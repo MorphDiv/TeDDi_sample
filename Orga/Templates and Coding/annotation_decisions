@@ -1,11 +1,25 @@
 #ANNOTATION DECISIONS
 
-Lines: Each line (often sentence) of a text is marked by <x>, where x is the line number (running number from 1)
-Segmentation: If a segmentation (e.g. by morphemes) is given, this is marked with <segmentation>
-Glosses: The line with glosses is marked with <gloss>
-Translation: The line with translation is marked with <translation>
+The way the texts are annotated depends on the format of the original text. If the original text (and respective translation) is organized by pages, then these are kept as fundamental text "unit". If it consists of separate paragraphs, or is organized by sentences (e.g. grammatical examples) then these are kept as the original unit respectively. This is because for many texts it is impossible to reliably break them down in to smaller units, e.g. sentences from paragraphs, without extremely time-consuming manual work. Hence, we leave the overall format and organization of the texts as it is. 
 
-Line breaks: Put an empty line between the sentences but not between the sentence, segmentation, gloss, and translation.
-White spaces: white spaces should be added around punctuation marks (on both sides).
-Footnotes: remove footnotes from text and glosses
+#XML-like annotations of text units
+These refer to units of the texts (i.e. pages, paragraphs, lines, etc.). The unit identifiers are embedded in "<>". The unit identifiers should be followed by a white space and then the text of the respective unit. There should be a blank line after each unit of the text. 
+
+<page_x>: some texts are organised just by pages (e.g. Boas hand-written manuscripts of Western Keres), these are indicated by <page_x>, where x is a running number starting at 1
+<paragraph_x>: if texts are organized into paragraphs, then use this instead 
+<line_x>: if there are lines (often corresponding to sentences) in the original text, then these are preceded by <line x>. This also includes example sentences in grammars. 
+
+#XML-like annotations of additional grammatical information 
+<segmentation>: if a segmentation (e.g. by morphemes in grammatical examples) is given, this is marked with <segmentation>. There is no number given here, as this annotation belongs to the <line_x> in the sense that there should be no blank line between them. 
+<gloss> The line with glosses is marked with <gloss>. Same applies here as for <segmentation>.
+<translation> The translation into another language. Note that this could be a translation of a whole page, paragraph, or a single line (e.g. sentence). 
+
+#Further XML-like annotations:
+<title>, <heading>, <subheading>: These can be used to indicate mostly lines which serve the purpose of structuring the texts, e.g. there are many headings and subheadings in the bible
+<footnote_x>: Many texts have footnotes explaining details about grammatical forms or alternative interpretations of what has been recorded. Put <footnote_x> in the text where it occurs (x is the number given in the original text), then put <footnote_x> after the text unit (separated by a line break from the text, but not a blank line), and give the text of the footnote following it.   
+
+#Line breaks and punctuation
+Line breaks: put an empty line between the text units (i.e. page, paragraph, line), but not between a line and the corresponding segmentation, gloss, or translation.
+White spaces: white spaces should be added *around* (not just after) punctuation marks. This later helps with tokenization.
+Footnotes: remove footnotes from text and glosses (or keep them?)
 
