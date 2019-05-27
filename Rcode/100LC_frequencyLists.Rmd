@@ -1,0 +1,152 @@
+---
+title: "100LC Frequency Distributions"
+author: "Chris Bentz"
+date: "May 15, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This file illustrates how to use tokenized and linearized files of the 100LC texts to generate frequency lists of orthographic words and UTF-8 characters.
+
+##Load libraries
+```{r}
+library(ggplot2)
+library(gridExtra)
+```
+
+## Examples for Code Illustration
+Specify paths to different tokenized and linearized text files for illustrating the workings and code of generating frequency lists.
+```{r}
+file.words <- "/home/chris/Data/100LC/Texts/Tokenized/Words/rus_pro_1.txt" 
+file.chars <- "/home/chris/Data/100LC/Texts/Tokenized/Characters/rus_pro_1.txt" 
+```
+
+Read files.
+```{r}
+words <- scan(file.words, what = "char", sep = "\n", encoding = "UTF-8")
+head(words)
+chars <- scan(file.chars, what = "char", sep = "\n", encoding = "UTF-8")
+head(chars)
+```
+
+Generate frequency list with the table() function, convert it to a data frame, and then order it by decreasing frequencies of occurrence. A separate column "Rank" is then added with increasing numbers, i.e. Rank 1 corresponds to the highest frequency unit. Finally, change the column name from "chars" to "Char".
+```{r}
+freq.list <- table(words)
+df <- as.data.frame(freq.list)
+df <- df[with(df, order(-Freq)), ]
+df$Rank <- 1:nrow(df)
+df.words <- df
+colnames(df.words)[1] <- c("Word")
+head(df.words)
+```
+
+Same for characters.
+```{r}
+freq.list <- table(chars)
+df <- as.data.frame(freq.list)
+df <- df[with(df, order(-Freq)), ]
+df$Rank <- 1:nrow(df)
+df.chars <- df
+colnames(df.chars)[1] <- c("Char")
+head(df.chars)
+```
+
+##ggplots of Frequency Distributions
+
+### UTF-8 Characters
+```{r}
+figure.chars <- ggplot(df.chars, aes(x = Rank, y = Freq)) +
+  geom_bar(stat = "identity", fill = "grey80") +
+  geom_text(aes(label = Char), vjust = 0.5, hjust = 0.5, position = position_dodge(1),
+            size = 5, colour = "black", angle = 45) +
+  labs(x = "Rank", y = "Frequency", size = 2) +
+  theme_bw() +
+  scale_fill_manual(values = c("grey80")) +
+  annotate("text", label = "Character Entropy = 4.5", x = 20, y = 750, color = "black", size = 5) +
+  theme(axis.text.y = element_text(size = 10),
+        axis.text.x = element_text(size = 10),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 12),
+        legend.position = "none")
+```
+
+### Orthographic Words
+```{r}
+figure.words <- ggplot(df.words, aes(x = Rank, y = Freq)) +
+  geom_bar(stat = "identity", fill = "grey80") +
+  geom_text(aes(label = Word), vjust = 0, hjust = 0, position = position_dodge(1),
+            size = 4, colour = "black", angle = 45) +
+  labs(x = "Rank", y = "Frequency", size = 2) +
+  scale_x_continuous(limits = c(0, 40)) +
+  scale_y_continuous(limits = c(0, 140)) +
+  theme_bw() +
+  annotate("text", label = "Word Entropy = 8.4", x = 20, y = 100, color = "black", size = 5) +
+  scale_fill_manual(values = c("grey80")) +
+  theme(axis.text.y = element_text(size = 10),
+        axis.text.x = element_text(size = 10),
+        axis.title.y = element_text(size = 12),
+        legend.position = "none")
+```
+
+Arrange figures together.
+```{r, fig.width = 10, fig.height = 5}
+fig.Dists <- grid.arrange(figure.chars, figure.words, ncol = 1)
+```
+
+```{r, fig.width = 10, fig.height = 5}
+ggsave("Figures/figure_Dists.pdf", fig.Dists , dpi = 300, scale = 1, device = cairo_pdf)
+```
+
+##Application
+
+###Frquency lists for characters
+Read all paths to tokenized files in a given folder. 
+```{r}
+files <- list.files(path = "/home/chris/Data/100LC/Texts/Tokenized/Characters", full.names = T)
+head(files)
+```
+
+Loop over all file paths to run the processing steps outlined above for each tokenized text file. Then safe the frequency lists in FreqLists/Characters as a .csv file, i.e. comma separated values. 
+```{r}
+# ptime <- proc.time() # get system time before starting process
+# for (file in files) {
+#   chars <- scan(file, what = "char", sep = "\n", encoding = "UTF-8")
+#   freq.list <- table(chars)
+#   df <- as.data.frame(freq.list)
+#   df <- df[with(df, order(-Freq)), ]
+#   df$Rank <- 1:nrow(df)
+#   colnames(df)[1] <- c("Char")
+#   # write character frequency distributions to file
+#   out.file.chars <- as.character(paste("/home/chris/Data/100LC/Texts/FreqLists/Characters/", basename(file), sep = ""))
+#   write.csv(df, file = out.file.chars, row.names = F)
+# }
+# proc.time() - ptime # show time elapsed while processing
+```
+
+
+###Frequency lists for orthographic words
+Read all paths to tokenized files in a given folder. 
+```{r}
+files <- list.files(path = "/home/chris/Data/100LC/Texts/Tokenized/Words", full.names = T)
+head(files)
+```
+
+Loop over all file paths to run the processing steps outlined above for each tokenized text file. Then safe the frequency lists in FreqLists/Words as a .csv file, i.e. comma separated values. 
+```{r}
+# ptime <- proc.time() # get system time before starting process
+# for (file in files) {
+#   words <- scan(file, what = "char", sep = "\n", encoding = "UTF-8")
+#   freq.list <- table(words)
+#   df <- as.data.frame(freq.list)
+#   df <- df[with(df, order(-Freq)), ]
+#   df$Rank <- 1:nrow(df)
+#   colnames(df)[1] <- c("Word")
+#   # write word frequency distributions to file
+#   out.file.words <- as.character(paste("/home/chris/Data/100LC/Texts/FreqLists/Words/", basename(file), sep = ""))
+#   write.csv(df, file = out.file.words, row.names = F)
+# }
+# proc.time() - ptime # show time elapsed while processing
+```
