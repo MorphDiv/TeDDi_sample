@@ -1,0 +1,77 @@
+---
+title: "100LC Tokenization"
+author: "Chris Bentz"
+date: "May 14, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This file illustrates how to "tokenize" and "linearize" the .txt files of the 100 language corpus. Tokenization can here be understood in two senses: a) splitting the texts into orthographic words, i.e. strings of characters that (in most scripts used for languages of the 100LC) are delimited by white spaces, b) further splitting orthographic words into single UTF-8 characters. Note that both a) and b) include the removal of punctuation. "Linearization" then means that tokens (i.e. characters or orthographic words) are given in separate lines (i.e. delimited by line breaks) in the respective output files. Note that this code currently only works correctly for the different scripts if there are white spaces separating orthographic words (but not diacritics such as tone marks or apostrohpes) as well as punctuation marks. 
+
+## Examples for Code Illustration
+
+Reading different UDHR files for illustrating the workings and code of tokenization and linearization by characters for different scripts.
+```{r}
+file.eng <- "/home/chris/Data/100LC/Texts/Raw/eng_pro_1.txt" 
+file.jpn <- "/home/chris/Data/100LC/Texts/Raw/jpn_pro_1.txt" 
+file.abk <- "/home/chris/Data/100LC/Texts/Raw/abk_pro_1.txt" 
+file.tha <- "/home/chris/Data/100LC/Texts/Raw/tha_pro_1.txt" 
+file.cmn <- "/home/chris/Data/100LC/Texts/Raw/cmn_pro_1.txt"
+file.rus <- "/home/chris/Data/100LC/Texts/Raw/rus_pro_1.txt"
+file.kan <- "/home/chris/Data/100LC/Texts/Raw/kan_pro_1.txt"
+file.vie <- "/home/chris/Data/100LC/Texts/Raw/vie_nfi_1.txt" 
+file.jac <- "/home/chris/Data/100LC/Texts/Raw/jac_nfi_1.txt" 
+file.yaq <- "/home/chris/Data/100LC/Texts/Raw/yaq_nfi_1.txt" 
+```
+
+
+
+## Tokenize Texts to Orthographic Words
+Read the respective textfile by using the function scan(). The argument "sep" is white spaces by default, i.e. this reads a vector of character strings separated by white spaces; the "skip" option gives the number of lines to skip. This is here set to 16, as there are sixteen lines of metadata in the raw text files. Furthermore, set texts to lower case characters (if applicable in any given script). The removal of punctuation and numbers is then implicit in the regular expression ".*[[:alpha:]].*", since this means "at least one alphabetic character". The text to be used for this illustration can be changed by the file name in the scan() function, e.g. change "file.eng" to "file.jpn".
+```{r}
+textfile <- scan(file.yaq, what = "char", quote = "", comment.char = "", encoding = "UTF-8", skip = 16) 
+textfile <- tolower(textfile) # set to lower case
+regex <- ".*[[:alpha:]].*" # regular expression for "at least one alphabetic character"
+matches <- regexpr(regex, textfile) 
+words <- regmatches(textfile, matches)
+print(words[1:100])
+```
+
+##Tokenize Orthographic Words to Characters
+We further tokenize orthographic words into UTF-8 characters with the function strsplit(). This function splits strings into UTF-8 characters if the argument "split" is not further specified. Note that the function unlist() then needs to be used to convert the resulting list of character strings into a single character string.
+```{r}
+characters <- unlist(strsplit(words, split = ""))
+print(characters[1:100])
+```
+
+
+## Application
+
+Read all paths to raw text files in a given folder.
+```{r}
+files <- list.files(path = "/home/chris/Data/100LC/Texts/Raw", full.names = T)
+head(files)
+```
+
+Loop over all file paths to run the processing steps outlined above for each raw text file. Then safe the linearized (i.e. with line breaks between each unit) orthographic words as well as individual UTF-8 characters in two separate folders. 
+```{r}
+# ptime <- proc.time() # get system time before starting process
+# for (file in files) {
+#   textfile <- scan(file, what = "char", quote = "", comment.char = "", encoding = "UTF-8", skip = 16)
+#   textfile <- tolower(textfile)
+#   regex <- ".*[[:alpha:]].*" 
+#   matches <- regexpr(regex, textfile) 
+#   words <- regmatches(textfile, matches)
+#   characters <- unlist(strsplit(words, split = ""))
+#   # write word files
+#   out.file.words <- as.character(paste("/home/chris/Data/100LC/Texts/Tokenized/Words/", basename(file), sep = ""))
+#   write(words, file = out.file.words, sep = "\n")
+#   # write character files
+#   out.file.chars <- as.character(paste("/home/chris/Data/100LC/Texts/Tokenized/Characters/", basename(file), sep = ""))
+#   write(characters, file = out.file.chars, sep = "\n")
+# }
+# proc.time() - ptime # show time elapsed while processing
+```
