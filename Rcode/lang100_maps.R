@@ -12,10 +12,11 @@
 #PACKAGES
 library(ggplot2)
 library(ggmap)
+library(maps)
 
 #LOAD DATA
 #load file with information on 100 language sample
-lang100 <- read.csv("~/Dropbox/100LC/LangData/langInfo_100.csv", header = T)
+lang100 <- read.csv("/home/chris/Data/100LC/LangInfo/langInfo_100LC.csv", header = T)
 
 #SIMPLE STATS
 unique(lang100$iso_639_3)#100
