@@ -4,10 +4,10 @@
 
 This `langInfo_100LC.csv` file contains information on the languages of the WALS 100 language sample from both WALS and Glottolog 3.3. It was created by downloading the following files:
 
-- `Glottolog3.3/languages_and_dialects_geo.csv` (Version 3.3, from https://glottolog.org/meta/downloads; accessed on 10/10/2018)
-- glottolog_languoid.csv (Version 3.3, at https://glottolog.org/meta/downloads; accessed on 10/10/2018)   
-- Wals_languages.csv (WALS 2014, at https://wals.info/languoid by choosing the "tab" option for downloads; accessed on accessed on 10/10/2018)
-- UNESCO endangerement scale (http://www.unesco.org/languages-atlas/, accessed on 28/02/2019)
+* `Glottolog3.3/languages_and_dialects_geo.csv` - (Version 3.3, from https://glottolog.org/meta/downloads; accessed on 10/10/2018)
+* `Glottolog3.3/glottolog_languoid.csv` - (Version 3.3, at https://glottolog.org/meta/downloads; accessed on 10/10/2018)   
+* `WALS/Wals_languages.csv` - (WALS 2014, at https://wals.info/languoid by choosing the "tab" option for downloads; accessed on accessed on 10/10/2018)
+* `UNESCO/unesco_atlas_languages_limited_dataset.ods` - UNESCO endangerement scale (http://www.unesco.org/languages-atlas/, accessed on 28/02/2019)
 
 Wals_languages.csv was amended by removing the comma in "(West Papuan, Indonesia)" in order to enable saving it as a csv file. Also, four deprecated glottocodes were replaced: 
 
