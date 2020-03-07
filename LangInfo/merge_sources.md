@@ -1,7 +1,13 @@
 Merge language information for 100LC sources
 ================
 Chris Bentz, Steven Moran
-06 March, 2020
+07 March, 2020
+
+``` r
+library(dplyr)
+library(tidyr)
+library(knitr)
+```
 
 Load and process the data
 =========================
@@ -59,8 +65,26 @@ glotto.langInfo.100 <- rbind(glotto.langInfo.fam, glotto.langInfo.noFamID)
 colnames(glotto.langInfo.100) <- c("family_id", "glottocode", "name_glotto", "iso_639_3", "level", "macroarea_glotto", "latitude_glotto", "longitude_glotto", "status", "top_level_family")
 ```
 
-Combine the WALS and Glottolog information
-==========================================
+Get folders from Corpus directory
+=================================
+
+``` r
+fils <- tibble(folder=list.dirs(path = "../Corpus", full.names = FALSE, recursive = FALSE))
+folders <- fils %>% separate(folder, c("folder_name", "iso_639_3"), sep="_(?=[a-z]{3}$)")
+kable(head(folders))
+```
+
+| folder\_name     | iso\_639\_3 |
+|:-----------------|:------------|
+| Abkhaz           | abk         |
+| Acoma            | kjq         |
+| Alamblak         | amp         |
+| Amele            | aey         |
+| Apurina          | apu         |
+| Arabic\_Egyptian | arz         |
+
+Combine the various information sources
+=======================================
 
 ``` r
 # Merge
@@ -69,9 +93,48 @@ langInfo.100 <- merge(wals.100.short, glotto.langInfo.100, by = "glottocode")
 # Reorder columns
 langInfo.100 <- langInfo.100[ , c(11, 1, 2, 10, 3, 12, 16, 9, 17, 7, 8, 13, 6, 14, 15, 4, 5)]
 
+# Merge in folder names
+langInfo.100 <- left_join(langInfo.100, folders)
+```
+
+    ## Joining, by = "iso_639_3"
+
+    ## Warning: Column `iso_639_3` joining factor and character vector, coercing into
+    ## character vector
+
+``` r
 # Write to file
 write.csv(file = "langInfo_100LC.csv", langInfo.100, row.names = F, quote=FALSE)
+```
 
+Which rows do not (yet) have file folders?
+==========================================
+
+``` r
+kable(langInfo.100 %>% filter(is.na(folder_name)) %>% select(iso_639_3, glottocode, name_glotto, name_wals))
+```
+
+| iso\_639\_3 | glottocode | name\_glotto            | name\_wals      |
+|:------------|:-----------|:------------------------|:----------------|
+| gry         | barc1235   | Barclayville Grebo      | Grebo           |
+| cku         | koas1236   | Koasati                 | Koasati         |
+| ses         | koyr1242   | Koyraboro Senni Songhai | Koyraboro Senni |
+| kgo         | kron1241   | Krongo                  | Krongo          |
+| lkt         | lako1247   | Lakota                  | Lakhota         |
+| lez         | lezg1247   | Lezgian                 | Lezgian         |
+| mpc         | mang1381   | Mangarrayi              | Mangarrayi      |
+| mni         | mani1292   | Manipuri                | Meithei         |
+| mrc         | mari1440   | Maricopa                | Maricopa        |
+| scs         | nort2942   | North Slavey            | Slave           |
+| one         | onei1249   | Oneida                  | Oneida          |
+| pwn         | paiw1248   | Paiwan                  | Paiwan          |
+| myp         | pira1253   | Pirahã                  | Pirahã          |
+| spp         | supy1237   | Supyire Senoufo         | Supyire         |
+| tiw         | tiwi1244   | Tiwi                    | Tiwi            |
+| bhq         | tuka1249   | Tukang Besi South       | Tukang Besi     |
+| pav         | wari1268   | Wari'                   | Wari'           |
+
+``` r
 # Clean up
 rm(list = ls())
 ```
