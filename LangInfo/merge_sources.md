@@ -69,19 +69,21 @@ Get folders from Corpus directory
 =================================
 
 ``` r
+# This is pretty ugly, but it works
 fils <- tibble(folder=list.dirs(path = "../Corpus", full.names = FALSE, recursive = FALSE))
-folders <- fils %>% separate(folder, c("folder_name", "iso_639_3"), sep="_(?=[a-z]{3}$)")
+folders <- fils %>% separate(folder, c("folder_language_name", "iso_639_3"), sep="_(?=[a-z]{3}$)")
+folders$folder_name <- paste(folders$folder_language_name, folders$iso_639_3, sep="_")
 kable(head(folders))
 ```
 
-| folder\_name     | iso\_639\_3 |
-|:-----------------|:------------|
-| Abkhaz           | abk         |
-| Acoma            | kjq         |
-| Alamblak         | amp         |
-| Amele            | aey         |
-| Apurina          | apu         |
-| Arabic\_Egyptian | arz         |
+| folder\_language\_name | iso\_639\_3 | folder\_name          |
+|:-----------------------|:------------|:----------------------|
+| Abkhaz                 | abk         | Abkhaz\_abk           |
+| Acoma                  | kjq         | Acoma\_kjq            |
+| Alamblak               | amp         | Alamblak\_amp         |
+| Amele                  | aey         | Amele\_aey            |
+| Apurina                | apu         | Apurina\_apu          |
+| Arabic\_Egyptian       | arz         | Arabic\_Egyptian\_arz |
 
 Combine the various information sources
 =======================================
