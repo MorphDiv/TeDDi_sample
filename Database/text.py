@@ -1,5 +1,6 @@
 """ Text object for the 100 LC files """
 
+import re
 import pathlib
 
 ENCODING = "UTF-8"
@@ -25,6 +26,8 @@ class Text:
                 else:
                     break
             body = (line + f.read()).strip()
+            # Fix files that have multiple tabs
+            body = re.sub(r"\t+", "\t", body)
         return cls(filename, metadata, body)
 
     def __init__(self, filename, metadata, body):
