@@ -10,7 +10,7 @@ class Text:
     @classmethod
     def from_rglob(cls, dir, glob):
         dir = pathlib.Path(dir)
-        return map(cls.from_file, dir.rglob(glob))
+        return map(cls.from_file, sorted(dir.rglob(glob)))
 
     @classmethod
     def from_file(cls, filename):
@@ -26,7 +26,7 @@ class Text:
                 else:
                     break
             body = (line + f.read()).strip()
-            # Fix files that have multiple tabs
+            # Fix files that have multiple tabs (from the crawlers)
             body = re.sub(r"\t+", "\t", body)
         return cls(filename, metadata, body)
 
