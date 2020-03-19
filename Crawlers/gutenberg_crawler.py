@@ -54,7 +54,7 @@ lang_dic = {
 
 # Root path
 def get_root(lang):
-    return '../data/' + lang_dic[lang][0] + '/fiction/'
+    return '../Corpus/' + lang_dic[lang][0] + '/fiction/'
 
 
 # Generate file name
@@ -229,6 +229,7 @@ def make_meta(lang, html_book, sample_type, cur_link):
 # comments:	NA
 
     '''
+    meta = re.sub('\t{2,}', '\t', meta)
     return meta
 
 
@@ -362,6 +363,10 @@ def main():
                     fname, current_counter = generate_fname(lang, current_counter)
                     f = codecs.open(fname, 'w', 'utf-8')
                     f.write(meta)
+
+                    # Replace tabs
+                    sample = re.sub('\t+', ' ', sample)
+
                     f.write(sample)
                     txt_files += 1
 
