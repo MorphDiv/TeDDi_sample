@@ -1,11 +1,21 @@
 # How to contribute
 
+## Overview
+
 The 100 LC repository is a collaborative effort to collect, curate, and analyze corpora.
 
 Here you will find reports on our practices for transcribing and annotating texts:
 
 * [Tutorial: Transcription and Annotation of Texts](https://www.overleaf.com/project/5cb846b20e7ba737465f8223)
 * [Adding PBC bibles and UDHR texts](https://www.overleaf.com/project/5c5ad23e2600fe61259dfd25)
+
+On SwitchDrive there is an example metadata header:
+
+https://drive.switch.ch/index.php/s/a7qzQoGGlIHQwGI
+
+but it is incorrectly formatted (i.e. has multiple tabs), so it has been fixed and put in this directory as `header_template.txt` for use and reference.
+
+## Workflow
 
 When working with this GitHub repository, please use the [issue tracker](https://github.com/uzling/100LC/issues) and submit a [pull request](https://github.com/uzling/100LC/pulls) when adding or updating data or code.
 
