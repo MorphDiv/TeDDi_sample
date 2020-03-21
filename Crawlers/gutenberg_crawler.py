@@ -257,12 +257,12 @@ def make_meta(lang, html_book, sample_type, source):
 
     meta = '''# language_name_wals:	''' + lang_dic[lang][2] + '''
 # language_name_glotto:	''' + lang_dic[lang][3] + '''
-# ISO_639-3:	''' + lang_dic[lang][1] + '''
+# ISO_6393:	''' + lang_dic[lang][1] + '''
 # year_composed:	NA
 # year_published:	''' + year + '''
 # mode:	written
-# genre_(broad):	fiction
-# genre_(narrow):	general_fiction
+# genre_broad:	fiction
+# genre_narrow:	general_fiction
 # writing_system:	''' + lang_dic[lang][4] + '''
 # special_characters:	NA
 # short_description:	''' + html_entities_transform(short_description) + '''
@@ -274,6 +274,7 @@ def make_meta(lang, html_book, sample_type, source):
 
     '''
     meta = re.sub('\t{2,}', '\t', meta)
+    meta = re.sub(' {2,}', ' ', meta)
     return meta
 
 
@@ -377,18 +378,13 @@ def sampling(text, tokens, lang):
 
 
 def main():
-    # tgl 15, 17, 18, 25, 51 -- to check
-    # added manually
+    # tgl 15, 17, 18, 25, 51 -- should be checked
     # links = ['/ebooks/14205',
     #          '/ebooks/18536',
     #          '/ebooks/16446',
     #          '/ebooks/18888',
     #          '/ebooks/18887']
 
-    # fr 88, 94, 106 -- to check
-    # links = ['/ebooks/24300',
-    #          '/ebooks/29251',
-    #          '/ebooks/22388']
 
     for lang in lang_dic:
         sources = []
@@ -448,8 +444,9 @@ def main():
                                 f = codecs.open(fname, 'w', 'utf-8')
                                 f.write(meta)
 
-                                # Replace tabs
+                                # Replace tabs and multiple white spaces
                                 sample = re.sub('\t+', ' ', sample)
+                                sample = re.sub(' {2,}', ' ', sample)
 
                                 f.write(sample)
 
