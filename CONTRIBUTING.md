@@ -11,9 +11,15 @@ Here you will find reports on our practices for transcribing and annotating text
 
 On SwitchDrive there is an example metadata header:
 
-https://drive.switch.ch/index.php/s/a7qzQoGGlIHQwGI
+* https://drive.switch.ch/index.php/s/a7qzQoGGlIHQwGI
 
-but it is incorrectly formatted (i.e. has multiple tabs), so it has been fixed and put in this directory as `header_template.txt` for use and reference.
+but it is incorrectly formatted (i.e. has multiple tabs), so it has been fixed and put in this directory as [header_template.txt](https://github.com/uzling/100LC/blob/master/header_template.txt) for use and reference.
+
+A description of the sampling algorithm is on Overleaf:
+
+* [Report on the project discussion in November--December 2018](https://www.overleaf.com/project/5c372715fbc85849bdc7dc0d)
+
+And the [100LC/Crawlers](https://github.com/uzling/100LC/tree/master/Crawlers) directory contains the web crawlers.
 
 ## Workflow
 
