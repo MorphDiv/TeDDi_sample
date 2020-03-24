@@ -1,0 +1,40 @@
+---
+title: "How many files per directory?"
+author: "Steven Moran"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+  pandoc_args: --webtex
+---
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(knitr)
+library(ggplot2)
+```
+
+```{r}
+# Get the file counts per directory
+fils <- list.files("../../Corpus", pattern="txt$", full.names = TRUE, recursive = TRUE)
+fils.counts <- tibble(dir = dirname(fils)) %>% count(dir) %>% arrange(desc(n))
+```
+
+```{r}
+# There are this many directories:
+nrow(fils.counts)
+```
+
+```{r}
+# There are this many files per directory
+kable(fils.counts)
+```
+
+```{r}
+# Order the data frame so that it plots correctly on the y-axis
+fils.counts$dir <- factor(fils.counts$dir, levels = fils.counts$dir)
+
+# Plot the distribution
+ggplot(data=fils.counts, aes(x=dir, y=n)) + geom_bar(stat="identity") +
+  theme(axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
