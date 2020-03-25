@@ -1,7 +1,7 @@
 How many files per directory?
 ================
 Steven Moran
-06 March, 2020
+25 March, 2020
 
 ``` r
 library(tidyverse)
@@ -20,7 +20,7 @@ fils.counts <- tibble(dir = dirname(fils)) %>% count(dir) %>% arrange(desc(n))
 nrow(fils.counts)
 ```
 
-    ## [1] 130
+    ## [1] 123
 
 ``` r
 # There are this many files per directory
@@ -40,20 +40,13 @@ kable(fils.counts)
 | ../../Corpus/Indonesian\_ind/non-fiction/written          |  1226|
 | ../../Corpus/French\_fra/non-fiction/written              |  1211|
 | ../../Corpus/Persian\_pes/non-fiction/written             |  1173|
-| ../../Corpus/Japanese\_jpn/non-fiction/written            |  1042|
 | ../../Corpus/Thai\_tha/non-fiction/written                |  1001|
 | ../../Corpus/Vietnamese\_vie/non-fiction/written          |   859|
 | ../../Corpus/Korean\_kor/non-fiction/written              |   853|
 | ../../Corpus/Basque\_eus/non-fiction/written              |   669|
 | ../../Corpus/Mandarin\_cmn/non-fiction/written            |   667|
 | ../../Corpus/Georgian\_kat/non-fiction/written            |   217|
-| ../../Corpus/Greek\_Modern\_ell/fiction                   |   165|
-| ../../Corpus/Finnish\_fin/fiction                         |   161|
-| ../../Corpus/German\_deu/fiction                          |   152|
-| ../../Corpus/French\_fra/fiction                          |   126|
-| ../../Corpus/Spanish\_spa/fiction                         |   119|
 | ../../Corpus/English\_eng/fiction                         |   117|
-| ../../Corpus/Mandarin\_cmn/fiction                        |   115|
 | ../../Corpus/Hindi\_hin/non-fiction/written               |    72|
 | ../../Corpus/Tagalog\_tgl/fiction                         |    55|
 | ../../Corpus/Tagalog\_tgl/non-fiction/written             |    44|

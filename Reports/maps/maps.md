@@ -1,7 +1,7 @@
 Generate world maps from the 100 LC language sample
 ================
 Chris Bentz, Steven Moran
-06 March, 2020
+25 March, 2020
 
 ``` r
 library(ggplot2)
@@ -12,7 +12,7 @@ library(testthat)
 
 ``` r
 # Load file with information on 100 language sample
-lang100 <- read.csv("langInfo_100LC.csv", header = T)
+lang100 <- read.csv("../../LangInfo/langInfo_100LC.csv", header = T)
 
 # Data checks
 expect_equal(length(lang100$iso_639_3), 100)
