@@ -1,7 +1,7 @@
 Merge language information for 100LC sources
 ================
 Chris Bentz, Steven Moran
-07 March, 2020
+25 March, 2020
 
 ``` r
 library(dplyr)
@@ -13,9 +13,9 @@ Load and process the data
 =========================
 
 ``` r
-wals <- read.csv("WALS/WALS_languages.csv", header = T)
-glotto.languages <- read.csv("Glottolog3.3/languages_and_dialects_geo.csv", header = T)
-glotto.languoids <- read.csv("Glottolog3.3/languoid.csv", header = T)
+wals <- read.csv("Sources/WALS/WALS_languages.csv", header = T)
+glotto.languages <- read.csv("Sources/Glottolog3.3/languages_and_dialects_geo.csv", header = T)
+glotto.languoids <- read.csv("Sources/Glottolog3.3/languoid.csv", header = T)
 
 # Select languages of the 100 language sample
 wals.100 <- wals[wals$sample.100 == "True", ]
