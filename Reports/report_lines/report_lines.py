@@ -21,6 +21,8 @@ report.write('language,fic_lines,nfi_lines,con_lines,pro_lines,tec_lines,gre_lin
              'fic_files,nfi_files,con_files,pro_files,tec_files,gre_files,'
              'total_lines,total_files\n')
 
+result = {}
+
 
 def count_lines(subdir, lang_root):
     joined_subdir = os.path.join(lang_root, subdir)
@@ -90,7 +92,7 @@ def main():
                                 total_files += amount_files
                                 total_lines += amount_lines
 
-            result = language + ',' + \
+            result[language] = ',' + \
                                 str(lang_stat['fic'][1]) + ',' + \
                                 str(lang_stat['nfi'][1]) + ',' + \
                                 str(lang_stat['con'][1]) + ',' + \
@@ -105,8 +107,9 @@ def main():
                                 str(lang_stat['gre'][0]) + ',' + \
                                 str(total_lines) + ',' + \
                                 str(total_files) + '\n'
-            print(result)
-            report.write(result)
+
+    for k, v in sorted(result.items()):
+        report.write(k + v)
 
     end = timeit.timeit()
     print('TIME:', end - start)
