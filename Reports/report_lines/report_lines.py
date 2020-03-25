@@ -4,7 +4,7 @@ import timeit
 
 from report_tokenized import count_files, walklevel
 
-root_path = '../Corpus'
+root_path = '/home/olga/Documents/Repositories/100LC/Corpus'
 genres = ['fiction', 'non-fiction', 'conversation', 'professional', 'technical', 'grammar_examples']
 
 genres_abbr = {
@@ -17,9 +17,9 @@ genres_abbr = {
 }
 
 report = codecs.open('report_lines.csv', 'w', 'utf-8')
-report.write('language;fic_lines;nfi_lines;con_lines;pro_lines;tec_lines;gre_lines;'
-             'fic_files;nfi_files;con_files;pro_files;tec_files;gre_files;'
-             'total_lines;total_files\n')
+report.write('language,fic_lines,nfi_lines,con_lines,pro_lines,tec_lines,gre_lines,'
+             'fic_files,nfi_files,con_files,pro_files,tec_files,gre_files,'
+             'total_lines,total_files\n')
 
 
 def count_lines(subdir, lang_root):
@@ -39,7 +39,6 @@ def count_lines(subdir, lang_root):
                         and line != '\n':
 
                     lines += 1
-
 
     return lines
 
@@ -91,20 +90,20 @@ def main():
                                 total_files += amount_files
                                 total_lines += amount_lines
 
-            result = language + ';' + \
-                                str(lang_stat['fic'][1]) + ';' + \
-                                str(lang_stat['nfi'][1]) + ';' + \
-                                str(lang_stat['con'][1]) + ';' + \
-                                str(lang_stat['pro'][1]) + ';' + \
-                                str(lang_stat['tec'][1]) + ';' + \
-                                str(lang_stat['gre'][1]) + ';' + \
-                                str(lang_stat['fic'][0]) + ';' + \
-                                str(lang_stat['nfi'][0]) + ';' + \
-                                str(lang_stat['con'][0]) + ';' + \
-                                str(lang_stat['pro'][0]) + ';' + \
-                                str(lang_stat['tec'][0]) + ';' + \
-                                str(lang_stat['gre'][0]) + ';' + \
-                                str(total_lines) + ';' + \
+            result = language + ',' + \
+                                str(lang_stat['fic'][1]) + ',' + \
+                                str(lang_stat['nfi'][1]) + ',' + \
+                                str(lang_stat['con'][1]) + ',' + \
+                                str(lang_stat['pro'][1]) + ',' + \
+                                str(lang_stat['tec'][1]) + ',' + \
+                                str(lang_stat['gre'][1]) + ',' + \
+                                str(lang_stat['fic'][0]) + ',' + \
+                                str(lang_stat['nfi'][0]) + ',' + \
+                                str(lang_stat['con'][0]) + ',' + \
+                                str(lang_stat['pro'][0]) + ',' + \
+                                str(lang_stat['tec'][0]) + ',' + \
+                                str(lang_stat['gre'][0]) + ',' + \
+                                str(total_lines) + ',' + \
                                 str(total_files) + '\n'
             print(result)
             report.write(result)
