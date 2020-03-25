@@ -4,7 +4,7 @@ import timeit
 
 from report_tokenized import count_files, walklevel
 
-root_path = '/home/olga/Documents/Repositories/100LC/Corpus'
+root_path = '../Corpus'
 genres = ['fiction', 'non-fiction', 'conversation', 'professional', 'technical', 'grammar_examples']
 
 genres_abbr = {
