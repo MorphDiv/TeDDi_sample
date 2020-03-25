@@ -41,7 +41,10 @@ def count_lines(subdir, lang_root):
                         and line != '\n':
 
                     # Structured files
-                    if '<line' in line:
+                    if line.startswith('<line') or \
+                            line.startswith('<title') or \
+                            line.startswith('<verse') or \
+                            line.startswith('<paragraph'):
                         lines += 1
 
                     # Unstructured files
