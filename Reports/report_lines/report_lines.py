@@ -40,7 +40,13 @@ def count_lines(subdir, lang_root):
                         and not line.startswith('#') \
                         and line != '\n':
 
-                    lines += 1
+                    # Structured files
+                    if '<line' in line:
+                        lines += 1
+
+                    # Unstructured files
+                    elif not line.startswith('<'):
+                        lines += 1
 
     return lines
 
