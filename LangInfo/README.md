@@ -2,7 +2,7 @@
 
 ## Data sources
 
-This `langInfo_100LC.csv` file contains information on the languages of the WALS 100 language sample from both WALS and Glottolog 3.3. It was created by downloading the following files:
+This `langInfo_100LC.csv` file contains information on the languages of the WALS 100 language sample from both WALS and Glottolog 3.3. It was created by downloading the following files (which reside under the `Sources` directory):
 
 * `Glottolog3.3/languages_and_dialects_geo.csv` - (Version 3.3, from https://glottolog.org/meta/downloads; accessed on 10/10/2018)
 * `Glottolog3.3/glottolog_languoid.csv` - (Version 3.3, at https://glottolog.org/meta/downloads; accessed on 10/10/2018)   
@@ -36,7 +36,7 @@ This leaves the number of languages defined by unique ISO-639-3 and glottocodes 
 
 ## Rcode
 
-The R code used to process and merge the three data files is given in `merge_sources.Rmd` script.
+The R code used to process and merge the three data files is given in `merge_sources.Rmd` script. The report produces a markdown file `merge_sources.md`, which can be view in the browser on GitHub.
 
 Language status: The status of languages according to Glottolog was found to be erroneous in some cases (e.g. Russian and Modern Greek are endangered). The UNESCO endangerment was used instead. It was manually assigned under "status" for languages where it is available, "NA" was assigned otherwise. Note that this endangerement ranking does not include a category for safe languages. We assigned the status "safe" to large languages of which we definitely know at this point that they are safe (e.g. English, French, Swahili, Tagalog).
 

@@ -1,22 +1,18 @@
----
-title: "Generate world maps from the 100 LC language sample"
-author: "Chris Bentz, Steven Moran"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
-output:
-  github_document:
-  pandoc_args: --webtex
----
+Generate world maps from the 100 LC language sample
+================
+Chris Bentz, Steven Moran
+25 March, 2020
 
-```{r warning=FALSE, message=FALSE}
+``` r
 library(ggplot2)
 library(ggmap)
 library(maps)
 library(testthat)
 ```
 
-```{r}
+``` r
 # Load file with information on 100 language sample
-lang100 <- read.csv("langInfo_100LC.csv", header = T)
+lang100 <- read.csv("../../LangInfo/langInfo_100LC.csv", header = T)
 
 # Data checks
 expect_equal(length(lang100$iso_639_3), 100)
@@ -27,7 +23,7 @@ expect_equal(length(levels(lang100$family_wals)), 68)
 expect_equal(length(levels(lang100$macroarea_glotto)), 6)
 ```
 
-```{r}
+``` r
 # WORLD MAP WITH LANGUAGE LOCATIONS FROM GLOTTOLOG AND WALS
 world <- map_data("world")
 lang100_map <- ggplot() + 
@@ -51,7 +47,9 @@ lang100_map <- ggplot() +
 lang100_map
 ```
 
-```{r}
+![](maps_files/figure-markdown_github/unnamed-chunk-3-1.png)
+
+``` r
 # WORLD MAP WITH LANGUAGE STATUS INFORMATION FROM GLOTTOLOG
 world <- map_data("world")
 status_map <- ggplot() + 
@@ -72,11 +70,15 @@ status_map <- ggplot() +
         legend.text = element_text(size = 12),
         legend.position = "bottom")
 status_map
+```
 
+![](maps_files/figure-markdown_github/unnamed-chunk-4-1.png)
+
+``` r
 # ggsave("worldmap_status.pdf", status_map, dpi = 300, scale = 1, device = cairo_pdf)
 ```
 
-```{r}
+``` r
 # WORLD MAP WITH TOP-LEVEL FAMILY INFORMATION FROM GLOTTOLOG
 world <- map_data("world")
 family_map <- ggplot() + 
@@ -97,11 +99,15 @@ family_map <- ggplot() +
         legend.text = element_text(size = 12),
         legend.position = "bottom")
 family_map
+```
 
+![](maps_files/figure-markdown_github/unnamed-chunk-5-1.png)
+
+``` r
 # ggsave("worldmap_family.pdf", family_map, dpi = 300, scale = 1, device = cairo_pdf)
 ```
 
-```{r}
+``` r
 # WORLD MAP WITH MACROAREA INFORMATION FROM GLOTTOLOG
 world <- map_data("world")
 macroarea_map <- ggplot() + 
@@ -121,6 +127,10 @@ macroarea_map <- ggplot() +
         legend.title = element_text(size = 12),
         legend.text = element_text(size = 12))
 macroarea_map
+```
 
+![](maps_files/figure-markdown_github/unnamed-chunk-6-1.png)
+
+``` r
 # ggsave("worldmap_family.pdf", macroarea_map, dpi = 300, scale = 1, device = cairo_pdf)
 ```
