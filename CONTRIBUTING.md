@@ -13,7 +13,7 @@ On SwitchDrive there is an example metadata header:
 
 * https://drive.switch.ch/index.php/s/a7qzQoGGlIHQwGI
 
-but it is incorrectly formatted (i.e. has multiple tabs), so it has been fixed and put in this directory as [header_template.txt](https://github.com/uzling/100LC/blob/master/header_template.txt) for use and reference.
+but it is incorrectly formatted (i.e. has multiple tabs), so it has been fixed and put in this directory as [header_template.tsv](https://github.com/uzling/100LC/blob/master/header_template.tsv) for use and reference.
 
 A description of the sampling algorithm is on Overleaf:
 
