@@ -4,8 +4,8 @@ import os
 import codecs
 import timeit
 
-root_path = '../Corpus'
-genres = ['fiction', 'non-fiction', 'conversation', 'professional', 'technical', 'grammar_examples']
+root_path = '/home/olga/Documents/Repositories/100LC/Corpus'
+genres = ['fiction', 'non-fiction', 'conversation', 'professional', 'technical', 'grammar']
 
 genres_abbr = {
     'fiction': 'fic',
@@ -13,7 +13,7 @@ genres_abbr = {
     'conversation': 'con',
     'professional': 'pro',
     'technical': 'tec',
-    'grammar_examples': 'gre'
+    'grammar': 'gre'
 }
 
 result = {}
@@ -97,7 +97,7 @@ def main():
                 for subdir in cur_dirs:
                     for genre in genres:
                         if subdir == genre:
-                            if subdir == 'non-fiction' or subdir == 'grammar_examples':
+                            if subdir == 'non-fiction' or subdir == 'grammar':
                                 amount_files_w = count_files(subdir + '/written', lang_root)
                                 amount_lines_w = count_lines(subdir + '/written', lang_root)
                                 amount_files_s = count_files(subdir + '/spoken', lang_root)
@@ -143,7 +143,7 @@ def main():
 if __name__ == '__main__':
     with codecs.open('line_counts.csv', 'w', 'utf-8') as report:
         report.write('language,fiction_lines,non-fiction_lines,conversation_lines,professional_lines,'
-                     'technical_lines,grammar_examples_lines,fiction_files,non-fiction_files,'
+                     'technical_lines,grammar_lines,fiction_files,non-fiction_files,'
                      'conversation_files,professional_files,technical_files,'
-                     'grammar_examples_files,total_lines,total_files\n')
+                     'grammar_files,total_lines,total_files\n')
         main()
