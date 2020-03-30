@@ -1,8 +1,8 @@
+""" Loops through the corpus files and reports the number of lines and files per language per genre. """
+
 import os
 import codecs
 import timeit
-
-from report_tokenized import count_files, walklevel
 
 root_path = '../Corpus'
 genres = ['fiction', 'non-fiction', 'conversation', 'professional', 'technical', 'grammar_examples']
@@ -16,12 +16,28 @@ genres_abbr = {
     'grammar_examples': 'gre'
 }
 
-report = codecs.open('report_lines.csv', 'w', 'utf-8')
-report.write('language,fic_lines,nfi_lines,con_lines,pro_lines,tec_lines,gre_lines,'
-             'fic_files,nfi_files,con_files,pro_files,tec_files,gre_files,'
-             'total_lines,total_files\n')
-
 result = {}
+
+
+def walklevel(some_dir, level=1):
+    some_dir = some_dir.rstrip(os.path.sep)
+    assert os.path.isdir(some_dir)
+    num_sep = some_dir.count(os.path.sep)
+    for root, dirs, files in os.walk(some_dir):
+        yield root, dirs, files
+        num_sep_this = root.count(os.path.sep)
+        if num_sep + level <= num_sep_this:
+            del dirs[:]
+
+
+def count_files(subdir, lang_root):
+    try:
+        joined_subdir = os.path.join(lang_root, subdir)
+        amount_files = len([name for name in os.listdir(joined_subdir)
+                            if os.path.isfile(os.path.join(joined_subdir, name))])
+    except FileNotFoundError:
+        amount_files = 0
+    return amount_files
 
 
 def count_lines(subdir, lang_root):
@@ -102,20 +118,20 @@ def main():
                                 total_lines += amount_lines
 
             result[language] = ',' + \
-                                str(lang_stat['fic'][1]) + ',' + \
-                                str(lang_stat['nfi'][1]) + ',' + \
-                                str(lang_stat['con'][1]) + ',' + \
-                                str(lang_stat['pro'][1]) + ',' + \
-                                str(lang_stat['tec'][1]) + ',' + \
-                                str(lang_stat['gre'][1]) + ',' + \
-                                str(lang_stat['fic'][0]) + ',' + \
-                                str(lang_stat['nfi'][0]) + ',' + \
-                                str(lang_stat['con'][0]) + ',' + \
-                                str(lang_stat['pro'][0]) + ',' + \
-                                str(lang_stat['tec'][0]) + ',' + \
-                                str(lang_stat['gre'][0]) + ',' + \
-                                str(total_lines) + ',' + \
-                                str(total_files) + '\n'
+                               str(lang_stat['fic'][1]) + ',' + \
+                               str(lang_stat['nfi'][1]) + ',' + \
+                               str(lang_stat['con'][1]) + ',' + \
+                               str(lang_stat['pro'][1]) + ',' + \
+                               str(lang_stat['tec'][1]) + ',' + \
+                               str(lang_stat['gre'][1]) + ',' + \
+                               str(lang_stat['fic'][0]) + ',' + \
+                               str(lang_stat['nfi'][0]) + ',' + \
+                               str(lang_stat['con'][0]) + ',' + \
+                               str(lang_stat['pro'][0]) + ',' + \
+                               str(lang_stat['tec'][0]) + ',' + \
+                               str(lang_stat['gre'][0]) + ',' + \
+                               str(total_lines) + ',' + \
+                               str(total_files) + '\n'
 
     for k, v in sorted(result.items()):
         report.write(k + v)
@@ -125,4 +141,9 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    with codecs.open('line_counts.csv', 'w', 'utf-8') as report:
+        report.write('language,fiction_lines,non-fiction_lines,conversation_lines,professional_lines,'
+                     'technical_lines,grammar_examples_lines,fiction_files,non-fiction_files,'
+                     'conversation_files,professional_files,technical_files,'
+                     'grammar_examples_files,total_lines,total_files\n')
+        main()
