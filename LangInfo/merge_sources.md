@@ -1,7 +1,7 @@
 Merge language information for 100LC sources
 ================
-Chris Bentz, Steven Moran
-25 March, 2020
+Chris Bentz & Steven Moran
+30 March, 2020
 
 ``` r
 library(dplyr)
@@ -24,7 +24,7 @@ wals.100 <- wals[wals$sample.100 == "True", ]
 wals.100.short <- wals.100[, 1:8]
 
 # Rename columns
-colnames(wals.100.short) <- c("wals.code", "glottocode", "name_wals", "latitude_wals", "longitude_wals", "macroarea_wals", "genus_wals", "family_wals")
+colnames(wals.100.short) <- c("wals_code", "glottocode", "name_wals", "latitude_wals", "longitude_wals", "macroarea_wals", "genus_wals", "family_wals")
 
 # Select languages in the 100 language sample by glottocode
 glotto.lang.100 <- glotto.languages[glotto.languages$glottocode %in% wals.100.short$glottocode, ]
