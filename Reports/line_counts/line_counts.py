@@ -4,7 +4,7 @@ import os
 import codecs
 import timeit
 
-root_path = '/home/olga/Documents/Repositories/100LC/Corpus'
+root_path = '../Corpus'
 genres = ['fiction', 'non-fiction', 'conversation', 'professional', 'technical', 'grammar']
 
 genres_abbr = {
