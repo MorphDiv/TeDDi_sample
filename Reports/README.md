@@ -2,9 +2,11 @@
 
 ## Overview
 
-This directory contains short scientific data reports using the 100LC corpus data. A data science report is explains some type of data analysis and are used to share results of that analysis.
+This directory contains short scientific data reports using the 100LC corpus data. A data science report explains some type of data analysis and they are used to create reproducible results and to share those results with others.
 
-This folder is needed to collect these reports into a single directory in our repository for easy browsing, access, sharing. We produce these reports so that we have an idea of, for example:
+For an example of a scientific data report workflow, see [A Reproducible Data Analysis Workflow with R Markdown, Git, Make, and Docker](https://psyarxiv.com/8xzqy/).
+
+This folder is needed for the 100 LC project so that we can collect these reports into a single directory in our repository for easy browsing, access, and sharing. We produce these reports so that we have an idea of, for example:
 
 * how much data still needs to be added to our language sample
 * how large is each language sample in terms of corpus size (e.g. files, lines, tokens)
