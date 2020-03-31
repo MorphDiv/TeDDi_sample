@@ -3,6 +3,7 @@ Postprocessing of the files crawled from Gutenberg and OpenSubtitles:
     Fixes meta (tab after each tag; replace multiple tabs and spaces)
     Fixes broken lines in meta
     Replaces tabs and spaces to a single space in body
+
 """
 
 import os
@@ -35,7 +36,7 @@ for root, dirs, files in os.walk(root_path):
 
                         # Fix broken lines
                         if 'short_description' in line:
-                            if text[i+1].startswith('\n'):
+                            if not text[i+1].startswith('#'):
                                 j = 1
                                 line = text[i].strip()
                                 while not text[i+j].startswith('#'):
@@ -46,7 +47,7 @@ for root, dirs, files in os.walk(root_path):
                                     j += 1
 
                                 line += '\n'
-                                i += j
+                                i += j-1
 
                         # Replace tab in copyright_long (OpenSubtitles)
                         line = re.sub('\t+Extracting', ' Extracting', line)
