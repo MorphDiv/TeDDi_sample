@@ -2,9 +2,9 @@
 
 import os
 import codecs
-import timeit
+import time
 
-root_path = '../Corpus'
+root_path = '../../Corpus'
 genres = ['fiction', 'non-fiction', 'conversation', 'professional', 'technical', 'grammar']
 
 genres_abbr = {
@@ -71,7 +71,7 @@ def count_lines(subdir, lang_root):
 
 
 def main():
-    start = timeit.timeit()
+    start = time.time()
     for root, dirs, files in walklevel(root_path, level=0):
         for cur_dir in dirs:
 
@@ -136,8 +136,8 @@ def main():
     for k, v in sorted(result.items()):
         report.write(k + v)
 
-    end = timeit.timeit()
-    print('TIME:', end - start)
+    end = time.time()
+    print('RUNNING TIME:', round((end - start)/60, 2), 'min')
 
 
 if __name__ == '__main__':
