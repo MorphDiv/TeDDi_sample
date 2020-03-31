@@ -1,7 +1,7 @@
 Merge language information for 100LC sources
 ================
-Chris Bentz, Steven Moran
-07 March, 2020
+Chris Bentz & Steven Moran
+30 March, 2020
 
 ``` r
 library(dplyr)
@@ -13,9 +13,9 @@ Load and process the data
 =========================
 
 ``` r
-wals <- read.csv("WALS/WALS_languages.csv", header = T)
-glotto.languages <- read.csv("Glottolog3.3/languages_and_dialects_geo.csv", header = T)
-glotto.languoids <- read.csv("Glottolog3.3/languoid.csv", header = T)
+wals <- read.csv("Sources/WALS/WALS_languages.csv", header = T)
+glotto.languages <- read.csv("Sources/Glottolog3.3/languages_and_dialects_geo.csv", header = T)
+glotto.languoids <- read.csv("Sources/Glottolog3.3/languoid.csv", header = T)
 
 # Select languages of the 100 language sample
 wals.100 <- wals[wals$sample.100 == "True", ]
@@ -24,7 +24,7 @@ wals.100 <- wals[wals$sample.100 == "True", ]
 wals.100.short <- wals.100[, 1:8]
 
 # Rename columns
-colnames(wals.100.short) <- c("wals.code", "glottocode", "name_wals", "latitude_wals", "longitude_wals", "macroarea_wals", "genus_wals", "family_wals")
+colnames(wals.100.short) <- c("wals_code", "glottocode", "name_wals", "latitude_wals", "longitude_wals", "macroarea_wals", "genus_wals", "family_wals")
 
 # Select languages in the 100 language sample by glottocode
 glotto.lang.100 <- glotto.languages[glotto.languages$glottocode %in% wals.100.short$glottocode, ]
@@ -70,20 +70,20 @@ Get folders from Corpus directory
 
 ``` r
 # This is pretty ugly, but it works
-fils <- tibble(folder=list.dirs(path = "../Corpus", full.names = FALSE, recursive = FALSE))
-folders <- fils %>% separate(folder, c("folder_language_name", "iso_639_3"), sep="_(?=[a-z]{3}$)")
-folders$folder_name <- paste(folders$folder_language_name, folders$iso_639_3, sep="_")
+fils <- tibble(language=list.dirs(path = "../Corpus", full.names = FALSE, recursive = FALSE))
+folders <- fils %>% separate(language, c("folder_language_name", "iso_639_3"), sep="_(?=[a-z]{3}$)")
+folders <- cbind(fils, folders)
 kable(head(folders))
 ```
 
-| folder\_language\_name | iso\_639\_3 | folder\_name          |
-|:-----------------------|:------------|:----------------------|
-| Abkhaz                 | abk         | Abkhaz\_abk           |
-| Acoma                  | kjq         | Acoma\_kjq            |
-| Alamblak               | amp         | Alamblak\_amp         |
-| Amele                  | aey         | Amele\_aey            |
-| Apurina                | apu         | Apurina\_apu          |
-| Arabic\_Egyptian       | arz         | Arabic\_Egyptian\_arz |
+| language              | folder\_language\_name | iso\_639\_3 |
+|:----------------------|:-----------------------|:------------|
+| Abkhaz\_abk           | Abkhaz                 | abk         |
+| Acoma\_kjq            | Acoma                  | kjq         |
+| Alamblak\_amp         | Alamblak               | amp         |
+| Amele\_aey            | Amele                  | aey         |
+| Apurina\_apu          | Apurina                | apu         |
+| Arabic\_Egyptian\_arz | Arabic\_Egyptian       | arz         |
 
 Combine the various information sources
 =======================================
@@ -104,8 +104,33 @@ langInfo.100 <- left_join(langInfo.100, folders)
     ## Warning: Column `iso_639_3` joining factor and character vector, coercing into
     ## character vector
 
+Data integrity checks
+=====================
+
 ``` r
-# Write to file
+library(testthat)
+library(stringr)
+
+# Make sure we have 100 languages in our sample after merging
+expect_equal(nrow(langInfo.100), 100)
+
+# Do the Glottocodes follow the correct format in the metadata?
+glottocode <- "([a-z0-9]{4})([0-9]{4})"
+expect_equal(length(which(!(str_detect(langInfo.100$glottocode, glottocode)))), 0)
+# If this test fails, the next line will tell us where
+# which(!(str_detect(langInfo.100$glottocode, glottocode)))
+
+# Do the ISO 639-3 codes follow the correct format in the metadata?
+isocode <- "[a-z]{3}"
+expect_equal(length(which(!(str_detect(langInfo.100$iso_639_3, isocode)))), 0)
+# If this test fails, the next line will tell us where
+# which(!(str_detect(langInfo.100$iso_639_3, isocode)))
+```
+
+Write results to CSV
+====================
+
+``` r
 write.csv(file = "langInfo_100LC.csv", langInfo.100, row.names = F, quote=FALSE)
 ```
 
@@ -113,7 +138,15 @@ Which rows do not (yet) have file folders?
 ==========================================
 
 ``` r
-kable(langInfo.100 %>% filter(is.na(folder_name)) %>% select(iso_639_3, glottocode, name_glotto, name_wals))
+# This many languages haven't been added yet
+nrow(langInfo.100 %>% filter(is.na(language)))
+```
+
+    ## [1] 17
+
+``` r
+# Here they are
+kable(langInfo.100 %>% filter(is.na(language)) %>% select(iso_639_3, glottocode, name_glotto, name_wals))
 ```
 
 | iso\_639\_3 | glottocode | name\_glotto            | name\_wals      |

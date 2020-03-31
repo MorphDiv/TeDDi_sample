@@ -336,12 +336,12 @@ def sample(link, text, year, tokens, lang, current_counter, total_tokens):
         f1 = codecs.open(fname, 'w', 'utf-8')
         meta = '''# language_name_wals:	''' + lang_dic[lang][2] + '''
 # language_name_glotto:	''' + lang_dic[lang][3] + '''
-# ISO_639-3:	''' + lang_dic[lang][1] + '''
+# ISO_6393:	''' + lang_dic[lang][1] + '''
 # year_composed:	NA
 # year_published:	''' + year + '''
 # mode:	written
-# genre_(broad):	non-fiction
-# genre_(narrow):	prepared_speeches
+# genre_broad:	non-fiction
+# genre_narrow:	prepared_speeches
 # writing_system:	''' + lang_dic[lang][4] + '''
 # special_characters:	NA
 # short_description:	OpenSubtitles2018
@@ -353,9 +353,12 @@ def sample(link, text, year, tokens, lang, current_counter, total_tokens):
 
 '''
         meta = re.sub('\t{2,}', '\t', meta)
+        meta = re.sub(' {2,}', ' ', meta)
         f1.write(meta)
 
         text = re.sub('\t+', ' ', text)
+        text = re.sub(' {2,}', ' ', text)
+
         f1.write(text[:-1])
         total_tokens += int(tokens)
         return total_tokens, current_counter, fname
