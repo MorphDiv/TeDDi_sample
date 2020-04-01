@@ -27,11 +27,6 @@ import csv
 import os
 import re
 import sys
-from nltk.tokenize import word_tokenize as nltk_tokenize
-from pythainlp import word_tokenize as thai_tokenize
-from wordfreq import tokenize
-
-from word_breaker.word_segment_v5 import WordSegment
 
 
 # Using this list in order to track languages with zero counts
@@ -74,8 +69,7 @@ result = {}
 
 def generate_result_dict():
     for lang in all_langs:
-        iso = lang[-3:]
-        result[iso] = [lang[:-4], 0, 0, 0, 0]
+        result[lang] = [0, 0, 0, 0]
 
 
 def walklevel(some_dir, level=1):
@@ -142,7 +136,8 @@ def count_tokens_simple(subdir, lang_root):
         for file in files:
             f = codecs.open(os.path.join(joined_subdir, file), 'r', 'utf-8')
             text = get_body_text(f)
-            tokens += text.split(' ')
+            # Split by white spaces and \n
+            tokens += text.split()
 
     return len(tokens)
 
@@ -213,9 +208,8 @@ def main(tokenization_mode, report_writer):
     for root, dirs, files in walklevel(root_path, level=0):
         for cur_dir in dirs:
             language = cur_dir
-            iso = language[-3:]
             print('\n' + str(i) + ' / 100...')
-            print(language[:-4], 'in process...')
+            print(language, 'in process...')
 
             number_genres = 0
             number_texts = 0
@@ -247,16 +241,16 @@ def main(tokenization_mode, report_writer):
                                 elif tokenization_mode == '-a':
                                     number_tokens += count_tokens_advanced(subdir, lang_root)
 
-            print(iso, language[:-4], number_texts, number_genres, number_characters, number_tokens)
+            print(language, number_texts, number_genres, number_characters, number_tokens)
 
-            result[iso] = [language[:-4], number_texts, number_genres, number_characters, number_tokens]
+            result[language] = [number_texts, number_genres, number_characters, number_tokens]
 
             i += 1
 
         for lang in all_langs:
             for k, v in result.items():
-                if v[0] in lang:
-                    report_writer.writerow((k, v[0], v[1], v[2], v[3], v[4]))
+                if k == lang:
+                    report_writer.writerow((k, v[0], v[1], v[2], v[3]))
 
 
 if __name__ == '__main__':
@@ -265,14 +259,20 @@ if __name__ == '__main__':
 
     if mode == '-s':
         report_name = 'progress_simple.csv'
+
     elif mode == '-a':
+        from nltk.tokenize import word_tokenize as nltk_tokenize
+        from pythainlp import word_tokenize as thai_tokenize
+        from wordfreq import tokenize
+        from word_breaker.word_segment_v5 import WordSegment
         report_name = 'progress_advanced.csv'
 
     if report_name != '':
         with open(report_name, 'w') as report:
-            writer = csv.writer(report)
-            writer.writerow(('iso', 'language', 'number_texts', 'number_genres', 'number_characters', 'number_tokens'))
+            writer = csv.writer(report, lineterminator='\n')
+            writer.writerow(('language', 'number_texts', 'number_genres', 'number_characters', 'number_tokens'))
             main(mode, writer)
             print('\nDONE')
     else:
         print('Please enter either -s or -a as an argument')
+
