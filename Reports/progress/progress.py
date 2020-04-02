@@ -268,11 +268,10 @@ if __name__ == '__main__':
         report_name = 'progress_advanced.csv'
 
     if report_name != '':
-        with open(report_name, 'w') as report:
+        with open(report_name, 'w', encoding='utf-8') as report:
             writer = csv.writer(report, lineterminator='\n')
             writer.writerow(('language', 'number_texts', 'number_genres', 'number_characters', 'number_tokens'))
             main(mode, writer)
             print('\nDONE')
     else:
         print('Please enter either -s or -a as an argument')
-
