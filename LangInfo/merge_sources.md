@@ -1,7 +1,7 @@
 Merge language information for 100LC sources
 ================
 Chris Bentz & Steven Moran
-30 March, 2020
+02 April, 2020
 
 ``` r
 library(dplyr)
@@ -145,7 +145,7 @@ nrow(langInfo.100 %>% filter(is.na(language)))
     ## [1] 17
 
 ``` r
-# Here they are
+# Here are the languages that still need to be added
 kable(langInfo.100 %>% filter(is.na(language)) %>% select(iso_639_3, glottocode, name_glotto, name_wals))
 ```
 
