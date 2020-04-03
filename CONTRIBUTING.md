@@ -23,12 +23,26 @@ And the [100LC/Crawlers](https://github.com/uzling/100LC/tree/master/Crawlers) d
 
 ## Workflow
 
-When working with this GitHub repository, please use the [issue tracker](https://github.com/uzling/100LC/issues) and submit a [pull request](https://github.com/uzling/100LC/pulls) when adding or updating data or code.
+Please use the GitHub workflow, described here:
 
-Standard practice in collaborative development on GitHub is to follow the fork and pull request model. See these documents for more information:
+* https://guides.github.com/introduction/flow/
 
+When working with this repository, please use the [issue tracker](https://github.com/uzling/100LC/issues) and submit a [pull request](https://github.com/uzling/100LC/pulls) for your branches, when adding or updating data or code.
+
+We follow standard practice in collaborative development on GitHub is to follow the fork and pull request model:
+
+* https://guides.github.com/activities/forking/
+
+There are a number of good GUIs for working with GitHub. For example:
+
+* https://desktop.github.com/
+* https://acodez.in/git-gui-clients/
+
+If you are the command line type, these documents contain for more information about setting up a fork and pull request workflow:
+
+* <https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork>
 * <https://gist.github.com/Chaser324/ce0505fbed06b947d962>
 * <https://www.gun.io/blog/how-to-github-fork-branch-and-pull-request>
 * <https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork>
-* <https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork>
+
 
