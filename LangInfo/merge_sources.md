@@ -1,7 +1,7 @@
 Merge language information for 100LC sources
 ================
 Chris Bentz & Steven Moran
-02 April, 2020
+06 April, 2020
 
 ``` r
 library(dplyr)
@@ -62,7 +62,7 @@ glotto.langInfo.noFamID$top_level_family <- rep("NA", nrow(glotto.langInfo.noFam
 glotto.langInfo.100 <- rbind(glotto.langInfo.fam, glotto.langInfo.noFamID)
 
 # Rename columns
-colnames(glotto.langInfo.100) <- c("family_id", "glottocode", "name_glotto", "iso_639_3", "level", "macroarea_glotto", "latitude_glotto", "longitude_glotto", "status", "top_level_family")
+colnames(glotto.langInfo.100) <- c("family_id", "glottocode", "name_glotto", "ISO_6393", "level", "macroarea_glotto", "latitude_glotto", "longitude_glotto", "status", "top_level_family")
 ```
 
 Get folders from Corpus directory
@@ -71,19 +71,19 @@ Get folders from Corpus directory
 ``` r
 # This is pretty ugly, but it works
 fils <- tibble(language=list.dirs(path = "../Corpus", full.names = FALSE, recursive = FALSE))
-folders <- fils %>% separate(language, c("folder_language_name", "iso_639_3"), sep="_(?=[a-z]{3}$)")
+folders <- fils %>% separate(language, c("folder_language_name", "ISO_6393"), sep="_(?=[a-z]{3}$)")
 folders <- cbind(fils, folders)
 kable(head(folders))
 ```
 
-| language              | folder\_language\_name | iso\_639\_3 |
-|:----------------------|:-----------------------|:------------|
-| Abkhaz\_abk           | Abkhaz                 | abk         |
-| Acoma\_kjq            | Acoma                  | kjq         |
-| Alamblak\_amp         | Alamblak               | amp         |
-| Amele\_aey            | Amele                  | aey         |
-| Apurina\_apu          | Apurina                | apu         |
-| Arabic\_Egyptian\_arz | Arabic\_Egyptian       | arz         |
+| language              | folder\_language\_name | ISO\_6393 |
+|:----------------------|:-----------------------|:----------|
+| Abkhaz\_abk           | Abkhaz                 | abk       |
+| Acoma\_kjq            | Acoma                  | kjq       |
+| Alamblak\_amp         | Alamblak               | amp       |
+| Amele\_aey            | Amele                  | aey       |
+| Apurina\_apu          | Apurina                | apu       |
+| Arabic\_Egyptian\_arz | Arabic\_Egyptian       | arz       |
 
 Combine the various information sources
 =======================================
@@ -99,9 +99,9 @@ langInfo.100 <- langInfo.100[ , c(11, 1, 2, 10, 3, 12, 16, 9, 17, 7, 8, 13, 6, 1
 langInfo.100 <- left_join(langInfo.100, folders)
 ```
 
-    ## Joining, by = "iso_639_3"
+    ## Joining, by = "ISO_6393"
 
-    ## Warning: Column `iso_639_3` joining factor and character vector, coercing into
+    ## Warning: Column `ISO_6393` joining factor and character vector, coercing into
     ## character vector
 
 Data integrity checks
@@ -122,9 +122,9 @@ expect_equal(length(which(!(str_detect(langInfo.100$glottocode, glottocode)))), 
 
 # Do the ISO 639-3 codes follow the correct format in the metadata?
 isocode <- "[a-z]{3}"
-expect_equal(length(which(!(str_detect(langInfo.100$iso_639_3, isocode)))), 0)
-# If this test fails, the next line will tell us where
-# which(!(str_detect(langInfo.100$iso_639_3, isocode)))
+expect_equal(length(which(!(str_detect(langInfo.100$ISO_6393, isocode)))), 0)
+# If this test fails, the next line will tell us where it fails
+# which(!(str_detect(langInfo.100$ISO_6393, isocode)))
 ```
 
 Write results to CSV
@@ -146,28 +146,28 @@ nrow(langInfo.100 %>% filter(is.na(language)))
 
 ``` r
 # Here are the languages that still need to be added
-kable(langInfo.100 %>% filter(is.na(language)) %>% select(iso_639_3, glottocode, name_glotto, name_wals))
+kable(langInfo.100 %>% filter(is.na(language)) %>% select(ISO_6393, glottocode, name_glotto, name_wals))
 ```
 
-| iso\_639\_3 | glottocode | name\_glotto            | name\_wals      |
-|:------------|:-----------|:------------------------|:----------------|
-| gry         | barc1235   | Barclayville Grebo      | Grebo           |
-| cku         | koas1236   | Koasati                 | Koasati         |
-| ses         | koyr1242   | Koyraboro Senni Songhai | Koyraboro Senni |
-| kgo         | kron1241   | Krongo                  | Krongo          |
-| lkt         | lako1247   | Lakota                  | Lakhota         |
-| lez         | lezg1247   | Lezgian                 | Lezgian         |
-| mpc         | mang1381   | Mangarrayi              | Mangarrayi      |
-| mni         | mani1292   | Manipuri                | Meithei         |
-| mrc         | mari1440   | Maricopa                | Maricopa        |
-| scs         | nort2942   | North Slavey            | Slave           |
-| one         | onei1249   | Oneida                  | Oneida          |
-| pwn         | paiw1248   | Paiwan                  | Paiwan          |
-| myp         | pira1253   | Pirahã                  | Pirahã          |
-| spp         | supy1237   | Supyire Senoufo         | Supyire         |
-| tiw         | tiwi1244   | Tiwi                    | Tiwi            |
-| bhq         | tuka1249   | Tukang Besi South       | Tukang Besi     |
-| pav         | wari1268   | Wari'                   | Wari'           |
+| ISO\_6393 | glottocode | name\_glotto            | name\_wals      |
+|:----------|:-----------|:------------------------|:----------------|
+| gry       | barc1235   | Barclayville Grebo      | Grebo           |
+| cku       | koas1236   | Koasati                 | Koasati         |
+| ses       | koyr1242   | Koyraboro Senni Songhai | Koyraboro Senni |
+| kgo       | kron1241   | Krongo                  | Krongo          |
+| lkt       | lako1247   | Lakota                  | Lakhota         |
+| lez       | lezg1247   | Lezgian                 | Lezgian         |
+| mpc       | mang1381   | Mangarrayi              | Mangarrayi      |
+| mni       | mani1292   | Manipuri                | Meithei         |
+| mrc       | mari1440   | Maricopa                | Maricopa        |
+| scs       | nort2942   | North Slavey            | Slave           |
+| one       | onei1249   | Oneida                  | Oneida          |
+| pwn       | paiw1248   | Paiwan                  | Paiwan          |
+| myp       | pira1253   | Pirahã                  | Pirahã          |
+| spp       | supy1237   | Supyire Senoufo         | Supyire         |
+| tiw       | tiwi1244   | Tiwi                    | Tiwi            |
+| bhq       | tuka1249   | Tukang Besi South       | Tukang Besi     |
+| pav       | wari1268   | Wari'                   | Wari'           |
 
 ``` r
 # Clean up
