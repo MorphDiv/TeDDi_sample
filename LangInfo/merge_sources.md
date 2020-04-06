@@ -70,13 +70,13 @@ Get folders from Corpus directory
 
 ``` r
 # This is pretty ugly, but it works
-fils <- tibble(language=list.dirs(path = "../Corpus", full.names = FALSE, recursive = FALSE))
-folders <- fils %>% separate(language, c("folder_language_name", "ISO_6393"), sep="_(?=[a-z]{3}$)")
+fils <- tibble(name=list.dirs(path = "../Corpus", full.names = FALSE, recursive = FALSE))
+folders <- fils %>% separate(name, c("folder_language_name", "ISO_6393"), sep="_(?=[a-z]{3}$)")
 folders <- cbind(fils, folders)
 kable(head(folders))
 ```
 
-| language              | folder\_language\_name | ISO\_6393 |
+| name                  | folder\_language\_name | ISO\_6393 |
 |:----------------------|:-----------------------|:----------|
 | Abkhaz\_abk           | Abkhaz                 | abk       |
 | Acoma\_kjq            | Acoma                  | kjq       |
@@ -139,14 +139,14 @@ Which rows do not (yet) have file folders?
 
 ``` r
 # This many languages haven't been added yet
-nrow(langInfo.100 %>% filter(is.na(language)))
+nrow(langInfo.100 %>% filter(is.na(name)))
 ```
 
     ## [1] 17
 
 ``` r
 # Here are the languages that still need to be added
-kable(langInfo.100 %>% filter(is.na(language)) %>% select(ISO_6393, glottocode, name_glotto, name_wals))
+kable(langInfo.100 %>% filter(is.na(name)) %>% select(ISO_6393, glottocode, name_glotto, name_wals))
 ```
 
 | ISO\_6393 | glottocode | name\_glotto            | name\_wals      |
