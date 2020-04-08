@@ -65,7 +65,7 @@ glotto.langInfo.noFamID$top_level_family <- rep("NA", nrow(glotto.langInfo.noFam
 glotto.langInfo.100 <- rbind(glotto.langInfo.fam, glotto.langInfo.noFamID)
 
 # Rename columns
-colnames(glotto.langInfo.100) <- c("family_id", "glottocode", "name_glotto", "ISO_6393", "level", "macroarea_glotto", "latitude_glotto", "longitude_glotto", "status", "top_level_family")
+colnames(glotto.langInfo.100) <- c("family_id", "glottocode", "name_glotto", "iso639_3", "level", "macroarea_glotto", "latitude_glotto", "longitude_glotto", "status", "top_level_family")
 ```
 
 # Get folders from Corpus directory
@@ -73,7 +73,7 @@ colnames(glotto.langInfo.100) <- c("family_id", "glottocode", "name_glotto", "IS
 ```{r}
 # This is pretty ugly, but it works
 fils <- tibble(name=list.dirs(path = "../Corpus", full.names = FALSE, recursive = FALSE))
-folders <- fils %>% separate(name, c("folder_language_name", "ISO_6393"), sep="_(?=[a-z]{3}$)")
+folders <- fils %>% separate(name, c("folder_language_name", "iso639_3"), sep="_(?=[a-z]{3}$)")
 folders <- cbind(fils, folders)
 kable(head(folders))
 ```
@@ -109,9 +109,9 @@ expect_equal(length(which(!(str_detect(langInfo.100$glottocode, glottocode)))), 
 
 # Do the ISO 639-3 codes follow the correct format in the metadata?
 isocode <- "[a-z]{3}"
-expect_equal(length(which(!(str_detect(langInfo.100$ISO_6393, isocode)))), 0)
+expect_equal(length(which(!(str_detect(langInfo.100$iso639_3, isocode)))), 0)
 # If this test fails, the next line will tell us where it fails
-# which(!(str_detect(langInfo.100$ISO_6393, isocode)))
+# which(!(str_detect(langInfo.100$iso639_3, isocode)))
 ```
 
 # Write results to CSV
@@ -126,7 +126,7 @@ write.csv(file = "langInfo_100LC.csv", langInfo.100, row.names = F, quote=FALSE)
 nrow(langInfo.100 %>% filter(is.na(name)))
 
 # Here are the languages that still need to be added
-kable(langInfo.100 %>% filter(is.na(name)) %>% select(ISO_6393, glottocode, name_glotto, name_wals))
+kable(langInfo.100 %>% filter(is.na(name)) %>% select(iso639_3, glottocode, name_glotto, name_wals))
 ```
 
 ```{r}
