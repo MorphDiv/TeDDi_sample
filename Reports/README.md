@@ -20,7 +20,11 @@ The [file_counts](file_counts) is an [R markdown](https://rmarkdown.rstudio.com/
 
 ### Line counts
 
-The [line_counts](line_counts) is a Python script that loops through the corpus files and reports their number of lines and files per language per genre and outputs this data in a `CSV` file. This report can be produced by running the command line command `python line_counts.py`. The `CSV` file will be written to the same directory as the script.
+The [line_counts](line_counts) directory contains a Python script that loops through the corpus files and reports their number of lines and files per language per genre and outputs this data in a `CSV` file. This report can be produced by running the command line command `python line_counts.py`. The `CSV` file will be written to the same directory as the script. It also contains a R version that reads from the database and reports the number of lines, etc., to be compared with the Python script.
+
+### Progress
+
+The [progress](progress) directory contains a Python script that loops through the corpus files and reports the number of texts, genres covered, unique characters and number of tokens per language. 
 
 ### World maps
 
