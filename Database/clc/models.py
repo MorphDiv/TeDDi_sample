@@ -163,7 +163,7 @@ def load(path=CORPUS_ROOT, engine=ENGINE):
 
         corpus_map = CorpusMap()
 
-        with open('langInfo_100LC.csv', newline='') as csvfile:
+        with open('../LangInfo/langInfo_100LC.csv', newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 insert_language(**row)

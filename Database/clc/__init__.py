@@ -25,6 +25,7 @@ def load(args=None):
     args = parser.parse_args(args)
 
     args = [CORPUS_ROOT] if args.full else [TEST_ROOT]
+
     models.load(*args)
 
     return None
