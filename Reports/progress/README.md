@@ -1,6 +1,6 @@
-### Progress
+# Progress report
 
-The [progress](progress) is a Python script that loops through the corpus files and reports the number of texts, genres covered, unique characters and number of tokens per language. Unlike [file_counts](file_counts) and [line_counts](line_counts) this report returns zero values for languages that are not covered yet. The output format is a `CSV` file of the following structure: `language,number_texts,number_genres,number_characters,number_tokens`. The `CSV` file will be written to the same directory as the script.
+The [progress.py](progress.py) is a Python script that loops through the corpus files and reports the number of texts, genres covered, unique characters and number of tokens per language. Unlike [file_counts](../file_counts) and [line_counts](../line_counts) this report returns zero values for languages that are not covered yet. The output format is a `CSV` file of the following structure:  `language,number_texts,number_genres,number_characters,number_tokens`. The `CSV` file will be written to the same directory as the script.
 
 The report can be produced in two modes:
 
@@ -21,13 +21,17 @@ The second mode tokenizes the texts language specifically by using different Pyt
 - `NLTK`: other languages
 
 Before running the code in an advanced mode, please install the required libraries by running the command:
+
 `pip install -r requirements.txt`
 
 Additional preparation steps:
 
 a) Download the `word_breaker` library for Burmese from [this repository](https://github.com/stevenay/myan-word-breaker), unzip it into the same folder where you store the script `progress.py`
+
 b) Install Japanese dictionary `mecab-ipadic`. Installation file for Linux can be found [here](https://packages.ubuntu.com/xenial/all/mecab-ipadic-utf8/download)
+
 c) Install Korean dictionary `mecab-ko-dic`. Installation commands for Linux:
+
 ```
 wget https://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.0.1-20150920.tar.gz
 tar zxfv mecab-ko-dic-2.0.1-20150920.tar.gz
@@ -37,6 +41,3 @@ sudo ldconfig
 make
 sudo make install
 ```
-
-
-
