@@ -1,7 +1,8 @@
-""" Fix the formatting of the corpus files  """
+""" Fix the formatting of the corpus files."""
 
-import text
+import clc
 
-for text in text.Text.from_rglob('../Corpus/', "*.txt"):
-    print(text)
-    text.to_file()
+
+for t in clc.Text.from_rglob(clc.TEST_ROOT, '*.txt'):
+    print(t)
+    t.to_file()
