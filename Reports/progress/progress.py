@@ -5,7 +5,7 @@ unique characters and number of tokens per language.
 This program returns zero values for languages that are not covered yet (unlike line_counts.py)
 
 Structure of the output:
-iso,language,number_texts,number_genres,number_characters,number_tokens
+language,number_texts,number_genres,number_characters,number_tokens
 
 How to run:
 python progress.py -s (counts tokens in a simple way,
