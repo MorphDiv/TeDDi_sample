@@ -14,23 +14,21 @@ library(knitr)
 ```
 
 ```{r}
-# For development, use the test database
-# load('../../../100LC-dev/Database/test.Rdata')
-
-# For production, load the R serialized version of the 100 LC database
-load('../../../100LC-dev/Database/100LC.Rdata')
+# Load the R serialized version of the 100 LC database
+load('../../Database/100LC.Rdata')
 
 # Remove all NAs (NULLs) in the line.text field in the database, i.e. any empty lines
 df <- df %>% filter(!is.na(text))
 ```
 
 ```{r}
-# Read in Olga's report (Python script's output)
+# Read in Olga's report (Python script's output that examines the corpus files directly)
 report <- read.csv('line_counts.csv')
 ```
 
 ```{r}
-# Calculate counts from database
+# Calculate counts from database version
+
 ## Totals
 total.files <- df %>% select(name, file_id) %>% distinct() %>% group_by(name) %>% summarize(db_total_files = n())
 total.lines <- df %>% select(name, line_id) %>% distinct() %>% group_by(name) %>% summarize(db_total_lines = n())
@@ -46,8 +44,10 @@ genre.broad.lines.wide <- spread(genre.broad.lines, key = genre_broad, value = d
 # Rename the columns
 genre.broad.files.wide <- genre.broad.files.wide %>% rename(db_conversation_files = conversation, db_fiction_files = fiction, db_grammar_files = grammar, db_non_fiction_files ='non-fiction', db_professional_files = professional)
 genre.broad.lines.wide <- genre.broad.lines.wide %>% rename(db_conversation_lines = conversation, db_fiction_lines = fiction, db_grammar_lines = grammar, db_non_fiction_lines ='non-fiction', db_professional_lines = professional)
+```
 
 
+```{r}
 # Combine the data frames
 db.report <- left_join(total.files, total.lines)
 db.report <- left_join(db.report, genre.broad.files.wide)
@@ -65,12 +65,12 @@ combined.reports <- combined.reports %>% select(language, total_files, db_total_
 ```
 
 ```{r}
-# Print
+# Print it for easy access
 kable(combined.reports)
 ```
 
 ```{r}
 # Write to CSV
-write.csv(combined.reports, file="combined_reports-full.csv", quote=FALSE)
+write.csv(combined.reports, file="compared_reports.csv", quote=FALSE, row.names=FALSE)
 ```
 
