@@ -1,0 +1,56 @@
+---
+title: "Compare simple vs advanced tokenization counts"
+author: "Steven Moran"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+  pandoc_args: --webtex
+---
+
+```{r warning=FALSE, message=FALSE}
+library(dplyr)
+library(knitr)
+library(testthat)
+```
+
+```{r}
+# Read in reports
+simple <- read.csv("progress_simple.csv")
+advanced <- read.csv("progress_advanced.csv")
+```
+
+```{r}
+# Rename columns
+simple <- simple %>% rename(simple_number_texts = number_texts, simple_number_genres = number_genres, simple_number_characters = number_characters, simple_number_tokens = number_tokens)
+advanced <- advanced %>% rename(advanced_number_texts = number_texts, advanced_number_genres = number_genres,  advanced_number_characters = number_characters, advanced_number_tokens = number_tokens)
+```
+
+```{r}
+# Merge
+both <- left_join(simple, advanced)
+```
+
+```{r}
+# We expect that the count for texts, genres, and unique characters are the same across reports
+expect_true(all(both$simple_number_texts==both$advanced_number_texts))
+expect_true(all(both$simple_number_genres==both$advanced_number_genres))
+expect_true(all(both$simple_number_characters==both$advanced_number_characters))
+```
+
+```{r}
+# Get the delta between tokenization routines
+both$delta_tokens <- abs(both$simple_number_tokens-both$advanced_number_tokens)
+```
+
+```{r}
+# TODO: Add in the writing system data
+# The current counts do not account for different writing systems within the same language folder, e.g.
+# https://github.com/uzling/100LC/blob/master/Corpus/Vietnamese_vie/professional/vie_pro_1.txt
+# https://github.com/uzling/100LC/blob/master/Corpus/Vietnamese_vie/professional/vie_pro_2.txt
+```
+
+```{r}
+# Display the difference in tokenization routines
+kable(both %>% select(language, simple_number_tokens, advanced_number_tokens, delta_tokens))
+```
+
