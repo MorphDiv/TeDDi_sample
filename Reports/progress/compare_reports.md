@@ -1,7 +1,7 @@
 Compare simple vs advanced tokenization counts
 ================
 Steven Moran
-13 April, 2020
+14 April, 2020
 
 ``` r
 library(dplyr)
@@ -154,3 +154,9 @@ kable(both %>% select(language, simple_number_tokens, advanced_number_tokens, de
 | Yoruba\_yor                |                  942404|                    942610|            206|
 | Zoque\_Copainala\_zoc      |                     872|                       894|             22|
 | Zulu\_zul                  |                    2150|                      2309|            159|
+
+``` r
+# Compared reports as CSV
+compared <- both %>% select(language, simple_number_tokens, advanced_number_tokens, delta_tokens)
+write.csv(compared, file="compare_reports.csv", row.names = FALSE, quote=FALSE)
+```
