@@ -9,7 +9,7 @@ library(testthat)
 library(knitr)
 ```
 
-Normnally, we would load and query the SQLite database with an R library like `RSQLite` or dump it first as an `Rdata` object and query that directly. For example:
+Normally, we would load and query the SQLite database with an R library like `RSQLite` or dump it first as an `Rdata` object and query that directly. For example:
 
 ``` r
 # Load the R serialized version of the 100 LC database
