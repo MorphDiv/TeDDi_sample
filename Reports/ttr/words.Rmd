@@ -1,0 +1,76 @@
+---
+title: "Word TTR in 100LC"
+author: "Steven Moran"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+  pandoc_args: --webtex
+---
+
+```{r echo=FALSE, include=FALSE}
+library(dplyr)
+library(RSQLite)
+```
+
+```{r}
+# Query the database and return a dataframe
+db.file <- '../../Database/words.sqlite3'
+runsql <- function(sql, dbname=db.file){
+  require(RSQLite)
+  driver <- dbDriver("SQLite")
+  connect <- dbConnect(driver, dbname=dbname);
+  closeup <- function(){
+    sqliteCloseConnection(connect)
+    sqliteCloseDriver(driver)
+  }
+  dd <- tryCatch(dbGetQuery(connect, sql), finally=closeup)
+  return(dd)
+}
+```
+
+```{r}
+# Get word token counts
+tokens <- runsql('
+select name, writing_system, count(*) from v_words group by name, writing_system
+')
+tokens <- tokens %>% rename(tokens = `count(*)`)
+```
+
+```{r}
+# Get word type counts
+types <- runsql('
+select name, writing_system, word_text, count(*) from v_words group by name, writing_system, word_text
+')
+```
+
+```{r}
+# Make sure the sum of counts is correct from SQL
+test <- types %>% filter(name=='Abkhaz_abk') %>% filter(writing_system=='Cyrl') %>% select('count(*)')
+sum(test$`count(*)`)
+```
+
+```{r}
+types <- types %>% group_by(name, writing_system) %>% summarize(types=n())
+```
+
+```{r}
+ttr <- left_join(types, tokens)
+```
+
+```{r}
+# Type-Token Ratio = (number of types/number of tokens) * 100
+ttr$ttr <- (ttr$types / ttr$tokens) * 100
+```
+
+```{r}
+library(knitr)
+ttr %>% kable()
+```
+
+```{r}
+library(ggplot2)
+p <- ttr
+p$name <- factor(p$name, levels = p$name[order(ttr$ttr)])
+qplot(name, ttr, data=p) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
