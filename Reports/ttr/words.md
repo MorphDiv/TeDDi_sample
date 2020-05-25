@@ -1,11 +1,16 @@
 Word TTR in 100LC
 ================
 Steven Moran
-14 May, 2020
+25 May, 2020
+
+Generate word type-token ratios for the 100LC corpus data.
+
+Query the database and return a dataframe.
 
 ``` r
-# Query the database and return a dataframe
-db.file <- '../../Database/words.sqlite3'
+db.file <- '../../Database/words.sqlite3' # Test data
+# db.file <- '../../Database/full.sqlite3'
+
 runsql <- function(sql, dbname=db.file){
   require(RSQLite)
   driver <- dbDriver("SQLite")
@@ -19,32 +24,44 @@ runsql <- function(sql, dbname=db.file){
 }
 ```
 
+Get the word token counts.
+
 ``` r
-# Get word token counts
 tokens <- runsql('
-select name, writing_system, count(*) from v_words group by name, writing_system
+SELECT name, writing_system, count(*) 
+FROM v_words 
+GROUP BY name, writing_system
 ')
+
 tokens <- tokens %>% rename(tokens = `count(*)`)
 ```
 
+Get word type counts.
+
 ``` r
-# Get word type counts
 types <- runsql('
-select name, writing_system, word_text, count(*) from v_words group by name, writing_system, word_text
+SELECT name, writing_system, word_text, count(*) 
+FROM v_words 
+GROUP BY name, writing_system, word_text
 ')
 ```
 
+Make sure the sum of counts is correct from SQL.
+
 ``` r
-# Make sure the sum of counts is correct from SQL
 test <- types %>% filter(name=='Abkhaz_abk') %>% filter(writing_system=='Cyrl') %>% select('count(*)')
 sum(test$`count(*)`)
 ```
 
     ## [1] 1325
 
+Get the type counts.
+
 ``` r
 types <- types %>% group_by(name, writing_system) %>% summarize(types=n())
 ```
+
+Join the type and token counts into a single data frame.
 
 ``` r
 ttr <- left_join(types, tokens)
@@ -52,10 +69,13 @@ ttr <- left_join(types, tokens)
 
     ## Joining, by = c("name", "writing_system")
 
+Calculate the type-token ratio: (number of types/number of tokens) \* 100.
+
 ``` r
-# Type-Token Ratio = (number of types/number of tokens) * 100
 ttr$ttr <- (ttr$types / ttr$tokens) * 100
 ```
+
+A table if TTR values:
 
 ``` r
 library(knitr)
@@ -79,6 +99,8 @@ ttr %>% kable()
 | Lavukaleve\_lvk             | Latn            |    645|    2109|  30.583215|
 | Vietnamese\_vie             | Latn            |   1215|    4545|  26.732673|
 
+Plot the languages by their TTR ratios.
+
 ``` r
 library(ggplot2)
 p <- ttr
@@ -88,3 +110,9 @@ qplot(name, ttr, data=p) +
 ```
 
 ![](words_files/figure-markdown_github/unnamed-chunk-10-1.png)
+
+Write the table to CSV.
+
+``` r
+write.csv(ttr, file="words_ttr.csv", row.names=FALSE)
+```

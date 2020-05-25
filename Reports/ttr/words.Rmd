@@ -7,14 +7,19 @@ output:
   pandoc_args: --webtex
 ---
 
+Generate word type-token ratios for the 100LC corpus data.
+
 ```{r echo=FALSE, include=FALSE}
 library(dplyr)
 library(RSQLite)
 ```
 
+Query the database and return a dataframe.
+
 ```{r}
-# Query the database and return a dataframe
-db.file <- '../../Database/words.sqlite3'
+db.file <- '../../Database/words.sqlite3' # Test data
+# db.file <- '../../Database/full.sqlite3'
+
 runsql <- function(sql, dbname=db.file){
   require(RSQLite)
   driver <- dbDriver("SQLite")
@@ -28,44 +33,61 @@ runsql <- function(sql, dbname=db.file){
 }
 ```
 
+Get the word token counts.
+
 ```{r}
-# Get word token counts
 tokens <- runsql('
-select name, writing_system, count(*) from v_words group by name, writing_system
+SELECT name, writing_system, count(*) 
+FROM v_words 
+GROUP BY name, writing_system
 ')
+
 tokens <- tokens %>% rename(tokens = `count(*)`)
 ```
 
+Get word type counts.
+
 ```{r}
-# Get word type counts
 types <- runsql('
-select name, writing_system, word_text, count(*) from v_words group by name, writing_system, word_text
+SELECT name, writing_system, word_text, count(*) 
+FROM v_words 
+GROUP BY name, writing_system, word_text
 ')
 ```
 
+Make sure the sum of counts is correct from SQL.
+
 ```{r}
-# Make sure the sum of counts is correct from SQL
 test <- types %>% filter(name=='Abkhaz_abk') %>% filter(writing_system=='Cyrl') %>% select('count(*)')
 sum(test$`count(*)`)
 ```
+
+Get the type counts.
 
 ```{r}
 types <- types %>% group_by(name, writing_system) %>% summarize(types=n())
 ```
 
+Join the type and token counts into a single data frame.
+
 ```{r}
 ttr <- left_join(types, tokens)
 ```
 
+Calculate the type-token ratio: (number of types/number of tokens) * 100.
+
 ```{r}
-# Type-Token Ratio = (number of types/number of tokens) * 100
 ttr$ttr <- (ttr$types / ttr$tokens) * 100
 ```
+
+A table if TTR values:
 
 ```{r}
 library(knitr)
 ttr %>% kable()
 ```
+
+Plot the languages by their TTR ratios.
 
 ```{r}
 library(ggplot2)
@@ -73,4 +95,10 @@ p <- ttr
 p$name <- factor(p$name, levels = p$name[order(ttr$ttr)])
 qplot(name, ttr, data=p) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+Write the table to CSV.
+
+```{r}
+write.csv(ttr, file="words_ttr.csv", row.names=FALSE)
 ```

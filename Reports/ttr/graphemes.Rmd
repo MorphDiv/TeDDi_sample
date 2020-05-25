@@ -10,136 +10,66 @@ output:
 ```{r echo=FALSE, include=FALSE}
 library(dplyr)
 library(knitr)
-library(qlcData)
-library(RSQLite)
+library(stringr)
 ```
 
+Load each grapheme orthography profile (OP) from disk, generate TTRs, and write to a table.
+
 ```{r}
-# Query the database and return a dataframe
-db.file <- '../../Database/words.sqlite3'
-runsql <- function(sql, dbname=db.file){
-  require(RSQLite)
-  driver <- dbDriver("SQLite")
-  connect <- dbConnect(driver, dbname=dbname);
-  closeup <- function(){
-    sqliteCloseConnection(connect)
-    sqliteCloseDriver(driver)
-  }
-  dd <- tryCatch(dbGetQuery(connect, sql), finally=closeup)
-  return(dd)
+# Create results data frame
+header <- c("name", "types", "tokens", "ttr")
+results <- as.data.frame(matrix(,0,length(header)))
+names(results) <- header
+
+# Loop over the OPs
+fils <- list.files("../graphemes/orthography_profiles", pattern="csv$", full.names = TRUE, recursive = TRUE)
+
+# Test:
+# file <- fils[1]
+
+for (file in fils) {
+  # Get language name from file path
+  s <- unlist(strsplit(file, "/"))
+  filename <- tail(s, n=1)
+  filename <- str_remove(filename, ".csv")
+  
+  # Read the OP
+  df <- read.csv(file=file)
+
+  # Get ttr
+  tokens <- sum(df$Frequency)
+  types <- length(unique(df$Grapheme))
+  ttr <- (types / tokens) * 100
+  
+  # Add to results data frame
+  result <- c(filename, types, tokens, ttr)
+  # results <- rbind(results, result)
+  results[nrow(results) + 1,] <- result
 }
+
+# Clean up
+results$types <- as.integer(results$types)
+results$tokens <- as.integer(results$tokens)
+results$ttr <- as.numeric(results$ttr)
 ```
 
 ```{r}
-# Get word token counts
-word.level <- runsql('
-select name, writing_system, word_text from v_words
-')
+results %>% kable()
 ```
 
-```{r}
-names <- word.level %>% select(name, writing_system) %>% distinct()
-```
+Write the results to CSV.
 
 ```{r}
-# Todo: split into groups by language / writing system and run tokenization on those
+write.csv(results, file="graphemes_ttr.csv", row.names=FALSE)
 ```
 
-```{r}
-Abkhaz_abk <- word.level %>% filter(name == "Abkhaz_abk")
-Abkhaz_abk <- write.profile(Abkhaz_abk$word_text)
-Abkhaz_abk$Frequency <- as.integer(Abkhaz_abk$Frequency)
-tokens <- sum(Abkhaz_abk$Frequency)
-types <- length(unique(Abkhaz_abk$Grapheme))
-# Abkhaz_abk %>% arrange(desc(Frequency)) %>% kable()
-ttr <- data.frame(name=c("Abkhaz_abk"), ttr=(types / tokens) * 100)
-```
-
-```{r}
-Acoma_kjq <- word.level %>% filter(name == "Acoma_kjq")
-Acoma_kjq <- write.profile(Acoma_kjq$word_text)
-Acoma_kjq$Frequency <- as.integer(Acoma_kjq$Frequency)
-tokens <- sum(Acoma_kjq$Frequency)
-types <- length(unique(Acoma_kjq$Grapheme))
-# Acoma_kjq %>% arrange(desc(Frequency)) %>% kable()
-ttr <- rbind(ttr, data.frame(name=c("Acoma_kjq"), ttr=(types / tokens) * 100))
-```
-
-```{r}
-Alamblak_amp <- word.level %>% filter(name == "Alamblak_amp")
-Alamblak_amp <- write.profile(Alamblak_amp$word_text)
-Alamblak_amp$Frequency <- as.integer(Alamblak_amp$Frequency)
-tokens <- sum(Alamblak_amp$Frequency)
-types <- length(unique(Alamblak_amp$Grapheme))
-# Alamblak_amp %>% arrange(desc(Frequency)) %>% kable()
-ttr <- rbind(ttr, data.frame(name=c("Alamblak_amp"), ttr=(types / tokens) * 100))
-```
-
-```{r}
-Arabic_Egyptian_arz <- word.level %>% filter(name == "Arabic_Egyptian_arz")
-Arabic_Egyptian_arz <- write.profile(Arabic_Egyptian_arz$word_text)
-Arabic_Egyptian_arz$Frequency <- as.integer(Arabic_Egyptian_arz$Frequency)
-tokens <- sum(Arabic_Egyptian_arz$Frequency)
-types <- length(unique(Arabic_Egyptian_arz$Grapheme))
-# Arabic_Egyptian_arz %>% arrange(desc(Frequency)) %>% kable()
-ttr <- rbind(ttr, data.frame(name=c("Arabic_Egyptian_arz"), ttr=(types / tokens) * 100))
-```
-
-```{r}
-Asmat_tml <- word.level %>% filter(name == "Asmat_tml")
-Asmat_tml <- write.profile(Asmat_tml$word_text)
-Asmat_tml$Frequency <- as.integer(Asmat_tml$Frequency)
-tokens <- sum(Asmat_tml$Frequency)
-types <- length(unique(Asmat_tml$Grapheme))
-# Asmat_tml %>% arrange(desc(Frequency)) %>% kable()
-ttr <- rbind(ttr, data.frame(name=c("Asmat_tml"), ttr=(types / tokens) * 100))
-```
-
-```{r}
-Bagirmi_bmi <- word.level %>% filter(name == "Bagirmi_bmi")
-Bagirmi_bmi <- write.profile(Bagirmi_bmi$word_text)
-Bagirmi_bmi$Frequency <- as.integer(Bagirmi_bmi$Frequency)
-tokens <- sum(Bagirmi_bmi$Frequency)
-types <- length(unique(Bagirmi_bmi$Grapheme))
-# Bagirmi_bmi %>% arrange(desc(Frequency)) %>% kable()
-ttr <- rbind(ttr, data.frame(name=c("Bagirmi_bmi"), ttr=(types / tokens) * 100))
-```
-
-```{r}
-Basque_eus <- word.level %>% filter(name == "Basque_eus")
-Basque_eus <- write.profile(Basque_eus$word_text)
-Basque_eus$Frequency <- as.integer(Basque_eus$Frequency)
-tokens <- sum(Basque_eus$Frequency)
-types <- length(unique(Basque_eus$Grapheme))
-# Basque_eus %>% arrange(desc(Frequency)) %>% kable()
-ttr <- rbind(ttr, data.frame(name=c("Basque_eus"), ttr=(types / tokens) * 100))
-```
-
-```{r}
-CanelaKraho_ram <- word.level %>% filter(name == "CanelaKraho_ram")
-CanelaKraho_ram <- write.profile(CanelaKraho_ram$word_text)
-CanelaKraho_ram$Frequency <- as.integer(CanelaKraho_ram$Frequency)
-tokens <- sum(CanelaKraho_ram$Frequency)
-types <- length(unique(CanelaKraho_ram$Grapheme))
-# CanelaKraho_ram %>% arrange(desc(Frequency)) %>% kable()
-ttr <- rbind(ttr, data.frame(name=c("CanelaKraho_ram"), ttr=(types / tokens) * 100))
-```
+Plot the TTR for graphemes.
 
 ```{r}
 library(ggplot2)
-p <- ttr
-p$name <- factor(p$name, levels = p$name[order(ttr$ttr)])
+p <- results
+p$name <- factor(p$name, levels = p$name[order(p$ttr)])
 qplot(name, ttr, data=p) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
-```{r}
-Abkhaz_abk %>% arrange(desc(Frequency)) %>% kable()
-Acoma_kjq %>% arrange(desc(Frequency)) %>% kable()
-Alamblak_amp %>% arrange(desc(Frequency)) %>% kable()
-Arabic_Egyptian_arz %>% arrange(desc(Frequency)) %>% kable()
-Asmat_tml %>% arrange(desc(Frequency)) %>% kable()
-Bagirmi_bmi %>% arrange(desc(Frequency)) %>% kable()
-Basque_eus %>% arrange(desc(Frequency)) %>% kable()
-CanelaKraho_ram %>% arrange(desc(Frequency)) %>% kable()
-```
