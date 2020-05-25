@@ -1,4 +1,4 @@
-Grapheme TTR in 100LC
+Words vs graphemes TTR in 100LC
 ================
 Steven Moran
 25 May, 2020
