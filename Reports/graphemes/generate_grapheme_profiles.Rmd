@@ -1,0 +1,63 @@
+---
+title: "Generate initial orthography profiles"
+author: "Steven Moran"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+  pandoc_args: --webtex
+---
+
+```{r echo=FALSE, include=FALSE}
+# install.packages("devtools")
+# devtools::install_github("cysouw/qlcData", build_vignettes = TRUE)
+
+library(dplyr)
+library(knitr)
+library(qlcData)
+library(purrrlyr)
+```
+
+```{r}
+load('test-100LC.Rdata')
+```
+
+There are multiple languages in the data frame -- each row is a word (with a bunch of other metadata that's simply repeated).
+
+```{r}
+table(df$name) %>% kable()
+head(df) %>% kable()
+```
+
+Here's how we generate an initial orthography profile (see Moran \& Cysouw, 2018) for one language.
+
+```{r}
+Abkhaz_abk <- df %>% filter(name == "Abkhaz_abk")
+op <- write.profile(Abkhaz_abk$word_text)
+op$Frequency <- as.integer(op$Frequency)
+op %>% arrange(desc(Frequency)) %>% kable()
+```
+
+For the input to the `write.profile` function, we first turn rows into a list using the `purrrlyr` library.
+
+```{r}
+# For testing
+# df <- df %>% filter(name %in% c('Abkhaz_abk', 'Acoma_kjq'))
+
+x <- df %>% 
+  slice_rows("name") %>% 
+  by_slice(function(x) as.vector(t(x[6])), .to = "words")
+```
+
+Now we write each language's profile to a CSV file.
+
+```{r}
+for (i in 1:nrow(x)) {
+  row <- x[i,]
+  op <- write.profile(row$words[[1]])
+  op$Frequency <- as.integer(op$Frequency)
+  op <- op %>% arrange(desc(Frequency))
+  fname <- paste0("orthography_profiles/", row$name, ".csv")
+  write.csv(op, file=fname, row.names=FALSE)
+}
+
+

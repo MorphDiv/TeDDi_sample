@@ -1,0 +1,50 @@
+---
+title: "Graphemes exploration"
+author: "Steven Moran"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+  pandoc_args: --webtex
+---
+
+```{r echo=FALSE, include=FALSE}
+library(dplyr)
+library(knitr)
+```
+
+This is the 100LC language info index file (planned languages, not actual languages in the corpus).
+
+```{r}
+index <- read.csv('../../LangInfo/langInfo_100LC.csv')
+```
+
+Which languages in 100LC are covered by Epitran, a tool for transliterating orthographic text as IPA:
+
+* https://pypi.org/project/epitran/
+
+Looks like 16 languages (but this depends on the script, which isn't indicated in the 100LC language info index):
+
+```{r}
+# This table was derived by hand from the project website above
+epitran <- read.csv('epitran_data.csv')
+
+table(index$iso639_3 %in% epitran$ISO6393) %>% kable()
+```
+
+```{r}
+index[which(index$iso639_3 %in% epitran$ISO6393),] %>% select(iso639_3, name) %>% arrange(name) %>% kable()
+```
+
+Which languages have grapheme-to-phoneme coverage in The World Writing System Database (https://agricolamz.github.io/wwsd/)? What's the overlap between the two sources? (Note: we'll have to take into account whether the scripts are the same.)
+
+```{r}
+# wwsd tables
+bib <- read.csv('~/Github/wwsd/bibliography.tsv', sep="\t", stringsAsFactors = FALSE)
+db <- read.csv('~/Github/wwsd/database.csv', stringsAsFactors = FALSE)
+
+table(index$glottocode %in% bib$glottocode) %>% kable()
+```
+
+```{r}
+index[which(index$glottocode %in% bib$glottocode),] %>% select(iso639_3, name)  %>% arrange(name) %>% kable()
+```
