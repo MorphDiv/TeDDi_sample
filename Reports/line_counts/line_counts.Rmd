@@ -8,36 +8,36 @@ output:
 ---
 
 ```{r warning=FALSE, message=FALSE}
-library(dplyr)
-library(tidyr)
+library(tidyverse)
 library(knitr)
 ```
 
-```{r}
-# Load the R serialized version of the 100 LC database
-load('../../Database/100LC.Rdata')
+# Generate line counts for the languages
 
-# Remove all NAs (NULLs) in the line.text field in the database, i.e. any empty lines
+Load the R serialized version of the 100 LC database.
+
+```{r}
+load('../../Database/100LC.Rdata')
+```
+
+Remove all NAs (NULLs) in the line.text field in the database, i.e. any empty lines
+
+```{r}
 df <- df %>% filter(!is.na(text))
 ```
 
-```{r}
-# Read in Olga's report (Python script's output that examines the corpus files directly)
-report <- read.csv('line_counts.csv')
-```
+Calculate counts from database version.
 
 ```{r}
-# Calculate counts from database version
-
-## Totals
+# Get totals
 total.files <- df %>% select(name, file_id) %>% distinct() %>% group_by(name) %>% summarize(db_total_files = n())
 total.lines <- df %>% select(name, line_id) %>% distinct() %>% group_by(name) %>% summarize(db_total_lines = n())
 
-## Genre specific
+# Get genre specific counts
 genre.broad.files <- df %>% select(name, file_id, genre_broad) %>% distinct() %>% group_by(name, genre_broad) %>% summarize(db_fiction_files = n())
 genre.broad.lines <- df %>% select(name, line_id, genre_broad) %>% distinct() %>% group_by(name, genre_broad) %>% summarize(db_total_files = n())
 
-## Convert output of genres to wide format for merging
+# Convert output of genres to wide format for merging
 genre.broad.files.wide <- spread(genre.broad.files, key = genre_broad, value = db_fiction_files)
 genre.broad.lines.wide <- spread(genre.broad.lines, key = genre_broad, value = db_total_files)
 
@@ -46,31 +46,57 @@ genre.broad.files.wide <- genre.broad.files.wide %>% rename(db_conversation_file
 genre.broad.lines.wide <- genre.broad.lines.wide %>% rename(db_conversation_lines = conversation, db_fiction_lines = fiction, db_grammar_lines = grammar, db_non_fiction_lines ='non-fiction', db_professional_lines = professional)
 ```
 
+Combine the data frames counts and add in the missing values, i.e. languages without data in `langInfo_100LC.csv`.
 
 ```{r}
-# Combine the data frames
 db.report <- left_join(total.files, total.lines)
 db.report <- left_join(db.report, genre.broad.files.wide)
 db.report <- left_join(db.report, genre.broad.lines.wide)
+
+index <- read.csv('../../LangInfo/langInfo_100LC.csv')
+missing.languages <- index %>% filter(is.na(name)) %>% select(name_glotto)
+missing.languages <- missing.languages %>% rename(name=name_glotto)
+
+db.report <- db.report %>% add_row(name=missing.languages$name)
+db.report <- db.report %>% arrange(name)
 ```
 
+Rows with all NAs reflect languages for which we don't have data yet.
+
 ```{r}
-# Compare the Python vs database reports
-## Combine them
+kable(db.report)
+```
+
+# Compare the database vs the Python reports
+
+Read in Olga's report (Python script's output that examines the corpus files directly).
+
+```{r}
+report <- read.csv('line_counts.csv')
+```
+
+Combine the reports for comparison.
+
+```{r}
 combined.reports <- left_join(report, db.report, by=c('language'='name'))
 combined.reports$delta_total_lines <- abs(combined.reports$total_lines-combined.reports$db_total_lines)
+```
 
-## Reorder to make it easier to compare
+Reorder the report to make it easier to compare.
+
+```{r}
 combined.reports <- combined.reports %>% select(language, total_files, db_total_files, fiction_files, db_fiction_files ,non.fiction_files, db_non_fiction_files, conversation_files, db_conversation_files, professional_files, db_professional_files, grammar_files, db_grammar_files, fiction_lines, db_fiction_lines, non.fiction_lines, db_non_fiction_lines, conversation_lines, db_conversation_lines, professional_lines, db_professional_lines, grammar_lines, db_grammar_lines, total_lines, db_total_lines, delta_total_lines)
 ```
 
+The combined reports.
+
 ```{r}
-# Print it for easy access
 kable(combined.reports)
 ```
 
+Write the table CSV.
+
 ```{r}
-# Write to CSV
 write.csv(combined.reports, file="compared_reports.csv", quote=FALSE, row.names=FALSE)
 ```
 
