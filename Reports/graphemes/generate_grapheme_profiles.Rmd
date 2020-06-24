@@ -7,28 +7,40 @@ output:
   pandoc_args: --webtex
 ---
 
+# Overview
+
+In its simpliest form, an orthography profile (Moran & Cysouw, 2018) is a Unicode character or Unicode grapheme unigram model, i.e. a CSV file where each row represents a character or grapheme in a writing system with additional information such as its frequency of occurrence in a text. This report generates orthography profiles from each corpus in the 100LC database. 
+
 ```{r echo=FALSE, include=FALSE}
+# To install orthography profile tokenization:
 # install.packages("devtools")
 # devtools::install_github("cysouw/qlcData", build_vignettes = TRUE)
+library(qlcData)
 
 library(dplyr)
 library(knitr)
-library(qlcData)
 library(purrrlyr)
 ```
 
+I use the 100LC test data set for corpora for illustration purposes. The output for each corpus is written to the `orthography_profiles` folder in this directory.
+
 ```{r}
-load('test-100LC.Rdata')
+load('../../Database/test-100LC.Rdata')
 ```
 
-There are multiple languages in the data frame -- each row is a word (with a bunch of other metadata that's simply repeated).
+There are multiple languages in the data frame -- each row is a word (with a bunch of other metadata that's simply repeated). For example:
 
 ```{r}
-table(df$name) %>% kable()
 head(df) %>% kable()
 ```
 
-Here's how we generate an initial orthography profile (see Moran \& Cysouw, 2018) for one language.
+Here are the frequency counts (word counts) per corpus.
+
+```{r}
+table(df$name) %>% kable()
+```
+
+Here's how we generate an initial orthography profile (a linguistically correct orthography profile usually requires expert analysis of elements such as bigraphs; see Moran \& Cysouw, 2018 for detailed discussion).
 
 ```{r}
 Abkhaz_abk <- df %>% filter(name == "Abkhaz_abk")
@@ -40,7 +52,7 @@ op %>% arrange(desc(Frequency)) %>% kable()
 For the input to the `write.profile` function, we first turn rows into a list using the `purrrlyr` library.
 
 ```{r}
-# For testing
+# For testing:
 # df <- df %>% filter(name %in% c('Abkhaz_abk', 'Acoma_kjq'))
 
 x <- df %>% 
@@ -59,5 +71,9 @@ for (i in 1:nrow(x)) {
   fname <- paste0("orthography_profiles/", row$name, ".csv")
   write.csv(op, file=fname, row.names=FALSE)
 }
+```
 
 
+# References
+
+* Moran, Steven and Michael Cysouw. 2018. The Unicode Cookbook for Linguists: Managing writing systems using orthography profiles. Translation and Multilingual Natural Language Process- ing series in Language Science Press. DOI: https://doi.org/10.5281/zenodo.1296780. Online: http://langsci-press.org/catalog/book/176.
