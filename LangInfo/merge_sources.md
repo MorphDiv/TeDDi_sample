@@ -1,7 +1,7 @@
 Merge language information for 100LC sources
 ================
 Chris Bentz & Steven Moran
-08 April, 2020
+17 July, 2020
 
 ``` r
 library(dplyr)
@@ -9,8 +9,7 @@ library(tidyr)
 library(knitr)
 ```
 
-Load and process the data
-=========================
+# Load and process the data
 
 ``` r
 wals <- read.csv("Sources/WALS/WALS_languages.csv", header = T)
@@ -65,8 +64,7 @@ glotto.langInfo.100 <- rbind(glotto.langInfo.fam, glotto.langInfo.noFamID)
 colnames(glotto.langInfo.100) <- c("family_id", "glottocode", "name_glotto", "iso639_3", "level", "macroarea_glotto", "latitude_glotto", "longitude_glotto", "status", "top_level_family")
 ```
 
-Get folders from Corpus directory
-=================================
+# Get folders from Corpus directory
 
 ``` r
 # This is pretty ugly, but it works
@@ -77,7 +75,7 @@ kable(head(folders))
 ```
 
 | name                  | folder\_language\_name | iso639\_3 |
-|:----------------------|:-----------------------|:----------|
+| :-------------------- | :--------------------- | :-------- |
 | Abkhaz\_abk           | Abkhaz                 | abk       |
 | Acoma\_kjq            | Acoma                  | kjq       |
 | Alamblak\_amp         | Alamblak               | amp       |
@@ -85,8 +83,7 @@ kable(head(folders))
 | Apurina\_apu          | Apurina                | apu       |
 | Arabic\_Egyptian\_arz | Arabic\_Egyptian       | arz       |
 
-Combine the various information sources
-=======================================
+# Combine the various information sources
 
 ``` r
 # Merge
@@ -101,11 +98,7 @@ langInfo.100 <- left_join(langInfo.100, folders)
 
     ## Joining, by = "iso639_3"
 
-    ## Warning: Column `iso639_3` joining factor and character vector, coercing into
-    ## character vector
-
-Data integrity checks
-=====================
+# Data integrity checks
 
 ``` r
 library(testthat)
@@ -127,22 +120,20 @@ expect_equal(length(which(!(str_detect(langInfo.100$iso639_3, isocode)))), 0)
 # which(!(str_detect(langInfo.100$iso639_3, isocode)))
 ```
 
-Write results to CSV
-====================
+# Write results to CSV
 
 ``` r
 write.csv(file = "langInfo_100LC.csv", langInfo.100, row.names = F, quote=FALSE)
 ```
 
-Which rows do not (yet) have file folders?
-==========================================
+# Which rows do not (yet) have file folders?
 
 ``` r
 # This many languages haven't been added yet
 nrow(langInfo.100 %>% filter(is.na(name)))
 ```
 
-    ## [1] 17
+    ## [1] 18
 
 ``` r
 # Here are the languages that still need to be added
@@ -150,8 +141,9 @@ kable(langInfo.100 %>% filter(is.na(name)) %>% select(iso639_3, glottocode, name
 ```
 
 | iso639\_3 | glottocode | name\_glotto            | name\_wals      |
-|:----------|:-----------|:------------------------|:----------------|
+| :-------- | :--------- | :---------------------- | :-------------- |
 | gry       | barc1235   | Barclayville Grebo      | Grebo           |
+| kyh       | karo1304   | Karok                   | Karok           |
 | cku       | koas1236   | Koasati                 | Koasati         |
 | ses       | koyr1242   | Koyraboro Senni Songhai | Koyraboro Senni |
 | kgo       | kron1241   | Krongo                  | Krongo          |
@@ -167,7 +159,7 @@ kable(langInfo.100 %>% filter(is.na(name)) %>% select(iso639_3, glottocode, name
 | spp       | supy1237   | Supyire Senoufo         | Supyire         |
 | tiw       | tiwi1244   | Tiwi                    | Tiwi            |
 | bhq       | tuka1249   | Tukang Besi South       | Tukang Besi     |
-| pav       | wari1268   | Wari'                   | Wari'           |
+| pav       | wari1268   | Wari’                   | Wari’           |
 
 ``` r
 # Clean up
