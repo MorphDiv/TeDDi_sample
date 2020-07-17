@@ -24,10 +24,12 @@ ttr <- left_join(w.cut, g.cut)
 ```
 
 ```{r}
-plot(ttr$word_ttr, ttr$grapheme_ttr, xlab="word ttr", ylab="grapheme ttr", pch=3)
-```
-
-```{r}
 library(ggplot2)
-qplot(word_ttr, grapheme_ttr, data=ttr)
+library(ggrepel)
+ggplot(ttr, aes(x=grapheme_ttr, y=word_ttr, label=name)) + 
+  geom_point() +
+  geom_label_repel(aes(label = name),
+                  box.padding   = 0.35, 
+                  point.padding = 0.5,
+                  segment.color = 'grey50')
 ```

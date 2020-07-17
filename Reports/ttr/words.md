@@ -1,15 +1,18 @@
 Word TTR in 100LC
 ================
 Steven Moran
-25 May, 2020
+17 July, 2020
 
-Generate word type-token ratios for the 100LC corpus data.
+This is an example of how to generate word type-token ratios for the
+100LC corpus data. Here a corpus is
+
+  - <https://github.com/uzling/100LC/tree/master/Database/tests/Corpus>
 
 Query the database and return a dataframe.
 
 ``` r
 db.file <- '../../Database/words.sqlite3' # Test data
-# db.file <- '../../Database/full.sqlite3'
+# db.file <- '../../Database/full.sqlite3' # Full data
 
 runsql <- function(sql, dbname=db.file){
   require(RSQLite)
@@ -61,6 +64,8 @@ Get the type counts.
 types <- types %>% group_by(name, writing_system) %>% summarize(types=n())
 ```
 
+    ## `summarise()` regrouping output by 'name' (override with `.groups` argument)
+
 Join the type and token counts into a single data frame.
 
 ``` r
@@ -69,47 +74,46 @@ ttr <- left_join(types, tokens)
 
     ## Joining, by = c("name", "writing_system")
 
-Calculate the type-token ratio: (number of types/number of tokens) \* 100.
+Calculate the type-token ratio: (number of types/number of tokens) \*
+100.
 
 ``` r
-ttr$ttr <- (ttr$types / ttr$tokens) * 100
+ttr$ttr <- (ttr$types / ttr$tokens)
 ```
 
-A table if TTR values:
+A table of TTR values:
 
 ``` r
-library(knitr)
 ttr %>% kable()
 ```
 
-| name                        | writing\_system |  types|  tokens|        ttr|
-|:----------------------------|:----------------|------:|-------:|----------:|
-| Abkhaz\_abk                 | Cyrl            |    844|    1325|  63.698113|
-| Acoma\_kjq                  | Latn            |    902|    2433|  37.073572|
-| Alamblak\_amp               | Latn            |  27044|  268933|  10.056036|
-| Arabic\_Egyptian\_arz       | Arab            |  74274|  528641|  14.049989|
-| Asmat\_tml                  | Latn            |     30|      53|  56.603774|
-| Bagirmi\_bmi                | Latn            |     50|      70|  71.428571|
-| Basque\_eus                 | Latn            |   4072|    8832|  46.105072|
-| CanelaKraho\_ram            | Latn            |   2666|   40181|   6.634977|
-| Dani\_LowerGrandValley\_dni | Latn            |    162|     298|  54.362416|
-| English\_eng                | Latn            |  17587|  842657|   2.087089|
-| Finnish\_fin                | Latn            |  16126|   39088|  41.255628|
-| Kayardild\_gyd              | Latn            |     24|      28|  85.714286|
-| Lavukaleve\_lvk             | Latn            |    645|    2109|  30.583215|
-| Vietnamese\_vie             | Latn            |   1215|    4545|  26.732673|
+| name                        | writing\_system | types | tokens |       ttr |
+| :-------------------------- | :-------------- | ----: | -----: | --------: |
+| Abkhaz\_abk                 | Cyrl            |   844 |   1325 | 0.6369811 |
+| Acoma\_kjq                  | Latn            |   902 |   2433 | 0.3707357 |
+| Alamblak\_amp               | Latn            | 27044 | 268933 | 0.1005604 |
+| Arabic\_Egyptian\_arz       | Arab            | 74274 | 528641 | 0.1404999 |
+| Asmat\_tml                  | Latn            |    30 |     53 | 0.5660377 |
+| Bagirmi\_bmi                | Latn            |    50 |     70 | 0.7142857 |
+| Basque\_eus                 | Latn            |  4072 |   8832 | 0.4610507 |
+| CanelaKraho\_ram            | Latn            |  2666 |  40181 | 0.0663498 |
+| Dani\_LowerGrandValley\_dni | Latn            |   162 |    298 | 0.5436242 |
+| English\_eng                | Latn            | 17587 | 842657 | 0.0208709 |
+| Finnish\_fin                | Latn            | 16126 |  39088 | 0.4125563 |
+| Kayardild\_gyd              | Latn            |    24 |     28 | 0.8571429 |
+| Lavukaleve\_lvk             | Latn            |   645 |   2109 | 0.3058321 |
+| Vietnamese\_vie             | Latn            |  1215 |   4545 | 0.2673267 |
 
 Plot the languages by their TTR ratios.
 
 ``` r
-library(ggplot2)
 p <- ttr
 p$name <- factor(p$name, levels = p$name[order(ttr$ttr)])
 qplot(name, ttr, data=p) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
-![](words_files/figure-markdown_github/unnamed-chunk-10-1.png)
+![](words_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 Write the table to CSV.
 
