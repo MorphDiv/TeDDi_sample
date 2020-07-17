@@ -1,7 +1,7 @@
 Words vs graphemes TTR in 100LC
 ================
 Steven Moran
-25 May, 2020
+17 July, 2020
 
 ``` r
 words.ttr <- read.csv('words_ttr.csv')
@@ -20,11 +20,11 @@ ttr <- left_join(w.cut, g.cut)
 plot(ttr$word_ttr, ttr$grapheme_ttr, xlab="word ttr", ylab="grapheme ttr", pch=3)
 ```
 
-![](words_vs_graphemes_ttr_files/figure-markdown_github/unnamed-chunk-4-1.png)
+![](words_vs_graphemes_ttr_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 library(ggplot2)
 qplot(word_ttr, grapheme_ttr, data=ttr)
 ```
 
-![](words_vs_graphemes_ttr_files/figure-markdown_github/unnamed-chunk-5-1.png)
+![](words_vs_graphemes_ttr_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->

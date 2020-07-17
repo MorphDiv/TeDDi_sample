@@ -7,10 +7,14 @@ output:
   pandoc_args: --webtex
 ---
 
-Generate word type-token ratios for the 100LC corpus data.
+This is an example of how to generate word type-token ratios for the 100LC corpus data. Here a corpus is 
+
+* https://github.com/uzling/100LC/tree/master/Database/tests/Corpus
 
 ```{r echo=FALSE, include=FALSE}
 library(dplyr)
+library(knitr)
+library(ggplot2)
 library(RSQLite)
 ```
 
@@ -18,7 +22,7 @@ Query the database and return a dataframe.
 
 ```{r}
 db.file <- '../../Database/words.sqlite3' # Test data
-# db.file <- '../../Database/full.sqlite3'
+# db.file <- '../../Database/full.sqlite3' # Full data
 
 runsql <- function(sql, dbname=db.file){
   require(RSQLite)
@@ -77,20 +81,18 @@ ttr <- left_join(types, tokens)
 Calculate the type-token ratio: (number of types/number of tokens) * 100.
 
 ```{r}
-ttr$ttr <- (ttr$types / ttr$tokens) * 100
+ttr$ttr <- (ttr$types / ttr$tokens)
 ```
 
-A table if TTR values:
+A table of TTR values:
 
 ```{r}
-library(knitr)
 ttr %>% kable()
 ```
 
 Plot the languages by their TTR ratios.
 
 ```{r}
-library(ggplot2)
 p <- ttr
 p$name <- factor(p$name, levels = p$name[order(ttr$ttr)])
 qplot(name, ttr, data=p) +

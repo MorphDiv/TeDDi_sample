@@ -1,9 +1,10 @@
 Grapheme TTR in 100LC
 ================
 Steven Moran
-25 May, 2020
+17 July, 2020
 
-Load each grapheme orthography profile (OP) from disk, generate TTRs, and write to a table.
+Load each grapheme orthography profile (OP) from disk, generate TTRs,
+and write to a table.
 
 ``` r
 # Create results data frame
@@ -29,7 +30,7 @@ for (file in fils) {
   # Get ttr
   tokens <- sum(df$Frequency)
   types <- length(unique(df$Grapheme))
-  ttr <- (types / tokens) * 100
+  ttr <- (types / tokens)
   
   # Add to results data frame
   result <- c(filename, types, tokens, ttr)
@@ -47,22 +48,22 @@ results$ttr <- as.numeric(results$ttr)
 results %>% kable()
 ```
 
-| name                        |  types|   tokens|         ttr|
-|:----------------------------|------:|--------:|-----------:|
-| Abkhaz\_abk                 |     64|    10003|   0.6398081|
-| Acoma\_kjq                  |     43|    15893|   0.2705594|
-| Alamblak\_amp               |     66|  1290455|   0.0051145|
-| Arabic\_Egyptian\_arz       |    426|  1961436|   0.0217188|
-| Asmat\_tml                  |     24|      199|  12.0603015|
-| Bagirmi\_bmi                |     47|      210|  22.3809524|
-| Basque\_eus                 |     71|    53270|   0.1332833|
-| CanelaKraho\_ram            |     79|   130177|   0.0606866|
-| Dani\_LowerGrandValley\_dni |     33|     1789|   1.8446059|
-| English\_eng                |     78|  3125326|   0.0024957|
-| Finnish\_fin                |     81|   278739|   0.0290594|
-| Kayardild\_gyd              |     21|      221|   9.5022624|
-| Lavukaleve\_lvk             |     46|     7575|   0.6072607|
-| Vietnamese\_vie             |    134|    15543|   0.8621244|
+| name                        | types |  tokens |       ttr |
+| :-------------------------- | ----: | ------: | --------: |
+| Abkhaz\_abk                 |    64 |   10003 | 0.0063981 |
+| Acoma\_kjq                  |    43 |   15893 | 0.0027056 |
+| Alamblak\_amp               |    66 | 1290455 | 0.0000511 |
+| Arabic\_Egyptian\_arz       |   426 | 1961436 | 0.0002172 |
+| Asmat\_tml                  |    24 |     199 | 0.1206030 |
+| Bagirmi\_bmi                |    47 |     210 | 0.2238095 |
+| Basque\_eus                 |    71 |   53270 | 0.0013328 |
+| CanelaKraho\_ram            |    79 |  130177 | 0.0006069 |
+| Dani\_LowerGrandValley\_dni |    33 |    1789 | 0.0184461 |
+| English\_eng                |    78 | 3125326 | 0.0000250 |
+| Finnish\_fin                |    81 |  278739 | 0.0002906 |
+| Kayardild\_gyd              |    21 |     221 | 0.0950226 |
+| Lavukaleve\_lvk             |    46 |    7575 | 0.0060726 |
+| Vietnamese\_vie             |   134 |   15543 | 0.0086212 |
 
 Write the results to CSV.
 
@@ -80,4 +81,4 @@ qplot(name, ttr, data=p) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
-![](graphemes_files/figure-markdown_github/unnamed-chunk-5-1.png)
+![](graphemes_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
