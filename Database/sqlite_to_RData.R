@@ -19,14 +19,14 @@ runsql <- function(sql, dbname=db.file){
   return(dd)
 }
 
-# Query each table and store as a dataframe
-corpus <- runsql('SELECT * FROM corpus')
-file <- runsql('SELECT * FROM file')
-language <- runsql('SELECT * FROM language')
-line <- runsql('SELECT * FROM line')
+# Query each table and store as a dataframe (we prefix each with `clc` because `file` and `lines` are functions in base R)
+clc_corpus <- runsql('SELECT * FROM corpus')
+clc_file <- runsql('SELECT * FROM file')
+clc_language <- runsql('SELECT * FROM language')
+clc_line <- runsql('SELECT * FROM line')
 
 # Save as a serialized Rdata object (default test data)
-save(corpus, file, language, line, file="test.RData")
+save(clc_corpus, clc_file, clc_language, clc_line, file="test.RData")
 # save(corpus, file, language, line, file="100LC.RData")
 
 
