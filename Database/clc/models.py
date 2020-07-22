@@ -46,7 +46,6 @@ def create_all(engine=ENGINE, metadata=Model.metadata):
     metadata.create_all(engine)
 
 
-
 class Language(Model):
     """ Languages in the sample """
 
@@ -97,7 +96,7 @@ class File(Model):
 
     id = Column(Integer, primary_key=True)
     corpus_id = Column(Integer, ForeignKey('corpus.id'), nullable=False)
-    # filename = Column(sa.Text, nullable=False)
+    filename = Column(sa.Text, nullable=False)
 
     # These are the current metadata fields in each text
     language_name_wals = Column(sa.Text, nullable=False)
@@ -116,8 +115,6 @@ class File(Model):
     copyright_long = Column(sa.Text, nullable=False)
     sample_type = Column(Enum(*sorted(SAMPLE_TYPE)), nullable=False)
     comments = Column(sa.Text, nullable=False)
-    # TODO: insert file type
-    type = Column(sa.Text)
 
 
 class Line(Model):
@@ -190,6 +187,6 @@ def load(path=CORPUS_ROOT, engine=ENGINE):
             corpus_id = corpus_map[params]
 
             # Insert file metadata and then loop through lines in the file and insert
-            file_id, = insert_file(corpus_id=corpus_id, **t.metadata).inserted_primary_key
+            file_id, = insert_file(corpus_id=corpus_id, filename=t.filename, **t.metadata).inserted_primary_key
             for line in _bodies.Body.load(t.body):
                 line_id = insert_line(file_id=file_id, **line).inserted_primary_key
