@@ -28,7 +28,7 @@ The [progress](progress) directory contains a Python script that loops through t
 
 ### Word frequencies
 
-The [word frequencies](word_frequencies) directory contains an R markdown report that generates word frequency counts per text file in the 100LC database. These word frequency counts are written to `CSV` files.
+The [word frequency](word_frequency) directory contains an R markdown report that generates word frequency counts per text file in the 100LC database. These word frequency counts are written to `CSV` files.
 
 ### World maps
 
