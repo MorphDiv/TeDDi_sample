@@ -7,7 +7,7 @@ output:
   pandoc_args: --webtex
 ---
 
-Load the `clc` package R library (named this because R package names cannot start with numers). 
+Load the `clc` package R library (named this because R package names cannot start with numbers). 
 
 TODO: work in progress.
 
@@ -17,23 +17,33 @@ library(clc)
 library(readr)
 ```
 
-Get a list of file IDs from the 100LC data.
+Get a list of file IDs from the 100LC database.
 
 ```{r}
 file_ids <- clc::get_file_ids()
 ```
 
-Loop through the file IDs, generate word frequency counts per file, write the output to disk.
+Here's an example of how to get the word count frequencies for one file.
 
 ```{r}
-# df <- clc::get_word_counts(file_ids[1])
-# readr::write_csv(df, paste0('csv/', file_ids[1], '_freq.csv'))
+# Get the word frequency counts
+df <- clc::get_word_counts(file_ids[1])
+# Look up the file name
+filename <- clc::clc_file %>% filter(id == file_ids[1]) %>% select(filename)
+# Strip its extension
+filename <- sub('\\.txt$', '', filename)
+# Write the results to CSV
+readr::write_csv(df, paste0('csv/', filename, '_freq.csv'))
 ```
 
-```{r echo=FALSE, message=FALSE}
+Loop through the file IDs, generate word frequency counts per file, write the output to disk.
+
+```{r echo=TRUE, results='hide'}
 lapply(file_ids, function(i){
   df <- clc::get_word_counts(file_ids[i])
-  readr::write_csv(df, paste0('csv/', file_ids[i], '_freq.csv'))
+  filename <- clc::clc_file %>% filter(id == file_ids[i]) %>% select(filename)
+  filename <- sub('\\.txt$', '', filename) 
+  readr::write_csv(df, paste0('csv/', filename, '_freq.csv'))
 })
 ```
 
