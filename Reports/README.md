@@ -26,6 +26,10 @@ The [line_counts](line_counts) directory contains a Python script that loops thr
 
 The [progress](progress) directory contains a Python script that loops through the corpus files and reports the number of texts, genres covered, unique characters and number of tokens per language. 
 
+### Word frequencies
+
+The [word frequencies](word_frequencies) directory contains an R markdown report that generates word frequency counts per text file in the 100LC database. These word frequency counts are written to `CSV` files.
+
 ### World maps
 
 The [maps](maps) report is an [R markdown](https://rmarkdown.rstudio.com/articles_intro.html) report that produces world maps from the 100LC language sample. The R markdown report can be produced by running `knitr` in R Studio ([an example here](https://rmarkdown.rstudio.com/articles_integration.html)). The report can be viewed in the browser because GitHub renders markdown (`md`) files.
