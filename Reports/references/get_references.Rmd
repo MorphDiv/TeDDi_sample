@@ -1,0 +1,44 @@
+---
+title: "Get the bibliographic references encoded in the 100LC input files"
+author: "Steven Moran"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+  pandoc_args: --webtex
+---
+
+Load the `clc` package R library and generate a table of references per file and per unique reference. 
+
+Note this package is a work in progress. For example, it currently only loads the test version of the 100 LC database, i.e. `test.RData`. If you want to run the `clc::get_references()` function on the entire dataset, then you need to load the clc library (below) and then load the full database into RStudio.
+
+
+```{r}
+library(clc)
+library(knitr)
+```
+
+Get the references from the 100LC `file` database table.
+
+```{r}
+references <- clc::get_references()
+```
+
+So let's write these to a CSV file for inspection.
+
+```{r}
+write_csv(references, 'files-references.csv')
+```
+
+Now we get the unique language name and their bibliographic sources for corpora above, like Basque, which have lots of input text files from the same source, e.g. Open Subtitles.
+
+```{r}
+unique.references <- references %>% select(language_name_glotto, source) %>% distinct()
+```
+
+This leaves us with 1010 observations instead of all files in the database.
+
+Let's write these to CSV as well.
+
+```{r}
+write_csv(unique.references, 'sources-references.csv')
+```
