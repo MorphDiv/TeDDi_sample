@@ -9,12 +9,19 @@ output:
 
 Load the `clc` package R library and generate a table of references per file and per unique reference. 
 
-Note this package is a work in progress. For example, it currently only loads the test version of the 100 LC database, i.e. `test.RData`. If you want to run the `clc::get_references()` function on the entire dataset, then you need to load the clc library (below) and then load the full database into RStudio.
+Note this package is a work in progress. 
 
+First load the 100LC RData object.
+
+```{r}
+# TODO: we should put this online somewhere because I can't get it to load as part of the clc package
+load('../../../clc/clc.RData')
+```
 
 ```{r}
 library(clc)
 library(knitr)
+library(readr)
 ```
 
 Get the references from the 100LC `file` database table.
@@ -23,7 +30,13 @@ Get the references from the 100LC `file` database table.
 references <- clc::get_references()
 ```
 
-So let's write these to a CSV file for inspection.
+Let's have a look at the results.
+
+```{r}
+references %>% head(n = 50) %>% kable()
+```
+
+Let's write these to a CSV file for easier inspection.
 
 ```{r}
 write_csv(references, 'files-references.csv')
@@ -35,10 +48,31 @@ Now we get the unique language name and their bibliographic sources for corpora 
 unique.references <- references %>% select(language_name_glotto, source) %>% distinct()
 ```
 
-This leaves us with 1010 observations instead of all files in the database.
+This leaves us with 1010 observations instead of a row for each file in the database.
+
+```{r}
+unique.references %>% head(n=20) %>% kable()
+```
 
 Let's write these to CSV as well.
 
 ```{r}
 write_csv(unique.references, 'sources-references.csv')
 ```
+
+Upon visual inspection, we see that some files have no source.
+
+```{r}
+unique.references %>% filter(source == "NA")
+```
+
+And others are quite limited in scope.
+
+```{r}
+unique.references %>% filter(language_name_glotto == "Wichita") %>% kable()
+```
+
+These should be udpated if they can, see:
+
+* https://github.com/uzling/100LC/issues/163
+
