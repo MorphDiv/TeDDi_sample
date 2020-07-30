@@ -1,0 +1,82 @@
+---
+title: "Get the unique mode and genre labels from metadata and file folder structure"
+author: "Steven Moran"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+  pandoc_args: --webtex
+---
+
+# Setup  
+
+```{r}
+library(dplyr)
+library(readr)
+library(knitr)
+```
+
+Load the RData serialized version of the 100LC database.
+
+```{r}
+load('../../Database/100LC.RData')
+```
+
+
+# Get genre info from the files
+
+Select the `mode`, `genre_narrow`, and `genre_broad` fields from the file table and get the distinct values per corpus.
+
+```{r}
+genre_info <- clc_file %>% select(corpus_id, language_name_wals, mode, genre_broad, genre_narrow) %>% distinct()
+write_csv(genre_info, 'genres_in_file_metadata_headers.csv')
+genre_info %>% kable()
+```
+
+What are the distinct values of each?
+
+Mode:
+
+```{r}
+clc_file %>% select(mode) %>% distinct() %>% kable()
+```
+
+Genre broad:
+
+```{r}
+clc_file %>% select(genre_broad) %>% distinct() %>% kable()
+```
+
+Genre narrow:
+
+```{r}
+clc_file %>% select(genre_narrow) %>% distinct() %>% kable()
+```
+
+Opps, looks like we still have some typos in the text! So I made an issue:
+
+* https://github.com/uzling/100LC/issues/165
+
+
+# Get genre info from the file folder structure
+
+Select the `genre_narrow` and `genre_broad` categories as encoded in the file folder structure.
+
+```{r}
+file_folders <- clc_corpus %>% select(name, genre_broad, genre_narrow) %>% distinct()
+write_csv(file_folders, 'genres_in_file_folders.csv')
+kable(file_folders)
+```
+
+Get the unique values.
+
+Genre broad:
+
+```{r}
+clc_corpus %>% select(genre_broad) %>% distinct() %>% kable()
+```
+
+Genre narrow:
+
+```{r}
+clc_corpus %>% select(genre_narrow) %>% distinct() %>% kable()
+```
