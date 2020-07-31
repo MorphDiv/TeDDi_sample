@@ -25,7 +25,9 @@ Model = declarative_base()
 
 GENRE_BROAD = {'professional', 'non-fiction', 'conversation', 'grammar', 'fiction'}
 
-GENRE_NARROW = {'spoken', 'written'}
+MODE = {'written', 'spoken', 'NA'}
+
+GENRE_NARROW = {'official_documents', 'oral_tradition', 'religion', 'spontaneous_speeches', 'spoken', 'prepared_speeches', 'face-to-face_conversations', 'general_fiction', 'written_tradition', 'NA'}
 
 MACROAREA = ('North America', 'South America', 'Eurasia', 'Africa', 'Australia', 'Papunesia')
 
@@ -35,8 +37,6 @@ ENDANGERMENT_STATUS = ('critically endangered', 'definitely endangered', 'extinc
 # ENDANGERMENT_STATUS = {'not endangered', 'threatened', 'shifting', 'moribund', 'nearly extinct', 'extinct'}
 
 SAMPLE_TYPE = {'whole', 'part'}
-
-MODE = {'written', 'spoken'}
 
 
 def create_all(engine=ENGINE, metadata=Model.metadata):
@@ -86,7 +86,7 @@ class Corpus(Model):
 
     # These fields are taken directly from the corpus directory structure
     genre_broad = Column(Enum(*sorted(GENRE_BROAD)), nullable=False)
-    genre_narrow = Column(Enum(*sorted(GENRE_NARROW)))
+    mode = Column(Enum(*sorted(MODE)))
 
 
 class File(Model):
@@ -105,8 +105,8 @@ class File(Model):
     year_composed = Column(sa.Text, nullable=False)
     year_published = Column(sa.Text, nullable=False)
     mode = Column(Enum(*sorted(MODE)), nullable=False)
-    genre_broad = Column(sa.Text, nullable=False) # TODO: enum once the data is cleaned up
-    genre_narrow = Column(sa.Text, nullable=False) # TODO: enum once the data is cleaned up; can be NULL
+    genre_broad = Column(Enum(*sorted(GENRE_BROAD)), nullable=False)
+    genre_narrow =  Column(Enum(*sorted(GENRE_NARROW)))
     writing_system = Column(String(4), CheckConstraint('length(writing_system) = 4'), nullable=False)
     special_characters = Column(sa.Text, nullable=False)
     short_description = Column(sa.Text, nullable=False)
@@ -180,7 +180,7 @@ def load(path=CORPUS_ROOT, engine=ENGINE):
 
             # Create the dictionary of values for the corpus table
             corpus_path_metadata = dict(language_id=language_id, name=t.corpus, genre_broad=t.genre_broad,
-                                        genre_narrow=t.genre_narrow)
+                                        mode=t.mode)
 
             # Insert only non-duplicated corpus entries
             params = corpus_map.params_to_key(corpus_path_metadata)
