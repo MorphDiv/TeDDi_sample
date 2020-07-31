@@ -17,6 +17,7 @@ runsql <- function(sql, dbname=db.file){
   }
   dd <- tryCatch(dbGetQuery(connect, sql), finally=closeup)
   return(dd)
+  dbDisconnect()
 }
 
 # Query each table and store as a dataframe (we prefix each with `clc` because `file` and `lines` are functions in base R)
@@ -27,7 +28,7 @@ clc_line <- runsql('SELECT * FROM line')
 
 # Save as a serialized Rdata object (default test data)
 save(clc_corpus, clc_file, clc_language, clc_line, file="test.RData")
-# save(corpus, file, language, line, file="100LC.RData")
+# save(clc_corpus, clc_file, clc_language, clc_line, file="100LC.RData")
 
 
 ################

@@ -40,19 +40,19 @@ class Text:
         parts = path.parts[i + 1:]
         corpus, genre_broad, *rest = parts
         if len(rest) == 1:
-            genre_narrow = None
+            mode = None
             filename, = rest
         elif len(rest) == 2:
-            genre_narrow, filename = rest
+            mode, filename = rest
         else:
             raise ValueError()
-        return corpus, genre_broad, genre_narrow, filename
+        return corpus, genre_broad, mode, filename
 
     def __init__(self, filepath, metadata, body):
         self.filepath = filepath
         self.metadata = metadata
         self.body = body
-        self.corpus, self.genre_broad, self.genre_narrow, self.filename = self.split_path(self.filepath)
+        self.corpus, self.genre_broad, self.mode, self.filename = self.split_path(self.filepath)
 
     def __repr__(self):
         return f'{self.__class__.__name__}({str(self.filepath)!r})'
@@ -71,6 +71,6 @@ class Text:
                 v = v.replace("official documents", "official_documents")
                 v = v.replace("oral tradition", "oral_tradition")
                 v = v.replace("spontaneous speeches", "spontaneous_speeches")
-                v = v.replace("written tradition", "written_traditions")
+                v = v.replace("written tradition", "written_tradition")
                 f.write(f"# {k}:\t{v}\n")
             f.write(f"\n{self.body}")
