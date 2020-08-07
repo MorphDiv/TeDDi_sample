@@ -1,8 +1,7 @@
-""" Generate 100LC text files in Chris Bentz unified format """
+""" Generate 100LC text files in Chris Bentz unified format. Make sure to create output/ directory. """
 
 from clc import models as db
 import sqlalchemy as sa
-import sys
 
 engine = None
 conn = None
@@ -148,7 +147,8 @@ def main():
                 f.write(row+"\n")
             f.write("\n")
             for row in lines:
-                f.write(row.strip()+"\n") # strip removes extra line break between groups
+                f.write(row.strip()+"\n") # strip() removes extra line break between groups
+
 
 if __name__ == "__main__":
     main()
