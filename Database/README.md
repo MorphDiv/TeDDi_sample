@@ -4,11 +4,11 @@
 
 Scripts in this directory deal with generating the 100 LC database from the corpus text files and for converting the data to various formats.
 
-For example, to parse the corpus files and to generate a [SQLite](https://www.sqlite.org/index.html) database, run:
+For example, to parse the corpus files and to generate a [SQLite](https://www.sqlite.org/index.html) database, run this script from the `100LC/Database` directory:
 
 `python3 load-database.py`
 
-The default is set to development mode and will run the database creation pipeline on the in `tests/Corpus`, which contain all of the maximally diverse input file formats (for testing). This file then will generate a SQLite database called `test.sqlite3`.
+The default is set to development mode and will run the database creation pipeline on the `tests/Corpus` directory, which contain the maximally diverse input file formats (for testing). This file then will generate a SQLite database called `test.sqlite3`.
 
 To run the pipeline on the full database, set the `-f` (full database) flag:
 
@@ -16,33 +16,35 @@ To run the pipeline on the full database, set the `-f` (full database) flag:
 
 Beware this takes a few minutes to run on the 25k+ files in the `100LC/Corpus` directory. Note that the current full database is also nearly 3GB.
 
-See `requirements.txt` for the required Python libraries for running the script. 
+See `requirements.txt` for the required Python libraries for running the script. For more information, see [Installing packages using pip and virtual environments](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
 
 The actual processing for parsing the input data and generating the database is located in the directory `Database/clc` (named `clc` for "Centennial Language Corpus" because package names / libraries cannot start with numerals). The database schema is encoded in the `Database/clc/models.py` file. This file also contains the constraints on input, so if for example a new corpus file is added in which it contains an invalid value for a metadata field, an error will be thrown when generating the database, e.g.
 
 `sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) CHECK constraint failed: file`
 
-See for example pull request [183](https://github.com/uzling/100LC/pull/182) for details.
+See for example pull request [182](https://github.com/uzling/100LC/pull/182) for details.
 
 
 ## Generating other formats
 
-There are a few other scripts in this directory for generating various formats of the database. For example, to create an [RData](https://bookdown.org/ndphillips/YaRrr/rdata-files.html) from the SQLite database, run the R script:
+There are a few other scripts in this directory for generating various formats of the database. For example, to create an [RData](https://bookdown.org/ndphillips/YaRrr/rdata-files.html) from the SQLite database, run the R script on the command line in the `100LC/Database` directory:
 
-`sqlite_to_RData.R`
+`Rscript sqlite_to_RData.R`
 
 To generate CSV files from the RData file, run:
 
-`to_csv.R`
+`Rscript to_csv.R`
 
 And to create corpus text files in a unified format, run:
 
-`generate_unified_format.py`
+`python3 generate_unified_format.py`
+
+The R scripts can also be fired from an R GUI like [RStudio](https://rstudio.com/), but make sure to set the current working directory to `100LC/Database`. This is also true of the Python scripts, e.g. within in IDE like [PyCharm](https://www.jetbrains.com/pycharm/).
 
 
 ## Other scripts
 
-The `fix-files.py` script can be used to reformat the metadata headers in the `Corpus` files and to clean up aspects of the body.
+The `fix-files.py` script can be used to reformat the metadata headers in the `Corpus` files and to clean up aspects of the body (same instructions as above).
 
 
 ## Errors
