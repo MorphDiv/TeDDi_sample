@@ -1,0 +1,55 @@
+---
+title: "Visualize word TTR for 100 LC corpora"
+author: "Steven Moran"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+  pandoc_args: --webtex
+---
+
+```{r echo=FALSE, include=FALSE}
+library(tidyverse)
+```
+
+Load the results from `get_word_ttr.Rmd`.
+
+```{r}
+df <- read_csv('word_ttr.csv')
+```
+
+Plot the languages and their genres by their TTR ratios.
+
+```{r}
+p <- tidyr::unite(df, corpus, c(name, genre_broad))
+p$corpus <- factor(p$corpus, levels = unique(p$corpus[order(df$ttr)]))
+qplot(corpus, ttr, data=p) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+Here's the same plot with `ggplot`.
+
+```{r}
+ggplot(p, aes(x=corpus, y=ttr)) + 
+   geom_point() + 
+   theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+Here's a plot grouped by genre by color.
+
+```{r}
+p <- df
+p$name <- factor(p$name, levels = unique(p$name[order(df$ttr)]))
+
+ggplot(p, aes(x=name, y=ttr, color=genre_broad, group=genre_broad)) + 
+   geom_point() + 
+   theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+```{r}
+p <- df
+p$name <- factor(p$name, levels = unique(p$name[order(df$ttr)]))
+
+ggplot(p, aes(x=ttr, y=name, color=genre_broad, group=genre_broad)) + 
+   geom_point() +
+   theme_bw()
+```
