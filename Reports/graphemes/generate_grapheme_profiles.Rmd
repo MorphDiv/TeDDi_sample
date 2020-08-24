@@ -15,60 +15,67 @@ In its simpliest form, an orthography profile (Moran & Cysouw, 2018) is a Unicod
 # To install orthography profile tokenization:
 # install.packages("devtools")
 # devtools::install_github("cysouw/qlcData", build_vignettes = TRUE)
-library(qlcData)
 
+library(qlcData)
 library(dplyr)
+library(tidyr)
 library(knitr)
 library(purrrlyr)
 ```
 
-I use the 100LC test data set for corpora for illustration purposes. The output for each corpus is written to the `orthography_profiles` folder in this directory.
+I use the 100LC test data set for corpora for illustration purposes. The output for each corpus is written to the `orthography_profiles` folder in this directory. To run on the full database, load `100LC.Rdata`.
 
 ```{r}
-load('../../Database/test-100LC.Rdata')
+# load('../../Database/test.RData')
+load('../../Database/100LC.Rdata')
 ```
 
-There are multiple languages in the data frame -- each row is a word (with a bunch of other metadata that's simply repeated). For example:
+First, we need to merge in the corpus IDs with the lines table.
 
 ```{r}
-head(df) %>% kable()
+lines <- clc_line %>% select(file_id, text)
+corpus_ids <- clc_file %>% select(id, corpus_id) %>% distinct()
+lines <- left_join(corpus_ids, lines, by=c("id"="file_id"))
+
+# corpus_names <- tidyr::unite(clc_corpus, corpus, c(name, genre_broad))
+# corpus_ids <- corpus_names %>% select(id, corpus) %>% distinct()
+# lines <- left_join(corpus_ids, lines, by=c("id"="file_id"))
+glimpse(lines)
 ```
 
-Here are the frequency counts (word counts) per corpus.
+Here are the frequency counts (word counts) per corpus. Recall that we need to do deal with languages that have multiple writing systems in the same folder. TODO.
 
 ```{r}
-table(df$name) %>% kable()
+table(lines$corpus_id) %>% kable()
 ```
 
 Here's how we generate an initial orthography profile (a linguistically correct orthography profile usually requires expert analysis of elements such as bigraphs; see Moran \& Cysouw, 2018 for detailed discussion).
 
 ```{r}
-Abkhaz_abk <- df %>% filter(name == "Abkhaz_abk")
-op <- write.profile(Abkhaz_abk$word_text)
+test <- lines %>% filter(id == 1)
+op <- write.profile(test$text)
+# Since we're working with lines, let's remove the spaces counted
+op <- op %>% filter(Grapheme!=" ")
 op$Frequency <- as.integer(op$Frequency)
 op %>% arrange(desc(Frequency)) %>% kable()
 ```
 
-For the input to the `write.profile` function, we first turn rows into a list using the `purrrlyr` library.
-
 ```{r}
-# For testing:
-# df <- df %>% filter(name %in% c('Abkhaz_abk', 'Acoma_kjq'))
+corpus_names <- tidyr::unite(clc_corpus, corpus, c(name, genre_broad))
 
-x <- df %>% 
-  slice_rows("name") %>% 
-  by_slice(function(x) as.vector(t(x[6])), .to = "words")
-```
+x <- lines %>% 
+  slice_rows("corpus_id") %>% 
+  by_slice(function(x) as.vector(t(x[2])), .to = "words")
 
-Now we write each language's profile to a CSV file.
-
-```{r}
 for (i in 1:nrow(x)) {
   row <- x[i,]
   op <- write.profile(row$words[[1]])
   op$Frequency <- as.integer(op$Frequency)
+  op <- op %>% filter(Grapheme!=" ")
   op <- op %>% arrange(desc(Frequency))
-  fname <- paste0("orthography_profiles/", row$name, ".csv")
+  # Create the corpus name
+  filename <- corpus_names %>% filter(id == i) %>% select(corpus)
+  fname <- paste0("orthography_profiles/", filename$corpus, ".csv")
   write.csv(op, file=fname, row.names=FALSE)
 }
 ```
