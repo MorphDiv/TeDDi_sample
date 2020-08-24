@@ -1,0 +1,159 @@
+---
+title: "Generate tables for the database paper"
+author: "Steven Moran"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+  pandoc_args: --webtex
+---
+
+```{r, warning=FALSE, message=FALSE}
+library(readr)
+library(dplyr)
+library(knitr)
+library(xtable)
+```
+
+# Overview
+
+Generate descriptive stats and plots for the 100LC database paper submission.
+
+
+# Corpus overview
+
+Load the 100 LC index file.
+
+```{r, warning=FALSE, message=FALSE}
+index <- read_csv('../../LangInfo/langInfo_100LC.csv')
+```
+
+Decide what we want to keep from the language index and create a LaTeX (long) table for the paper submission.
+
+```{r}
+df <- index %>% select(name_glotto, glottocode, iso639_3, status, genus_wals, macroarea_glotto) %>% arrange(name_glotto)
+```
+
+Rename the columns.
+
+```{r}
+df <- df %>% rename('Language name' = name_glotto, 'Glottocode' = glottocode, 'ISO 630-3' = iso639_3, 'Endangerment' = status, 'Genus' = genus_wals, 'Area' = macroarea_glotto)
+```
+
+How about this for a descriptive table of the languages in the 100 LC sample?
+
+```{r}
+df %>% head() %>% kable()
+```
+
+Dump an xtable (`longtable` in latex) for the paper. Currently, I just copy and paste the table into the Overleaf document.
+
+```{r}
+add.to.row <- list(pos = list(0), command = NULL)
+command <- paste0("\\hline\n\\endhead\n",
+                "\\hline\n",
+                "\\multicolumn{", dim(df)[2] + 1, "}{l}",
+                "{\\footnotesize Continued on next page}\n",
+                "\\endfoot\n",
+                "\\endlastfoot\n")
+add.to.row$command <- command
+print(xtable(df), hline.after=c(-1), add.to.row = add.to.row, tabular.environment = "longtable", include.rownames=FALSE)
+```
+
+# Word TTR
+
+Now which stats for the paper (see: https://github.com/uzling/100LC/issues/189)?
+
+Counts for both words and characters:
+
+* number of types per genre and language
+* number of tokens per genre and language
+
+Calculations (per language and per genre and language):
+
+* word TTR
+* character TTR
+* median word length (in characters)
+
+Genres are represented by corpus IDs in the database (see: https://github.com/uzling/100LC/blob/master/Reports/genres/get_genres.md). This makes it easy to extract the pertinent file(s) per genre and to do the various type / token counts.
+
+However, the 100 LC corpus contains multiple writing scripts in files within the same language and genre (see: https://github.com/uzling/100LC/issues/189). This issue is discussed in this report on getting word types and tokens:
+
+* https://github.com/uzling/100LC/blob/master/Reports/ttr/get_word_ttr.md
+
+Let's load the results from that report.
+
+```{r, warning=FALSE, message=FALSE}
+word_ttr <- read_csv('../ttr/word_ttr.csv')
+```
+
+And have a look:
+
+```{r}
+word_ttr %>% head() %>% kable()
+```
+
+Rename the columns to match in the paper.
+
+```{r}
+word_ttr <- word_ttr %>% rename('Language' = name, 'Genre' = genre_broad, 'Word types' = types, 'Word tokens' = tokens, 'Type-token ratio' = ttr)
+word_ttr %>% head() %>% kable()
+```
+
+```{r}
+add.to.row <- list(pos = list(0), command = NULL)
+command <- paste0("\\hline\n\\endhead\n",
+                "\\hline\n",
+                "\\multicolumn{", dim(word_ttr)[2] + 1, "}{l}",
+                "{\\footnotesize Continued on next page}\n",
+                "\\endfoot\n",
+                "\\endlastfoot\n")
+add.to.row$command <- command
+print(xtable(word_ttr), hline.after=c(-1), add.to.row = add.to.row, tabular.environment = "longtable", include.rownames=FALSE)
+```
+
+# Grapheme TTR
+
+We generate the grapheme TTR figures here:
+
+* https://github.com/uzling/100LC/blob/master/Reports/ttr/get_grapheme_ttr.md
+
+Let's load the results from that report.
+
+```{r, warning=FALSE, message=FALSE}
+grapheme_ttr <- read_csv('../ttr/grapheme_ttr.csv')
+```
+
+And have a look:
+
+```{r}
+grapheme_ttr %>% head() %>% kable()
+```
+
+Rename the columns to match in the paper.
+
+```{r}
+grapheme_ttr <- grapheme_ttr %>% rename('Language' = name, 'Genre' = genre_broad, 'Grapheme types' = types, 'Grapheme tokens' = tokens, 'Type-token ratio' = ttr)
+grapheme_ttr %>% head() %>% kable()
+```
+
+```{r}
+add.to.row <- list(pos = list(0), command = NULL)
+command <- paste0("\\hline\n\\endhead\n",
+                "\\hline\n",
+                "\\multicolumn{", dim(grapheme_ttr)[2] + 1, "}{l}",
+                "{\\footnotesize Continued on next page}\n",
+                "\\endfoot\n",
+                "\\endlastfoot\n")
+add.to.row$command <- command
+print(xtable(grapheme_ttr), hline.after=c(-1), add.to.row = add.to.row, tabular.environment = "longtable", include.rownames=FALSE)
+```
+
+# TODOS
+
+* Plot words and graphemes TTR? These are (bad) preliminary:
+    * https://github.com/uzling/100LC/blob/master/Reports/ttr/plot_ttr.md
+    * https://github.com/uzling/100LC/blob/master/Reports/ttr/words_vs_graphemes_ttr.md
+* Plot maps (see: https://github.com/uzling/100LC/issues/190)
+* Generate median word length (in characters) (see: https://github.com/uzling/100LC/issues/189)
+
+
