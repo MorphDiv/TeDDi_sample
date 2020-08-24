@@ -9,13 +9,18 @@ output:
 
 ```{r echo=FALSE, include=FALSE}
 library(dplyr)
+library(readr)
+library(tidyr)
 library(knitr)
 ```
 
-```{r}
-words.ttr <- read.csv('words_ttr.csv')
+```{r, warning=FALSE, message=FALSE}
+words.ttr <- read_csv('word_ttr.csv')
+words.ttr <- tidyr::unite(words.ttr, name, c(name, genre_broad))
 w.cut <- words.ttr %>% select(name, ttr) %>% rename(word_ttr=ttr)
-graphemes.ttr <- read.csv('graphemes_ttr.csv')
+
+graphemes.ttr <- read.csv('grapheme_ttr.csv')
+graphemes.ttr <- tidyr::unite(graphemes.ttr, name, c(name, genre_broad))
 g.cut <- graphemes.ttr %>% select(name, ttr) %>% rename(grapheme_ttr=ttr)
 ```
 

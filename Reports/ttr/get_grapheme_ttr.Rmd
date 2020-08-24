@@ -1,0 +1,72 @@
+---
+title: "Grapheme TTR in 100LC"
+author: "Steven Moran"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+  pandoc_args: --webtex
+---
+
+```{r echo=FALSE, include=FALSE}
+library(dplyr)
+library(readr)
+library(knitr)
+library(stringr)
+```
+
+Load each grapheme orthography profile (OP) from disk, generate TTRs, and write to a table.
+
+```{r, warning=FALSE, message=FALSE}
+# Create results data frame
+header <- c("name", "genre_broad", "types", "tokens", "ttr")
+results <- as.data.frame(matrix(,0,length(header)))
+names(results) <- header
+
+# Loop over the OPs
+fils <- list.files("../graphemes/orthography_profiles", pattern="csv$", full.names = TRUE, recursive = TRUE)
+
+# For testing, set to just one file:
+# file <- fils[1]
+
+col_types <- cols(Frequency='i', .default='c')
+
+for (file in fils) {
+  # Get language name from file path
+  s <- unlist(strsplit(file, "/"))
+  filename <- tail(s, n=1)
+  filename <- str_remove(filename, ".csv")
+  
+  # Read the OP
+  df <- read_csv(file, col_types=col_types)
+
+  # Get ttr
+  tokens <- sum(df$Frequency)
+  types <- length(unique(df$Grapheme))
+  ttr <- (types / tokens)
+  
+  # Recreate the language name and broad genre (this is soooo hacky...)
+  genre_broad <- unlist(lapply(str_split(filename, "_"), tail ,n=1))
+  fname <- str_remove(filename, paste0("_", genre_broad))
+  
+  # Add to results data frame
+  result <- c(fname, genre_broad, types, tokens, ttr)
+  results[nrow(results) + 1,] <- result
+}
+
+# Clean up
+results$types <- as.integer(results$types)
+results$tokens <- as.integer(results$tokens)
+results$ttr <- as.numeric(results$ttr)
+```
+
+```{r}
+results %>% kable()
+```
+
+Write the results to CSV.
+
+```{r}
+write_csv(results, 'grapheme_ttr.csv')
+```
+
+

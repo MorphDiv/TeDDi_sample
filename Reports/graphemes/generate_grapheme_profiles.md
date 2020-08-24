@@ -1,9 +1,10 @@
 Generate initial orthography profiles
 ================
 Steven Moran
-24 June, 2020
+23 August, 2020
 
-# Overview
+Overview
+========
 
 In its simpliest form, an orthography profile (Moran & Cysouw, 2018) is
 a Unicode character or Unicode grapheme unigram model, i.e. a CSV file
@@ -14,64 +15,180 @@ text. This report generates orthography profiles from each corpus in the
 
 I use the 100LC test data set for corpora for illustration purposes. The
 output for each corpus is written to the `orthography_profiles` folder
-in this directory.
+in this directory. To run on the full database, load `100LC.Rdata`.
 
-``` r
-load('../../Database/test-100LC.Rdata')
-```
+    # load('../../Database/test.RData')
+    load('../../Database/100LC.Rdata')
 
-There are multiple languages in the data frame – each row is a word
-(with a bunch of other metadata that’s simply repeated). For example:
+First, we need to merge in the corpus IDs with the lines table.
 
-``` r
-head(df) %>% kable()
-```
+    lines <- clc_line %>% select(file_id, text)
+    corpus_ids <- clc_file %>% select(id, corpus_id) %>% distinct()
+    lines <- left_join(corpus_ids, lines, by=c("id"="file_id"))
 
-| word\_id | line\_id | file\_id | corpus\_id | language\_id | word\_text      | line\_text                                                                                                                                                                | writing\_system | file\_genre\_broad | file\_genre\_narrow | genre\_broad | genre\_narrow | name        |
-| -------: | -------: | -------: | ---------: | -----------: | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :-------------- | :----------------- | :------------------ | :----------- | :------------ | :---------- |
-|        1 |        1 |        1 |          1 |            1 | Ауаҩытәыҩса     | Ауаҩытәыҩса изинқәа Зегьеицырзеиҧшу Адекларациа                                                                                                                           | Cyrl            | professional       | official\_documents | professional | NA            | Abkhaz\_abk |
-|        2 |        1 |        1 |          1 |            1 | изинқәа         | Ауаҩытәыҩса изинқәа Зегьеицырзеиҧшу Адекларациа                                                                                                                           | Cyrl            | professional       | official\_documents | professional | NA            | Abkhaz\_abk |
-|        3 |        1 |        1 |          1 |            1 | Зегьеицырзеиҧшу | Ауаҩытәыҩса изинқәа Зегьеицырзеиҧшу Адекларациа                                                                                                                           | Cyrl            | professional       | official\_documents | professional | NA            | Abkhaz\_abk |
-|        4 |        1 |        1 |          1 |            1 | Адекларациа     | Ауаҩытәыҩса изинқәа Зегьеицырзеиҧшу Адекларациа                                                                                                                           | Cyrl            | professional       | official\_documents | professional | NA            | Abkhaz\_abk |
-|        5 |        2 |        1 |          1 |            1 | Алагалажәа      | Алагалажәа                                                                                                                                                                | Cyrl            | professional       | official\_documents | professional | NA            | Abkhaz\_abk |
-|        6 |        3 |        1 |          1 |            1 | Дызусҭзаалак,   | Дызусҭзаалак, ауаатәыҩсатә ҭаацәара иалахәу иҳаҭыри, иара иузиҟәымҭхо имоу изинқәеи, ахақәиҭреи, аиашареи, адунеижәларбжьаратәи аҭынчреи шьаҭас ишрымоу хшыҩзышьҭра азуа, | Cyrl            | professional       | official\_documents | professional | NA            | Abkhaz\_abk |
+    # corpus_names <- tidyr::unite(clc_corpus, corpus, c(name, genre_broad))
+    # corpus_ids <- corpus_names %>% select(id, corpus) %>% distinct()
+    # lines <- left_join(corpus_ids, lines, by=c("id"="file_id"))
+    glimpse(lines)
 
-Here are the frequency counts (word counts) per corpus.
+    ## Rows: 19,883,566
+    ## Columns: 3
+    ## $ id        <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+    ## $ corpus_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+    ## $ text      <chr> "Ауаҩытәыҩса изинқәа Зегьеицырзеиҧшу Адекларациа", "Алагала…
 
-``` r
-table(df$name) %>% kable()
-```
+Here are the frequency counts (word counts) per corpus. Recall that we
+need to do deal with languages that have multiple writing systems in the
+same folder. TODO.
 
-| Var1                        |   Freq |
-| :-------------------------- | -----: |
-| Abkhaz\_abk                 |   1325 |
-| Acoma\_kjq                  |   2433 |
-| Alamblak\_amp               | 268933 |
-| Arabic\_Egyptian\_arz       | 528641 |
-| Asmat\_tml                  |     53 |
-| Bagirmi\_bmi                |     70 |
-| Basque\_eus                 |   8832 |
-| CanelaKraho\_ram            |  40181 |
-| Dani\_LowerGrandValley\_dni |    298 |
-| English\_eng                | 842657 |
-| Finnish\_fin                |  39088 |
-| Kayardild\_gyd              |     28 |
-| Lavukaleve\_lvk             |   2109 |
-| Vietnamese\_vie             |   4545 |
+    table(lines$corpus_id) %>% kable()
+
+| Var1 |    Freq |
+|:-----|--------:|
+| 1    |      91 |
+| 2    |     266 |
+| 3    |    7945 |
+| 4    |    9477 |
+| 5    |    7958 |
+| 6    |   31174 |
+| 7    |    7958 |
+| 8    |      28 |
+| 9    |       9 |
+| 10   |    7956 |
+| 11   |  585635 |
+| 12   |      93 |
+| 13   |      92 |
+| 14   |   30997 |
+| 15   |      91 |
+| 16   |      54 |
+| 17   |    1056 |
+| 18   |    7925 |
+| 19   |      92 |
+| 20   |    1151 |
+| 21   |    7954 |
+| 22   |      22 |
+| 23   |  494919 |
+| 24   |  880307 |
+| 25   |      92 |
+| 26   |    7917 |
+| 27   |      96 |
+| 28   |  653116 |
+| 29   | 1257089 |
+| 30   |      96 |
+| 31   |  531889 |
+| 32   |  794207 |
+| 33   |      91 |
+| 34   |  156707 |
+| 35   |      91 |
+| 36   |  626298 |
+| 37   |  890769 |
+| 38   |      92 |
+| 39   |      19 |
+| 40   |  540205 |
+| 41   |  932903 |
+| 42   |     184 |
+| 43   |    6287 |
+| 44   |      91 |
+| 45   |    7897 |
+| 46   |      83 |
+| 47   |    7931 |
+| 48   |     182 |
+| 49   |    8733 |
+| 50   |  988784 |
+| 51   |      89 |
+| 52   |  137599 |
+| 53   |      94 |
+| 54   |    1232 |
+| 55   |      91 |
+| 56   |      51 |
+| 57   | 1081625 |
+| 58   |      92 |
+| 59   |    7958 |
+| 60   |   23015 |
+| 61   |  833667 |
+| 62   |      91 |
+| 63   |      89 |
+| 64   |       5 |
+| 65   |    9448 |
+| 66   |    7933 |
+| 67   |      90 |
+| 68   |    7958 |
+| 69   |      13 |
+| 70   |  799404 |
+| 71   |      92 |
+| 72   |      10 |
+| 73   |    7958 |
+| 74   |     226 |
+| 75   |      90 |
+| 76   |      46 |
+| 77   |       3 |
+| 78   |   31454 |
+| 79   |      86 |
+| 80   |  214838 |
+| 81   |  758884 |
+| 82   |     184 |
+| 83   |    7958 |
+| 84   |     144 |
+| 85   |     634 |
+| 86   |     676 |
+| 87   |      64 |
+| 88   |    7958 |
+| 89   |       5 |
+| 90   |    7958 |
+| 91   |       1 |
+| 92   |       2 |
+| 93   |      91 |
+| 94   |    1018 |
+| 95   |  996810 |
+| 96   |      90 |
+| 97   |    7786 |
+| 98   |     127 |
+| 99   |      36 |
+| 100  |     186 |
+| 101  |    5826 |
+| 102  | 1006147 |
+| 103  |      92 |
+| 104  |    7958 |
+| 105  |      93 |
+| 106  |    7958 |
+| 107  |  555446 |
+| 108  |  899563 |
+| 109  |      92 |
+| 110  |    7944 |
+| 111  |      93 |
+| 112  |  108206 |
+| 113  |   42763 |
+| 114  |      96 |
+| 115  |  820750 |
+| 116  |      90 |
+| 117  | 1168920 |
+| 118  |      92 |
+| 119  |  721697 |
+| 120  |     186 |
+| 121  |      42 |
+| 122  |   31157 |
+| 123  |     144 |
+| 124  |    7957 |
+| 125  |      92 |
+| 126  |    7957 |
+| 127  |   30819 |
+| 128  |      90 |
+| 129  |     146 |
+| 130  |      92 |
 
 Here’s how we generate an initial orthography profile (a linguistically
 correct orthography profile usually requires expert analysis of elements
 such as bigraphs; see Moran & Cysouw, 2018 for detailed discussion).
 
-``` r
-Abkhaz_abk <- df %>% filter(name == "Abkhaz_abk")
-op <- write.profile(Abkhaz_abk$word_text)
-op$Frequency <- as.integer(op$Frequency)
-op %>% arrange(desc(Frequency)) %>% kable()
-```
+    test <- lines %>% filter(id == 1)
+    op <- write.profile(test$text)
+    # Since we're working with lines, let's remove the spaces counted
+    op <- op %>% filter(Grapheme!=" ")
+    op$Frequency <- as.integer(op$Frequency)
+    op %>% arrange(desc(Frequency)) %>% kable()
 
 | Grapheme | Frequency | Codepoint | UnicodeName                                        |
-| :------- | --------: | :-------- | :------------------------------------------------- |
+|:---------|----------:|:----------|:---------------------------------------------------|
 | а        |      2463 | U+0430    | CYRILLIC SMALL LETTER A                            |
 | и        |       791 | U+0438    | CYRILLIC SMALL LETTER I                            |
 | р        |       746 | U+0440    | CYRILLIC SMALL LETTER ER                           |
@@ -137,36 +254,31 @@ op %>% arrange(desc(Frequency)) %>% kable()
 | Н        |         1 | U+041D    | CYRILLIC CAPITAL LETTER EN                         |
 | Х        |         1 | U+0425    | CYRILLIC CAPITAL LETTER HA                         |
 
-For the input to the `write.profile` function, we first turn rows into a
-list using the `purrrlyr` library.
+    corpus_names <- tidyr::unite(clc_corpus, corpus, c(name, genre_broad))
 
-``` r
-# For testing:
-# df <- df %>% filter(name %in% c('Abkhaz_abk', 'Acoma_kjq'))
+    x <- lines %>% 
+      slice_rows("corpus_id") %>% 
+      by_slice(function(x) as.vector(t(x[2])), .to = "words")
 
-x <- df %>% 
-  slice_rows("name") %>% 
-  by_slice(function(x) as.vector(t(x[6])), .to = "words")
-```
+    for (i in 1:nrow(x)) {
+      row <- x[i,]
+      op <- write.profile(row$words[[1]])
+      op$Frequency <- as.integer(op$Frequency)
+      op <- op %>% filter(Grapheme!=" ")
+      op <- op %>% arrange(desc(Frequency))
+      # Create the corpus name
+      filename <- corpus_names %>% filter(id == i) %>% select(corpus)
+      fname <- paste0("orthography_profiles/", filename$corpus, ".csv")
+      write.csv(op, file=fname, row.names=FALSE)
+    }
 
-Now we write each language’s profile to a CSV file.
+References
+==========
 
-``` r
-for (i in 1:nrow(x)) {
-  row <- x[i,]
-  op <- write.profile(row$words[[1]])
-  op$Frequency <- as.integer(op$Frequency)
-  op <- op %>% arrange(desc(Frequency))
-  fname <- paste0("orthography_profiles/", row$name, ".csv")
-  write.csv(op, file=fname, row.names=FALSE)
-}
-```
-
-# References
-
-  - Moran, Steven and Michael Cysouw. 2018. The Unicode Cookbook for
+-   Moran, Steven and Michael Cysouw. 2018. The Unicode Cookbook for
     Linguists: Managing writing systems using orthography profiles.
     Translation and Multilingual Natural Language Process- ing series in
     Language Science Press. DOI:
-    <https://doi.org/10.5281/zenodo.1296780>. Online:
-    <http://langsci-press.org/catalog/book/176>.
+    <a href="https://doi.org/10.5281/zenodo.1296780" class="uri">https://doi.org/10.5281/zenodo.1296780</a>.
+    Online:
+    <a href="http://langsci-press.org/catalog/book/176" class="uri">http://langsci-press.org/catalog/book/176</a>.
