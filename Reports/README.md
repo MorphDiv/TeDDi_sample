@@ -34,4 +34,4 @@ The [word frequency](word_frequency) directory contains an R markdown report tha
 
 The [maps](maps) report is an [R markdown](https://rmarkdown.rstudio.com/articles_intro.html) report that produces world maps from the 100LC language sample. The R markdown report can be produced by running `knitr` in R Studio ([an example here](https://rmarkdown.rstudio.com/articles_integration.html)). The report can be viewed in the browser because GitHub renders markdown (`md`) files.
 
-**NOTE**: Python scripts should NOT be used for extracting numbers for further analyses. They only serve for getting approximate numbers at the pre-database stage. Please use the R scripts counted on the database for obtaining the reliable counts for further analyses.
+**NOTE**: Python scripts should NOT be used for extracting numbers for further analyses. They only serve for getting approximate numbers at the pre-database stage. Please use the R scripts, which work with the database, for obtaining the reliable counts for further analyses.
