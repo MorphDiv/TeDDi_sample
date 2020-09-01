@@ -1,8 +1,8 @@
 """ Loops through the corpus files and reports the number of lines and files per language per genre. """
 
 import os
+import re
 import codecs
-import time
 
 root_path = '../../Corpus'
 genres = ['fiction', 'non-fiction', 'conversation', 'professional', 'technical', 'grammar']
@@ -15,6 +15,9 @@ genres_abbr = {
     'technical': 'tec',
     'grammar': 'gre'
 }
+
+# Empty lines, number + empty lines (for Bible)
+empty_line = re.compile('^[0-9]*\s+\n$')
 
 result = {}
 
@@ -48,11 +51,18 @@ def count_lines(subdir, lang_root):
         for file in files:
             f = codecs.open(os.path.join(joined_subdir, file), 'r', 'utf-8')
             for line in f:
+                # Check empty lines
+                check_empty = re.search(empty_line, line)
+                if check_empty:
+                    continue
+
                 # Exclude meta and lines that we don't want to count
                 if '<translation>' not in line \
                         and '<segmentation>' not in line \
                         and '<glossing>' not in line \
                         and '<comment>' not in line \
+                        and '<chapter' not in line \
+                        and '<book' not in line \
                         and not line.startswith('#') \
                         and line != '\n':
 
@@ -71,7 +81,6 @@ def count_lines(subdir, lang_root):
 
 
 def main():
-    start = time.time()
     for root, dirs, files in walklevel(root_path, level=0):
         for cur_dir in dirs:
 
@@ -135,9 +144,6 @@ def main():
 
     for k, v in sorted(result.items()):
         report.write(k + v)
-
-    end = time.time()
-    print('RUNNING TIME:', round((end - start)/60, 2), 'min')
 
 
 if __name__ == '__main__':
