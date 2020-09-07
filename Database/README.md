@@ -5,7 +5,7 @@ Scripts and code in this directory deal with validating the [raw corpus text fil
 
 ## Generating the database
 
-To parse the [corpus files](../Corpus) and to generate a [SQLite](https://www.sqlite.org/index.html) database, run this script from the `100LC/Database` directory:
+To parse the [corpus files](../Corpus) and to generate a [SQLite](https://www.sqlite.org/index.html) database, run this script from the `100LC/Database` directory on your local machine:
 
 `python3 load-database.py`
 
@@ -19,9 +19,9 @@ Beware this takes a few minutes to run on the 25k+ files in the [100LC/Corpus](.
 
 See the [requirements file](requirements.txt) for the required Python libraries for running the script. For more information on how to install these libraries, see [Installing packages using pip and virtual environments](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/). They must be installed to run the database aggregation pipeline.
 
-The actual process for parsing the corpus input data files and generating the resulting database is located in the directory [Database/clc](Database/clc) (named `clc` for "Centennial Language Corpus" because package names / libraries in Python cannot start with numerals!). This directory contains a [Python package](https://packaging.python.org/overview/) that was developed for validating and aggregating the 100 LC corpus text files into a relational database. To assist in this process, we use [SQLAlchemy](https://www.sqlalchemy.org/), a Python SQL toolkit and [Object Relational Mapper](https://en.wikipedia.org/wiki/Object-relational_mapping) in our Python package.
+The actual process for parsing the corpus input data files and generating the resulting database is located in the directory [clc](clc) (named `clc` for "Centennial Language Corpus" because package names / libraries in Python cannot start with numerals!). This directory contains a [Python package](https://packaging.python.org/overview/) that was developed for validating and aggregating the 100 LC corpus text files into a relational database. To assist in this process, we use [SQLAlchemy](https://www.sqlalchemy.org/), a Python SQL toolkit and [Object Relational Mapper](https://en.wikipedia.org/wiki/Object-relational_mapping) in our Python package.
 
-The database schema is encoded in the [models file](Database/clc/models.py). This file also contains constraints on the input, so if for example a new corpus file is added in which it contains an invalid value for a metadata field, an error will be thrown when generating the database, e.g.:
+The database schema is encoded in the [models file](clc/models.py). This file also contains constraints on the input, so if for example a new corpus file is added in which it contains an invalid value for a metadata field, an error will be thrown when generating the database, e.g.:
 
 `sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) CHECK constraint failed: file`
 
@@ -58,7 +58,7 @@ The basic workflow for adding new text files is to first add those files (and th
 
 `python3 load-database.py`
 
-This allows for quickly testing whether new files break the database loading routine due to errors like those mentioned above. Once the files' contents are loaded into the database without error (and the database's new contents should be eye-balled to make sure nothing weird happened), then the new files can be added to the [100LC/Corpus][../Corpus] directory (within their file folder structure, which might need to be created). At this point the test files can be removed from [tests/Corpus](tests/Corpus) and the full database pipeline can be run on all new and old files:
+This allows for quickly testing whether new files break the database loading routine due to errors like those mentioned above. Once the files' contents are loaded into the database without error (and the database's new contents should be eye-balled to make sure nothing weird happened), then the new files can be added to the [100LC/Corpus](../Corpus) directory (within their file folder structure, which might need to be created). At this point the test files can be removed from [tests/Corpus](tests/Corpus) and the full database pipeline can be run on all new and old files:
 
 `python3 load-database.py -f`
 
