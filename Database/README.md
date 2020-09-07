@@ -9,7 +9,7 @@ To parse the [corpus files](../Corpus) and to generate a [SQLite](https://www.sq
 
 `python3 load-database.py`
 
-The default is set to development mode and will run the database creation pipeline on the [tests/Corpus](tests/Corpus) directory, which contains the maximally diverse input file formats (for testing), as described in OpenBIS. This script then generates a SQLite database called `test.sqlite3`, if it does not fail when parsing the raw input files (see discussion below).
+The default is set to development mode and will run the database creation pipeline on the [100LC/Database/tests/Corpus](tests/Corpus) directory, which contains the maximally diverse input file formats (for testing), as described in OpenBIS. This script then generates a SQLite database called `test.sqlite3`, if it does not fail when parsing the raw input files (see discussion below).
 
 To run the database generation pipeline on the full set of corpus files, set the `-f` (full database) flag:
 
@@ -64,7 +64,7 @@ This allows for quickly testing whether new files break the database loading rou
 
 It is important to note that new text files for languages that already exist in the corpus directory do not require any special changes to the database loading routine if they adhere to the header template, its correct values, and to the correct text file formats described above. If the database loading routine crashes due to an error, these are usually trivial errors, like wrong values or incorrect formatting, that the user can easily fix. Hence, when new data comes it, it should be via [pull request](https://github.com/uzling/100LC/pulls), so that the database maintainer can follow the testing routine described above before checking that the data load correctly and then merge the pull request.
 
-However, there is an additional step that the database maintainer needs to do when adding *new* languages to the 100LC repository. When adding *new* languages to the [100LC/Database/Corpus](..Corpus) directory, run the `merge_sources.Rmd` script in the [LangInfo directory](../LangInfo) before running the `load-database.py` pipeline, or you will get the following error:
+However, there is an additional step that the database maintainer needs to do when adding *new* languages to the 100LC repository. When adding *new* languages to the [100LC/Database/Corpus](../Corpus) directory, run the `merge_sources.Rmd` script in the [LangInfo directory](../LangInfo) before running the `load-database.py` pipeline, or you will get the following error:
 
 ```
 sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) NOT NULL constraint failed: corpus.language_id
@@ -73,7 +73,7 @@ sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) NOT NULL constraint fail
 (Background on this error at: http://sqlalche.me/e/13/gkpj)
 ```
 
-This is because the database generation pipeline needs as input the data in the [langInfo_100LC.csv](../LangInfo/langInfo_100LC.csv) language index for validation purposes. For more information, see the [LangInfo/README.md](../LangInfo/README.md).
+This is because the database generation pipeline needs as input the data in the [langInfo_100LC.csv](../LangInfo/langInfo_100LC.csv) language index for validation purposes. For more information, see the [100LC/LangInfo/README.md](../LangInfo/README.md).
 
 In other words, when new languages are added, we first need to update the language index file, then we add the new corpus files via their new directory, e.g. `100LC/Corpus/New_Language_new/conversation/new__con_1.txt`, then we run the load database pipeline.
 
@@ -99,7 +99,7 @@ Forthcoming (todo): add routine to generate XML format from the database.
 
 ## Other useful scripts
 
-The `fix-files.py` script can be used to reformat the metadata headers in the `Corpus` files and to clean up aspects of the body (same instructions as above).
+The [fix-files.py](fix-files.py) script can be used to reformat the metadata headers in the [Corpus files](../Corpus) and to clean up aspects of the body (same instructions as above).
 
 
 
