@@ -19,7 +19,7 @@ Beware this takes a few minutes to run on the 25k+ files in the [100LC/Corpus](.
 
 See the [requirements file](requirements.txt) for the required Python libraries for running the script. For more information on how to install these libraries, see [Installing packages using pip and virtual environments](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/). They must be installed to run the database aggregation pipeline.
 
-The actual process for parsing the corpus input data files and generating the resulting database is located in the directory [clc](clc) (named `clc` for "Centennial Language Corpus" because package names / libraries in Python cannot start with numerals!). This directory contains a [Python package](https://packaging.python.org/overview/) that was developed for validating and aggregating the 100 LC corpus text files into a relational database. To assist in this process, we use [SQLAlchemy](https://www.sqlalchemy.org/), a Python SQL toolkit and [Object Relational Mapper](https://en.wikipedia.org/wiki/Object-relational_mapping) in our Python package.
+The actual process for parsing the corpus input data files and generating the resulting database is located in the directory [100LC/Database/clc](clc) (named `clc` for "Centennial Language Corpus" because package names / libraries in Python cannot start with numerals!). This directory contains a [Python package](https://packaging.python.org/overview/) that was developed for validating and aggregating the 100 LC corpus text files into a relational database. To assist in this process, we use [SQLAlchemy](https://www.sqlalchemy.org/), a Python SQL toolkit and [Object Relational Mapper](https://en.wikipedia.org/wiki/Object-relational_mapping) in our Python package.
 
 The database schema is encoded in the [models file](clc/models.py). This file also contains constraints on the input, so if for example a new corpus file is added in which it contains an invalid value for a metadata field, an error will be thrown when generating the database, e.g.:
 
@@ -54,17 +54,17 @@ https://github.com/uzling/100LC/blob/master/Database/clc/bodies.py
 
 An invalid text body will trigger a database a Python error.
 
-The basic workflow for adding new text files is to first add those files (and their directories if needed) to [tests/Corpus](tests/Corpus) and then to run the database loading routine in test mode:
+The basic workflow for adding new text files is to first add those files (and their directories if needed) to [100LC/Database/tests/Corpus](tests/Corpus) and then to run the database loading routine in test mode:
 
 `python3 load-database.py`
 
-This allows for quickly testing whether new files break the database loading routine due to errors like those mentioned above. Once the files' contents are loaded into the database without error (and the database's new contents should be eye-balled to make sure nothing weird happened), then the new files can be added to the [100LC/Corpus](../Corpus) directory (within their file folder structure, which might need to be created). At this point the test files can be removed from [tests/Corpus](tests/Corpus) and the full database pipeline can be run on all new and old files:
+This allows for quickly testing whether new files break the database loading routine due to errors like those mentioned above. Once the files' contents are loaded into the database without error (and the database's new contents should be eye-balled to make sure nothing weird happened), then the new files can be added to the [100LC/Corpus](../Corpus) directory (within their file folder structure, which might need to be created). At this point the test files can be removed from [100LC/Database/tests/Corpus](tests/Corpus) and the full database pipeline can be run on all new and old files:
 
 `python3 load-database.py -f`
 
 It is important to note that new text files for languages that already exist in the corpus directory do not require any special changes to the database loading routine if they adhere to the header template, its correct values, and to the correct text file formats described above. If the database loading routine crashes due to an error, these are usually trivial errors, like wrong values or incorrect formatting, that the user can easily fix. Hence, when new data comes it, it should be via [pull request](https://github.com/uzling/100LC/pulls), so that the database maintainer can follow the testing routine described above before checking that the data load correctly and then merge the pull request.
 
-However, there is an additional step that the database maintainer needs to do when adding *new* languages to the 100LC repository. When adding *new* languages to the `Corpus` directory, run the `merge_sources.Rmd` script in that directory before running the `load-database.py` pipeline, or you will get the following error:
+However, there is an additional step that the database maintainer needs to do when adding *new* languages to the 100LC repository. When adding *new* languages to the [100LC/Database/Corpus](..Corpus) directory, run the `merge_sources.Rmd` script in the [LangInfo directory](../LangInfo) before running the `load-database.py` pipeline, or you will get the following error:
 
 ```
 sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) NOT NULL constraint failed: corpus.language_id
@@ -73,14 +73,14 @@ sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) NOT NULL constraint fail
 (Background on this error at: http://sqlalche.me/e/13/gkpj)
 ```
 
-This is because the database generation pipeline needs as input the data in the `langInfo_100LC.csv` language index for validation purposes. For more information, see the README.md in the `100LC/LangInfo` directory.
+This is because the database generation pipeline needs as input the data in the [langInfo_100LC.csv](../LangInfo/langInfo_100LC.csv) language index for validation purposes. For more information, see the [LangInfo/README.md](../LangInfo/README.md).
 
 In other words, when new languages are added, we first need to update the language index file, then we add the new corpus files via their new directory, e.g. `100LC/Corpus/New_Language_new/conversation/new__con_1.txt`, then we run the load database pipeline.
 
 
 ## Generating other formats
 
-There are a few other scripts in this directory for generating various formats of the database. For example, to create an [RData](https://bookdown.org/ndphillips/YaRrr/rdata-files.html) from the SQLite database, run the R script on the command line in the `100LC/Database` directory:
+There are a few other scripts in this directory for generating various formats of the database. For example, to create an [RData](https://bookdown.org/ndphillips/YaRrr/rdata-files.html) from the SQLite database, run the R script on the command line in the `100LC/Database` directory on your local machine:
 
 `Rscript sqlite_to_RData.R`
 
