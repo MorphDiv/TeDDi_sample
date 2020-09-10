@@ -1,6 +1,6 @@
-# 100 LC database generation
+# 100LC database generation
 
-Scripts and code in this directory deal with validating the [raw corpus text files](../Corpus) and for generating the 100 LC relational database. This directory also contains script for converting the database into various output formats, including an  [RData file](https://bookdown.org/ndphillips/YaRrr/rdata-files.html), [CSV files](https://en.wikipedia.org/wiki/Comma-separated_values) and as [XML files](https://en.wikipedia.org/wiki/XML).
+Scripts and code in this directory deal with validating the [raw corpus text files](../Corpus) and for generating the 100LC relational database. This directory also contains script for converting the database into various output formats, including an  [RData file](https://bookdown.org/ndphillips/YaRrr/rdata-files.html), [CSV files](https://en.wikipedia.org/wiki/Comma-separated_values) and as [XML files](https://en.wikipedia.org/wiki/XML).
 
 
 ## Generating the database
@@ -8,6 +8,8 @@ Scripts and code in this directory deal with validating the [raw corpus text fil
 To parse the [corpus files](../Corpus) and to generate a [SQLite](https://www.sqlite.org/index.html) database, run this script from the `100LC/Database` directory on your local machine:
 
 `python3 load-database.py`
+
+See the [requirements file](requirements.txt) for the required Python libraries for running the script. For more information on how to install these libraries, see [Installing packages using pip and virtual environments](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/). They must be installed to run the database aggregation pipeline.
 
 The default is set to development mode and will run the database creation pipeline on the [100LC/Database/tests/Corpus](tests/Corpus) directory, which contains the maximally diverse input file formats (for testing), as described in OpenBIS. This script then generates a SQLite database called `test.sqlite3`, if it does not fail when parsing the raw input files (see discussion below).
 
@@ -17,9 +19,7 @@ To run the database generation pipeline on the full set of corpus files, set the
 
 Beware this takes a few minutes to run on the 25k+ files in the [100LC/Corpus](../Corpus) directory. Note that the current full database when completed is nearly 3GB in size.
 
-See the [requirements file](requirements.txt) for the required Python libraries for running the script. For more information on how to install these libraries, see [Installing packages using pip and virtual environments](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/). They must be installed to run the database aggregation pipeline.
-
-The actual process for parsing the corpus input data files and generating the resulting database is located in the directory [100LC/Database/clc](clc) (named `clc` for "Centennial Language Corpus" because package names / libraries in Python cannot start with numerals!). This directory contains a [Python package](https://packaging.python.org/overview/) that was developed for validating and aggregating the 100 LC corpus text files into a relational database. To assist in this process, we use [SQLAlchemy](https://www.sqlalchemy.org/), a Python SQL toolkit and [Object Relational Mapper](https://en.wikipedia.org/wiki/Object-relational_mapping) in our Python package.
+The actual process for parsing the corpus input data files and generating the resulting database is located in the directory [100LC/Database/clc](clc) (named `clc` for "Centennial Language Corpus" because package names / libraries in Python cannot start with numerals!). This directory contains a [Python package](https://packaging.python.org/overview/) that was developed for validating and aggregating the 100LC corpus text files into a relational database. To assist in this process, we use [SQLAlchemy](https://www.sqlalchemy.org/), a Python SQL toolkit and [Object Relational Mapper](https://en.wikipedia.org/wiki/Object-relational_mapping) in our Python package.
 
 The database schema is encoded in the [models file](clc/models.py). This file also contains constraints on the input, so if for example a new corpus file is added in which it contains an invalid value for a metadata field, an error will be thrown when generating the database, e.g.:
 
