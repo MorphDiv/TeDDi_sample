@@ -1,32 +1,18 @@
 """
 Loops through the corpus files and reports the number of texts, genres covered,
-unique characters and number of tokens per language.
+unique characters per language.
 
 This program returns zero values for languages that are not covered yet (unlike line_counts.py)
 
 Structure of the output:
-language,number_texts,number_genres,number_characters,number_tokens
-
-How to run:
-python progress.py -s (counts tokens in a simple way,
-i.e. separates by white spaces (no matter what language is processed)
-
-python progress.py -a (counts tokens in an advanced way;
-treats Burmese, Chinese, Japanese, Korean, Thai differently)
-
-Running time (corpus state on 30.03.20):
-python progress.py -s (7-9 min)
-python progress.py -a (4.5 hrs)
+language,number_texts,number_genres,number_characters
 """
 
-# import unicodedata
-# from string import punctuation
 
 import codecs
 import csv
 import os
 import re
-import sys
 
 
 # Using this list in order to track languages with zero counts
@@ -128,81 +114,7 @@ def count_characters(subdir, lang_root):
     return len(characters)
 
 
-# Separate by white spaces (no matter what language is processed)
-def count_tokens_simple(subdir, lang_root):
-    joined_subdir = os.path.join(lang_root, subdir)
-    tokens = []
-    for root, dirs, files in os.walk(joined_subdir):
-        for file in files:
-            f = codecs.open(os.path.join(joined_subdir, file), 'r', 'utf-8')
-            text = get_body_text(f)
-            # Split by white spaces and \n
-            tokens += text.split()
-
-    return len(tokens)
-
-
-# Treat languages differently by using language specific libraries
-def count_tokens_advanced(subdir, lang_root):
-    langs = {
-        'eng': 'en',
-        'fin': 'fi',
-        'fra': 'fr',
-        'deu': 'de',
-        'ell': 'el',
-        'hin': 'hi',
-        'ind': 'id',
-        'jpn': 'ja',
-        'kor': 'ko',
-        'cmn': 'zh',
-        'pes': 'fa',
-        'rus': 'ru',
-        'spa': 'es',
-        'tur': 'tr'
-    }
-    lang = lang_root[-3:]
-    joined_subdir = os.path.join(lang_root, subdir)
-    tokens = []
-    for root, dirs, files in os.walk(joined_subdir):
-        for file in files:
-            f = codecs.open(os.path.join(joined_subdir, file), 'r', 'utf-8')
-            text = get_body_text(f)
-
-            if lang in langs:
-                tokens += tokenize(text, langs[lang])
-            elif lang == 'tha':
-                tokens += thai_tokenize(text)
-            elif lang == 'mya':
-                word_segmenter = WordSegment()
-
-                text_arr = text.split('\n')
-                for line in text_arr:
-                    segments = word_segmenter.normalize_break(line, 'unicode',
-                                                              word_segmenter.SegmentationMethod.sub_word_possibility)
-                    for segment in segments:
-                        for word in segment:
-                            if '\n' not in word:
-                                tokens.append(word)
-
-            else:
-                # NLTK tokenize works slow, maybe there are other better ways of tokenization
-                tokens += nltk_tokenize(text)
-
-            # The loop slows down the program (additional removal of punctuation, digits)
-            # for token in tokens:
-            #     print(token)
-            #     if len(token) == 1 and unicodedata.category(token[0])[0] not in 'LN':
-            #         tokens.remove(token)
-            #     if len(token) > 1 and unicodedata.category(token[0])[0] not in 'LN'
-            #     and unicodedata.category(token[1])[0] not in 'LN':
-            #         tokens.remove(token)
-            # tokens = [word.lower() for word in tokens if not word.isdigit()
-            #           and not word.isspace() and word not in punctuation]
-
-    return len(tokens)
-
-
-def main(tokenization_mode, report_writer):
+def main(report_writer):
     generate_result_dict()
     i = 1
     for root, dirs, files in walklevel(root_path, level=0):
@@ -214,7 +126,6 @@ def main(tokenization_mode, report_writer):
             number_genres = 0
             number_texts = 0
             number_characters = 0
-            number_tokens = 0
 
             lang_root = os.path.join(root_path, language)
 
@@ -228,50 +139,27 @@ def main(tokenization_mode, report_writer):
                                     number_texts += count_files(subdir + '/' + text_type, lang_root)
                                     number_characters += count_characters(subdir + '/' + text_type, lang_root)
 
-                                    if tokenization_mode == '-s':
-                                        number_tokens += count_tokens_simple(subdir + '/' + text_type, lang_root)
-                                    elif tokenization_mode == '-a':
-                                        number_tokens += count_tokens_advanced(subdir + '/' + text_type, lang_root)
                             else:
                                 number_texts += count_files(subdir, lang_root)
                                 number_characters += count_characters(subdir, lang_root)
-                                number_tokens += count_tokens_simple(subdir, lang_root)
-                                if tokenization_mode == '-s':
-                                    number_tokens += count_tokens_simple(subdir, lang_root)
-                                elif tokenization_mode == '-a':
-                                    number_tokens += count_tokens_advanced(subdir, lang_root)
 
-            print(language, number_texts, number_genres, number_characters, number_tokens)
+            print(language, number_texts, number_genres, number_characters)
 
-            result[language] = [number_texts, number_genres, number_characters, number_tokens]
+            result[language] = [number_texts, number_genres, number_characters]
 
             i += 1
 
         for lang in all_langs:
             for k, v in result.items():
                 if k == lang:
-                    report_writer.writerow((k, v[0], v[1], v[2], v[3]))
+                    report_writer.writerow((k, v[0], v[1], v[2]))
 
 
 if __name__ == '__main__':
-    mode = sys.argv[1]
-    report_name = ''
+    report_name = 'progress.csv'
 
-    if mode == '-s':
-        report_name = 'progress_simple.csv'
-
-    elif mode == '-a':
-        from nltk.tokenize import word_tokenize as nltk_tokenize
-        from pythainlp import word_tokenize as thai_tokenize
-        from wordfreq import tokenize
-        from word_breaker.word_segment_v5 import WordSegment
-        report_name = 'progress_advanced.csv'
-
-    if report_name != '':
-        with open(report_name, 'w', encoding='utf-8') as report:
+    with open(report_name, 'w', encoding='utf-8') as report:
             writer = csv.writer(report, lineterminator='\n')
-            writer.writerow(('language', 'number_texts', 'number_genres', 'number_characters', 'number_tokens'))
-            main(mode, writer)
+            writer.writerow(('language', 'number_texts', 'number_genres', 'number_characters'))
+            main(writer)
             print('\nDONE')
-    else:
-        print('Please enter either -s or -a as an argument')

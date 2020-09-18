@@ -34,6 +34,7 @@ In cases where one of the ISO codes is not registered with Glottolog, the other 
 
 This leaves the number of languages defined by unique ISO-639-3 and glottocodes at 100.
 
+
 ## Rcode
 
 The R code used to process and merge the three data files is given in `merge_sources.Rmd` script. The report produces a markdown file `merge_sources.md`, which can be view in the browser on GitHub.
@@ -41,6 +42,24 @@ The R code used to process and merge the three data files is given in `merge_sou
 Language status: The status of languages according to Glottolog was found to be erroneous in some cases (e.g. Russian and Modern Greek are endangered). The UNESCO endangerment was used instead. It was manually assigned under "status" for languages where it is available, "NA" was assigned otherwise. Note that this endangerement ranking does not include a category for safe languages. We assigned the status "safe" to large languages of which we definitely know at this point that they are safe (e.g. English, French, Swahili, Tagalog).
 
 
+## Generating the index
 
+It is important to note that the `langInfo_100LC.csv` is generated from the above mentioned sources, but it adds and populates the the columns for:
 
+* name
+* folder_language_name
 
+from the `Corpus` directory itself. This was requested because if data does not exists in a particular language folder, then that is clearly shown in the `langInfo_100LC.csv` index. In other words, for languages in 100LC that do not yet have data, these two fields are "NA".
+
+An issue arrises here, however, when running the `load-database.py` script in the `Database` directory on *new* data. For example, when adding Piraha data, the `load-database.py` script will correctly fail, e.g.:
+
+```
+sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) NOT NULL constraint failed: corpus.language_id
+[SQL: INSERT INTO corpus (language_id, name, genre_broad, mode) VALUES (?, ?, ?, ?)]
+[parameters: (None, 'Piraha_myp', 'non-fiction', 'spoken')]
+(Background on this error at: http://sqlalche.me/e/13/gkpj)
+```
+
+if the `merge_sources.Rmd` script is not run first to populate the `name` and `folder_language_name` fields. Basically, the `load-database.py` pipeline goes to parse the new file(s), but sees in the `langInfo_100LC.csv` index that there is no `corpus.language_id` specified in the index (i.e. the `folder_language_name`). We could pre-populate the `langInfo_100LC.csv` by adding all folders to the `Corpus` directory, but then we would lack information about which languages are still to be added.
+
+In sum, when adding *new* languages to the `Corpus` directory, run the `merge_sources.Rmd` script in this directory before running the `load-database.py` pipeline, or you will get the error above.

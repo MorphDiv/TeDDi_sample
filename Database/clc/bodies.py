@@ -1,11 +1,35 @@
 """ Text (body) object for the 100 LC files """
 
-# FIXME: cleanup/refactor (consider using subclasses)
+# TODO: cleanup/refactor (consider using subclasses)
 
 import pathlib
 import re
+from itertools import groupby
 
-__all__ = ['Body']
+
+__all__ = ['detemine_file_type', 'Body']
+
+
+def determine_file_type(text):
+    # Tabbed files
+    if "\t" in text[0]:
+        tokens = text[0].split("\t")
+        # PBC format contains and 8 digit number \t text
+        if re.match(r"(\#)?(\d{8})", tokens[0]):
+            return "PBC"
+        # Hand-added grammars contain some number of annotation levels beginning with <line_1>
+        if "line_1" in tokens[0]:
+            return "Grammar"
+        raise ValueError("Line contains tab, but doesn't match PBC or Grammar format.")
+    # Hand-added bibles
+    elif "book_1" in text[0]:
+        return "Bible"
+    # Transkripus created file
+    elif "page_1" in text[0]:
+        return "Transkribus"
+    # Plain text (Opensubtitles, UDHR, Gutenberg, etc.)
+    else:
+        return "Text"
 
 
 class Body:
@@ -19,7 +43,7 @@ class Body:
     def get_records(self, text):
         # Return file type and records
 
-        # TODO
+        # TODO:
         # return file_type, self._parse_transkribus(text)
 
         file_type = self._determine_file_type(text)
@@ -36,27 +60,7 @@ class Body:
         else:
             raise ValueError("There is no file type for this file")
 
-    @staticmethod
-    def _determine_file_type(text):
-        # Tabbed files
-        if text[0].__contains__("\t"):
-            tokens = text[0].split("\t")
-            # PBC format contains and 8 digit number \t text
-            if re.match(r"(\#)?(\d{8})", tokens[0]):
-                return "PBC"
-            # Hand-added grammars contain some number of annotation levels beginning with <line_1>
-            if tokens[0].__contains__("line_1"):
-                return "Grammar"
-            raise ValueError("Line contains tab, but doesn't match PBC or Grammar format.")
-        # Hand-added bibles
-        elif text[0].__contains__("book_1"):
-            return "Bible"
-        # Transkripus created file
-        elif text[0].__contains__("page_1"):
-            return "Transkribus"
-        # Plain text (Opensubtitles, UDHR, Gutenberg, etc.)
-        else:
-            return "Text"
+    _determine_file_type = staticmethod(determine_file_type)
 
     @staticmethod
     def _parse_text(text):
@@ -79,7 +83,7 @@ class Body:
         for line in text:
             d = {}
             # Some lines are only the passage number without an text; just return all the same
-            if not line.__contains__("\t"):
+            if not "\t" in line:
                 d["text_raw"] = line.strip()
                 d["label"] = line.strip()
                 d["text"] = None
@@ -101,7 +105,7 @@ class Body:
         for line in text:
             d = {}
             # Some lines are only page or chapter labels
-            if not line.__contains__("\t"):
+            if not "\t" in line:
                 d["text_raw"] = line.strip()
                 d["label"] = line.strip()
                 d["text"] = None
@@ -123,7 +127,7 @@ class Body:
         for line in text:
             d = {}
             # Some lines are only page numbers
-            if not line.__contains__("\t"):
+            if not "\t" in line:
                 d["text_raw"] = line.strip()
                 d["label"] = line.strip()
                 d["text"] = None
@@ -139,16 +143,8 @@ class Body:
 
     @staticmethod
     def _get_chunks(text):
-        # Chunk records by new line
-        chunks = []
-        temp = []
-        for i in text:
-            if not i == "":
-                temp.append(i.strip())
-            else:
-                chunks.append(temp)
-                temp = []
-        return chunks
+        # Chunk records by new line and return a list of lists
+        return [list(g) for k, g in groupby(text, key=lambda x: x != '') if k]
 
     def _parse_grammar(self, text):
         # Grammars are any set of interlinear glossed texts, each entry separated by \n, so we chunk them first
@@ -161,21 +157,21 @@ class Body:
                 key, value = (x.strip() for x in (key, value))
 
                 # Populate line categories
-                if key.__contains__("translation"):
+                if "translation" in key:
                     d["translation"] = value
-                if key.__contains__("footnote"):
+                if "footnote" in key:
                     d["footnote"] = value
-                if key.__contains__("glossing"):
+                if "glossing" in key:
                     d["glossing"] = value
-                if key.__contains__("segmentation"):
+                if "segmentation" in key:
                     d["segmentation"] = value
-                if key.__contains__("comment"):
+                if "comment" in key:
                     d["comment"] = value
-                if key.__contains__("phonological"):
+                if "phonological" in key:
                     d["phonological"] = value
-                if key.__contains__("morphomic"):
+                if "morphomic" in key:
                     d["morphomic"] = value
-                if key.__contains__("line"):
+                if "line" in key:
                     d["text_raw"] = i
                     d["label"] = key
                     d["text"] = value

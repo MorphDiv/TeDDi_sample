@@ -1,80 +1,74 @@
 Merge language information for 100LC sources
 ================
 Chris Bentz & Steven Moran
-08 April, 2020
+08 August, 2020
 
-``` r
-library(dplyr)
-library(tidyr)
-library(knitr)
-```
+    library(dplyr)
+    library(tidyr)
+    library(knitr)
 
 Load and process the data
 =========================
 
-``` r
-wals <- read.csv("Sources/WALS/WALS_languages.csv", header = T)
-glotto.languages <- read.csv("Sources/Glottolog3.3/languages_and_dialects_geo.csv", header = T)
-glotto.languoids <- read.csv("Sources/Glottolog3.3/languoid.csv", header = T)
+    wals <- read.csv("Sources/WALS/WALS_languages.csv", header = T)
+    glotto.languages <- read.csv("Sources/Glottolog3.3/languages_and_dialects_geo.csv", header = T)
+    glotto.languoids <- read.csv("Sources/Glottolog3.3/languoid.csv", header = T)
 
-# Select languages of the 100 language sample
-wals.100 <- wals[wals$sample.100 == "True", ]
+    # Select languages of the 100 language sample
+    wals.100 <- wals[wals$sample.100 == "True", ]
 
-# Select columns with language information in WALS file
-wals.100.short <- wals.100[, 1:8]
+    # Select columns with language information in WALS file
+    wals.100.short <- wals.100[, 1:8]
 
-# Rename columns
-colnames(wals.100.short) <- c("wals_code", "glottocode", "name_wals", "latitude_wals", "longitude_wals", "macroarea_wals", "genus_wals", "family_wals")
+    # Rename columns
+    colnames(wals.100.short) <- c("wals_code", "glottocode", "name_wals", "latitude_wals", "longitude_wals", "macroarea_wals", "genus_wals", "family_wals")
 
-# Select languages in the 100 language sample by glottocode
-glotto.lang.100 <- glotto.languages[glotto.languages$glottocode %in% wals.100.short$glottocode, ]
+    # Select languages in the 100 language sample by glottocode
+    glotto.lang.100 <- glotto.languages[glotto.languages$glottocode %in% wals.100.short$glottocode, ]
 
-# Glottolog languoid information (to get top level families)
-glotto.languoids.100 <- glotto.languoids[glotto.languoids$id %in% wals.100.short$glottocode, ]
+    # Glottolog languoid information (to get top level families)
+    glotto.languoids.100 <- glotto.languoids[glotto.languoids$id %in% wals.100.short$glottocode, ]
 
-# Select particular columns of languoid data frame
-keeps <- c("id", "family_id", "status")
-glotto.languoids.100.short <- glotto.languoids.100[keeps]
+    # Select particular columns of languoid data frame
+    keeps <- c("id", "family_id", "status")
+    glotto.languoids.100.short <- glotto.languoids.100[keeps]
 
-# Merge language information and languoid information
-glotto.lang.languoids.100 <- merge(glotto.lang.100, glotto.languoids.100.short, by.x = "glottocode", by.y = "id")
+    # Merge language information and languoid information
+    glotto.lang.languoids.100 <- merge(glotto.lang.100, glotto.languoids.100.short, by.x = "glottocode", by.y = "id")
 
-# Select only families from languoid information to get family names per language
-# NOTE: family_id has to be empty in order to find macrofamilies! (for whatever reason)
-glotto.families <- glotto.languoids[glotto.languoids$level == "family" & glotto.languoids$family_id == "",]
-keeps <- c("id", "name")
-glotto.families.short <- glotto.families[keeps]
+    # Select only families from languoid information to get family names per language
+    # NOTE: family_id has to be empty in order to find macrofamilies! (for whatever reason)
+    glotto.families <- glotto.languoids[glotto.languoids$level == "family" & glotto.languoids$family_id == "",]
+    keeps <- c("id", "name")
+    glotto.families.short <- glotto.families[keeps]
 
-# Rename column "name"
-colnames(glotto.families.short) <- c("id", "top_level_family")
+    # Rename column "name"
+    colnames(glotto.families.short) <- c("id", "top_level_family")
 
-# Separate earlier dataset by languages with and without family_id. This is necessary to merge with top_level_family names
-glotto.langInfo.withFamID <- glotto.lang.languoids.100[glotto.lang.languoids.100$family_id != "",]
-glotto.langInfo.noFamID <- glotto.lang.languoids.100[glotto.lang.languoids.100$family_id == "",]
+    # Separate earlier dataset by languages with and without family_id. This is necessary to merge with top_level_family names
+    glotto.langInfo.withFamID <- glotto.lang.languoids.100[glotto.lang.languoids.100$family_id != "",]
+    glotto.langInfo.noFamID <- glotto.lang.languoids.100[glotto.lang.languoids.100$family_id == "",]
 
-# Merge language info with family names only for subset with family ids
-glotto.langInfo.fam <- merge(glotto.langInfo.withFamID, glotto.families.short, by.x = "family_id", by.y ="id")
+    # Merge language info with family names only for subset with family ids
+    glotto.langInfo.fam <- merge(glotto.langInfo.withFamID, glotto.families.short, by.x = "family_id", by.y ="id")
 
-# Add NA column "top_level_family" to languages without family_id
-glotto.langInfo.noFamID$top_level_family <- rep("NA", nrow(glotto.langInfo.noFamID))
+    # Add NA column "top_level_family" to languages without family_id
+    glotto.langInfo.noFamID$top_level_family <- rep("NA", nrow(glotto.langInfo.noFamID))
 
-# Create dataset with all 100 languages and language info from glottolog
-glotto.langInfo.100 <- rbind(glotto.langInfo.fam, glotto.langInfo.noFamID)
+    # Create dataset with all 100 languages and language info from glottolog
+    glotto.langInfo.100 <- rbind(glotto.langInfo.fam, glotto.langInfo.noFamID)
 
-# Rename columns
-colnames(glotto.langInfo.100) <- c("family_id", "glottocode", "name_glotto", "iso639_3", "level", "macroarea_glotto", "latitude_glotto", "longitude_glotto", "status", "top_level_family")
-```
+    # Rename columns
+    colnames(glotto.langInfo.100) <- c("family_id", "glottocode", "name_glotto", "iso639_3", "level", "macroarea_glotto", "latitude_glotto", "longitude_glotto", "status", "top_level_family")
 
 Get folders from Corpus directory
 =================================
 
-``` r
-# This is pretty ugly, but it works
-fils <- tibble(name=list.dirs(path = "../Corpus", full.names = FALSE, recursive = FALSE))
-folders <- fils %>% separate(name, c("folder_language_name", "iso639_3"), sep="_(?=[a-z]{3}$)")
-folders <- cbind(fils, folders)
-kable(head(folders))
-```
+    # This is pretty ugly, but it works
+    fils <- tibble(name=list.dirs(path = "../Corpus", full.names = FALSE, recursive = FALSE))
+    folders <- fils %>% separate(name, c("folder_language_name", "iso639_3"), sep="_(?=[a-z]{3}$)")
+    folders <- cbind(fils, folders)
+    kable(head(folders))
 
 | name                  | folder\_language\_name | iso639\_3 |
 |:----------------------|:-----------------------|:----------|
@@ -88,70 +82,58 @@ kable(head(folders))
 Combine the various information sources
 =======================================
 
-``` r
-# Merge
-langInfo.100 <- merge(wals.100.short, glotto.langInfo.100, by = "glottocode")
+    # Merge
+    langInfo.100 <- merge(wals.100.short, glotto.langInfo.100, by = "glottocode")
 
-# Reorder columns
-langInfo.100 <- langInfo.100[ , c(11, 1, 2, 10, 3, 12, 16, 9, 17, 7, 8, 13, 6, 14, 15, 4, 5)]
+    # Reorder columns
+    langInfo.100 <- langInfo.100[ , c(11, 1, 2, 10, 3, 12, 16, 9, 17, 7, 8, 13, 6, 14, 15, 4, 5)]
 
-# Merge in folder names
-langInfo.100 <- left_join(langInfo.100, folders)
-```
+    # Merge in folder names
+    langInfo.100 <- left_join(langInfo.100, folders)
 
     ## Joining, by = "iso639_3"
-
-    ## Warning: Column `iso639_3` joining factor and character vector, coercing into
-    ## character vector
 
 Data integrity checks
 =====================
 
-``` r
-library(testthat)
-library(stringr)
+    library(testthat)
+    library(stringr)
 
-# Make sure we have 100 languages in our sample after merging
-expect_equal(nrow(langInfo.100), 100)
+    # Make sure we have 100 languages in our sample after merging
+    expect_equal(nrow(langInfo.100), 100)
 
-# Do the Glottocodes follow the correct format in the metadata?
-glottocode <- "([a-z0-9]{4})([0-9]{4})"
-expect_equal(length(which(!(str_detect(langInfo.100$glottocode, glottocode)))), 0)
-# If this test fails, the next line will tell us where
-# which(!(str_detect(langInfo.100$glottocode, glottocode)))
+    # Do the Glottocodes follow the correct format in the metadata?
+    glottocode <- "([a-z0-9]{4})([0-9]{4})"
+    expect_equal(length(which(!(str_detect(langInfo.100$glottocode, glottocode)))), 0)
+    # If this test fails, the next line will tell us where
+    # which(!(str_detect(langInfo.100$glottocode, glottocode)))
 
-# Do the ISO 639-3 codes follow the correct format in the metadata?
-isocode <- "[a-z]{3}"
-expect_equal(length(which(!(str_detect(langInfo.100$iso639_3, isocode)))), 0)
-# If this test fails, the next line will tell us where it fails
-# which(!(str_detect(langInfo.100$iso639_3, isocode)))
-```
+    # Do the ISO 639-3 codes follow the correct format in the metadata?
+    isocode <- "[a-z]{3}"
+    expect_equal(length(which(!(str_detect(langInfo.100$iso639_3, isocode)))), 0)
+    # If this test fails, the next line will tell us where it fails
+    # which(!(str_detect(langInfo.100$iso639_3, isocode)))
 
 Write results to CSV
 ====================
 
-``` r
-write.csv(file = "langInfo_100LC.csv", langInfo.100, row.names = F, quote=FALSE)
-```
+    write.csv(file = "langInfo_100LC.csv", langInfo.100, row.names = F, quote=FALSE)
 
 Which rows do not (yet) have file folders?
 ==========================================
 
-``` r
-# This many languages haven't been added yet
-nrow(langInfo.100 %>% filter(is.na(name)))
-```
+    # This many languages haven't been added yet
+    nrow(langInfo.100 %>% filter(is.na(name)))
 
     ## [1] 17
 
-``` r
-# Here are the languages that still need to be added
-kable(langInfo.100 %>% filter(is.na(name)) %>% select(iso639_3, glottocode, name_glotto, name_wals))
-```
+    # Here are the languages that still need to be added
+    kable(langInfo.100 %>% filter(is.na(name)) %>% select(iso639_3, glottocode, name_glotto, name_wals))
 
 | iso639\_3 | glottocode | name\_glotto            | name\_wals      |
 |:----------|:-----------|:------------------------|:----------------|
 | gry       | barc1235   | Barclayville Grebo      | Grebo           |
+| kyh       | karo1304   | Karok                   | Karok           |
 | cku       | koas1236   | Koasati                 | Koasati         |
 | ses       | koyr1242   | Koyraboro Senni Songhai | Koyraboro Senni |
 | kgo       | kron1241   | Krongo                  | Krongo          |
@@ -163,13 +145,10 @@ kable(langInfo.100 %>% filter(is.na(name)) %>% select(iso639_3, glottocode, name
 | scs       | nort2942   | North Slavey            | Slave           |
 | one       | onei1249   | Oneida                  | Oneida          |
 | pwn       | paiw1248   | Paiwan                  | Paiwan          |
-| myp       | pira1253   | Pirahã                  | Pirahã          |
 | spp       | supy1237   | Supyire Senoufo         | Supyire         |
 | tiw       | tiwi1244   | Tiwi                    | Tiwi            |
 | bhq       | tuka1249   | Tukang Besi South       | Tukang Besi     |
-| pav       | wari1268   | Wari'                   | Wari'           |
+| pav       | wari1268   | Wari’                   | Wari’           |
 
-``` r
-# Clean up
-rm(list = ls())
-```
+    # Clean up
+    rm(list = ls())

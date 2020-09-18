@@ -1,0 +1,40 @@
+---
+title: "Words vs graphemes TTR in 100LC"
+author: "Steven Moran"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+  pandoc_args: --webtex
+---
+
+```{r echo=FALSE, include=FALSE}
+library(dplyr)
+library(readr)
+library(tidyr)
+library(knitr)
+```
+
+```{r, warning=FALSE, message=FALSE}
+words.ttr <- read_csv('word_ttr.csv')
+words.ttr <- tidyr::unite(words.ttr, name, c(name, genre_broad))
+w.cut <- words.ttr %>% select(name, ttr) %>% rename(word_ttr=ttr)
+
+graphemes.ttr <- read.csv('grapheme_ttr.csv')
+graphemes.ttr <- tidyr::unite(graphemes.ttr, name, c(name, genre_broad))
+g.cut <- graphemes.ttr %>% select(name, ttr) %>% rename(grapheme_ttr=ttr)
+```
+
+```{r}
+ttr <- left_join(w.cut, g.cut)
+```
+
+```{r}
+library(ggplot2)
+library(ggrepel)
+ggplot(ttr, aes(x=grapheme_ttr, y=word_ttr, label=name)) + 
+  geom_point() +
+  geom_label_repel(aes(label = name),
+                  box.padding   = 0.35, 
+                  point.padding = 0.5,
+                  segment.color = 'grey50')
+```

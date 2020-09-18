@@ -1,0 +1,203 @@
+---
+title: "Grapheme to phoneme exploration"
+author: "Steven Moran"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+  pandoc_args: --webtex
+---
+
+# Overview
+
+First, this report investigates various resources on writing systems and what the coverage of those resources are on the 100LC language sample. Second, in light of a potential novel model of g2p conversion using neural networks at the level of phonetic features, I investigate the coverage of [PHOIBLE](https://phoible.org/) on the data in the [SIGMORPHON 2020 shared task for g2p conversion](https://www.aclweb.org/anthology/2020.sigmorphon-1.2/).
+
+
+```{r echo=FALSE, include=FALSE}
+library(tidyverse)
+library(knitr)
+```
+
+
+## Writing system coverage of 100LC data
+
+This is the 100LC language info index file (planned languages, not actual languages in the corpus).
+
+```{r}
+index <- read.csv('../../LangInfo/langInfo_100LC.csv')
+```
+
+```{r}
+head(index) %>% kable()
+```
+
+Which languages in 100LC are covered by Epitran, a tool for transliterating orthographic text as IPA:
+
+* https://pypi.org/project/epitran/
+
+Looks like 16 languages (but this depends on the script, which isn't indicated in the 100LC language info index):
+
+```{r}
+# This table was derived by hand from the project website above
+epitran <- read.csv('epitran_data.csv')
+```
+
+```{r}
+table(index$iso639_3 %in% epitran$ISO6393) %>% kable()
+```
+
+```{r}
+epitran.lgs <- index[which(index$iso639_3 %in% epitran$ISO6393),] %>% select(iso639_3, name) %>% arrange(name)
+epitran.lgs %>% kable()
+```
+
+Which languages have grapheme-to-phoneme coverage in The World Writing System Database (https://agricolamz.github.io/wwsd/)? What's the overlap between the two sources? (Note: we'll have to take into account whether the scripts are the same.)
+
+```{r}
+# wwsd tables (TODO: update these URLs to point to the online resource once my PRs are merged)
+bib <- read.csv('~/Github/wwsd/bibliography.tsv', sep="\t", stringsAsFactors = FALSE)
+db <- read.csv('~/Github/wwsd/database.csv', stringsAsFactors = FALSE)
+
+table(index$glottocode %in% bib$glottocode) %>% kable()
+```
+
+```{r}
+wwsd.lgs <- index[which(index$glottocode %in% bib$glottocode),] %>% select(iso639_3, name)  %>% arrange(name)
+wwsd.lgs %>% kable()
+```
+
+```{r}
+message('There are ', nrow(full_join(epitran.lgs, wwsd.lgs)), ' languages in both epitran and wwsd.')
+```
+
+```{r}
+full_join(epitran.lgs, wwsd.lgs) %>% arrange(name) %>% kable()
+```
+
+```{r}
+message('There are ', nrow(inner_join(epitran.lgs, wwsd.lgs)), ' languages in both epitran and wwsd.')
+```
+
+```{r}
+inner_join(epitran.lgs, wwsd.lgs) %>% arrange(name) %>% kable()
+```
+
+
+## PHOIBLE coverage for potential NN models with phonetic features
+
+First load PHOIBLE.
+
+```{r}
+phoible <- read_csv(url('https://github.com/phoible/dev/blob/master/data/phoible.csv?raw=true'), col_types = c(InventoryID='i', Marginal='l', .default='c'))
+```
+
+These are the languages available in the [SIGMORPHON g2p task](https://sigmorphon.github.io/sharedtasks/2020/task1/):
+
+* Adyghe (ady)
+* Armenian (arm)
+* Bulgarian (bul)
+* Dutch (dut)
+* French (fre)
+* Georgian (geo)
+* Hindi (hin)
+* Hungarian (hun)
+* Icelandic (ice)
+* Japanese hiragana (jpn)
+* Korean (kor)
+* Lithuanian (lit)
+* Modern Greek (gre)
+* Romanian (rum)
+* Vietnamese (vie)
+
+Are their phonological inventories all present in PHOIBLE? First, create a vector of their ISO 639-3 codes for lookup. Note that the codes above are ISO 639-2 and there are [some discrepencies](https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes), e.g. "fre" vs "fra" for these languages:
+
+* Armenian (arm) -> hye
+* Dutch (dut) -> nld
+* French (fre) -> fra
+* Georgian (geo) -> kat
+* Icelandic (ice) -> isl
+* Modern Greek (gre) -> ell
+* Romanian (rum) -> ron
+
+So I update them accordingly.
+
+```{r}
+iso <- c('ady', 'hye', 'bul', 'nld', 'fra', 'kat', 'hin', 'hun', 'isl', 'jpn', 'kor', 'lit', 'ell', 'ron', 'vie')
+```
+
+Check against PHOIBLE. All languages have phoneme coverage.
+
+```{r}
+iso %in% phoible$ISO6393
+```
+
+Let's extract just those languages.
+
+```{r}
+task_lgs <- phoible %>% filter(ISO6393 %in% iso)
+```
+
+PHOIBLE can have more than one inventory for a particular language (e.g. when two doculects describe the same language variety). How about in this sample? Quite a bit.
+
+```{r}
+task_lgs %>% select(InventoryID, ISO6393) %>% distinct() %>% group_by(ISO6393) %>% summarize(inventories=n()) %>% kable()
+```
+
+Let's use `ady` as a test case.
+
+```{r}
+ady <- task_lgs %>% filter(ISO6393=="ady")
+```
+
+[Adyghe](https://en.wikipedia.org/wiki/Adyghe_language) [[adyg1241](https://glottolog.org/resource/languoid/id/adyg1241)] is a Northwest Caucasian language belong to the Circassian language family.
+
+It's phoneme inventory consists of:
+
+```{r}
+ady_phonemes <- ady %>% select(Phoneme)
+ady_phonemes %>% kable()
+```
+
+The frequency of phonemes cross-lingustically in phoible is:
+
+```{r}
+freq <- phoible %>% select(Phoneme) %>% group_by(Phoneme) %>% summarize(count=n())
+freq$frequency <- freq$count/nrow(freq)
+freq %>% arrange(desc(count)) %>% head() %>% kable()
+```
+
+Let's add this to the Adyghe data:
+
+```{r}
+ady_phonemes <- left_join(ady_phonemes, freq)
+ady_phonemes %>% arrange(desc(count)) %>% kable()
+```
+
+As shown, most phoneme occur in other languages.
+
+For each phoneme, we can extract its features:
+
+```{r}
+ady %>% select(-1,-2,-3,-4,-5,-6,-8,-9,-11) %>% kable()
+```
+
+And use these as input to our NN.
+
+Another example would be something like extracting the features for segments as per the Romanian example in the g2p task (see my notes in OpenBIS):
+
+* antonim a n t o n i m
+
+```{r}
+r_ex <- c('a', 'n', 't', 'o', 'n', 'i', 'm')
+r_ex <- unique(r_ex)
+phonemes <- phoible %>% select(-1,-2,-3,-4,-5,-6,-8,-9,-11) %>% distinct()
+phonemes %>% filter(Phoneme %in% r_ex) %>% kable()
+r_ex_phonemes <- phonemes %>% filter(Phoneme %in% r_ex)
+```
+
+Let's take a subset for illustration purposes, since Romanian doesn't have clicks, etc.
+
+```{r}
+r_ex_phonemes %>% select(Phoneme, consonantal, sonorant, continuant, delayedRelease, nasal, labial, round) %>% kable()
+```
+
+Of course these features can also be combined in various ways to add additional data on natural classes.

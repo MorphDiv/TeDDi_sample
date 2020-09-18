@@ -9,11 +9,7 @@ Here you will find reports on our practices for transcribing and annotating text
 * [Tutorial: Transcription and Annotation of Texts](https://www.overleaf.com/2126693322drbnvwzzvfsv)
 * [Adding PBC bibles and UDHR texts](https://www.overleaf.com/9246389869rxwwtxhjxfcm)
 
-On SwitchDrive there is an example metadata header:
-
-* https://drive.switch.ch/index.php/s/a7qzQoGGlIHQwGI
-
-but it is incorrectly formatted (i.e. has multiple tabs), so it has been fixed and put in this directory as [header_template.tsv](https://github.com/uzling/100LC/blob/master/header_template.tsv) for use and reference.
+Each file must contain a correctly formatted header. An example is given in the [header_template.tsv](https://github.com/uzling/100LC/blob/master/header_template.tsv) file.
 
 A description of the sampling algorithm is on Overleaf:
 
@@ -23,13 +19,26 @@ And the [100LC/Crawlers](https://github.com/uzling/100LC/tree/master/Crawlers) d
 
 ## Workflow
 
-Please use the GitHub workflow, described here:
+We use GitHub to maintain the corpus and code. You can read more about what GitHub is here:
+
+* [What Exactly Is GitHub Anyway?](https://techcrunch.com/2012/07/14/what-exactly-is-github-anyway/)
+* [What Is GitHub? A Beginner’s Introduction to GitHub](https://kinsta.com/knowledgebase/what-is-github/)
+
+If you haven't used GitHub before, you will need to create a free account here:
+
+* https://github.com/
+
+and you can start working through the tutorials here:
+
+* https://lab.github.com/
+
+Please use the GitHub workflow, described in detail here:
 
 * https://guides.github.com/introduction/flow/
 
 When working with this repository, please use the [issue tracker](https://github.com/uzling/100LC/issues) and submit a [pull request](https://github.com/uzling/100LC/pulls) for your branches, when adding or updating data or code.
 
-We follow standard practice in collaborative development on GitHub is to follow the fork and pull request model:
+We follow standard practice in collaborative development on GitHub, which is to follow the fork and pull request model:
 
 * https://guides.github.com/activities/forking/
 
