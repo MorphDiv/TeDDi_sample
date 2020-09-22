@@ -7,7 +7,7 @@ PACKAGE_DIR = pathlib.Path(__file__).parent
 
 TEST_ROOT = PACKAGE_DIR.parent / 'tests' / 'Corpus'
 
-CORPUS_ROOT = PACKAGE_DIR.parent.parent.parent / '100LC' / 'Corpus'
+CORPUS_ROOT = PACKAGE_DIR.parent.parent / 'Corpus'
 
 CONFIG = PACKAGE_DIR / 'config.ini'
 
