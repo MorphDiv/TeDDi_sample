@@ -94,7 +94,7 @@ And to create corpus text files in a unified format, run:
 
 The R scripts can also be fired from an R GUI like [RStudio](https://rstudio.com/), but make sure to set the current working directory to `100LC/Database`. This is also true of the Python scripts, e.g. within in IDE like [PyCharm](https://www.jetbrains.com/pycharm/).
 
-Forthcoming (todo): add routine to generate XML format from the database. Add them to the server.
+Forthcoming (todo): add routine to generate XML format from the database. Add them to the server (to be decided where).
 
 
 ## Other useful scripts
