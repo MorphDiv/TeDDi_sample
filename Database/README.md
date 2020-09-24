@@ -9,7 +9,7 @@ To parse the [corpus files](../Corpus) and to generate a [SQLite](https://www.sq
 
 `python3 load-database.py`
 
-See the [requirements file](requirements.txt) for the required Python libraries for running the script. For more information on how to install these libraries, see [Installing packages using pip and virtual environments](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/). They must be installed to run the database aggregation pipeline.
+See the [requirements file](requirements.txt) for the required Python library for running the script. For more information on how to install Python libraries, see [Installing packages using pip and virtual environments](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/). They must be installed to run the database aggregation pipeline.
 
 The default is set to development mode and will run the database creation pipeline on the [100LC/Database/tests/Corpus](tests/Corpus) directory, which contains the maximally diverse input file formats (for testing), as described in OpenBIS. This script then generates a SQLite database called `test.sqlite3`, if it does not fail when parsing the raw input files (see discussion below).
 
@@ -84,13 +84,19 @@ There are a few other scripts in this directory for generating various formats o
 
 `Rscript sqlite_to_RData.R`
 
+This script requires that you have the [RSQLite](https://cran.r-project.org/web/packages/RSQLite/index.html) library installed. In R, you can do this with the `install.packages('RSQLite')` command.
+
 To generate CSV files from the RData file, run:
 
 `Rscript to_csv.R`
 
+This script required the R library [readr](https://cran.r-project.org/web/packages/readr/index.html).
+
 And to create corpus text files in a unified format, run:
 
 `python3 generate_unified_format.py`
+
+This script has the same [requirements](requirements.txt) as discussed above.
 
 The R scripts can also be fired from an R GUI like [RStudio](https://rstudio.com/), but make sure to set the current working directory to `100LC/Database`. This is also true of the Python scripts, e.g. within in IDE like [PyCharm](https://www.jetbrains.com/pycharm/).
 
