@@ -163,14 +163,18 @@ def load(path=CORPUS_ROOT, engine=ENGINE):
         with open('../LangInfo/langInfo_100LC.csv', newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
+                # R writes 'NA' for NULL; here we switch it to Python None, so that it is inserted NULL in SQL
+                for k, v in row.items():
+                    if v == 'NA':
+                        row[k] = None
                 insert_language(**row)
 
-        # TODO: fix blacklist
-        blacklist = ['crk_nfi_1']
+        # TODO: fix denylist
+        denylist = ['crk_nfi_1']
 
         for t in _texts.Text.from_rglob(path, "*.txt"):
-            # TODO: remove blacklist
-            if any(bad_file in str(t.filename) for bad_file in blacklist):
+            # TODO: remove denylist
+            if any(bad_file in str(t.filename) for bad_file in denylist):
                 continue
 
             print(t)
