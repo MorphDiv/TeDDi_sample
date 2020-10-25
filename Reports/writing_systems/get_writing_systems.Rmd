@@ -1,0 +1,27 @@
+---
+title: "Identify which languages in 100LC have multiple scripts"
+author: "Steven Moran"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  github_document:
+  pandoc_args: --webtex
+---
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(knitr)
+```
+
+Load the R serialized version of the 100 LC database.
+
+```{r}
+# load('../../Database/test.RData') # for testing
+load('../../Database/100LC.Rdata') # full database
+```
+
+Identify which languages have more than one writing system as indicated in their files.
+
+```{r}
+langs_ws <- clc_file %>% select(language_name_wals, writing_system) %>% group_by(language_name_wals, writing_system) %>% distinct()
+langs_ws %>% group_by(language_name_wals) %>% filter(n() > 1) %>% kable()
+```

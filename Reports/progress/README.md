@@ -1,43 +1,31 @@
-# Progress report
+# Progress reports (pre-database)
 
-The [progress.py](progress.py) is a Python script that loops through the corpus files and reports the number of texts, genres covered, unique characters and number of tokens per language. Unlike [file_counts](../file_counts) and [line_counts](../line_counts) this report returns zero values for languages that are not covered yet. The output format is a `CSV` file of the following structure:  `language,number_texts,number_genres,number_characters,number_tokens`. The `CSV` file will be written to the same directory as the script.
+These scripts should NOT be used for extracting any counts for analyses, but only as a means of tracking progress at the pre-database stage. They are Python scripts that run on the raw input text files in the [corpus](../../Corpus/) directory.
 
-The report can be produced in two modes:
+The [progress.py](progress.py) script loops through the corpus files and reports the number of: 
 
-1. Using simple tokenization (fast; 7-9 minutes as per 30.03.20)
-- The command for producing the report in this mode: `python progress.py -s`
-- The output file is named `progress_simple.csv`
-- The first mode tokenizes the texts in a simple way, i.e. splits the texts by white spaces. The report in this mode provides approximate number of tokens for most of the languages; the numbers are less reliable for Burmese, Chinese, Japanese, Korean and Thai.
+* texts
+* genres covered
+* unique characters per language
 
-2. Using advanced tokenization (slow; approx. 4.5 hours as per 30.03.20)
-- The command for producing the report in this mode: `python progress.py -a`
-- The output file is named `progress_advanced.csv`
+It returns zero values for languages that are not yet covered. (See also the [langInfo.csv](../../LangInfo/langInfo_100LC.csv) index file for more information.) 
 
-The second mode tokenizes the texts language specifically by using different Python libraries:
+The output format for [progress.py](progress.py) is a `CSV` file with the following columns:
 
-- `word_breaker`: Burmese
-- `pythainlp`: Thai
-- `wordfreq`: English, Finnish, French, German, Greek, Hindi, Indonesian, Japanese, Korean, Mandarin, Persian, Russian, Spanish, Turkish
-- `NLTK`: other languages
+* language
+* number_texts
+* number_genres
+* number_characters
 
-Before running the code in an advanced mode, please install the required libraries by running the command:
+The output is saved in [progress.csv](progress.csv).
 
-`pip install -r requirements.txt`
+Note that the character counts from [progress.py](progress.py) do not distinguish between corpora that include different writing systems in the 100LC corpus. This is because files with different writing systems are not taken into account. For a report on which corpora have multiple writing systems, see [this report](../writing_systems/get_writing_systems.md).
 
-Additional preparation steps:
+The [line_counts.py](line_counts.py) script loops through the corpus files and reports the number of:
 
-a) Download the `word_breaker` library for Burmese from [this repository](https://github.com/stevenay/myan-word-breaker), unzip it into the same folder where you store the script `progress.py`
+* total lines per corpus
+* total files per corpus
+* total lines per genre per corpus
+* total files per genre per corpus
 
-b) Install Japanese dictionary `mecab-ipadic`. Installation file for Linux can be found [here](https://packages.ubuntu.com/xenial/all/mecab-ipadic-utf8/download)
-
-c) Install Korean dictionary `mecab-ko-dic`. Installation commands for Linux:
-
-```
-wget https://bitbucket.org/eunjeon/mecab-ko-dic/downloads/mecab-ko-dic-2.0.1-20150920.tar.gz
-tar zxfv mecab-ko-dic-2.0.1-20150920.tar.gz
-cd mecab-ko-dic-2.0.1-20150920
-./configure
-sudo ldconfig
-make
-sudo make install
-```
+It writes the results to [line_counts.csv](line_counts.csv). A report of line and file counts that uses the database is provided in the [line counts report](../line_counts/line_counts.md), which also run a comparison with the results extracted in this directory.

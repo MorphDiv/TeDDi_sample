@@ -1,9 +1,11 @@
 """ Text (body) object for the 100 LC files """
 
-# FIXME: cleanup/refactor (consider using subclasses)
+# TODO: cleanup/refactor (consider using subclasses)
 
 import pathlib
 import re
+from itertools import groupby
+
 
 __all__ = ['detemine_file_type', 'Body']
 
@@ -41,7 +43,7 @@ class Body:
     def get_records(self, text):
         # Return file type and records
 
-        # TODO
+        # TODO:
         # return file_type, self._parse_transkribus(text)
 
         file_type = self._determine_file_type(text)
@@ -141,16 +143,8 @@ class Body:
 
     @staticmethod
     def _get_chunks(text):
-        # Chunk records by new line
-        chunks = []
-        temp = []
-        for i in text:
-            if not i == "":
-                temp.append(i.strip())
-            else:
-                chunks.append(temp)
-                temp = []
-        return chunks
+        # Chunk records by new line and return a list of lists
+        return [list(g) for k, g in groupby(text, key=lambda x: x != '') if k]
 
     def _parse_grammar(self, text):
         # Grammars are any set of interlinear glossed texts, each entry separated by \n, so we chunk them first
