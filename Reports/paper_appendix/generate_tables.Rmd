@@ -27,25 +27,47 @@ Load the 100 LC index file.
 index <- read_csv('../../LangInfo/langInfo_100LC.csv')
 ```
 
+Let's add in the corpus sizes by word counts (as suggested [here](https://github.com/uzling/100LC/pull/193)).
+
+```{r}
+word_counts <- read_csv('../ttr/word_ttr.csv')
+```
+
+The output from the [word ttr script](https://github.com/uzling/100LC/blob/master/Reports/ttr/word_ttr.csv) is broken down by genre.
+
+```{r}
+word_counts %>% head(n=15) %>% kable()
+```
+
+So let's first get the full counts.
+
+```{r}
+word_totals <- word_counts %>% group_by(name) %>% summarize(corpus_size=sum(tokens))
+```
+
+Next we can merge the counts into the 100LC index.
+
+```{r}
+index <- left_join(index, word_totals)
+```
+
 Decide what we want to keep from the language index and create a LaTeX (long) table for the paper submission.
 
 ```{r}
-df <- index %>% select(name_glotto, glottocode, iso639_3, status, genus_wals, macroarea_glotto) %>% arrange(name_glotto)
+df <- index %>% select(name_glotto, glottocode, iso639_3, status, genus_wals, macroarea_glotto, corpus_size) %>% arrange(name_glotto)
 ```
 
 Rename the columns.
 
 ```{r}
-df <- df %>% rename('Language name' = name_glotto, 'Glottocode' = glottocode, 'ISO 630-3' = iso639_3, 'Endangerment' = status, 'Genus' = genus_wals, 'Area' = macroarea_glotto)
+df <- df %>% rename('Language name' = name_glotto, 'Glottocode' = glottocode, 'ISO 630-3' = iso639_3, 'Endangerment' = status, 'Genus' = genus_wals, 'Area' = macroarea_glotto, 'Size' = corpus_size)
 ```
 
 How about this for a descriptive table of the languages in the 100LC sample?
 
-% TODO: add in corpus size
-% https://github.com/uzling/100LC/blob/master/Reports/ttr/word_ttr.csv
 
 ```{r}
-df %>% head() %>% kable()
+df %>% head(n=30) %>% kable()
 ```
 
 Dump an xtable (`longtable` in latex) for the paper. Currently, I just copy and paste the table into the Overleaf document.
