@@ -1,21 +1,19 @@
 Generate tables for the database paper
 ================
 Steven Moran
-24 August, 2020
+29 October, 2020
 
     library(readr)
     library(dplyr)
     library(knitr)
     library(xtable)
 
-Overview
-========
+# Overview
 
 Generate descriptive stats and plots for the 100LC database paper
 submission.
 
-Corpus overview
-===============
+# Corpus overview
 
 Load the 100 LC index file.
 
@@ -61,8 +59,8 @@ copy and paste the table into the Overleaf document.
     ## add.to.row, : Attempt to use "longtable" with floating = TRUE. Changing to
     ## FALSE.
 
-    ## % latex table generated in R 4.0.2 by xtable 1.8-4 package
-    ## % Mon Aug 24 21:09:23 2020
+    ## % latex table generated in R 4.0.3 by xtable 1.8-4 package
+    ## % Thu Oct 29 14:26:32 2020
     ## \begin{longtable}{llllll}
     ##   \hline
     ## Language name & Glottocode & ISO 630-3 & Endangerment & Genus & Area \\ 
@@ -175,8 +173,7 @@ copy and paste the table into the Overleaf document.
     ##   \hline
     ## \end{longtable}
 
-Word TTR
-========
+# Word TTR
 
 Now which stats for the paper (see:
 <a href="https://github.com/uzling/100LC/issues/189" class="uri">https://github.com/uzling/100LC/issues/189</a>)?
@@ -249,8 +246,8 @@ Rename the columns to match in the paper.
     ## add.to.row, : Attempt to use "longtable" with floating = TRUE. Changing to
     ## FALSE.
 
-    ## % latex table generated in R 4.0.2 by xtable 1.8-4 package
-    ## % Mon Aug 24 21:09:23 2020
+    ## % latex table generated in R 4.0.3 by xtable 1.8-4 package
+    ## % Thu Oct 29 14:26:32 2020
     ## \begin{longtable}{llrrr}
     ##   \hline
     ## Language & Genre & Word types & Word tokens & Type-token ratio \\ 
@@ -391,8 +388,7 @@ Rename the columns to match in the paper.
     ##   \hline
     ## \end{longtable}
 
-Grapheme TTR
-============
+# Grapheme TTR
 
 We generate the grapheme TTR figures here:
 
@@ -443,8 +439,8 @@ Rename the columns to match in the paper.
     ## = add.to.row, : Attempt to use "longtable" with floating = TRUE. Changing to
     ## FALSE.
 
-    ## % latex table generated in R 4.0.2 by xtable 1.8-4 package
-    ## % Mon Aug 24 21:09:23 2020
+    ## % latex table generated in R 4.0.3 by xtable 1.8-4 package
+    ## % Thu Oct 29 14:26:32 2020
     ## \begin{longtable}{llrrr}
     ##   \hline
     ## Language & Genre & Grapheme types & Grapheme tokens & Type-token ratio \\ 
@@ -588,8 +584,7 @@ Rename the columns to match in the paper.
     ##   \hline
     ## \end{longtable}
 
-TODOS
-=====
+# TODOS
 
 -   Plot words and graphemes TTR? These are (bad) preliminary:
     -   <a href="https://github.com/uzling/100LC/blob/master/Reports/ttr/plot_ttr.md" class="uri">https://github.com/uzling/100LC/blob/master/Reports/ttr/plot_ttr.md</a>

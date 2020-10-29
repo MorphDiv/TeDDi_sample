@@ -39,7 +39,10 @@ Rename the columns.
 df <- df %>% rename('Language name' = name_glotto, 'Glottocode' = glottocode, 'ISO 630-3' = iso639_3, 'Endangerment' = status, 'Genus' = genus_wals, 'Area' = macroarea_glotto)
 ```
 
-How about this for a descriptive table of the languages in the 100 LC sample?
+How about this for a descriptive table of the languages in the 100LC sample?
+
+% TODO: add in corpus size
+% https://github.com/uzling/100LC/blob/master/Reports/ttr/word_ttr.csv
 
 ```{r}
 df %>% head() %>% kable()
@@ -51,12 +54,12 @@ Dump an xtable (`longtable` in latex) for the paper. Currently, I just copy and 
 add.to.row <- list(pos = list(0), command = NULL)
 command <- paste0("\\hline\n\\endhead\n",
                 "\\hline\n",
-                "\\multicolumn{", dim(df)[2] + 1, "}{l}",
+                "\\multicolumn{", dim(df)[2], "}{l}",
                 "{\\footnotesize Continued on next page}\n",
                 "\\endfoot\n",
                 "\\endlastfoot\n")
 add.to.row$command <- command
-print(xtable(df), hline.after=c(-1), add.to.row = add.to.row, tabular.environment = "longtable", include.rownames=FALSE)
+print(xtable(df), hline.after=c(-1), add.to.row = add.to.row, tabular.environment = "longtable", include.rownames=FALSE, file = "100LC_index.tex")
 ```
 
 # Word TTR
@@ -103,12 +106,12 @@ word_ttr %>% head() %>% kable()
 add.to.row <- list(pos = list(0), command = NULL)
 command <- paste0("\\hline\n\\endhead\n",
                 "\\hline\n",
-                "\\multicolumn{", dim(word_ttr)[2] + 1, "}{l}",
+                "\\multicolumn{", dim(word_ttr)[2], "}{l}",
                 "{\\footnotesize Continued on next page}\n",
                 "\\endfoot\n",
                 "\\endlastfoot\n")
 add.to.row$command <- command
-print(xtable(word_ttr), hline.after=c(-1), add.to.row = add.to.row, tabular.environment = "longtable", include.rownames=FALSE)
+print(xtable(word_ttr, digits = c(0,0,0,0,0,2)), hline.after=c(-1), add.to.row = add.to.row, tabular.environment = "longtable", include.rownames=FALSE, file="word_ttr.tex")
 ```
 
 # Grapheme TTR
@@ -140,12 +143,12 @@ grapheme_ttr %>% head() %>% kable()
 add.to.row <- list(pos = list(0), command = NULL)
 command <- paste0("\\hline\n\\endhead\n",
                 "\\hline\n",
-                "\\multicolumn{", dim(grapheme_ttr)[2] + 1, "}{l}",
+                "\\multicolumn{", dim(grapheme_ttr)[2], "}{l}",
                 "{\\footnotesize Continued on next page}\n",
                 "\\endfoot\n",
                 "\\endlastfoot\n")
 add.to.row$command <- command
-print(xtable(grapheme_ttr), hline.after=c(-1), add.to.row = add.to.row, tabular.environment = "longtable", include.rownames=FALSE)
+print(xtable(grapheme_ttr, digits = c(0, 0, 0, 0, 0, 2)), hline.after=c(-1), add.to.row = add.to.row, tabular.environment = "longtable", include.rownames=FALSE, file="grapheme_ttr.tex")
 ```
 
 # TODOS
@@ -153,7 +156,6 @@ print(xtable(grapheme_ttr), hline.after=c(-1), add.to.row = add.to.row, tabular.
 * Plot words and graphemes TTR? These are (bad) preliminary:
     * https://github.com/uzling/100LC/blob/master/Reports/ttr/plot_ttr.md
     * https://github.com/uzling/100LC/blob/master/Reports/ttr/words_vs_graphemes_ttr.md
-* Plot maps (see: https://github.com/uzling/100LC/issues/190)
 * Generate median word length (in characters) (see: https://github.com/uzling/100LC/issues/189)
 
 
