@@ -1,6 +1,6 @@
 ---
-title: "Generate world maps from the 100 LC language sample"
-author: "Chris Bentz, Steven Moran"
+title: "Generate world maps from the 100LC language sample"
+author: "Steven Moran and Chris Bentz\n"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   github_document:
@@ -8,27 +8,36 @@ output:
 ---
 
 ```{r warning=FALSE, message=FALSE}
-library(ggplot2)
+library(tidyverse)
 library(ggmap)
 library(maps)
 library(testthat)
 ```
 
-```{r}
-# Load file with information on 100 language sample
-lang100 <- read.csv("../../LangInfo/langInfo_100LC.csv", header = T)
+# Overview
 
-# Data checks
-expect_equal(length(lang100$iso_639_3), 100)
-expect_equal(length(lang100$glottocode), 100)
-expect_equal(length(levels(lang100$top_level_family)), 60)
-expect_equal(length(levels(lang100$genus_wals)), 94)
-expect_equal(length(levels(lang100$family_wals)), 68)
-expect_equal(length(levels(lang100$macroarea_glotto)), 6)
+Let's generate some world maps from the 100LC language sample for visual inspection and for publications. If you want to save them as PDF, uncomment the last line in each map plot, i.e. `ggsave`.
+
+Load the lang info file with information on 100 language sample.
+
+```{r}
+lang100 <- read.csv("../../LangInfo/langInfo_100LC.csv", header = T)
 ```
 
+Some data checks. All rows should have a unique ISO 639-3 code and a Glottocode. Other values are set at the time of reporting.
+
 ```{r}
-# WORLD MAP WITH LANGUAGE LOCATIONS FROM GLOTTOLOG AND WALS
+expect_equal(length(unique(lang100$iso639_3)), 100)
+expect_equal(length(unique(lang100$glottocode)), 100)
+expect_equal(length(unique(lang100$top_level_family)), 61)
+expect_equal(length(unique(lang100$genus_wals)), 94)
+expect_equal(length(unique(lang100$family_wals)), 68)
+expect_equal(length(unique(lang100$macroarea_glotto)), 6)
+```
+
+A world map with language locations from [Glottolog](https://glottolog.org/) and [WALS](https://wals.info/).
+
+```{r}
 world <- map_data("world")
 lang100_map <- ggplot() + 
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
@@ -49,10 +58,13 @@ lang100_map <- ggplot() +
         legend.title = element_text(size = 10),
         legend.position = "bottom")
 lang100_map
+
+# ggsave("lang100_map.pdf", status_map, dpi = 300, scale = 1, device = cairo_pdf)
 ```
 
+A world map with language status information from Glottolog.
+
 ```{r}
-# WORLD MAP WITH LANGUAGE STATUS INFORMATION FROM GLOTTOLOG
 world <- map_data("world")
 status_map <- ggplot() + 
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
@@ -62,7 +74,7 @@ status_map <- ggplot() +
   scale_y_continuous(limits = c(-65, 80)) +
   scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
   geom_hline(aes(yintercept = 0), colour = "grey", size = 1, linetype = 2) +
-  labs(x = "longitude", y = "latitude") +
+  labs(x = "longitude", y = "latitude", color = "Endangerment status") +
   ggtitle("Language status information from Glottolog") +
   theme_bw() +
   theme(axis.title.x = element_text(size = 12),
@@ -76,8 +88,9 @@ status_map
 # ggsave("worldmap_status.pdf", status_map, dpi = 300, scale = 1, device = cairo_pdf)
 ```
 
+A world map with top-level family information from Glottolog.
+
 ```{r}
-# WORLD MAP WITH TOP-LEVEL FAMILY INFORMATION FROM GLOTTOLOG
 world <- map_data("world")
 family_map <- ggplot() + 
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
@@ -87,7 +100,7 @@ family_map <- ggplot() +
   scale_y_continuous(limits = c(-65, 80)) +
   scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
   geom_hline(aes(yintercept = 0), colour = "grey", size = 1, linetype = 2) +
-  labs(x = "longitude", y = "latitude") +
+  labs(x = "longitude", y = "latitude", color = "Language family") +
   ggtitle("Top-level family information from Glottolog") +
   theme_bw() +
   theme(axis.title.x = element_text(size = 12),
@@ -98,11 +111,12 @@ family_map <- ggplot() +
         legend.position = "bottom")
 family_map
 
-# ggsave("worldmap_family.pdf", family_map, dpi = 300, scale = 1, device = cairo_pdf)
+# ggsave("family_map.pdf", family_map, dpi = 300, scale = 1, device = cairo_pdf)
 ```
 
+A world map with macroarea information from Glottolog.
+
 ```{r}
-# WORLD MAP WITH MACROAREA INFORMATION FROM GLOTTOLOG
 world <- map_data("world")
 macroarea_map <- ggplot() + 
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
@@ -112,7 +126,7 @@ macroarea_map <- ggplot() +
   scale_y_continuous(limits = c(-65, 80)) +
   scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
   geom_hline(aes(yintercept = 0), colour = "grey", size = 1, linetype = 2) +
-  labs(x = "longitude", y = "latitude") +
+  labs(x = "longitude", y = "latitude", color = "Macroarea") +
   ggtitle("Macroarea information from Glottolog") +
   theme_bw() +
   theme(axis.title.x = element_text(size = 12),
@@ -122,5 +136,127 @@ macroarea_map <- ggplot() +
         legend.text = element_text(size = 12))
 macroarea_map
 
-# ggsave("worldmap_family.pdf", macroarea_map, dpi = 300, scale = 1, device = cairo_pdf)
+# ggsave("macroarea_map.pdf", macroarea_map, dpi = 300, scale = 1, device = cairo_pdf)
+```
+
+Next we generate some world maps that require data about the 100LC corpus contents.
+
+Let's get the output from the [writing systems report](../writing_systems/get_writing_systems.md), so that we have information on which corpora are represented by which writing systems.
+
+```{r, warning=FALSE, message=FALSE}
+langs_ws <- read_csv('../writing_systems/100LC_writing_systems.csv')
+```
+
+And let's merge in the geo-coordinates from the lang100 index file, so that we can plot the data on a world map.
+
+```{r}
+langs_ws <- left_join(langs_ws, lang100)
+```
+
+A world map with points colored by writing system.
+
+```{r}
+world <- map_data("world")
+ws_map <- ggplot() + 
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "grey90", col = "grey") +
+  geom_point(data = langs_ws, aes(x = longitude_glotto, y = latitude_glotto, colour = writing_system), 
+             alpha = 0.8, size = 3) +
+  scale_y_continuous(limits = c(-65, 80)) +
+  scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
+  geom_hline(aes(yintercept = 0), colour = "grey", size = 1, linetype = 2) +
+  labs(x = "longitude", y = "latitude", color = "Writing system") +
+  ggtitle("Writing systems in the 100LC corpus") +
+  theme_bw() +
+  theme(axis.title.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12),
+        title = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 12))
+ws_map
+
+# ggsave("ws_map.pdf", macroarea_map, dpi = 300, scale = 1, device = cairo_pdf)
+```
+
+To create a map of corpus size, we can first load in the output from the [get word TTR report](../ttr/get_word_ttr.md).
+
+```{r}
+word_ttr <- read_csv('../ttr/word_ttr.csv')
+```
+
+This CSV file splits each language by broad genre, so first we can collapse those into single word counts per corpus.
+
+```{r}
+word_counts <- word_ttr %>% group_by(name) %>% summarize(word_count = sum(tokens))
+```
+
+Again we need the geo-coordinates to be able to plot on a world map.
+
+```{r}
+word_counts <- left_join(word_counts, lang100)
+```
+
+A world map with points sized word tokens per corpus.
+
+```{r}
+library(scales)
+world <- map_data("world")
+word_tokens <- ggplot() + 
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "grey90", col = "grey") +
+  geom_point(data = word_counts, aes(x = longitude_glotto, y = latitude_glotto, size = word_count), 
+             alpha = 0.8) +
+  scale_y_continuous(limits = c(-65, 80)) +
+  scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
+  scale_size_continuous(labels = comma) + 
+  geom_hline(aes(yintercept = 0), colour = "grey", size = 1, linetype = 2) +
+  labs(x = "longitude", y = "latitude", size = "Corpus size") +
+  ggtitle("Corpus sizes in word tokens in the 100LC corpus") +
+  theme_bw() +
+  theme(axis.title.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12),
+        title = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 12))
+word_tokens
+
+# ggsave("word_tokens.pdf", macroarea_map, dpi = 300, scale = 1, device = cairo_pdf)
+```
+
+We can also plot size by word types.
+
+```{r}
+word_type_counts <- word_ttr %>% group_by(name) %>% summarize(word_type_count = sum(types))
+```
+
+Again we need the geo-coordinates to be able to plot on a world map, but this we can just merge into the existing dataframe.
+
+```{r}
+word_counts <- left_join(word_counts, word_type_counts)
+```
+
+A world map with points sized word types per corpus.
+
+```{r}
+world <- map_data("world")
+word_types <- ggplot() + 
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "grey90", col = "grey") +
+  geom_point(data = word_counts, aes(x = longitude_glotto, y = latitude_glotto, size = word_type_count), 
+             alpha = 0.8) +
+  scale_y_continuous(limits = c(-65, 80)) +
+  scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
+  scale_size_continuous(labels = comma) + 
+  geom_hline(aes(yintercept = 0), colour = "grey", size = 1, linetype = 2) +
+  labs(x = "longitude", y = "latitude", size = "Corpus size") +
+  ggtitle("Corpus sizes in word types in the 100LC corpus") +
+  theme_bw() +
+  theme(axis.title.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12),
+        title = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 12))
+word_types
+
+# ggsave("word_types.pdf", macroarea_map, dpi = 300, scale = 1, device = cairo_pdf)
 ```
