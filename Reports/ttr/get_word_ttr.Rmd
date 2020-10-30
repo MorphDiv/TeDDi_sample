@@ -1,5 +1,5 @@
 ---
-title: "Generate word TTR for 100 LC corpora"
+title: "Generate word type-token ratios and mean word length for the 100LC corpora"
 author: "Steven Moran"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
@@ -14,16 +14,18 @@ library(knitr)
 library(tidytext)
 ```
 
-Load the data. Make sure you load the right data source for your purposes.
+# Overview and analysis
+
+Load the data. Make sure you load the right data source for your purposes, i.e. development versus analysis (the test database is small and is meant for development).
 
 ```{r}
 load('../../Database/test.RData') # for testing
 # load('../../Database/100LC.RData') # full database
 ```
 
-Genres are represented by corpus IDs in the database (see: https://github.com/uzling/100LC/blob/master/Reports/genres/get_genres.md). This makes it easy to extract the pertinent file(s) per genre and to do the various type / token counts.
+Genres are represented by corpus IDs in the database (see: [https://github.com/uzling/100LC/blob/master/Reports/genres/get_genres.md](https://github.com/uzling/100LC/blob/master/Reports/genres/get_genres.md)). This makes it easy to extract the pertinent file(s) per genre and to do the various type / token counts.
 
-However, the 100 LC corpus contains multiple writing scripts in files within the same language and genre (see: https://github.com/uzling/100LC/issues/189). For example notice that Vietnames (professional) has two files (from UDHR) -- one written in Latin script and the other written in [Han](https://en.wikipedia.org/wiki/Chinese_characters):
+However, the 100LC corpus contains multiple writing scripts in files within the same language and genre (see: [https://github.com/uzling/100LC/issues/189](https://github.com/uzling/100LC/issues/189)). For example, notice that Vietnamese (professional) has two files (from UDHR) -- one written in Latin script and the other written in [Han](https://en.wikipedia.org/wiki/Chinese_characters):
 
 ```{r}
 clc_file %>% 
@@ -34,22 +36,9 @@ clc_file %>%
   kable()
 ```
 
-For the languages that contain the same writing systems within their genre folders, getting the counts is straightforward. However, because the 100 LC corpus is so large, we can't (yet) simply create the word TTR in one pass, e.g.:
+Because the 100LC corpus design does not distinguish between writing systems *within* the same genre in these limited cases, we cannot use a more straightforward approach to calculate the word type-token ratios for each corpus, i.e.:
 
-```{r}
-# Merge the corpus IDs into the lines dataframe, so that we can apply tokenization on each corpus / genre
-# lines <- clc_line %>% select(file_id, text)
-# corpus_ids <- clc_file %>% select(id, corpus_id)
-# lines <- left_join(corpus_ids, lines, by=c("id"="file_id"))
-
-# Generate the TTRs per corpus -- this crashes due to memory issues!!
-# corpus_words <- lines %>% unnest_tokens(word, text) %>% count(corpus_id, word, sort = TRUE) %>% ungroup()
-# types_tokes <- corpus_words %>% group_by(corpus_id) %>% summarize(types=n(), tokens=sum(n)) %>% ungroup()
-```
-
-So insted, we apply tokenization and get the word TTRs to each corpus individually and then we glue together the results into a dataframe.
-
-```{r, warning=FALSE, message=FALSE}
+```{r, eval=FALSE}
 # Merge the corpus IDs into the lines dataframe, so that we can apply tokenization on each corpus / genre.
 lines <- clc_line %>% select(file_id, text)
 corpus_ids <- clc_file %>% select(id, corpus_id) %>% distinct()
@@ -71,6 +60,56 @@ for(i in ids) {
   }
 ```
 
+The above code does work and produces results for each corpus that has a single writing system, but it will treat corpora like Vietnamese (genre professional) with two different writing systems as a single corpus. Note that the corpus information above also needs to be merged together with the metadata:
+
+```{r eval=FALSE}
+results <- left_join(results, clc_corpus, by=c("corpus_id"="id"))
+results <- results %>% select(name, genre_broad, types, tokens)
+results$ttr <- (results$types / results$tokens)
+```
+
+To address the issue of multiple writing systems within the same corpus, we create a composite ID. Then we can identify which files within the same corpus and genre have different writing systems.
+
+```{r}
+# Group corpora and genre by specific writing systems
+multiple_writing_systems <- clc_file %>% 
+  select(id, corpus_id, filename, language_name_wals, genre_broad, writing_system) %>%
+  group_by(corpus_id, language_name_wals, genre_broad, writing_system) %>%
+  distinct()
+
+# Create the composite key
+multiple_writing_systems$composite_id <- paste0(multiple_writing_systems$corpus_id, "_", multiple_writing_systems$writing_system)
+multiple_writing_systems %>% filter(language_name_wals == "Vietnamese") %>% kable()
+```
+
+Next, we merge the compositie corpus IDs into the lines dataframe, so that we can apply tokenization on each corpus / genre / writing system.
+
+```{r, warning=FALSE, message=FALSE}
+lines <- clc_line %>% select(file_id, text)
+corpus_ids <- multiple_writing_systems %>% select(id, corpus_id, composite_id) %>% distinct()
+lines <- left_join(corpus_ids, lines, by=c("id"="file_id"))
+```
+
+Then we create a results dataframe to append the results to. 
+
+```{r}
+header <- c("corpus_id", "mean_word_length", "types", "tokens")
+results <- as.data.frame(matrix(,0,length(header)))
+names(results) <- header
+```
+
+Now we loop over each corpus (todo: make this an `apply()`).
+
+```{r, warning=FALSE, message=FALSE}
+ids <- multiple_writing_systems %>% ungroup() %>% select(composite_id) %>% distinct()
+
+for(i in ids$composite_id) {
+  corpus_words <- lines %>% ungroup() %>% filter(composite_id == i) %>% filter(!is.na(text)) %>% unnest_tokens(word, text) %>% count(composite_id, word, sort = TRUE) %>% arrange(composite_id, desc(n)) %>% ungroup()
+  types_tokes <- corpus_words %>% group_by(composite_id) %>% summarize(mean_word_length = mean(nchar(word)), types = n(), tokens = sum(n)) %>% ungroup()
+  results <- rbind(results, types_tokes)
+  }
+```
+
 How's it look?
 
 ```{r}
@@ -80,8 +119,8 @@ results %>% kable()
 Let's merge in the language names and clean it up a bit.
 
 ```{r}
-results <- left_join(results, clc_corpus, by=c("corpus_id"="id"))
-results <- results %>% select(name, genre_broad, types, tokens)
+results <- left_join(results, multiple_writing_systems, by=c("composite_id"="composite_id"))
+results <- results %>% select(language_name_wals, genre_broad, writing_system, types, tokens, mean_word_length)
 results$ttr <- (results$types / results$tokens)
 ```
 
@@ -91,11 +130,26 @@ Now how does it look?
 results %>% kable()
 ```
 
-TODO: go through the languages with multiple writing systems individually.
-
 Lastly, write the results to disk.
 
 ```{r}
-write_csv(results, 'word_ttr.csv')
+write_csv(results, 'word_ttr2.csv')
 ```
 
+
+# Future
+
+For the languages that contain the same writing systems within their genre folders, getting the counts is straightforward. However, because the 100LC corpus is so large, we can't (yet) simply create the word TTR in one pass, e.g.:
+
+```{r}
+# Merge the corpus IDs into the lines dataframe, so that we can apply tokenization on each corpus / genre
+# lines <- clc_line %>% select(file_id, text)
+# corpus_ids <- clc_file %>% select(id, corpus_id)
+# lines <- left_join(corpus_ids, lines, by=c("id"="file_id"))
+
+# Generate the TTRs per corpus -- this crashes due to memory issues!!
+# corpus_words <- lines %>% unnest_tokens(word, text) %>% count(corpus_id, word, sort = TRUE) %>% ungroup()
+# types_tokes <- corpus_words %>% group_by(corpus_id) %>% summarize(types=n(), tokens=sum(n)) %>% ungroup()
+```
+
+Maybe something for the future.
