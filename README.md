@@ -6,6 +6,16 @@ This repository contains the corpus data and code that processes and analyzes it
 
 To contribute code or data to the repository, please first refer to our guidelines on [contributing](CONTRIBUTING.md).
 
+Contributors to 100LC (alphabetical order):
+
+Bentz, Christian
+Gutierrez-Vasques, Ximena
+Mächler, Alina
+Moran, Steven
+Rood, David S. (Wichita texts)
+Samardžić, Tanja
+Sozinova, Olga
+
 This work is licensed under a
 [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
