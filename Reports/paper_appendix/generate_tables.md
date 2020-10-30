@@ -256,10 +256,12 @@ Rename the columns to match in the paper.
     ## Warning in print.xtable(xtable(grapheme_ttr, digits = c(0, 0, 0, 0, 0, 2)), :
     ## Attempt to use "longtable" with floating = TRUE. Changing to FALSE.
 
-# TODOS
+# Plots
 
--   Plot words and graphemes TTR? These are (bad) preliminary:
-    -   <a href="https://github.com/uzling/100LC/blob/master/Reports/ttr/plot_ttr.md" class="uri">https://github.com/uzling/100LC/blob/master/Reports/ttr/plot_ttr.md</a>
-    -   <a href="https://github.com/uzling/100LC/blob/master/Reports/ttr/words_vs_graphemes_ttr.md" class="uri">https://github.com/uzling/100LC/blob/master/Reports/ttr/words_vs_graphemes_ttr.md</a>
+For a [histrograph plot](https://github.com/uzling/100LC/pull/193) of
+word ttr, see [plot\_ttr.md](../ttr/plot_ttr.md).
+
+# TODO
+
 -   Generate median word length (in characters) (see:
     <a href="https://github.com/uzling/100LC/issues/189" class="uri">https://github.com/uzling/100LC/issues/189</a>)
