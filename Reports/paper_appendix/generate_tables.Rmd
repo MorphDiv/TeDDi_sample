@@ -155,14 +155,22 @@ word_ttr %>%
   kable()
 ```
 
+Let's rearrange the columns to make them more reader friendly.
+
+```{r}
+word_ttr <- word_ttr %>% select(name, genre_broad, writing_system, mean_word_length, types, tokens, ttr)
+```
+
 Rename the columns to match in the paper.
 
 ```{r}
 word_ttr <- word_ttr %>%
   rename("Language" = name,
          "Genre" = genre_broad,
+         "Writing system" = writing_system,
          "Word types" = types,
          "Word tokens" = tokens,
+         "Mean word length" = mean_word_length,
          "Type-token ratio" = ttr)
 
 word_ttr %>%
@@ -182,12 +190,19 @@ command <- paste0(
 )
 add_to_row$command <- command
 print(xtable(word_ttr,
-             digits = c(0, 0, 0, 0, 0, 0, 2, 2)),
+      digits = c(0, 0, 0, 0, 2, 0, 0, 2)),
       hline.after = c(-1),
       add_to_row = add_to_row,
       tabular.environment = "longtable",
       include.rownames = FALSE,
       file = "word_ttr.tex")
+
+print(xtable(word_ttr,
+      digits = c(0, 0, 0, 0, 2, 0, 0, 2)),
+      hline.after = c(-1),
+      add_to_row = add_to_row,
+      tabular.environment = "longtable",
+      include.rownames = FALSE)
 ```
 
 # Grapheme TTR
