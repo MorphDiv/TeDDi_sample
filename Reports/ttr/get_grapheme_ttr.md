@@ -1,7 +1,8 @@
-Grapheme TTR in 100LC
+Grapheme type-token ratios in 100LC corpora
 ================
 Steven Moran
-24 August, 2020
+
+31 October, 2020
 
 Load each grapheme orthography profile (OP) from disk, generate TTRs,
 and write to a table.
