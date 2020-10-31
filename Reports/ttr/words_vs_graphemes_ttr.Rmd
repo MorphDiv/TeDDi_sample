@@ -1,6 +1,6 @@
 ---
-title: "Words vs graphemes TTR in 100LC"
-author: "Steven Moran"
+title: "Words vs graphemes type-token ratios in 100LC corpora"
+author: "Steven Moran\n"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   github_document:
@@ -8,33 +8,30 @@ output:
 ---
 
 ```{r echo=FALSE, include=FALSE}
-library(dplyr)
-library(readr)
-library(tidyr)
+library(tidyverse)
 library(knitr)
+library(ggrepel)
 ```
 
 ```{r, warning=FALSE, message=FALSE}
-words.ttr <- read_csv('word_ttr.csv')
-words.ttr <- tidyr::unite(words.ttr, name, c(name, genre_broad))
-w.cut <- words.ttr %>% select(name, ttr) %>% rename(word_ttr=ttr)
+words_ttr <- read_csv('word_ttr.csv')
+words_ttr <- tidyr::unite(words_ttr, name, c(name, genre_broad))
+w_cut <- words_ttr %>% select(name, ttr) %>% rename(word_ttr = ttr)
 
-graphemes.ttr <- read.csv('grapheme_ttr.csv')
-graphemes.ttr <- tidyr::unite(graphemes.ttr, name, c(name, genre_broad))
-g.cut <- graphemes.ttr %>% select(name, ttr) %>% rename(grapheme_ttr=ttr)
+graphemes_ttr <- read.csv('grapheme_ttr.csv')
+graphemes_ttr <- tidyr::unite(graphemes_ttr, name, c(name, genre_broad))
+g_cut <- graphemes_ttr %>% select(name, ttr) %>% rename(grapheme_ttr = ttr)
 ```
 
 ```{r}
-ttr <- left_join(w.cut, g.cut)
+ttr <- left_join(w_cut, g_cut)
 ```
 
 ```{r}
-library(ggplot2)
-library(ggrepel)
-ggplot(ttr, aes(x=grapheme_ttr, y=word_ttr, label=name)) + 
+ggplot(ttr, aes(x = grapheme_ttr, y = word_ttr, label = name)) +
   geom_point() +
   geom_label_repel(aes(label = name),
-                  box.padding   = 0.35, 
+                  box.padding   = 0.35,
                   point.padding = 0.5,
                   segment.color = 'grey50')
 ```

@@ -1,27 +1,30 @@
-Words vs graphemes TTR in 100LC
+Words vs graphemes type-token ratios in 100LC corpora
 ================
 Steven Moran
-24 August, 2020
 
-    words.ttr <- read_csv('word_ttr.csv')
-    words.ttr <- tidyr::unite(words.ttr, name, c(name, genre_broad))
-    w.cut <- words.ttr %>% select(name, ttr) %>% rename(word_ttr=ttr)
+31 October, 2020
 
-    graphemes.ttr <- read.csv('grapheme_ttr.csv')
-    graphemes.ttr <- tidyr::unite(graphemes.ttr, name, c(name, genre_broad))
-    g.cut <- graphemes.ttr %>% select(name, ttr) %>% rename(grapheme_ttr=ttr)
+    words_ttr <- read_csv('word_ttr.csv')
+    words_ttr <- tidyr::unite(words_ttr, name, c(name, genre_broad))
+    w_cut <- words_ttr %>% select(name, ttr) %>% rename(word_ttr = ttr)
 
-    ttr <- left_join(w.cut, g.cut)
+    graphemes_ttr <- read.csv('grapheme_ttr.csv')
+    graphemes_ttr <- tidyr::unite(graphemes_ttr, name, c(name, genre_broad))
+    g_cut <- graphemes_ttr %>% select(name, ttr) %>% rename(grapheme_ttr = ttr)
+
+    ttr <- left_join(w_cut, g_cut)
 
     ## Joining, by = "name"
 
-    library(ggplot2)
-    library(ggrepel)
-    ggplot(ttr, aes(x=grapheme_ttr, y=word_ttr, label=name)) + 
+    ggplot(ttr, aes(x = grapheme_ttr, y = word_ttr, label = name)) +
       geom_point() +
       geom_label_repel(aes(label = name),
-                      box.padding   = 0.35, 
+                      box.padding   = 0.35,
                       point.padding = 0.5,
                       segment.color = 'grey50')
+
+    ## Warning: Removed 4 rows containing missing values (geom_point).
+
+    ## Warning: Removed 4 rows containing missing values (geom_label_repel).
 
 ![](words_vs_graphemes_ttr_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
