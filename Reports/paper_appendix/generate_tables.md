@@ -94,9 +94,9 @@ Decide what we want to keep from the language index and create a LaTeX
 Rename the columns.
 
     df <- df %>% rename("Language name" = name_glotto,
-                        # "Glottocode" = glottocode,
-                        # "ISO 630-3" = iso639_3,
-                        # "Endangerment" = status,
+                        "Glottocode" = glottocode,
+                        "ISO 630-3" = iso639_3,
+                        "Endangerment" = status,
                         "Genus" = genus_wals,
                         "Area" = macroarea_glotto,
                         "Size (in words)" = corpus_size)
@@ -108,7 +108,7 @@ sample?
       head(n = 30) %>%
       kable()
 
-| Language name           | glottocode | iso639\_3 | status                | Genus                        | Area          | Size (in words) |
+| Language name           | Glottocode | ISO 630-3 | Endangerment          | Genus                        | Area          | Size (in words) |
 |:------------------------|:-----------|:----------|:----------------------|:-----------------------------|:--------------|----------------:|
 | Abkhazian               | abkh1244   | abk       | vulnerable            | Northwest Caucasian          | Eurasia       |            1332 |
 | Alamblak                | alam1246   | amp       | definitely endangered | Sepik Hill                   | Papunesia     |          229160 |
@@ -177,10 +177,10 @@ copy and paste the table into the Overleaf document.
     ## Attempt to use "longtable" with floating = TRUE. Changing to FALSE.
 
     ## % latex table generated in R 4.0.3 by xtable 1.8-4 package
-    ## % Sat Oct 31 12:33:39 2020
+    ## % Sat Oct 31 12:54:26 2020
     ## \begin{longtable}{llllllr}
     ##   \hline
-    ## Language name & glottocode & iso639\_3 & status & Genus & Area & Size (in words) \\ 
+    ## Language name & Glottocode & ISO 630-3 & Endangerment & Genus & Area & Size (in words) \\ 
     ##  Abkhazian & abkh1244 & abk & vulnerable & Northwest Caucasian & Eurasia & 1332 \\ 
     ##   Alamblak & alam1246 & amp & definitely endangered & Sepik Hill & Papunesia & 229160 \\ 
     ##   Amele & amel1241 & aey & vulnerable & Madang & Papunesia & 233776 \\ 
