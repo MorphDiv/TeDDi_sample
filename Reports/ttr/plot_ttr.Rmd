@@ -1,5 +1,5 @@
 ---
-title: "Visualize word and graphemes TTR for 100 LC corpora"
+title: "Visualize word and graphemes type-token ratios for 100LC corpora"
 author: "Steven Moran"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
@@ -16,7 +16,7 @@ library(tidyverse)
 Load the results from `get_word_ttr.Rmd`.
 
 ```{r}
-df <- read_csv('word_ttr.csv')
+df <- read_csv("word_ttr.csv")
 ```
 
 Plot the languages and their genres by their TTR ratios.
@@ -24,16 +24,16 @@ Plot the languages and their genres by their TTR ratios.
 ```{r}
 p <- tidyr::unite(df, corpus, c(name, genre_broad))
 p$corpus <- factor(p$corpus, levels = unique(p$corpus[order(df$ttr)]))
-qplot(corpus, ttr, data=p) +
+qplot(corpus, ttr, data = p) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 Here's the same plot with `ggplot`.
 
 ```{r}
-ggplot(p, aes(x=corpus, y=ttr)) + 
-   geom_point() + 
-   theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(p, aes(x = corpus, y = ttr)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 Here's a plot grouped by genre by color.
@@ -42,26 +42,52 @@ Here's a plot grouped by genre by color.
 p <- df
 p$name <- factor(p$name, levels = unique(p$name[order(df$ttr)]))
 
-ggplot(p, aes(x=name, y=ttr, color=genre_broad, group=genre_broad)) + 
-   geom_point() + 
-   theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(p, aes(x = name, y = ttr, color = genre_broad, group = genre_broad)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 ```{r}
 p <- df
 p$name <- factor(p$name, levels = unique(p$name[order(df$ttr)]))
 
-ggplot(p, aes(x=ttr, y=name, color=genre_broad, group=genre_broad)) + 
-   geom_point() +
-   theme_bw()
+ggplot(p, aes(x = ttr, y = name, color = genre_broad, group = genre_broad)) +
+  geom_point() +
+  theme_bw()
 ```
+
+These are all pretty horrible. Tanja [suggested for the plots](https://github.com/uzling/100LC/pull/193):
+
+>>> I think we should not aim to have all languages on any plot axis. So, for plotting the counts and TTRs, I suggest histograms (how many languages/corpora we have for each TTR value). For this, it might be useful to bin TTRs (e.g. divide the range of its values into 20 bins). Then we still need to think a little how to show the variation across genres, which seems quite big. We could have, for instance, different colours for histogram bars for "meant TTR per language", "only fiction", "only professional", etc.
+
+>>> It might be a good idea to have a separate plot for each category as it might get crowded again if we have 20x5 bars. But lets still think about this.
+
+Here's all the languages in a historgram.
+
+```{r}
+ggplot(df, aes(x = ttr)) +
+  geom_histogram(bins = 10, col = "white") +
+  labs(x = "Word type-token ratio", y = "Number of languages in 100LC") +
+  theme_bw()
+```
+
+Here they are divided by genre.
+
+```{r}
+ggplot(df, aes(x = ttr, fill = genre_broad)) +
+  geom_histogram(bins = 10, col = "white", position = "identity") +
+  labs(x = "Word type-token ratio", y = "Number of languages in 100LC", fill = "Genre") +
+  theme_bw() +
+  scale_fill_brewer(palette = "Dark2")
+```
+
 
 # Graphemes
 
 Load the pre-compiled grapheme ttr data.
 
 ```{r}
-df <- read_csv('grapheme_ttr.csv')
+df <- read_csv("grapheme_ttr.csv")
 ```
 
 Plot the TTR for graphemes.
@@ -71,6 +97,6 @@ p <- df
 p <- tidyr::unite(df, corpus, c(name, genre_broad))
 p$name <- factor(p$corpus, levels = unique(p$corpus[order(df$ttr)]))
 
-qplot(corpus, ttr, data=p) +
+qplot(corpus, ttr, data = p) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
