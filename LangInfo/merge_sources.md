@@ -1,7 +1,7 @@
 Merge language information for 100LC sources
 ================
 Chris Bentz & Steven Moran
-02 February, 2021
+13 May, 2021
 
 ``` r
 library(dplyr)
@@ -102,11 +102,6 @@ langInfo.100 <- left_join(langInfo.100, folders)
 
 ``` r
 library(testthat)
-```
-
-    ## Error in get(genname, envir = envir) : object 'testthat_print' not found
-
-``` r
 library(stringr)
 
 # Make sure we have 100 languages in our sample after merging
@@ -138,7 +133,7 @@ write.csv(file = "langInfo_100LC.csv", langInfo.100, row.names = F, quote=FALSE)
 nrow(langInfo.100 %>% filter(is.na(name)))
 ```
 
-    ## [1] 15
+    ## [1] 13
 
 ``` r
 # Here are the languages that still need to be added
@@ -158,10 +153,8 @@ kable(langInfo.100 %>% filter(is.na(name)) %>% select(iso639_3, glottocode, name
 | mrc       | mari1440   | Maricopa                | Maricopa        |
 | scs       | nort2942   | North Slavey            | Slave           |
 | one       | onei1249   | Oneida                  | Oneida          |
-| pwn       | paiw1248   | Paiwan                  | Paiwan          |
 | spp       | supy1237   | Supyire Senoufo         | Supyire         |
 | bhq       | tuka1249   | Tukang Besi South       | Tukang Besi     |
-| pav       | wari1268   | Wari’                   | Wari’           |
 
 ``` r
 # Clean up
