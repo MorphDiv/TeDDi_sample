@@ -8,6 +8,8 @@ output:
 
 ```{r, message=FALSE}
 library(tidyverse)
+library(lingtypology)
+library(testthat)
 ```
 
 Get counts of families and area coverage for 100LC. This is easy because we have already combined the 100LC data with Glottolog.
@@ -50,6 +52,27 @@ ud <- ud %>% select(X1, V1, `alpha3-b`) %>% rename(file_prefix=X1, ISO6391 = V1,
 ud <- left_join(ud, glottolog)
 ```
 
+Some of the mappings from ISO639-1 to ISO639-3 are wrong. Note the NAs in the `family_id`. We need to fix these by hand.
+
+```{r}
+ud %>% select(file_prefix, ISO6391, iso639P3code, family_id) %>% head()
+ud <- ud %>% select(file_prefix, ISO6391, iso639P3code, family_id)
+write_csv(ud, 'ud.csv')
+```
+Relaod and remerge.
+
+```{r}
+ud <- read_csv('ud_by_hand.csv')
+ud <- left_join(ud, glottolog)
+ud <- left_join(ud, glottolog_areas, by=c("iso639P3code"="isocodes"))
+```
+
+We note that languagae isolates do not have a `family_id` in Glottolog, like Basque. This potentially throws our language family counts off, i.e. when there are two language isolates, counting them both as family `NA` would group them into the same "family". If thre is just one, then the counts are still correct (as in the case of UD).
+
+```{r}
+ud %>% filter(is.na(family_id))
+```
+
 How many language families are present?
 
 ```{r}
@@ -59,7 +82,6 @@ nrow(ud %>% filter(!is.na(family_id)) %>% select(family_id) %>% distinct())
 Let's get the areas. UD is *heavily* Eurasian-centric.
 
 ```{r}
-ud <- left_join(ud, glottolog_areas, by=c("iso639P3code"="isocodes"))
 table(ud$macroarea)
 ```
 
@@ -69,12 +91,11 @@ Next, let's get the language family coverage for [mBERT](https://github.com/goog
 mbert <- read_csv('mBERT.csv', col_names=F)
 ```
 
-Now we can get some of the ISO 639-3 codes by language name look up.
+Now we can get some of the ISO 639-3 codes by language name look up. For this we can use the `lingtypology` library.
 
 ```{r, warning=FALSE, message=FALSE}
-library(lingtypology)
-mbert_iso <- as.data.frame(iso.lang(mbert$X1))
-mbert_iso <- mbert_iso %>% rownames_to_column(var="Name") %>% rename(iso639P3code = `iso.lang(mbert$X1)`)
+mbert_iso <- as.data.frame(lingtypology::iso.lang(mbert$X1))
+mbert_iso <- mbert_iso %>% rownames_to_column(var="Name") %>% rename(iso639P3code = `lingtypology::iso.lang(mbert$X1)`)
 ```
 
 But doesn't get all of them, so we will have to fill in some by hand, which we do by first writing the data to disk and then manually adding the missing codes.
@@ -88,9 +109,7 @@ Going through by hand, I randomly chose certain codes, e.g. Colloquiual Malay fo
 Let's reload the by hand data.
 
 ```{r, message=FALSE}
-mbert_iso <- read_csv('mBERT_iso_updated_by_hand.csv')
-
-library(testthat)
+mbert_iso <- read_csv('mBERT_iso_by_hand.csv')
 expect_false(any(is.na(mbert_iso$iso639P3code)))
 ```
 
@@ -100,7 +119,7 @@ And calculate how many "true" languages the sample has.
 nrow(mbert_iso %>% select(iso639P3code) %>% distinct())
 ```
 
-Now we merge in Glottolog data and calculate how many language families are present. Not many and less than UD.
+Now we merge in Glottolog data and calculate how many language families are present. Not many and less than UD. (Once again Basque is `NA` for `family_id`, but it's the only language isolate in the sample, so the counts are correct for language family.)
 
 ```{r}
 mbert_iso <- left_join(mbert_iso, glottolog)
@@ -120,8 +139,82 @@ By comparison here are the macroarea coverage in all of Glottolog.
 table(glottolog_areas$macroarea)
 ```
 
+Now for the bibles data.
 
+```{r}
+bibles <- read_csv('bibles100codes.csv')
+bibles <- left_join(bibles, glottolog)
+bibles <- left_join(bibles, glottolog_areas)
+```
 
+How many languages according to ISO 639-3 codes?
+
+```{r}
+nrow(bibles %>% select(iso639P3code) %>% distinct())
+```
+
+How many language families? Since there are two islates in the sample, we need to add by one to account for the two `NA` in the `family_id`.
+
+```{r}
+nrow(bibles %>% select(family_id) %>% distinct()) + 1
+```
+
+Areal distribution? Note no data points in Australia.
+
+```{r}
+table(bibles$macroarea)
+```
+
+Now for XGLUE.
+
+```{r}
+xglue <- read_csv('xglue_languagecodes.txt', col_names = FALSE)
+xglue <- xglue %>% rename(alpha2 = X1)
+xglue <- left_join(xglue, iso)
+xglue <- xglue %>% rename(iso639P3code = `alpha3-b`)
+xglue <- left_join(xglue, glottolog)
+```
+
+Some of the XLGUE mappings are wrong. Note the NAs. We fix these by hand.
+
+```{r}
+xglue %>% select(family_id) %>% distinct()
+tmp <- xglue %>% select(alpha2, iso639P3code, English, family_id)
+# write_csv(tmp, 'xglue.csv')
+tmp
+```
+
+Load the hand corrected XGLUE data.
+
+```{r}
+xglue <- read_csv('xglue_by_hand.csv')
+```
+
+Merge in Glottolog.
+
+```{r}
+xglue <- left_join(xglue, glottolog)
+xglue <- left_join(xglue, glottolog_areas)
+```
+
+How many languages according to ISO 639-3 codes?
+
+```{r}
+nrow(xglue %>% select(iso639P3code) %>% distinct())
+```
+
+How many language families?
+
+```{r}
+expect_false(any(is.na(xglue %>% select(family_id) %>% distinct())))
+nrow(xglue %>% select(family_id) %>% distinct())
+```
+
+Areal distribution? Note no data points in Australia. Most XGLUE languages are Eurasian. No Americas, Papunesia or Australia coverage.
+
+```{r}
+table(xglue$macroarea)
+```
 
 
 
