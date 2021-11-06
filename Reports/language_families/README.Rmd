@@ -14,11 +14,11 @@ library(testthat)
 
 Get counts of families and area coverage for 100LC. This is easy because we have already combined the 100LC data with Glottolog.
 
-Number of language families.
+Number of language families. As we discuss below, language family isolates have no `family_id` in Glottolog, and thus are listed `NA`. To account for this we need to add families to get the correct counts. In the case of 100LC, there are 9 language isolates in the current sample, so we add 8.
 
 ```{r, message=FALSE, warning=FALSE}
 df <- read_csv('../../LangInfo/langInfo_100LC.csv')
-nrow(df %>% filter(!is.na(family_id)) %>% select(family_id) %>% distinct())
+nrow(df %>% filter(!is.na(family_id)) %>% select(family_id) %>% distinct()) + 8
 ```
 
 Distribution of languages by area.
@@ -59,6 +59,7 @@ ud %>% select(file_prefix, ISO6391, iso639P3code, family_id) %>% head()
 ud <- ud %>% select(file_prefix, ISO6391, iso639P3code, family_id)
 write_csv(ud, 'ud.csv')
 ```
+
 Relaod and remerge.
 
 ```{r}
@@ -82,6 +83,7 @@ nrow(ud %>% filter(!is.na(family_id)) %>% select(family_id) %>% distinct())
 Let's get the areas. UD is *heavily* Eurasian-centric.
 
 ```{r}
+ud <- left_join(ud, glottolog_areas, by=c("iso639P3code"="isocodes"))
 table(ud$macroarea)
 ```
 
@@ -96,6 +98,14 @@ Now we can get some of the ISO 639-3 codes by language name look up. For this we
 ```{r, warning=FALSE, message=FALSE}
 mbert_iso <- as.data.frame(lingtypology::iso.lang(mbert$X1))
 mbert_iso <- mbert_iso %>% rownames_to_column(var="Name") %>% rename(iso639P3code = `lingtypology::iso.lang(mbert$X1)`)
+```
+
+Now we can get some of the ISO 639-3 codes by language name look up.
+
+```{r, warning=FALSE, message=FALSE}
+library(lingtypology)
+mbert_iso <- as.data.frame(iso.lang(mbert$X1))
+mbert_iso <- mbert_iso %>% rownames_to_column(var="Name") %>% rename(iso639P3code = `iso.lang(mbert$X1)`)
 ```
 
 But doesn't get all of them, so we will have to fill in some by hand, which we do by first writing the data to disk and then manually adding the missing codes.
@@ -215,7 +225,3 @@ Areal distribution? Note no data points in Australia. Most XGLUE languages are E
 ```{r}
 table(xglue$macroarea)
 ```
-
-
-
-

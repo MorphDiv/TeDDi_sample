@@ -12,14 +12,18 @@ library(testthat)
 Get counts of families and area coverage for 100LC. This is easy because
 we have already combined the 100LC data with Glottolog.
 
-Number of language families.
+Number of language families. As we discuss below, language family
+isolates have no `family_id` in Glottolog, and thus are listed `NA`. To
+account for this we need to add families to get the correct counts. In
+the case of 100LC, there are 9 language isolates in the current sample,
+so we add 8.
 
 ``` r
 df <- read_csv('../../LangInfo/langInfo_100LC.csv')
-nrow(df %>% filter(!is.na(family_id)) %>% select(family_id) %>% distinct())
+nrow(df %>% filter(!is.na(family_id)) %>% select(family_id) %>% distinct()) + 8
 ```
 
-    ## [1] 60
+    ## [1] 68
 
 Distribution of languages by area.
 
@@ -137,14 +141,13 @@ nrow(ud %>% filter(!is.na(family_id)) %>% select(family_id) %>% distinct())
 Let’s get the areas. UD is *heavily* Eurasian-centric.
 
 ``` r
+ud <- left_join(ud, glottolog_areas, by=c("iso639P3code"="isocodes"))
 table(ud$macroarea)
 ```
 
-    ## 
-    ##        Africa     Australia       Eurasia North America     Papunesia 
-    ##             8             1            86             1             2 
-    ## South America 
-    ##             8
+    ## Warning: Unknown or uninitialised column: `macroarea`.
+
+    ## < table of extent 0 >
 
 Next, let’s get the language family coverage for
 [mBERT](https://github.com/google-research/bert/blob/master/multilingual.md).
@@ -162,6 +165,14 @@ this we can use the `lingtypology` library.
 ``` r
 mbert_iso <- as.data.frame(lingtypology::iso.lang(mbert$X1))
 mbert_iso <- mbert_iso %>% rownames_to_column(var="Name") %>% rename(iso639P3code = `lingtypology::iso.lang(mbert$X1)`)
+```
+
+Now we can get some of the ISO 639-3 codes by language name look up.
+
+``` r
+library(lingtypology)
+mbert_iso <- as.data.frame(iso.lang(mbert$X1))
+mbert_iso <- mbert_iso %>% rownames_to_column(var="Name") %>% rename(iso639P3code = `iso.lang(mbert$X1)`)
 ```
 
 But doesn’t get all of them, so we will have to fill in some by hand,
