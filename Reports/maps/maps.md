@@ -2,7 +2,7 @@ Generate world maps from the 100LC language sample
 ================
 Steven Moran and Chris Bentz
 
-01 November, 2021
+10 November, 2021
 
 ``` r
 library(tidyverse)
