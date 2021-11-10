@@ -88,7 +88,7 @@ status_map
 # ggsave("worldmap_status.pdf", status_map, dpi = 300, scale = 1, device = cairo_pdf)
 ```
 
-For publication, we tweek the labels.
+For publication, we tweak the labels.
 
 ```{r, 100LC-sample}
 world <- map_data("world")
@@ -113,7 +113,39 @@ status_map
 # ggsave("worldmap_status.pdf", status_map, dpi = 300, scale = 1, device = cairo_pdf)
 ```
 
+We can also tweak the EL scales, so that the legend isn't so large. We consider all ELs EL.
 
+```{r}
+minimal_el_status <- lang100
+minimal_el_status$status[minimal_el_status$status == "severely endangered"] <- "endangered"
+minimal_el_status$status[minimal_el_status$status == "definitely endangered"] <- "endangered"
+minimal_el_status$status[minimal_el_status$status == "critically endangered"] <- "endangered"
+```
+
+Map it.
+
+```{r}
+world <- map_data("world")
+status_map <- ggplot() + 
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "grey90", col = "grey") +
+  geom_point(data = minimal_el_status, aes(x = longitude_glotto, y = latitude_glotto, colour = status), 
+             alpha = 0.8, size = 3) +
+  scale_y_continuous(limits = c(-65, 80)) +
+  scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
+  geom_hline(aes(yintercept = 0), colour = "grey", size = 1, linetype = 2) +
+  labs(x = "", y = "", color = "Endangerment status") +
+  theme_bw() +
+  theme(axis.title.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12),
+        title = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 12),
+        legend.position = "bottom")
+status_map
+
+# ggsave("worldmap_status.pdf", status_map, dpi = 300, scale = 1, device = cairo_pdf)
+```
 
 
 A world map with top-level family information from Glottolog.

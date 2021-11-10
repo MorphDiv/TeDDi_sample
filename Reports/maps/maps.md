@@ -2,7 +2,7 @@ Generate world maps from the 100LC language sample
 ================
 Steven Moran and Chris Bentz
 
-01 November, 2021
+10 November, 2021
 
 ``` r
 library(tidyverse)
@@ -97,7 +97,7 @@ status_map
 # ggsave("worldmap_status.pdf", status_map, dpi = 300, scale = 1, device = cairo_pdf)
 ```
 
-For publication, we tweek the labels.
+For publication, we tweak the labels.
 
 ``` r
 world <- map_data("world")
@@ -121,6 +121,45 @@ status_map
 ```
 
 ![](maps_files/figure-gfm/100LC-sample-1.png)<!-- -->
+
+``` r
+# ggsave("worldmap_status.pdf", status_map, dpi = 300, scale = 1, device = cairo_pdf)
+```
+
+We can also tweak the EL scales, so that the legend isn’t so large. We
+consider all ELs EL.
+
+``` r
+minimal_el_status <- lang100
+minimal_el_status$status[minimal_el_status$status == "severely endangered"] <- "endangered"
+minimal_el_status$status[minimal_el_status$status == "definitely endangered"] <- "endangered"
+minimal_el_status$status[minimal_el_status$status == "critically endangered"] <- "endangered"
+```
+
+Map it.
+
+``` r
+world <- map_data("world")
+status_map <- ggplot() + 
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "grey90", col = "grey") +
+  geom_point(data = minimal_el_status, aes(x = longitude_glotto, y = latitude_glotto, colour = status), 
+             alpha = 0.8, size = 3) +
+  scale_y_continuous(limits = c(-65, 80)) +
+  scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
+  geom_hline(aes(yintercept = 0), colour = "grey", size = 1, linetype = 2) +
+  labs(x = "", y = "", color = "Endangerment status") +
+  theme_bw() +
+  theme(axis.title.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12),
+        title = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 12),
+        legend.position = "bottom")
+status_map
+```
+
+![](maps_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ``` r
 # ggsave("worldmap_status.pdf", status_map, dpi = 300, scale = 1, device = cairo_pdf)
@@ -150,7 +189,7 @@ family_map <- ggplot() +
 family_map
 ```
 
-![](maps_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](maps_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
 # ggsave("family_map.pdf", family_map, dpi = 300, scale = 1, device = cairo_pdf)
@@ -179,7 +218,7 @@ macroarea_map <- ggplot() +
 macroarea_map
 ```
 
-![](maps_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](maps_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
 # ggsave("macroarea_map.pdf", macroarea_map, dpi = 300, scale = 1, device = cairo_pdf)
@@ -228,7 +267,7 @@ ws_map <- ggplot() +
 ws_map
 ```
 
-![](maps_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](maps_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
 # ggsave("ws_map.pdf", macroarea_map, dpi = 300, scale = 1, device = cairo_pdf)
@@ -307,7 +346,7 @@ word_tokens <- ggplot() +
 word_tokens
 ```
 
-![](maps_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](maps_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 ``` r
 # ggsave("word_tokens.pdf", macroarea_map, dpi = 300, scale = 1, device = cairo_pdf)
@@ -352,7 +391,7 @@ word_types <- ggplot() +
 word_types
 ```
 
-![](maps_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](maps_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 ``` r
 # ggsave("word_types.pdf", macroarea_map, dpi = 300, scale = 1, device = cairo_pdf)
