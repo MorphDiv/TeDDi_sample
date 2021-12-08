@@ -1,0 +1,95 @@
+---
+title: "World Maps"
+author: ''
+date: "December 08, 2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Session Info
+Give the session info (reduced).
+```{r, echo = F}
+# R version
+sessionInfo()$R.version$version.string
+# platform
+sessionInfo()$R.version$platform 
+```
+
+# Load Libraries
+If the libraries are not installed yet, you need to install them using, for example, the command: install.packages("ggplot2").
+```{r, message = FALSE}
+library(readr)
+library(ggmap)
+library(maps)
+library(gridExtra)
+library(ggrepel)
+library(RCurl)
+```
+
+Give the package versions.
+```{r, echo = F}
+# version of packages loaded
+installed.packages()[names(sessionInfo()$otherPkgs), "Version"]
+```
+
+# Load the language info 
+Load language info file directly from the github repo.
+```{r, message = F}
+languages <- as.data.frame(read_csv("https://raw.githubusercontent.com/100LC/100LC/master/LangInfo/langInfo_100LC.csv?token=AAIGDLRJZF4UHO3BRXEV3IDBWD65O"))
+```
+
+# Simple Stats
+```{r}
+length(unique(languages$iso639_3)) # number of languages according to iso
+length(unique(languages$glottocode)) # number of languages according to glottolog
+length(unique(languages$family_id)) # number of language families according to glottolog
+unique(languages$macroarea_glotto) # number of macroareas according to glottolog
+```
+
+# Pre-Processing
+```{r}
+# add 360 to longitudes for languages with longitudes < -25 
+# (this is necessary to create a Pacific centered map)
+languages$longitude_glotto[languages$longitude_glotto < -25] <- 
+  languages$longitude_glotto[languages$longitude_glotto < -25] + 360
+# collapse status information into fewer factors
+languages$status[languages$status %in% c("definitely endangered", "severely endangered", "critically endangered")]  <- "endangered" 
+```
+
+# World Map
+World maps with endangerment status information from Glottolog.
+```{r, fig.width = 10, fig.height = 5, warning = FALSE}
+# create world map
+world <- map_data("world", wrap = c(-25, 335)) 
+status.map <- ggplot() + 
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "white", colour = "darkgrey") +
+  geom_point(data = languages, aes(x = longitude_glotto, y = latitude_glotto, 
+                                 fill = status), 
+             alpha = 1, size = 3, pch = 21) +
+             scale_fill_manual(values = c("#FFB266", "#FF3333", "#00FF80", "#FFFF66")) +
+  geom_text_repel(data = languages, aes(x = longitude_glotto, y = latitude_glotto, 
+                                        label = name_glotto), size = 2.5,
+                  box.padding = unit(0.1, 'lines'), force = 0.5) +
+  scale_y_continuous(limits = c(-65, 80)) +
+  labs(x = "longitude", y = "latitude", fill = "Endangerment Status") +
+  theme_bw() +
+  theme(axis.title.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12),
+        title = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 12),
+        legend.position = "bottom")
+status.map
+```
+
+Save to file.
+```{r, warning = FALSE}
+ggsave("~/Desktop/worldMap_100LC.pdf", status.map, 
+       dpi = 300, scale = 1, width = 12, height = 6, device = cairo_pdf)
+```
