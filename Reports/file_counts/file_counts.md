@@ -1,7 +1,7 @@
 How many files per directory?
 ================
 Steven Moran
-15 June, 2020
+10 December, 2021
 
 ``` r
 library(tidyverse)
@@ -9,7 +9,8 @@ library(knitr)
 library(ggplot2)
 ```
 
-Get the file counts per directory.
+Get the file counts per
+directory.
 
 ``` r
 fils <- list.files("../../Corpus", pattern="txt$", full.names = TRUE, recursive = TRUE)
@@ -22,7 +23,7 @@ There are this many directories:
 nrow(fils.counts)
 ```
 
-    ## [1] 132
+    ## [1] 138
 
 There are this many files per directory:
 
@@ -61,9 +62,15 @@ kable(fils.counts)
 | ../../Corpus/Tagalog\_tgl/fiction                         |   55 |
 | ../../Corpus/Tagalog\_tgl/non-fiction/written             |   44 |
 | ../../Corpus/Japanese\_jpn/fiction                        |   25 |
+| ../../Corpus/Piraha\_myp/conversation                     |   17 |
+| ../../Corpus/Warao\_wba/non-fiction/spoken                |   15 |
+| ../../Corpus/Ngiyambaa\_wyb/conversation                  |   11 |
+| ../../Corpus/Tiwi\_tiw/non-fiction/spoken                 |   10 |
 | ../../Corpus/Martuthunira\_vma/conversation               |    7 |
 | ../../Corpus/Hebrew\_Modern\_heb/fiction                  |    5 |
+| ../../Corpus/Ngiyambaa\_wyb/non-fiction/spoken            |    5 |
 | ../../Corpus/Russian\_rus/fiction                         |    4 |
+| ../../Corpus/Gooniyandi\_gni/conversation                 |    3 |
 | ../../Corpus/Makah\_myh/conversation                      |    3 |
 | ../../Corpus/Rapanui\_rap/non-fiction/spoken              |    3 |
 | ../../Corpus/Asmat\_tml/conversation                      |    2 |
@@ -73,8 +80,10 @@ kable(fils.counts)
 | ../../Corpus/Makah\_myh/non-fiction/spoken                |    2 |
 | ../../Corpus/Mandarin\_cmn/professional                   |    2 |
 | ../../Corpus/Otomi\_Mezquital\_ote/non-fiction/written    |    2 |
+| ../../Corpus/Paiwan\_pwn/conversation                     |    2 |
 | ../../Corpus/Swahili\_swh/non-fiction/written             |    2 |
 | ../../Corpus/Vietnamese\_vie/professional                 |    2 |
+| ../../Corpus/Wari\_pav/conversation                       |    2 |
 | ../../Corpus/Wichita\_wic/conversation                    |    2 |
 | ../../Corpus/Abkhaz\_abk/professional                     |    1 |
 | ../../Corpus/Acoma\_kjq/non-fiction/spoken                |    1 |
@@ -104,7 +113,7 @@ kable(fils.counts)
 | ../../Corpus/French\_fra/professional                     |    1 |
 | ../../Corpus/Georgian\_kat/professional                   |    1 |
 | ../../Corpus/German\_deu/professional                     |    1 |
-| ../../Corpus/Gooniyandi\_gni/conversation                 |    1 |
+| ../../Corpus/Grebo\_gry/non-fiction/spoken                |    1 |
 | ../../Corpus/Greenlandic\_West\_kal/non-fiction/written   |    1 |
 | ../../Corpus/Greenlandic\_West\_kal/professional          |    1 |
 | ../../Corpus/Guarani\_gug/non-fiction/written             |    1 |
@@ -119,7 +128,6 @@ kable(fils.counts)
 | ../../Corpus/Jakaltek\_jac/non-fiction/written            |    1 |
 | ../../Corpus/Japanese\_jpn/professional                   |    1 |
 | ../../Corpus/Kannada\_kan/professional                    |    1 |
-| ../../Corpus/Karok\_kyh/non-fiction/spoken                |    1 |
 | ../../Corpus/Kayardild\_gyd/grammar/spoken                |    1 |
 | ../../Corpus/Kewa\_kew/non-fiction/written                |    1 |
 | ../../Corpus/Khalkha\_khk/non-fiction/written             |    1 |
@@ -137,10 +145,10 @@ kable(fils.counts)
 | ../../Corpus/Maung\_mph/non-fiction/written               |    1 |
 | ../../Corpus/Maybrat\_ayz/non-fiction/written             |    1 |
 | ../../Corpus/Mixtec\_Chalcatongo\_mig/non-fiction/written |    1 |
-| ../../Corpus/Ngiyambaa\_wyb/conversation                  |    1 |
 | ../../Corpus/Oromo\_Harar\_hae/non-fiction/written        |    1 |
 | ../../Corpus/Otomi\_Mezquital\_ote/grammar/written        |    1 |
 | ../../Corpus/Otomi\_Mezquital\_ote/professional           |    1 |
+| ../../Corpus/Paiwan\_pwn/non-fiction/spoken               |    1 |
 | ../../Corpus/Persian\_pes/fiction                         |    1 |
 | ../../Corpus/Persian\_pes/professional                    |    1 |
 | ../../Corpus/Quechua\_Imbabura\_qvi/non-fiction/written   |    1 |
@@ -155,7 +163,6 @@ kable(fils.counts)
 | ../../Corpus/Tagalog\_tgl/professional                    |    1 |
 | ../../Corpus/Thai\_tha/professional                       |    1 |
 | ../../Corpus/Turkish\_tur/professional                    |    1 |
-| ../../Corpus/Warao\_wba/non-fiction/spoken                |    1 |
 | ../../Corpus/Wichi\_mzh/non-fiction/written               |    1 |
 | ../../Corpus/Yagua\_yad/non-fiction/written               |    1 |
 | ../../Corpus/Yagua\_yad/professional                      |    1 |
