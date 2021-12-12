@@ -9,7 +9,7 @@ output:
 
 # Setup  
 
-```{r}
+```{r, message=FALSE}
 library(dplyr)
 library(readr)
 library(knitr)
@@ -52,17 +52,16 @@ Genre narrow:
 clc_file %>% select(genre_narrow) %>% distinct() %>% kable()
 ```
 
-Opps, looks like we still have some typos in the text! So I made an issue:
-
-* https://github.com/uzling/100LC/issues/165
-
-
 # Get genre info from the file folder structure
 
 Select the `genre_narrow` and `genre_broad` categories as encoded in the file folder structure.
 
 ```{r}
-file_folders <- clc_corpus %>% select(name, genre_broad, genre_narrow) %>% distinct()
+file_folders <- clc_file %>% select(corpus_id, genre_broad, genre_narrow) %>% distinct()
+corpus_names <- clc_corpus %>% select(id, name)
+file_folders <- left_join(file_folders, corpus_names, by=c("corpus_id"="id"))
+file_folders <- file_folders %>% select(name, genre_broad, genre_narrow)
+
 write_csv(file_folders, 'genres_in_file_folders.csv')
 kable(file_folders)
 ```
@@ -72,11 +71,11 @@ Get the unique values.
 Genre broad:
 
 ```{r}
-clc_corpus %>% select(genre_broad) %>% distinct() %>% kable()
+clc_file %>% select(genre_broad) %>% distinct() %>% kable()
 ```
 
 Genre narrow:
 
 ```{r}
-clc_corpus %>% select(genre_narrow) %>% distinct() %>% kable()
+clc_file %>% select(genre_narrow) %>% distinct() %>% kable()
 ```
