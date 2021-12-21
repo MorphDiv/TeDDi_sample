@@ -1,7 +1,7 @@
 ---
 title: "World Maps"
-author: ''
-date: "December 08, 2021"
+author: 'Chris Bentz and Steven Moran'
+date: "(`r format(Sys.time(), '%d %B, %Y')`)"
 output:
   pdf_document: default
   html_document: default
@@ -40,28 +40,29 @@ installed.packages()[names(sessionInfo()$otherPkgs), "Version"]
 # Load the language info 
 Load language info file directly from the github repo.
 ```{r, message = F}
-languages <- as.data.frame(read_csv("https://raw.githubusercontent.com/100LC/100LC/master/LangInfo/langInfo_100LC.csv?token=AAIGDLTBFWOJFBSJLANCKJTBWIQP2"))
+languages <- as.data.frame(read_csv("https://raw.githubusercontent.com/100LC/100LC/master/LangInfo/langInfo_100LC.csv?token=AAIGDLUYEVDIGWGOHXZK6QTBYG4V2"))
 ```
+# All languages of 100 WALS sample
 
-# Simple Stats
+## Simple Stats
 ```{r}
 length(unique(languages$iso639_3)) # number of languages according to iso
 length(unique(languages$glottocode)) # number of languages according to glottolog
-length(unique(languages$family_id)) # number of language families according to glottolog
-unique(languages$macroarea_glotto) # number of macroareas according to glottolog
+length(unique(languages$top_level_family)) # number of top level language families according to glottolog
+length(unique(languages$family_wals)) # number of language families according to wals
+unique(languages$macroarea_glotto) # number of macroareas according to glottolog (same as for WALS)
 ```
-
-# Pre-Processing
+## Pre-Processing
 ```{r}
 # add 360 to longitudes for languages with longitudes < -25 
 # (this is necessary to create a Pacific centered map)
-languages$longitude_glotto[languages$longitude_glotto < -25] <- 
-  languages$longitude_glotto[languages$longitude_glotto < -25] + 360
+languages$longitude_wals[languages$longitude_wals < -25] <- 
+  languages$longitude_wals[languages$longitude_wals < -25] + 360
 # collapse status information into fewer factors
 languages$status[languages$status %in% c("definitely endangered", "severely endangered", "critically endangered")]  <- "endangered" 
 ```
 
-# World Map
+## World Map 
 World maps with endangerment status information from Glottolog.
 ```{r, fig.width = 10, fig.height = 5, warning = FALSE}
 # create world map
@@ -69,13 +70,13 @@ world <- map_data("world", wrap = c(-25, 335))
 status.map <- ggplot() + 
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
                fill = "white", colour = "darkgrey") +
-  geom_point(data = languages, aes(x = longitude_glotto, y = latitude_glotto, 
+  geom_point(data = languages, aes(x = longitude_wals, y = latitude_wals, 
                                  fill = status), 
              alpha = 1, size = 3.5, pch = 21) +
              # select colours manually to be color blind safe
              scale_fill_manual(values = c("#E69F00", "#661100", "#009E73", "#F0E442")) +
-  geom_text_repel(data = languages, aes(x = longitude_glotto, y = latitude_glotto, 
-                                        label = name_glotto), size = 2.5,
+  geom_text_repel(data = languages, aes(x = longitude_wals, y = latitude_wals, 
+                                        label = name_wals), size = 2.5,
                   box.padding = unit(0.1, 'lines'), force = 0.5) +
   scale_y_continuous(limits = c(-65, 80)) +
   labs(x = "longitude", y = "latitude", fill = "Endangerment Status") +
@@ -93,4 +94,67 @@ Save to file.
 ```{r, warning = FALSE}
 ggsave("~/Desktop/worldMap_100LC.pdf", status.map, 
        dpi = 300, scale = 1, width = 12, height = 6, device = cairo_pdf)
+```
+# Languages for which texts are currently available in the corpus
+
+Exclude languages for which there is currently no data.
+```{r}
+# give selection of languages which are currently not represented by text data 
+# (see folder Reports/line_counts/line_counts.csv on github)
+missing <- c("Karok", "Koasati", "Koyraboro Senni", "Krongo", "Lakhota", "Lezgian", 
+             "Mangarrayi", "Meithei", "Maricopa", "Slave", "Oneida", "Supiyre", "Tukang Besi")
+# define a "no tin" operator
+`%notin%` <- Negate(`%in%`)
+# exclude these languages from the language info data frame
+languages.corpus <- languages[languages$name_wals %notin% missing, ]
+```
+
+## Simple Stats
+```{r}
+length(unique(languages.corpus$iso639_3)) # number of languages according to iso
+length(unique(languages.corpus$glottocode)) # number of languages according to glottolog
+length(unique(languages.corpus$top_level_family)) # number of top level language families according to glottolog
+length(unique(languages.corpus$family_wals)) # number of language families according to wals
+unique(languages.corpus$macroarea_glotto) # number of macroareas according to glottolog (same as for WALS)
+```
+
+## Pre-Processing
+```{r}
+# add 360 to longitudes for languages with longitudes < -25 
+# (this is necessary to create a Pacific centered map)
+languages.corpus$longitude_wals[languages.corpus$longitude_wals < -25] <- 
+  languages.corpus$longitude_wals[languages.corpus$longitude_wals < -25] + 360
+```
+
+## World Map 
+World maps with family information.
+```{r, fig.width = 10, fig.height = 7.5, warning = FALSE}
+# create world map
+world <- map_data("world", wrap = c(-25, 335)) 
+family.map <- ggplot() + 
+  geom_polygon(data = world, aes(x = long, y = lat, group = group), 
+               fill = "white", colour = "darkgrey") +
+  geom_point(data = languages.corpus, aes(x = longitude_wals, y = latitude_wals, 
+                                 fill = family_wals), 
+             alpha = 1, size = 3.5, pch = 21) +
+             # select colors manually to be color blind safe
+             # scale_fill_manual(values = c("#E69F00", "#661100", "#009E73", "#F0E442")) +
+  geom_text_repel(data = languages.corpus, aes(x = longitude_wals, y = latitude_wals, 
+                                        label = name_wals), size = 2.5,
+                  box.padding = unit(0.1, 'lines'), force = 0.5) +
+  scale_y_continuous(limits = c(-65, 80)) +
+  labs(x = "longitude", y = "latitude", fill = "Family (WALS)") +
+  theme_bw() +
+  theme(axis.title.x = element_text(size = 12),
+        axis.title.y = element_text(size = 12),
+        title = element_text(size = 8),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 8),
+        legend.position = "bottom")
+family.map
+```
+
+```{r, warning = FALSE}
+ggsave("~/Desktop/worldMap_CurrentCorpus.pdf", family.map, 
+       dpi = 300, scale = 1, width = 10, height = 7.5, device = cairo_pdf)
 ```
