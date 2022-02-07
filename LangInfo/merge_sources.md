@@ -1,7 +1,7 @@
 Merge language information for 100LC sources
 ================
 Chris Bentz & Steven Moran
-13 May, 2021
+04 February, 2022
 
 ``` r
 library(dplyr)
@@ -133,7 +133,7 @@ write.csv(file = "langInfo_100LC.csv", langInfo.100, row.names = F, quote=FALSE)
 nrow(langInfo.100 %>% filter(is.na(name)))
 ```
 
-    ## [1] 13
+    ## [1] 11
 
 ``` r
 # Here are the languages that still need to be added
@@ -145,7 +145,6 @@ kable(langInfo.100 %>% filter(is.na(name)) %>% select(iso639_3, glottocode, name
 | kyh       | karo1304   | Karok                   | Karok           |
 | cku       | koas1236   | Koasati                 | Koasati         |
 | ses       | koyr1242   | Koyraboro Senni Songhai | Koyraboro Senni |
-| kgo       | kron1241   | Krongo                  | Krongo          |
 | lkt       | lako1247   | Lakota                  | Lakhota         |
 | lez       | lezg1247   | Lezgian                 | Lezgian         |
 | mpc       | mang1381   | Mangarrayi              | Mangarrayi      |
@@ -153,7 +152,6 @@ kable(langInfo.100 %>% filter(is.na(name)) %>% select(iso639_3, glottocode, name
 | mrc       | mari1440   | Maricopa                | Maricopa        |
 | scs       | nort2942   | North Slavey            | Slave           |
 | one       | onei1249   | Oneida                  | Oneida          |
-| spp       | supy1237   | Supyire Senoufo         | Supyire         |
 | bhq       | tuka1249   | Tukang Besi South       | Tukang Besi     |
 
 ``` r
