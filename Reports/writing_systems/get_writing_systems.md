@@ -1,4 +1,4 @@
-Identify which languages in 100LC have multiple scripts
+Identify which languages in TeDDi have multiple scripts
 ================
 Steven Moran
 25 October, 2020
@@ -6,10 +6,10 @@ Steven Moran
     library(tidyverse)
     library(knitr)
 
-Load the R serialized version of the 100LC database.
+Load the R serialized version of the TeDDi database.
 
     # load('../../Database/test.RData') # for testing
-    load('../../Database/100LC.Rdata') # full database
+    load('../../Database/TeDDi.Rdata') # full database
 
 Identify which languages have more than one writing system as indicated
 in their files.
@@ -34,4 +34,4 @@ Write all the languages and their writing systems to a table, so that we
 can use it in other reports, such as [creating maps](../maps/maps.md).
 
     langs_ws <- clc_file %>% select(language_name_wals, iso639_3, writing_system) %>% group_by(language_name_wals, writing_system) %>% distinct()
-    write_csv(langs_ws, '100LC_writing_systems.csv')
+    write_csv(langs_ws, 'TeDDi_writing_systems.csv')

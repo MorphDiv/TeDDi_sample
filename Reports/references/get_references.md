@@ -1,4 +1,4 @@
-Get the bibliographic references encoded in the 100LC input files
+Get the bibliographic references encoded in the TeDDi input files
 ================
 Steven Moran
 29 July, 2020
@@ -8,7 +8,7 @@ file and per unique reference.
 
 Note this package is a work in progress.
 
-First load the 100LC RData object.
+First load the TeDDi RData object.
 
     # TODO: we should put this online somewhere because I can't get it to load as part of the clc package
     load('../../../clc/clc.RData')
@@ -33,7 +33,7 @@ First load the 100LC RData object.
     library(knitr)
     library(readr)
 
-Get the references from the 100LC `file` database table.
+Get the references from the TeDDi `file` database table.
 
     references <- clc::get_references()
 
@@ -154,4 +154,4 @@ And others are quite limited in scope.
 
 These should be udpated if they can, see:
 
--   <a href="https://github.com/uzling/100LC/issues/163" class="uri">https://github.com/uzling/100LC/issues/163</a>
+-   <a href="https://github.com/morphdiv/teddi_sample/issues/163" class="uri">https://github.com/morphdiv/teddi_sample/issues/163</a>

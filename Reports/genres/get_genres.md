@@ -12,10 +12,10 @@ library(readr)
 library(knitr)
 ```
 
-Load the RData serialized version of the 100LC database.
+Load the RData serialized version of the TeDDi database.
 
 ``` r
-load('../../Database/100LC.RData')
+load('../../Database/TeDDi.RData')
 ```
 
 # Get genre info from the files

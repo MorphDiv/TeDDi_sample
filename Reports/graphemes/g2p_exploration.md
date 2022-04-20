@@ -7,20 +7,20 @@ Overview
 ========
 
 First, this report investigates various resources on writing systems and
-what the coverage of those resources are on the 100LC language sample.
+what the coverage of those resources are on the TeDDi language sample.
 Second, in light of a potential novel model of g2p conversion using
 neural networks at the level of phonetic features, I investigate the
 coverage of [PHOIBLE](https://phoible.org/) on the data in the
 [SIGMORPHON 2020 shared task for g2p
 conversion](https://www.aclweb.org/anthology/2020.sigmorphon-1.2/).
 
-Writing system coverage of 100LC data
+Writing system coverage of TeDDi data
 -------------------------------------
 
-This is the 100LC language info index file (planned languages, not
+This is the TeDDi language info index file (planned languages, not
 actual languages in the corpus).
 
-    index <- read.csv('../../LangInfo/langInfo_100LC.csv')
+    index <- read.csv('../../LangInfo/langInfo_TeDDi.csv')
 
     head(index) %>% kable()
 
@@ -33,13 +33,13 @@ actual languages in the corpus).
 | bmi       | bagi1246   | bag        | Bagirmi         | Bagirmi    | language | safe                  | cent2225   | Central Sudanic          | Bongo-Bagirmi       | Central Sudanic     | Africa            | Africa          |         11.52392 |          14.76949 |     11.6666667 |        16.00000 | Bagirmi\_bmi  | Bagirmi                |
 | bsn       | bara1380   | brs        | Barasana-Eduria | Barasano   | language | definitely endangered | tuca1253   | Tucanoan                 | Tucanoan            | Tucanoan            | South America     | South America   |          0.02193 |         -70.80800 |     -0.1666667 |       -70.66667 | Barasano\_bsn | Barasano               |
 
-Which languages in 100LC are covered by Epitran, a tool for
+Which languages in TeDDi are covered by Epitran, a tool for
 transliterating orthographic text as IPA:
 
 -   <a href="https://pypi.org/project/epitran/" class="uri">https://pypi.org/project/epitran/</a>
 
 Looks like 16 languages (but this depends on the script, which isn’t
-indicated in the 100LC language info index):
+indicated in the TeDDi language info index):
 
     # This table was derived by hand from the project website above
     epitran <- read.csv('epitran_data.csv')

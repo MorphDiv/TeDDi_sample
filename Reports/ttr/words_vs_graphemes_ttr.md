@@ -1,4 +1,4 @@
-Words vs graphemes type-token ratios in 100LC corpora
+Words vs graphemes type-token ratios in TeDDi corpora
 ================
 Steven Moran
 

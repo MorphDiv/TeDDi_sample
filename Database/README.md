@@ -1,31 +1,31 @@
-# 100LC database generation
+# TeDDi database generation
 
-Scripts and code in this directory deal with validating the [raw corpus text files](../Corpus) and for generating the 100LC relational database. This directory also contains script for converting the database into various output formats, including an  [RData file](https://bookdown.org/ndphillips/YaRrr/rdata-files.html), [CSV files](https://en.wikipedia.org/wiki/Comma-separated_values) and as [XML files](https://en.wikipedia.org/wiki/XML).
+Scripts and code in this directory deal with validating the [raw corpus text files](../Corpus) and for generating the TeDDi relational database. This directory also contains script for converting the database into various output formats, including an  [RData file](https://bookdown.org/ndphillips/YaRrr/rdata-files.html), [CSV files](https://en.wikipedia.org/wiki/Comma-separated_values) and as [XML files](https://en.wikipedia.org/wiki/XML).
 
 
 ## Generating the database
 
-To parse the [corpus files](../Corpus) and to generate a [SQLite](https://www.sqlite.org/index.html) database, run this script from the `100LC/Database` directory on your local machine:
+To parse the [corpus files](../Corpus) and to generate a [SQLite](https://www.sqlite.org/index.html) database, run this script from the `teddi_sample/Database` directory on your local machine:
 
 `python3 load-database.py`
 
 See the [requirements file](requirements.txt) for the required Python library for running the script. For more information on how to install Python libraries, see [Installing packages using pip and virtual environments](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/). They must be installed to run the database aggregation pipeline.
 
-The default is set to development mode and will run the database creation pipeline on the [100LC/Database/tests/Corpus](tests/Corpus) directory, which contains the maximally diverse input file formats (for testing), as described in OpenBIS. This script then generates a SQLite database called `test.sqlite3`, if it does not fail when parsing the raw input files (see discussion below).
+The default is set to development mode and will run the database creation pipeline on the [teddi_sample/Database/tests/Corpus](tests/Corpus) directory, which contains the maximally diverse input file formats (for testing), as described in OpenBIS. This script then generates a SQLite database called `test.sqlite3`, if it does not fail when parsing the raw input files (see discussion below).
 
 To run the database generation pipeline on the full set of corpus files, set the `-f` (full database) flag:
 
 `python3 load-database.py -f`
 
-Beware this takes a few minutes to run on the 25k+ files in the [100LC/Corpus](../Corpus) directory. Note that the current full database when completed is nearly 3GB in size.
+Beware this takes a few minutes to run on the 25k+ files in the [teddi_sample/Corpus](../Corpus) directory. Note that the current full database when completed is nearly 3GB in size.
 
-The actual process for parsing the corpus input data files and generating the resulting database is located in the directory [100LC/Database/clc](clc) (named `clc` for "Centennial Language Corpus" because package names / libraries in Python cannot start with numerals!). This directory contains a [Python package](https://packaging.python.org/overview/) that was developed for validating and aggregating the 100LC corpus text files into a relational database. To assist in this process, we use [SQLAlchemy](https://www.sqlalchemy.org/), a Python SQL toolkit and [Object Relational Mapper](https://en.wikipedia.org/wiki/Object-relational_mapping) in our Python package.
+The actual process for parsing the corpus input data files and generating the resulting database is located in the directory [teddi_sample/Database/clc](clc) (named `clc` for "Centennial Language Corpus" because package names / libraries in Python cannot start with numerals!). This directory contains a [Python package](https://packaging.python.org/overview/) that was developed for validating and aggregating the TeDDi corpus text files into a relational database. To assist in this process, we use [SQLAlchemy](https://www.sqlalchemy.org/), a Python SQL toolkit and [Object Relational Mapper](https://en.wikipedia.org/wiki/Object-relational_mapping) in our Python package.
 
 The database schema is encoded in the [models file](clc/models.py). This file also contains constraints on the input, so if for example a new corpus file is added in which it contains an invalid value for a metadata field, an error will be thrown when generating the database, e.g.:
 
 `sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) CHECK constraint failed: file`
 
-See for example pull request [182](https://github.com/uzling/100LC/pull/182) for details. More discussion is also given below.
+See for example pull request [182](https://github.com/morphdiv/teddi_sample/pull/182) for details. More discussion is also given below.
 
 
 ## Basic workflow for adding new data files
@@ -44,27 +44,27 @@ is incorrect and should be:
 
 It is the job of the database loading routine to catch such errors and then to fail on database loading because we do not want any invalid values inserted into the database. The full set of value sets are defined in the database model here:
 
-https://github.com/uzling/100LC/blob/master/Database/clc/models.py#L26-L34
+https://github.com/morphdiv/teddi_sample/blob/master/Database/clc/models.py#L26-L34
 
 and they can be updated accordingly, e.g. a new genre is added.
 
 Third, another data input issue that will cause the database loading routine to fail is badly formed body data for a corpus file, i.e. the text after the header template needs to adhere to one of several input formats. These are described in detail in OpenBIS and the programmatic defintion of each format is coded in the `bodies.py` file for parsing:
 
-https://github.com/uzling/100LC/blob/master/Database/clc/bodies.py
+https://github.com/morphdiv/teddi_sample/blob/master/Database/clc/bodies.py
 
 An invalid text body will trigger a database a Python error.
 
-The basic workflow for adding new text files is to first add those files (and their directories if needed) to [100LC/Database/tests/Corpus](tests/Corpus) and then to run the database loading routine in test mode:
+The basic workflow for adding new text files is to first add those files (and their directories if needed) to [teddi_sample/Database/tests/Corpus](tests/Corpus) and then to run the database loading routine in test mode:
 
 `python3 load-database.py`
 
-This allows for quickly testing whether new files break the database loading routine due to errors like those mentioned above. Once the files' contents are loaded into the database without error (and the database's new contents should be eye-balled to make sure nothing weird happened), then the new files can be added to the [100LC/Corpus](../Corpus) directory (within their file folder structure, which might need to be created). At this point the test files can be removed from [100LC/Database/tests/Corpus](tests/Corpus) and the full database pipeline can be run on all new and old files:
+This allows for quickly testing whether new files break the database loading routine due to errors like those mentioned above. Once the files' contents are loaded into the database without error (and the database's new contents should be eye-balled to make sure nothing weird happened), then the new files can be added to the [teddi_sample/Corpus](../Corpus) directory (within their file folder structure, which might need to be created). At this point the test files can be removed from [teddi_sample/Database/tests/Corpus](tests/Corpus) and the full database pipeline can be run on all new and old files:
 
 `python3 load-database.py -f`
 
-It is important to note that new text files for languages that already exist in the corpus directory do not require any special changes to the database loading routine if they adhere to the header template, its correct values, and to the correct text file formats described above. If the database loading routine crashes due to an error, these are usually trivial errors, like wrong values or incorrect formatting, that the user can easily fix. Hence, when new data comes it, it should be via [pull request](https://github.com/uzling/100LC/pulls), so that the database maintainer can follow the testing routine described above before checking that the data load correctly and then merge the pull request.
+It is important to note that new text files for languages that already exist in the corpus directory do not require any special changes to the database loading routine if they adhere to the header template, its correct values, and to the correct text file formats described above. If the database loading routine crashes due to an error, these are usually trivial errors, like wrong values or incorrect formatting, that the user can easily fix. Hence, when new data comes it, it should be via [pull request](https://github.com/morphdiv/teddi_sample/pulls), so that the database maintainer can follow the testing routine described above before checking that the data load correctly and then merge the pull request.
 
-However, there is an additional step that the database maintainer needs to do when adding *new* languages to the 100LC repository. When adding *new* languages to the [100LC/Database/Corpus](../Corpus) directory, run the `merge_sources.Rmd` script in the [LangInfo directory](../LangInfo) before running the `load-database.py` pipeline, or you will get the following error:
+However, there is an additional step that the database maintainer needs to do when adding *new* languages to the TeDDi repository. When adding *new* languages to the [teddi_sample/Database/Corpus](../Corpus) directory, run the `merge_sources.Rmd` script in the [LangInfo directory](../LangInfo) before running the `load-database.py` pipeline, or you will get the following error:
 
 ```
 sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) NOT NULL constraint failed: corpus.language_id
@@ -73,14 +73,14 @@ sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) NOT NULL constraint fail
 (Background on this error at: http://sqlalche.me/e/13/gkpj)
 ```
 
-This is because the database generation pipeline needs as input the data in the [langInfo_100LC.csv](../LangInfo/langInfo_100LC.csv) language index for validation purposes. For more information, see the [100LC/LangInfo/README.md](../LangInfo/README.md).
+This is because the database generation pipeline needs as input the data in the [langInfo_TeDDi.csv](../LangInfo/langInfo_TeDDi.csv) language index for validation purposes. For more information, see the [teddi_sample/LangInfo/README.md](../LangInfo/README.md).
 
-In other words, when new languages are added, we first need to update the language index file, then we add the new corpus files via their new directory, e.g. `100LC/Corpus/New_Language_new/conversation/new__con_1.txt`, then we run the load database pipeline.
+In other words, when new languages are added, we first need to update the language index file, then we add the new corpus files via their new directory, e.g. `teddi_sample/Corpus/New_Language_new/conversation/new_con_1.txt`, then we run the load database pipeline.
 
 
 ## Generating other formats
 
-There are a few other scripts in this directory for generating various formats of the database. For example, to create an [RData](https://bookdown.org/ndphillips/YaRrr/rdata-files.html) from the SQLite database, run the R script on the command line in the `100LC/Database` directory on your local machine:
+There are a few other scripts in this directory for generating various formats of the database. For example, to create an [RData](https://bookdown.org/ndphillips/YaRrr/rdata-files.html) from the SQLite database, run the R script on the command line in the `teddi_sample/Database` directory on your local machine:
 
 `Rscript sqlite_to_RData.R`
 
@@ -98,7 +98,7 @@ And to create corpus text files in a unified format, run:
 
 This script has the same [requirements](requirements.txt) as discussed above.
 
-The R scripts can also be fired from an R GUI like [RStudio](https://rstudio.com/), but make sure to set the current working directory to `100LC/Database`. This is also true of the Python scripts, e.g. within in IDE like [PyCharm](https://www.jetbrains.com/pycharm/).
+The R scripts can also be fired from an R GUI like [RStudio](https://rstudio.com/), but make sure to set the current working directory to `teddi_sample/Database`. This is also true of the Python scripts, e.g. within in IDE like [PyCharm](https://www.jetbrains.com/pycharm/).
 
 Forthcoming (todo): add routine to generate XML format from the database. Add them to the server (to be decided where).
 

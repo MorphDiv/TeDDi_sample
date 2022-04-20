@@ -11,14 +11,14 @@ a Unicode character or Unicode grapheme unigram model, i.e. a CSV file
 where each row represents a character or grapheme in a writing system
 with additional information such as its frequency of occurrence in a
 text. This report generates orthography profiles from each corpus in the
-100LC database.
+TeDDi database.
 
-I use the 100LC test data set for corpora for illustration purposes. The
+I use the TeDDi test data set for corpora for illustration purposes. The
 output for each corpus is written to the `orthography_profiles` folder
-in this directory. To run on the full database, load `100LC.Rdata`.
+in this directory. To run on the full database, load `TeDDi.Rdata`.
 
     # load('../../Database/test.RData')
-    load('../../Database/100LC.Rdata')
+    load('../../Database/TeDDi.Rdata')
 
 First, we need to merge in the corpus IDs with the lines table.
 

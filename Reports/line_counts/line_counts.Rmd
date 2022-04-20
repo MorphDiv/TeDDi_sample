@@ -1,5 +1,5 @@
 ---
-title: "Get line and file counts for the 100LC corpora by genre"
+title: "Get line and file counts for the TeDDi corpora by genre"
 author: "Steven Moran"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
@@ -14,18 +14,18 @@ library(knitr)
 
 # Overview
 
-Calculate line counts from database version of the 100LC corpus. These include total line counts, total file counts, for each language and for each genre represented by each language.
+Calculate line counts from database version of the TeDDi corpus. These include total line counts, total file counts, for each language and for each genre represented by each language.
 
 Then compare them with the [pre-database Python script](../progress/line_counts.py) that counts these figures directly from the text files.
 
 
 # Generate line and files counts from the database
 
-Load the R serialized version of the 100LC database.
+Load the R serialized version of the TeDDi database.
 
 ```{r}
 # load('../../Database/test.RData') # for testing
-load('../../Database/100LC.Rdata') # full database
+load('../../Database/TeDDi.Rdata') # full database
 ```
 
 First, remove all NAs (NULLs) in the `clc_line.text` field in the database, i.e. any empty lines due to issues such as tags without text, so that we get correct counts:
@@ -99,21 +99,21 @@ total_files_per_genre_wide <- total_files_per_genre_wide %>% rename(db_conversat
 total_lines_per_genre_wide <- total_lines_per_genre_wide %>% rename(db_conversation_lines = conversation, db_fiction_lines = fiction, db_grammar_lines = grammar, db_non_fiction_lines = 'non-fiction', db_professional_lines = professional)
 ```
 
-Combine the data frames counts and add in the missing values, i.e. languages without data as indicated in the [langInfo_100LC.csv](../../LangInfo/langInfo_100LC.csv) index.
+Combine the data frames counts and add in the missing values, i.e. languages without data as indicated in the [langInfo_TeDDi.csv](../../LangInfo/langInfo_TeDDi.csv) index.
 
 ```{r}
 db_report <- left_join(total_files, total_lines)
 db_report <- left_join(db_report, total_files_per_genre_wide)
 db_report <- left_join(db_report, total_lines_per_genre_wide)
 
-index <- read.csv('../../LangInfo/langInfo_100LC.csv')
+index <- read.csv('../../LangInfo/langInfo_TeDDi.csv')
 missing.languages <- index %>% filter(is.na(name)) %>% select(name_wals)
 missing.languages <- missing.languages %>% rename(name=name_wals)
 
 db_report <- db_report %>% add_row(language_name_wals=missing.languages$name)
 ```
 
-Lastly, let's add the 100LC corpus names for convenience for matching with the progress report.
+Lastly, let's add the TeDDi corpus names for convenience for matching with the progress report.
 
 ```{r}
 corpus_names <- index %>% select(name_wals, name)

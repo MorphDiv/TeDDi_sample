@@ -1,4 +1,4 @@
-Generate world maps from the 100LC language sample
+Generate world maps from the TeDDi language sample
 ================
 Steven Moran and Chris Bentz
 
@@ -13,26 +13,26 @@ library(testthat)
 
 # Overview
 
-Let’s generate some world maps from the 100LC language sample for visual
+Let’s generate some world maps from the TeDDi language sample for visual
 inspection and for publications. If you want to save them as PDF,
 uncomment the last line in each map plot, i.e. `ggsave`.
 
-Load the lang info file with information on 100 language sample.
+Load the lang info file with information on TeDDi language sample.
 
 ``` r
-lang100 <- read.csv("../../LangInfo/langInfo_100LC.csv", header = T)
+lang_teddi <- read.csv("../../LangInfo/langInfo_TeDDi.csv", header = T)
 ```
 
 Some data checks. All rows should have a unique ISO 639-3 code and a
 Glottocode. Other values are set at the time of reporting.
 
 ``` r
-expect_equal(length(unique(lang100$iso639_3)), 100)
-expect_equal(length(unique(lang100$glottocode)), 100)
-expect_equal(length(unique(lang100$top_level_family)), 61)
-expect_equal(length(unique(lang100$genus_wals)), 94)
-expect_equal(length(unique(lang100$family_wals)), 68)
-expect_equal(length(unique(lang100$macroarea_glotto)), 6)
+expect_equal(length(unique(lang_teddi$iso639_3)), 100)
+expect_equal(length(unique(lang_teddi$glottocode)), 100)
+expect_equal(length(unique(lang_teddi$top_level_family)), 61)
+expect_equal(length(unique(lang_teddi$genus_wals)), 94)
+expect_equal(length(unique(lang_teddi$family_wals)), 68)
+expect_equal(length(unique(lang_teddi$macroarea_glotto)), 6)
 ```
 
 A world map with language locations from
@@ -40,12 +40,12 @@ A world map with language locations from
 
 ``` r
 world <- map_data("world")
-lang100_map <- ggplot() + 
+lang_teddi_map <- ggplot() + 
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
                fill = "grey90", col = "grey") +
-  geom_point(data = lang100, aes(x = longitude_glotto, y = latitude_glotto), 
+  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto), 
              colour = "red", alpha = 0.8, size = 3, shape = 1) +
-  geom_point(data = lang100, aes(x = longitude_wals, y = latitude_wals), 
+  geom_point(data = lang_teddi, aes(x = longitude_wals, y = latitude_wals), 
              colour = "green", alpha = 0.8, size = 2) +
   scale_y_continuous(limits = c(-65, 80)) +
   scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
@@ -58,13 +58,13 @@ lang100_map <- ggplot() +
         title=element_text(size = 12),
         legend.title = element_text(size = 10),
         legend.position = "bottom")
-lang100_map
+lang_teddi_map
 ```
 
 ![](maps_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
-# ggsave("lang100_map.pdf", status_map, dpi = 300, scale = 1, device = cairo_pdf)
+# ggsave("lang_teddi_map.pdf", status_map, dpi = 300, scale = 1, device = cairo_pdf)
 ```
 
 A world map with language status information from Glottolog.
@@ -74,7 +74,7 @@ world <- map_data("world")
 status_map <- ggplot() + 
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
                fill = "grey90", col = "grey") +
-  geom_point(data = lang100, aes(x = longitude_glotto, y = latitude_glotto, colour = status), 
+  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto, colour = status), 
              alpha = 0.8, size = 3) +
   scale_y_continuous(limits = c(-65, 80)) +
   scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
@@ -104,7 +104,7 @@ world <- map_data("world")
 status_map <- ggplot() + 
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
                fill = "grey90", col = "grey") +
-  geom_point(data = lang100, aes(x = longitude_glotto, y = latitude_glotto, colour = status), 
+  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto, colour = status), 
              alpha = 0.8, size = 3) +
   scale_y_continuous(limits = c(-65, 80)) +
   scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
@@ -120,7 +120,7 @@ status_map <- ggplot() +
 status_map
 ```
 
-![](maps_files/figure-gfm/100LC-sample-1.png)<!-- -->
+![](maps_files/figure-gfm/TeDDi-sample-1.png)<!-- -->
 
 ``` r
 # ggsave("worldmap_status.pdf", status_map, dpi = 300, scale = 1, device = cairo_pdf)
@@ -130,7 +130,7 @@ We can also tweak the EL scales, so that the legend isn’t so large. We
 consider all ELs EL.
 
 ``` r
-minimal_el_status <- lang100
+minimal_el_status <- lang_teddi
 minimal_el_status$status[minimal_el_status$status == "severely endangered"] <- "endangered"
 minimal_el_status$status[minimal_el_status$status == "definitely endangered"] <- "endangered"
 minimal_el_status$status[minimal_el_status$status == "critically endangered"] <- "endangered"
@@ -292,7 +292,7 @@ world <- map_data("world")
 family_map <- ggplot() + 
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
                fill = "grey90", col = "grey") +
-  geom_point(data = lang100, aes(x = longitude_glotto, y = latitude_glotto, colour = top_level_family), 
+  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto, colour = top_level_family), 
              alpha = 0.8, size = 3) +
   scale_y_continuous(limits = c(-65, 80)) +
   scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
@@ -322,7 +322,7 @@ world <- map_data("world")
 macroarea_map <- ggplot() + 
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
                fill = "grey90", col = "grey") +
-  geom_point(data = lang100, aes(x = longitude_glotto, y = latitude_glotto, colour = macroarea_glotto), 
+  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto, colour = macroarea_glotto), 
              alpha = 0.8, size = 3) +
   scale_y_continuous(limits = c(-65, 80)) +
   scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
@@ -344,7 +344,7 @@ macroarea_map
 # ggsave("macroarea_map.pdf", macroarea_map, dpi = 300, scale = 1, device = cairo_pdf)
 ```
 
-Next we generate some world maps that require data about the 100LC
+Next we generate some world maps that require data about the TeDDi
 corpus contents.
 
 Let’s get the output from the [writing systems
@@ -352,14 +352,14 @@ report](../writing_systems/get_writing_systems.md), so that we have
 information on which corpora are represented by which writing systems.
 
 ``` r
-langs_ws <- read_csv('../writing_systems/100LC_writing_systems.csv')
+langs_ws <- read_csv('../writing_systems/TeDDi_writing_systems.csv')
 ```
 
-And let’s merge in the geo-coordinates from the lang100 index file, so
+And let’s merge in the geo-coordinates from the lang_teddi index file, so
 that we can plot the data on a world map.
 
 ``` r
-langs_ws <- left_join(langs_ws, lang100)
+langs_ws <- left_join(langs_ws, lang_teddi)
 ```
 
     ## Joining, by = "iso639_3"
@@ -377,7 +377,7 @@ ws_map <- ggplot() +
   scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
   geom_hline(aes(yintercept = 0), colour = "grey", size = 1, linetype = 2) +
   labs(x = "longitude", y = "latitude", color = "Writing system") +
-  ggtitle("Writing systems in the 100LC corpus") +
+  ggtitle("Writing systems in the TeDDi corpus") +
   theme_bw() +
   theme(axis.title.x = element_text(size = 12),
         axis.title.y = element_text(size = 12),
@@ -422,7 +422,7 @@ word_counts <- word_ttr %>% group_by(name) %>% summarize(word_count = sum(tokens
 Again we need the geo-coordinates to be able to plot on a world map.
 
 ``` r
-word_counts <- left_join(word_counts, lang100)
+word_counts <- left_join(word_counts, lang_teddi)
 ```
 
     ## Joining, by = "name"
@@ -456,7 +456,7 @@ word_tokens <- ggplot() +
   scale_size_continuous(labels = comma) + 
   geom_hline(aes(yintercept = 0), colour = "grey", size = 1, linetype = 2) +
   labs(x = "longitude", y = "latitude", size = "Corpus size") +
-  ggtitle("Corpus sizes in word tokens in the 100LC corpus") +
+  ggtitle("Corpus sizes in word tokens in the TeDDi corpus") +
   theme_bw() +
   theme(axis.title.x = element_text(size = 12),
         axis.title.y = element_text(size = 12),
@@ -501,7 +501,7 @@ word_types <- ggplot() +
   scale_size_continuous(labels = comma) + 
   geom_hline(aes(yintercept = 0), colour = "grey", size = 1, linetype = 2) +
   labs(x = "longitude", y = "latitude", size = "Corpus size") +
-  ggtitle("Corpus sizes in word types in the 100LC corpus") +
+  ggtitle("Corpus sizes in word types in the TeDDi corpus") +
   theme_bw() +
   theme(axis.title.x = element_text(size = 12),
         axis.title.y = element_text(size = 12),

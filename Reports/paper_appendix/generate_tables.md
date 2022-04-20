@@ -1,4 +1,4 @@
-Generate tables for the 100LC database paper
+Generate tables for the TeDDi database paper
 ================
 Steven Moran
 
@@ -11,17 +11,17 @@ Steven Moran
 
 # Overview
 
-Generate descriptive stats and plots for the 100LC database paper
+Generate descriptive stats and plots for the TeDDi database paper
 submission.
 
 # Corpus overview
 
-Load the 100LC index file.
+Load the TeDDi index file.
 
-    index <- read_csv("../../LangInfo/langInfo_100LC.csv")
+    index <- read_csv("../../LangInfo/langInfo_TeDDi.csv")
 
 Let’s add in the corpus sizes by word counts (as suggested
-[here](https://github.com/uzling/100LC/pull/193)).
+[here](https://github.com/morphdiv/teddi_sample/pull/193)).
 
     word_counts <- read_csv("../ttr/word_ttr.csv")
 
@@ -38,7 +38,7 @@ Let’s add in the corpus sizes by word counts (as suggested
     ## )
 
 The output from the [word ttr
-script](https://github.com/uzling/100LC/blob/master/Reports/ttr/word_ttr.csv)
+script](https://github.com/morphdiv/teddi_sample/blob/master/Reports/ttr/word_ttr.csv)
 is broken down by genre and writing systems when there are multiple
 scripts for the same corpus and genre, e.g. Vietnamese.
 
@@ -72,7 +72,7 @@ So let’s first get the full counts.
 
     ## `summarise()` ungrouping output (override with `.groups` argument)
 
-Next we can merge the counts into the 100LC index.
+Next we can merge the counts into the TeDDi index.
 
     index <- left_join(index, word_totals)
 
@@ -101,7 +101,7 @@ Rename the columns.
                         "Area" = macroarea_glotto,
                         "Size (in words)" = corpus_size)
 
-How about this for a descriptive table of the languages in the 100LC
+How about this for a descriptive table of the languages in the TeDDi
 sample?
 
     df %>%
@@ -161,7 +161,7 @@ copy and paste the table into the Overleaf document.
           add_to_row = add_to_row,
           tabular.environment = "longtable",
           include.rownames = FALSE,
-          file = "100LC_index.tex")
+          file = "TeDDi_index.tex")
 
     ## Warning in print.xtable(xtable(df, digits = c(0, 0, 0, 0, 0, 0, 0, 0)), :
     ## Attempt to use "longtable" with floating = TRUE. Changing to FALSE.
@@ -287,7 +287,7 @@ copy and paste the table into the Overleaf document.
 # Word TTR
 
 Now which stats for the paper (see:
-<a href="https://github.com/uzling/100LC/issues/189" class="uri">https://github.com/uzling/100LC/issues/189</a>)?
+<a href="https://github.com/morphdiv/teddi_sample/issues/189" class="uri">https://github.com/morphdiv/teddi_sample/issues/189</a>)?
 
 Counts for both words and characters:
 
@@ -301,16 +301,16 @@ Calculations (per language and per genre and language):
 -   median word length (in characters)
 
 Genres are represented by corpus IDs in the database (see:
-<a href="https://github.com/uzling/100LC/blob/master/Reports/genres/get_genres.md" class="uri">https://github.com/uzling/100LC/blob/master/Reports/genres/get_genres.md</a>).
+<a href="https://github.com/morphdiv/teddi_sample/blob/master/Reports/genres/get_genres.md" class="uri">https://github.com/morphdiv/teddi_sample/blob/master/Reports/genres/get_genres.md</a>).
 This makes it easy to extract the pertinent file(s) per genre and to do
 the various type / token counts.
 
-However, the 100LC corpus contains multiple writing scripts in files
+However, the TeDDi corpus contains multiple writing scripts in files
 within the same language and genre (see:
-<a href="https://github.com/uzling/100LC/issues/189" class="uri">https://github.com/uzling/100LC/issues/189</a>).
+<a href="https://github.com/morphdiv/teddi_sample/issues/189" class="uri">https://github.com/morphdiv/teddi_sample/issues/189</a>).
 This issue is discussed in this report on getting word types and tokens:
 
--   <a href="https://github.com/uzling/100LC/blob/master/Reports/ttr/get_word_ttr.md" class="uri">https://github.com/uzling/100LC/blob/master/Reports/ttr/get_word_ttr.md</a>
+-   <a href="https://github.com/morphdiv/teddi_sample/blob/master/Reports/ttr/get_word_ttr.md" class="uri">https://github.com/morphdiv/teddi_sample/blob/master/Reports/ttr/get_word_ttr.md</a>
 
 Let’s load the results from that report.
 
@@ -537,7 +537,7 @@ Rename the columns to match in the paper.
 
 We generate the grapheme TTR figures here:
 
--   <a href="https://github.com/uzling/100LC/blob/master/Reports/ttr/get_grapheme_ttr.md" class="uri">https://github.com/uzling/100LC/blob/master/Reports/ttr/get_grapheme_ttr.md</a>
+-   <a href="https://github.com/morphdiv/teddi_sample/blob/master/Reports/ttr/get_grapheme_ttr.md" class="uri">https://github.com/morphdiv/teddi_sample/blob/master/Reports/ttr/get_grapheme_ttr.md</a>
 
 Let’s load the results from that report.
 
@@ -603,5 +603,5 @@ Rename the columns to match in the paper.
 
 # Plots
 
-For a [histrograph plot](https://github.com/uzling/100LC/pull/193) of
+For a [histrograph plot](https://github.com/morphdiv/teddi_sample/pull/193) of
 word ttr, see [plot\_ttr.md](../ttr/plot_ttr.md).

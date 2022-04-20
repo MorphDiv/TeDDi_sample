@@ -1,5 +1,4 @@
-Generate word type-token ratios and mean word length for the 100LC
-corpora
+Generate word type-token ratios and mean word length for the TeDDi corpora
 ================
 Steven Moran
 
@@ -17,16 +16,16 @@ purposes, i.e. development versus analysis (the test database is small
 and is meant for code development).
 
     # load('../../Database/test.RData') # for testing
-    load("../../Database/100LC.RData") # full database
+    load("../../Database/TeDDi.RData") # full database
 
 Genres are represented by corpus IDs in the database (see:
-<https://github.com/uzling/100LC/blob/master/Reports/genres/get_genres.md>).
+<https://github.com/morphdiv/teddi_sample/blob/master/Reports/genres/get_genres.md>).
 This makes it easy to extract the pertinent file(s) per genre and to do
 the various type / token counts.
 
-However, the 100LC corpus contains multiple writing scripts in files
+However, the TeDDi corpus contains multiple writing scripts in files
 within the same language and genre (see:
-<https://github.com/uzling/100LC/issues/189>). For example, notice that
+<https://github.com/morphdiv/teddi_sample/issues/189>). For example, notice that
 Vietnamese (professional) has two files (from UDHR) – one written in
 Latin script and the other written in
 [Han](https://en.wikipedia.org/wiki/Chinese_characters):
@@ -56,7 +55,7 @@ Latin script and the other written in
 |        121 | Vietnamese           | professional | Latn            |
 |        121 | Vietnamese           | professional | Hani            |
 
-Because the 100LC corpus design does not distinguish between writing
+Because the TeDDi corpus design does not distinguish between writing
 systems *within* the same genre in these limited cases, we cannot use a
 more straightforward approach to calculate the word type-token ratios
 for each corpus, i.e.:
@@ -318,7 +317,7 @@ Let’s add the metadata to the results and generate the TTR.
     results <- results %>% select(language_name_wals, genre_broad, writing_system, types, tokens, mean_word_length)
     results$ttr <- (results$types / results$tokens)
 
-Reports use the 100LC language names because those are NULL for
+Reports use the TeDDi language names because those are NULL for
 languages not yet in the corpus. Let’s merge them back in.
 
     language_names <- clc_language %>% select(name, name_wals)
@@ -475,7 +474,7 @@ Lastly, write the results to disk.
 
 For the languages that contain the same writing systems within their
 genre folders, getting the counts is straightforward. However, because
-the 100LC corpus is so large, we can’t (yet) simply create the word TTR
+the TeDDi corpus is so large, we can’t (yet) simply create the word TTR
 in one pass, e.g.:
 
     # Merge the corpus IDs into the lines dataframe, so that we can apply tokenization on each corpus / genre

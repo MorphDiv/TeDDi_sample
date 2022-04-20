@@ -1,4 +1,4 @@
-Grapheme type-token ratios in 100LC corpora
+Grapheme type-token ratios in TeDDi corpora
 ================
 Steven Moran
 

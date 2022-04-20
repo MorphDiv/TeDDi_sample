@@ -1,4 +1,4 @@
-# Query 100 LC SQLite database tables and serialize them to an RData file
+# Query TeDDi SQLite database tables and serialize them to an RData file
 # Steven Moran <steven.moran@uzh.ch>
 # Command line usage: `Rscript sqlite_to_RData.R`
 
@@ -28,7 +28,7 @@ clc_line <- runsql('SELECT * FROM line')
 
 # Save as a serialized Rdata object (default test data)
 save(clc_corpus, clc_file, clc_language, clc_line, file="test.RData")
-# save(clc_corpus, clc_file, clc_language, clc_line, file="100LC.RData")
+# save(clc_corpus, clc_file, clc_language, clc_line, file="TeDDi.RData")
 
 
 ################
