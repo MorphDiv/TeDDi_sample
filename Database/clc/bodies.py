@@ -1,4 +1,4 @@
-""" Text (body) object for the 100 LC files """
+""" Text (body) object for the TeDDi files """
 
 # TODO: cleanup/refactor (consider using subclasses)
 
