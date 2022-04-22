@@ -1,4 +1,4 @@
-""" Generate 100LC text files in Chris Bentz unified format. Make sure to create output/ directory. """
+""" Generate TeDDi text files in Chris Bentz unified format. Make sure to create output/ directory. """
 
 from clc import models as db
 import sqlalchemy as sa

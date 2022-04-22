@@ -123,7 +123,7 @@ expect_equal(length(which(!(str_detect(langInfo.100$iso639_3, isocode)))), 0)
 # Write results to CSV
 
 ``` r
-write.csv(file = "langInfo_100LC.csv", langInfo.100, row.names = F, quote=FALSE)
+write.csv(file = "langInfo_TeDDi.csv", langInfo.100, row.names = F, quote=FALSE)
 ```
 
 # Which rows do not (yet) have file folders?

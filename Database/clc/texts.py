@@ -1,4 +1,4 @@
-""" Text object for the 100 LC files """
+""" Text object for the TeDDi files """
 
 import pathlib
 import re

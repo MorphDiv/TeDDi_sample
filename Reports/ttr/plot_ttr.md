@@ -1,4 +1,4 @@
-Visualize word and graphemes type-token ratios for 100LC corpora
+Visualize word and graphemes type-token ratios for TeDDi corpora
 ================
 Steven Moran
 31 October, 2020
@@ -59,7 +59,7 @@ Here’s a plot grouped by genre by color.
 ![](plot_ttr_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 These are all pretty horrible. Tanja [suggested for the
-plots](https://github.com/uzling/100LC/pull/193):
+plots](https://github.com/morphdiv/teddi_sample/pull/193):
 
 > > > I think we should not aim to have all languages on any plot axis.
 > > > So, for plotting the counts and TTRs, I suggest histograms (how
@@ -78,7 +78,7 @@ Here’s all the languages in a historgram.
 
     ggplot(df, aes(x = ttr)) +
       geom_histogram(bins = 10, col = "white") +
-      labs(x = "Word type-token ratio", y = "Number of languages in 100LC") +
+      labs(x = "Word type-token ratio", y = "Number of languages in TeDDi") +
       theme_bw()
 
 ![](plot_ttr_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
@@ -87,7 +87,7 @@ Here they are divided by genre.
 
     ggplot(df, aes(x = ttr, fill = genre_broad)) +
       geom_histogram(bins = 10, col = "white", position = "identity") +
-      labs(x = "Word type-token ratio", y = "Number of languages in 100LC", fill = "Genre") +
+      labs(x = "Word type-token ratio", y = "Number of languages in TeDDi", fill = "Genre") +
       theme_bw() +
       scale_fill_brewer(palette = "Dark2")
 

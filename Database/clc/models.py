@@ -1,4 +1,4 @@
-""" Database model for the 100 LC project """
+""" Database model for the TeDDi project """
 
 import csv
 import pathlib
@@ -160,7 +160,7 @@ def load(path=CORPUS_ROOT, engine=ENGINE):
 
         corpus_map = CorpusMap()
 
-        with open('../LangInfo/langInfo_100LC.csv', newline='') as csvfile:
+        with open('../LangInfo/langInfo_TeDDi.csv', newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 # R writes 'NA' for NULL; here we switch it to Python None, so that it is inserted NULL in SQL

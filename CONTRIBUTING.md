@@ -2,20 +2,20 @@
 
 ## Overview
 
-The 100 LC repository is a collaborative effort to collect, curate, and analyze corpora.
+The TeDDi repository is a collaborative effort to collect, curate, and analyze corpora.
 
 Here you will find reports on our practices for transcribing and annotating texts:
 
 * [Tutorial: Transcription and Annotation of Texts](https://www.overleaf.com/2126693322drbnvwzzvfsv)
 * [Adding PBC bibles and UDHR texts](https://www.overleaf.com/9246389869rxwwtxhjxfcm)
 
-Each file must contain a correctly formatted header. An example is given in the [header_template.tsv](https://github.com/uzling/100LC/blob/master/header_template.tsv) file.
+Each file must contain a correctly formatted header. An example is given in the [header_template.tsv](https://github.com/morphdiv/teddi_sample/blob/master/header_template.tsv) file.
 
 A description of the sampling algorithm is on Overleaf:
 
 * [Report on the project discussion in November--December 2018](https://www.overleaf.com/2181948136htbsjqnypshb)
 
-And the [100LC/Crawlers](https://github.com/uzling/100LC/tree/master/Crawlers) directory contains the web crawlers.
+And the [teddi_sample/Crawlers](https://github.com/morphdiv/teddi_sample/tree/master/Crawlers) directory contains the web crawlers.
 
 ## Workflow
 
@@ -36,7 +36,7 @@ Please use the GitHub workflow, described in detail here:
 
 * https://guides.github.com/introduction/flow/
 
-When working with this repository, please use the [issue tracker](https://github.com/uzling/100LC/issues) and submit a [pull request](https://github.com/uzling/100LC/pulls) for your branches, when adding or updating data or code.
+When working with this repository, please use the [issue tracker](https://github.com/morphdiv/teddi_sample/issues) and submit a [pull request](https://github.com/morphdiv/teddi_sample/pulls) for your branches, when adding or updating data or code.
 
 We follow standard practice in collaborative development on GitHub, which is to follow the fork and pull request model:
 

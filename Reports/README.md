@@ -2,7 +2,7 @@
 
 ## Overview
 
-This directory contains short scientific data reports needed for monitoring the progress in building the 100LC corpus (for an example of a scientific data report workflow, see [A Reproducible Data Analysis Workflow with R Markdown, Git, Make, and Docker](https://psyarxiv.com/8xzqy/). 
+This directory contains short scientific data reports needed for monitoring the progress in building the TeDDi corpus (for an example of a scientific data report workflow, see [A Reproducible Data Analysis Workflow with R Markdown, Git, Make, and Docker](https://psyarxiv.com/8xzqy/). 
 
 We collect the report in this folder for the ease of browsing, access, and sharing. In particular, these reports should help us assess: 
 
@@ -28,10 +28,10 @@ The [progress](progress) directory contains a Python script that loops through t
 
 ### Word frequencies
 
-The [word frequency](word_frequency) directory contains an R markdown report that generates word frequency counts per text file in the 100LC database. These word frequency counts are written to `CSV` files.
+The [word frequency](word_frequency) directory contains an R markdown report that generates word frequency counts per text file in the TeDDi database. These word frequency counts are written to `CSV` files.
 
 ### World maps
 
-The [maps](maps) report is an [R markdown](https://rmarkdown.rstudio.com/articles_intro.html) report that produces world maps from the 100LC language sample. The R markdown report can be produced by running `knitr` in R Studio ([an example here](https://rmarkdown.rstudio.com/articles_integration.html)). The report can be viewed in the browser because GitHub renders markdown (`md`) files.
+The [maps](maps) report is an [R markdown](https://rmarkdown.rstudio.com/articles_intro.html) report that produces world maps from the TeDDi language sample. The R markdown report can be produced by running `knitr` in R Studio ([an example here](https://rmarkdown.rstudio.com/articles_integration.html)). The report can be viewed in the browser because GitHub renders markdown (`md`) files.
 
 **NOTE**: Python scripts should NOT be used for extracting numbers for further analyses. They only serve for getting approximate numbers at the pre-database stage. Please use the R scripts, which work with the database, for obtaining the reliable counts for further analyses.
