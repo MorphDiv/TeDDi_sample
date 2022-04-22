@@ -1,8 +1,7 @@
 Generate world maps from the TeDDi language sample
 ================
 Steven Moran and Chris Bentz
-
-15 November, 2021
+22 April, 2022
 
 ``` r
 library(tidyverse)
@@ -15,7 +14,7 @@ library(testthat)
 
 Let’s generate some world maps from the TeDDi language sample for visual
 inspection and for publications. If you want to save them as PDF,
-uncomment the last line in each map plot, i.e. `ggsave`.
+uncomment the last line in each map plot, i.e. `ggsave`.
 
 Load the lang info file with information on TeDDi language sample.
 
@@ -40,12 +39,12 @@ A world map with language locations from
 
 ``` r
 world <- map_data("world")
-lang_teddi_map <- ggplot() + 
+lang_teddi_map <- ggplot() +
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
                fill = "grey90", col = "grey") +
-  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto), 
+  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto),
              colour = "red", alpha = 0.8, size = 3, shape = 1) +
-  geom_point(data = lang_teddi, aes(x = longitude_wals, y = latitude_wals), 
+  geom_point(data = lang_teddi, aes(x = longitude_wals, y = latitude_wals),
              colour = "green", alpha = 0.8, size = 2) +
   scale_y_continuous(limits = c(-65, 80)) +
   scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
@@ -74,7 +73,7 @@ world <- map_data("world")
 status_map <- ggplot() + 
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
                fill = "grey90", col = "grey") +
-  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto, colour = status), 
+  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto, colour = status),
              alpha = 0.8, size = 3) +
   scale_y_continuous(limits = c(-65, 80)) +
   scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
@@ -104,7 +103,7 @@ world <- map_data("world")
 status_map <- ggplot() + 
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
                fill = "grey90", col = "grey") +
-  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto, colour = status), 
+  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto, colour = status),
              alpha = 0.8, size = 3) +
   scale_y_continuous(limits = c(-65, 80)) +
   scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
@@ -292,7 +291,7 @@ world <- map_data("world")
 family_map <- ggplot() + 
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
                fill = "grey90", col = "grey") +
-  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto, colour = top_level_family), 
+  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto, colour = top_level_family),
              alpha = 0.8, size = 3) +
   scale_y_continuous(limits = c(-65, 80)) +
   scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
@@ -322,7 +321,7 @@ world <- map_data("world")
 macroarea_map <- ggplot() + 
   geom_polygon(data = world, aes(x = long, y = lat, group = group), 
                fill = "grey90", col = "grey") +
-  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto, colour = macroarea_glotto), 
+  geom_point(data = lang_teddi, aes(x = longitude_glotto, y = latitude_glotto, colour = macroarea_glotto),
              alpha = 0.8, size = 3) +
   scale_y_continuous(limits = c(-65, 80)) +
   scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
@@ -355,8 +354,8 @@ information on which corpora are represented by which writing systems.
 langs_ws <- read_csv('../writing_systems/TeDDi_writing_systems.csv')
 ```
 
-And let’s merge in the geo-coordinates from the lang_teddi index file, so
-that we can plot the data on a world map.
+And let’s merge in the geo-coordinates from the lang\_teddi index file,
+so that we can plot the data on a world map.
 
 ``` r
 langs_ws <- left_join(langs_ws, lang_teddi)
@@ -394,26 +393,27 @@ ws_map
 ```
 
 To create a map of corpus size, we can first load in the output from the
-[get word TTR report](../ttr/get_word_ttr.md).
+[get word TTR
+    report](../ttr/get_word_ttr.md).
 
 ``` r
 word_ttr <- read_csv('../ttr/word_ttr.csv')
 ```
 
+    ## Rows: 135 Columns: 7
+
+    ## ── Column specification ─────────────────────────────────────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (3): name, genre_broad, writing_system
+    ## dbl (4): types, tokens, mean_word_length, ttr
+
     ## 
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## cols(
-    ##   name = col_character(),
-    ##   genre_broad = col_character(),
-    ##   writing_system = col_character(),
-    ##   types = col_double(),
-    ##   tokens = col_double(),
-    ##   mean_word_length = col_double(),
-    ##   ttr = col_double()
-    ## )
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 This CSV file splits each language by broad genre, so first we can
-collapse those into single word counts per corpus.
+collapse those into single word counts per
+corpus.
 
 ``` r
 word_counts <- word_ttr %>% group_by(name) %>% summarize(word_count = sum(tokens))
@@ -472,7 +472,8 @@ word_tokens
 # ggsave("word_tokens.pdf", macroarea_map, dpi = 300, scale = 1, device = cairo_pdf)
 ```
 
-We can also plot size by word types.
+We can also plot size by word
+types.
 
 ``` r
 word_type_counts <- word_ttr %>% group_by(name) %>% summarize(word_type_count = sum(types))
