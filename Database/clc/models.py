@@ -170,7 +170,8 @@ def load(path=CORPUS_ROOT, engine=ENGINE):
                 insert_language(**row)
 
         # TODO: fix denylist
-        denylist = ['crk_nfi_1']
+        #denylist = ['crk_nfi_1']
+        denylist = []
 
         for t in _texts.Text.from_rglob(path, "*.txt"):
             # TODO: remove denylist
