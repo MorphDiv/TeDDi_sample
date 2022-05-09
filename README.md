@@ -6,6 +6,8 @@ This repository contains the corpus data and code that processes and analyzes it
 
 To contribute code or data to the repository, please first refer to our guidelines on [contributing](CONTRIBUTING.md).
 
+Data formats available for direct [download](https://drive.switch.ch/index.php/s/MJv7xFkzqlzFn0y)
+
 Main Contributors (alphabetical order):
 
 Bentz, Christian;
