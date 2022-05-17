@@ -44,7 +44,7 @@ Language status: The status of languages according to Glottolog was found to be 
 
 ## Generating the index
 
-It is important to note that the `langInfo_TeDDi.csv` is generated from the above mentioned sources, but it adds and populates the the columns for:
+It is important to note that the `langInfo_TeDDi.csv` is generated from the above mentioned sources, but it adds and populates the columns for:
 
 * name
 * folder_language_name
@@ -63,3 +63,7 @@ sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) NOT NULL constraint fail
 if the `merge_sources.Rmd` script is not run first to populate the `name` and `folder_language_name` fields. Basically, the `load-database.py` pipeline goes to parse the new file(s), but sees in the `langInfo_TeDDi.csv` index that there is no `corpus.language_id` specified in the index (i.e. the `folder_language_name`). We could pre-populate the `langInfo_TeDDi.csv` by adding all folders to the `Corpus` directory, but then we would lack information about which languages are still to be added.
 
 In sum, when adding *new* languages to the `Corpus` directory, run the `merge_sources.Rmd` script in this directory before running the `load-database.py` pipeline, or you will get the error above.
+
+## Plot with WALS feature coverage
+
+The script in `WALSChapterCoverage.Rmd' loads information on WALS features (`WALS_languages_chapters.csv'), and information on the TeDDi languages (`langInfo_TeDDi.csv'). These are merged to then calculate and plot the coverage (in percentages) of WALS features for the respective languages in the TeDDi sample. The `coverage.plot' is a barplot with the height of bars reflecting the coverage percentage. Additionally, a heatmap is generated with the presence/absence of each feature for a given language. 
