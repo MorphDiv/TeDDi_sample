@@ -66,4 +66,4 @@ In sum, when adding *new* languages to the `Corpus` directory, run the `merge_so
 
 ## Plot with WALS feature coverage
 
-The script in `WALSChapterCoverage.Rmd' loads information on WALS features (`WALS_languages_chapters.csv'), and information on the TeDDi languages (`langInfo_TeDDi.csv'). These are merged to then calculate and plot the coverage (in percentages) of WALS features for the respective languages in the TeDDi sample. The `coverage.plot' is a barplot with the height of bars reflecting the coverage percentage. Additionally, a heatmap is generated with the presence/absence of each feature for a given language. 
+The script in `WALSChapterCoverage.Rmd` loads information on WALS features (`WALS_languages_chapters.csv`), and information on the TeDDi languages (`langInfo_TeDDi.csv`). These are merged to then calculate and plot the coverage (in percentages) of WALS features for the respective languages in the TeDDi sample. The `coverage.plot` is a barplot with the height of bars reflecting the coverage percentage. Additionally, a heatmap is generated with the presence/absence of each feature for a given language. 
