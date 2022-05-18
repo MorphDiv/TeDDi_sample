@@ -66,13 +66,13 @@ coverage.plot <- ggplot(data = wals.100.coverage, aes(x = reorder(name_wals, -co
   geom_text(aes(label = round(coverage, 2)), hjust = 1.2, colour = "black", angle = 90) +
   scale_fill_continuous(low = "red", high = "light blue") +
   theme(legend.position = "none", axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
-coverage.plot
+print(coverage.plot)
 ```
 
 Save to file.
 ```{r, warning = FALSE}
-ggsave("Barplot_WALSCoverage.pdf", coverage.plot, 
-       dpi = 300, scale = 1, width = 15, height = 5, device = cairo_pdf)
+#ggsave("Barplot_WALSCoverage.pdf", coverage.plot, 
+#       dpi = 300, scale = 1, width = 15, height = 5, device = cairo_pdf)
 ```
 
 ## Heatmap
@@ -82,5 +82,5 @@ wals.100.chapters.long <- melt(wals.100.chapters, id.vars = c("wals_code", "name
 heatmap <- ggplot(data = wals.100.chapters.long, aes(x = name_wals, y = variable, fill = is.na(value))) +
   geom_tile() +
   theme(axis.text.x = element_text(angle = 90))
-heatmap
+print(heatmap)
 ```
