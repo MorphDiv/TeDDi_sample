@@ -1,7 +1,7 @@
 WALS Chapter Coverage
 ================
 Chris Bentz
-05/20/2022
+4/25/2022
 
 ## Load Packages
 
@@ -27,11 +27,13 @@ library(reshape2)
 
 ## Load Data
 
-Load the data with WALS chapter information as well as language information for languages included in the 100 language sample (in csv format).
+Load the data with WALS chapter information as well as language
+information for languages included in the 100 language sample (in csv
+format).
 
 ``` r
-wals.chapters <- read.csv("~/Github/TeDDi_sample/LangInfo/Sources/WALS/WALS_languages_chapters.csv", header = T, na.strings = c("", "NA"))
-wals.100 <- read.csv("~/Github/TeDDi_sample/LangInfo/langInfo_TeDDi.csv")
+wals.chapters <- read.csv("Sources/WALS/WALS_languages_chapters.csv", header = T, na.strings = c("", "NA"))
+wals.100 <- read.csv("langInfo_TeDDi.csv")
 ```
 
 Some pre-processing steps.
@@ -50,7 +52,8 @@ wals.chapters.short <- select(wals.chapters, wals_code, X1A.Consonant.Inventorie
 
 ## Merge
 
-Merge the two data frames together by wals code.
+Merge the two data frames together by wals
+code.
 
 ``` r
 wals.100.chapters <- merge(wals.100.short, wals.chapters.short, by = "wals_code")
@@ -58,7 +61,8 @@ wals.100.chapters <- merge(wals.100.short, wals.chapters.short, by = "wals_code"
 
 ## Calculate Coverage
 
-Get percentages of coverage (filled cells) for each language in the WALS 100 language sample.
+Get percentages of coverage (filled cells) for each language in the WALS
+100 language sample.
 
 ``` r
 # calculate percentages
@@ -84,7 +88,7 @@ coverage.plot <- ggplot(data = wals.100.coverage, aes(x = reorder(name_wals, -co
 print(coverage.plot)
 ```
 
-![](WALSChapterCoverage_files/figure-markdown_github/unnamed-chunk-6-1.png)
+![](WALSChapterCoverage_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 Save to file.
 
@@ -95,20 +99,16 @@ Save to file.
 
 ## Heatmap
 
-Plot heatmap with all wals features and languages, in which empty cells are indicated by colour.
+Plot heatmap with all wals features and languages, in which empty cells
+are indicated by
+colour.
 
 ``` r
 wals.100.chapters.long <- melt(wals.100.chapters, id.vars = c("wals_code", "name_wals"))
-```
-
-    ## Warning: attributes are not identical across measure variables; they will be
-    ## dropped
-
-``` r
 heatmap <- ggplot(data = wals.100.chapters.long, aes(x = name_wals, y = variable, fill = is.na(value))) +
   geom_tile() +
   theme(axis.text.x = element_text(angle = 90))
 print(heatmap)
 ```
 
-![](WALSChapterCoverage_files/figure-markdown_github/unnamed-chunk-8-1.png)
+![](WALSChapterCoverage_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
