@@ -1,0 +1,48 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 8.
+Variables
+Next
+Sometimes it is convenient to be able to have variable variable names.
+That is, a variable name which can be set and used dynamically.
+A normal variable is set with a statement such as:
+?php $a = "hello";?
+A variable variable takes the value of a variable and treats that as the name of a variable.
+In the above example, hello, can be used as the name of a variable by using two dollar signs. i.e.
+?php $$a = "world";?
+At this point two variables have been defined and stored in the PHP symbol tree: $a with contents "hello" and $hello with contents "world ".
+Therefore, this statement:
+?php echo "$a ${$a}";?
+produces the exact same output as:
+?php echo "$a $hello";?
+i.e. they both produce: hello world.
+In order to use variable variables with arrays, you have to resolve an ambiguity problem.
+That is, if you write $$a[ 1] then the parser needs to know if you meant to use $a[1] as a variable, or if you wanted $$a as the variable and then the [1] index from that variable.
+The syntax for resolving this ambiguity is: ${$a[1]} for the first case and ${$a}[1] for the second.
+Warning
+Please note that variable variables cannot be used with PHP 's Superglobal arrays.
+This means you cannot do things like ${$_GET}.
+If you are looking for a way to handle availability of superglobals and the old HTTP_*_VARS, you might want to try referencing them.
+Prev
+Home
+Next
+Variable scope
+Up
+Variables from outside PHP

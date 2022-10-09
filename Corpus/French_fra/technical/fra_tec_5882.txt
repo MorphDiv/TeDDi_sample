@@ -1,0 +1,47 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Utilisation avancée
+Options de la ligne de commande
+Quand vous lancez & appname; depuis la ligne de commande, il y a plusieurs options pour ouvrir des fichiers de données. Ils peuvent être affichés en lançant tellico --help.
+Utilisation & #160;: tellico [Qt-options] [KDE-options] [options] [filename] Tellico - un gestionnaire de collection pour KDE Options & #160;: --nofile Ne pas reouvrir le dernier fichier ouvert --bibtex Importer le & lt; nom de fichiergt; comme un fichier bibtex --mods Importer le & lt; nom de fichiergt; comme un fichier MODS --ris Importer le & lt; nom de fichiergt; comme un fichierRIS Arguments & #160;: filename Fichier à ouvrir
+L'interface & DBus;
+& appname; a une interface & DBus; minimale, qui peut être utilisée pour scripter ou interagir avec des applications lancées depuis la ligne de commande. Comme avec tous les appels & DBus;, vous avez besoin de spécifier le service qui va interférer avec et l'interface particulière. Le nom du service & DBus; est org. kde. tellico.
+Les commandes & DBus;
+Deux objets & DBus; sont disponibles dans l'interface de Tellico & #160;: Tellico et Collections.
+L'objet Tellico
+La liste complète des commandes & DBus; dans l'objet tellico est affichée ci-dessous & #160;:
+bool importTellico(QString file, QString action) bool importBibtex(QString file, QString action) bool importMODS(QString file, QString action) bool importRIS(QString file, QString action) bool exportXML(QString file) bool exportZip(QString file) bool exportBibtex(QString file) bool exportHTML(QString file) bool exportCSV(QString file) bool exportPilotDB(QString file) QListlt; intgt; selectedEntries() QListlt; intgt; filteredEntries() void openFile(QString file) void setFilter(QString text) bool showEntry(int id)
+Pour les quatres commandes d'import, le premier argument est le fichier à importer, et le deuxième est l'action d'import. Trois actions sont disponibles & #160;: replace, append, et merge. Quatre formats de fichier sont gérés pour l'import & #160;: fichiers & XML; Tellico, fichiers Bibtex, fichiers MODS et fichiers RIS.
+La collection courante ouverte dans & appname; doit être exportée dans un fichier, soit dans le format & XML; Tellico, le format ZIP Tellico, le format comma-separated values & HTML; (CSV) ou le format PilotDB.
+Une liste des entrées ID courantes sélectionnées ou filtrées permet de faciliter l'affichage ou la mise à jour des entrées dans la vue.
+Un nouveau fichier de données peut être ouvert en utilisant la commande openFile(). L'emplacement complet doit être spécifié.
+Un nouveau filtre peut être défini en utilisant la commande setFilter(), qui est l'équivalent de la saisie dans la boîte de filtre dans la fenêtre principale.
+En donnant une entrée ID, showEntry() sélectionnera cette entrée et affichera les détails de l'entrée dans la fenêtre principale.
+L'objet Collections
+La liste complète des commandes & DBus; dans l'objet Collections est affichée ci-dessous & #160;:
+int addEntry() bool removeEntry(int entryID) QStringList allValues(QString fieldName) QStringList entryValues(int entryID, QString fieldName) QStringList selectedBibtexKeys() QString entryBibtexKey(int entryID) bool setEntryValue(int entryID, QString fieldName, QString value) bool addEntryValue(int entryID, QString fieldName, QString value)
+Une nouvelle entrée peut être créée dans la collection courante en utilisant la commande addEntry(). La valeur retournée est l'entrée ID qui peut être ensuite utilisée pour définir les valeurs du champ dans l'entrée. Une entrée peut être supprimée de la collection en appelant la commande removeEntry().
+Appeler allValues() en utilisant simplement un nom de champ retournera toutes les valeurs pour ce champ pour les entrées courantes sélectionnées. Si aucune entrées ne sont sélectionnées, la liste retournée est vide. Si une entrée ID est incluse dans la commande, les valeurs du champ pour cette entrée spécifique sont retournées.
+Si la collection courante est une bibliographie, appeler selectedBibtexKeys() retournera la clé de citation Bibtex pour toutes les entrées sélectionnées. bibtexKey pour une entrée spécifique peut être trouvé en utilisant la commande entryBibtexKey().
+Les entrées peuvent être modifiées directement avec l'interface & DBus;. Donner une entrée ID setEntryValue() définira la valeur du champ directement. Pour ajouter une valeur, sans affecter les valeurs existantes, utilisez addEntryValue(). La nouvelle valeur sera en annexe de la fin de la liste existante.
+Exemples & DBus;
+Voici des exemples pour scripter & appname; en utilisant l'interface & DBus;. Depuis que le pid doit être connu, la façon la plus simple d'inclure celle -ci dans la commande shell se fait de cette manière & #160;: dcop $(dcop | grep tellico) tellico.
+Ouvrir un fichier Bibtex% qdbus org. kde. tellico / Tellico org. kde. tellico. importBibtex "/ home/ robby/ reference. bib" "replace" true
+Exporter un fichier Bibtex% qdbus org. kde. tellico / Tellico org. kde. tellico. exportBibtex ~/ documents/ reference. bib true
+Rappeler la clé de citation de la sélection courante% qdbus org. kde. tellico / Collections org. kde. tellico. selectedBibtexKeys stephenson2004
+Ajouter une nouvelle entrée et définir le titre% myid=`qdbus org. kde. tellico / Collections org. kde. tellico. addEntry `% qdbus org. kde. tellico / Collections org. kde. tellico. setEntryValue $myid title "My New Book" true

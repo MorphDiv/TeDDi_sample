@@ -1,0 +1,227 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+As of version 4.3.0, PHP supports a new SAPI type (Server Application Programming Interface) named CLI which means Command Line Interface.
+As the name implies, this SAPI type main focus is on developing shell (or desktop as well) applications with PHP.
+There are quite a few differences between the CLI SAPI and other SAPI s which are explained in this chapter.
+It' s worth mentioning that CLI and CGI are different SAPI's although they do share many of the same behaviors.
+The CLI SAPI was released for the first time with PHP 4.2.0, but was still experimental and had to be explicitly enabled with --enable-cli when running. / configure.
+Since PHP 4.3.0 the CLI SAPI is no longer experimental and the option --enable-cli is on by default.
+You may use --disable-cli to disable it.
+As of PHP 4.3.0, the name, location and existence of the CLI / CGI binaries will differ depending on how PHP is installed on your system.
+By default when executing make, both the CGI and CLI are built and placed as sapi / cgi / php and sapi / cli / php respectively, in your php source directory.
+You will note that both are named php.
+What happens during make install depends on your configure line.
+If a module SAPI is chosen during configure, such as apxs, or the --disable-cgi option is used, the CLI is copied to {PREFIX} / bin / php during make install otherwise the CGI is placed there.
+So, for example, if --with--apxs is in your configure line then the CLI is copied to {PREFIX} / bin / php during make install.
+If you want to override the installation of the CGI binary, use make install-cli after make install.
+Alternatively you can specify --disable-cgi in your configure line.
+Note:
+Because both --enable-cli and --enable-cgi are enabled by default, simply having --enable-cli in your configure line does not necessarily mean the CLI will be copied as {PREFIX} / bin / php during make install.
+The windows package distributes the CGI as php.exe and has a folder named cli with the CLI in it, so: cli / php.exe.
+What SAPI do I have?:
+From a shell, typing php -v will tell you whether php is CGI or CLI.
+See also the function php_sapi_name() and the constant PHP_SAPI.
+Remarkable differences of the CLI SAPI compared to other SAPI s:
+Unlike the CGI SAPI, no headers are written to the output.
+Though the CGI SAPI provides a way to suppress HTTP headers, there 's no equivalent switch to enable them in the CLI SAPI.
+CLI is started up in quiet mode by default, though the -q switch is kept for compatibility so that you can use older CGI scripts.
+It does not change the working directory to that of the script. (-C switch kept for compatibility)
+Plain text error messages (no HTML formatting).
+There are certain php.ini directives which are overriden by the CLI SAPI because they do not make sense in shell environments:
+Table 23-1.
+Overriden php.ini directives
+Directive
+CLI SAPI default value
+Comment
+html_errors
+FALSE
+It can be quite hard to read the error message in your shell when it 's cluttered with all those meaningless HTML tags, therefore this directive defaults to FALSE.
+implicit_flush
+TRUE
+It is desired that any output coming from print(), echo() and friends is immediately written to the output and not cached in any buffer.
+You still can use output buffering if you want to defer or manipulate standard output.
+max_execution_time
+0 (unlimited)
+Due to endless possibilities of using PHP in shell environments, the maximum execution time has been set to unlimited.
+Whereas applications written for the web are often executed very quickly, shell application tend to have a much longer execution time.
+register_argc_argv
+TRUE
+Because this setting is TRUE you will always have access to argc (number of arguments passed to the application) and argv (array of the actual arguments) in the CLI SAPI.
+As of PHP 4.3.0, the PHP variables $argc and $argv are registered and filled in with the appropriate values when using the CLI SAPI.
+Prior to this version, the creation of these variables behaved as they do in CGI and MODULE versions which requires the PHP directive register_globals to be on.
+Regardless of version or register_globals setting, you can always go through either $_SERVER or $HTTP_SERVER_VARS.
+Example: $_SERVER[ 'argv']
+Note:
+These directives cannot be initialized with another value from the configuration file php.ini or a custom one (if specified).
+This is a limitation because those default values are applied after all configuration files have been parsed.
+However, their value can be changed during runtime (which does not make sense for all of those directives, e.g. register_argc_argv).
+To ease working in the shell environment, the following constants are defined:
+Table 23-2.
+CLI specific Constants
+Constant
+Description
+STDIN
+$stdin = fopen( 'php: / /stdin', 'r');
+STDOUT
+$stdout = fopen( 'php: / /stdout', 'w');
+STDERR
+$stderr = fopen( 'php: / /stderr', 'w');
+Given the above, you don 't need to open e.g. a stream for stderr yourself but simply use the constant instead of the stream resource:
+php -r 'fwrite(STDERR, "stderr\n");'
+The CLI SAPI does not change the current directory to the directory of the executed script!
+Example showing the difference to the CGI SAPI:
+?php / * Our simple test application named test.php* / echo getcwd(), "\n";?
+When using the CGI version, the output is:
+$pwd / tmp $php -q another_directory / test.php / tmp / another_directory
+Using the CLI SAPI yields:
+$pwd / tmp $php -f another_directory / test.php / tmp
+Note:
+The CGI SAPI supports the CLI SAPI behaviour by means of the -C switch when run from the command line.
+The list of command line options provided by the PHP binary can be queried anytime by running PHP with the -h switch:
+Usage: php [options] [-f] file [args...] php [options] -r code [args...] php [options] [- - args...] -s Display colour syntax highlighted source. -w Display source with stripped comments and whitespace. -f file Parse file. -v Version number -c path | file Look for php.ini file in this directory -a Run interactively -d foo[=bar] Define INI entry foo with value'bar '-e Generate extended information for debugger / profiler -z file Load Zend extension file. -l Syntax check only (lint) -m Show compiled in modules -i PHP information -r code Run PHP code without using script tags?..? -h This help args...
+Arguments passed to script.
+Use - - args when first argument starts with - or script is read from stdin
+The CLI SAPI has three different ways of getting the PHP code you want to execute:
+Telling PHP to execute a certain file.
+php my_script.php php -f my_script.php
+Pass the PHP code to execute directly on the command line.
+php -r 'print_r(get_defined_constants());'
+Note:
+Read the example carefully, there are no beginning or ending tags!
+The -r switch simply does not need them.
+Using them will lead to a parser error.
+Provide the PHP code to execute via standard input (stdin).
+This gives the powerful ability to dynamically create PHP code and feed it to the binary, as shown in this (fictional) example:
+$some_application | some_filter | php | sort -u final_output.txt
+Like every shell application, the PHP binary accepts a number of arguments but your PHP script can also receive arguments.
+The number of arguments which can be passed to your script is not limited by PHP (the shell has a certain size limit in the number of characters which can be passed; usually you won't hit this limit).
+The arguments passed to your script are available in the global array $argv.
+The zero index always contains the script name (which is - in case the PHP code is coming from either standard input or from the command line switch -r).
+The second registered global variable is $argc which contains the number of elements in the $argv array (not the number of arguments passed to the script).
+As long as the arguments you want to pass to your script do not start with the - character, there 's nothing special to watch out for.
+Passing an argument to your script which starts with a - will cause trouble because PHP Passing an argument to your script which starts with a - will cause trouble because PHP itself thinks it has to handle it.
+To prevent this, use the argument list separator - -.
+After this separator has been parsed by PHP, every argument following it is passed untouched to your script.
+# This will not execute the given code but will show the PHP usage $php -r 'var_dump($argv);' -h Usage: php [options] [-f] file [args...] [...] # This will pass the '-h 'argument to your script and prevent PHP from showing it's usage $php -r'var_dump($argv);' - - -h array(2) {[0]= string(1) "-" [1]= string(2) "-h "}
+However, there 's another way of using PHP for shell scripting.
+You can write a script where the first line starts with #! / usr / bin / php.
+Following this you can place normal PHP code included within the PHP starting and end tags.
+Once you have set the execution attributes of the file appropriately (e.g. chmod +x test) your script can be executed like a normal shell or perl script:
+#! / usr / bin / php ?php var_dump( $argv);?
+$chmod 755 test $. / test -h - - foo array( 4) {[0]= string(6) ". / test" [1]= string(2) "-h "[2]= string(2) "- -" [3]= string(3) "foo "}
+Table 23-3.
+Command line options
+Option
+Description
+-s
+Display colour syntax highlighted source.
+This option uses the internal mechanism to parse the file and produces a HTML highlighted version of it and writes it to standard output.
+Note that all it does it to generate a block of code [...] / code HTML tags, no HTML headers.
+Note:
+This option does not work together with the -r option.
+-w
+Display source with stripped comments and whitespace.
+Note:
+This option does not work together with the -r option.
+-f
+Parses and executed the given filename to the -f option.
+This switch is optional and can be left out.
+Only providing the filename to execute is sufficient.
+-v
+Writes the PHP, PHP SAPI, and Zend version to standard output, e.g.
+$php -v PHP 4.3.0 (cli), Copyright (c) 1997-2002 The PHP Group Zend Engine v1.3.0, Copyright (c) 1998-2002 Zend Technologies
+-c
+With this option one can either specify a directory where to look for php.ini or you can specify a custom INI file directly (which does not need to be named php.ini), e.g.:
+$php -c / custom / directory / my_script.php $php -c / custom / directory / custom-file.ini my_script.php
+-a
+Runs PHP interactively.
+-d
+This option allows you to set a custom value for any of the configuration directives allowed in php.ini.
+The syntax is:
+-d configuration_directive[ =value]
+Examples:
+# Omitting the value part will set the given configuration directive to "1" $php -d max_execution_time -r '$foo = ini_get("max_execution_time"); var_dump($foo); 'string(1) "1 "# Passing an empty value part will set the configuration directive to" "php -d max_execution_time= -r '$foo = ini_get("max_execution_time"); var_dump($foo);' string(0)" "# The configuration directive will be set to anything passed after the '= 'character $php -d max_execution_time=20 -r '$foo = ini_get("max_execution_time"); var_dump($foo);' string(2) "20" $php -d max_execution_time=doesntmakesense -r '$foo = ini_get("max_execution_time"); var_dump($foo); 'string(15) "doesntmakesense "
+-e
+Generate extended information for debugger / profiler.
+-z
+Load Zend extension.
+If only a filename is given, PHP tries to load this extension from the current default library path on your system (usually specified / etc / ld.so.conf on Linux systems).
+Passing a filename with an absolute path information will not use the systems library search path.
+A relative filename with a directory information will tell PHP only to try to load the extension relative to the current directory.
+-l
+This option provides a convenient way to only perform a syntax check on the given PHP code.
+On succes, the text No syntax errors detected in filename is written to standard output and the shell return code is 0.
+On failure, the text Errors parsing filename in addition to the internal parser error message is written to standard output and the shell return code is set to 255.
+This option won' t find fatal errors (like undefined functions).
+Use -f if you would like to test for fatal errors too.
+Note:
+This option does not work together with the -r option.
+-m
+Using this option, PHP prints out the built in (and loaded) PHP and Zend modules:
+$php -m [PHP Modules] xml tokenizer standard session posix pcre overload mysql mbstring ctype [Zend Modules]
+-i
+This command line option calls phpinfo(), and prints out the results.
+If PHP is not working correctly, it is advisable to use php -i and see whether any error messages are printed out before or in place of the information tables.
+Beware that the output is in HTML and therefore quite huge.
+-r
+This option allows execution of PHP right from within the command line.
+The PHP start and end tags (?php and?) are not needed and will cause a parser error if present.
+Note:
+Care has to be taken when using this form of PHP to not collide with command line variable substitution done by the shell.
+Example showing a parser error
+$php -r "$foo = get_defined_constants();" Command line code(1):
+Parse error - parse error, unexpected '='
+$php -r "= get_defined_constants();"
+$php -r '$foo = get_defined_constants(); var_dump($foo);' array(370) {["E_ERROR"]= int(1) ["E_WARNING"]= int(2) ["E_PARSE"]= int(4) ["E_NOTICE"]= int(8) ["E_CORE_ERROR"]= [...]
+-h
+With this option, you can get information about the actual list of command line options and some one line descriptions about what they do.
+The PHP executable can be used to run PHP scripts absolutely independent from the web server.
+If you are on a Unix system, you should add a special first line to your PHP script, and make it executable, so the system will know, what program should run the script.
+On a Windows platform you can associate php.exe with the double click option of the .php files, or you can make a batch file to run the script through PHP.
+The first line added to the script to work on Unix won 't hurt on Windows, so you can write cross platform programs this way.
+A simple example of writing a command line PHP program can be found below.
+Example 23-1.
+Script intended to be run from command line (script.php)
+#! / usr / bin / php ?php if ($argc != 2 | | in_array($argv[1], array('--help', '-help', '-h', '- ?'))) {?
+This is a command line PHP script with one option.
+Usage: ?php echo $argv[ 0];? option option can be some word you would like to print out.
+With the --help, -help, -h, or -? options, you can get this help. ?php} else {echo $argv[1];}?
+In the script above, we used the special first line to indicate that this file should be run by PHP.
+We work with a CLI version here, so there will be no HTTP header printouts.
+There are two variables you can use while writing command line applications with PHP: $argc and $argv.
+The first is the number of arguments plus one (the name of the script running).
+The second is an array containing the arguments, starting with the script name as number zero ($argv[0]).
+In the program above we checked if there are less or more than one arguments.
+Also if the argument was --help, -help, -h or -?, we printed out the help message, printing the script name dynamically.
+If we received some other argument we echoed that out.
+If you would like to run the above script on Unix, you need to make it executable, and simply call it as script.php echothis or script.php -h.
+On Windows, you can make a batch file for this task:
+Example 23-2.
+Batch file to run a command line PHP script (script.bat)
+@c:\php\cli\php.exe script.php %1 %2 %3 %4
+Assuming you named the above program script.php, and you have your CLI php.exe in c:\php\cli\php.exe this batch file will run it for you with your added options: script.bat echothis or script.bat -h.
+See also the Readline extension documentation for more functions you can use to enhance your command line applications in PHP.
+Prev
+Home
+Next
+Functions restricted / disabled by safe mode
+Up
+Function Reference

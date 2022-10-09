@@ -1,0 +1,64 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Funciones & DCOP;
+
+Juan Manuel García Molina juanma@superiodico. net Traductor
+& DCOP; se puede llamar de varias formas desde & kommander;. El primero es el método de la consola
+dcop kmdr-executor-@pid KommanderIf changeWidgetText miWidget nuevo texto
+Asume que está dentro de un archivo de & kommander; y que tiene acceso al especial @pid, que contiene el id. del proceso. De hecho, es más fácil reemplazar kmdr-executor-@pid por @dcopid. Sin embargo, puede usar esta sintaxis (obviamente, sin los especiales) desde la línea de órdenes o desde cualquier guión externo para alterar la ventana de & kommander;.
+Debido a que & kommander; no tiene un analizador completo en su estado alfa, si quiere usar el & DCOP; interno mucho más rápido para la ventana de otra aplicación (DCOP; en consola es muy lento) es más complicado porque debe dar mucha información, entre la que se incluye un prototipo para la llamada. La llamada superior sería así:
+@dcop(@dcopid, KommanderIf, enableWidget(QString, bool), Widget, true)
+En el momento de escribir este manual, debería evitar anidar llamadas & DCOP; dentro de las estructuras de lenguajes de guiones (como bash), lo que significa que debería usar métodos de llamada desde consola. Si usa & DCOP; interno, todos los especiales de & kommander; se ejecutarán primero y luego se ejecutará el guión.
+Hay una forma simplificada de usar & DCOP; desde dentro de & kommander;, usando la sintaxis del objeto. Si quisiera cambiar el texto de un widget llamado @EditLine1, se vería como:
+@EditLine1. changeWidgetText(Texto nuevo)
+Como puede ver, la sintaxis es muy sencilla, así como visualmente consistente con los grupos de funciones. Todas las referencias & DCOP; de este documento usarán la nueva sintaxis del objeto mostrada arriba. Tenga en cuenta que si hace referencia a un widget usando & DCOP; desde otra ventana o desde otra aplicación, el primer parámetro será siempre el nombre del widget. Todas las funciones que se muestran aquí comienzan en el segundo parámetro.
+& DCOP; para variables globales
+global(QString nombreVariable)
+Devuelve el valor de la variable global indicada. Cuando un guión se ejecuta desde la ventana de & kommander; cualquier variable (no global) definida en el guión dejará de existir una vez completado este y, por tanto, no estará disponible para otros procesos de guiones ni en nuevos ejemplares del proceso que lo invocó. El ámbito global significa que una variable existirá para cualquier proceso de la ventana hasta que se cierre la misma. Puede cambiar estas variables en cualquier momento con una nueva llamada a @setGlobal.
+setGlobal(QString nombreVariable, QString valor)
+Crea una variable global en el proceso de la ventana y le asigna un valor. Este valor se puede recuperar o volver a definir con global(QString nombreVariable).
+& DCOP; para todos los widgets
+changeWidgetText(QString text)
+Debería renombrarse a setWidgetText y probablemente este nombre quede obsoleto. Elimina el texto mostrado en el widget y lo reemplaza con el texto suministrado.
+enableWidget(bool enable)
+Activa o desactiva el widget.
+associatedText
+Devuelve el texto asociado con el widget especificado. No es el mismo que el texto que se muestra. Sería @widgetText o el texto y/ o el guión que se use para que llegue el valor que se muestra.
+setAssociatedText(QString text)
+Define la cadena predefinida de texto de & kommander;. Típicamente se define como @widgetText para mostrar lo que se introduzca en el widget. Posiblemente no lo necesite, pero ahí está por si acaso. Se aplica a todos los widgets que tengan datos.
+& DCOP; para widgets de listas de selección y de listas de selección múltiple
+addListItem(QString item, int index)
+Añade un elemento a un widget de lista de selección en el índice (index) especificado. El índice de la lista comienza en el cero. Para añadirlo al final de la lista, use -1.
+addListItems(QStringList items, int index)
+Añade una lista de cadenas de una vez. La lista debería delimitarla por EOL (\ - saltos de línea). Es tan hábil que puede usar bash para derivar la lista de forma bastante sencilla. Por ejemplo, usando @exec(ls -l ~/ projects | grep kmdr) para que los elementos que proporcione conformen un listado de los archivos de & kommander; de la carpeta projects. El índice de la lista comienza en el cero. Para añadirlo al final de la lista, use -1.
+addUniqueItem(QString item)
+addUniqueItem añade un elemento al final de la lista sólo si es único.
+clearList
+Elimina todos los elementos.
+removeListItem(int index)
+Elimina el elemento que hay en el índice (index) indicado.
+item(int index)
+Devuelve el texto del elemento en el index (índice) especificado.
+setCurrentListItem(int index)
+Define el elemento actual (o seleccionado) con el index (índice) especificado. Se aplica a widgets de lista y de lista de selección múltiple.
+& DCOP; para widgets de casilla de verificación y botones de radio
+setChecked(QString widgetName, bool checked)
+Marca/ quita la marca de widgets de casilla de verificación y botones de radio.
+& DCOP; para widgets de solapa
+setCurrentTab(QString widgetName, int index)
+Selecciona la solapa por index (índice) para widgets de solapa. El índice comienza en el 0.

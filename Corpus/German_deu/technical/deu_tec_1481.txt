@@ -1,0 +1,109 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Arbeiten mit Prozeduren und Funktionen
+/text/sbasic/shared/01020300.xhp
+Prozeduren
+Funktionen;arbeiten mit
+Variablen;an Prozeduren und Funktionen übergeben
+Parameter; für Prozeduren und Funktionen
+Parameter;per Referenz oder Wert übergeben
+Variablen;Gültigkeitsbereich
+Gültigkeitsbereich von Variablen
+GLOBAL-Variablen
+PUBLIC-Variablen
+PRIVATE-Variablen
+Funktionen;Wertetyp zurückgeben
+Wertetyp von Funktionen zurückgeben
+Arbeiten mit Prozeduren und Funktionen
+Im Folgenden ist die grundlegende Verwendung von Prozeduren und Funktionen in $[officename] Basic beschrieben.
+Wenn Sie ein neues Modul erstellen, fügt $[officename] Basic automatisch eine SUB namens &quot; Main &quot; ein.
+Dieser Standardname hat nichts mit der Reihenfolge oder dem Ausgangspunkt eines $[officename] Basic-Projekts zu tun.
+Sie können diese SUB auch problemlos umbenennen.
+Prozeduren (SUB-Blöcke) und Funktionen (FUNCTION-Blöcke) helfen Ihnen dabei, einen strukturierten Überblick über Ihr Programm zu behalten, indem sie das Programm in logische Abschnitte aufteilen.
+Ein Vorteil von Prozeduren und Funktionen ist beispielsweise die Möglichkeit, einmal entwickelten Programmcode für bestimmte Aufgabenkomponenten in anderen Projekten erneut zu verwenden.
+Übergeben von Variablen an Prozeduren (SUB) und Funktionen (FUNCTION)
+Sie können sowohl an Prozeduren als auch an Funktionen Variablen übergeben.
+Die SUB- oder FUNCTION-Einheit muss jedoch so deklariert werden, dass sie Parameter erwartet:
+Parameter1 As Type, Parameter2 As Type,...
+)
+Programmcode
+END SUB
+Die SUB wird mit folgender Syntax aufgerufen:
+SubName(Wert1, Wert2,...)
+Die an eine SUB übergebenen Parameter müssen zu den in der SUB-Deklaration definierten Parametern passen.
+Das gleiche gilt für die Verwendung von FUNCTIONs, nur mit dem Unterschied, dass sie ein Funktionsergebnis zurückliefern.
+Dieses Funktionsergebnis bestimmen Sie am besten kurz vor Erreichen des Funktionsendes.
+Sie bestimmen das Funktionsergebnis, indem Sie den Wert, den die Funktion zurückliefern soll, dem Funktionsnamen wie einem Parameter zuweisen (vergleiche Beispiellisting).
+FUNCTION FunctionName(Parameter1 as Typ, Parameter2 as Typ,...) as Typ
+Programmcode
+FunktionsName=Ergebnis
+End Function
+Die FUNCTION wird mit folgender Syntax aufgerufen:
+Variable=FunctionName(Parameter1, Parameter2,...)
+Library.Module.Macro()
+Um beispielsweise den Autotext-Makro in der Bibliothek &quot; Gimmicks &quot; aufzurufen, geben Sie den folgenden Befehl ein:
+Gimmicks.AutoText.Main()
+Übergeben von Variablen als Wert oder Referenz
+Sie können Parameter entweder als Referenz oder als Wert an eine SUB oder FUNCTION übergeben.
+Falls nicht anders festgelegt werden Parameter standardmäßig immer als Referenz übergeben.
+Dies bedeutet, dass die SUB bzw.
+FUNCTION den Parameter erhält und seinen Wert lesen und ändern kann.
+Wenn Sie einen Parameter als Wert übergeben möchten, fügen Sie beim Aufruf der SUB oder FUNCTION das Schlüsselwort &quot; ByVal &quot; vor dem Parameter ein, z.
+B.:
+ByVal
+Parameter)
+In diesem Fall kann die Funktion den ursprünglichen Inhalt des Parameters nicht ändern, da sie nur den Wert erhält, nicht jedoch den Parameter selber.
+Gültigkeitsbereich von Variablen
+Eine Variable innerhalb einer SUB oder einer FUNCTION definiert bleibt dort nur solange gültig, bis die Prozedur verlassen wird.
+Diese ist als eine &quot; lokale &quot; Variable bekannt.
+In vielen Fällen benötigen Sie eine Variable, die in allen Prozeduren, in jedem Modul aller Bibliotheken gültig ist, oder nachdem eine SUB oder FUNCTION ausgeführt wird.
+Deklarieren von Variablen außerhalb einer SUB oder FUNCTION
+GLOBAL VarName As TYPNAME
+Diese Variable bleibt während die gesamte $[officename]-Sitzung gültig.
+PUBLIC VarName As TYPNAME
+Die Variable hat in allen Modulen Gültigkeit.
+PRIVATE VarName As TYPNAME
+Die Variable hat nur im Modul Gültigkeit.
+DIM VarName as TYPENNAME
+Die Variable ist nur in diesem Modul gültig.
+Beispiele für private Variablen
+Durch das Setzen von CompatibilityMode(true) werden private Variablen bezüglich eines einzelnen Moduls als privat behandelt.
+from i17948, see i54894
+REM ***** Modul 1 *****
+Private meinText As String
+Sub initMeinText
+meinText = &quot; Hallo &quot;
+print &quot; in Modul 1 : &quot; , meinText
+End Sub
+REM ***** Modul 2 *****
+'Option Explicit
+Sub demoBug
+CompatibilityMode(true)
+initMeinText
+' Gibt jetzt einen leeren String zurück
+' (oder löst einen Fehler für Option Explicit aus)
+print &quot; Jetzt in Modul 2 : &quot; , meinText
+End Sub
+Speichern von Variableninhalten nach dem Verlassen einer SUB oder FUNCTION
+STATIC VarName As TYPNAME
+Die Variable behält ihren Wert bis zum nächsten Einstieg in die FUNCTION oder SUB.
+Die Deklaration muss innerhalb einer SUB oder FUNCTION stehen.
+Festlegen des Rückgabewert-Typs einer FUNCTION
+Um den Typ der Rückgabevariablen einer Funktion zu definieren, hängen Sie wie bei einer Variablen ein Typ-Deklarationszeichen an den Funktionsnamen an oder geben den Typ am Ende der Parameterliste durch &quot; As &quot; und das entsprechende Schlüsselwort an.
+Beispiel:
+function WordCount(WordText as String) as Integer

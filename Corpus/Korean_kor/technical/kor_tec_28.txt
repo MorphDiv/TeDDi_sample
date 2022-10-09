@@ -1,0 +1,71 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+This section gathers most common errors that occur at build time.
+1. I got the latest version of PHP using the anonymous CVS service, but there's no configure script!
+You have to have the GNU autoconf package installed so you can generate the configure script from configure.in. Just run ./buildconf in the top-level directory after getting the sources from the CVS server. (Also, unless you run configure with the --enable-maintainer-mode option, the configure script will not automatically get rebuilt when the configure.in file is updated, so you should make sure to do that manually when you notice configure.in has changed. One symptom of this is finding things like @VARIABLE@ in your Makefile after configure or config.status is run.)
+2. I'm having problems configuring PHP to work with Apache. It says it can't find httpd.h, but it's right where I said it is!
+You need to tell the configure/setup script the location of the top-level of your Apache source tree. This means that you want to specify --with-apache=/path/to/apache and not --with-apache=/path/to/apache/src.
+3. While configuring PHP (./configure), you come across an error similar to the following:
+
+Be sure to read the installation instructions carefully and note that you need both flex and bison installed to compile PHP. Depending on your setup you will install bison and flex from either source or a package, such as a RPM.
+4. When I try to start Apache, I get the the following message:
+
+This error usually comes up when one compiles the Apache core program as a DSO library for shared usage. Try to reconfigure apache, making sure to use at least the following flags:
+
+For more information, read the top-level Apache INSTALL file or the Apache DSO manual page.
+5. When I run configure, it says that it can't find the include files or library for GD, gdbm, or some other package!
+You can make the configure script looks for header files and libraries in non-standard locations by specifying additional flags to pass to the C preprocessor and linker, such as:
+6. When it is compiling the file language-parser.tab.c, it gives me errors that say yytname undeclared.
+You need to update your version of Bison. You can find the latest version at ftp://ftp.gnu.org/pub/gnu/bison/.
+7. When I run make, it seems to run fine but then fails when it tries to link the final application complaining that it can't find some files.
+Some old versions of make that don't correctly put the compiled versions of the files in the functions directory into that same directory. Try running cp *.o functions and then re-running make to see if that helps. If it does, you should really upgrade to a recent version of GNU make.
+8. When linking PHP, it complains about a number of undefined references.
+Take a look at the link line and make sure that all of the appropriate libraries are being included at the end. Common ones that you might have missed are '-ldl' and any libraries required for any database support you included.
+If you're linking with Apache 1.2.x, did you remember to add the appropriate information to the EXTRA_LIBS line of the Configuration file and re-rerun Apache's Configure script? See the INSTALL file that comes with the distribution for more information.
+Some people have also reported that they had to add '-ldl' immediately following libphp4.a when linking with Apache.
+9. I can't figure out how to build PHP with Apache 1.3.
+This is actually quite easy. Follow these steps carefully:
+Grab the latest Apache 1.3 distribution from http://www.apache.org/dist/.
+Ungzip and untar it somewhere, for example /usr/local/src/apache-1.3.
+Compile PHP by first running ./configure --with-apache=/ path /apache-1.3 (substitute path for the actual path to your apache-1.3 directory.
+Type make followed by make install to build PHP and copy the necessary files to the Apache distribution tree.
+Change directories into to your / path /apache-1.3/src directory and edit the Configuration file. Add to the file: AddModule modules/php4/libphp4.a.
+Type: ./Configure followed by make.
+You should now have a PHP-enabled httpd binary!
+Note: You can also use the new Apache ./configure script. See the instructions in the README.configure file which is part of your Apache distribution. Also have a look at the INSTALL file in the PHP distribution.
+10. I have followed all the steps to install the Apache module version on UNIX, and my PHP scripts show up in my browser or I am being asked to save the file.
+This means that the PHP module is not getting invoked for some reason. Three things to check before asking for further help:
+Make sure that the httpd binary you are running is the actual new httpd binary you just built. To do this, try running: /path/to/binary/httpd -l
+If you don't see mod_php4.c listed then you are not running the right binary. Find and install the correct binary.
+Make sure you have added the correct Mime Type to one of your Apache .conf files. It should be: AddType application/x-httpd-php3 .php3 (for PHP 3)
+or AddType application/x-httpd-php .php (for PHP 4)
+Also make sure that this AddType line is not hidden away inside a Virtualhost or Directory block which would prevent it from applying to the location of your test script.
+Finally, the default location of the Apache configuration files changed between Apache 1.2 and Apache 1.3. You should check to make sure that the configuration file you are adding the AddType line to is actually being read. You can put an obvious syntax error into your httpd.conf file or some other obvious change that will tell you if the file is being read correctly.
+11. It says to use: --activate-module=src/modules/php4/libphp4.a, but that file doesn't exist, so I changed it to --activate-module=src/modules/php4/libmodphp4.a and it doesn't work!? What's going on?
+Note that the libphp4.a file is not supposed to exist. The apache process will create it!
+12. When I try to build Apache with PHP as a static module using --activate-module=src/modules/php4/libphp4.a it tells me that my compiler is not ANSI compliant.
+This is a misleading error message from Apache that has been fixed in more recent versions.
+13. When I try to build PHP using --with-apxs I get strange error messages.
+There are three things to check here. First, for some reason when Apache builds the apxs Perl script, it sometimes ends up getting built without the proper compiler and flags variables. Find your apxs script (try the command which apxs, it's sometimes found in /usr/local/apache/bin/apxs or /usr/sbin/apxs. Open it and check for lines similar to these:
+14. During make, I get errors in microtime, and a lot of RUSAGE_ stuff.
+During the make portion of installation, if you encounter problems that look similar to this:
+Your system is broken. You need to fix your /usr/include files by installing a glibc-devel package that matches your glibc. This has absolutely nothing to do with PHP. To prove this to yourself, try this simple test:
+15. I want to upgrade my PHP. Where can I find the ./configure line that was used to build my current PHP installation?
+Either you look at config.nice file, in the source tree of your current PHP installation or, if this is not available, you simply run a
+16. When building PHP with the GD library it either gives strange compile errors or segfaults on execution.
+Make sure your GD library and PHP are linked against the same depending libraries (e.g. libpng).

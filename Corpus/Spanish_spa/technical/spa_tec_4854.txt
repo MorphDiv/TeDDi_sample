@@ -1,0 +1,36 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+& kppp; y los asuntos de seguridad
+Esta sección está mayormente indicada para los administradores (root) con importantes demandas en seguridad, o simplemente a quién tenga un interés técnico. No es necesario leerlo si únicamente utiliza & Linux; a nivel doméstico, aunque siempre puede aprender algo.
+Restricción de acceso a & kppp;
+Un administrador de sistema puede querer restringir el acceso a según quién utilice & kppp;. Hay dos maneras de acometer esto.
+Restricción de acceso con permisos de grupo
+Cree un nuevo grupo (quizá llamado dialout o similar), y ponga a todos los usuarios a los que se les permita usar & kppp; en ese grupo. Después teclee en la línea de órdenes:
+# chown root. dialout / opt/ kde/ bin/ kppp # chmod 4750 / opt/ kde/ bin/ kppp
+Esto asume que & kde; está instalado en / opt/ kde/ y que el nuevo grupo se llama dialout.
+Restricción de acceso por el método de & kppp;
+Antes de hacer nada, & kppp; comprueba si hay un archivo llamado / etc/ kppp. allow. Si dicho archivo existe, sólo les estará permitido llamar a los usuarios nombrados en el mismo. El archivo debe ser legible (pero por supuesto NO puede ser escrito). Sólo se reconocen los nombres de usuario, así que no se pueden utilizar identificadores de usuario (UID) en este archivo. Este es un pequeño ejemplo:
+# / etc/ kppp. allow # comment lines like this are ignored # as well as empty lines fred karl daisy
+En el ejemplo anterior, sólo los usuarios fred, karl y daisy pueden efectuar llamadas, así como cualquier usuario con un UID de 0 (de modo que no hay que incluir a root específicamente).
+¿kppp; tiene el bit SUID activo? ¿Qué pasa con la seguridad?
+Es virtualmente imposible escribir un sistema de llamadas telefónicas sin el bit SUID que sea al mismo tiempo fiable y sencillo de utilizar para los usuarios inexpertos. & kppp; aborda los problemas de seguridad con la siguiente estrategia.
+Inmediatamente después de iniciarse, & kppp; se divide.
+El proceso maestro, que se ocupa de todas las operaciones del entorno gráfico (como la interacción con el usuario), abandona el estado SUID tras la división, y se ejecuta con privilegios de usuario normal.
+El proceso esclavo mantiene sus privilegios, y es el responsable de todas las acciones que necesitan privilegios de root. Para mantener esta parte segura, aquí no se utiliza ninguna llamada a las bibliotecas de & kde; o & Qt;, sólo se hacen llamadas a bibliotecas sencillas. El código fuente de este proceso es corto (unas 500 líneas) y está muy bien documentados, así que es fácil buscar agujeros de seguridad.
+Los procesos maestro y esclavo se comunican a través del IPC estándar de & UNIX;.
+Un agradecimiento especial a Harri Porten por escribir este excelente segmento de código. Se pensaba que era imposible, pero el lo resolvió en una semana.

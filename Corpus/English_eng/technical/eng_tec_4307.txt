@@ -1,0 +1,61 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3, PHP 4)
+Pack given arguments into binary string according to format.
+Returns binary string containing data.
+The idea to this function was taken from Perl and all formatting codes work the same as there, however, there are some formatting codes that are missing such as Perl' s "u "format code.
+The format string consists of format codes followed by an optional repeater argument.
+The repeater argument can be either an integer value or * for repeating to the end of the input data.
+For a, A, h, H the repeat count specifies how many characters of one data argument are taken, for @ it is the absolute position where to put the next data, for everything else the repeat count specifies how many data arguments are consumed and packed into the resulting binary string.
+Currently implemented are
+a NUL-padded string
+A SPACE-padded string
+h Hex string, low nibble first
+H Hex string, high nibble first
+c signed char
+C unsigned char
+s signed short (always 16 bit, machine byte order)
+S unsigned short (always 16 bit, machine byte order)
+n unsigned short (always 16 bit, big endian byte order)
+v unsigned short (always 16 bit, little endian byte order)
+i signed integer (machine dependent size and byte order)
+I unsigned integer (machine dependent size and byte order)
+l signed long (always 32 bit, machine byte order)
+L unsigned long (always 32 bit, machine byte order)
+N unsigned long (always 32 bit, big endian byte order)
+V unsigned long (always 32 bit, little endian byte order)
+f float (machine dependent size and representation)
+d double (machine dependent size and representation)
+x NUL byte
+X Back up one byte
+@ NUL-fill to absolute position
+Example 1. pack() format string
+$binarydata = pack ("nvc*", 0x1234, 0x5678, 65, 66);
+The resulting binary string will be 6 bytes long and contain the byte sequence 0x12, 0x34, 0x78, 0x56, 0x41, 0x42.
+Note that the distinction between signed and unsigned values only affects the function unpack(), where as function pack() gives the same result for signed and unsigned format codes.
+Also note that PHP internally stores integer Also note that PHP internally stores integer values as signed values of a machine dependent size.
+If you give it an unsigned integer value too large to be stored that way it is converted to a float which often yields an undesired result.
+Prev
+Home
+Next
+ignore_user_abort
+Up
+show_source

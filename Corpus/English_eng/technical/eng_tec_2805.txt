@@ -1,0 +1,45 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3, PHP 4)
+This function scans string for matches to pattern, then replaces the matched text with replacement.
+The modified string is returned. (Which may mean that the original string is returned if there are no matches to be replaced.)
+If pattern contains parenthesized substrings, replacement may contain substrings of the form\\ digit, which will be replaced by the text matching the digit' th parenthesized substring; \\0 will produce the entire contents of string.
+Up to nine substrings may be used.
+Parentheses may be nested, in which case they are counted by the opening parenthesis.
+If no matches are found in string, then string will be returned unchanged.
+For example, the following code snippet prints "This was a test" three times:
+Example 1. ereg_replace() Example
+$string = "This is a test"; echo ereg_replace (" is", "was", $string); echo ereg_replace (" ()is", "\\1was", $string); echo ereg_replace ("( ()is)", "\\2was", $string);
+One thing to take note of is that if you use an integer value as the replacement One thing to take note of is that if you use an integer value as the replacement parameter, you may not get the results you expect.
+This is because ereg_replace() will interpret the number as the ordinal value of a character, and apply that.
+For instance:
+Example 2. ereg_replace() Example
+?php / * This will not work as expected. * / $num = 4; $string = "This string has four words ."; $string = ereg_replace('four', $num, $string); echo $string; / * Output: 'This string has words. '* / / * This will work. * / $num = '4'; $string = "This string has four words ."; $string = ereg_replace('four', $num, $string); echo $string; / * Output: 'This string has 4 words.' * /?
+Example 3.
+Replace URLs with links
+$text = ereg_replace( "[[:alpha :]]+: / /[^ [:space :]]+[[:alnum:] / ]", "a href=\"\\0\" \\0 / a ", $text);
+See also ereg(), eregi(), eregi_replace(), str_replace(), and preg_match().
+Prev
+Home
+Next
+Regular Expression Functions (POSIX Extended)
+Up
+ereg

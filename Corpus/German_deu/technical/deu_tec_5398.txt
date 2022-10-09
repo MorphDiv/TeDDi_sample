@@ -1,0 +1,41 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+& kommander;-Grundlagen
+Tamara King
+tik@acm.org
+Eric Laffoon
+sequitur@kde.org
+Georg Schuster gschuster@utanet.at Deutsche Übersetzung
+Konzepte
+& kommander; wurde ursprünglich rund um ein einfaches Konzept entworfen, das sich als revolutionär unter den visuellen Entwicklungswerkzeugen entpuppt hat. Typischerweise ermöglichen diese Werkzeuge die Erstellung von Dialogen und möglicheweise von Benutzeroberflächen. So eine Benutzeroberfläche hat Menüs, Werkzeugleisten, eine Statusleiste und den Anwendungsbereich. Dialoge sind Kindfenster ohne Menüs und tragen ihren Namen weil ihr Zweck ist, in Dialog mit dem Benutzer zu treten oder mit ihm Informationen auszutauschen. Die Elemente auf einem Dialog werden Bedienelemente genannt und man verknüpft das Programm und diese Bedienelemente. & kommander; ist anders, weil es von vorneherein nicht programmiert. Es benutzt ein Konzept der Verknüpfung von Text mit den Bedienelementen im Dialog. Ursprünglich wurde dies Assoziierter Text genannt, nun heißt es einfach kommander;-Text. Bedienelemente in & kommander;-Dialogen können den Inhalt anderer Bedienelemente durch Referenz enthalten und ein Bedienelement kann seinen eigenen Inhalt referenzieren, mittels Anweisung, die so aussieht: @BedienelementText. Anweisungensind Befehle mit besonderer Bedeutung in & kommander;. Es kann also, wenn ein Dialog mit zwei einzeiligen Eingabefeld-Bedienelementen, dem ersten Vorname und dem zweiten Nachname, erstellt wurde, eine Schaltfläche mit dem & kommander;-Text Mein Name ist @Vorname @Nachname hinzugefügt werden. Zuerst müßte Vor- und Nachname ausgefüllt werden, dann könnte & kommander; die Referenz benutzen. Von der Konsole gestartet, könnte die ganze Zeichenkette ausgegeben werden. Es würde den Vornamen so erhalten: @Vorname - > hole das Bedienelement Vorname (@Vorname) - > @BedienelementText - > hole den Inhalt des einzeiligen Eingabefeldes. Wenn dort Eric eingegeben worden wäre, liefert @Vorname also Eric.
+Das ist, vereinfacht, der Kern von & kommander;. Interessant ist, was man daraus machen kann. Zunächst sollte angemerkt werden, dass, verglichen mit der Art von auf Programmiersprachen gestützten Werkzeugen, & kommander; keine Programmanweisungen für solche Operationen braucht. Das macht & kommander; schnell für Entwickler. Für Endbenutzer ist es einfacher, als Programmiersprachen zu lernen. Für Jedermann bedeutet es, die Aufgabe in den Mittelpunkt zu stellen, statt die Sprachreferenz ewig mitzuführen. Anfangs, wenn Leute mit einem Werkzeug wie & kommander; in Berührung kommen, ist die erste Frage Wofür kann ich dieses Werkzeug nutzen? Es stellt sich heraus, dass der Umgang mit Zeichenketten allgegenwärtig ist.
+Also, was kann & kommander; leisten? Hier die Liste mit grundlegenden Operationen. & kommander; kann:
+Zeichenketten an das aufrufende Programm über stdout weitergeben.
+Programme aufrufen.
+& DCOP; benutzen um mit & kde;-Programmen zusammenzuarbeiten
+Wenn sie keine Programmierer sind, möchten Sie die Erklärung allgemein verständlich. Erstens, wenn & kommander; von der Konsole gestartet wird, ist die Konsole das aufrufende Programm. Es besteht eine Eltern-Kind Beziehung hier. Durch die Standardausgabe (stdout), so genannt, weil es auch eine Fehlerausgabe gibt, des Kindprogrammes kann eine Nachricht zur Konsole geschickt werden. Dies ist interessant, weil Programme wie & quantaplus; die Standardausgabe nutzen, um Information von Programmen, dies sie starten, zu erhalten. Auf diese Weise können & kommander;-Dialoge ihre Text-Ausgabe direkt an den Editor von & quantaplus; lierfern, wenn sie aus & quantaplus; gestartet wurden. Das bedeutet, & kommander;-Dialoge können für die Erweiterung eines Programmes genutzt werden.
+Der zweite Fall ist der Aufruf einer ausführbaren Datei. Jedes Programm, das auf ihrem Rechner läuft, ist ausführbar. Auch ein Skript-Programm, das von einem Interpreter ausgeführt wird, ist, technisch gesehen, ausführbar. & kommander; kann Befehle wie auf der Konsole ausführen, auch wenn vom Menü gestartet. So würde beispielsweise, wenn es & GIMP; starten soll, eine Schaltfläche die Beschriftung The Gimp tragen und eine Anweisung wie: @exec(gimp) enthalten. Das genügt, um bei Benutzung & GIMP; starten zu lassen. Man könnte auch ls -l ausführen lassen, aber das Ergebnis wäre nur von einer Konsole aus sichtbar.
+Der dritte Fall ist besonders interessant. & DCOP; ist die Abkürzung für & kde;s D esktop CO mmunication P rotocol und ist sehr leistungsfähig. Starten Sie das kdcop -Programm und sehen Sie die Liste an. Jede standardkonforme & kde;-Anwendung hat Dinge in & DCOP; und die fortschrittlich gestalteten benutzen es intensiv. Mit & DCOP; ist die Suche nach Informationen jeder Art ebenso wie die Einstellung von Bedienelement-Werten und mehr möglich. Ein Teil dieses Handbuches beschreibt die Verwendung von & DCOP;. & kommander; kann & DCOP;-Anforderungen senden als auch selbst über & DCOP; gesteuert werden. Von der Befehlszeile können & DCOP;-Anfragen an jedes & kde;-Programm gesendet werden. Wo ist also die Verbesserung? Bei einer großen Anzahl von & DCOP;-Anforderungen über die Befehlszeile wird es sehr langsam, wenn z. B. Schleifen hunderte Mal ausgeführt werden. Hier hat & kommander; eine @dcop Anweisung, weil das etwa 1000 Mal schneller läuft. Weil & kommander; & DCOP; senden und empfangen kann, ist es möglich, damit & kommander; zu skripten. Daher haben wir auch eine lokale & DCOP; Anweisung, @ldcop, um weniger für das Absetzen eines Befehls eingeben zu müssen.
+Sind das alle Kernkonzepte in & kommander;? Nein, aber es sollte für das grundsätzliche Verständnis, wie es funktioniert, hilfreich sein, sodass es nicht wie eine Fremdsprache wirkt. Es gibt aber noch mehr. Mit Signalen und Slots behandelt & kommander; Ereignisse. Ein Ereignis in einem Programm meint irgendetwas geschah, wie die Schaffung eines Bedienelementes oder die Änderung des enthaltenen Textes. Diese Änderungen senden Signal aus, die mit einem empfangenden Slot verbunden werden können, der dann etwas tut, wenn das Ereignis auftritt. Eine Anwendung in & kommander; ist Population-Text, das bei Aufruf ein Bedienelement mit Text befüllt. Ebenso wie & kommander;-Text kann Population-Text Zeichenketten oder Skripte enthalten.
+Das sollte die Basis für den Beginn mit & kommander; legen. Wir versuchen die Anzahl der Anweisungen niedrig zu halten und verwenden häufig & DCOP;. Die Idee ist, die Mächtigkeit von & kommander; so schlank und einheitlich wie möglich zu gewährleisten. Es kann jede Skriptsprache in & kommander; eingebaut werden, sogar mehrere gleichzeitig in einem Dialog. Im weiteren Bereich der Dokumentation wird vorausgesetzt, dass die hier präsentierten Konzepte und Begriffe bekannt sind. Sehr nützlich für das Verständnis, was mit & kommander; möglich ist, sind auch die Beispiele und Anleitungen.
+& editor;
+Der Executor
+Der Executer, benannt kmdr-executor, führt & kommander;-Skripte aus. Er ladet .kmdr Dateien und erzeugt dynamische, voll funktionale Dialoge.
+Excecutor für Entwickler
+C++ Entwickler können leicht die KmdrDialogInstance Klasse in ihren C++-Programmen nutzen und damit die Funktionalität in ihre Anwendungen einbetten, sodass kein Bedarf besteht, das eigenständige Executor-Programm auszuführen. Für Standarddialoge ist der Aufwand für die Dialogerstellung minimal, aber die Erstellung der & kde;-Anwendung beim Start kann den Dialog für etwa eine Sekunde verzögern.
+Einen Dialog erstellen

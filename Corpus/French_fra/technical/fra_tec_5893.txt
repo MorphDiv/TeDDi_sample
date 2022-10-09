@@ -1,0 +1,128 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Options de & CUPS; n'étant pour l'instant pas accessibles par le & centreConfiguration;
+Ce chapitre donne quelques astuces sur des possibilités de configuration qui peuvent ne pas être accessibles par & kdeprint; l'GUI; pour & CUPS;.
+Vue d'ensemble des caractéristiques fournies
+Les caractéristiques et fonctionnalités les plus utilisées que & CUPS; fournit sont toutes gérées dans & kdeprint;.
+La gestion des imprimantes est gérée & #160;: ajouter, supprimer, modifier, configurer, tester, désactiver, activer...
+La gestion des tâches est supportée & #160;: annuler, suspendre, continuer, déplacer vers une imprimante différente
+Options d'impression & #160;: pour un contrôle total tel que fourni par & CUPS;.
+Où trouver de l'aide lors de l'utilisation de & CUPS;
+Beaucoup d'informations sur le fonctionnement interne de & CUPS; sont disponibles à partir de l'interface web, que & CUPS; gérera toujours. L'interface fonctionne avec n'importe quel navigateur (même les navigateurs texte). Utilisez l'adresse http: / /localhost:631/ pour commencer. Vous trouverez à cette adresse un lien vers la documentation disponible localement de & CUPS; aux formats HTML et PDF si & CUPS; est nouveau pour vous.
+& CUPS; est accessible par d'autres moyens que & kdeprint; & #160;: la ligne de commande et le navigateur sont deux interfaces natives de & CUPS;. Les nombreux outils en ligne de commande vous donne le contrôle le plus complet que vous puissiez avoir sur & CUPS;. L'interface web est seulement un sous-ensemble des options de configuration et de contrôle disponibles.
+Cela est également vrai pour & kdeprint;. Généralement, au fur et à mesure du développement de & CUPS;, la plupart des nouvelles fonctionnalités seront d'abord accessibles par la ligne de commande. Assurez -vous de consulter la dernière version des pages de manuel de & CUPS; pour rester à jour avec les nouvelles fonctionnalités après avoir installé une nouvelle version.
+Selon la manière dont vous mettez à jour & CUPS;, il se peut que votre fichier de configuration actif n'ait pas été remplacé par un nouveau. Ainsi, votre nouveau et plus efficace démon & CUPS; pourrait ne pas être au courant des nouvelles fonctionnalités à utiliser.
+Une liste complète des fichiers et pages de manuel disponibles devrait toujours se trouver dans le manuel de l'administrateur logiciel de & CUPS; (http: / /localhost:631/ sam. html#FILES. Dans la barre d'URL; de & konqueror;, saisissez man: / lpadmin et man: / cupsd. conf pour vous informer sur les commandes et les fichiers de configuration les plus importants. Vous connaissiez déjà la sympathique possibilité de & konqueror; d'afficher les traditionnelles pages de manuel & UNIX; n'est -ce pas & #160;? Lisez ceci. À partir d'ici, vous trouverez des astuces intéressantes et des liens vers d'autres pages de manuel et de documentation.
+Comment trouver les pages de manuel concernant & CUPS;
+Voici un moyen de trouver les pages de manuel sur & CUPS; présentes dans votre système & #160;:
+kurt@transmeta: ~ > apropos cups cups-calibrate (8)- ESP Printer Calibration Tool lpstat (1) - print cups status information cups-lpd (8) - receive print jobs + report printer status to lpd clients classes. conf (5) - class configuration file for cups backend (1) - cups backend transmission interfaces filter (1) - cups file conversion filter interfaces cups-polld (8) - cups printer polling daemon mime. types (5) - mime type description file for cups cupsd (8) - common unix printing system daemon lpadmin (8) - configure cups printers and classes cupsd. conf (5) - server configuration file for cups mime. convs (5) - mime type conversion file for cups printers. conf (5) - printer configuration file for cups mime. convs (5) - mime type conversion file for cups cups-polld (8) - cups printer polling daemon lpstat (1) - print cups status information backend (1) - cups backend transmission interfaces mime. types (5) - mime type description file for cups cupsd (8) - common unix printing system daemon lpadmin (8) - configure cups printers and classes printers. conf (5) - printer configuration file for cups cupsd. conf (5) - server configuration file for cups filter (1) - cups file conversion filter interfaces
+En dehors de & kdeprint;, quelques trucs et astuces pour & CUPS; avec la ligne de commande
+Voici quelques exemples d'options qui ne sont actuellement accessibles que si vous utilisez la ligne de commande.
+Autoriser ou refuser l'accès à l'imprimante pour certains utilisateurs
+Lorsque vous installez (ou modifiez) un imprimante avec la ligne de commande, vous pouvez soit refuser soit autoriser l'utilisation de cette imprimante à certains utilisateurs & #160;:
+lpadmin -p HeidelbergDigimaster9110 -v lpd: / 10.160.16.99/ mqueue -u allow: kurt, sylvi, hansjoerg -E -P / home/ kurt/ PPDs/ DVHV. ppd
+permettra l'utilisation de cette (croyez moi & #160;: très jolie et très professionelle) imprimante seulement aux trois utilisateurs mentionnés et la refusera à tous les autres. Si un autre utilisateur veut imprimer avec la DigiMaster à partir du serveur & CUPS;, il recevra un message d'erreur avec les lignes client-error-not-possible.
+lpadmin -p HeidelbergDigimaster9110 -v lpd: / 10.160.16.99/ mqueue -u deny: tackat, boss, waba -E -P / home/ kurt/ PPDs/ DVHV. ppd
+refusera l'utilisation de cette même imprimante aux trois utilisateurs mentionnés et dans le même temps la permettra à tous les autres utilisateurs. Si un utilisateur refusé veut imprimer avec la DigiMaster à partir du serveur & CUPS;, il recevra un message d'erreur avec les lignes client-error-not-possible.
+Il n'est possible d'utiliser qu'une seule option à la fois & #160;; il n'y a actuellement aucun support pour une option similaire gérant les droits par groupes. Cela sera implémenté dans le futur.
+Imposer des quotas pour certaines imprimantes
+Vous voulez parfois imposer des quotas pour certaines imprimantes. Avec les quotas, vous pouvez définir une limite supérieure pour le nombre de pages ou pour la quantité de données à imprimer pour une certaine durée et pour une certaine imprimante.
+Les quotas peuvent être définis avec l'option -o lors de l'installation de l'imprimante avec la commande lpadmin, ou plus tard pour une imprimante déjà existante. Voici maintenant quelques indications (qui ne sont pas présentes au moment d'écrire la documention officielle de & CUPS;) & #160;:
+Avec & CUPS; vous pouvez avoir des quotas pour les imprimantes individuelles basés sur le nombre de page et sur la taille des fichiers.
+Les quotas sont calculés individuellement pour chaque utilisateur (donc un seul ensemble de limites s'applique à tous les utilisateurs pour l'imprimante concernée).
+Les quotas incluent également les pages supplémentaires (si elles sont utilisées).
+Cela signifie que vous pouvez limiter chaque utilisateur à 20 pages par jour sur une imprimante chère, mais que vous ne pouvez pas limiter tous les utilisateurs sauf Kurt ou root.
+Il y a les options job-k-limit, job-page-limit, et job-quota-period à donner lors de la mise en place d'une imprimante.
+L'option job-quota-period définit un intervalle de temps pour le calcul des quotas (les intervalles sont donnés en secondes & #160;; ainsi un jour fait 60x60x24=86 400, une semaine fait 60x60x24x7=604 800 et un mois fait 60x60x24x30=2 592 000 secondes).
+Pour que les quotas s'appliquent, il faut que la période de temps et au moins une limite soient définies avec une valeur non nulle.
+La valeur par défaut de 0 pour job-k-limit indique qu'il n'y a pas de limite.
+La valeur par défaut de 0 pour job-page-limit indique qu'il n'y a pas de limite.
+La valeur par défaut de 0 pour job-quota-period indique que les limites s'appliquent à toutes les tâches qui ont été imprimées par un utilisateur et qui sont encore connues par le système.
+Exemples pratiques & #160;:
+Cas où une durée plus une ou les deux limites de tâches sont définies
+lpadmin -p danka_infotec_4850 -o job-quota-period=604800 -o job-k-limit=1024
+Cette commande définit la limite à 1 & #160; Mo de fichier (en tout) par semaine pour chaque utilisateur de l'imprimante danka_infotec_4850.
+lpadmin p danka_infotec_4105 -o job-quota-period=604800 -o job-page-limit=100
+Cette commande définit la limite à 100 & #160; pages (en tout) par semaine pour chaque utilisateur de l'imprimante danka_infotec_4105.
+lpadmin -p danka_infotec_P450 -o job-quota-period=604800 -o job-k-limit=1024 -o job-page-limit=100
+Cette commande définit une limite combinée de 1 & #160; Mo (en tout) et de 100 & #160; pages (en tout) par semaine pour chaque utilisateur de l'imprimante danka_infotec_P450. La première limite atteinte sera effective.
+Exemples qui ne marchent pas
+Ne marche PAS, car une seule période de temps ou limite de tâche a été définie.
+lpadmin -p danka_infotec_P320 -o job-quota-period=604800 lpadmin -p danka_infotec_FullColor -o job-page-limit=100 lpadmin -p danka_infotec_HiSpeed -o job-k-limit=1024
+Messages d'erreur relatifs
+Lorsqu'un utilisateur atteint la limite de son quota, il aura le message client-error-not-possible s'il désire imprimer.
+Installer une imprimante brute
+Il y a différentes façons de définir une imprimante brute. Une manière simple est d'utiliser la commande lpadmin. Il suffit de ne pas définir de fichier & PPD; à utiliser pour cette imprimante, et elle sera brute.
+lpadmin -p Raw_Danka_infotec -E -v lpd: / /10.160.16.137/ PORT1
+Les files d'impression d'imprimantes brutes ne modifient pas le fichier à imprimer pour le transformer en un autre format de fichier. Cela est utile, par exemple, dans le cas où vous imprimez à partir d'un client & Windows; avec Samba par un serveur & CUPS; sur une imprimante PCL & #160;: dans ce cas, le pilote de l'imprimante sous & Windows; générera le fichier à imprimer formaté pour l'imprimante de destination. Filtrer ce fichier avec un filtre & CUPS; ne pourrait qu'endommager le fichier. Dans certains cas (si vous voulez être certain que le fichier soit bien envoyé vers l'imprimante non filtrée par & CUPS;, la commande lpadmin sans un & PPD; est utile.
+Problèmes & CUPS; dans & kdeprint;
+Cette section du manuel de & kdeprint; sera animée par les réactions des utilisateurs. Voici un petit début.
+Messages d' erreur
+Qu'est -ce que l'erreur client-error-bad-request signifie & #160;?
+L'utilisateur a envoyé un fichier au serveur & CUPS; que celui -ci n'a pas pu traiter. Vous obtenez également ce message lorsque vous envoyez un fichier vide.
+Et client-error-not-possible & #160;?
+Ce message peut être rencontré pour deux raisons. La première dans le cas où l'utilisateur n'est pas autorisé à imprimer sur une certaine imprimante. La seconde raison est le cas où l'utilisateur a atteint son quota (basé sur la taille des fichiers ou sur le nombre de pages)
+Qu'en est -il pour le message client-error-not-found & #160;?
+L'utilisateur a essayé d'accéder à une ressource non existante sur le serveur & CUPS; comme essayer d'imprimer un fichier non existant ou un fichier où vous n'avez pas la permission en lecture.
+Questions et réponses
+Pourquoi est -ce que je ne peux pas relancer mes tâches & #160;?
+Pour pouvoir relancer vos tâches terminées à partir de l'interface web, vous avez besoin d'un paramètre dans le fichier / etc/ cups/ cupsd. conf & #160;: set PreserveJobFiles True.
+Comment est -ce que je me débarrasse de la longue liste de tâches terminées dans l'interface web & #160;?
+TODO
+Comment les pages sont -elles comptabilisées & #160;?
+& CUPS; comptabilise les impressions en faisant passer toutes les tâches par le filtre pstops. Ce filtre se charge, entre autres, de compter le nombre de pages. La sortie de ce filtre peut alors être envoyée à d'autres filtres (comme pstoraster & #160; / & #160; rastertopcl) ou directement à l'imprimante (si c'est une imprimante & PostScript;).
+Cela marche de la même façon pour les imprimantes réseaux, parallèles, séries ou USB. Pour que pstops fonctionne, il faut qu'il reçoive en entrée un & PostScript; qui respecte le DSC (Document Structuring Convention) ou un équivalent proche. Il calcule le nombre de pages durant le filtrage sur le serveur d'impression et écrit dans le fichier / var/ log/ cups/ page_log des informations pour chaque page (quelle heure, quel utilisateur, quels numéro et nom de tâche, quelle imprimante, combien d'exemplaires, combien de kilo octets & #160;?).
+En passant & #160;: parmi ma liste de souhaits personnelle, il y a un hack du webalizer pour qu'il lise et analyse le fichier page_log et en retourne une sortie similaire. Quelqu'un & #160;?
+Cependant, cela ne donne pas de résultats corrects dans les cas suivants & #160;:
+L'imprimante connaît une défaillance, et en conséquence se débarrasse de la tâche, ou alors elle jette la tâche à cause d'un problème avec le format de données.
+Les tâches imprimées comme brutes sont toujours comptabilisés comme ayant une taille de 1 & #160; page (et éventuellement en plusieurs exemplaires).
+C'est pourquoi la comptabilisation des pages de & CUPS; n'est qu'approximation (excellente ou tout du moins assez bonne dans la plupart des cas, mais également mauvaise dans certains cas). Le seul comptage fiable est celui réalisé par le compteur interne de l'imprimante (parce que c'est celui pour lequel vous payez, si vous utilisez une imprimante click-price ou similaire). Une petite minorité d'imprimantes peut être interrogée à distance par SNMP (Simple Network Management Protocol) pour récupérer cette information. Cela signifie, que dans un grand réseau avec de nombreuses imprimantes différentes, il n'y a pas d'outils de comptabilisation de page fiable et précis & #160;!
+Pourquoi la comptabilisation des pages ne marche -t-elle pas avec les clients & Windows; & #160;?
+À partir d'un client & Windows;, les tâches ont presque toutes besoin d'être envoyées brutes. Pourquoi & #160;? Si & CUPS; fonctionne en tant que serveur d'impression pour les clients & Windows; qui utilisent le pilote original natif de & Windows; pour l'imprimante cible, cela garantit que la tâche est formatée correctement. C'est pourquoi le serveur ne devrait pas modifier le fichier et l'imprimer en brut & #160;; aussi, aucun filtre n'est utilisé (ce qui n'est de toute manière pas possible puisque l'entrée venant du client n'est pas formatée en & PostScript; comme pstops le demande & #160;; il ne peut ainsi pas compter les pages et indique la valeur par défaut de 1).
+Comment puis -je obtenir une liste des options disponibles pour une imprimante donnée ou pour un fichier & PPD; & #160;?
+Référez -vous à la page de manuel de la commande lpoptions. Vous pouvez également consulter un système faisant tourner & CUPS; concernant n'importe quelle option des imprimantes gérées. Il n'est pas nécessaire qu'une imprimante soit installée localement. À partir du moment où l'imprimante est disponible localement (avec la fonctionalité printer browsing de & CUPS;), cela fonctionnera également à distance.
+Pour consulter les options disponibles d'une imprimante, saisissez lpoptions -p HitachiDDP70MicroPress -l. Cela donnera une longue liste de toutes les options disponibles lues à partir du fichier & PPD; de l'imprimante Hitachi (installée dans mon cas sur un serveur à distance transmeta). Afin que cette commande réussisse, il faut que le serveur distant Transmeta et son démon & CUPS; marchent, tout comme le démon & CUPS; local.
+Comment puis -je lire le listage reçu par la commande lpoptions & #160;?
+Vous savez que pour les fabricants d'imprimantes & PostScript;, il est légal de définir leurs propres noms et procédures internes, y compris pour les options & PostScript; standards. À partir du moment où le pilote de l'imprimante est capable de récupérer les options à partir du & PPD; et de les montrer à l'utilisateur d'une manière compréhensible, alors tout va bien. Cependant, comment faites- vous si vous désirez utiliser quelques options obscures avec la ligne de commande & #160;? Comment trouvez -vous sa syntaxe exacte & #160;?
+Prenons un exemple. Regardons l'imprimante Hitachi DDP70 et comment elle implémente l'impression en duplex. Cela nous éclairera quelque peu. Comment lui indiquer d'imprimer recto-verso & #160;? duplex ou Duplex & #160;? Ou bien encore un tout autre nom & #160;?
+lpoptions -h transmeta -p Hitachi_DDP70_ClusterPrintingSystem -l | grep uplex
+Cela donne comme résultat
+TR-Duplex/ Duplex: False *True
+Cela doit être interprêté comme suit & #160;:
+Le nom de l'option recherchée est TR-Duplex & #160;;
+Vous voyez derrière le slash la traduction de l'option telle qu'elle devrait être montrée dans une & GUI; ou une interface web (Duplex) & #160;;
+Cette option peut prendre soit la valeur False soit la valeur True & #160;;
+La valeur actuelle du paramètre est True. On le reconnaît grâce à l'étoile * qui se trouve à côté.
+Pour remplacer le paramètre par défaut actuel (duplex) et imprimer une tâche en simplex, il faut utiliser la commande suivante & #160;:
+lpr -P Hitachi_DDP70_ClusterPrintingSystem -o TR-Duplex=False / path/ to/ your/ printjob
+Comment puis -je obtenir un listing mis en page correctement des options disponibles pour une imprimante ou un & PPD; donné & #160;?
+Utilisez la commande lphelp qui devrait être installée localement sur votre système. Il n'y a pas encore de page de manuel pour lphelp.
+lphelp infotecP450
+Cela liste les options disponible pour l'imprimante nommée. Le résultat possède une jolie mise en page et explique toutes les options disponibles ainsi que la façon de les utiliser. Vous pouvez également interroger plusieurs imprimantes à la fois & #160;:
+lphelp infotec7410color DANKA_fullcolor_D2000 HP_ColorLaserJet8550
+Cela marche également pour les fichiers & PPD;. Il suffit d'indiquer le chemin du & PPD; & #160;:
+lphelp / home/ kurt/ PPDs/ HP-ColorLaserJet8550. ppd
+Résoudre les problèmes
+Aucun système n'est parfait. Voici quelques pièges communs déjà connus.
+Mon imprimante nommée 3-lp-duplex se comporte de manière erratique. Qu'est -ce qui ne vas pas & #160;?
+Les noms d'imprimantes utilisés dans & CUPS; devraient commencer par une lettre et peuvent contenir jusqu'à 128 caractères qui soient des lettres, des nombres ou le caractère souligné. Utiliser des tirets peut amener des problèmes. En parlant du nommage dans & CUPS; & #160;: les noms d'imprimantes ne sont pas sensibles à la casse. Ainsi, une imprimante nommée Best_of_Danka sera la même que best_of_danka ou BEST_OF_DANKA. (C'est un prérequis de & IPP; avec lequel & CUPS; est totalement compatible).
+Pourquoi est -ce que j'obtiens Unable to connect to SAMBA host: Success avec mes imprimantes partagées à partir de & Windows; auxquelles j'accède par l'intermédiaire de Samba & #160;?
+Les droits de l'imprimante & Windows; distante sont -ils corrects & #160;? Êtes vous actuellement autorisé à imprimer sur l'imprimante partagée & Windows; & #160;?
+Mes fichiers pour l'imprimante lp disparaissent parfois mystérieusement et j'apprends 2 jours plus tard qu'ils ont été imprimés sur une imprimante trois étages en dessous de mon bureau. Que se passe -t-il & #160;?
+Croyez -moi, il est très peu probable que votre imprimante soit la seule à s'appeler lp. Il se peut que & CUPS; vous joue un tour. Comme il se peut que vous ayez le paramètre ImplicitClasses On activé, & CUPS; essaie de placer toutes mes imprimantes qu'il trouve sur le réseau dans une classe appelée lp. Toutes les tâches destinées à lp sont envoyées à cette classe et le premier membre disponible se charge d'imprimer. Donc si ce sympathique camarade (qui a écouté avec attention lorsque vous vous êtes extasié pour & CUPS; et & kdeprint;) a installé & CUPS; et fouillé dans le système... vous voyez l'idée & #160;?
+Suivez ce conseil & #160;: choisissez un nom unique pour chaque imprimante réseau & #160;! (Faites attention, l'imprimante branchée sur votre port parallèle peut également être une imprimante accessible par tout le monde si vous ne faites pas attention à vos paramètres).

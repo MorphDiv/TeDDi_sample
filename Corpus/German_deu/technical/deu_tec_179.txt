@@ -1,0 +1,345 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+AddIn zu $[officename] Calc programmieren
+/text/scalc/01/04060112.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe dedr: fixed #i30855#
+Programmieren;AddIns
+Gemeinsame Bibliotheken;Programmieren
+Externe DLL-Funktionen
+Funktionen;$[officename] Calc AddIn DLL
+AddIns;zum Programmieren
+mw made &quot; external... &quot; a one level entry and deleted one &quot; functions;... &quot; entry
+AddIn zum Programmieren in $[officename] Calc
+API Funktionen
+nutzen.
+Funktions-Assistenten
+unter der Kategorie
+AddIn
+.
+Wenn Sie selbst AddIns programmieren möchten, erfahren Sie hier, welche Funktionen für eine erfolgreiche Implementierung von AddIns aus der
+Shared Library (gemeinsamen Bibliothek)
+externen DLL
+exportiert werden müssen.
+shared library (gemeinsame Bibliothek)
+DLL
+.
+Um von $[officename] erkannt zu werden, muss die
+shared library
+DLL
+bestimmte Eigenschaften aufweisen, wie im Folgenden erklärt wird.
+Mit diesen Informationen können Sie Ihr eigenes AddIn für den
+Funktions-Assistenten
+von $[officename] Calc programmieren.
+Das AddIn-Konzept
+Jede AddIn-Bibliothek liefert bestimmte Funktionen.
+Einige Funktionen dienen zu Verwaltungszwecken.
+Sie können eigene Funktionen nahezu beliebig benennen.
+Es müssen jedoch auch bestimmte Regeln der Parameterübergabe befolgt werden.
+Für die verschiedenen Plattformen gelten leicht unterschiedliche Benennungs- und Aufrufkonventionen.
+Shared Library
+AddIn-DLL
+GetFunctionCount
+und
+GetFunctionData
+vorhanden sein.
+Mit ihnen lassen sich sowohl die Funktionen als auch Parametertypen und Rückgabewerte ermitteln.
+Für Rückgabewerte werden die Datentypen Double und String unterstützt.
+Für Parameter sind zusätzlich die Zellbereiche
+Double Array
+,
+String Array
+und
+Cell Array
+möglich.
+Parameter werden per Referenz übergeben.
+Daher ist grundsätzlich eine Veränderung der Werte möglich.
+Dieses wird von $[officename] Calc jedoch nicht unterstützt, da es innerhalb einer Tabellenkalkulation nicht sinnvoll ist.
+Bibliotheken können zur Laufzeit nachgeladen und ihr Inhalt mithilfe der Verwaltungsfunktionen analysiert werden.
+Für jede Funktion stehen Informationen über Anzahl und Typ der Parameter sowie der interne und externe Funktionsname und eine Verwaltungsnummer zur Verfügung.
+Die Funktionen werden synchron gerufen und liefern ihr Ergebnis unverzüglich zurück.
+Realtimefunktionen (asynchrone Funktionen) sind zwar auch möglich, können aufgrund ihrer Komplexität hier aber nicht weiter erläutert werden.
+Allgemeines zum Interface
+Eine in $[officename] Calc integrierte AddIn-Funktion kann maximal 16 Parameter umfassen: einen Ergebniswert und bis zu 15 Eingabeparameter.
+Die Datentypen sind folgendermaßen definiert:
+Datentypen
+Definition
+CALLTYPE
+unter Windows:
+FAR PASCAL (_far _pascal)
+sonst: default (betriebssystemspezifischer Standard)
+USHORT
+2 Byte unsigned Integer
+double
+8 Byte plattformabhängiges Format
+Paramtype
+plattformabhängig wie int
+PTR_DOUBLE =0 Zeiger auf einen double
+PTR_STRING =1 Zeiger auf eine Null-terminierte Zeichenkette
+PTR_DOUBLE_ARR =2 Zeiger auf ein Double Array
+PTR_STRING_ARR =3 Zeiger auf ein String Array
+PTR_CELL_ARR =4 Zeiger auf ein Cell Array
+NONE =5
+Shared Library
+DLL
+-Funktionen
+Shared Library
+externen DLL
+aufgerufen werden.
+Shared Library
+DLL
+-Funktionen gilt:
+void CALLTYPE fn(out, in1, in2, ...)
+Output:
+Ergebniswert
+Zellbereich
+ein Array vom Typ Double Array, String Array oder Cell Array ist.
+GetFunctionCount()
+GetFunctionData
+und
+GetParameterDescription
+benötigt.
+Syntax
+void CALLTYPE GetFunctionCount(USHORT & nCount)
+Parameter
+USHORT & nCount:
+Output:
+Referenz auf Variable, die die Anzahl der AddIn-Funktionen enthalten soll.
+Stellt das AddIn beispielsweise 5 Funktionen für $[officename] Calc zur Verfügung, so ist nCount=5.
+GetFunctionData()
+Ermittelt alle wichtigen Informationen über eine AddIn-Funktion.
+Syntax
+void CALLTYPE GetFunctionData(USHORT & nNo, char* pFuncName, USHORT & nParamCount, Paramtype* peType, char* pInternalName)
+Parameter
+USHORT & nNo:
+Input:
+Funktionsnummer zwischen 0 und nCount-1 einschließlich.
+char* pFuncName:
+Shared Library
+DLL
+darstellt.
+Dieser Name legt nicht den Namen fest, der im
+Funktions-Assistenten
+verwendet wird.
+USHORT & nParamCount:
+Output:
+Anzahl der Parameter der AddIn-Funktion.
+Diese Anzahl muß größer 0 sein, da es immer einen Ergebniswert gibt, der Maximalwert ist16.
+Paramtype* peType:
+Output:
+Zeiger auf ein Array mit genau 16 Variablen vom Typ Paramtype.
+Die ersten nParamCount Einträge werden mit dem Typ des entsprechenen Parameters gefüllt.
+char* pInternalName:
+Funktions-Assistenten
+erscheint.
+Umlaute sind hier zulässig.
+Die Parameter pFuncName und pInternalName sind char Arrays, die in $[officename] Calc mit der Größe 256 implementiert sind.
+GetParameterDescription()
+Funktions-Assistenten
+Beschreibungen der Funktionen und ihrer Parameter anzuzeigen.
+Syntax
+void CALLTYPE GetParameterDescription(USHORT & nNo, USHORT & nParam, char* pName, char* pDesc)
+Parameter
+USHORT & nNo:
+Input:
+Nummer der Funktion innerhalb der Bibliothek zwischen 0 und nCount-1.
+USHORT & nParam:
+Input:
+Gibt an, für welchen Parameter die Beschreibung geliefert werden soll, Parameter beginnen bei 1.
+Ist nParam 0, soll die Beschreibung der Funktion an sich in pDesc geliefert werden, pName ist in diesem Fall bedeutungslos.
+char* pName:
+Output:
+Nimmt den Namen bzw. die Art des Parameters auf, z.
+B. das Wort &quot; Zahl &quot; oder &quot; Zeichenkette &quot; oder &quot; Datum &quot; o. ä.
+In $[officename] Calc implementiert als char[256].
+char* pDesc:
+Output:
+Nimmt die Beschreibung des Parameters auf, z.
+B. &quot; Wert, zu dem das Universum berechnet werden soll &quot; .
+In $[officename] Calc implementiert als char[256].
+Funktions-Assistenten
+verfügbare Platz beschränkt ist und die 256 Zeichen nicht voll genutzt werden können.
+Zellbereiche
+Folgende Tabellen geben Auskunft darüber, welche Datenstrukturen ein externes Programm-Modul zur Verfügung stellen muss, um Zellbereiche zu übergeben. $[officename] Calc unterscheidet je nach Datentyp zwischen drei verschiedenen Arrays.
+Double Array
+Als Parameter können Sie einen Zellbereich mit Werten vom Typ Zahl/Double übergeben.
+Ein Double Array ist in $[officename] Calc folgendermaßen definiert:
+Offset
+Name
+Beschreibung
+0
+Col1
+Spaltennummer der linken oberen Ecke des Zellbereichs.
+Die Zählung beginnt bei 0.
+2
+Row1
+Zeilennummer der linken oberen Ecke des Zellbereichs, ab 0 gezählt.
+4
+Tab1
+Tabellennummer der linken oberen Ecke des Zellbereichs, ab 0 gezählt.
+6
+Col2
+Spaltennummer der rechten unteren Ecke des Zellbereichs.
+Die Zählung beginnt bei 0.
+8
+Row2
+Zeilennummer der rechten unteren Ecke des Zellbereichs, ab 0 gezählt.
+10
+Tab2
+Tabellennummer der rechten unteren Ecke des Zellbereichs, ab 0 gezählt.
+12
+Count
+Anzahl der folgenden Elemente.
+Leere Zellen werden nicht mitgezählt und nicht übergeben.
+14
+Col
+Spaltennummer des Elements.
+Die Zählung beginnt bei 0.
+16
+Row
+Zeilennummer des Elements, ab 0 gezählt.
+18
+Tab
+Tabellennummer des Elements, ab 0 gezählt.
+20
+Error
+Fehlernummer, wobei der Wert 0 für &quot; keinen Fehler &quot; belegt ist.
+Wenn das Element aus einer Formel-Zelle stammt, wird der Fehlerwert durch die Formel bestimmt.
+22
+Value
+8 Byte IEEE-Variable vom Typ Double/Fließkomma
+30
+...
+Nächstes Element
+String Array
+Ein Zellbereich, der Werte vom Datentyp Text enthält, wird als String Array übergeben.
+Ein String Array ist in $[officename] Calc folgendermaßen definiert:
+Offset
+Name
+Beschreibung
+0
+Col1
+Spaltennummer der linken oberen Ecke des Zellbereichs.
+Die Zählung beginnt bei 0.
+2
+Row1
+Zeilennummer der linken oberen Ecke des Zellbereichs, ab 0 gezählt.
+4
+Tab1
+Tabellennummer der linken oberen Ecke des Zellbereichs, ab 0 gezählt.
+6
+Col2
+Spaltennummer der rechten unteren Ecke des Zellbereichs.
+Die Zählung beginnt bei 0.
+8
+Row2
+Zeilennummer der rechten unteren Ecke des Zellbereichs, ab 0 gezählt.
+10
+Tab2
+Tabellennummer der rechten unteren Ecke des Zellbereichs, ab 0 gezählt.
+12
+Count
+Anzahl der folgenden Elemente.
+Leere Zellen werden nicht mitgezählt und nicht übergeben.
+14
+Col
+Spaltennummer des Elements.
+Die Zählung beginnt bei 0.
+16
+Row
+Zeilennummer des Elements, ab 0 gezählt.
+18
+Tab
+Tabellennummer des Elements, ab 0 gezählt.
+20
+Error
+Fehlernummer, wobei der Wert 0 für &quot; keinen Fehler &quot; belegt ist.
+Wenn das Element aus einer Formel-Zelle stammt, wird der Fehlerwert durch die Formel bestimmt.
+22
+Len
+Länge des folgenden Strings, inklusive abschließendem Null-Byte.
+Wenn die Länge inklusive abschließendem Null-Byte einen ungeraden Wert ergibt, wird dem String ein zweites Null-Byte hinzugefügt, um einen geraden Wert zu erhalten.
+Daher wird Len berechnet mit ((StrLen+2) & ~1).
+24
+String
+Zeichenfolge mit abschließendem Null-Byte
+24+Len
+...
+Nächstes Element
+Cell Array
+Cell Arrays dienen zum Aufrufen von Zellbereichen, die sowohl Text als auch Zahlen enthalten.
+Ein Cell Array ist in $[officename] Calc wie folgt definiert:
+Offset
+Name
+Beschreibung
+0
+Col1
+Spaltennummer der linken oberen Ecke des Zellbereichs.
+Die Zählung beginnt bei 0.
+2
+Row1
+Zeilennummer der linken oberen Ecke des Zellbereichs, ab 0 gezählt.
+4
+Tab1
+Tabellennummer der linken oberen Ecke des Zellbereichs, ab 0 gezählt.
+6
+Col2
+Spaltennummer der rechten unteren Ecke des Zellbereichs.
+Die Zählung beginnt bei 0.
+8
+Row2
+Zeilennummer der rechten unteren Ecke des Zellbereichs, ab 0 gezählt.
+10
+Tab2
+Tabellennummer der rechten unteren Ecke des Zellbereichs, ab 0 gezählt.
+12
+Count
+Anzahl der folgenden Elemente.
+Leere Zellen werden nicht mitgezählt und nicht übergeben.
+14
+Col
+Spaltennummer des Elements.
+Die Zählung beginnt bei 0.
+16
+Row
+Zeilennummer des Elements, ab 0 gezählt.
+18
+Tab
+Tabellennummer des Elements, ab 0 gezählt.
+20
+Error
+Fehlernummer, wobei der Wert 0 für &quot; keinen Fehler &quot; belegt ist.
+Wenn das Element aus einer Formel-Zelle stammt, wird der Fehlerwert durch die Formel bestimmt.
+22
+Type
+Typ des Zellinhalts, 0 == Double, 1 == String
+24
+Value or Len
+Wenn Type == 0:
+8 Byte IEEE-Variable vom Typ Double/Fließkomma
+Wenn Type == 1:
+Länge des folgenden Strings, inklusive abschließendem Null-Byte.
+Wenn die Länge inklusive abschließendem Null-Byte einen ungeraden Wert ergibt, wird dem String ein zweites Null-Byte hinzugefügt, um einen geraden Wert zu erhalten.
+Daher wird Len berechnet mit ((StrLen+2) & ~1).
+26 if Type==1
+String
+Wenn Type == 1:
+Zeichenfolge mit abschließendem Null-Byte
+32 or 26+Len
+...
+Nächstes Element

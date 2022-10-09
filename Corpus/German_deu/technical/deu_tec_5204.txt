@@ -1,0 +1,100 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+& kde; unter die Haube geschaut
+Nicolas Goutte goutte@kde.org
+Die manuelle Anpassung von Konfigurationsdateien
+Einleitung
+Die Konfigurationsdateien von & kde; können bequem mit einem normalen Editor wie & kate; bearbeitet werden, da es sich um gewöhnliche Textdateien handelt.
+Ein Beispiel für eine Textdatei:
+[General] AutoSave=1 LastFile=/var/tmp/test.txt
+Die benutzerspezifischen Konfigurationsdateien liegen unter .kde/share/config. Ersetzen Sie hierbei .kde mit dem Inhalt der Umgebungsvariable $KDEHOME. Die globalen Konfigurationsdateien liegen im Unterordner share/config des Installationspfades von & kde;. Den Installationspfad können Sie durch Ausführen des Befehls kde4-config --prefix herausfinden. Die Konfigurationsdateien besitzen in den meisten Fällen einen Namen, der mit der Zeichenfolge rc endet (ohne einen vorangehenden Punkt!), beispielsweise kopeterc.
+Das manuelle Bearbeiten von Konfigurationsdateien kann sich negativ auf die Stabilität Ihrer & kde;-Installation auswirken. Normalerweise prüfen die Anwendungen nicht, ob sie sinnvolle Daten aus ihren Konfigurationsdateien einlesen. Demzufolge können sie durch fehlerhafte Konfigurationsdateien leicht durcheinander gebracht werden oder sogar abstürzen.
+Sicherungskopien
+Darum gilt als erste Regel, dass vor jeder Änderung eine Sicherungskopie anzulegen ist. Diese Sicherungskopie sollte besser außerhalb der Ordnerhierarchie von .kde (oder dem entsprechenden in $KDEHOME eingetragenen Ordner) abgelegt werden. Das Anlegen einer Sicherungskopie ist sowieso eine gute Idee für den Fall, dass es zu einem Problem mit & kde; kommt, bei dem wichtige Konfigurationsdateien zerstört werden. Denken Sie nur an Ihre Einstellung in & kmail;, die in kmailrc gespeichert sind. Ein so schwerwiegender Fehler sollte nicht passieren, kann aber nie ausgeschlossen werden.
+Änderungen durchführen
+Warum möchten Sie überhaupt die Konfigurationsdateien bearbeiten? Nun, zunächst einmal sind Sie dazu gewzungen, wenn Sie den KIOSK-Modus erzwingen wollen. Oder ein Entwickler bittet Sie darum einen Eintrag einzufügen, weil dies für die Lösung eines Problems mit einer Anwendung nötig oder hilfreich ist. Möglicherweise möchten Sie aber auch ein Problem mit der Konfiguration lösen, ohne dabei alle Dateien im Ordner .kde löschen zu müssen. Vielleicht sind Sie einfach nur daran interessiert einen Blick in die Eingeweide von & kde; zu werfen.
+Was auch immer der Grund sein mag, Sie möchten eine Konfigurationsdatei ändern.
+Wenn Sie vorhaben, eine solche Datei zu bearbeiten, müssen Sie sicherstellen, dass diese nicht gerade läuft. Handelt es sich um eine Datei, die von & kde; selbst verwendet wird, sollten Sie in Betracht ziehen, diese nur zu ändern, wenn & kde; nicht läuft.
+Wenn Sie bereit sind, legen Sie eine Sicherungskopie der Datei an (sofern Sie das nicht bereits getan haben), starten den Editor (wir nehmen hier an, es handelt sich um & kate;) und laden die Datei. Sorgen Sie dafür, dass die Datei als UTF-8 geladen wird. & kate; zeigt dies als utf8 an.
+Sie haben nun eine Datei vor sich, die etwa so aussieht:
+[Group] Key1=Value1 Key2=Value2 Key3=Value3
+Diese können Sie nun (vorsichtig!) ändern und dann speichern. Stellen Sie hierbei sicher, dass Sie als UTF-8 gespeichert wird.
+Jetzt können Sie die betreffende Anwendung testen. Wenn Sie nicht mehr vernünftig läuft, schließen Sie die Anwendung und spielen die Sicherungskopie der Konfigurationsdatei ein.
+Verwandte Informationen
+bietet weitere Informationen über die Ordnerstruktur von & kde; und hilft Ihnen dabei genau die Datei zu finden, die Sie bearbeiten müssen.
+Automatisieren (Scripting) der Arbeitsumgebung
+& kde; bietet mit & DCOP; (Desktop COmmunication Protocol) ein mächtiges Interprozess-Kommunikationssystem. Sie können mit & DCOP; eine Vielzahl von Funktionen in & kde; über die Befehlszeile oder mit Skripten in der von Ihnen bevorzugten Skriptsprache steuern. Darüberhinaus können Sie Informationen von & kde;-Anwendungen anfordern. Eine Reihe von Medienabspielern in & kde; bietet Methoden an, um beispielsweise Informationen über das gerade abgespielte Stück abzufragen.
+Allgemein gesagt bietet jede & kde;-Anwendung eine oder mehrere & DCOP;- Schnittstellen, die wiederum Methoden (oder, wenn sie das bevorzugen: Funktionen) bereitstellen, die eine andere Anwendung aufrufen kann. Darum besteht der erste Schritt beim Arbeiten mit & DCOP; darin, herauszufinden, welche Methode die richtige für die gewünschte Aufgabe ist. Das geht am einfachsten mit dem Programm kdcop, das die vorhandenen & DCOP;-Methoden darstellen kann.
+Rufen Sie kdcop von der & konsole; oder über Befehl ausführen (das Fenster, das bei Betätigen von Alt; F2 erscheint) auf. Das Hauptfenster von kdcop zeigt in einer Baumansicht die laufenden Anwendungen, die eine & DCOP;-Schnittstelle anbieten. Um die richtige Methode zu finden, müssen Sie diese im Baum suchen. Ein Anhaltspunkt ist dabei, dass die am häufigsten verwendeten Methoden gewöhnlich über die mit Voreinstellung markierte Schnittstelle ansprechbar sind.
+Um zu prüfen, ob die Funktion macht, was wir erwarten, führen Sie einen Doppelklick auf den Eintrag setColor aus. Um die Farbe c zu setzen, klicken Sie auf den Farbauswahlknopf und wählen eine Farbe aus. Legen Sie mit dem Ankreuzfeld fest, ob die Farbe Farbe A sein soll. Klicken Sie nun OK, und die Hintergrundfarbe ist gesetzt.
+Um von Ihrer bevorzugten Skriptsprache auf die & DCOP;-Methoden zuzugreifen, können Sie entweder die & DCOP;-Bindungen, die im Paket kdebindings enthalten sind, verwenden oder das Befehlszeilenprogramm dcop verwenden. Für einfachere Aufgaben ist das Befehlszeileprogramm dcop ausreichend. Um eine & DCOP;-Methode von der Befehlszeile aufzurufen, müssen Sie die Anwendung und die Schnittstelle, zu der die Methode gehört, angeben. Darüberhinaus ist die Angabe der Methode selbst und deren Argumente erforderlich. Diese Eingaben müssen in einer Form erfolgen, die für die verwendete Shell passend ist.
+Anwendung, Schnittstelle und Methode werden in dieser Reihenfolge angegeben, gefolgt von den Argumenten in der selben Reihenfolge, wie sie in kdcop angezeigt werden. dcop verfügt über eine Vielzahl von Optionen, die Sie mit einem Aufruf von dcop --help anzeigen lassen können.
+Genug der Theorie. Es ist Zeit für ein Beispiel:
+Ein & DCOP;-Skript, das die Hintergrundfarbe ändert
+Mit dem Befehlszeilenprogramm dcop und ein wenig Perl, machen wir uns nun daran ein einfaches Skript zu erstellen, das die Hintergrundfarbe der Arbeitsfläche langsam das gesamte Spektrum durchlaufen lässt.
+Zunächst suchen wir mit kdcop nach der passenden Methode. Für dieses Beispiel kürzen wir die Suche ab und kommen gleich zum Ziel: die gesuchte Methode ist kdesktop KBackgroundIface setcolor. Die Argumente und der Rückgabetyp der Funktion werden im Stil der Programmiersprache C++ angezeigt. Für setColor sind die Argumente c, mit dem die neue Hintergrundfarbe übergeben wird, und ein boolescher Wert, isColorA, der angibt, ob es die erste oder die zweite Farbe ist. Das ist beim Setzen von Farbverläufen und ähnlichem nützlich.
+Um die Methode setColor auf der Befehlszeile aufzurufen, verwenden wir folgendes:
+% dcop kdesktop KBackgroundIface setColor '#ffffff' false
+Für die Angabe der Farbe, benutzen wir den hexadezimalen RGB-Wert, wie er in & HTML; verwendet wird. Beachten Sie, dass er durch einfache Anführungszeichen eingefasst ist, um das # vor einer Interpretation durch die Shell zu bewahren.
+Um den hexadezimalen Wert einer Farbe herauszufinden, rufen Sie einen Farbauswahldialog in einer & kde;-Anwendung auf, (beispielsweise im & kcontrolcenter; über Erscheinungsbild & Designs Farben), wählen die gewünschte Farbe aus und verwenden den im Textfeld HTML angezeigten Wert.
+Das wäre alles, was wir von & DCOP; benötigen. Jetzt müssen wir nur noch ein Skript dazu schreiben. Hier ist eine (sehr) grobe Implementierung:
+< ![CDATA[ $min=49; # Minimum value of R, G, or B colour $max=174; # Maximum value of R, G, or B colour $step=5; # Amount to step colour by on each step $sleeptime=15; # Interval in seconds between each step @start = ($max, $min, $min); @colour = @start; while (1) {foreach (0..5) {my $which = $_% 3; # Which colour (R, G or B) to change my $updown = $_% 2; # Whether to increase or decrease the colour value do {if ($updown == 0) {$colour[$which]+=$step;} if ($updown == 1) {$colour[$which]-=$step;} my $dcopcall=sprintf "dcop kdesktop KBackgroundIface setColor '#%x%x%x' true\", @colour; system($dcopcall); sleep $sleeptime;} while (($colour[$which] > = $min) and ($colour[$which] < = $max));}}]] >
+Rufen Sie das Skript ohne Argumente auf, und es lässt die Hintergrundfarbe ein leicht gedecktes Spektrum durchlaufen, bis es beendet wird. Voilagrave;!
+Natürlich ist Perl nicht die einzige Sprache, mit der Sie Skripte für & DCOP; schreiben können. Es geht auch mit einem Shell-Skript:
+Das Setzen eines Hintergrundes aus dem Internet
+Das folgende Skript holt sich mittels allgemein verfügbarer Hilfsmittel und ein wenig & DCOP; das Hauptbild des Comics User Friendly und setzt es als Hintergrundbild für die Arbeitsfläche.
+< ![CDATA[ #!/bin/sh COMICURL=`wget -qO - http://www.userfriendly.org/static/index.html |\\ grep Latest | sed -e "s,.*SRC=\\",, "-e" s,\\ "> .*,," ` TMPFILE=`mktemp /tmp/$0.XXXXXX ` || exit 1 wget -q -O $TMPFILE $COMICURL dcop kdesktop KBackgroundIface setWallpaper $TMPFILE 1]] >
+Die erste Zeile nach #!/bin/sh verwendet wget und ein wenig Zauberei mit regulären Ausdrücken, um die Adresse des Bildes aus dem & HTML;-Quellcode der Hauptseite zu extrahieren. Die zweite und dritte Zeile laden das Bild herunter und setzen es mit Hilfe von dcop als Hintergrundbild.
+Das Anlegen spezieller Tastenzuordnungen in & kde;
+Viele moderne Tastaturen besitzen spezielle Tasten, die in der Voreinstellung keiner Funktionalität zugeordnet sind.
+Multimedia -Tasten senden häufig ein Zeichen und können wie jede andere Taste in einer Anwendung zugeordnet werden. Manche Tasten wiederum werden nicht erkannt und bewirken bei dem Versuch sie über einen Tastendruck zuzuordnen nichts.
+Einige IBM-Laptops besitzen beispielsweise zusätzliche Tasten über den Pfeiltasten, die wie Seite nach links und Seite nach rechts aussehen.
+Verwenden Sie den Befehl xev, um die Kodes dieser Tasten herauszufinden. In diesem Fall sind es 233 und 234.
+Wählen Sie Tasten-Symbole aus. Es gibt eine Reihe davon, die in der Voreinstellung nicht belegt sind und demzufolge noch zur Verfügung stehen. Eine Liste finden Sie in /usr/X11R6/include/keysymdef.h oder der entsprechenden Datei auf Ihrem System.
+Erstellen Sie in Ihrem Persönlichen Verzeichnis einen Datei mit dem Namen .Xmodmap und fügen Sie Folgendes hinzu:
+keycode 233 = Next_Virtual_Screen keycode 234 = Prev_Virtual_Screen
+Führen Sie den Befehl xmodmap ~/.Xmodmap aus.
+Jetzt sollten Sie in der Lage sein, den Befehl xev erneut auszuführen und dabei feststellen, dass die Tasten jetzt das Tasten-Symbol generieren, dass Sie zugeordnet haben. Jetzt können die Tasten wie die anderen auch einer Aktion zugewiesen werden.
+Die Manpage von xev. Diese wird angezeigt, wenn Sie in der Adressleiste von & konqueror; man:/xev oder in einem Befehlsfenster den Befehl man xev eingeben.
+Zuordnen von Tastenkürzeln für neue Aktionen
+Den meisten Aktionen in der Arbeitsumgebung oder in Anwendungen kann ein Tastaturkürzel zugewiesen werden. Wenn die Aktion eine selbst geschriebene oder aus einem anderen Grund nicht verfügbare Aktion ist, können Sie trotzdem ein Tastaturkürzel zuweisen.
+Um die beiden vorangegangenen Abschnitte einmal zusammenzuführen, möchten Sie vielleicht einer bislang unbenutzten Taste auf Ihrer Tastatur ein Skript oder einen DCOP-Befehl zuweisen. In unserem Beispiel hier werden wir den in hinzugefügten Tasten das Wechseln zur nächsten oder vorherigen virtuellen Arbeitsfläche zuweisen, zwei Funktionen, für die wir DCOP benötigen, das in näher vorgestellt wird.
+Wir erreichen dies ganz einfach auf folgende Weise:
+Öffnen Sie & kcontrol; und wählen Sie unter Regionaleinstellungen & Zugangshilfen den Eintrag Tastenkombinationen.
+Wählen Sie Neue Aktion
+Vergeben Sie einen Namen für die Aktion, & eg; Nächste virtuelle Arbeitsfläche.
+Wählen Sie bei Aktionstyp den Eintrag Tastenkürzel - > Befehl/Adresse (einfach).
+Auf der Karteikarte Tastenkürzel drücken Sie die Taste, mit der der Befehl ausgelöst werden soll. Für unsere Beispiel wäre dies die Taste mit dem Symbol Nächste Seite. Es wird nun das Symbol Next_Virtual_Screen auf dem angezeigten Knopf dargestellt.
+Auf der Karteikarte Befehl/Adresse-Einstellungen geben Sie in das Textfeld den auszuführenden Befehl ein: dcop kwin default nextDesktop.
+Wiederholen Sie diesen Ablauf mit der Taste Prev_Virtual_Screen, und geben Sie hierzu den Befehl dcop kwin default previousDesktop ein.
+Nun führt das Betätigen der Taste Prev_Virtual_Screen oder Next_Virtual_Screen zum Wechsel auf die betreffende virtuelle Arbeitsfläche.
+Offenkundig können Sie jeder freien Taste eine beliebige Aktion zuweisen.
+Das Handbuch zu KHotKeys können Sie über das & khelpcenter; oder durch Eingabe von help:/khotkeys in der Adressleiste von & konqueror; aufrufen.
+Adriaan de Groot groot@kde.org
+& kdebugdialog; - Kontrollieren Sie die Debug-Ausgaben von & kde;
+Grundlegende Anwendung
+& kdebugdialog; ist in der Voreinstellung nicht über & kmenu; erreichbar. Sie müssen es aus der Konsole oder über Befehl ausführen durch Eingabe von kdebugdialog aufrufen. & kdebugdialog; zeigt ein Fenster mit einer langen Liste von Debug-Bereichen. Für jeden Bereich ist ein Ankreuzfeld vorgesehen, mit dem Sie die Debug-Ausgaben für diesen Bereich von & kde; ein- oder ausschalten können.
+Die Liste der Debug-Bereiche ist nummerisch sortiert, nicht alphabetisch, so dass kio (127) in der Liste vor artskde (400) erscheint. Der Zahlenbereich erstreckt sich etwa bis 200000, es gibt aber eigentlich nur 400 Bereiche. Sie müssen aber nicht durch die ganze Liste blättern, um den gewünschten Bereich zu finden. Im oberen Bereich des Dialogs finden Sie ein Textfeld, in dem Sie den Namen des gesuchten Bereichs eingeben können. Geben Sie hier etwas ein, werden nur noch die Bereiche angezeigt, die den eingegebenen Text enthalten. Geben Sie beispielsweise k ein, schränkt das die Auswahlmöglichkeiten noch nicht wesentlich ein, bei Eingabe von kont werden aber nur noch die Debug-Bereiche von & kontact; angezeigt. Ein noch schnellerer Weg, um die Debug-Ausgaben ein- bzw. auszuschalten steht mit den Knöpfen Alle auswählen und Gesamte Auswahl aufheben zur Verfügung. Dies führt dazu, dass & kde; eine ganze Masse von Debug-Ausgaben produziert oder nur sehr wenig.
+KDebugDialog im erweiterten Modus
+Im erweiterten Modus, den Sie durch Eingabe von kdebugdialog --fulmode aufrufen, steht die gleiche Liste wie im normalen Modus zur Verfügung, aber Sie können immer nur einen Bereich über ein Auswahlfeld wählen. Sie können nun für jeden Bereich für die verschiedenen Nachrichtentypen wie Information, Warnung, Fehler und Fataler Fehler festlegen, wohin die Ausgabe erfolgen soll. Hierbei stehen folgende Möglichkeiten zur Verfügung:
+Datei, wobei Sie einen Dateinamen angeben können. Diese Datei wird in den über $HOME festgelegten Ordner geschrieben.
+Mitteilungsfenster. Jede Debug-Nachricht wird in einem Mitteilungsfenster angezeigt, das Sie mit OK schließen müssen, damit Sie in der Anwendung weiterarbeiten können.
+Shell, die Voreinstellung. Ausgaben werden nach stderr geschrieben und erscheinen in dem Befehlsfenster, in dem die Anwendung gestartet wurde, oder in .xsession-errors.
+Systemlog. Hierbei wird jede Debug-Ausgabe zur weiteren Verarbeitung an den Prozess übergeben, der für das Systemprotokoll zuständig ist.
+Keine. Diese Einstellung unterdrückt die Ausgabe von Debug-Ausgaben.
+Bei Ausgaben, die schwerwiegende (fatale) Fehler anzeigen, ist es gewöhnlich nicht ratsam die Einstellung Keine oder Systemlog zu wählen, da Sie diese Ausgaben höchstwahrscheinlich nicht sehen und die Anwendung für Sie ohne jeden Hinweis einfach beendet wird. Ob eine Anwendung durch einen fatalen Fehler beendet wird, können Sie über das Ankreuzfeld Bei fatalen Fehlern abbrechen festlegen. In der Voreinstellung ist diese Einstellung aktiv, aber wahrscheinlich erwarten Sie sowieso, dass eine Anwendung bei einem fatalen Fehler abstürzt.

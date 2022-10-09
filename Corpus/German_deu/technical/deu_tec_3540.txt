@@ -1,0 +1,71 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+Rückgabewert: eine Such-Ergebnis-Kennung im Erfolgsfall, FALSE im Fehlerfall.
+Die ldap_search() Funktion führt die Suche für einen gegebenen Filter im Verzeichnis mit der Reichweite von LDAP_SCOPE_SUBTREE durch.
+Das ist äquivalent zu einer Suche im ganzen Verzeichnis. base_dn legt den Basis DN für das Verzeichnis fest.
+Der optionale vierte Parameter kann benutzt werden, um die Rückgabewerte des Servers so einzuschränken, dass nur die tatsächlich benötigten Merkmale und ihre zugehörigen Werte in der Ergebnismenge enthalten sind.
+Dieses Vorgehen ist um einiges effizienter als die standardmäßige Vorgehensweise (diese liefert alle Merkmale und alle zugehörigen Werte).
+Aus diesem Grund ist die Angabe des vierten Parameters als gute Praxis zu empfehlen.
+Der vierte Parameter ist ein Standard PHP Array aus Strings der benötigten Merkmale, z.B. array( "mail" ,"sn" ,"cn").
+Beachten Sie, dass der "dn" immer zurückgeliefert wird, ohne Rücksicht darauf, welche Merkmalstypen angefragt wurden.
+Beachten Sie weiterhin, dass manche Verzeichnis-Server so konfiguriert sind, dass sie nicht mehr als eine vorbestimmte Anzahl an Einträgen zurückliefern.
+Sollte dies der Fall sein, zeigt Ihnen der Server an, dass nur eine Teilmenge des Ergebnisses zurückgeliefert wurde.
+Diesen Hinweis erhalten Sie auch, wenn Sie den sechsten Parameter größenbegrenzung mit angegeben hatten, um die Anzahl der angefragten Einträge einzuschränken.
+Der fünfte Parameter nur_werte sollte auf 1 gesetzt werden, wenn Sie nur Merkmalstypen erhalten möchten.
+Wenn der Wert auf 0 steht, erhalten Sie sowohl Merkmalstypen als auch Merkmalswerte.
+Das ist das Standard Verhalten.
+Mit dem sechsten Parameter größenbegrenzung ist es möglich, die Anzahl der Einträge, die Sie erhalten, zu begrenzen.
+Wenn Sie diesen Wert auf 0 setzen, bedeutet dies keine Beschränkung der Ergegnismenge.
+ANMERKUNG:
+Dieser Parameter kann eine serverseitig gesetzte Beschränkung NICHT überschreiben.
+Sie haben nur die Möglichkeit die Beschränkung noch weiter herabzusetzen.
+Der siebte Parameter zeitbegrenzung legt die Zahl in Sekunden fest, die auf die Suche verwendet wird.
+Wenn Sie diesen Wert auf 0 setzen, bedeutet dies keine Beschränkung der Zeit.
+ANMERKUNG:
+Dieser Parameter kann eine serverseitig gesetzte Zeitbegrenzung NICHT überschreiben.
+Sie haben nur die Möglichkeit die Beschränkung noch weiter herabzusetzen.
+Der achte Parameter deref gibt an, wie Aliase während einer Suche behandelt werden.
+Wert kann einer der folgenden sein:
+LDAP_DEREF_NEVER - (Standard) Aliase werden nie aufgelöst.
+LDAP_DEREF_SEARCHING - Aliase sollen während der Suche aufgelöst werden, aber nicht dann, wenn das Basisobjekt der Suche ermittelt wird.
+LDAP_DEREF_FINDING - Aliase sollen aufgelöst werden, wenn das Basisobjekt ermiitelt wird, aber nicht während der Suche.
+LDAP_DEREF_ALWAYS - Aliase sollen immer aufgelöst werden.
+Anmerkung:
+Diese optionalen Parameter wurden in 4.0.2 hinzugefügt: nur_werte, größenbegrenzung, zeitbegrenzung, deref.
+Der Suchfilter kann einfach oder kompliziert sein, wenn sie boolsche Operatoren in dem Format verwenden, wie in der LDAP Dokumentation beschrieben (siehe Netscape Directory SDK für die vollständige Information über Filter).
+Das untenstehende Beispiel liefert die Organisationseinheit, den Familiennamen, den Vornamen und die Email-Addresse aller Personen in "Meine Firma" deren Familien - oder Vorname die Zeichenkette $person enhält.
+In diesem Beispiel wird ein boolscher Filter verwendet, um den Server zu veranlassen, nach Informationen in mehr als einem Merkmal zu suchen.
+Beispiel 1.
+LDAP Suche
+/ / $ds gültige Verbindungs-Kennung für einen Verzeichnis-Server / / $person ein Teil oder der vollständige Name einer Person, z.B. "Jo" $dn = "o=Meine Firma, c=DE"; $filter="(|(sn=$person*)(vorname=$person*))"; $justthese = array ("ou", "sn", "vorname", "mail"); $sr=ldap_search($ds, $dn, $filter, $justthese); $info = ldap_get_entries($ds, $sr); print $info["count"]. "gefundene Einträge p";
+Seit der Version 4.0.5 ist es außerdem möglich parallele Suchen durchzuführen.
+Um dies zu verwirklichen benutzen Sie als erstes Argument einen Array von Verbindungs-Kennungen, statt einer einzelnen Verbindungs-Kennung.
+Falls Sie nicht den gleichen Basis DN und den gleichen Filter für alle Suchen verwenden möchten, können Sie ebenso einen Array von Basis DNs und / oder einen Array von Filtern benutzen.
+Diese Arrays müssen die gleiche Größe wie das Array der Verbindungs-Kennungen haben, da die ersten Einträge der Arrays für eine Suche verwendet werden, die zweiten Einträge für eine andere Suche und so weiter.
+Wenn Sie parallel suchen erhalten Sie ein Array von Such-Ergebnis-Kennungen, außer im Fall eines Fehlers, dann liefert der Eintrag zur entsprechenden Suche FALSE Wenn Sie parallel suchen erhalten Sie ein Array von Such-Ergebnis-Kennungen, außer im Fall eines Fehlers, dann liefert der Eintrag zur entsprechenden Suche FALSE zurück.
+Das entspricht ganz genau dem Wert der normalerweise zurückgeliefert wird, außer dass Sie immer eine Ergebnis-Kennung erhalten, wenn Sie eine Suche durchgeführt haben.
+Es treten einige seltene Fälle auf, wo eine normale Suche FALSE zurückgibt, während die parallele Suche eine Kennung zurückliefert.
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

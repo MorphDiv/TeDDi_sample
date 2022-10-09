@@ -1,0 +1,72 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Kapitel 3.
+
+Nach vorne
+Diese Sektion enthält Anmerkungen und Hinweise zur Installation von PHP auf Mac OS X Server.
+Es gibt ein paar vorgefertigte und kompilierte Pakete von PHP für Mac OS X.
+Das ist hilfreich, um eine Standardkonfiguration aufzusetzen, doch sollten Sie eine davon abweichende Konfiguration benötigen (wie z.B. einen Secure Server oder einen anderen Datenbanktreiber), müssen Sie evtl.
+PHP und / oder Ihren Webserver selbst bauen.
+Wenn Sie mit dem Bilden und Kompilieren Ihrer Software nicht vertraut sind, sollten Sie sich nach einer von jemand anders bereits erstellten Paketversion von PHP mit den von Ihnen benötigten Features umsehen.
+Es gibt zwei leicht unterschiedliche Versionen von Mac OS X, nämlich einen Client und einen Server.
+Die folgende Beschreibung ist für OS X Server.
+Beispiel 3-4.
+Mac OS X Server Installation
+
+Beschaffen Sie sich die aktuellen Distributionen von Apache und PHP 2.
+Untar 'en Sie sie, und starten configure an Apache wie folgt. / configure --exec-prefix= / usr\ --localstatedir= / var\ --mandir= / usr / share / man\ --libexecdir= / System / Library / Apache / Modules\ --iconsdir= / System / Library / Apache / Icons\ --includedir= / System / Library / Frameworks / Apache.framework / Versions / 1.3 / Headers\ --enable-shared=max\ --enable-module=most\ --target=apache 4.
+Sie können auch folgende Zeile hinzufügen: setenv OPTIM=-O2 Wenn Sie wollen, dass der Compiler Optimierungen durchführt.
+
+Wechseln Sie in das Verzeichnis mit dem PHP Source und führen configure aus. / configure --prefix= / usr\ --sysconfdir= / etc\ --localstatedir= / var\ --mandir= / usr / share / man\ --with-xml\ --with-apache= / src / apache_1.3.12 Wenn Sie andere Ergänzungen haben (MySQL, GD, etc.), fügen Sie diese bitte hier hinzu.
+Geben Sie bei der Option --with-apache den Pfad zu dem Verzeichnis mit Ihrem Apache Source an, z.B. "/ src / apache_1.3.12".
+6. make 7. make install Dies fügt Ihrem Apache Source Verzeichnis das Verzeichnis src / modules / php4 hinzu.
+
+Nun konfigurieren Sie Apache neu, incl.
+PHP 4 Modul.. / configure --exec-prefix= / usr\ --localstatedir= / var\ --mandir= / usr / share / man\ --libexecdir= / System / Library / Apache / Modules\ --iconsdir= / System / Library / Apache / Icons\ --includedir= / System / Library / Frameworks / Apache.framework / Versions / 1.3 / Headers\ --enable-shared=max\ --enable-module=most\ --target=apache\ --activate-module=src / modules / php4 / libphp4.a Sollten Sie eine Meldung erhalten, dass libmodphp4.a nicht mehr gültig ist, wechseln Sie in Ihrem Apache Source Verzeichnis zu src / modules / php4, und führen folgenden Befehl aus: ranlib libmodphp4.a Dann gehen Sie zurück in das Hauptverzeichnis des Apache Source, und führen obigen configure Befehl erneut aus.
+Das aktualisiert die Linktabelle.
+9. make 10. make install 11.
+Kopieren Sie die Datei php.ini-dist von Ihrem Verzeichnis mit dem PHP 4 Source in Ihr "bin" Verzeichnis, und benennen Sie sie um: cp php.ini-dist / usr / local / bin / php.ini oder (wenn Sie kein lokales Verzeichnis haben) cp php.ini-dist / usr / bin / php.ini
+Andere Beispiele für Mac OS X Client und Mac OS X Server finden Sie bei Stepwise.
+Diese Tipps wurden freundlicherweise von Marc Liyanage zur Verfügung gestellt.
+Das PHP Modul für den Apache Webserver ist in Mac OS X inkludiert.
+Diese Version unterstützt die MySQL und PostgreSQL Datenbanken.
+Anmerkung:
+Vorsicht wenn Sie dies tun, Sie könnten Ihren Apache Webserver vermurksen!
+Installationsschritte:
+
+Öffnen Sie ein Terminalfenster
+
+Geben Sie "wget http: / /www.diax.ch / users / liyanage / software / macosx / libphp4.so.gz" ein, und warten Sie bis der Download beendet ist
+
+Geben Sie "gunzip libphp4.so.gz" ein
+
+Geben Sie "sudo apxs -i -a -n php4 libphp4.so" ein
+* #AddType application / x-httpd-php .php * #AddType application / x-httpd-php-source .phps
+Starten Sie mit "sudo apachectl graceful" den Webserver neu.
+PHP sollte nun laufen.
+Sie können dies testen, indem Sie eine Datei in Ihrem Verzeichnis "Sites" erstellen, z.B. "test.php", folgende Zeile hineinschreiben: "?php phpinfo()?".
+Nun öffnen Sie 127.0.0.1 / ~your_username / test.php in Ihrem Webbrowser.
+Sie sollten nun eine Tabelle mit Informationen über das PHP Modul sehen.
+Zurück
+Zum Anfang
+Nach vorne
+Unix / OpenBSD Installation
+Nach oben
+Komplette Liste der Konfigurationsoptionen

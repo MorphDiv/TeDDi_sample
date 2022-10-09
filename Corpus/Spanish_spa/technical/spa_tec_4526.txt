@@ -1,0 +1,50 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+Aviso
+Este módulo es EXPERIMENTAL.
+Esto significa que el comportamineto de estas funciones, nombre de funciones y en definitiva TODO lo documentado aqui, puede cambiar en una futura version de PHP SIN AVISO.
+Quedas avisado, y utilizar este módulo es tu responsabiliad.
+The socket extension implements a low-level interface to the socket communication functions, providing the possibility to act as a socket server as well as a client.
+
+When using the socket functions described here, it is important to remember that while many of them have identical names to their C counterparts, they often have different declarations.
+
+That said, those unfamiliar with socket programming can still find a lot of useful material in the appropriate Unix man pages, and there is a great deal of tutorial information on socket programming in C on the web, much of which can be applied, with slight modifications, to socket programming in PHP.
+Ejemplo 1.
+
+
+
+Change the address and port variables to suit your setup and execute.
+
+
+
+?php error_reporting( E_ALL); / * Allow the script to hang around waiting for connections. * / set_time_limit(0); $address = '192.168.1.53'; $port = 10000; if (($sock = socket(AF_INET, SOCK_STREAM, 0)) 0) {echo "socket() failed: reason: ". strerror($sock). "\n";} if (($ret = bind($sock, $address, $port)) 0) {echo "bind() failed: reason:". strerror($ret). "\n";} if (($ret = listen($sock, 5)) 0) {echo "listen() failed: reason: ". strerror($ret). "\n";} do {if (($msgsock = accept_connect($sock)) 0) {echo "accept_connect() failed: reason:". strerror($msgsock). "\n"; break;} do {$buf = ''; $ret = read($msgsock, $buf, 2048); if ($ret 0) {echo "read() failed: reason: ". strerror($ret). "\n"; break 2;} if ($ret == 0) {break 2;} $buf = trim($buf); if ($buf == 'quit') {close($msgsock); break 2;} $talkback = "PHP:
+You said '$buf'.\n"; write($msgsock, $talkback, strlen($talkback)); echo "$buf\n";} while (true); close($msgsock);} while (true); close($sock);?
+Ejemplo 2.
+
+
+
+
+?php error_reporting( E_ALL); echo "h2 TCP / IP Connection / h2 \n"; / * Get the port for the WWW service. * / $service_port = getservbyname('www', 'tcp'); / * Get the IP address for the target host. * / $address = gethostbyname('www.php.net'); / * Create a TCP / IP socket. * / $socket = socket(AF_INET, SOCK_STREAM, 0); if ($socket 0) {echo "socket() failed: reason:". strerror($socket). "\n";} else {"socket() successful: ". strerror($socket). "\n";} echo "Attempting to connect to '$address 'on port '$service_port'.. ."; $result = connect($socket, $address, $service_port); if ($result 0) {echo "connect() failed.\nReason: ($result)". strerror($result). "\n";} else {echo "OK.\n";} $in = "HEAD / HTTP / 1.0\r\n\r\n"; $out = ''; echo "Sending HTTP HEAD request.. ."; write($socket, $in, strlen($in)); echo "OK.\n"; echo "Reading response:\n\n"; while (read($socket, $out, 2048)) {echo $out;} echo "Closing socket.. ."; close($socket); echo "OK.\n\n";?
+Anterior
+Inicio
+Siguiente
+
+Subir

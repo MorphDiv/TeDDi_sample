@@ -1,0 +1,41 @@
+# language_name_wals:	Turkish
+# language_name_glotto:	Turkish
+# ISO_6393:	tur
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/tr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Kullanım Kılavuzu
+Önceki
+Bölüm 4.
+Güvenlik
+Sonraki
+Register Globals Kullanımı
+PHP 'nin bir özelliği, register_globals = off ile konfigüre edilerek güvenliğin arttırılabilmesidir.
+Bu özelliğin kapatılması, PHP içine direk olarak hiçbir değerin girmemesini sağlamak anlamına gelir.
+Bu şekilde, potansiyel bir saldırgan tarafından yapılabilecek değişken saldırılarını azaltmış olursunuz.
+Değişkenlere saldırmaya çalışmak onlara fazladan zamana mal olacak, ve iç değişkenler kullanıcı tarafından gönderilen verilerden verimli bir şekilde izole edilmiş olacaktır.
+Bu durum PHP ile çalışırken harcanması gereken zamanı arttırsa da, faydaları kaybettiğiniz zamana kıyasla çok daha fazladır.
+Örnek 4-8. register_globals=off olmadan çalışmak
+?php if ($username) {/ / get / post / cookies ile kullan inodot;c inodot; taraf inodot;ndan de gbreve;i scedil;tirilebilir $good_login = 1;} if ($good_login == 1) {/ / get / post / cookies ile kullan inodot;c inodot; taraf inodot;ndan de gbreve;i scedil;tirilebilir fpassthru (" / highly / sensitive / data / index.html");}?
+Örnek 4-9. register_globals = off olarak çalışmak
+?php if( $HTTP_COOKIE_VARS['username']) {/ / yaln inodot;zca çerezden gelebilir $good_login = 1; fpassthru (" / highly / sensitive / data / index.html");}?
+Örnek 4-10.
+Basit değişken saldırısını tespit etmek
+?php if ($HTTP_COOKIE_VARS['username'] !$HTTP_POST_VARS['username'] !$HTTP_GET_VARS['username']) {/ / Kullaniciyi dogrulamak icin diger yöntemleri uygular... $good_login = 1; fpassthru (" / highly / sensitive / data / index.html");} else {mail("admin@example.com", "Olas inodot; sald inodot;r inodot; denemesi", $HTTP_SERVER_VARS['REMOTE_ADDR']); echo "Güvenlik ihlali, yönetici uyarildi ."; exit;}?
+Önceki
+Baþlangýç
+Sonraki
+Hata Raporlama
+Yukarý
+Kullanıcı tarafından Gönderilen Veri

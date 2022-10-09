@@ -1,0 +1,37 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+You can use the PDF functions in PHP to create PDF files if you have the PDF library by Thomas Merz (available at http://www.pdflib.com/pdflib/index.html; you will also need the JPEG library and the TIFF library to compile this. These two libs also quite often make problems when configuring php. Follow the messages of configure to fix possible problems.
+Please consult the excellent documentation for pdflib shipped with the source distribution of pdflib. It provides a very good overview of what pdflib capable of doing. Most of the functions in pdflib and the PHP module have the same name. The parameters are also identical. You should also understand some of the concepts of PDF or Postscript to efficiently use this module. All lengths and coordinates are measured in Postscript points. There are generally 72 PostScript points to an inch, but this depends on the output resolution.
+There is another PHP module for pdf document creation based on FastIO's. ClibPDF. It has a slightly different API. Check the ClibPDF functions section for details.
+The pdf module introduces two new type of variable. It is called pdfdoc pdfdoc is a pointer to a pdf document and almost all functions need it as its first parameter.
+Since the very begining of PDF support in PHP — starting with pdflib 0.6 — there has been tons of changes especially to the pdflib API. Most of these changes has been somehow covered by PHP, some has even required changes to the PHP API. Since pdflib 3.x the API seems to be stabilzed and PHP 4 has adopted the version as a minimum requirement for PDF support. The consequence will be that many functions will disappear or be replaced by alternatives sooner or later. Support for pdflib 0.6 is already completely given up. The following table list all the functions which are deprecated in PHP 4.02 and should be replaced by their new versions.
+
+표 1. Deprecated functions and its replacements
+Since version 3.0 of pdflib you should configure pdflib with the option --enable-shared-pdflib.
+If you use pdflib 2.01 check how the lib was installed. There should be a file or a to link libpdf.so. Version 2.01 just creates a lib with the name libpdf2.01.so which cannot be found when linking the test programm in configure. You will have to create a symbolic link from libpdf.so to libpdf2.01.so.).
+Version 2.20 of pdflib has introduced more changes to its API and support for chinese and japanese fonts. This unfortunately causes some changes of the pdf module of php4 (not php3). If you use pdflib 2.20 handle the in memory generation of PDF documents with care. Until pdflib 3.0 is released it might be unstable. The encoding parameter of pdf_set_font() has changed to a string. This means that instead of e.g. 4 you have to use 'winansi'.
+If you use pdflib 2.30 the pdf_set_text_matrix() will have gone. It is not supported any more. In general it is a good advise to consult the release notes of the used version of pdflib for possible changes.
+Any version of PHP 4 after March, 9th 2000 do not support versions of pdflib older than 3.0. PHP 3 on the other hand should not be used with version newer than 2.01.
+Most of the functions are fairly easy to use. The most difficult part is probably to create a very simple pdf document at all. The following example should help to get started. It creates the file test.pdf with one page. The page contains the text "Times Roman outlined" in an outlined, 30pt font. The text is also underlined.
+
+예 1. Creating a PDF document with pdflib
+The script getpdf.php just returns the pdf document.
+The pdflib distribution contains a more complex example which creates a serious of pages with an analog clock. This example converted into PHP using pdflib looks as the following (you can see the same example in the documentation for the clibpdf module):
+
+예 2. pdfclock example from pdflib distribution
+The PHP script getpdf.php just outputs the pdf document.

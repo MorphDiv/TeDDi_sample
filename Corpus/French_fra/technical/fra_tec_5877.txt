@@ -1,0 +1,209 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel de & ksysv;
+Peter Putzer
+putzer@kde. org
+& traducteurEricBischoff; & traducteurRobertJacolin; traducteurRomainPelisse; relecteurLudovicGrossard;
+Peter Putzer
+& ksysv; est un éditeur graphique pour la configuration de l'initialisation de type Unix System V.
+KDE
+KSysV
+Niveau d' exécution
+Éditeur de niveaux d' exécution
+init SystemV
+Introduction
+Bienvenue dans l'éditeur d'initialisation de type System V de & kde;, plus connu sous le nom & ksysv; (et référencé ainsi par la suite). Cette section présente quelques concepts et explique ce que vous pouvez faire avec & ksysv;.
+Une brève description de l'initialisation de type System V
+L'explication qui suit a été empruntée à tksysv (une source d'inspiration pour & ksysv;) & #160;:
+L'initialisation de type System V est en passe de devenir le standard dans le monde & Linux; pour contrôler le démarrage logiciel en phase d'amorçage. Cela est dû au fait que cette méthode est plus facile d'utilisation et plus flexible que l'initialisation traditionnelle de type BSD.
+Je ne vais pas entrer dans les détails historiques ici (essentiellement parce que je ne les connais pas & #160;!).
+L'exécutable init se trouve dans / sbin et non dans / etc. C'est important, car on pourrait être tenté de passer une machine en initialisation de type System V sans la réinstaller ni la reformater. Le noyau & Linux; cherche son programme d'initialisation en priorité dans / etc, il convient donc de vous assurer que votre ancien exécutable d'initialisation éventuel s'y trouvant n'existe plus.
+L'initialisation de SysV diffère également de celle de BSD dans la mesure où ses fichiers de configuration se trouvent dans un sous-dossier de / etc au lieu de résider directement dans / etc. Ce dossier s'appelle rc. d. Vous y trouverez rc. sysinit ainsi que les dossiers suivants & #160;:
+init. d/
+rc0. d/
+rc1. d/
+rc2. d/
+rc3. d/
+rc4. d/
+rc5. d/
+rc6. d/
+Le dossier init. d contient un tas de scripts. Pour schématiser, vous avez besoin d'un script pour chaque service que vous souhaitez démarrer au moment de l'amorçage ou lorsque vous passez à un autre niveau d'exécution. Les services comprennent des choses telles que le support du réseau, NFS, & Sendmail;, httpd, & etc; Les services ne comprennent pas des choses telles que setserial qui doivent être lancées une fois puis s'achever. De telles initialisations devraient aller dans rc. local.
+Si vous souhaitez utiliser rc. local, il devrait se trouver dans / etc/ rc. d. La plupart des systèmes contiennent ce fichier même s'il ne fait pas grand-chose. Si vous avez besoin de procéder à des opérations spécifiques au port série lors de l'amorçage, vous pouvez également placer un fichier rc. serial dans / etc/ rc. d.
+L'enchaînement des événements se déroule comme suit & #160;:
+Le noyau cherche à plusieurs endroits le programme init et lance le premier qu'il trouve,
+init lance / etc/ rc. d/ rc. sysinit,
+rc. sysinit accomplit un tas de tâches nécessaires et lance ensuite rc. serial (s'il existe),
+init lance rc. local,
+init exécute tous les scripts correspondants au niveau d'exécution par défaut.
+Le niveau d'exécution par défaut est défini dans / etc/ inittab. Vous devriez trouver en début de fichier une ligne ressemblant à & #160;:
+id:3: initdefault:
+Vous pouvez déduire de ce qui est spécifié dans la deuxième colonne que le niveau d'exécution par défaut est 3, ce qui devrait être le cas sur la plupart des systèmes. Si vous désirez modifier cette valeur, vous pouvez éditer / etc/ inittab à la main et changer le 3. Soyez très prudent lorsque vous modifiez inittab. Si vous cassez tout, vous pouvez vous en sortir en réamorçant et en saisissant & #160;:
+LILO boot: linux single
+Cela devrait vous permettre de réamorcer en mode monoutilisateur, vous laissant ainsi l'opportunité de réparer les dégâts.
+Mais comment les différents scripts sont -ils exécutés & #160;? Si vous tapez ls -l dans rc3. d, vous devriez voir quelque chose du genre & #160;:
+lrwxrwxrwx 1 root root 13 13:11 S10network -gt;.. / init. d/ network lrwxrwxrwx 1 root root 16 13:11 S30syslog -gt;.. / init. d/ syslog lrwxrwxrwx 1 root root 14 13:32 S40cron -gt;.. / init. d/ cron lrwxrwxrwx 1 root root 14 13:11 S50inet -gt;.. / init. d/ inet lrwxrwxrwx 1 root root 13 13:11 S60nfs -gt;.. / init. d/ nfs lrwxrwxrwx 1 root root 15 13:11 S70nfsfs -gt;.. / init. d/ nfsfs lrwxrwxrwx 1 root root 18 13:11 S75keytable -gt;.. / init. d/ keytable lrwxrwxrwx 1 root root 23 13:11 S80sendmail -gt;.. / init. d/ sendmail. init lrwxrwxrwx 1 root root 18 13:11 S90lpd -gt;.. / init. d/ lpd. init lrwxrwxrwx 1 root root 11 13:11 S99local -gt;.. / rc. local
+Vous remarquerez ici qu'il n'y a pas vraiment de fichiers dans le dossier. Tout ce qui s'y trouve, ce sont des liens vers les scripts du dossier init. d.
+De plus, le nom des liens commence par S suivi d'un nombre. Le S indique qu'on démarre le script en question (Start en anglais) et le K signifie qu'on l'arrête (Kill en anglais). Le nombre sert uniquement à ordonner les scripts. Init démarrera les services dans l'ordre où ils apparaissent. Vous pourriez utiliser deux fois le même nombre, mais ça ne servirait qu'à générer de la confusion. Vous n'avez besoin que d'un nombre de deux chiffres précédé d'un S ou d'un K majuscule pour démarrer ou arrêter le service qui vous interesse.
+Comment démarrer ou arrêter des services & #160;? C'est simple. Chaque script est écrit de telle sorte qu'il accepte un argument qui peut être start ou stop. Vous pouvez en fait exécuter ces scripts à la main à l'aide d'une commande comme & #160;:
+/ etc/ rc. d/ init. d/ httpd. init stop
+Pour arrêter le serveur httpd, init se contente de lire le nom, et s'il commence par K, il appelle le script avec l'argument stop. S'il commence par S, il démarre le script avec l'argument start.
+Pourquoi tous ces niveaux d'exécution & #160;?
+Certaines personnes veulent un moyen simple de configurer les machines pour plusieurs usages. Je pourrais définir un niveau d'exécution serveur qui ne lance que httpd, & Sendmail;, networking, & etc; Puis je pourrais avoir un niveau d'exécution utilisateur qui lance & kdm;, la gestion du réseau, & etc;
+Utilisation de l' interface
+Cette section vous apprend à utiliser & ksysv;, ce qui ne devrait pas être difficile, car il a été conçu pour être aussi convivial que possible.
+À la souris
+L'utilisation de & ksysv; à la souris ou un autre périphérique de pointage est simple & #160;: faites glisser un élément de la zone des services disponibles vers un des six niveaux d'exécution pour le démarrer (ou l'arrêter) à ce niveau d'exécution.
+Vous pouvez également faire passer des scripts d'un niveau d'exécution à l'autre, ou changer leur position au sein d'un niveau d'exécution donné grâce au glisser-déposer. En procédant ainsi, vous retirez l'élément de son niveau d'exécution ou de sa position originels, ce qui n'est pas le cas lorsque vous faites glisser un élément depuis la zone des services disponibles.
+Les éléments sont déplacés quand vous les faites glisser vers une nouvelle zone. Pour copier un service dans un niveau d'exécution différent, vous devez sélectionner Copier dans le menu Édition ou dans le menu contextuel, et le Coller dans le niveau d'exécution de destination.
+Le numéro d'ordre d'un élément ne peut parfois pas être calculé. Dans un tel cas, il convient de modifier le numéro d'ordre des éléments voisins avant de réessayer d'insérer le service.
+Les numéros d'ordre doivent être compris entre 0 et 99, et pas au-delà.
+Vous pouvez supprimer des éléments en les faisant glisser vers la Corbeille (symbolisée par une icône représentant une poubelle).
+Pour le moment, il n'y a pas de moyen de restaurer des éléments glissés à la Corbeille, alors soyez prudent & #160;!
+Clavier
+Vous pouvez utiliser la touche de tabulation pour passer d'une zone de l'écran à la suivante (Services disponibles, Niveau d'exécution 1 Démarrer, Niveau d'exécution 1 Arrêter, & etc;) ainsi que les touches fléchées pour déplacer la sélection de haut en bas et de bas en haut.
+Pour déplacer un élément vers un niveau d'exécution différent, couper -le vers le presse-papiers (en utilisant Ctrl; X) et coller -le dans le niveau d'exécution de destination (avec Ctrl; V).
+Pour changer à la main le numéro d'ordre des éléments ou leur nom, appuyez sur Entrée pour ouvrir la boîte de dialogue des propriétés. Utilisez la touche de tabulation pour passer d'un champ au suivant. Fermez la boîte de dialogue en appuyant sur Entrée pour valider les modifications, ou appuyez sur Échap pour annuler les changements.
+Les éléments de menu
+Une description exhaustive des menus de & ksysv;.
+Le menu Fichier
+À cause du risque de perte de données, tous les éléments du menu Fichier demandent confirmation avant d'exécuter leur fonction.
+Fichier Revenir à la configuration précédente
+Oublie tous les changements effectués, et revient à la dernière configuration enregistrée.
+Ctrl; O Fichier Ouvrir...
+Ouvre une configuration précédemment enregistrée.
+Ctrl; S Fichier Enregistrer la configuration
+Rend vos modifications permanentes. Il n'y a pas de fichiers de sauvegarde créés lors de l'enregistrement, utilisez donc cette fonction avec prudence.
+Fichier Enregistrer sous...
+Enregistre une copie de votre nouvelle configuration.
+Ctrl; L Fichier Enregistrer le journal...
+Enregistre un journal
+Ctrl; P Fichier Imprimer le journal...
+Imprime un exemplaire du journal.
+Ctrl; Q Fichier Quitter
+Sort de & ksysv;.
+Le menu Édition
+Ctrl; Z Édition Annuler
+Annule les derniers changements effectués.
+Ctrl; Maj; Z Édition Refaire
+Refait la dernière action annulée.
+Ctrl; X Édition Couper
+Coupe le service actuellement sélectionné et le place dans le presse-papiers.
+Ctrl; C Édition Copier
+Copie l'élément sélectionné dans le presse-papiers, sans le retirer de sa position d'origine.
+Ctrl; V Édition Coller
+Colle le contenu du presse-papiers à la position courante.
+Édition Propriétés
+Ouvre la boîte de dialogue des propriétés de l'élément sélectionné.
+Le menu Outils
+Outils Démarrer un service...
+Démarre le service sélectionné.
+Outils Arrêter un service...
+Arrête le service sélectionné
+Outils Redémarrer un service...
+Redémarrer le service sélectionné.
+Outils Modifier un service...
+Permet d'éditer le service sélectionné
+Le menu Configuration
+Configuration Afficher la barre d' outils
+Affiche ou fait disparaître la barre d'outils.
+Configuration Afficher la barre d' état
+Affiche ou fait disparaître la barre d'état.
+Configuration Afficher le journal
+Affiche ou fait disparaître la fenêtre du journal
+Configuration Enregistrer la configuration
+Enregistre la configuration actuelle.
+Configuration Configurer les raccourcis clavier...
+Configure les raccourcis clavier par défaut.
+Configuration Configurer les barres d'outils...
+Personnalise la barre d'outils.
+Configuration Configurer KSysV - Éditeur de la configuration de démarrage...
+Personnalise le fonctionnement de & ksysv;
+Le menu Aide
+& help. menu. documentation;
+Configuration
+Toutes les options sont enregistrées dans $KDEHOME / share/ config/ ksysvrc. Les valeurs par défaut sont prises dans le fichier de portée globale ($KDEDIR / share/ config/ ksysvrc), s'il existe, sinon elles sont déterminées par & ksysv; lui-même. Les changements apportés aux valeurs par défaut sont enregistrés dans votre fichier de portée locale ksysvrc.
+Sections utilisées
+Sections utilisées ainsi que les valeurs par défaut correspondantes.
+& lsqb; Path Settingsrsqb;
+Mot clé
+Valeur par défaut
+Description
+ScriptPath
+/ etc/ rc. d/ init. d
+Emplacement des scripts utilisés pour démarrer et arrêter les services.
+RunlevelPath
+/ etc/ rc. d/
+Emplacement des sous dossiers du niveau d'exécution.
+& lsqb; Colorsrsqb;
+Changed
+rouge
+Couleur utilisée pour les entrées modifiées.
+New
+bleu
+Couleur utilisée pour les nouvelles entrées
+& lsqb; Geometryrsqb;
+Width
+Largeur de la fenêtre de & ksysv;
+Height
+Hauteur de la fenêtre de & ksysv;
+& lsqb; Other Settingsrsqb;
+ToolBar
+vrai
+Si la barre d'outil est activé ou pas
+Barre d' état
+Si la barre d'état est activé ou pas.
+ShowLog
+Si la fenêtre des journaux est affiché ou non
+Facteur de taille
+80
+100 - Facteur de taille = pourcentage de la fenêtre réservé à l'affichage des fichiers de journal.
+Questions et réponses
+J'ai trafiqué le niveau d'exécution par défaut, et à présent ma machine n'arrête plus de redémarrer. Que puis -je faire & #160;?
+Saisissez linux single à l'invite de LILO, et appuyez sur Entrée afin de redémarrer en mode monoutilisateur. Modifiez le fichier / etc/ inittab et choisissez une valeur autorisée comme niveau d'exécution par défaut. 3 devrait normalement convenir.
+Ma machine se bloque juste après le redémarrage
+Voir la question 1 ci-dessus.
+J'ai réglé avec & ksysv; certains services pour qu'ils s'exécutent au niveau d'exécution X, alors pourquoi ne fonctionnent ils pas & #160;?
+Si vous utilisez les distributions & SuSE; ou Delix (DLD), vous devez également modifier un fichier spécifique à la distribution dans / etc. Veuillez consulter le manuel de votre distribution pour plus de détails.
+L'approche de ces distributions pour démarrer des services rend la configuration des services facile avec les outils de configuration que ces distributions utilisent, mais c'est malheureusement non standard. Les auteurs de & ksysv; prévoient d'écrire une extension générique pour cette approche un jour ou l'autre, mais n'espérez pas de résultats dans un délai trop proche.
+Si vous utilisez une distribution différente, veuillez vérifier que vous avez tous les fichiers de configuration nécessaires pour le service, et qu'ils sont aux emplacements corrects. Certains démons comme Apache (alias httpd) meurent simplement en silence lorsque leurs fichiers de configuration sont absents ou incorrects.
+Signification standard des niveaux d' exécution
+Elles varie en fonction de la distribution, c'est pourquoi ce qui suit est une liste incomplète des distributions & Linux; les plus courantes. Si vous avez une autre distribution, veuillez adresser un courrier électronique à l'auteur pour ajouter les informations correspondant à cette distribution à ce manuel.
+& RedHat;
+Niveau d'exécution 0 & #160;:
+arrêt (éteint la machine)
+Niveau d'exécution 1 & #160;:
+Mode monoutilisateur
+Niveau d'exécution 2 & #160;:
+Multiutilisateur en mode texte, sans NFS.
+Niveau d'exécution 3 & #160;:
+Multiutilisateur en mode texte, avec tous les services réseau.
+Niveau d'exécution 4 & #160;:
+Inutilisé.
+Niveau d'exécution 5 & #160;:
+Multiutilisateur en mode graphique, avec tous les services réseau.
+Niveau d'exécution 6 & #160;:
+Redémarrage
+Remerciements et licence
+& ksysv; Copyright & copy; 1997-1998 Peter Putzer
+Peter Putzer, putzer@kde. org - Développeur
+Documentation & #160;:
+Peter Putzer, putzer@kde. org - Contenu originel
+Eric Bischoff, & Eric. Bischoff. mail; - éditeur
+Traduction française par & EricBischoff;, & RobertJacolin; et & RomainPelisse;. Relecture par & LudovicGrossard;
+& underFDL; & underGPL;
+Installation

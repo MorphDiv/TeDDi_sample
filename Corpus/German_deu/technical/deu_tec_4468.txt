@@ -1,0 +1,47 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Kapitel 14.
+Klassen und Objekte
+Nach vorne
+Anmerkung:
+In PHP 3 verlieren Objekte während des Prozesses der Serialisierung und Deserialisierung ihre Assoziation zur Klasse.
+Die resultierende Variable ist vom Typ Objekt, hat aber keine Klasse und keine Methoden, weshalb sie ziemlich unbrauchbar ist (Sie wurde wie ein Array, jedoch mit einer ziemlich komischen Syntax).
+Achtung
+Die folgende Information ist nur für PHP 4 gültig.
+serialize() gibt eine Zeichenkette zurück, die eine Byte-Strom-Repräsentation irgendeines in PHP speicherbaren Wertes enthält. unserialize() kann diese Zeichenkette verwenden, um die ursprünglichen Variablenwerte wieder herzustellen.
+Die Verwendung von serialize zum Speichern eines Objektes wird alle Variablen innerhalb eines Objektes speichern.
+Die Funktionen in einem Objekt werden nicht gespeichert, sondern nur der Name der Klasse.
+Um ein Objekt wieder deserialisieren zu können, muss die Klasse dieses Objektes definiert werden.
+Das heißt, wenn Sie ein Objekt $a der Klasse A in page1.php haben und dieses serialisieren, erhalten Sie eine Zeichenkette, die sich auf die Klasse A bezieht, und alle Werte der in $a enthaltenen Variablen enthält.
+Wenn Sie $a der Klasse A in page2.php mittels unserialize wiederherstellen möchten, muss die Definition von Klasse A in page2.php vorhanden sein.
+Dies kann zum Beispiel durch das Speichern der Klassendefiniton von Klasse A in einer Include-Datei, und das Einbinden dieser Datei sowohl in page1.php und page2.php realisiert werden.
+classa.inc: class A {var $one = 1; function show_one() {echo $this - one;}} page1.php: include("classa.inc"); $a = new A; $s = serialize($a); / / speichere $s irgendwo, wo sie page2.php finden kann. $fp = fopen("store", "w"); fputs($fp, $s); fclose($fp); page2.php: / / Dies ist für das korrekte Arbeiten von unserialize nötig. include("classa.inc"); $s = implode("", @file("store")); $a = unserialize($s); / / Nun verwenden wir die Funktion show_one() des Objektes $a. $a - show_one();
+Wenn Sie mit Sessions arbeiten und session_register() verwenden, um Objekte zu registrieren, so werden diese Objekte am Ende der PHP Seite serialisiert, und in jeder folgenden Seite automatisch via unserialize wiederhergestellt.
+Das heißt, dass diese Objekte auf jeder Ihrer Seite auftauchen können, sobald sie Teil Ihrer Session sind.
+Es wird ausdrücklich empfohlen, dass Sie die Klassendefinitionen der so registrierten Objekte in allen Ihren Seiten einbinden, auch wenn Sie diese Klassen eigentlich nicht auf allen Ihren Seiten benötigen.
+Tun Sie es nicht und wird ein Objekt ohne einer vorhandenen Klassendefinition deserialisiert, verliert es seine Assoziation zur Klasse, und wird zu einem Objekt der Klasse stdClass, ohne irgendwelchen Funktionen.
+Das bedeutet, dass es ziemlich nutzlos wird.
+Würde also $a in dem obigen Beispiel mittels session_register( "a") ein Teil einer Session, sollten Sie die Datei classa.inc nicht nur in page1.php und page2.php, sondern in all Ihre Seiten einbinden.
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben
+Die "magischen" Funktionen __sleep und __wakeup

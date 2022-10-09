@@ -1,0 +1,109 @@
+# language_name_wals:	Mandarin
+# language_name_glotto:	Mandarin Chinese
+# ISO_6393:	cmn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hans
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/zh_CN.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+对话框编辑器中控件的编程示例
+/text/sbasic/guide/sample_code.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+控件编程示例
+对话框;加载（示例）
+对话框;显示（示例）
+控件;读取或编辑属性（示例）
+列表框;从（示例）删除条目
+列表框;添加条目至（示例）
+示例; 编程控件
+对话框编辑器;控件的编程示例
+对话框编辑器中控件的编程示例
+对话框
+工具箱
+栏上的工具可以创建对话框并添加下列控件：名为 &quot; CheckBox1 &quot; 的
+复选框
+、名为 &quot; Label1 &quot; 的
+标签字段
+、名为 &quot; CommandButton1 &quot; 的
+按钮
+以及名为 &quot; ListBox1 &quot; 的
+列表框
+。
+在将控件附加到对象变量时，请使字母大小写保持一致。
+加载对话框的全局函数
+Function LoadDialog(Libname as String, DialogName as String, Optional oLibContainer)
+Dim oLib as Object
+Dim oLibDialog as Object
+Dim oRuntimeDialog as Object
+If IsMissing(oLibContainer ) then
+oLibContainer = DialogLibraries
+End If
+oLibContainer.LoadLibrary(LibName)
+oLib = oLibContainer.GetByName(Libname)
+oLibDialog = oLib.GetByName(DialogName)
+oRuntimeDialog = CreateUnoDialog(oLibDialog)
+LoadDialog() = oRuntimeDialog
+End Function
+显示对话框
+rem 全局变量的定义
+Dim oDialog1 AS Object
+Sub StartDialog1
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+oDialog1.Execute()
+end sub
+读取或编辑程序中控件的属性
+Sub Sample1
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM 获取对话框模型
+oDialog1Model = oDialog1.Model
+REM 显示 Label1 的文字
+oLabel1 = oDialog1.GetControl( &quot; Label1 &quot; )
+MsgBox oLabel1.Text
+REM 设置控件 Label1 的新文字
+oLabel1.Text = &quot; New Files &quot;
+REM 显示控件 CheckBox1 的模型属性
+oCheckBox1Model = oDialog1Model.CheckBox1
+MsgBox oCheckBox1Model.Dbg_Properties
+REM 为 CheckBox1 的控件模型设置新状态
+oCheckBox1Model.State = 1
+REM 显示控件 CommandButton1 的模型属性
+oCMD1Model = oDialog1Model.CommandButton1
+MsgBox oCMD1Model.Dbg_Properties
+REM 显示控制 CommandButton1 的属性
+oCMD1 = oDialog1.GetControl( &quot; CommandButton1 &quot; )
+MsgBox oCMD1.Dbg_Properties
+REM 执行对话框
+oDialog1.Execute()
+End Sub
+向列表框中添加条目
+Sub AddEntry
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM 向 ListBox 中添加新条目
+oDialog1Model = oDialog1.Model
+oListBox = oDialog1.GetControl( &quot; ListBox1 &quot; )
+dim iCount as integer
+iCount = oListbox.ItemCount
+oListbox.additem( &quot; New Item &quot; & iCount,0)
+end sub
+删除 ListBox 中的条目
+Sub RemoveEntry
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM 删除 ListBox 中的第一个条目
+oDialog1Model = oDialog1.Model
+oListBox = oDialog1.GetControl( &quot; ListBox1 &quot; )
+oListbox.removeitems(0,1)
+end sub

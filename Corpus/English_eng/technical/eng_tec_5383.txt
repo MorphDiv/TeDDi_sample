@@ -1,0 +1,59 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+These functions allow you to access Oracle8 and Oracle7 databases.
+It uses the Oracle8 Call-Interface (OCI8)
+This extension is more flexible than the standard Oracle extension.
+It supports binding of global and local PHP variables to Oracle placeholders, has full LOB, FILE and ROWID support and allows you to use user-supplied define variables.
+You will need the Oracle8 client libraries to use this extension.
+Before using this extension, make sure that you have set up your Oracle environment variables properly for the Oracle user, as well as your web daemon user.
+The variables you might need to set are as follows:
+ORACLE_HOME
+ORACLE_SID
+LD_PRELOAD
+LD_LIBRARY_PATH
+NLS_LANG
+ORA_NLS33
+After setting up the environment variables for your webserver user, be sure to also add the webserver user (nobody, www) to the oracle group.
+If your webserver doesn 't start or crashes at startup:
+Check that Apache is linked with the pthread library:
+# ldd / www / apache / bin / httpd libpthread.so.0 = / lib / libpthread.so.0 (0x4001c000) libm.so.6 = / lib / libm.so.6 (0x4002f000) libcrypt.so.1 = / lib / libcrypt.so.1 (0x4004c000) libdl.so.2 = / lib / libdl.so.2 (0x4007a000) libc.so.6 = / lib / libc.so.6 (0x4007e000) / lib / ld-linux.so.2 = / lib / ld-linux.so.2 (0x40000000)
+If the libpthread is not listed you have to reinstall Apache:
+# cd / usr / src / apache_1.3.xx # make clean # LIBS=-lpthread. / config.status # make # make install
+Please note that on some systems like UnixWare it is libthread instead of libpthread.
+PHP and Apache have to be configured with EXTRA_LIBS=-lthread.
+You have to compile PHP with the option --with-oci8[ =DIR], where DIR defaults to your environmment variable ORACLE_HOME.
+This extension has no configuration directives defined in php.ini.
+The constants below are defined by this extension, and will only be available when the extension has either been compiled into PHP or dynamically loaded at runtime.
+Example 1.
+OCI Hints
+?php / / by sergo@bacup.ru / / Use option:
+OCI_DEFAULT for execute command to delay execution OCIExecute( $stmt, OCI_DEFAULT); / / for retrieve data use (after fetch): $result = OCIResult($stmt, $n); if (is_object ($result)) $result = $result - load(); / / For INSERT or UPDATE statement use: $sql = "insert into table (field1, field2) values (field1 = 'value', field2 = empty_clob()) returning field2 into :field2"; OCIParse($conn, $sql); $clob = OCINewDescriptor($conn, OCI_D_LOB); OCIBindByName ($stmt, ":field2", $clob, -1, OCI_B_CLOB); OCIExecute($stmt, OCI_DEFAULT); $clob - save ("some text"); OCICommit($conn);?
+You can easily access stored procedures in the same way as you would from the commands line.
+Example 2.
+Using Stored Procedures
+?php / / by webmaster@remoterealty.com $sth = OCIParse ($dbh, "begin sp_newaddress (:address_id, '$firstname', '$lastname', '$company', '$address1', '$address2', '$city', '$state', '$postalcode', '$country', :error_code );end; "); / / This calls stored procedure sp_newaddress, with :address_id being an / / in / out variable and :error_code being an out variable. / / Then you do the binding:
+OCIBindByName ($sth, ":address_id", $addr_id, 10); OCIBindByName ($sth, ":error_code", $errorcode, 10); OCIExecute ($sth);?
+Prev
+Home
+Next
+deaggregate
+Up
+OCIBindByName

@@ -1,0 +1,75 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+This module enables you to transparently read and write gzip (.gz) compressed files, through versions of most of the filesystem functions which work with gzip-compressed files (and uncompressed files, too, but not with sockets).
+Note:
+Version 4.0.4 introduced a fopen-wrapper for .gz-files, so that you can use a special 'zlib:' URL to access compressed files transparently using the normal f*() file access functions if you prepend the filename or path with a'zlib: 'prefix when calling fopen().
+In version 4.3.0, this special prefix has been changed to 'zlib: / /' to prevent ambiguities with filenames containing ':'.
+This feature requires a C runtime library that provides the fopencookie() This feature requires a C runtime library that provides the fopencookie() function.
+To my current knowledge the GNU libc is the only library that provides this feature.
+This module uses the functions of zlib by Jean-loup Gailly and Mark Adler.
+You have to use a zlib version = 1.0.9 with this module.
+Zlib support in PHP is not enabled by default.
+You will need to configure PHP --with-zlib[ =DIR]
+The windows version of PHP The windows version of PHP has built in support for this extension.
+You do not need to load any additional extension in order to use these functions.
+Note:
+Builtin support for zlib is available with PHP 4.3.0.
+The behaviour of these functions is affected by settings in php.ini.
+The zlib extension offers the option to transparently compress your pages on-the-fly, if the requesting browser supports this.
+Therefore there are three options in the configuration file php.ini.
+Table 1.
+Zlib Configuration Options
+Name
+Default
+Changeable
+zlib.output_compression
+"Off"
+PHP_INI_ALL
+zlib.output_compression_level
+"-1"
+PHP_INI_ALL
+zlib.output_handler
+""
+PHP_INI_ALL
+Here is a short explanation of the configuration directives.
+Whether to transparently compress pages.
+If this option is set to "On" in php.ini or the Apache configuration, pages are compressed if the browser sends an "Accept-Encoding: gzip "or "deflate" header. "Content-Encoding: gzip "(respectively "deflate") and "Vary:
+Accept-Encoding "headers are added to the output.
+You can use ini_set() to disable this in your script if the headers aren't already sent.
+If you output a "Content-Type: image /" header the compression is disabled, too (in order to circumvent a Netscape bug).
+You can reenable it, if you add "ini_set('zlib.output_compression', 'On')" after the header call which added the image content-type.
+This option also accepts integer values instead of boolean "On" / "Off", using this you can set the output buffer size (default is 4KB).
+Instead you must use zlib.output_handler.
+Compression level used for transparent output compression.
+You cannot specify additional output handlers if zlib.output_compression is activated here.
+This setting does the same as output_handler but in a different order.
+This extension has no resource types defined.
+The constants below are defined by this extension, and will only be available when the extension has either been compiled into PHP or dynamically loaded at runtime.
+This example opens a temporary file and writes a test string to it, then it prints out the content of this file twice.
+Example 1.
+Small Zlib Example
+?php $filename = tempnam ('/ tmp', 'zlibtest') .'.gz'; print "html \n head / head \n body \n pre \n"; $s = "Only a test, test, test, test, test, test, test, test!\n"; / / open file for writing with maximum compression $zp = gzopen($filename, "w9"); / / write string to file gzwrite($zp, $s); / / close file gzclose($zp); / / open file for reading $zp = gzopen($filename, "r"); / / read 3 char print gzread($zp, 3); / / output until end of the file and close it. gzpassthru($zp); print "\n"; / / open file and print content (the 2nd time). if (readgzfile($filename) != strlen($s)) {echo "Error with zlib functions !";} unlink($filename); print" / pre \n / h1 / body \n / html \n";?
+Prev
+Home
+Next
+zip_read
+Up
+gzclose

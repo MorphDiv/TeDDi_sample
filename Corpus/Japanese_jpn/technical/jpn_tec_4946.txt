@@ -1,0 +1,37 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+出力制御関数により、スクリプトから送信される出力を制御することが可 能になります。この機能は、複数の異なった場面、特にスクリプトがデー タ出力を開始した後にヘッダをブラウザに送信する必要がある場合に有用 です。出力制御関数は、 header() または setcookie() を使用して送信されたヘッダには作用せ ず、 echo() のような関数とPHPコードのブロック間 のデータにのみ作用します。
+これらの関数は、標準モジュールの一部と して利用可能であり、常に使用できます。
+これらの関数はPHPコアに含まれるため、使用す る際にインストールは不要です。
+これらの関数の動作は、 php.ini の設定により変化します。
+
+表 1出力制御設定オプション
+以下に設定ディレクティブの簡単な説明を示します。
+このディレクティブを'On'と設定することにより、全てのファイルに関 して出力バッファリングを有効にすることができます。 特定の大きさにバッファの大きさを制限したい場合、このディレクティ ブの値として'On'の代わりに最大バイト数(例:output_buffering=4096) を使用することができます。
+スクリプトの全ての出力を関数にリダイレクトすることができます。 例えば、output_handlerに mb_output_handler() を 指定した場合、文字エンコーディングは透過的に指定したエンコーディ ングに変換されます。出力ハンドラを指定することにより自動的に出力 バッファリングをonにします。
+注意 ob_inconv_handler() と mb_output_handler() の両方で使用することはで きません。また、 ob_gzhandler() と zlib.output_compression の両方を使用することはできません。
+デフォルトは FALSE です。これを TRUE 変更にすると、PHPが 各出力ブロックの後で自動的に出力レイヤをフラッシュするよう指定し ます。これは、各 print() および HTML ブロックの後で flush() 関数をコールすることと等価です。
+Web環境の中で PHP を使用している時、 このオプションをonに変更すると、著しい性能低下が生じるため、 通常はデバッグ目的のみにすることが推奨されます。 CLI SAPI のもとで実行される時、この値はデフォルトで TRUE に なっています。
+ob_implicit_flush() も参照して下さい。
+この拡張モジュールはリソース型を全く定義し ません。
+この拡張モジュールは定数を全く定義しませ ん。
+
+例 1出力制御の例
+上記の例では、 echo() からの出力は、 ob_end_flush() がコールされるまで出力バッファに 保存されます。この際、 setcookie() をコールするとエラーを発生することな くクッキーが保存されます。(通常、データの送信後はブラウザにヘッダ を送信することはできません。)
+注意 PHP 4.1 (および4.2)から4.3に更新する際、前のバージョンのバグのせ いで、 php.ini の implict_flush を OFF にする必要があります。さもないと、 ob_start() を使用する全ての出力は、出力を抑制 することができなくなります。
+header() および setcookie() も参照下さい。

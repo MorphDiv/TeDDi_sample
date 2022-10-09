@@ -1,0 +1,50 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3 CVS only)
+Returns an associative array of status and return codes for the last SQL query / statement / command.
+Elements of the array are:
+Table 1.
+Status information returned by sesam_diagnostic()
+Element
+Contents
+$array[ "sqlstate"]
+5 digit SQL return code (see the SESAM manual for the description of the possible values of SQLSTATE)
+$array[ "rowcount"]
+number of affected rows in last update / insert / delete (set after "immediate "statements only)
+$array[ "errmsg"]
+"human readable" error message string (set after errors only)
+$array[ "errcol"]
+error column number of previous error (0-based; or -1 if undefined.
+Set after errors only)
+$array[ "errlin"]
+error line number of previous error (0-based; or -1 if undefined.
+Set after errors only)
+In the following example, a syntax error (E SEW42AE ILLEGAL CHARACTER) is displayed by including the offending SQL statement and pointing to the error location:
+Example 1.
+Displaying SESAM error messages with error position
+?php / / Function which prints a formatted error message, / / displaying a pointer to the syntax error in the / / SQL statement function PrintReturncode ($exec_str) {$err = Sesam_Diagnostic(); $colspan=4; / / 4 cols for: sqlstate, errlin, errcol, rowcount if ($err["errlin"] == -1) --$colspan; if ($err["errcol"] == -1) --$colspan; if ($err["rowcount"] == 0) --$colspan; echo "TABLE BORDER \n"; echo" TR TH COLSPAN=".$colspan. "FONT COLOR=red ERROR: / FONT". htmlspecialchars($err["errmsg"]). "/ TH / TR \n"; if ($err["errcol"] = 0) {echo" TR TD COLSPAN=".$colspan. "PRE \n"; $errstmt = $exec_str ."\n"; for ($lin=0; $errstmt != ""; ++$lin) {if ($lin != $err["errlin"]) {/ / $lin is less or greater than errlin if (!($i = strchr ($errstmt, "\n"))) $i =""; $line = substr ($errstmt, 0, strlen($errstmt)-strlen($i)+1); $errstmt = substr($i, 1); if ($line != "\n") print htmlspecialchars ($line);} else {if (! ($i = strchr ($errstmt, "\n"))) $i = ""; $line = substr ($errstmt, 0, strlen ($errstmt)-strlen($i)+1); $errstmt = substr($i, 1); for ($col=0; $col $err["errcol"]; ++$col) echo (substr($line, $col, 1) == " ")? " ": "."; echo" FONT COLOR=RED BLINK\\ / BLINK / FONT \n"; print "FONT COLOR=\"#880000\" ".htmlspecialchars($line). "/ FONT"; for ($col=0; $col $err["errcol"]; ++$col) echo (substr ($line, $col, 1) == " ")? " ":" ."; echo "FONT COLOR=RED BLINK / / BLINK / FONT \n";}} echo" / PRE / TD / TR \n";} echo "TR \n"; echo" TD sqlstate= ". $err["sqlstate"]." / TD \n"; if ($err["errlin"] != -1) echo "TD errlin=". $err["errlin"]. "/ TD \n"; if ($err["errcol"] != -1) echo" TD errcol= ". $err["errcol"]." / TD \n"; if ($err["rowcount"] != 0) echo "TD rowcount=". $err["rowcount"]. "/ TD \n"; echo" / TR \n"; echo "/ TABLE \n";} if (!sesam_connect ("mycatalog", "phoneno", "otto")) die ("cannot connect"); $stmt = "SELECT * FROM phone\n"." WHERE@ LASTNAME='KRAEMER'\n". "ORDER BY FIRSTNAME"; if (!($result = sesam_query ($stmt))) PrintReturncode ($stmt);?
+See also: sesam_errormsg() for simple access to the error string only
+Prev
+Home
+Next
+sesam_connect
+Up
+sesam_disconnect

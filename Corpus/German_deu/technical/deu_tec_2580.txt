@@ -1,0 +1,126 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+K\xFCnftige Arbeiten
+aRts entwickelt sich zu schnell, als das an dieser Stelle eine aktuelle Liste m\xF6glich w\xE4re.
+Informationen zu Pl\xE4nen finden Sie in der Datei TODO und in den Mailinglisten.
+Sie sind eingeladen, sich bei der weiteren Planung und Implementation zu beteiligen.
+Dieses in der Entwicklung befindliche Dokument versucht einen \xDCberblick dar\xFCber zu geben, wie neue Technologien in aRts integriert werden.
+Es behandelt folgende Themen:
+Wie Schnittstellen funktionieren.
+Codecs:
+Dekodierung von mp3-Str\xF6men in eine Form, so dass sie als Daten verwendet werden k\xF6nnen.
+Video.
+Threading.
+Synchronisation.
+Dynamische Erweiterung / Maskierung.
+Dynamische Komposition.
+GUI
+MIDI
+Dieses befindet sich in Arbeit.
+Es ist die Grundlage daf\xFCr, wie neue Technologien in aRts integriert werden k\xF6nnen.
+Man kann einen ungef\xE4hren Eindruck davon bekommen, wie solche Probleme gel\xF6st werden.
+Sie k\xF6nnen alles, was Sie hier sehen, korrigieren.
+Programme, die aRts -Technologie verwenden (bitte: koordinieren Sie IhrerAnstrengungen):
+KPhone (Voice over IP)
+Noatun (Video- / Audiospieler)
+artscontrol (Kontrollprogramm des Soundservers)
+Brahms (Musiksequencer)
+Kaiman (KDE 2-Medienspieler - kmedia2-kompatibel)
+mpglib / kmpg (mpg Audio- und Videowiedergabetechnologie)
+SDL (direkte Medienschicht f\xFCr Spiele, noch nicht begonnen, aber wohl sinnvoll)
+electric ears (Der Autor hat mich kontaktiert - Status unbekannt)
+Wie Schnittstellen (interfaces) funktionieren
+&MCOP;-Schnittstellen sind die Grundlage des Konzeptes von aRts.
+Sie sind das netzwerktransparente \xC4quivalent zu C++-Klassen.
+Sie sollten Ihre Programmentwicklung mit Schnittstellen durchf\xFChren.
+Die Schnittstellen bestehen aus vier Teilen:
+Synchrone Str\xF6me
+Asynchrone Str\xF6me
+Methods
+Attributes
+Diese k\xF6nnen beliebig kombiniert werden.
+Neue Technologien sollten als Schnittstellen definiert werden.
+Lesen Sie die Abschnitte \xFCber asynchrone Str\xF6me und synchrone Str\xF6me, sowie den \xFCber die KMedia2-Schnittstelle.
+Es sind gute Beispiele f\xFCr ihre Funktionsweise
+Schnittstellen werden als .idl -Code spezifiziert und mit dem mcopidl -Compiler \xFCbersetzt.
+Codecs - Datendekodierung
+Die kmedia2-Schnittstellen erlauben Ihnen zu ignorieren, dass wav-Dateien, mp3-Dateien und viele andere Formate aus Datenstr\xF6men bestehen.
+Stattdessen k\xF6nnen Sie Methoden implementieren, um sie abzuspielen.
+Sie k\xF6nnen eine Routine zum Laden von wav-Dateien schreiben, um wav-Dateien abzuspielen (als PlayObject), aber niemand sonst kann Ihren Code verwenden.
+Asynchrone Str\xF6me sind eine Alternative.
+Sie definieren eine Schnittstelle, die die \xDCbergabe von Datenbl\xF6cken erm\xF6glichen.
+So sieht das in &MCOP; aus:
+Nat\xFCrlich k\xF6nnen Codecs Attribute verwenden, um zus\xE4tzliche Daten, wie Formatinformationen bereitzustellen.
+Dieser ByteAudioCodec kann zum Beispiel mit einem ByteStreamToAudio -Objekt verbunden werden, um einen Audio-Strom zu formen.
+Andere Codec-Typen k\xF6nnen stattdessen Video-Daten direkt ausgeben, wie
+Meistens sollte ein Codec-Konzept verwendet werden anstatt einem Sie wissen, wie man es abspielt und ich nicht -Konzept, wie zum Beispiel WavPlayObject es praktiziert.
+Nat\xFCrlich muss sich jemand hinsetzen und einige Versuche durchf\xFChren, bevor ein API festgeschrieben werden kann.
+Video
+Mein Vorschlag ist, Video als asynchronen Strom eines &MCOP;-Datentypen, der Bilder enth\xE4lt, zu implementieren.
+Dieser Datentyp muss noch kreiert werden.
+Auf diese Weise k\xF6nnten Plugins, die Video-Bilder verarbeiten in der gleichen Art wie Audio-Plugins verbunden werden.
+Auf einige Dinge muss dabei geachtet werden:
+Es gibt die Farbmodelle RGB und YUV.
+Das Format sollte dem Strom aufgepr\xE4gt werden.
+Synchronisation ist wichtig.
+Es sollte m\xF6glich sein, die VideoFrame -Klasse so zu reimplementieren, das Daten im gemeinsam genutzten Speicher gespeichert werden k\xF6nnen.
+Damit w\xFCrde auch Video-Streaming zwischen verschiedenen Prozessen ohne gro\xDFe Probleme m\xF6glich.
+Bisher befindet sich f\xFCr Videodaten von der Dekodierung bis zum Rendern alles im gleichen Prozess.
+Ich habe einen Prototyp f\xFCr ein Videostreaming-Programm implementiert, man kann ihn von hier herunterladen.
+Er muss nach einigen Experimenten in &MCOP; integriert werden.
+Eine Render-Komponente, die XMITSHM (mit RGB und YUV) unterst\xFCtzt, sollte programmiert werden.
+Martin Vogt arbeitet derzeit an so etwas.
+Threading
+Bisher ist &MCOP; Singel-Threaded.
+F\xFCr Video werden wir allerdings wohl nicht um Threading herum kommen.
+Dabei ist auf einige Dinge zu achten.
+SmartWrappers - sie sind nicht threadsicher wegen nicht abgesicherter Referenzz\xE4hlung und \xE4hnlichen Dingen.
+Dispatcher / I/O - nicht threadsicher.
+Ich k\xF6nnte mir allerdings vorstellen, einzelne Modules sowohl f\xFCr synchrones als auch asynchrone Streaming threadsicher zu machen.
+Auf diese Weise - mit einem threadtauglichen Flusssystem - k\xF6nnte der Signalfluss auf zwei oder mehr Prozessoren verteilt werden.
+Damit w\xE4re dem Audiosystem in Bezug auf Mehrprozessorsysteme erheblich geholfen.
+Wie es funktionieren k\xF6nnte:
+Das Flusssystem entscheidet, welche Module was berechnen sollen - das sind:
+Video-Frames (mit der process_indata-Methode)
+Synchrone Audio-Str\xF6me (calculateBlock)
+oder asynchrone Str\xF6me, haupts\xE4chlich Byte-Str\xF6me
+Module k\xF6nnen diese Dinge in eigenen Threads berechnen.
+F\xFCr Audio ist es sinnvoll, Threads wiederholt zu benutzen (z.B. rendern in vier Threads auf vier Prozessoren, unabh\xE4ngig davon, ob 100 Module ausgef\xFChrt werden).
+F\xFCr Video und Byte-Dekomprimierung k\xF6nnte es sinnvoll sein, eine blockierende Implementierung in einem eigenen Thread zu haben, der mit dem Rest das &MCOP;-Systems durch das Flusssystem synchronisiert wird.
+Module d\xFCrfen die Funktionen von &MCOP; (wie entfernte Aufrufe) w\xE4hrend Thread-Operationen nicht verwenden
+Synchronisation
+Video und MIDI (und Audio) m\xFCssen m\xF6glicherweise synchronisiert werden.
+Das funktioniert \xFCber Zeitmarken.
+Zeitmarken k\xF6nnten zu asynchronen Str\xF6men hinzugef\xFCgt werden, indem jedes Paket mit einer Zeitmarke versehen wird.
+Zwei Video-Frames m\xFCssen als zwei Pakete gesendet werden (sie sind sowieso recht gro\xDF), damit sie unterschiedliche Zeitmarken haben k\xF6nnen.
+Audio sollte implizit Zeitmarken haben, da Audiodaten synchron wiedergegeben werden.
+Dynamische Zusammenstellung (Composition)
+Es sollte folgendes m\xF6glich sein:
+Ein FX-Effekt ist zusammengesetzt aus mehreren einfachen Modulen.
+Ein FX-Effekt sollte aussehen wie ein normales &MCOP;-Modul (siehe auch Maskierung (masquerading)), obwohl er aus anderen Modulen besteht.
+Das ist f\xFCr aRts-builder erforderlich.
+GUI
+Alle GUI -Komponenten werden &MCOP;-Module sein.
+Sie sollten Attribute wie Gr\xF6\xDFe (size), Name (label), Farbe (color),... haben.
+Ein RAD -Builder (aRts-builder) sollte in der Lage sein, sie visuell zusammenzusetzen.
+Das GUI sollte durch Sicherung der Attribute speicherbar sein.
+MIDI
+MIDI sollte als asynchroner Strom implementiert werden.
+Es sollte zwei M\xF6glichkeiten geben, zum Einen die Verwendung von normalen &MCOP;-Strukturen f\xFCr die Typen und zum Anderen die Einf\xFChrung von weiteren angepassten Typen.
+Normale Strukturen sollten ausreichen, also etwas wie:
+Asynchrone Str\xF6me sollten angepasste Typen unterst\xFCtzen.

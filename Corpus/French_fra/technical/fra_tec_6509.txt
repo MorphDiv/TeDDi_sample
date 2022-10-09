@@ -1,0 +1,214 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	2014
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Intégration d'un logiciel existant dans GNOME
+Guide pour les fournisseurs de logiciels indépendants
+Rosanna
+Yuen
+zana@gnome.org
+Federico
+Mena-Quintero
+federico@gnu.org
+Mike
+Hearn
+mike@navi.cx
+2005, 2006
+Rosanna Yuen, Federico Mena-Quintero, Mike Hearn
+0.6
+19 septembre 2006
+Extension des conseils sur les icônes.
+0.5
+18 septembre 2006
+Intégration du contenu du premier article de Rosanna Yuen sur les standards de freedesktop.org.
+0.0
+Juin 2005
+Version initiale de ce document.
+Permission vous est donnée de copier, distribuer et/ou modifier ce document selon les termes de la Licence GNU Free Documentation License, Version 1.1 ou ultérieure publiée par la Free Software Foundation sans section inaltérable, sans texte de première page de couverture ni texte de dernière page de couverture. Vous trouverez un exemplaire de cette licence en suivant ce
+Ce manuel fait partie de la collection de manuels GNOME distribués selon les termes de la licence de documentation libre GNU. Si vous souhaitez distribuer ce manuel indépendamment de la collection, vous devez joindre un exemplaire de la licence au document, comme indiqué dans la section 6 de celle-ci.
+La plupart des noms utilisés par les entreprises pour distinguer leurs produits et services sont des marques déposées. Lorsque ces noms apparaissent dans la documentation GNOME et que les membres du projet de Documentation GNOME sont informés de l'existence de ces marques déposées, soit ces noms entiers, soit leur première lettre est en majuscule.
+LE PRÉSENT DOCUMENT EST FOURNI « TEL QUEL », SANS AUCUNE GARANTIE, EXPRESSE OU IMPLICITE, Y COMPRIS, ET SANS LIMITATION, LES GARANTIES DE BONNE QUALITÉ MARCHANDE OU D'APTITUDE À UN EMPLOI PARTICULIER OU AUTORISÉ DU DOCUMENT OU DE SA VERSION MODIFIÉE. L'UTILISATEUR ASSUME TOUT RISQUE RELATIF À LA QUALITÉ, À LA PERTINENCE ET À LA PERFORMANCE DU DOCUMENT OU DE SA VERSION DE MISE À JOUR. SI LE DOCUMENT OU SA VERSION MODIFIÉE S'AVÉRAIT DÉFECTUEUSE, L'UTILISATEUR (ET NON LE RÉDACTEUR INITIAL, L'AUTEUR, NI TOUT AUTRE PARTICIPANT) ENDOSSERA LES COÛTS DE TOUTE INTERVENTION, RÉPARATION OU CORRECTION NÉCESSAIRE. CETTE DÉNÉGATION DE RESPONSABILITÉ CONSTITUE UNE PARTIE ESSENTIELLE DE CETTE LICENCE. AUCUNE UTILISATION DE CE DOCUMENT OU DE SA VERSION MODIFIÉE N'EST AUTORISÉE AUX TERMES DU PRÉSENT ACCORD, EXCEPTÉ SOUS CETTE DÉNÉGATION DE RESPONSABILITÉ ; ET
+EN AUCUNE CIRCONSTANCE ET SOUS AUCUNE INTERPRÉTATION DE LA LOI, QU'IL S'AGISSE DE RESPONSABILITÉ CIVILE (Y COMPRIS LA NÉGLIGENCE), CONTRACTUELLE OU AUTRE, L'AUTEUR, LE RÉDACTEUR INITIAL, TOUT PARTICIPANT ET TOUT DISTRIBUTEUR DE CE DOCUMENT OU DE SA VERSION DE MISE À JOUR AINSI QUE TOUT FOURNISSEUR DE QUELQUE PARTIE QUE CE SOIT NE POURRONT ÊTRE TENUS RESPONSABLES À L'ÉGARD DE QUICONQUE POUR TOUT DOMMAGE DIRECT, INDIRECT, PARTICULIER OU ACCIDENTEL DE TOUT TYPE Y COMPRIS, SANS LIMITATION, LES DOMMAGES LIÉS À LA PERTE DE CLIENTÈLE, AUX ARRÊTS DE TRAVAIL, AUX DÉFAILLANCES ET AUX DYSFONCTIONNEMENTS INFORMATIQUES OU TOUT AUTRE DOMMAGE OU PERTE LIÉE À L'UTILISATION DU PRÉSENT DOCUMENT ET DE SES VERSIONS DE MISE À JOUR, ET CE MÊME SI CES PARTIES ONT ÉTÉ INFORMÉES DE LA POSSIBILITÉ DE TELS DOMMAGES.
+LE PRÉSENT DOCUMENT ET SES VERSIONS MODIFIÉES SONT FOURNIS SELON LES TERMES DE LA LICENCE DE DOCUMENTATION LIBRE GNU SACHANT QUE :
+Préface
+GNOME est un projet de conception d'un bureau complet et d'une plateforme de développement entièrement basés sur des logiciels libres. De nombreuses entreprises, gouvernements, écoles, institutions et individus ont déjà installé le bureau GNOME sur leur infrastructure. Si vous êtes un développeur de logiciels tiers (« fournisseur de logiciels indépendants » (Independent Software Vendor :
+Ce guide est utile dans les situations suivantes :
+Vous êtes un développeur ou un distributeur de logiciels qui possède une application qui n'est pas spécialement conçue pour fonctionner sous GNOME, mais vous voulez vous assurer qu'elle fonctionne convenablement dans un bureau GNOME.
+Vous êtes un administrateur système d'une institution qui déploie des bureaux GNOME pour ses utilisateurs. Vous possédez également des applications pré-existantes ou internes et vous désirez que vos utilisateurs de GNOME soient capables d'accéder convenablement à ces applications.
+Vous êtes en train d'écrire une application purement GNOME et vous avez besoin d'une liste de contrôle avec les éléments de base à vérifier pour s'assurer que votre application s'intègre bien avec le reste du bureau GNOME.
+D'une manière générale, ce guide traite de l'intégration de logiciels existants dans un bureau GNOME. D'un autre côté, si vous pensez écrire un nouveau logiciel, nous vous encourageons à le développer complètement en choisissant GNOME comme plateforme cible ; veuillez vous référer au
+Une des préoccupations majeures de GNOME est l'interaction avec l'utilisateur. Les utilisateurs doivent être à l'aise dans leur environnement informatique, c'est-à-dire avoir un bureau complet et un ensemble d'applications qui fonctionnent conjointement de manière cohérente. Avec relativement peu de travail, des applications qui n'ont pas été explicitement conçues pour GNOME peuvent être modifiées pour une utilisation aisée dans un bureau GNOME.
+Structure de ce guide
+Ce guide se présente sous la forme d'une liste de tâches à réaliser afin d'intégrer un logiciel existant dans GNOME. Ce guide présente ces tâches à peu près par ordre d'importance. Par exemple, la tâche consistant à ajouter votre application dans les menus du bureau GNOME apparaît avant celle consistant à ajouter la prise en charge du glisser-déposer. De plus, ce guide possède un
+Standards et freedesktop.org
+De nombreuses tâches d'intégration figurant dans ce guide reposent sur des standards qui ne sont pas uniquement applicables à GNOME. D'autres projets de bureau, comme le bureau
+La création d'une application parfaite procure des sensations merveilleuses. Que votre application soit grosse ou petite, vous voulez que le bureau la reconnaisse et que celle-ci interagisse d'une manière appropriée. Avec les nombreux bureaux disponibles actuellement, il vaut mieux que votre application s'intègre bien avec le plus grand nombre possible d'entre eux. Même si aucune règle officielle n'a été adoptée, il existe un ensemble de spécifications disponibles sur
+Bien que n'étant pas un organisme officiel de création de standards, freedesktop.org maintient un ensemble de lignes directrices informelles mais couramment acceptées. Lorsque vous suivez ces directives, elles permettent aux applications d'être intégrées dans les bureaux les respectant.
+Intégration de base
+Ce chapitre vous enseigne les étapes essentielles à suivre pour intégrer un programme dans le bureau GNOME. Ces étapes sont les suivantes :
+permettre à l'utilisateur de lancer votre application en la faisant apparaître dans les menus du tableau de bord du bureau ou en utilisant n'importe quelle autre procédure de lancement du bureau ;
+permettre au bureau de savoir quels types de fichiers créés par les utilisateurs nécessitent le lancement de votre application ;
+permettre au bureau de savoir comment afficher les icônes appropriées pour votre programme et quels sont les fichiers créés par celui-ci.
+Fichiers desktop : positionnement de votre application dans les menus du bureau
+Pour lancer des applications à partir de GNOME, les utilisateurs cliquent sur des icônes sur leur bureau ou sélectionnent les applications à exécuter dans un menu. Par conséquent, la première étape pour l'intégration d'un programme existant dans GNOME est de l'
+Contrairement à Windows ou MacOS, les menus utilisateurs sous GNOME sont automatiquement construits à partir de la liste des applications enregistrées. Chaque application déclarée indique un ensemble de catégories auquelles elle appartient et le système de configuration du menu les trie et les range. Ce mécanisme suit les standards freedesktop.org d'entrée et de menu desktop.
+Bien que très fréquent pour les autres bureaux, la création de vos propres sous-menus spécifiques à votre application n'est pas recommandée. Associez plutôt un seul élément de menu à chaque application fournie. Les éléments supplémentaires tels que les fichiers d'aide, les fichiers LISEZMOI ou les liens vers votre site Web devraient être intégrés dans l'application elle-même.
+Sous GNOME et les autres bureaux obéissant aux directives freedesktop.org, une application est enregistrée dans les menus du bureau grâce à un
+positionner l'application dans le
+lister l'application dans la boîte de dialogue
+créer les lanceurs adéquats dans le menu ou sur le bureau,
+associer le nom à la description de l'application,
+utiliser l'icône appropriée,
+reconnaître les types MIME pris en charge pour l'ouverture des fichiers.
+Pour ajouter une entrée de menu pour votre application, créez un fichier desktop. Son nom doit être unique et il n'y a pas de limitation de longueur, évitez donc les abréviations et n'hésitez pas à inclure des mots marquants. Cependant, ne mettez pas d'espaces ni de caractères internationaux dans le nom du fichier. Par exemple, « societetoto-peintre-pro.desktop » serait un bon choix de nom de fichier mais « stpp.desktop » en serait un mauvais, tout comme « societetoto peintre pro.desktop ». Le fichier doit être codé en UTF-8 et doit ressembler au modèle suivant :
+Ces fichiers desktop contiennent des métadonnées à propos de l'application et jouent un rôle central pour l'intégration du programme dans GNOME et les autres bureaux respectant les standards. Le modèle présenté ici est le plus basique qui soit. Le fichier peut être traduit dans d'autres langues afin que le nom de votre application puisse apparaître dans la langue maternelle de l'utilisateur.
+Notez que l'emplacement
+Notez qu'avec le bureau KDE, il est nécessaire de lancer la commande
+Placez ce fichier dans le répertoire
+Tous les fichiers desktop actifs doivent respecter le même format. Un exemple minimal de fichier desktop est affiché ici :
+Excepté pour la première ligne servant à identifier le fichier desktop, l'ordre des lignes est sans importance. Dans
+Cependant, les clés sont sensibles à la casse.
+Exemple de fichier desktop
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Nom de l'application exemple
+Comment=Une application exemple
+Exec=programme
+Icon=programme.png
+Terminal=false
+Explication ligne par ligne
+Ligne
+Description
+[Desktop Entry]
+C'est la première ligne de tous les fichiers desktop et l'en-tête de la section identifiant le bloc de paires clé-valeur associé au bureau. Elle est nécessaire pour que le bureau reconnaisse le fichier de manière correcte.
+Type=Application
+Link
+Directory
+Indique au bureau que ce fichier desktop est du type application. Les autres valeurs possibles pour cette clé sont
+Encoding=UTF-8
+Indique le codage du contenu de ce fichier desktop.
+Name=Nom de l'application exemple
+Nom de l'application pour le menu principal et tous les lanceurs.
+Comment=Une application exemple
+Décrit l'application et est utilisé comme infobulle.
+Exec=programme
+La commande qui lance l'application à partir d'un shell. Elle peut posséder des paramètres.
+Icon=programme.png
+Le nom de l'icône associée à l'application.
+Terminal=false
+Indique si l'application doit s'exécuter dans un terminal.
+Lancement du programme
+Si votre application accepte des paramètres en ligne de commande, vous pouvez indiquer ceux-ci en utilisant les champs montrés dans la
+Variables pour l'exécution
+Ajouter...
+Correspond à...
+%f
+Un nom de fichier unique.
+%F
+Plusieurs noms de fichier.
+%u
+Une URL unique.
+%U
+Plusieurs URL.
+%d
+Un répertoire unique. Utilisé conjointement à
+%D
+Plusieurs répertoires. Utilisé conjointement à
+%n
+Nom de fichier unique sans chemin.
+%N
+Plusieurs noms de fichier sans chemin.
+%k
+Un URI ou un nom de fichier local indiquant l'emplacement du fichier desktop.
+%v
+Nom du dispositif d'entrée.
+Langues étrangères
+Pour créer des noms et des commentaires traduits, des lignes supplémentaires pour chaque version traduite doivent être ajoutées. Par exemple, pour ajouter une version suédoise du commentaire, ajouter la ligne suivante :
+Comment[sv]=Exempelprogramnamn
+Il n'y a aucune limite au nombre de traductions dans le fichier.
+Comme il est lourd de maintenir une longue liste de traductions dans un fichier, une meilleure solution pour créer ces traductions est d'utiliser le paquet
+Références
+
+Installation d'icônes
+Dans le fichier
+Le bureau recherche les icônes dans le sous-répertoire du thème choisi dans
+Pour intégrer visuellement au mieux votre application au bureau GNOME tout en lui conservant un aspect visuel natif si elle est utilisée sous KDE, Windows XP ou Mac OS X, suivez les
+
+
+
+Ajout de types MIME
+Si votre application peut ouvrir des types MIME spécifiques, vous devez le faire savoir au bureau dans le fichier desktop. Par exemple, si votre application accepte les fichiers
+MimeType=image/png
+Des types MIME supplémentaires peuvent être ajoutés en séparant les différents types par des points-virgules.
+Le système connaît déjà un grand nombre de types MIME. Cependant, si vous en créez un vous-même, vous devez faire enregistrer votre type MIME dans la base de données MIME. Dans le répertoire
+Exemple de fichier pour enregistrer un nouveau type MIME
+exemple
+chaine_de_recherche
+nouvelle_extension
+&lt;?xml version="1.0" encoding="UTF-8"?gt;
+&lt;mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info"gt;
+ &lt;mime-type type="application/x-
+Dans cet exemple, remplacez l'exemple de type MIME par le nom de votre type MIME. La section
+Parce que la commande
+Une fois que votre nouveau type MIME est correctement décrit dans le fichier, tapez ce qui suit dans un terminal :
+update-mime-database /usr/share/mime
+Pour plus d'informations sur la manière de faire un bon choix d'extension MIME et d'enregistrer votre type MIME, consultez le site de l'
+
+Intégration plus complète avec le Bureau
+Ce chapitre contient une liste de choses à faire pour permettre à votre application une intégration dans GNOME meilleure que le strict minimum. Par exemple, GNOME est capable de fournir un retour à l'utilisateur pendant que l'application est lancée : vous trouverez comment activer ce retour à la
+Notification au démarrage
+Bien que les champs detaillés à la
+Quand la notification de démarrage est activée, le tableau de bord et le curseur indiquent à l'utilisateur que l'application a été lancée. Lorsque l'application apparaît à l'écran, le tableau de bord et le curseur retournent dans leur état normal.
+Pour faire savoir au lanceur que votre application prend en charge la notification du démarrage, ajoutez la ligne suivante à votre fichier desktop :
+StartupNotify=true
+Cette commande dans le fichier desktop permet au bureau d'utiliser n'importe quelle notification au démarrage existante pour votre application ou votre toolkit. La plupart des toolkits modernes fonctionnent de manière transparente avec le système de notification. Si vous n'utilisez pas un toolkit moderne, le lien sur les
+Indépendemment du toolkit, il y a un type d'applications pour lequel vous devez gérer manuellement les retours. Les applications capables de contrôle à distance (celles qui disent à un processus existant d'ouvrir une nouvelle fenêtre au lieu de lancer un nouveau processus) ne peuvent utiliser le mécanisme intégré. La valeur de l'environnement DESKTOP_LAUNCH_ID doit être transmise par votre application et celle-ci doit notifier l'ouverture de cette fenêtre au système de lancement. Si vous utilisez
+
+Installation d'un générateur de vignettes
+Le gestionnaire de fichiers GNOME, Nautilus, est capable d'afficher dans ses listes de fichiers des petites vignettes adaptées à chaque fichier à la place des icônes génériques. Par exemple, un document d'un traitement de texte peut prendre l'apparence d'une version miniature de la première page du document. Ceci est utile car cela permet aux utilisateurs d'avoir une petite représentation des données consultables dans leurs fichiers, ce qui peut aider à se souvenir du fichier qu'ils recherchent. Il est possible de rendre capable votre application de créer ces vignettes en quelques étapes simples.
+Un
+Pour chaque type MIME que vous souhaitez prendre en charge, vous devez créer une paire de clés GConf :
+application@x-toto
+/desktop/gnome/thumbnailers/
+Type : booléen. Détermine si ce générateur de vignettes doit être utilisé. Vous pouvez activer ou désactiver chaque générateur individuellement. Lorsque vous installez un nouveau générateur de vignettes, vous devez évidement définir la valeur de cette clé à
+/desktop/gnome/thumbnailers/
+Type : chaîne. Il s'agit de la commande que GNOME doit utiliser pour générer une vignette concernant un fichier de type
+Par conséquent, chaque type MIME nécessite deux clés GConf (
+Dans la clé
+%i
+Nom du fichier d'entrée. C'est le fichier que votre générateur de vignettes doit lire.
+URI d'entrée. Si votre générateur de vignettes peut prendre en charge des URI au lieu des noms de fichiers standards, utilisez
+%o
+Nom du fichier de sortie. C'est sous ce nom que votre générateur de vignettes doit écrire l'image vignette au format PNG.
+%s
+128
+Taille de la vignette sous la forme d'un entier unique. Par exemple, s'il s'agit de
+Soit
+Informations supplémentaires
+Comme paramètre de configuration supplémentaire, vous pouvez activer la clé booléenne
+Liste de contrôle pour l'intégration
+Cet appendice fournit une liste de contrôle des diverses tâches présentées dans ce guide. Vous pouvez utiliser cette liste de contrôle pour vous assurer que votre logiciel est intégré au bureau GNOME au moins à un niveau très élémentaire et également comme ressource pour planifier la continuation de votre travail d'intégration.
+Est-ce que votre programme apparaît dans les menus du tableau de bord GNOME ?
+Est-ce que votre programme possède une icône pour les menus du tableau de bord ou du bureau ? Dans ce cas, possèdent-elles des tailles pré-rendues et une version
+Si votre programme peut charger et enregistrer des fichiers, est-ce que les types MIME gérés sont enregistrés ?
+Est-ce que votre programme fournit des icônes MIME pour le gestionnaire de fichiers ?
+Est-ce que votre programme prend en charge la notification au démarrage afin que GNOME puisse fournir un retour à l'utilisateur pendant que l'application est chargée ?
+Si votre programme crée des documents « imprimables », est-ce qu'il installe un générateur de vignettes utilisable par le gestionnaire de fichiers ?
+Remerciements
+Un grand merci à Jakub Steiner pour avoir fourni une très belle feuille de style CSS pour la version HTML de ce guide !
+Bruno Brouard <annoa\.b\@gmail\.com>, 2009
+Claude Paroz <claude\@2xlibre\.net>, 2009

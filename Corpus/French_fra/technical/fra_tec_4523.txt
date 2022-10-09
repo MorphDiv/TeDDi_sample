@@ -1,0 +1,74 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+Avertissement
+Cette fonction est EXPERIMENTALE.
+Cela signifie que le comportement de cette fonction, son nom et concrètement, TOUT ce qui est documenté ici peut changer dans un futur proche, SANS PREAVIS!
+Soyez-en conscient, et utilisez cette fonction à vos risques et périls.
+socket_select() accepte un tableau de sockets et attend qu 'elles changent de statut.
+Ceux qui sont familiers avec les sockets de BSD reconnaitront dans ces tableaux de sockets les sets de file descriptor.
+Trois tableaux indépendants de ressources de sockets sont surveillés.
+Les sockets listées dans le paramètre read seront surveillées en lecture: pour savoir quand elles sont disponibles en lecture (plus précisément, si une lecture ne va pas bloquer, en particulier, une ressource de socket a déjà atteint une fin de fichier, auquel cas socket_read() retournera une chaîne de taille zéro).
+Les sockets listées dans write seront surveillées en écriture: pour voir si une écriture ne va pas bloquer.
+Les sockets listées dans except seront surveillées pour leurs exceptions.
+Avertissement
+En sortie de fonction, les tableaux sont modifiées pour indiquer quelles sockets ont changés d 'états.
+Vous n'avez pas besoin de passer tous les tableaux à socket_select().
+Vous pouvez les omettre, ou utiliser un tableau vide, ou encore NULL à la place.
+N'oubliez pas que ces tableaux sont passés par référence et seront modifiés par socket_select().
+Exemple:
+?php / * Pr eacute; pare le tableau read (socket surveill eacute;es en lecture) * / $read = array($socket1, $socket2); if (false === ($num_changed_sockets = socket_select($read, $write = NULL, $except = NULL, 0))) {/ * Gestion des erreurs * / else if ($num_changed_sockets 0) {/ * Au moins une des sockets a eacute;t eacute; modifi eacute; * /}?
+
+A cause d'une limitation du Zend Engine actuel, il n'est pas possible de passer une constante comme NULL A cause d'une limitation du Zend Engine actuel, il n 'est pas possible de passer une constante comme NULL directement comme paramètre à cette focntion, qui attend une valeur par référence.
+A la place, utiliser un tableau temporaireou une expression dont le membre de gauche est une variable temporaire:
+?php socket_select( $r, $w, $e = NULL, 0);?
+Les paramètres tv_sec and tv_usec ensemble forment le paramètre timeout (durée de vie).
+Le timeout est la durée maximale de temps avant que socket_select() ne se termine. tv_sec peut être zéro, ce qui fera que socket_select() retournera immédiatement.
+C'est très pratique opur faire du polling (sondage).
+Si tv_sec est NULL (pas de timeout), socket_select() peut se bloquer indéfiniment.
+En cas de succès, socket_select() retourne le nombre de sockets contenus dans les tableaux modifiées.
+Ce nombre peut être zéro si la durée maximale d 'attente a été atteinte.
+En cas d 'erreur, FALSE est retourné.
+Le code d'erreur généré peut être obtenu en appelant la fonction socket_last_error().
+Ce code d'erreur peut être passé à la fonction socket_strerror() pour obtenir un message d 'erreur, humainement lisible.
+
+Assurez vous bien d'utiliser l 'opérateur === lorsque vous vérifiez les erreurs.
+Etant donnée que socket_select() peut retourner 0, la comparaison avec FALSE via == donnerait TRUE:
+?php if (false === socket_select($r, $w, $e = NULL, 0)) {echo "socket_select() a eacute;chou eacute;.
+Raison: ". socket_strerror(socket_last_error()). "\n";}?
+
+Méfiez vous des implémentations de sockets, qui doivent être manipulées avec délicatesse.
+Quelques règles de base:
+Vous devez toujours essayer d'utiliser socket_select() sans timeout.
+Votre programme ne devrait avoir rien à faire si il n 'y a pas de données disponibles.
+Le code qui dépends d 'un timeout est généralement peut portable, et difficile à déboguer.
+Une socket ne doit pas être ajoutée à l'un des tableaux en paramètre, si vous ne souhaitez pas vérifier le résultat après l'appel à socket_select().
+Après le retour de socket_select(), toutes les sockets dans tous les tableaux doivent être vérifiées.
+Toute socket qui est disponible en écriture ou en lecture doit être utilisée pour écrire ou lire.
+Si vous écrivez ou lisez avec une socket retournée dans un tableau, soyez conscient qu 'elles ne pourront pas écrire ou lire toutes les données que vous demandez.
+Soyez prêts à ne pouvoir lire qu 'un seul octet.
+Il est commun à la plupart des implémentations de socket que la seule exception interceptée par les sockets dans le tableau except est le cas des données hors limites, reçues par une socket.
+Voir aussi socket_read(), socket_write(), socket_last_error() et socket_strerror().
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

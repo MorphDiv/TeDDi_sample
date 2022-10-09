@@ -1,0 +1,111 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	2009
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Introduction aux filtres génériques
+Filtres
+Génériques
+Les filtres Génériques regroupent les filtres difficiles à placer ailleurs. Vous y trouvez :
+Le filtre
+Le filtre
+Le filtre
+
+
+
+Éroder
+Généralités
+Éroder
+Original
+Après application du filtre
+Ce filtre renforce, élargit les zones claires de l'image. Son action est l'inverse de celle du filtre Dilater
+Pour chaque pixel de l'image, il aligne la Valeur (luminosité) du pixel sur la plus forte Valeur (la plus claire) des 8 pixels environnants (matrice 3x3). Ainsi, un pixel clair est ajouté autour des zones sombres. Un pixel isolé sur un fond plus clair sera effacé. Une zone claire plus étendue se dilatera d'un pixel en tous sens.
+Sur les images complexes, comme dans l'exemple ci-dessus, les zones claires sont également élargies et renforcées, avec un effet de
+Exemple d'application du filtre
+Sur un fond uni, le filtre peut servir à supprimer le bruit, les parasites :
+Ouverture du filtre
+On accède à ce filtre par le menu d'image en suivant
+
+
+
+
+
+
+Dilater
+Exemple d'application du filtre Dilater
+Après application du filtre
+Ce filtre élargit et renforce les zones sombres du calque actif ou de la sélection.
+Pour chaque pixel de l'image, il aligne la Valeur (luminosité) du pixel sur la plus faible Valeur (la plus sombre) des 8 pixels environnants (matrice 3x3). Ainsi, un pixel sombre est ajouté autour des zones sombres. Un pixel isolé sur un fond plus clair sera transformé en un gros
+Dans cette image, le pixel étudié est bordé de rouge et la matrice étudiée est bordée de vert. J'espère que vous avez compris comment poursuivre le processus pour obtenir un bloc de 3x3 pixels: quand le pixel
+Une zone sombre plus étendue se dilatera d'un pixel en tous sens:
+Le filtre a été appliqué 2 fois.
+Sur les images plus complexes, les zones sombres sont également élargies et renforcées, avec un effet de
+Bien entendu, si le fond est plus sombre que le premier plan, c'est ce fond qui recouvrira l'ensemble de l'image.
+On accède à ce filtre par le menu d'image en suivant
+Exemples
+Dilater un texte
+Dilater un effet néon
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Matrice de convolution
+Nous sommes là dans le coin des mathématiciens. La plupart des filtres de traitement des images utilisent des matrices de convolution. Avec le filtre Matrice de convolution, vous pouvez, si le cœur vous en dit, vous concocter un petit filtre sur mesure.
+Mais qu'est-ce que c'est qu'une matrice de convolution? On peut s'en faire une idée approximative sans utiliser les outils mathématiques que bien peu connaissent. Une convolution est un traitement d'une matrice par une autre appelée matrice de convolution ou
+Notre filtre
+GIMP utilise des matrices de convolution 5x5 ou 3x3. Nous nous limiterons aux matrices 3x3, les plus utilisées. Elles suffisent à tous les effets recherchés. Si toutes les cases des bords du noyau sont à 0, le système considère qu'il s'agit d'une matrice 3x3.
+Le filtre étudie successivement chacun des pixels de l'image. Pour chaque pixel, que nous appellerons
+Vite un exemple, simple :
+À gauche se trouve la matrice de l'image: chaque pixel est indiqué par sa valeur. Le pixel initial est encadré de rouge. La zone d'action du noyau est encadré de vert. Au centre, se trouve le noyau et, à droite, le résultat de la convolution.
+Voici ce qui s'est passé: le filtre a lu successivement, de gauche à droite et de haut en bas, les pixels de la zone d'action du noyau et il a multiplié chacun d'eux par la valeur correspondante du noyau et additionné les résultats. Le pixel initial a pris la valeur 42 : (40*0)+(42*1)+(46*0) + (46*0)+(50*0)+(55*0) + (52*0)+(56*0)+(58*0) = 42 (le filtre dépose ses résultats sur une copie de l'image et pas directement dans l'image). Le résultat graphique est un décalage du pixel initial d'un pixel vers le bas.
+On accède à ce filtre par le menu d'image en suivant
+Options
+Options du filtre
+Matrice
+C'est la matrice 5x5 du noyau que vous voulez créer: vous entrez les valeurs voulues directement dans les cases.
+
+
+Bordure
+Source, Étendre, Enrouler, Rogner
+Quand le pixel initial est sur un bord, une partie du noyau porte en dehors des limites de l'image. Vous devez décider de ce que doit faire le filtre. Dans les exemples ci-dessous, le noyau simple de déplacement décrit plus haut a été appliqué plusieurs fois, grâce à Ctrl-F, à l'image:
+
+
+
+Canaux
+Vous pouvez choisir là le ou les canaux sur lesquels agira le filtre.
+Normaliser
+Quand cette option est cochée, le Diviseur prend la valeur du résultat du calcul de convolution. Si ce résultat est égal à 0 (on ne peut pas diviser par 0), un Décalage de 128 est appliqué. S'il est négatif (on ne peut pas avoir de couleur négative), c'est un décalage de 255 qui est appliqué (ce qui inverse le résultat).
+Poids alpha
+Si cette option n'est pas cochée, le calcul ne tient pas compte du degré de transparence des couleurs, ce qui peut être cause d'artéfacts lors de l'application d'un flou.
+La création de noyaux nécessite des connaissances mathématiques de haut niveau. Mais vous en trouverez de tout faits sur la Toile. En voici quelques exemples:
+Augmenter le contraste
+Flou
+Renforcement des bords
+Détection des bords
+Repoussage
+Julien Hardelin, jhardlin{AT}wanadoo{POINT}fr, 2008, 2009
+Automatique

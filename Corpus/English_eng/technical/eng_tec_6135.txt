@@ -1,0 +1,315 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+The & kleopatra; Handbook
+Marc Mutz
+marc@kdab. net
+David Faure
+Developer
+Steffen Hansen
+& Steffen. Hansen. mail;
+Matthias Kalle Dalheimer
+Jesper Pedersen
+& Jesper. Pedersen. mail;
+Daniel Molkentin
+& Daniel. Molkentin. mail;
+ROLES_OF_TRANSLATORS
+& kleopatra; is a tool for managing X.509 and OpenPGP certificates.
+KDE
+Kapp
+X509
+LDAP
+gpg
+gpgsm
+Introduction
+& kleopatra; is the & kde; tool for managing X.509 and OpenPGP certificates in the & gpgsm; keybox and for retrieving certificates from LDAP servers.
+& kleopatra; can be started from & kmail; 's Tools Certificate Manager menu, as well as from the command line. The & kleopatra; executable is named kleopatra.
+This program is named after Cleopatra, a famous female Egyptian pharaoh that lived at the time of Julius Caesar, whom she is said to have had an intimate relationship with.
+The name was chosen since this program originates from the Auml; gypten Projects (Auml; gypten is German for Egypt). & kleopatra; is the German spelling of Cleopatra.
+Main Functions
+Viewing the Local Keybox
+& kleopatra; 's main function is to display and edit the contents of the local keybox, which is similar to & gpg; 's concept of keyrings, albeit one should not stretch this analogy too much.
+The main window is divided into the large key listing area consisting of several tabs, the menubar and the search bar on top, and a status bar at the bottom.
+Each line in the key list corresponds to one certificate, identified by the so-called Subject & dn;. & dn; is an acronym for Distinguished Name, a hierarchical identifier, much like a file system path with an unusual syntax, that is supposed to globally uniquely identify a given certificate.
+To be valid, and thus usable, (public) keys need to be signed by a & ca; (Certification Authority). These signatures are called certificates, but usually the terms certificate and (public) key are used interchangeably, and we will not distinguish between them in this manual either, except when explicitly noted.
+& ca; s must in turn be signed by other & ca; s to be valid. Of course, this must end somewhere, so the top-level & ca; (root-ca;) signs its key with itself (this is called a self-signature). Root certificates thus need to be assigned validity (commonly called trust) manually, & eg; after comparing the fingerprint with the one on the website of the & ca;. This is typically done by the system administrator or the vendor of a product using certificates, but can be done by the user via & gpgsm; 's command line interface.
+To see which of the certificates are root certificates, you switch to the hierarchical keylist mode with View Hierarchical Certificate List.
+You can see the details of any certificate by double-clicking it or using View Certificate Details. This opens a dialog that shows the most common properties of the certificate, its certificate chain (ie; the chain of issuers up to the root-ca;), and a dump of all information the backend is able to extract from the certificate.
+If you change the keybox without using & kleopatra; (eg; using & gpgsm; 's command line interface), you can refresh the view with F5 View Redisplay.
+Searching and Importing Certificates
+Most of the time, you will acquire new certificates by verifying signatures in emails, since certificates are embedded in the signatures made using them most of the time. However, if you need to send a mail to someone you have not yet had contact with, you need to fetch the certificate from an LDAP folder (although & gpgsm; can do this automatically), or from a file. You also need to import your own certificate after receiving the & ca; answer to your certification request.
+To search for a certificate in an LDAP directory, select File Lookup Certificates on Server and enter some text (eg; the name of the person you want the certificate for) into the line edit of the Keyserver Certificate Lookup dialog, then click on the Search button. The results will be displayed in the key list below the search bar, where you can select certificates to look at them by clicking the Details button or download them with Import into the local keybox.
+You can configure the list of LDAP servers to search in the Directory Services page of & kleopatra; 's configure dialog.
+If you received the certificate as a file, try File Import Certificates.... & gpgsm; needs to understand the format of the certificate file; please refer to & gpgsm; 's manual for a list of supported file formats.
+If you did not create your keypair with & gpgsm;, you also need to manually import the public key (as well as the secret key) from the PKCS#12 file you got from the & ca;. You can do this on the command line with kleopatra --import-certificate filename or from within & kleopatra; with File Import Certificates..., just as you would to for normal certificates.
+Creating New Key Pairs
+The menu item File New Certificate... starts the Certificate Creation Wizard which will guide you through a number of steps to create a certificate request.
+Whenever you are done with a step in the wizard, press Next to go to the next step (or Back to review steps that are already completed). The certificate request creation can be canceled at any time by pressing the Cancel button.
+On the first page of the wizard choose which type of certificate you want to create:
+Create a personal OpenPGP key pair
+OpenPGP key pairs are created locally, and certified by your friends and acquaintances. There is no central certification authority; instead, every individual creates a personal Web Of Trust by certifying other user's key pairs with his own certificate.
+You have to enter a Name, EMail and optional a Comment.
+Create a personal X.509 key pair and certification request
+X.509 key pairs are created locally, but certified centrally by a certification authority (ca;). CAs can certify other CAs, creating a central, hierarchical chain of trust.
+The next step in the wizard is to type in your personal data for the certificate. The fields to fill out are:
+Common Name (CN): Your name;
+Email address (EMAIL): Your email address; be sure to type this in correctlymdash; this will be the address people will be sending mail to when they use your certificate.
+Location (L): The town or city in which you live;
+Organizational unit (OU): The organizational unit you are in (for example, "Logistics");
+Organization (O): The organization you represent (for example, the company you work for);
+Country code (C): The two letter code for the country in which you are living (for example, "US");
+The next step in the wizard is to select whether to store the certificate in a file or send it directly to a & ca;. You will have to specify the filename or email address to send the certificate request to.
+Keybox Management
+In addition to list and validate, search and import certificates and creating new ones, & kleopatra; also has some less often used functions that help you manage your local keybox.
+These functions include deleting certificates from the local keybox with Del Certificates Delete, as well as manual handling of CRLs (Tools Refresh Certificates, Tools Clear CRL Cache, Tools Dump CRL Cache).
+Menu Reference
+File Menu
+Ctrl; N File...
+Creates a new key pair (public and private) and allows to send the public part to a certification authority (ca;) for signing. The resulting certificate is then sent back to you, or stored in an LDAP server for you to download into your local keybox, where you can use it to sign and decrypt mails.
+This mode of operation is called decentralized key generation, since all keys are created locally. & kleopatra; (and & gpgsm;) do not support centralized key generation directly, but you can import the public/ secret key bundle that you receive from the & ca; in PKCS#12 format via File Import Certificates....
+Ctrl; I File...
+Imports certificates and/ or secret keys from files into the local keybox.
+The format of the certificate file must be supported by & gpgsm;. Please refer to the & gpgsm; manual for a list of supported formats.
+Ctrl; E File...
+Exports the selected certificates into a file.
+This exports only the public keys, even if the secret key is available. Use File Export Secret Key... to export both public and secret keys into a file, but note that this is almost always a bad idea.
+File Export Secret Key...
+Exports both the public and the secret key to a (PKCS#12) file.
+It should rarely be necessary to use this function, and if it is, it should be carefully planned. Planning the migration of a secret key involves choice of transport media and secure deletion of the key data on the old machine, as well as the transport medium, among other things.
+Ctrl; Q File Quit
+Terminates & kleopatra;.
+View Menu
+F5 View Redisplay
+Redisplays the selected certificates or refreshes the certificate list.
+If there are selected certificates, the refresh operation is restricted to those selected entries.
+If a query result (either remote or local) is currently displayed, the query is re-issued and the new results are displayed in place of the old ones.
+If no query has been performed, the whole keybox contents is re-fetched and re-displayed.
+You can use this if you have changed the contents of the keybox by other means than & kleopatra; (eg; by using & gpgsm; 's command line interface).
+Esc View
+Stops (cancels) all pending operations, & eg; a search or a download.
+Depending on the server used, cancelling a remote search can block & kleopatra; for a few seconds while waiting for the backend to complete the procedure. This is normal and expected behavior.
+View Certificate Details
+Shows the details of the currently selected certificate.
+This function is also available by double-clicking the corresponding item in the list view directly.
+View Hierarchical Certificate List
+Toggles between hierarchical and flat keylist mode.
+In hierarchical mode, certificates are arranged in issuer/ subject relation, so it is easy to see to which certification hierarchy a given certificate belongs, but a given certificate is harder to find initially (though you can of course use the search bar).
+In flat mode, all certificates are displayed in a flat list, sorted alphabetically. In this mode, a given certificate is easy to find, but it is not directly clear which root certificate it belongs to.
+Ctrl;. View
+(This function is only available when View Hierarchical Certificate List is on.)
+Expands all list items in the certificate list view, & ie; makes all items visible.
+This is the default when entering hierarchical keylist mode.
+You can still expand and collapse each individual item by itself, of course.
+Ctrl;, View Collapse All
+Collapses all list items in the certificate list view, & ie; hides all but the top-level items.
+Certificates Menu
+Del Certificates Delete
+Deletes selected certificate(s) from the local keyring.
+Use this function to remove unused keys from your local keybox. However, since certificates are typically attached to signed emails, verifying an email might result in the key just removed to pop back into the local keybox. So it is probably best to avoid using this function as much as possible. When you are lost, use the search bar or the View Hierarchical Key List function to regain control over the lot of certificates.
+Certificates Dump Certificate
+Shows the detailed contents of the & gpgsm; CRL cache.
+Tools Menu
+Tools GnuPG Log Viewer...
+Starts kwatchgnupg;, a tool to present the debug output of GnuPG application. If signing, encryption, or verification mysteriously stop working, you might find out why by looking at the log.
+Tools Refresh X.509 or OpenPGP Certificates
+Refreshing X.509 or OpenPGP certificates implies downloading all certificates and CRLs, to check if any of them have been revoked in the meantime.
+This can put a severe strain on your own as well as other people's network connections, and can take up to an hour or more to complete, depending on your network connection, and the number of certificates to check.
+Tools Clear CRL Cache
+Clears the & gpgsm; CRL cache.
+You probably never need this. You can force a refresh of the CRL cache by selecting all certificates and using Tools Refresh Certificates instead.
+Tools Dump CRL Cache
+Shows the detailed contents of the & gpgsm; CRL cache.
+Tools Configure GnuPG Backend...
+Opens a dialog that allows you to configure every aspect of & gpgsm; and other backend modules.
+This dialog is dynamically built from the output of the & gpgconf; utility and may thus change when backend modules are updated.
+Settings Menu
+Settings Show Statusbar
+Toggles the visibility of the bottom status bar.
+Settings Configure Shortcuts...
+Opens the standard & kde; shortcut configuration dialog, where you can assign and re-assign keyboard shortcuts for all menu items.
+Settings Configure & kleopatra;...
+Opens & kleopatra; 's configure dialog.
+See for more details.
+Window Menu
+The Window menu allows you to manage the tabs. Using the items in this menu you can rename a tab, add a new tab, duplicate the current tab, close the current tab, and move the current tab to the left or right.
+By clicking with the & RMB; click on a tab you open a context menu, where you can also select the same actions.
+Help Menu
+The Help menu contains the standard & kde; help menu.
+& help. menu. documentation;
+Command Line Options Reference
+Only the options specific to & kleopatra; are listed here. As with all & kde; applications, you can get a complete list of options by issuing the command kleopatra --help.
+--external
+Run UI server only, hide main window
+-p --openpgp
+Use OpenPGP for the following operation
+-c --cms
+Use CMS (X.509, S/ MIME) for the following operation
+-i --import-certificate
+Specifies a file or & URL; from which to import certificates (or secret keys) from.
+This is the command line equivalent of File Import Certificates....
+-e --encrypt
+Encrypt file(s)
+-s --sign
+Sign file(s)
+-E --encrypt-sign
+Encrypt and/ or sign file(s)
+-d --decrypt
+Decrypt file(s)
+-V --verify
+Verify file/ signature
+-D --decrypt-verify
+Decrypt and/ or verify file(s)
+Configuring & kleopatra;
+& kleopatra; 's configure dialog can be accessed via Settings Configure & kleopatra;....
+Each of its pages is described in the sections below.
+Configuring Directory Services
+On this page, you can configure which LDAP servers to use for certificate searches. You can also configure their order, as well as some selected LDAP-related settings from the dynamic backend configuration dialog, available via Tools Configure GnuPG Backend....
+To add a new server, click on the New button. Then you can set the Server Name, the Server Port (preset to the default LDAP port), the Base & dn; (sometimes referred to as the search root or search base), and the usual User Name and Password, both of which are only needed if the server requires authentication.
+To remove a server from the search list, select it in the list, then press the Delete button.
+To set the LDAP timeout, & ie; the maximum time the backend will wait for a server to respond, simply use the corresponding input field labeled LDAP timeout (minutes: seconds).
+If one of your servers has a large database, so that even reasonable searches like Smith hit the maximum number of items returned by query, you might want to increase this limit. You can find out easily if you hit the limit during a search, since a dialog box will pop up in that case, telling you that the results have been truncated.
+Some servers may impose their own limits on the number of items returned from a query. In this case, increasing the limit here will not result in more returned items.
+Configuring visual Appearance
+& kleopatra; allows you to customize the appearance of (validated) keys in the list view. This includes the foreground (text) and background colors, as well as the font.
+Each Key Category on the left is assigned a set of colors and a font in which keys belonging to that category are displayed. The category list also acts as a preview of the settings. Categories can be freely defined by the administrator or the power user, see in.
+To change the text (foreground) color of a category, select it in the list, and press the Set Text Color... button. The standard & kde; color selection dialog will appear where you can select or create a new color.
+Changing the background color is done in the same way, just press Set Background Color... instead.
+To change the font, you basically have two options:
+Modify the standard font, used for all list views in & kde;
+Use a custom font.
+The first option has the advantage that the font will follow whichever style you choose & kde; -wide, whereas the latter gives you full control over the font to use. The choice is yours.
+To use the modified standard font, select the category in the list, and check or uncheck the font modifiers Italic, Bold, and/ or Strikeout. You can immediately see the effect on the font in the category list.
+To use a custom font, press the Set Font... button. The standard & kde; font selection dialog will appear where you can select the new font. Note that you can still use the font modifiers to change the custom font, just as for modifying the standard font.
+To switch back to the standard font, you need to press the Default Appearance button.
+Configuring the dn; Attribute Order
+Although & dn; s are hierarchical, the order of the individual components (called relative & dn; s (RDNs), or & dn; attributes) is not defined. The order in which the attributes are shown is thus a matter of personal taste or company policy, which is why it is configurable in & kleopatra;.
+This setting does not only apply to & kleopatra;, but to all applications using & kleopatra; Technology. At the time of this writing, these include & kmail;, & kaddressbook;, as well as & kleopatra; itself, of course.
+This configuration page basically consists of two lists, one for the known attributes (Available attributes), and one describing the Current attribute order.
+Both lists contain entries described by the short from of the attribute (eg; CN) as well as the spelled-out form (Common Name).
+The Available attributes list is always sorted alphabetically, while the Current attribute order list's order reflects the configured & dn; attribute order: the first attribute in the list is also the one displayed first.
+Only attributes explicitly listed in the Current attribute order list are displayed at all. The rest is hidden by default.
+However, if the placeholder entry _X_ (All others) is in the current list, all unlisted attributes (whether known or not), are inserted at the point of _X_, in their original relative order.
+A small example will help to make this more clear:
+Given the & dn;
+O=kde;, C=US, CN=Dave Devel, X-BAR=foo, OU=kleopatra;, X-FOO=bar,
+the default attribute order of CN, L, _X_, OU, O, C will produce the following formatted & dn;:
+CN=Dave Devel, X-BAR=foo, X-FOO=bar, OU=kleopatra;, O=kde;, C=US
+while CN, L, OU, O, C will produce
+CN=Dave Devel, OU=kleopatra;, O=kde;, C=US
+To add an attribute to the display order list, select it in the Available attributes list, and press the Add to current attribute order button.
+To remove an attribute from the display order list, select it in the Current attribute order list, and press the Remove from current attribute order button.
+To move an attribute to the beginning (end), select it in the Current attribute order list, and press the Move to top (Move to bottom) button.
+To move an attribute up (down) one slot only, select it in the Current attribute order list, and press the Move one up (Move one down) button.
+Administrator's Guide
+This Administrator's Guide describes ways to customize & kleopatra; that are not accessible via the & GUI;, but only via config files.
+It is assumed that the reader is familiar with the technology used for & kde; application configuration, including layout, file system location and cascading of & kde; config files, as well as the KIOSK framework.
+Customization of the Certificate-Creation Wizard
+& kleopatra; allows you to customize the fields that the user is allowed to enter in order to create their certificate.
+Create a group called CertificateCreationWizard in the system-wide kleopatrarc. If you want a custom order of attributes or if you only want certain items to appear, create a key called DNAttributeOrder. The argument is one or more of CN, SN, GN, L, T, OU, O, PC, C, SP, DC, BC, EMAIL If you want to initialize fields with a certain value, write something like Attribute=value. If you want the attribute to be treated as a required one, append an exclamation mark (e. g. CN!, L, OU, O!, C!, EMAIL!, which happens to be the default configuration).
+Using the KIOSK mode modifier $e allows to retrieve the values from environment variables or from an evaluated script or binary. If you want to disallow editing of the respective field in addition, use the modifier $i. If you want to disallow the use Insert My Address button, set ShowSetWhoAmI to false.
+Due to the nature of the & kde; KIOSK framework, using the immutable flag ($i) makes it impossible for the user to override the flag. This is intended behavior. $i and $e can be used with all other config keys in & kde; applications as well.
+The following example outlines possible customizations:
+[CertificateCreationWizard]; Disallow to copy personal data from the addressbook, do not allow local override ShowSetWhoAmI[$i]=false; sets the user name to $USER CN[$e]=$USER; sets the company name to "My Company", disallows editing O[$i]=My Company; sets the department name to a value returned by a script OU[$ei]=$(lookup_dept_from_ip); sets country to DE, but allows for changes by the user C=DE
+Creating and Editing Key Categories
+& kleopatra; allows the user to configure the visual appearance of keys based on a concept called Key Categories. Key Categories are also used to filter the list of certificates. This section describes how you can edit the available categories and add new ones.
+When trying to find the category a key belongs to, & kleopatra; tries to match the key to a sequence of key filters, configured in the libkleopatrarc. The first one to match defines the category, based on a concept of specificity, explained further below.
+Each key filter is defined in a config group named Key Filter # n, where n is a number, starting from 0.
+The only mandatory keys in a Key Filter # n group are Name, containing the name of the category as displayed in the config dialog, and id, which is used as a reference for the filter in other configuration sections (such as View # n).
+lists all keys that define the display properties of keys belonging to that category (ie; those keys that can be adjusted in the config dialog), whereas lists all keys that define the criteria the filter matches keys against.
+Key-Filter Configuration Keys Defining Display Properties
+Config Key
+Type
+Description
+background-color
+color
+The background color to use. If missing, defaults to whichever background color is defined globally for list views.
+foreground-color
+The foreground color to use. If missing, defaults to whichever foreground color is defined globally for list views.
+font
+font
+The custom font to use. The font will be scaled to the size configured for list views, and any font attributes (see below) will be applied.
+font-bold
+boolean
+If set to true and font is not set, uses the default list view font with bold font style added (if available). Ignored if font is also present.
+font-italic
+Analogous to font-bold, but for italic font style instead of bold.
+font-strikeout
+If true, draws a centered line over the font. Applied even if font is set.
+icon
+text
+The name of an icon to show in the first column. Not yet implemented.
+Key-Filter Configuration Keys Defining Filter Criteria
+If specified, filter matches when...
+is-revoked
+the key has been revoked.
+match-context
+context
+Context is an enumeration with the following allowed values: appearance, filtering and any.
+the context in which this filter matches.
+is-expired
+the key is expired.
+is-disabled
+the key has been disabled (marked for not using) by the user. Ignored for & smime; keys.
+is-root-certificate
+the key is a root certificate. Ignored for OpenPGP keys.
+can-encrypt
+the key can be used for encryption.
+can-sign
+the key can be used for signing.
+can-certify
+the key can be used for signing (certifying) other keys.
+can-authenticate
+the key can be used for authentication (eg; as an TLS client certificate).
+is-qualified
+the key can be used to make Qualified Signatures (as defined by the German Digital Signature Law).
+is-cardkey
+the key material is stored on a smartcard (instead of on the computer).
+has-secret-key
+the secret key for this key pair is available.
+is-openpgp-key
+the key is an OpenPGP key (true), or an & smime; key (false).
+was-validated
+the key has been validated.
+prefix -ownertrust
+validity
+Validity is an (ordered) enumeration with the following allowed values: unknown, undefined, never, marginal, full, ultimate. See the & gpg; and & gpgsm; manuals for a detailed explanation.
+the key has exactly (prefix nbsp; =nbsp; is), has anything but (prefix nbsp; =nbsp; is-not), has at least (prefix nbsp; =nbsp; is-at-least), or has at most (prefix nbsp; =nbsp; is-at-most) the ownertrust given as the value of the config key. If more than one prefix -ownertrust keys (with different prefix values) are present in a single group, the behavior is undefined.
+prefix -validity
+Analogous to prefix -ownertrust, but for key validity instead of ownertrust.
+Some of the more interesting criteria, such as is-revoked or is-expired will only work on validated keys, which is why, by default, only validated keys are checked for revocation and expiration, although you are free to remove these extra checks.
+In addition to the config keys listed above, a key filter may also have an id and match-contexts.
+Using the filter's id, which defaults to the filter's config group name if not given or empty, you can reference the key filter elsewhere in the configuration, & eg; in & kleopatra; 's View configurations. The id is not interpreted by & kleopatra;, so you can use any string you like, as long as it's unique.
+The match-contexts limits the applicability of the filter. Two contexts are currently defined: The appearance context is used when defining coloring and font properties for the views. The filtering context is used to selectively include (and exclude) certificate from views. any can be used to signify all currently defined contexts, and is the default if match-contexts is not given, or otherwise produces no contexts. This ensures that no key filter can end up dead, & ie; with no contexts to apply it in.
+The format of the entry is a list of tokens, separated by non-word characters. Each of the tokens is optionally prefixed by an exclamation point (!), indicating negation. The tokens act in order on an internal list of contexts, which starts out empty. This is best explained by an example: any! appearance is the same as filtering, and appearance! appearance is producing the empty set, as is! any. However, the last two will be internally replaced by any, since they produce no contexts at all.
+In general, criteria not specified (ie; the config entry is not set) are not checked for. If a criterion is given, it is checked for and must match for the filter as a whole to match, & ie; the criteria are AND'ed together.
+Each filter has an implied specificity that is used to rank all matching filters. The more specific filter wins over less specific ones. If two filters have the same specificity, the one that comes first in the config file wins. A filter's specificity is proportional to the number of criteria it contains.
+Examples of key filters
+To check for all expired, but non-revoked root certificates, you would use a key filter defined as follows:
+To check for all disabled OpenPGP keys (not yet supported by & kleopatra;) with ownertrust of at least marginal, you would use:
+Credits and License
+& kleopatra; copyright 2002 & Steffen. Hansen;, & Matthias. Kalle. Dalheimer; and & Jesper. Pedersen;., copyright 2004 & Daniel. Molkentin;, copyright 2004 Klarauml; lvdalens Datakonsult AB
+Documentation copyright 2002 & Steffen. Hansen;, copyright 2004 & Daniel. Molkentin;, copyright 2004 Klarauml; lvdalens Datakonsult AB
+Contributors
+& Marc. Mutz; & Marc. Mutz. mail;
+& David. Faure; & David. Faure. mail;
+& Steffen. Hansen; hansen@kde. org
+& Matthias. Kalle. Dalheimer; & Matthias. Kalle. Dalheimer. mail;
+& Jesper. Pedersen; & Jesper. Pedersen. mail;
+& Daniel. Molkentin; & Daniel. Molkentin. mail;
+CREDIT_FOR_TRANSLATORS
+& underFDL; & underGPL;
+O=kde;, C=US, CN=Dave Devel, X-BAR=foo, OU=kleopatra;, X-FOO=bar, the default attribute order of CN, L, _X_, OU, O, C will produce the following formatted & dn;: CN=Dave Devel, X-BAR=foo, X-FOO=bar, OU=kleopatra;, O=kde;, C=US while CN, L, OU, O, C will produce CN=Dave Devel, OU=kleopatra;, O=kde;, C=US

@@ -1,0 +1,41 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+xml_parse_into_struct() analyse le fichier XML data, et le place dans deux tableaux: le premier index contient des pointeurs sur la position des valeurs correspondantes dans le tableau values array.
+Ces deux paramètres sont passés par références.
+Ci-dessous, vous trouverez un exemple qui illustre la structure des deux tableaux générés par la fonction.
+On utilise une balise simple note, placée dans une autre balise para.
+On analyse le tout, et on affiche la structure générée:
+?php $simple = "para note simple note / note / para"; $p = xml_parser_create(); xml_parse_into_struct($p,$simple,$vals,$index); xml_parser_free($p); echo "Tableau d'index\n"; print_r($index); echo "\nTableau de valeurs\n"; print_r($vals);?
+Tableau d'index Array ([PARA] = Array ([0] = 0 [1] = 2) [NOTE] = Array ([0] = 1)) Tableau de valeurs Array ([0] = Array ([tag] = PARA [type] = open [level] = 1) [1] = Array ([tag] = NOTE [type] = complete [level] = 2 [value] = simple note) [2] = Array ([tag] = PARA [type] = close [level] = 1))
+L'analyse événementielle (comme celle de expat), peut se révéler complexe lorsque le document XML est complexe. xml_parse_into_struct() ne génère pas d'objet de type DOM, mais il génère plutôt des structures qui peuvent être parcourues à la façon d 'un arbre.
+Considérons le fichier suivant, qui représente une petite base de données XML:
+Exemple 1. moldb.xml - Petite base de données moléculaire
+
+Exemple 2. parsemoldb.php - analyse moldb.xml et crée un tableau d 'objet moléculaires
+?php class AminoAcid {var $name; / / nom de l'amino acide var $symbol; / / symbole en trois lettres var $code; / / code en une lettre var $type; / / hydrophobe, chargé ou neutre function AminoAcid ($aa) {foreach ($aa as $k - $v) $this - $k = $aa[$k];}} function readDatabase($filename) {/ / read the xml database of aminoacids $data = implode("",file($filename)); $parser = xml_parser_create(); xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0); xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,1); xml_parse_into_struct($parser,$data, $values, $tags); xml_parser_free($parser); / / parcourt les structures foreach ($tags as $key - $val) {if ($key == "molecule") {$molranges = $val; / / chaque paire contigue sont les définitions supérieures / / et inférieures de la molécule for ($i=0; $i count($molranges); $i+=2) {$offset = $molranges[$i] + 1; $len = $molranges[$i + 1] - $offset; $tdb[] = parseMol(array_slice($values, $offset, $len));}} else {continue;}} return $tdb;} function parseMol($mvalues) {for ($i=0; $i count($mvalues); $i++) $mol[$mvalues[$i]["tag"]] = $mvalues[$i]["value"]; return new AminoAcid($mol);} $db = readDatabase("moldb.xml"); echo "** Database of AminoAcid objects:\n"; print_r($db);?
+
+
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

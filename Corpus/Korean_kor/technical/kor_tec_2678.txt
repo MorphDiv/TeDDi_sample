@@ -1,0 +1,74 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+SESAM/SQL-Server is a mainframe database system, developed by Fujitsu Siemens Computers, Germany. It runs on high-end mainframe servers using the operating system BS2000/OSD.
+In numerous productive BS2000 installations, SESAM/SQL-Server has proven
+the ease of use of Java-, Web- and client/server connectivity,
+the capability to work with an availability of more than 99.99%,
+the ability to manage tens and even hundreds of thousands of users.
+There is a PHP3 SESAM interface available which allows database operations via PHP-scripts.
+참고: Access to SESAM is only available with the latest CVS-Version of PHP3. PHP 4 does not support the SESAM database.
+The behaviour of these functions is affected by settings in php.ini.
+Name of BS2000 PLAM library containing the loadable SESAM driver modules. Required for using SESAM functions. The BS2000 PLAM library must be set ACCESS=READ,SHARE=YES because it must be readable by the apache server's user id.
+Name of SESAM application configuration file. Required for using SESAM functions. The BS2000 file must be readable by the apache server's user id.
+The application configuration file will usually contain a configuration like (see SESAM reference manual):
+Name of SESAM message catalog file. In most cases, this directive is not neccessary. Only if the SESAM message file is not installed in the system's BS2000 message file table, it can be set with this directive.
+The message catalog must be set ACCESS=READ,SHARE=YES because it must be readable by the apache server's user id.
+There is no standalone support for the PHP SESAM interface, it works only as an integrated Apache module. In the Apache PHP module, this SESAM interface is configured using Apache directives.
+표 1. SESAM Configuration directives
+Example:
+Example:
+Example:
+In addition to the configuration of the PHP/SESAM interface, you have to configure the SESAM-Database server itself on your mainframe as usual. That means:
+starting the SESAM database handler (DBH), and
+
+To get a connection between a PHP script and the database handler, the CNF and NAM parameters of the selected SESAM configuration file must match the id of the started database handler.
+In case of distributed databases you have to start a SESAM/SQL-DCN agent with the distribution table including the host and database names.
+The communication between PHP (running in the POSIX subsystem) and the database handler (running outside the POSIX subsystem) is realized by a special driver module called SQLSCI and SESAM connection modules using common memory. Because of the common memory access, and because PHP is a static part of the web server, database accesses are very fast, as they do not require remote accesses via ODBC, JDBC or UTM.
+Only a small stub loader (SESMOD) is linked with PHP, and the SESAM connection modules are pulled in from SESAM's OML PLAM library. In the configuration, you must tell PHP the name of this PLAM library, and the file link to use for the SESAM configuration file (As of SESAM V3.0, SQLSCI is available in the SESAM Tool Library, which is part of the standard distribution).
+Because the SQL command quoting for single quotes uses duplicated single quotes (as opposed to a single quote preceded by a backslash, used in some other databases), it is advisable to set the PHP configuration directives php3_magic_quotes_gpc and php3_magic_quotes_sybase to On for all PHP scripts using the SESAM interface.
+Because of limitations of the BS2000 process model, the driver can be loaded only after the Apache server has forked off its server child processes. This will slightly slow down the initial SESAM request of each child, but subsequent accesses will respond at full speed.
+When explicitly defining a Message Catalog for SESAM, that catalog will be loaded each time the driver is loaded (i.e., at the initial SESAM request). The BS2000 operating system prints a message after successful load of the message catalog, which will be sent to Apache's error_log file. BS2000 currently does not allow suppression of this message, it will slowly fill up the log.
+Make sure that the SESAM OML PLAM library and SESAM configuration file are readable by the user id running the web server. Otherwise, the server will be unable to load the driver, and will not allow to call any SESAM functions. Also, access to the database must be granted to the user id under which the Apache server is running. Otherwise, connections to the SESAM database handler will fail.
+The result cursors which are allocated for SQL "select type" queries can be either "sequential" or "scrollable". Because of the larger memory overhead needed by "scrollable" cursors, the default is "sequential".
+When using "scrollable" cursors, the cursor can be freely positioned on the result set. For each "scrollable" query, there are global default values for the scrolling type (initialized to: SESAM_SEEK_NEXT) and the scrolling offset which can either be set once by sesam_seek_row() or each time when fetching a row using sesam_fetch_row(). When fetching a row using a "scrollable" cursor, the following post-processing is done for the global default values for the scrolling type and scrolling offset:
+표 2. Scrolled Cursor Post-Processing
+Because in the PHP world it is natural to start indexes at zero (rather than 1), some adaptions have been made to the SESAM interface: whenever an indexed array is starting with index 1 in the native SESAM interface, the PHP interface uses index 0 as a starting point. E.g., when retrieving columns with sesam_fetch_row(), the first column has the index 0, and the subsequent columns have indexes up to (but not including) the column count ($array["count"]). When porting SESAM applications from other high level languages to PHP, be aware of this changed interface. Where appropriate, the description of the respective php sesam functions include a note that the index is zero based.
+When allowing access to the SESAM databases, the web server user should only have as little privileges as possible. For most databases, only read access privilege should be granted. Depending on your usage scenario, add more access rights as you see fit. Never allow full control to any database for any user from the 'net! Restrict access to php scripts which must administer the database by using password control and/or SSL security.
+No two SQL dialects are ever 100% compatible. When porting SQL applications from other database interfaces to SESAM, some adaption may be required. The following typical differences should be noted:
+
+Some vendor specific data types may have to be replaced by standard SQL data types (e.g., TEXT could be replaced by VARCHAR(max. size)).
+
+In SESAM (as in standard SQL), such identifiers must be enclosed in double quotes (or renamed).
+
+SESAM data types have a precision, not a display length. Instead of int(4) (intended use: integers up to '9999'), SESAM requires simply int for an implied size of 31 bits. Also, the only datetime data types available in SESAM are: DATE, TIME(3) and TIMESTAMP(3).
+SQL types with vendor-specific unsigned, zerofill, or auto_increment attributes
+Unsigned and zerofill are not supported. Auto_increment is automatic (use "INSERT... VALUES(*, ...)" instead of "... VALUES(0, ...)" to take advantage of SESAM-implied auto-increment.
+int... DEFAULT '0000'
+Numeric variables must not be initialized with string constants. Use DEFAULT 0 instead. To initialize variables of the datetime SQL data types, the initialization string must be prefixed with the respective type keyword, as in: CREATE TABLE exmpl (xtime timestamp(3) DEFAULT TIMESTAMP '1970-01-01 00:00:00.000' NOT NULL);
+$count = xxxx_num_rows();
+Some databases promise to guess/estimate the number of the rows in a query result, even though the returned value is grossly incorrect. SESAM does not know the number of rows in a query result before actually fetching them. If you REALLY need the count, try SELECT COUNT(...) WHERE..., it will tell you the number of hits. A second query will (hopefully) return the results.
+DROP TABLE thename;
+In SESAM, in the DROP TABLE command, the table name must be either followed by the keyword RESTRICT or CASCADE. When specifying RESTRICT, an error is returned if there are dependent objects (e.g., VIEWs), while with CASCADE, dependent objects will be deleted along with the specified table.
+SESAM does not currently support the BLOB type. A future version of SESAM will have support for BLOB.
+At the PHP interface, the following type conversions are automatically applied when retrieving SQL fields:
+표 3. SQL to PHP Type Conversions
+The special "multiple fields" feature of SESAM allows a column to consist of an array of fields. Such a "multiple field" column can be created like this:
+예 1. Creating a "multiple field" column
+예 2. Filling a "multiple field" column
+When retrieving a result row, "multiple columns" are accessed like "inlined" additional columns. In the example above, "pkey" will have the index 0, and the three "multi(1..3)" columns will be accessible as indices 1 through 3.
+For specific SESAM details, please refer to the SESAM/SQL-Server documentation (english) or the SESAM/SQL-Server documentation (german), both available online, or use the respective manuals.

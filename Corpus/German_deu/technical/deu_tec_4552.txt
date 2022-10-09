@@ -1,0 +1,61 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+Forms Data Format (FDF) ist ein Format zur Verarbeitung von Formularen innerhalb von PDF Dokumenten.
+Weiterführende Informationen zu FDF und dessen Verwendung sind unter http: / /partners.adobe.com / asn / developer / acrosdk / forms.html zu finden.
+Der Ansatz den FDF verfolgt, ist vergleichbar mit dem üblicher HTML Formulare.
+Die wesentlichen Unterschiede liegen in der Übertragung der Daten nach Absenden des Formulars (dies ist das eigentliche Form Data Format), sowie in dem Format des Dokuments welches das Formular enthält(PDF).
+Die Verarbeitung der FDF Daten ist eine der Möglichkeiten, die die FDF Funktionen bereitstellen.
+Darüber hinaus kann man beispielsweise innerhalb eines vorhandenen PDF Formulars die Input Felder dynamisch mit Daten füllen, ohne das Formular selbst zu verändern.
+Hierzu erzeugt man das FDF Dokument (fdf_create()), setzt die Werte der jeweiligen Input Felder (fdf_set_value()) und verbindet es mit dem jeweiligen PDF Formular (fdf_set_file()).
+Nachdem man das FDF Dokument, mit dem passenden MimeType application / vnd.fdf versehen, ausgegeben hat, erkennt das Acrobat Reader PlugIn des Browsers den MimeType und füllt das Zielformular mit den Daten des FDF Dokuments.
+Betrachtet man ein FDF Dokument mit einem Text Editor, findet sich dort ein Katalog-Objekt FDF.
+Dieses Objekt kann mehrere Einträge der Art Fields, F, Status etc.. enthalten.
+Die gebräuchlichsten Einträge sind Fields, welches zu einer Anzahl von Input Feldern verweist, sowie F das den Dateinamen des zugehörigen PDF Dokuments enthält.
+Diese Einträge finden sich in der FDF Dokumentation unter / F-Key oder / Status-Key.
+Modifikationen dieser Einträge werden mit Hilfe der Funktionen fdf_set_file() und fdf_set_status() vorgenommen.
+Felder werden u.a. mit fdf_set_value(), fdf_set_opt() modifiziert.
+Benötigt wird das FDF-Toolkit-SDK, welches unter http: / /partners.adobe.com / asn / developer / acrosdk / forms.html Benötigt wird das FDF-Toolkit-SDK, welches unter http: / /partners.adobe.com / asn / developer / acrosdk / forms.html heruntergeladen werden kann.
+Ab PHP-Version 4.3 ist mindestens die Version 5.0 des FDF-SDKs erforderlich.
+Die FDF-Toolkit Bibliothek steht ausschließlich vorkompiliert zur Verfügung.
+Von Adobe unterstütze Plattformen sind Win32, Linux, Solaris und AIX.
+
+Anmerkung:
+
+
+
+
+
+Diese Erweiterung definiert keine Konfigurationseinstellungen in der php.ini.
+Die meisten FDF-Funktionen benötigen an erster Stelle einen fdf Die meisten FDF-Funktionen benötigen an erster Stelle einen fdf Ressource-Parameter.
+Der Parameter fdf ist ein Zeiger auf eine geöffnete FDF-Datei. fdf Ressource-Parameter werden von den Funktionen fdf_create(), fdf_open() und fdf_open_string() zurückgegeben.
+Folgende Konstanten werden von dieser Erweiterung definiert und stehen nur zur Verfügung, wenn die Erweiterung entweder statisch in PHP kompiliert oder dynamisch zur Laufzeit geladen wurde.
+(integer)
+Das Beispiel zeigt die Auswertung der Formular Daten.
+Beispiel 1.
+Auswertung eines FDF_Dokuments
+?php / / Speichern der FDF Daten in eine temporäre Datei $fdffp = fopen( "test.fdf", "w"); fwrite($fdffp, $HTTP_FDF_DATA, strlen($HTTP_FDF_DATA)); fclose($fdffp); / / Öffnen der temporären Datei und Auswertung der Daten / / Das PDF Formular enthält verschiedene Eingabefelder mit den zugehörigen Namen / / band, datum, kommentar, verleger, bearbeiter, sowie zwei Checkboxen / / zeige_verleger und zeige_bearbeiter. $fdf = fdf_open("test.fdf"); $band = fdf_get_value($fdf, "band"); echo "Das Feld Band hat den Wert 'B $band / B' BR "; $datum = fdf_get_value($fdf, "datum"); echo "Das Feld Datum hat den Wert 'B $datum / B' BR"; $kommentar = fdf_get_value($fdf, "kommentar"); echo "Das Feld Kommentar hat den Wert 'B $kommentar / B' BR "; if (fdf_get_value($fdf, "zeige_verleger") == "On") {$verleger = fdf_get_value($fdf, "verleger"); echo "Das Feld Verleger hat den Wert 'B $verleger / B' BR";} else {echo "Verleger soll nicht angezeigt werden.
+BR ";} if (fdf_get_value($fdf, "zeige_bearbeiter") == "On") {$bearbeiter = fdf_get_value($fdf, "bearbeiter"); echo "Das Feld Bearbeiter hat den Wert 'B $bearbeiter / B' BR";} else {echo "Bearbeiter soll nicht angezeigt werden.
+BR ";} fdf_close($fdf);?
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

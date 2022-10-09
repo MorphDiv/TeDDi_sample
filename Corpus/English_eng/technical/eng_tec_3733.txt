@@ -1,0 +1,45 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 4 = 4.0.2)
+This function opens the module of the algorithm and the mode to be used.
+The name of the algorithm is specified in algorithm, eg. "twofish" or is one of the MCRYPT_ciphername constants.
+The module is closed by calling mcrypt_module_close().
+Normally it returns an encryption descriptor, or FALSE on error.
+The algorithm_directory and mode_directory are used to locate the encryption modules.
+When you supply a directory name, it is used.
+When you set one of these to the empty string (""), the value set by the mcrypt.algorithms_dir or mcrypt.modes_dir ini-directive is used.
+When these are not set, the default directories that are used are the ones that were compiled in into libmcrypt (usally / usr / local / lib / libmcrypt).
+Example 1. mcrypt_module_open() Example
+?php $td = mcrypt_module_open (MCRYPT_DES, '', MCRYPT_MODE_ECB, '/ usr / lib / mcrypt-modes'); $td = mcrypt_module_open ('rijndael-256','', 'ofb', '');?
+The first line in the example above will try to open the DES cipher from the default directory and the EBC mode from the directory / usr / lib / mcrypt-modes.
+The second example uses strings as name for the cipher an dmode, this only works when the extension is linked against libmcrypt 2.4.x or 2.5.x.
+Example 2.
+Using mcrypt_module_open() in encryption
+?php / * Open the cipher * / $td = mcrypt_module_open ('rijndael-256', '', 'ofb', ''); / * Create the IV and determine the keysize length * / $iv = mcrypt_create_iv (mcrypt_enc_get_iv_size($td), MCRYPT_DEV_RANDOM); $ks = mcrypt_enc_get_key_size ($td); / * Create key * / $key = substr (md5 ('very secret key'), 0, $ks); / * Intialize encryption * / mcrypt_generic_init ($td, $key, $iv); / * Encrypt data * / $encrypted = mcrypt_generic ($td, 'This is very important data'); / * Terminate encryption handler * / mcrypt_generic_deinit ($td); / * Initialize encryption module for decryption * / mcrypt_generic_init ($td, $key, $iv); / * Decrypt encrypted string * / $decrypted = mdecrypt_generic ($td, $encrypted); / * Terminate decryption handle and close module * / mcrypt_generic_deinit ($td); mcrypt_module_close ($td); / * Show string * / echo trim ($decrypted) ."\n";?
+The first line in the example above will try to open the DES cipher from the default directory and the EBC mode from the directory / usr / lib / mcrypt-modes.
+The second example uses strings as name for the cipher an dmode, this only works when the extension is linked against libmcrypt 2.4.x or 2.5.x.
+See also mcrypt_module_close(), mcrypt_generic(), mdecrypt_generic(), mcrypt_generic_init() and mcrypt_generic_deinit().
+Prev
+Home
+Next
+mcrypt_module_is_block_mode
+Up
+mcrypt_module_self_test

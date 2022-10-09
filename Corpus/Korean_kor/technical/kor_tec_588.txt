@@ -1,0 +1,28 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 3 = 3.0.7, PHP 4)
+PHP는 파일에 대한 접근을 막는데 간단한 방법을 제공합니다. 이것은 모든 접근하는 프로그램이 파일을 잠그는데 같은 방법을 사용해야 하며 그렇지 않으면 동작하지 않습니다.
+flock() 은 fp 가 열려진 파일에 대한 포인터일때 이것위에서 동작합니다 operation 은 산출되는 값중에 하나입니다:
+
+공동으로 접근을 막고자 할때(읽는 사람) operation 을 LOCK_SH로 설정합니다 (PHP 4.0.1 이전버전은 1로 설정합니다).
+단독으로 접근을 막는 것이 필요할때(쓰는 사람) operation 을 LOCK_EX로 설정합니다 (PHP 4.0.1이전버전은 2로 설정합니다).
+파일에 대한 접근을 풀어줄때 (공동 또는 단독) operation 을 LOCK_UN으로 설정합니다. (PHP 4.0.1이전 버전은 3으로 설정합니다).
+파일에 대한 접근을 막는데 flock() 을 사용하고 싶지않으면 LOCK_NB을 추가 하세요 (PHP 4.0.1 이전버젼에서는) operation 을 4로 설정하세요.
+flock() 은 실제로 모든 환경에서 간단한 읽기/쓰기 예를 수행할 수 있게 만들어줍니다 reader/writer model which can be used on virtually every platform (대부분의 유닉스와 윈도우즈 환경에서도). 접근을 막을 수가 없다면 세번째 매개변수가 TRUE 로 설정되어 있는 것입니다.(EWOULDBLOCK errno condition)
+flock() 은 성공하면 TRUE 를 반환하고 실패하면 FALSE 를 반환합니다. (예를 들면 파일 접근을 막는것이 요청되지 못할 때).
+flock() 은 대부분의 운영체제에서 프로세스 단계에서 실행됩니다. ISAPI같은 멀티쓰레드된 서버 API를 사용하고자 할 경우에 flock() 이 같은 서버의 인스턴스의 병렬 쓰레드로서 다른 PHP스크립트가 진행될때 파일을 보호할 것을 기대하지 마십시오

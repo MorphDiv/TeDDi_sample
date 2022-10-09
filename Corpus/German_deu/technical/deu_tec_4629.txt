@@ -1,0 +1,131 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Kapitel 5.
+Sicherheit
+Nach vorne
+Heutzutage sind Datenbanken die Hauptkomponenten jeder Webbasierten Applikation, aufgrund welcher Websites verschiedene dynamische Inhalte anbieten können.
+Nachdem heikle oder geheime Informationen in solch einer Datenbank gespeichert werden können, sollten Sie deren Schutz ernsthaft bedenken.
+Um Informationen zu bekommen oder zu speichern, müssen Sie eine legitime Abfrage senden, das Ergebnis holen, und die Verbindung schließen.
+Heutzutage ist die allgemein verwendete Abfragesprache für solche Interaktionen die Structured Query Language (SQL).
+Sehen Sie, wie sich ein Angreifer an einer SQL Abfrage zu schaffen machen kann.
+Sie werden merken, dass PHP Ihre Datenbank alleine nicht schützen kann.
+Die folgenden Abschnitte sind eine Einführung in die Grundlagen, wie man innerhalb von PHP Skripten auf Datenbanken zugreift und diese manipuliert.
+Denken Sie an diese einfache Regel: tief gestaffelte Verteidigung.
+Je mehr Platz Sie den Maßnahmen zum Schutz Ihrer Datenbank geben, desto geringer ist die Wahrscheinlichkeit, dass ein Angreifer Erfolg hat, und gespeicherte Geheiminformationen aufdeckt oder missbraucht.
+Gutes Design des Datenbankschemas, und die Applikation wird mit Ihren größten Befürchtungen fertig.
+Der Erste Schritt liegt immer im Erstellen der Datenbank, außer Sie wollen eine bereits existierende Dritter verwenden.
+Ist eine Datenbank erstellt, ist sie einem Eigentümer zugewiesen, welcher das Kommando zum Erstellen ausgeführt hat.
+Gewöhnlich kann nur der Eigentümer (oder ein Superuser) alles mit den Objekten in dieser Datenbank machen, und um anderen Benutzern die Verwendung zu erlauben, müssen Rechte vergeben werden.
+Applikationen sollten sich mit der Datenbank nie als deren Eigentümer oder als ein Superuser verbinden, da diese Benutzer jede gewollte Abfrage ausführen können, um z.B. das Schema zu modifizieren (z.B.
+Tabellen löschen) oder den gesamten Inhalt löschen.
+Sie können verschiedene Datenbanknutzer mit sehr limitierten Rechten auf Datenbankobjekte für jeden Aspekt Ihrer Applikation anlegen.
+Nur die wirklich benötigten Rechte sollten gewährt werden, und vermeiden Sie, dass der gleiche Benutzer in verschiedenen Anwendungsfällen mit der Datenbank interagieren kann.
+Das heißt, dass Eindringlinge, welche unter Verwendung einer dieser Referenzen Zugriff auf Ihre Datenbank erlangt haben, nur so viele Änderungen durchführen können, wie es Ihre Applikation kann.
+Implementieren Sie nicht alle Geschäftslogik in die Webapplikation (z.B.
+Ihr Skript), sondern tun Sie das im Datenbankschema unter Verwendung von Sichten, Triggern, oder Regeln.
+Wenn sich das System entwickelt, werden neu zu öffnende Ports zu der Datenbank vorgesehen, und Sie müssen die Logik in jedem Datenbank-Client neu implementieren.
+Überdies können Trigger verwendet werden, um transparent und automatisch mit Feldern umzugehen, welche beim debuggen Ihrer Applikation oder beim Zurückverfolgen von Transaktionen oft einen Einblick gewähren.
+Vielleicht wollen Sie die Verbindungen über SSL herstellen, um die Client / Server Kommunikation für eine erhöhte Sicherheit zu verschlüsseln, oder aber auch ssh verwenden, um die Netzwerkverbindung zwischen den Clients und dem Datenbankserver zu verschlüsseln.
+Ist eines davon realisiert, wird ein Monitoring Ihres Verkehrs und das Erlangen von Informationen zu harter Arbeit.
+SSL / SSH schützt zwar die gerade auf dem Weg befindlichen Daten vom Client zum Server, jedoch nicht die dauernd in einer Datenbank gespeicherten Daten.
+SSL ist ein "auf-der-Leitung" Protokoll.
+Hat ein Angreifer direkten Zugriff auf Ihre Datenbank (den Webserver umgehend), können die gespeicherten heiklen Daten aufgedeckt oder zweckentfremdet werden, außer wenn die Information von der Datenbank selbst geschützt ist.
+Die Daten zu verschlüsseln ist ein guter Weg, diese Gefahr zu mildern, doch bieten nur wenige Datenbanken diese Art der Verschlüsselung von Daten.
+Der einfachste Weg, dieses Problem zu umgehen ist, erst einmal Ihr eigenes Verschlüsselungspaket zu erstellen, und dieses dann in Ihren PHP Skripten zu nutzen.
+PHP kann Ihnen in diesem Fall mit seinen verschiedenen Erweiterungen helfen, wie z.B.
+Mcrypt and Mhash, welche eine große Auswahl an Verschlüsselungsalgorhythmen abdecken.
+Das Skript verschlüsselt die Daten vor dem Speichern, und entschlüsselt diese wieder beim Erhalt.
+Siehe die Verweise für weitere Beispiele, wie Verschlüsselung arbeitet.
+Im Fall von wirklich versteckten Daten, wenn deren unverfälschte Repräsentation nicht nötig ist (z.B. keine Anzeige), ist hashing ebenfalls überlegenswert.
+Das bekannte Beispiel für das Hashing ist das Speichern des MD5 hash eines Passwortes in einer Datenbank, anstatt des Passwortes selbst.
+Siehe auch crypt() und md5().
+Beispiel 5-5.
+Verwenden eines hashed Passwortfeldes
+/ / Speichern des Passwort hash $query = sprintf( "INSERT INTO users(name,pwd) VALUES('%s' ,'%s') ;", addslashes($username), md5($password)); $result = pg_exec($connection, $query); / / Afragen, ob der User das richtige Passwort übermittelt hat $query = sprintf("SELECT 1 FROM users WHERE name='%s 'AND pwd='%s' ;", addslashes($username), md5($password)); $result = pg_exec($connection, $query); if (pg_numrows($result) 0) {echo "Welcome, $username !";} else {echo "Authentication failed for $username .";}
+Viele Entwickler sind sich nicht bewusst, wie man sich an SQL Abfragen zu schaffen machen kann und nehmen an, dass eine SQL Abfrage ein vertrauenswürdiges Kommando ist.
+Das heißt, dass SQL Abfragen Zugriffskontrollen hinters Licht führen, und dadurch Standard Authentifizierungs - und Authorisationschecks umgehen können, und manchmal können SQL Abfragen sogar Zugriff zu Kommandos auf Betriebssystemebene erlauben.
+Direkt SQL Command Injection ist eine Technik, wo ein Angreifer SQL Kommandos erstellt oder existierende verändert, um versteckte Daten sichtbar zu machen, wertvolle Daten zu überschreiben, oder sogar gefährliche Kommandos auf Systemebene des Datenbank-Hosts auszuführen.
+Dies wird durch die Applikation erreicht, welche den Input des Benutzers mit statischen Parametern kombiniert, um eine SQL Abfrage zu erstellen.
+Die folgenden Beispiele basieren - leider - auf wahren Begebenheiten.
+Dank dem Mangel an Input Validierungen, und dem Verbinden zum Datenbankserver als ein Superuser oder jemand der Benutzer anlegen kann, kann ein Angreifer einen Superuser in Ihrer Datenbank anlegen.
+Beispiel 5-6.
+Die Ergebnisliste in mehrere Seiten aufsplitten... und Superuser anlegen (PostgreSQL and MySQL)
+$offset = argv[ 0]; / / Vorsicht, keine Validierung des Input! $query = "SELECT id, name FROM products ORDER BY name LIMIT 20 OFFSET $offset ;"; / / mit PostgreSQL $result = pg_exec($conn, $query); / / mit MySQL $result = mysql_query($query);
+/ / Im Fall von PostgreSQL 0; insert into pg_shadow(usename,usesysid,usesuper,usecatupd,passwd) select 'crack', usesysid, 't' ,'t' ,'crack 'from pg_shadow where usename='postgres'; - - / / Im Fall von MySQL 0; UPDATE user SET Password=PASSWORD('crack') WHERE user='root'; FLUSH PRIVILEGES;
+Anmerkung:
+Es ist eine übliche Technik, den SQL Parser mittels dem Kommentarzeichen in SQL - - zu zwingen, den Rest der vom Entwickler geschriebenen Abfrage zu ignorieren.
+Ein gangbarer Weg um Passwörter zu finden ist, Ihre Seiten mit den Suchergebnissen hinters Licht zu führen.
+Der Angreifer braucht nur zu probieren, ob irgendeine übertragene Variable, die in dem SQL Statement verwendet wird, nicht richtig gehandhabt wird.
+Diese Filter können gewöhnlich in einer vorausgehenden Form gesetzt werden, indem WHERE, ORDER BY, LIMIT und OFFSET Klauseln in SELECT Statements umgebaut werden.
+Wenn Ihre Datenbank das UNION Konstrukt unterstützt, kann der Angreifer versuchen, eine komplette Abfrage an das Original anzuhängen, um Paßwörter aus einer willkürlichen Tabelle aufzulisten.
+Die Verwendung von verschlüsselten Passwortfeldern wird ausdrücklich empfohlen.
+Beispiel 5-7.
+Artikel auflisten... und ein paar Passwörter (irgendein Datenbankserver)
+
+
+SQL UPDATEs sind ebenfalls ein Anlass, Ihre Datenbank anzugreifen.
+Diese Abfragen sind auch durch das Ändern und Anhängen einer komplett neuen Abfrage gefährdet.
+Aber der Angreifer könnte auch mit der SET Aber der Angreifer könnte auch mit der SET Klausel herumspielen.
+In diesem Fall muss eine Schemainformation vorhanden sein, um die Abfrage erfolgreich manipulieren zu können.
+Diese kann durch Untersuchen der Variablennamen im Formular, oder simpel mittels brute force gesammelt werden.
+Es gibt nicht so viele Namenskonventionen für Felder, welche Passwörter oder Benutzernamen speichern.
+Beispiel 5-8.
+Vom Zurücksetzen eines Passwortes... zum Erlangen von mehr Rechten (irgendein Datenbankserver)
+
+
+Ein furchterregendes Beispiel, wie der Zugriff auf Kommandos auf Betriebssystemebene bei manchen Datenbankservern erfolgen kann.
+Beispiel 5-9.
+Angriff auf das Betriebssystem des Datenbank Hosts (MSSQL Server)
+
+
+Anmerkung:
+Manche der obigen Beispiele sind an einen spezifischen Datenbankserver gebunden.
+Das heißt jedoch nicht, dass nicht ein ähnlicher Angriff auf andere Produkte möglich wäre.
+Ihr Datenbankserver könnte auf andere Weise genauso verwundbar sein.
+Sie könnten sich nun darauf berufen, dass der Angreifer in den meisten Beispielen ein Stück Information über das Datenbankschema haben muss.
+Sie haben recht, aber Sie wissen nie, wann und wie es genommen werden kann, und wenn es passiert, kann Ihre Datenbank entblößt werden.
+Wenn Sie ein Open Source, oder öffentlich verfügbares Paket zur Handhabung von Datenbanken verwenden, welches vielleicht zu einem Content Management System oder Forum gehört, können Eindringlinge leicht eine Kopie eines Stücks Ihres Codes erstellen.
+Es kann auch ein Sicherheitsrisiko sein, wenn es sich um ein schlecht designtes Paket handelt.
+Diese Angriffe basieren hauptsächlich auf dem Ausnutzen des Codes, welcher ohne Bedenken auf die Sicherheit geschrieben wurde.
+Vertrauen Sie nie auf irgendeine Art von Input, speziell wenn er von der Clientseite kommt, selbst wenn er von einer Auswahlbox, einem versteckten Eingabefeld, oder einem Cookie kommt.
+Das erste Beispiel zeigt, dass solch eine untadelige Abfrage ein Disaster anrichten kann.
+Stellen Sie nie als Superuser oder Owner einer Datenbank eine Verbindung zur Datenbank her.
+Verwenden Sie immer speziell angelegte Benutzer mit sehr limitierten Rechten.
+Prüfen Sie, ob der gegebene Input dem erwarteten Datentyp entspricht.
+PHP bietet eine große Auswahl an Funktionen zum Validieren des Input, von den einfachsten unter Variablenfunktionen und Character Type Functions (z.B. is_numeric() bzw. ctype_digit()), bis hin zu den Perl kompatiblen Regulären Ausdrücken.
+Wenn die Applikation numerischen Input erwartet, erwägen Sie die Prüfung der Daten mit is_numeric(), oder die Änderung des Typs mit settype(), oder verwenden Sie die numerische Repräsentation mittels sprintf().
+Beispiel 5-10.
+Ein sicherer Weg, eine Abfrage zu erstellen
+settype( $offset, 'integer'); $query = "SELECT id, name FROM products ORDER BY name LIMIT 20 OFFSET $offset ;"; / / Beachten Sie %d im Formatstring, %s zu verwenden wäre sinnlos $query = sprintf("SELECT id, name FROM products ORDER BY name LIMIT 20 OFFSET %d ;", $offset);
+Escapen Sie jeden nicht numerischen Input, welcher zur Datenbank weitergereicht werden soll mit addslashes() oder addcslashes().
+Siehe auch das erste Beispiel.
+Wie dieses Beispiel zeigt, sind in den statischen Teil der Abfrage eingebrachten Escapes nicht genug, und können leicht gehacked werden.
+Geben Sie keinerlei datenbankspezifische Informationen aus, speziell über das Schema, egal wie (auf ehrliche oder unehrliche Weise).
+Siehe auch Fehlerbehandlung und Error Handling and Logging Functions.
+Sie können stored procedures und vorher definierte Cursor verwenden, um den Datenzugriff zu abstrahieren, sodass Benutzer nicht direkt auf Tabellen oder Views zugreifen, aber diese Lösung hat andere Auswirkungen.
+Abgesehen davon profitieren Sie von einer Protokollierung der Abfragen entweder in Ihrem Skript, oder durch die Datenbank selbst, wenn es hilft.
+Klar, die Protokollierung kann nicht irgendeinen schädlichen Versuch verhindern, aber es kann helfen herauszufinden, welche Applikation umgangen wurde.
+Das Log ist durch die in ihm enthaltene Information nützlich, und je mehr Details es enthält, desto besser ist es im Allgemeinen.
+Zurück
+Zum Anfang
+Nach vorne
+Dateisystem - Sicherheit
+Nach oben
+Fehlerbehandlung

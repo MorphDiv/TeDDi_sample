@@ -1,0 +1,209 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+El manual de & ksysv;
+Peter Putzer
+putzer@kde. org
+Juan Luis Montore jlm@ict. es Traductor
+Peter Putzer
+& ksysv; es un editor gráfico para la configuración de inicio de la máquina al estilo de SysV.
+KDE
+KSysV
+Nivel de ejecución
+Editor del nivel de ejecución
+Inicialización « System V »
+Introducción
+Bienvenido al editor de inicialización « System V », conocido comúnmente (y referenciado como tal de aquí en adelante) como & ksysv;. Esta sección introduce unos pocos conceptos y explica lo que puede hacer con & ksysv;.
+Una breve descripción de la inicialización « System V »
+La siguiente explicación está « tomada » de tksysv (una fuente de inspiración para & ksysv;):
+La inicialización « System V » está convirtiéndose rápidamente en el estándar dentro del mundo & Linux; para controlar el arranque de los programas en el instante de inicio de la máquina. Ello es debido a que es más fácil de usar y es más potente y flexible que la inicialización BSD tradicional.
+No quiero entrar en la historia aquí (básicamente porque no la conozco: -).
+El archivo binario « init » está situado en el / sbin y no en / etc. Esto es importante ya que uno podría intentar actualizar una máquina al « System V » sin reinstalar y reformatear. El núcleo & Linux; busca « init » en / etc primero, por lo que debe asegurarse de borrar su « init » antiguo de allí si es que lo había.
+La inicialización « SysV » difiere de la inicialización BSD en que los archivos de configuración están en una subcarpeta de / etc en vez de residir en / etc. Esta carpeta se llama rc. d. En ella, encontrará el archivo rc. sysinit y las siguientes carpetas:
+init. d/
+rc0. d/
+rc1. d/
+rc2. d/
+rc3. d/
+rc4. d/
+rc5. d/
+rc6. d
+init. d contiene un conjunto de scripts. Básicamente, necesitará un script para cada servicio que deba iniciar en el arranque de la máquina o al entrar en otro nivel de ejecución. Los servicios incluyen cosas como redes, NFS, & Sendmail;, httpd, & etc; Los servicios no incluyen cosas como setserial, que deben ejecutarse una sola vez y luego terminar. Cosas como esta deberían incluirse en el archivo rc. local.
+rc. local debe estar en / etc/ rc. d si es que quiere tenerlo. Muchos sistemas incluyen uno aún cuando no haga mucho. Puede incluir también un archivo rc. serial en / etc/ rc. d si necesita efectuar acciones específicas a los puertos serie durante el arranque.
+La cadena de eventos es la siguiente:
+El núcleo busca « init » en diversos lugares y ejecuta el primero que encuentra.
+« init » ejecuta / etc/ rc. d/ rc. sysinit.
+rc. sysinit hace un conjunto de cosas necesarias y luego ejecuta rc. serial (si existe).
+« init » ejecuta rc. local
+« init » ejecuta todos los scripts para el nivel de ejecución predeterminado.
+El nivel de ejecución predeterminado se decide en el arcchivo / etc/ inittab. Debería tener una línea casi al principio que diga:
+id:3: initdefault:
+A partir de aquí, debería mirar en la segunda columna y ver que el nivel de ejecución predeterminada es 3, como suele ser el caso en la mayoría de sistemas. Si quiere cambiarlo, puede editar / etc/ inittab a mano y cambiar el 3. Sea muy cuidadoso al manipular inittab. Si la alterara incorrectamente, podría solucionarlo reiniciando la máquina y haciendo:
+LILO boot: linux single
+Esto debería permitirle iniciar la máquina en modo usuario único de forma que pueda resolverlo.
+Ahora, ¿como se ejecutan los « scripts » adecuados? Si Usted ejecuta ls -l en la carpeta rc3. d, debería ver algo como:
+lrwxrwxrwx 1 root root 13 13:11 S10network -gt;.. / init. d/ network lrwxrwxrwx 1 root root 16 13:11 S30syslog -gt;.. / init. d/ syslog lrwxrwxrwx 1 root root 14 13:32 S40cron -gt;.. / init. d/ cron lrwxrwxrwx 1 root root 14 13:11 S50inet -gt;.. / init. d/ inet lrwxrwxrwx 1 root root 13 13:11 S60nfs -gt;.. / init. d/ nfs lrwxrwxrwx 1 root root 15 13:11 S70nfsfs -gt;.. / init. d/ nfsfs lrwxrwxrwx 1 root root 18 13:11 S75keytable -gt;.. / init. d/ keytable lrwxrwxrwx 1 root root 23 13:11 S80sendmail -gt;.. / init. d/ sendmail. init lrwxrwxrwx 1 root root 18 13:11 S90lpd -gt;.. / init. d/ lpd. init lrwxrwxrwx 1 root root 11 13:11 S99local -gt;.. / rc. local
+Se dará cuenta de que no hay archivos reales en la carpeta. Todos son enlaces a scripts en la carpeta init. d.
+Los enlaces también tienen una S y un número al principio. Esta S significa que se debe iniciar este script en particular, y una K significa detenerlo. El número sólo sirve a efectos de ordenación. El proceso « init » iniciará todos los servicios usando dicha numeración. Puede duplicar números, pero esto sólo le creará confusión. Tan solo necesita usar un número de dos dígitos, junto con una S o una K mayúsculas para iniciar o detener los servicios que precise.
+¿Como iniciar o parar servicios? Fácil. Cada uno de los scripts ha sido escrito para aceptar un argumento que puede ser start y stop. Puede ejecutar estos scripts a mano, con una orden:
+/ etc/ rc. d/ init. d/ httpd. init stop
+Para detener el servidor httpd. « init » sólo lee el nombre y si tiene una K, invoca el script con el argumento stop. Si tiene una S lo invoca con el argumento start.
+¿Por qué todos estos niveles de ejecución?
+Algunas personas quieren una forma fácil para configurar la máquina como multi-propósito. Por ejemplo, yo podría tener un nivel de ejecución « servidor » que sólo ejecute httpd, & Sendmail;, la red, & etc; Luego, podría tener un nivel de ejecución « usuario » que ejecute & kdm;, la red, & etc;
+Características principales de la pantalla
+Aquí aprenderá a usar & ksysv;, lo cual no debería ser difícil ya que ha sido diseñado para ser lo más amigable posible.
+Ratón
+Usando & ksysv; con un ratón o cualquier otro dispositivo apuntador es fácil: tan sólo arrastre una entrada desde el área Servicios disponibles a cualquiera de los seis niveles de ejecución para iniciarlo (o detenerlo) en dicho nivel.
+También puede mover scripts entre niveles, o cambiar la posición dentro de un nivel dado, arrastrándolo. Al hacerlo así lo borrará de su nivel original (o posición). Esto no ocurrirá si arrastra una entrada desde el área de Servicios disponibles.
+Las entradas se mueven cuando las arrastra a una nueva área. Para copiar un servicio a un nivel diferente, debe seleccionar Copiar desde Editar o bien en el menú contextual y Pegar en el nivel objetivo.
+El « número de orden » de una entrada no puede calcularse en algunas ocasiones. En ese caso deberá editar los números de las entradas de alrededor antes de intentar insertar el servicio.
+Los números de orden deben estar comprendidos entre 00 y 99.
+Puede borrar entradas arrastrándolas al área Papelera (simbolizada por un icono de una papelera).
+Por ahora no hay forma de recuperar entradas arrastradas a la Papelera, de forma que... ¡debe ser cuidadoso!
+Teclado
+Puede usar la tecla Tabulador para cambiar el foco entre diferentes paneles (Servicios disponibles, Nivel de ejecución 1 Iniciar, Nivel de ejecución 1 Detener, & etc;) y las teclas de cursor para mover la selección arriba y abajo.
+Para mover una entrada a un nivel diferente, utilice Cortar, lo que la enviará al portapapeles (usando Ctrl; X) y a continuación deberá utilizar Pegar en el nivel de ejecución objetivo (con Ctrl; V).
+Para cambiar manualmente el número de orden o el nombre de una entrada, pulse Enter para abrir el diálogo de propiedades. Use el Tabulador para cambiar entre los diferentes campos. Cierre el diálogo pulsando Entrar para aceptar las modificaciones, o pulse Esc para cancelar los cambios.
+Entradas del menú
+Una descripción « uno a uno » del menú de & ksysv;
+El menú Archivo
+Debido al peligro de pérdida de datos, todas las entradas del menú bajo Archivo piden confirmación antes de efectuar su labor.
+Archivo Volver a la configuración anterior...
+Olvida los cambios que haya hecho y vuelve a la última configuración guardada.
+Ctrl; O Archivo Abrir...
+Abre una configuración guardada previamente.
+Ctrl; S Archivo Guardar configuración
+Hace que sus cambios sean permanentes. Al guardar no se generan archivos de respaldo, por lo que debe usarlo con cuidado.
+Archivo Guardar como...
+Guarda una copia de su nueva configuración.
+Ctrl; L Archivo Guardar registro...
+Guarda un registro.
+Ctrl; P Archivo Imprimir registro...
+Imprime una copia del registro.
+Ctrl; Q Archivo Salir
+Sale de & ksysv;.
+El menú Editar
+Ctrl; Z Editar Deshacer
+Deshace los últimos cambios no guardados.
+Ctrl; & Shift; Z Editar Rehacer
+Vuelve a efectuar el último cambio deshecho.
+Ctrl; X Editar Cortar
+Corta el servicio seleccionado actual en el portapapeles.
+Ctrl; C Editar Copiar
+Copia la entrada seleccionada en el portapapeles, sin quitarla de su posición original.
+Ctrl; V Editar Pegar
+Pega el contenido del portapapeles en la posición actual del cursor.
+Editar Propiedades
+Abre el diálogo de propiedades para el elemento seleccionado.
+El menú Herramientas
+Herramientas Iniciar Servicio...
+Inicia el servicio seleccionado.
+Herramientas Parar servicio...
+Detiene el servicio seleccionado.
+Herramientas Reiniciar servicio...
+Reinicia el servicio seleccionado.
+Herramientas Editar servicio...
+Edita el servicio seleccionado.
+El menú Opciones
+Opciones Mostrar barra de herramientas
+Muestra/ oculta la barra de herramientas.
+Opciones Mostrar barra de estado
+Muestra/ oculta la barra de estado.
+Opciones Mostrar registro
+Muestra/ oculta la ventana de registro.
+Opciones Guardar opciones
+Guarda las opciones actuales.
+Opciones Configurar asociaciones de teclas...
+Personaliza las asociaciones de teclas predeterminadas.
+Opciones Configurar barras de herramientas...
+Retoca la barra de herramientas.
+Opciones Configurar editor de inicio SysV...
+Retoca el comportamiento de & ksysv;.
+El menú Ayuda
+& help. menu. documentation;
+Configuración
+Todas las opciones serán guardadas en $KDEHOME / share/ config/ ksysvrc. Los valores predeterminados se tomarán del archivo global ($KDEDIR / share/ config/ ksysvrc), si está disponible, o bien se generarán en & ksysv;. Los cambios de los valores predeterminados están almacenados en su archivo local ksysvrc.
+Secciones reconocidas
+Secciones reconocidas y teclas con sus valores predeterminados.
+& lsqb; Configuración de rutarsqb;
+Palabra clave
+Predeterminado
+Descripción
+ScriptPath
+/ etc/ rc. d/ init. d
+Ruta a los scripts utilizados para iniciar y detener servicios.
+RunlevelPath
+/ etc/ rc. d
+Ruta a las subcarpetas de los niveles de ejecución.
+& lsqb; Coloresrsqb;
+Changed
+red (rojo)
+Color utilizado para las entradas que han cambiado
+New
+blue (azul)
+Color utilizado para las entradas nuevas
+& lsqb; Geometríarsqb;
+Width
+Ancho de la ventana de & ksysv;
+Height
+Altura de & ksysv;
+& lsqb; Otras configuracionesrsqb;
+ToolBar
+true (verdadero)
+Indica si la barra de herramientas está activada o no
+StatusBar
+Indica si la barra de estado está activada o no
+ShowLog
+Indica si se mostrará la ventana de registro o no
+PanningFactor
+80
+100 - PanningFactor = porcentaje de ventana reservado para mostrar el archivo de registro100 - PanningFactor = porcentaje de ventana reservado para mostrar el archivo de registro
+Preguntas y respuestas
+He estado jugando con el nivel de ejecución predeterminado, y ahora mi máquina se reinicia todo el tiempo. ¿Qué puedo hacer?
+Introduzca linux single en el cursor de LILO, y pulse Entrar para iniciar la máquina en modo de usuario único. Edite el archivo / etc/ inittab y cambie el nivel de ejecución predeterminado a algo seguro. 3 debería ser un valor seguro.
+Mi máquina « se para » justo después de reiniciar
+Ver la pregunta 1 anterior.
+He planificado que algunos servicios se ejecutaran en el nivel X usando & ksysv;. ¿Por qué no están funcionando?
+Si está usando una distribución & SuSE; o Delix (DLD), debe editar también un archivo específico de la distribución en la carpeta / etc. Por favor, consulte el manual de su distribución para obtener más detalles.
+El método usado a la hora de iniciar servicios en las distribuciones mencionadas antes hace más sencilla la configuración de los servicios usando las herramientas propias que dichas distribuciones proporcionan pero, desafortunadamente, no son estándar. Los autores de & ksysv; tienen planeado escribir una extensión genérica para este método en algún momento futuro, pero no lo espere de inmediato.
+Si está usando una distribución diferente, verifique por favor si tiene todos los archivos de configuración que dicho servicio necesite, o si están en su ubicación correcta. Algunos « demonios », por ejemplo Apache, (en definitiva, httpd) simplemente mueren silenciosamente si sus archivos de configuración no existen o son incorrectos.
+Semántica estándar de los niveles de ejecución
+Estos varían según la distribución, de forma que esta es una lista incompleta de las distribuciones & Linux; más comunes. Si tiene alguna distribución adicional, envíe por favor un correo electrónico al autor y dicha información se añadirá a este manual.
+& RedHat;:
+Nivel de ejecución 0:
+halt (detiene la máquina).
+Nivel de ejecución 1:
+Modo de usuario único.
+Nivel de ejecución 2:
+Modo multi-usuario en modo texto, sin NFS.
+Nivel de ejecución 3:
+Modo multi-usuario en modo texto, con acceso completo a la red.
+Nivel de ejecución 4:
+No usado.
+Nivel de ejecución 5:
+Modo multi-usuario en modo gráfico (X11), con acceso completo a la red.
+Nivel de ejecución 6:
+Reiniciar
+Licencia y créditos
+Copyright de & ksysv; & copy; 1997-1998 Peter Putzer
+Peter Putzer, putzer@kde. org: Desarrollador.
+Documentación:
+Peter Putzer, putzer@kde. org: Contenido original.
+Eric Bischoff, & Eric. Bischoff. mail; - Editor
+Traducido por Juan Luis Montore Parera jlm@ict. es.
+& underFDL; & underGPL;
+Instalación

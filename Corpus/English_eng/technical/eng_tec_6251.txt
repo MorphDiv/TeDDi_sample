@@ -1,0 +1,598 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+The & ktts; Handbook
+Jeremy Whiting jpwhiting@kde. org
+Gary R. Cramblitt garycramblitt@comcast. net
+ROLES_OF_TRANSLATORS
+Jeremy Whiting
+Gary R. Cramblitt
+& ktts; - the & kde; Text-to-Speech system - is a plugin based service that allows any & kde; (or non-kde;) application to speak using the & DBus; interface.
+& ktts; intends to be the implementation for the & kde; Text-to-Speech API.
+KDE
+accessibility
+kdeaccessibility
+TTS
+Text-to-Speech
+KTTSD
+kttsmgr
+festival
+flite
+hadifix
+MBROLA
+freetts
+epos
+SSML
+Introduction
+& ktts; is a subsysem within & kde; for producing Text-to-Speech (TTS). It provides a common API for & kde; programmers to give TTS capabilities to their applications. It provides some nice capabilities for end users as well.
+User features:
+Speak contents of a text file.
+Speak & kde; notification events (KNotify).
+Speak all or part of the text of a web page in & konqueror;.
+Speak all or part of the text in & kate; text editor, including instances where & kate; is embedded in another & kde; application.
+Speech is spoken via speech-dispatcher, so any speech-dispatcher backend can be used (espeak, festival, & etc;)
+User-configurable filters for substituting misspoken words, choosing speech synthesizers, and transforming XHMTL/ XML; documents.
+Programmer features:
+Priority system for screen reader outputs, warnings and messages, while still playing regular texts.
+Permit generation of speech from the command line (or via shell scripts) using the & qdbus; utility.
+Provide a lightweight and easily usable interface for applications to generate speech output.
+Applications need not be concerned about contention over the speech device.
+FUTURE: Provide support for speech markup languages, such as VoiceXML, Sable, & Java; Speech Markup Language (JSML), and Speech Markup Meta-language (SMML).
+FUTURE: Provide limited support for embedded speech markers.
+Asynchronous to prevent system blocking.
+& ktts; actually consists of several programs:
+kttsd
+the & kde; Text-to-Speech Daemon, which is a non-GUI; application that provides TTS services to applications via & DBus;.
+kttsmgr
+a & GUI; application for configuring and controlling kttsd. kttsmgr sits in the system tray.
+libkhtmlkttsdplugin
+A plugin for the & konqueror; web browser that permits you to speak all or a portion of the text on a web page.
+ktexteditor_kttsd
+A plugin for the & kate; text editor that permits you to speak all or a portion of a text file.
+Support
+In addition to the & kde; Bugzilla database (http: / /bugs. kde. org/), discussions for & ktts; currently take place in the kde-accessibility mailing list. Subscribe at https: / /mail. kde. org/ mailman/ listinfo/ kde-accessibility. Developers also hang out in IRC (irc. kde. org, channel #kde-accessibility).
+Using & ktts;
+Before you can use & ktts;, you must install speech-dispatcher and make sure it is working. See.
+Starting kttsmgr
+To start the & ktts; system, type the following command in a & konsole;
+kttsmgr
+or click on kttsmgr in the & kde; Menu.
+If this is the first time running kttsmgr, or if you have not yet configured any talkers, the Talkers screen appears. See. If you have already configured at least one talker, the General screen appears. See.
+Configuring Talkers
+Most text-to-speech (TTS) synthesizers offer multiple languages and voices and may offer multiple speaking genders, volumes, and rates. You may configure more than one instance of a synthesizer. Each combination of language, synthesizer, voice, gender, volume, and rate is called a talker. You should configure at least one talker before you use & ktts; otherwise speech-dispatcher will use a default voice.
+Multiple talkers for the same synthesizer is similar to multiple print queues for a single physical printer.
+When you click the Talkers tab in kttsmgr, the Talkers screen appears. This screen also automatically appears if you start kttsmgr and you have not yet configured any talkers.
+The & kde; Text-to-Speech Manager (Talkers tab).
+The & kde; Text-to-Speech Manager (Talkers tab)
+Click to add a new talker.
+All the configured Talkers are listed here. Highest priority Talkers are listed at the top. The top-most talker will be used to do the speaking when an application does not specify a talker.
+Click on a talker in the list to highlight it and click this button to remove it.
+Click on a talker in the list to highlight it and click this button to change its configuration. See below.
+Click on a talker in the list to highlight it and click this button to move it down one row in the list. The lower a talker appears in the list, the lower its priority.
+Click one of these buttons to apply the changes you have made to the running & ktts; system.
+When you click the Add button, the Add Talker screen appears.
+Add Talker screen.
+Add Talker screen
+You should give your new talker a name, this can be anything.
+Choose the language and synthesizer here.
+Choose the voice type here, there are three Male, three Female, one Male Child and one Female Child voices to choose from.
+Set any custom voice parameters here.
+When you click here your new talker will appear in the list in the Talkers screen. Click the Edit button to edit the talker's configuration.
+You are almost ready to begin using & ktts;. Now go back to the General tab and check the Enable Text-to-Speech System (KTTSD) box. This will start the & kde; TTS Daemon. See. You may now begin using & ktts; to speak text. Click the Jobs tab to create and manage text jobs. See.
+Starting KTTSD and Setting General Options
+Once you have configured at least one talker, you can start the & kde; Text-to-Speech System. Click on the General tab. The General screen appears. You can also set some general options on this screen.
+The & kde; Text-to-Speech Manager (General tab).
+The & kde; Text-to-Speech Manager (General tab)
+Check this box to activate the & ktts; system. This starts the & kde; TTS Daemon (KTTSD). If KTTSD starts successfully, the Jobs tab will appear. Once KTTSD has been started, you can begin creating and speaking text jobs. See. Unchecking will stop KTTSD and deactivate the & kde; TTS system.
+When this box is checked, an icon appears in the system tray whenever kttsmgr is running. In this mode, clicking OK or Cancel does not cause kttsmgr to exit. Instead, the screen disappears but kttsmgr continues running in the system tray. Click the icon to restore the screen. To quit kttsmgr, right-click on the icon in the system tray and choose Quit. When unchecked, an icon does not appear in the system tray. Clicking OK or Cancel quits kttsmgr.
+When kttsmgr exits, & ktts; keeps running if the Enable Text-to-Speech System (KTTSD) box is checked.
+This option does not take effect until the next time kttsmgr is started.
+This option has no effect when kttsmgr is running in the & kcontrol;.
+When this box is checked, and kttsmgr automatically appears in the system tray whenever speaking, it will also disappear automatically when speaking has finished.
+Be sure to click here to save your settings.
+Managing Text Jobs
+When you click the Jobs tab in kttsmgr, the Jobs screen appears.
+The & kde; Text-to-Speech Manager (Jobs tab).
+The & kde; Text-to-Speech Manager (Jobs tab)
+The controls here allow you to change attributes of the currently speaking voice.
+The buttons in this row permit you to stop, cancel, pause and resume the current text job.
+The buttons in this row permit you to speak the text currently in the & kde; clipboard, or open a text file for speaking. You can also change the talker for a job.
+When you click OK or Apply, all changes to settings on other screens are applied (if any).
+The Jobs tab only appears when KTTSD is running. If you do not see the Jobs tab, click on the General tab and check the Enable Text-to-Speech (KTTSD) box.
+Speaking Text from Web Pages
+While running the & kde; & konqueror; web browser, you can speak the text of the web page displayed. First ensure that & ktts; is running. Highlight the text you want spoken and choose Tools Speak Text on the main menu. After a moment, the highlighted text should begin speaking.
+It is almost always a good idea to highlight the text on the web page you want spoken. You can skip this step, but you will hear a lot of & HTML; headers and other invisible tags spoken.
+Speaking Text from & kate; Text Editor
+While running the & kde; Advanced Text Editor (kate;), you can speak the text displayed. First ensure that & ktts; is running. Highlight the text you want spoken and choose Tools Speak Text on the main menu. After a moment, the highlighted text should begin speaking.
+You do not have to first highlight text. In this case, the entire file will be spoken.
+This also works when & kate; is running embedded in another application, such as & konqueror; or & quanta;.
+Speaking Notifications (KNotify)
+KNotify is the notification subsystem within & kde;, which alerts you to events you configure within the & kde; system. You can configure & ktts; to speak text notifications.
+For example, & konversation;, a & kde; IRC application, permits you to configure a wide variety of notifications. For instance, you can tell & konversation; to notify you whenever a message appears in an IRC channel with your nickname in it. Together with & ktts; you can have & kde; speak the text of the IRC message to you.
+In general, if a & kde; application supports KNotify, a Notifications menu item will appear under the application's Settings menu. The specifics for configuring each application with KNotify vary from application to application.
+String Replacer filters are a good way to clean up messages sent from applications if they are mispronounced or misspoken in & ktts;. The kmail. xml file, which comes with & ktts;, is a good example. It removes br, and b tags from the & kmail; notification messages and also removes the phrase / local/ inbox/, since this may be safely assumed in most cases. See.
+Filters (Advanced)
+Filters are an advanced feature of & ktts;. For the basic operation of & ktts;, they are not needed.
+Filters are used to pre-process text before it is sent to speech-dispatcher. They are useful for enhancing speech, substituting for misspoken words or abbreviations, choosing the appropriate language and talker to do the speaking, or working around certain limitations of speech synthesizers and their voices.
+Types of & ktts; Messages
+To understand how to use filters, it is helpful to first understand how text is processed by speech-dispatcher. Text spoken by & ktts; is of four possible types.
+Screen Reader Output.
+Warnings.
+Messages
+Text Jobs
+The type is determined by the application that sends the text to & ktts;.
+Screen Reader Output has the highest priority. It is reserved for use by Screen Reader applications. Screen Reader Output preempts all other messages, causing those jobs to pause. Once the Screen Reader Output has been spoken, the preempted messages will automatically resume.
+Warnings are the next highest priority. It is reserved for high-priority messages, such as "CPU is over-heating." A Warning will preempt Messages and regular text, causing those jobs to pause. Once the Warning has been spoken, the preempted messages will automatically resume.
+Messages are the next highest priority. A Message will preempt regular text jobs. & kmouth; is an example of an application that uses Messages. For example, while reading out long text from a web page, & kmouth; can be used to greet someone who walks into the room. & kde; Notifications are also Messages (see).
+The rest are ordinary Text Jobs. Any job you initiate from the Jobs tab is a Text Job. KSayit is an example of an application that uses Text Jobs. Text Jobs are intended for longer speech output that is not urgent.
+All four kinds of jobs are queues, except for Screen Reader Output. If a Screen Reader Output is sent from an application while & ktts; is speaking another Screen Reader Output, the speaking message is stopped and discarded.
+Types of Filters
+The first thing you must know about filters is that they are never applied to Screen Reader Output. They are applied to Warnings, Messages, and Text jobs, and also & kde; notifications (KNotify).
+Filters process the text and pass it on to the next filter. There are currently three kinds of filters.
+String Replacers.
+& XML; Transformers
+Talker Choosers.
+Filters are implemented using a plugin architecture. In the future, there may be additional kinds of filters.
+String Replacer filters substitute pieces of text with other text. The replaced pieces are matched either as words or as regular expressions. & ktts; comes with pre-defined String Replacer filters for speaking abbreviations, speaking chat emoticons, such as ": -)", or reformatting notification messages from & konversation; or & kmail; into a more understandable form.
+& XML; Transformers use an & XML; Style Language - Transforms (XSLT) file to convert & XML; of one format to another format. & ktts; comes with a couple of XSLT files for converting & XHTML; into SSML.
+Talker Choosers permit you redirect jobs to a talker based on the contents of the text, or upon the application that sent it to & ktts;. For example, if you have configured a female talker in the Talkers tab, you can direct text coming from KSayIt to that talker. See.
+Each of these kinds of filters has configurable rules for when the filter should apply itself to the text to be spoken. If the filter determines that it should not apply itself, the text is passed on to the next filter unaltered.
+When a Text Job, Message, Warning, or & kde; Notification message is sent to & ktts;, it passes through each of the enabled filters you have configured in the screen below. The order is from top to bottom.
+Configuring Filters
+To use filters, click the Filters tab in kttsmgr.
+The & kde; Text-to-Speech Manager (Filters tab).
+The & kde; Text-to-Speech Manager (Filters tab)
+This is the list of configured ordinary filters. If unchecked, the filter is inactive and will be bypassed. Filters are applied in the order specified here, top to bottom.
+Click here to add a new filter. You will be prompted for the kind of filter to add. After choosing the kind, see the configuration dialogs below.
+Click here to remove a filter.
+Click here to change the configuration of a filter. See the configuration dialogs below.
+Click these buttons to move a filter up or down in the list.
+Be sure to click here, otherwise your settings will not take effect.
+Configuring String Replacer Filters
+You configure String Replacer filters by supplying a list of words or regular expressions to be matched. When the matched words or regular expressions are found in the text, each is replaced by a substitute string you supply.
+String Replacer
+String Replacer
+Enter a name for your filter. Use any name you like that distinquishes it from all other filters.
+This is the list of words and regular expressions. The filter searches for matches on each string in the Match column, replacing the matched string with the string in the Replace With column. The list is processed in the order displayed, top to bottom.
+Click here to add another word or regular expression to the list.
+Click here to move the currently highlighted word or regular expression up or down in the list.
+Click to change an existing word or regular expression in the list.
+Click to remove the currently highlighted word or regular expression from the list.
+Use these buttons to load a list of words or regular expression from a file, save the current list to a file, or clear the entire list. When loading from a file, the items in the file are appended to the existing list.
+If not blank, the filter will apply itself only if the job's talker language matches the language you enter here. Click the button to display a list of languages. You may select more than one language by pressing & Ctrl; while clicking.
+If not blank, the filter will apply itself only if the text came from one of the applications listed. You may enter more than one application separated by commas. Example: konversation, kmail
+You can discover the Application ID of running programs using the qdbus; program. You should leave the & DBus; numbers out. For example, if & qdbus; shows an Application ID of kopete-3432, you would just enter kopete.
+The String Replacer filter will only apply itself to the text if all non-blank conditions are met in the Apply This Filter When box. If all the boxes are blank, the filter will apply to all text.
+When matching words, the String Replacer filter internally uses a regular expression of the form \\s word \\s. In other words, the word must have word boundaries (spaces) on either side of it.
+A discussion on how to write regular expressions is outside the scope of this handbook. If you have the & kde; Regular Expression editor installed, there is a button available on the Add or Edit screens that will assist you at constructing regular expressions. The & kde; Regular Expression Editor is part of the kdeutils package.
+& ktts; comes with a few word list files, including a list of emoticons, such as ": -)", some abbreviations typically used in IRC or instant messaging applications, and a list of other abbreviations. There is also a list of special characters which the current version of the Polish Festival voice cannot handle. If you develop useful word lists of your own, use the Save button to save them to a file and send them to the & ktts; team for inclusion in the next version.
+Configuring & XML; Transformer Filters
+The & XML; Transformer filter uses XSLT files to transform & XML; from one format to another. XSLT, the & XML; Style Language - Transforms, is a W3C standard language for performing such transformations. It can only be used on well-formed & XML;. You must have the xsltproc utility installed.
+XML; Transformer
+XML; Transformer
+Enter the full path to an existing XSLT file, which will perform the transformation.
+Specify the path to the xsltproc utility. If xsltproc is in your environment PATH, simply enter xsltproc.
+The & XML; Transformer filter will only apply itself to the text if the specified root element or DOCTYPE are met and if the application ID is met in the Apply This Filter When box. If an item in this box is blank, the test is not performed, so if all the boxes are blank, the filter will apply itself to all text. However, you should fill in at least one box, since many text jobs will not be in & XML; format.
+Configuring Talker Chooser Filters
+Talker Chooser filters are used to direct the text to a desired talker configured in the Talker tab, or to any talker having specified attributes. For example, you can specify that text coming from kmail should be spoken using a talker configured with a female voice. See.
+Just before & ktts; begins sending text to each of the filters, it picks a talker to speak the text. The talker chosen is based on the talker attributes specified by the application that sent the text to & ktts; and the attributes of the talkers that you have configured on the Talkers tab. The Talker Chooser filter permits you to override the chosen talker.
+Talker Chooser
+Talker Chooser
+If not blank, the filter will apply itself only if the text contains the entered regular expression. If it is installed, click the browse button to launch the & kde; Regular Expression Editor to assist you at entering the regular expression.
+For better performance, try to "anchor" the regular expression to the start of the string. In other words, start your regular expression with < ![CDATA[^]] >.
+Specify the attributes of the talker you prefer to speak the text here. If the text meets the filter conditions above, a talker will be chosen that most closely matches the attributes you specify here. Click the button at the right to display the Select Talker screen.
+Use these buttons to save your Talker Chooser settings, load settings from a saved file, or clear all the settings.
+The Talker Chooser filter will only apply itself to the text if all non-blank conditions are met in the Apply This Filter When box. You must fill in at least one of the boxes.
+Command Reference
+TODO
+Developer's Guide to & ktts;
+& ktts; has two Application Programmer Interfaces (APIs):
+The & kde; Text-to-Speech API, which is used by application programmers to give their applications TTS capabilities. Applications communicate with KTTSD via & DBus;.
+The KTTSD Plugin API, which is used to add speech synthesis plugins to KTTSD so that & ktts; will work with a new speech synthesis engine.
+The following section gives a short description of the & kde; Text-to-Speech API & DBus; Interface. Full documentation for both APIs is available online at the & kde; Accessibility web site (http: / /accessibility. kde. org).
+The & ktts; & DBus; Interface
+Applications communicate requests for Text-to-Speech services via the & kde; & DBus; interface to program kttsd object KSpeech.
+Enter the following commands in a & konsole;.
+If KTTSD is not already running
+kttsd
+To queue a text job to be spoken
+qdbus org. kde. kttsd / KSpeech say "text" "options"
+where text is the text to be spoken, and options is a language code such as en, cy, & etc;
+Example.
+qdbus org. kde. kttsd / KSpeech say "This is a test." "en"
+There are many more commands that can be sent. To see a list of possible commands,
+qdbus org. kde. kttsd / KSpeech
+or read the & kde; Text-to-Speech API online.
+Questions and Answers
+& reporting. bugs; & updating. documentation;
+I need to start over. How do I get & ktts; completely terminated?
+Enter the following commands in a & konsole;:
+killall kttsd killall kttsmgr
+How can I see debugging output from kttsd?
+Open two & konsole; windows. First start kttsd in one window, then start kttsmgr in the second.
+None of the supported speech synthesizers support the language I need. Where can I get a synth for my language?
+Google(tm) is your friend. This link might also help. If you find a free synthesis engine that supports your desired language, and want to add support for it to & ktts;, please contact the development team. Open source engines are especially welcome. If you know of a commercial synth, perhaps you can persuade the vendor to donate a free copy to the & ktts; development team. In the meantime, you may be able to get the synth working using speech-dispatchers command backend.
+I have the & HTML; & XML; Transformer filter configured, but web pages are not spoken at all using the Festival plugin.
+Due to a bug in Festival 1.95 beta, you must install the rab_diphone (British male) voice for SABLE to work at all, even if you are not using that voice to speak the web pages. Also, make sure the xsltproc utility is installed and in the PATH.
+Certain characters or punctuation seem to be producing errors in the synthesizer, making it skip entire sentences, or pronounce gibberish. What can I do?
+First, make sure the Character encoding option in the talker's configuration dialog is properly set for the language. If certain words or characters are causing problems, a String Replacer filter might help. See.
+Credits and License
+& ktts;
+Program Copyright & copy; 2002 Jos#233; Pablo Ezequiel "Pupeno" Fern#225; ndez pupeno@kde. org
+Current Maintainer: Jeremy Whiting jpwhiting@kde. org
+Contributors:
+Gary Cramblitt garycramblitt@comcast. net
+Olaf Schmidt ojschmidt@kde. org
+Gunnar Schmi Dt gunnar@schmi-dt. de
+Paul Giannaros ceruleanblaze@gmail. com
+Documentation Copyright & copy; 2009 Jeremy Whiting jpwhiting@kde. org & copy; 2004 Gary R. Cramblitt garycramblitt@comcast. net
+CREDIT_FOR_TRANSLATORS
+& underFDL; & underGPL;
+Speech synthesis engines used by & ktts; have their own licenses. See each engine's documentation or website for details. Some voices also have their own licensing.
+Installation
+How to obtain & ktts;
+& install. intro. documentation;
+Debian Install Command: apt-get install kdeaccessibility
+You will find links to source and binary packages on the & kde; Accessibility web site (http: / /accessibility. kde. org).
+If you have access to the & kde; code repository, you can download & ktts; by checking out the kdeaccessibility module. & ktts; will be found in the kttsd folder. You can also download tarballs of the kdeaccessibility source code from ftp: / /ftp. kde. org/ pub/ kde/
+Requirements
+Mandatory requirements:
+& kde; version 4.4 or later.
+speech-dispatcher version 0.67 or later.
+A speech synthesizer. The following synthesizers and spoken languages are currently supported.
+Espeak
+Most languages, check http: / /espeak. sourceforge. net/ languages. html for the current list of supported languages
+Festival
+American English, British, Spanish, German, Finnish, Czech, Polish, Russian, Italian, French Canadian, Kiswahili, Zulu, and Ibibio
+It also works with any synthesis engine that can be run from a command in a & konsole;.
+The languages listed above may not be comprehensive or up-to-date. Check the specifications for each engine for a complete list of supported languages. Also check the & ktts; website for additional information that might not have made it into this handbook.
+speech-dispatcher uses a flexible plugin architecture for speech synthesis engines. If you want to enhance & ktts; to support another engine, contact the development team.
+See for specific instructions for each of these engines.
+Optional components:
+The xsltproc utility is needed for SSML support and for the & XML; Transformer filter, but not required. Debian users can install xsltproc with the command apt-get install xsltproc.
+Compilation and Installation
+In order to compile & ktts;, you must have a recent (kde; 4.4 or greater) copy of the & kde; development files, including kdelibs and the development files for speech-dispatcher.
+If you downloaded the & ktts; source from the kdeaccessibility code repository module, or downloaded the nightly tarball, use the following commands to compile and install.
+cd kdeaccessibility mkdir build cd build cmake.. / make sudo make install
+Configuration
+Make sure speech-dispatcher is working with your speech synthesis engine before using & ktts;. The shell script spd-conf can be used for that.
+& ktts; in & kde; 4.4 is a first attempt at porting & ktts; to use speech-dispatcher. In the future kttsmgr will be able to configure speech-dispatcher directly without spd-conf.
+SSML
+Long text is parsed into sentences. User may backup by sentence or paragraph, replay, pause, and stop playing.
+Audio output via & arts;, ALSA, GStreamer (version 0.8.7 or later), or aKode.
+Plugin-based architecture for support of a wide variety of speech synthesis engines and drivers.
+Configuring Synthesis Plugins (Talkers)
+When applications send text to & ktts;, they may specify the attributes of the preferred talker to do the synthesis. For example, an application may request an English language female talker. If you have configured a talker with both the English language and female gender, that talker will be used, otherwise the closest matching talker will be automatically picked. To learn more about how & ktts; picks talkers, see.
+You can select a speech synthesis plugin by either Synthesizer name, or by the Language the synthesizer can speak. Check the radio button next to the corresponding box. When the Language radio button is checked, the Language box displays all the languages supported by all available synthesizers, and the Synthesizer box displays only those synthesizers that support the chosen language. When the Synthesizer radio button is checked, the Synthesizer box displays all available synthesizers, and the Language box displays only the languages supported by the chosen synthesizer.
+When you click the Add button on the Talkers tab and add a talker that cannot automatically configure itself, or click the Edit button, the Talker Configuration screen appears. Each speech synthesis plugin has a different Talker Configuration screen. The following is an example for configuring the Festival Interactive plugin. For specifics for each kind of plugin, see.
+Talker Configuration
+Talker Configuration
+Specify the path to the Festival executable program. If Festival is in your PATH environment variable, just enter festival.
+Click to scan for available voices.
+Select a voice.
+Select a character encoding for text sent to Festival. For voices that are known to & ktts;, this setting will be picked for you automatically. In general, western languages use ISO 8859-1. Eastern European languages such as Czech or Slovak use ISO 8859-2.
+Click to test. You should hear a test sentence spoken.
+Use these controls to set the volume, talking speed, and pitch (tone) of the synthesized speech. If any of these are disabled (grayed), the chosen voice does not support changing them.
+Some voices, such as the MultiSyn voices, are so large that they require several seconds to load. Checking this box will cause them to be loaded when KTTSD is started, thereby saving time (at the expense of using more memory) before the first sentence is synthesized.
+Click the OK button to save the talker configuration settings.
+Be sure to click the Apply button, otherwise your changes will not take effect in the running & ktts; system.
+If this box is disabled, you have not yet configured any talkers (or you forgot to click the Apply button). See.
+When this box is checked, the kttsmgr screen appears when you start kttsmgr. If unchecked, the kttsmgr icon appears in the system tray when kttsmgr is started, but the screen does not appear. Click the icon in the system tray to make the screen appear.
+When this box is checked, and kttsmgr is not already running, it will appear in the system tray whenever KTTSD is speaking. This gives you an opportunity to stop or otherwise manage the speaking.
+All of the text jobs currently in the queue are listed here, together with the application that queued the job, the current job state, number of sentences in the job, and current sentence number. The Talker ID corresponds to the ID column on the Talkers screen.
+The buttons in this row permit you to advance or rewind by sentence within the job selected in the list above. (Not all jobs have multiple parts.)
+The currently-speaking sentence appears here.
+When you click OK, all changes to settings on other screens are applied (if any) and kttsmgr minimizes to the system tray. Click on the icon in the system tray to restore the screen.
+Drag this divider to resize the jobs listing and Current sentence panels.
+If you do not have the & arts; audio subsystem installed, but you do have ALSA, GStreamer, or aKode installed, click the Audio tab. See.
+Only Text jobs are listed and controlled on this screen. Screen Reader Output, Warnings, and Messages are not displayed. For more information about & ktts; message types, see.
+Audio Settings
+When you click the Audio tab in kttsmgr, the Audio screen appears.
+The & kde; Text-to-Speech Manager (Audio tab).
+The & kde; Text-to-Speech Manager (Audio tab)
+Select the method of audio output here. If a component is is grayed, either & ktts; was compiled without that support for that audio plugin, or & ktts; was unable to load the necessary libraries.
+If GStreamer or aKode is selected for audio output, choose the audio sink method here. If no sinks are listed, you need to install at least one. If ALSA is selected, choose the PCM device here. See.
+Adjust the speed of talking here. 50% is approximately twice as slow as normal while 200% is approximately twice as fast. You must have the sox utility installed for this setting to work.
+When this box is checked, & ktts; will copy temporary audio files (. wav files) into the indicated folder. Choose any folder on your hard drive you like, but you must have write access to it. This can be useful for creating audio files of speech for other purposes. The files will have names of the form kttsd-J-SS where J is the job number and SS is the sentence number. Existing files with the same name will be deleted. Do not forget to uncheck this box, otherwise your hard drive will fill up!
+Be sure to click Apply to apply the new settings to the running & ktts; system.
+There are two ways to adjust the speed of speech in & ktts;. Many of the Talkers have a Speed setting in their configuration dialogs, which you can display by clicking Edit on the Talkers screen. This Speed setting on the Audio screen is in addition to the talker speed setting and generally can be used even if the talker does not support a speed setting. For this speed setting to work, you must have the sox utility installed on your system (Debian users: apt-get install sox). Also, this speed setting is ignored when speaking text containing SSML. (See)
+The list of ALSA devices includes all the ALSA PCM devices and plugins configured in your system. Many of the choices will not work. You must experiment to find a device that works for you. If in doubt, choose default.
+Text Interruption Settings
+When you click the Interruption tab in kttsmgr, the Interruption screen appears.
+The & kde; Text-to-Speech Manager (Interruption tab).
+The & kde; Text-to-Speech Manager (Interruption tab)
+This screen permits you to specify special actions to be taken whenever a text job is interrupted by another, higher priority, message. There are four kinds of speech jobs that & ktts; handles:
+Regular text.
+Messages.
+Screen Reader Output has the highest priority. It is reserved for use by Screen Reader applications. Screen Reader Output preempts all other messages, causing those jobs to pause. Once the Screen Reader Output has been spoken, the preempted jobs will automatically resume.
+Warnings are the next highest priority. It is reserved for high-priority messages, such as "CPU is over-heating." A Warning will preempt Messages and regular text, causing those jobs to pause. Once the Warning has been spoken, the preempted jobs will automatically resume.
+Messages are the next highest priority. A Message will preempt regular text jobs. & kmouth; is an example of an application that uses Messages. For example, while reading out long text from a web page, & kmouth; can be used to greet someone who walks into the room.
+When a text job is interrupted by a Message, Warning, or Screen Reader Output, & ktts; will add the audio outputs on this screen to the stream.
+This message is spoken whenever a regular text job is interrupted.
+This audio file is sounded whenever a regular text job is interrupted. If both a Pre-sound and a Pre-message are specified, the Pre-sound is sounded before the Pre-message.
+This message is spoken whenever an interrupted text job resumes.
+This audio file is sounded whenever an interrupted text job resumes. It is sounded last.
+The settings on this screen apply only to regular text jobs. Messages, Warnings, and Screen Reader Outputs have no special actions when they are preempted by a higher-priority message.
+To enable & ktts; to speak KNotify text notifications, start kttsmgr and click the Notifications tab. The Notifications screen appears.
+The & kde; Text-to-Speech Manager (Notifications tab).
+The & kde; Text-to-Speech Manager (Notification tab)
+Check this box to enable speaking of & kde; notifications. If unchecked, everything else on this screen is disabled and & ktts; does not speak any notifications.
+When checked, any application that sends an event with a sound will not be spoken by & ktts;.
+Use these buttons to add or delete application events from the list below. When you click the Add button, a screen appears in which you select the application and event you want to add to the list.
+This event will speak the message & konversation; sends when someone mentions your nickname in an Internet Relay Chat message.
+For all other events coming from & konversation;, no action will be taken in & ktts;.
+For all events not otherwise specified in the list, no action will be taken in & ktts;.
+Use this box to specify what & ktts; should do when it receives an event. Your choices are:
+Speak event name
+Speaks the name of the event; what you see listed in the event list on this screen.
+Speak the notification message
+Speaks the message as it is sent from the application.
+Do not speak the notification
+Does not speak this event at all.
+Speak custom text
+Speaks the text you enter in the box to the right.
+If the action is Speak custom text, enter the text of the message you would like spoken here. Within the message, you may use the following substitution strings:
+%e
+The name of the event
+%a
+The name of the application that sent the event
+%m
+The message the application sent
+Test the message by clicking here.
+You may specify the attributes of the desired talker to speak the notification message here. default will use the topmost talker listed in the Talkers screen. See.
+Notice there are three levels of events. If an action for a specific event of a specific application is specified, that action is taken. Otherwise, if an action for all other events of a specific application is specified, that action is taken. Otherwise, the action specified for all other events under Default (all other events) is taken.
+The event all notifications for application Default (all other events) may not be deleted from the list. For the default all other events, you may specify the kind of notifications that are spoken, as follows:
+none
+None will be spoken.
+notification dialogs
+Notifications that display a dialog on your screen, that you must then dismiss, will be spoken.
+passive popups
+Notifications that display a passive dialog on your screen, that automatically disappear after a moment, will be spoken.
+notification dialogs and passive popups
+Notifications that display on screen, passively or not, will be spoken.
+all notifications
+All notifications, regardless of whether they produce a display on screen, will be spoken.
+Use the Save button to save your notification settings to a file. Use the Load button to load saved settings from a file. The loaded events are merged with existing events in the list. If you want to start with an empty event list, click the Clear button first. All events except for all notifications will be erased.
+SSML
+The Speech Synthesis Markup Language (SSML) is a W3C standard for marking up text for speech output. It provides tags for controlling voices, rate of speech, volume, gender, and pitch (tone). It also provides tags for controlling how words are spoken, for instance spelling out abbreviations. SSML is part of the VoiceXML specification, which is also a W3C standard.
+At this time, & ktts; provides limited and very basic support for SSML. It currently has the following restrictions.
+Works only with the Festival Interactive and Hadifix Talkers.
+You must install the rab_diphone (British male) voice, as this is the default voice Festival uses when speaking SSML.
+The Speed setting on the Audio screen is ignored when speaking text containing SSML.
+If the Speed or Pitch settings in the Festival configuration dialog are not set to 100%, it will usually cause the SSML text to be spoken in a monotone.
+The following sample text can be used to experiment with SSML.
+<! [CDATA[ < ?xml version="1.0" encoding="UTF-8"? > < !DOCTYPE speak PUBLIC "-//W3C//DTD SYNTHESIS 1.0//EN" "http://www.w3.org/TR/speech-synthesis/synthesis.dtd" > Who's been sleeping in my bed?said papa bear. Who's been sleeping in my bed?said momma bear. Who's been sleeping in my bed?said baby bear.]] >
+More robust support for SSML is planned for the next version of & ktts;.
+There are two kinds of filters -- ordinary filters and Sentence Boundary Detector (SBD) filters. SBDs break text up into individual sentences. This allows & ktts; to begin speaking faster because it need only synthesize the first sentence; not the entire Text Job. It also permits you to advance or rewind by sentence in the Jobs tab, or to stop or pause Text Jobs when the speech synthesizer does not directly support stopping of speech.
+When a Text Job, Message, Warning, or & kde; Notification message is sent to & ktts;, it passes through each of the enabled filters you have configured in the screen below. The order is from top to bottom. After passing through each of the ordinary filters listed in the top portion of the screen, Text Jobs are passed to the Sentence Boundary Detector (SBD) filters. (kde; Notifications, Warnings, and Messages never pass through SBD filters.) Unlike ordinary filters, the first SBD filter that makes changes to the text stops any further filtering.
+These are the Sentence Boundary Detector filters. When you first start & ktts;, the Standard Sentence Boundary Detector is automatically configured for you. You can change this filter's configuration, or add additional Sentence Boundary Detectors, but we advise beginners not to change them.
+This drop-down button permits you to add, remove, edit, or change the order of Sentence Boundary Detector filters.
+All matching is case insensitive.
+The easiest way to learn how to configure Talker Choosers is to experiment. Disable the Talker Chooser and submit some text. In the Jobs tab, note the talker that & ktts; chooses. Click the Change Talker button, enter some attributes, and try again to see how the choice is affected. Of course, you must have more than one talker configured for the Talker Chooser to do anything.
+Configuring Sentence Boundary Detector Filters
+Sentence Boundary Detector (SBD) filters break text up into individual sentences. This is important because it
+allows & ktts; to begin speaking faster because it need only synthesize the first sentence, rather than the entire block of text, which might be very long, and
+allows you to rewind and advance by sentences in the Jobs tab, and
+allows you to pause or stop Text Jobs in the Jobs tab even if the speech synthesizer is not capable of being stopped.
+For these reasons, the Standard Sentence Boundary Detector filter is automatically configured the first time you run kttsmgr and cannot be disabled (although you can remove it). We advise you not to modify this filter unless you know what you are doing.
+You can, however, add additional SBD filters to solve certain problems. For example, as of February 2005, the Polish Festival voice has the annoying attribute of speaking sentence punctuation. It will speak the periods at the end of each sentence, for instance. You cannot solve this problem by creating a String Replacer filter to remove the sentence punctuation, because doing so will prevent the Standard SBD from recognizing any sentences. Instead, you can create a modified version of the Standard SBD that recognizes sentences while simultaneously removing the sentence punctuation. To do this, add an SBD filter and use the Load button to load the polish_festival_sbdrc file that comes with & ktts;.
+SBD filters work by matching an end-of-sentence regular expression and inserting Tab (decimal 8) characters at the sentence boundaries. (All Tab characters are automatically stripped from text before filtering begins.) Note that the Standard SBD preserves the sentence punctuation.
+SBD filters are never applied to & kde; Notification messages (knotify), Warnings, Messages, or Screen Reader Outputs.
+If you accidentally remove the Standard Sentence Boundary Detectory filter, you can get it back by loading the standard_sbdrc file, which comes with & ktts;.
+Selecting Talkers (Advanced)
+You can configure any number of talkers in the Talkers tab. See. When applications send text to & ktts;, they may specify the attributes of a desired talker to speak the text. & ktts; will pick the closest matching talker from among the talkers you have configured to satisfy the application's request. For example, an application might request the text be spoken by an English female voice. If you have configured a talker with English language and female gender, that talker will be used. If you have configured all English male talkers, one of those talkers will be used. If an application specifies no attributes, the default (topmost) talker listed in the Talkers tab is used.
+When applications specify the attributes of the desired talker, they may indicate that certain attributes are "preferred" over other attributes. For example, an application may specify that it wishes that a female loud voice speak the text, and that the loud attribute is "preferred" over the female attribute. If you had a female soft talker and a male loud talker configured, & ktts; will choose the male loud talker to do the speaking. Since language is a critical parameter in making speech understandable, it is always a "preferred" attribute.
+Using the Select Talker screen, you may override application talker settings. The screen is displayed
+when you click the Change Talker button on the Jobs tab, or
+when you click the Talker button on the Filter Configuration dialog for a Talker Chooser filter, or
+when you click the Talker button on the Notifications tab.
+Select Talker
+Select Talker
+The screen offers three methods to specify desired talker attributes:
+Use the default talker (topmost in the Talkers tab). In other words, no talker attributes are specified.
+Use the closest matching talker having one or more specified attributes.
+Use the closest matching talker having all the attributes of a configured talker. If you do n't delete or modify the talker's settings, & ktts; will pick that specific talker. If you delete or modify the talker's settings, then & ktts; will pick the closest matching talker having the talker's original attributes.
+Choose the method for entering the desired talker attributes by clicking one of these radio buttons.
+Choose the attributes of the desired talker here. Leave an attribute blank if you do not care about that attribute.
+Check this box if you wish the attribute to be "preferred" over other attributes. You may check more than one box.
+Since language is a critical factor in making speech understandable, it is always a preferred attribute. It is rare that you will use this attribute. The only time you might specify the language attribute is when you know a specific application sends text in a language different from your desktop.
+This is a list of the talkers you currently have configured in & ktts;. By choosing one of these, in effect, you are specifying all the attributes of that talker. If that talker is still configured when text is sent, you'll get an exact match and that talker will be chosen. However, if you later delete the talker, or modify its settings, it might not be the chosen talker anymore. The talker most closely matching the original attributes will be chosen.
+The Language attribute is special because text will probably be unintelligible if spoken by a talker that speaks a language different from the text. Therefore, language is automatically a "preferred" attribute. If you specify a language, it will override the chosen language, but if you leave it blank, the existing language setting will be used. If the application that sent the text to & ktts; did not specify a language, & ktts; assigns the language of the topmost talker you have configured in the Talkers tab. In other words, the topmost talker is assumed to speak the language of your desktop.
+To clear all the attributes in the Use closest matching Talker having section, first click the Use default Talker radio button, then click the Use closest matching Talker having radio button.
+To speak the last queued text job
+dcop kttsd KSpeech startText 0
+In this case, 0 refers to the last text job queued. You may also specify a specific job number. (If no job number is given, a 0 is required.)
+To stop the currently speaking text job
+dcop kttsd KSpeech stopText 0
+Depending upon the speech plugin used, speaking may not immediately stop.
+kttsmgr immediately crashes when I start it. I compiled with debug support and I do n't even get a backtrace.
+GStreamer has crashed taking & ktts; down with it. You most likely need to "register" GStreamer. For GStreamer 0.8x, the command is gst-register-0.8. If this does n't solve the problem, you may have an incompatible version of GStreamer installed. You could try upgrading or uninstalling GStreamer.
+ALSA audio output is not working if I am playing music in another application at the same time. When I pause a text job, & ktts; freezes. I notice "unable to open PCM" in the & konsole; output.
+You have the ALSA device contention problem, which prevents opening more than one PCM device at one time. See the ALSA website (dmix) for possible solutions. www. alsa-project. org
+I have an additional Festival voice I downloaded from the Internet. I installed it, and I can use it in Festival, but it does not show up in kttsmgr.
+Edit file $KDEHOME/ share/ apps/ kttsd/ festivalint/ voices to add the new voice. The other entries can be used as a guide. If you successfully add a voice, please send a patch to the developers along with the & URL; from which you obtained the voice file.
+& ktts; is speaking too slow. How can I speed it up?
+There is a Speed setting on the Audio tab. For this to work, you must have the sox utility installed and available in the PATH. Some synthesis plugins, such as Festival Interactive also provide a Speed setting in the talker configuration dialog. Depending upon the voice used, it may or may not be enabled.
+OK, that works for some things, but web pages are still spoken too slow.
+The speed settings are ignored when & ktts; is speaking & HTML;. (This is because the & HTML; is converted into SSML, which has its own "rate" tags.) Either disable the & HTML; & XML; Transformer filter (see), or if you are brave, edit the. xsl file in the & HTML; to SSML Transformer filter and increase the default talking rate.
+I cannot get web pages to speak in a female voice. I have female Festival talker configured, but & ktts; always speaks web pages in a male voice.
+As of Festival 1.95 beta, the SABLE GENDER tag does n't seem to be working. To keep Festival from producing errors, the SSML to SABLE. xsl file strips the gender tags out. The same applies to voice tags as well.
+I added a String Replacer filter of my own and now & ktts; will not allow me to rewind or advance by sentence. On the Jobs tab, it claims each job has only one sentence. What did I do wrong?
+You must not filter out sentence punctuation characters (period, question mark, exclamation mark, colon, and semicolon). For these characters, use a Sentence Boundary Detector filter instead.
+Festival Lite (flite)
+English
+Hadifix (mbrola; and txt2pho)
+German, Hungarian
+Epos
+Czech, Slovak
+FreeTTS
+At least one of the following audio subsystems:
+& kde; & arts; Soundsystem. & arts; is usually installed with & kde;.
+ALSA (Advanced & Linux; Sound Architecture). ALSA is installed with most & Linux; systems. (www. alsa-project. org)
+GStreamer version 0.8.7 or greater. Note: Be sure to register your GStreamer plugins by running the gst-register command prior to using GStreamer in & ktts;. (http: / /gstreamer. freedesktop. org)
+aKode library. aKode is a decoder library that is part of & kde;.
+The & kde; project plans to drop & arts; starting in version 4.
+Some users experience device contention with ALSA. If your system has this problem, you will not be able to simultaneously play music while speaking. & ktts; will also freeze if you pause a text job and then start another. See the ALSA website (dmix) for possible solutions.
+As of July 2005, aKode does not support a true pause capability. When you pause a text job in & ktts; it will finish speaking the current sentence.
+The sox audio utility is needed for adjusting overall speech speed, but not required. Debian users can install sox with the command apt-get install sox. Sox is included on most & Linux; distribution CDs.
+If you downloaded & ktts; as a tarball, log in as a normal user and untar the tarball to a suitable folder, change to that folder, and enter the following commands.
+. / configure make
+The following configure options are available:
+Default Option
+Description
+Alternate
+--with-arts
+Builds the arts audio plugin.
+--without-arts
+--with-alsa=check
+Builds the ALSA audio plugin.
+--with-alsa=no
+--with-gstreamer=no
+Does not build the GStreamer audio plugin.
+--with-gstreamer=check
+--with-akode=no
+Does not build the aKode audio plugin.
+--with-akode=check
+In & kde; 4, the & arts; plugin will likely be removed or at least not built by default.
+The following speech synthesizer plugins are all built by default. Some of them are runtime only dependent upon non-free software. (Non-free according to Debian Policy). The "Configure Option to not build" column shows the configure command to not build the plugin:
+Synth
+License
+Configure Option to not build
+free
+--disable-kttsd-festivalint
+Festival Lite
+--disable-kttsd-flite
+--disable-kttsd-epos
+Command
+--disable-kttsd-command
+Hadifix
+non-free
+--disable-kttsd-hadifix
+--disable-kttsd-freetts
+By default, the commands above will install & ktts; to / opt/ kde3. If this folder is not in your $KDEDIRS path, you may need to add a --prefix= target option. For example,
+. / configure --prefix=/ usr/ local make
+On Debian systems, / usr/ local is the usual place to install applications compiled from source code.
+Login as root and install the compiled & ktts; using the following commands.
+su make install
+cd kdeaccessibility echo kttsd > inst-apps make -f Makefile. cvs. / configure cd kttsd make su make install
+Make sure your speech synthesis engine is working before using & ktts;. Follow the instructions that came with the engine.
+In some cases, you may need to grant write access to the audio device.
+chmod a+rw / dev/ dsp*
+Using with Festival (Interactive)
+Festival is one of the best free and open source TTS engines available. Voice quality is generally good and there are quite a few languages and voices supported. For many voices, you can control the volume, speed of the generated speech, and pitch (tone) from & ktts;.
+Synthesizer Name: Festival Interactive
+& URL;: http: / /www. cstr. ed. ac. uk/ projects/ festival/
+Debian Install Command: apt-get install festival
+You will need to install at least one language. Follow the instructions that come with Festival. If you will be speaking web pages, you must install the rab_diphone (British Male) voice.
+Additional English festival voices are available from
+http: / /hts. ics. nitech. ac. jp/.
+Additional Spanish, English, and German voices are available from
+http: / /cslu. cse. ogi. edu/ tts/ download/
+You must compile an additional module for these voices, therefore, you must have the Festival source code. The German voices have limited distribution.
+A Finnish male voice is available from
+http: / /www. ling. helsinki. fi/ suopuhe/ download/.
+A Polish male voice is available from
+http: / /www. artegence. com/ download/ voicexml/ speech/ festival_polish_voice. tgz.
+A Russian male voice is available from
+http: / /nshmyrev. narod. ru/ festival/ festival. html
+You must have Festival 1.95 beta or later to use this voice. The voice is still in early development. Untar to festival/ lib/ voices/ russian/. When you configure the Russian talker, the voice code is msu_ru_nsh_diphone. Be sure to select an 8-bit cryllic encoding, such as KOI8-R.
+Italian voices for Festival 1.95 beta are available at
+http: / /www. csrf. pd. cnr. it/ TTS/ It-FESTIVAL-download. htm.
+If you get CRC errors when you unzip, try downloading again.
+Kiswahili, Zulu, and Ibibio voices for Festival 1.95 beta are available at
+http: / /www. llsti. org/.
+Unfortunately, the Hindi voice also available there will not work with & ktts;.
+Commercial voices, including a French Canadian voice, can be purchased from Cepstral, LLC at
+http: / /www. cepstral. com/
+The FAQ on their Support page has information about using their voices in Festival.
+Festival is typically included with & Linux; distributions. Check your distro CDs to see if it is included.
+When using the Polish, Hungarian, or Czech languages, be sure the Encoding option is set to ISO 8859-2.
+When using the Russian voice, be sure the Encoding option is set to an 8-bit cryllic encoding, such as KOI8-R.
+Using Festival with & mbrola;
+Festival can be used in combination with the & mbrola; synthesizer. In this mode, Festival does the lexical analysis and & mbrola; produces the audio. The & mbrola; binary and & mbrola; voice files can be downloaded from
+http: / /festvox. org/ mbrola/.
+Follow the instructions in the readme. txt that comes with the download.
+Note that & mbrola; is not a complete Text-to-Speech system. & mbrola; synthesizes speech from diphone files. You must have additional software that can produce the diphones. When combined with Festival, Festival produces the diphones needed by & mbrola;. txt2pho can also be used to produce diphones from German text. See for more information.
+There are three methods of combining Festival with & mbrola;.
+mbrola; Wrappers. At the time of writing this Handbook, this method is limited to English voices.
+IMS German Festival.
+Festival-Czech.
+Using Festival with & mbrola; Wrappers
+In this method, additional wrapper code is added to Festival to enable speech synthesis using & mbrola; voice files. Note that the & mbrola; voice files are not installed in the & mbrola; folder tree. Instead, they are installed in the festival/ lib/ folder tree. For instructions, see
+http: / /www. cstr. ed. ac. uk/ projects/ festival/ mbrola. html
+Using IMS German Festival
+IMS German Festival is a modified version of Festival that uses German & mbrola; voices. It works with either Festival version 1.4.1 or Festival 2.0 (1.95beta). First install Festival and & mbrola;, if you have not already done so. Next, download IMS German Festival, from
+http: / /www. ims. uni-stuttgart. de/ phonetik/ synthesis/ festival_opensource. html.
+Follow the instructions in the README that comes with the download. (Note, if using in combination with Festival 2.0, it is not necessary to apply the fixes tarball, but you must still rebuild festival.) Finally, add the following lines to the festival/ lib/ siteinit. scm file.
+(voice-location "german_de1_os" "/ usr/ local/ mbrola/ de1" "German Female, IMS Festival de1") (voice-location "german_de2_os" "/ usr/ local/ mbrola/ de2" "German Male, IMS Festival de2") (voice-location "german_de3_os" "/ usr/ local/ mbrola/ de3" "German Female, IMS Festival de3")
+just above the line that reads
+(provide'siteinit)
+On some systems, the file you edit is / etc/ festival. scm. Only add the lines that correspond to the German voices you have installed. Substitute the correct path for / usr/ local/ mbrola/. Also note that (at the time of this writing) IMS German Festival does not work with the de4, de5, or de6 German voices.
+Using Festival-Czech
+This method uses some special code to enable speech synthesis using Festival with an & mbrola; Czech voice. To install, first download and install Festival and & mbrola;, and make sure both are working. Next, download Festival-Czech from
+http: / /www. freebsoft. org/ festival-czech
+In the following procedures substitute the correct folder paths as needed.
+Untar the download to a suitable folder and make the lexicon. The Festival executable must be in your PATH.
+cd / usr/ local tar xvfz festival-czech. tar. gz cd festival-czech make
+Download the cz2 voice file from the & mbrola; website, and unzip it in the & mbrola; folder.
+cd / usr/ local/ mbrola mkdir cz2 cd cz2 unzip cz2-001009. zip
+Add the following lines to the festival/ lib/ siteinit. scm file.
+(set! czech-lexicon-file "/ usr/ local/ festival-czech/ czech-lexicon. out") (set! load-path (cons "/ usr/ local/ festival-czech" load-path)) (require'czech) (set! czech-mbrola_database "/ usr/ local/ mbrola/ cz2/ cz2") (set! mbrola_progname "/ usr/ local/ mbrola/ mbrola") (voice-location "czech_mbrola_cz2" "/ usr/ local/ mbrola/ cz2" "Czech Male, MBROLA") (require'czech-mbrola)
+On some systems, the file you edit is / etc/ festival. scm.
+Using with Festival Lite (flite)
+Festival Lite is a free open source engine that currently supports a limited number of voices and languages. It is light weight, but sacrifices voice quality somewhat. You cannot control the pitch, volume, or speed of this engine from & ktts;.
+Synthesizer Name: Festival Lite (flite)
+& URL;: http: / /www. speech. cs. cmu. edu/ flite/ index. html
+Debian Install Command: apt-get install flite
+flite is typically included with & Linux; distributions. Check your distro CDs to see if it is included.
+Build and install flite following the instructions in the README that comes with it.
+Using with Hadifix (mbrola; and txt2pho)
+Hadifix is a two-stage synthesis engine based on diphones. The txt2pho utility converts text into diphones and the & mbrola; engine synthesizes the diphones to sound. Voice quality is good, but language support is currently somewhat limited. You can control the voice, pitch, speed, and volume from kttsmgr.
+Synthesizer Name: Hadifix
+& URL;: see below
+Debian Install Command: none
+If you do not already have Hadifix installed, do this:
+Download & mbrola; binary from http: / /festvox. org/ mbrola/.
+Install & mbrola; to / usr/ local/ mbrola folder.
+Download at least one german language file from the & mbrola; site. Unzip to the / usr/ local/ mbrola folder.
+Download txt2pho from
+http: / /www. ikp. uni-bonn. de/ dt/ forsch/ phonetik/ hadifix/ HADIFIXforMBROLA. html.
+Unzip txt2pho to / usr/ local/ txt2pho.
+Edit txt2phorc file, putting correct data paths in.
+Either copy txt2phorc to ~/. txt2phorc or to / etc/ txt2pho. Note that you drop the "rc" in file name.
+In kttsmgr, choose the German language (de), and add Hadifix.
+On the Configure Talker screen, configure a voice and the paths to & mbrola; and txt2pho.
+Click the Test button to test.
+A Hungarian implementation for & mbrola; and txt2pho is available at
+http: / /tkltrans. sourceforge. net/.
+Using with Epos
+Epos is a free Czeck and Slovak open source engine. It is light weight, but sacrifices voice quality somewhat. You cannot control the volume of this engine from & ktts;.
+Synthesizer Name: Epos TTS Synthesis System
+& URL;: http: / /epos. ure. cas. cz/
+Debian Install Command: apt-get install epos
+Start kttsmgr. On the Talkers tab, click the Add button. Choose Czeck or Slovak language and Epos TTS Synthesis System. If the epos server executable and client are not in your PATH, specify the paths to these executables in the Configure Talker screen. The options boxes permit you to pass additional options to the server and client. In a & konsole;, type epos -h or say -h for information.
+Using with FreeTTS
+FreeTTS is a free open source speech engine written in & Java;, which means that you must have the & Java; Virtual Machine software installed on your system to use it. It currently has limited voice and language support. You cannot control the pitch, volume, or speed of this engine from & ktts;.
+Synthesizer Name: FreeTTS
+& URL;: http: / /sourceforge. net/ projects/ freetts/
+Using the Command Plugin
+The command plugin permits you to use & ktts; with any speech synthesis engine that can be run as a command in a & konsole;.
+Synthesizer Name: Command
+& URL;: none
+Ideally, you should use a command that synthesizes to a temporary audio (wav) file, rather than send the speech directly to the audio device.
+If the speech synthesis engine requires text to be encoded differently from your desktop encoding setting, you must use the %f parameter to pass the text to the engine. & ktts; will encode the text in the setting you specify when it writes the text to the temporary file. If you attempt to pass text on the command line using the %t parameter, it will be encoded using your desktop locale setting. You can also use the Send the data as standard input option to solve this problem, if the engine accepts input from StdIn. For example, here is a sample command to send polish text to Festival using ISO 8859-2 encoding and removing unspeakable punctuation characters.
+cat %f | tr '(){}[] "'' '| festival --tts --language polish

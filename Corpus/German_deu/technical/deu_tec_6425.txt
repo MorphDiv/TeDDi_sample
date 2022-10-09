@@ -1,0 +1,119 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	2014
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Schnelleinführung in die Optimierung von GNOME-Programmen
+Dies ist eine kurze Einführung in die Optimierung und behandelt sowohl das Wie als auch das Warum. Details zu individuellen Werkzeugen verschieben wir auf spätere Artikel, eine Sammlung aus Hinweisen und Tricks ist jedoch enthalten.
+Was optimieren wir?
+Sie sollten bei der Optimierung für GNOME zunächst eines bedenken: Wir versuchen nicht, das Programm zu verbessern, sondern wir versuchen, die Benutzer glücklicher zu machen.
+Bessere Programme machen die Benutzer glücklicher, aber es gibt Verbesserungsmöglichkeiten, die sie viel glücklicher machen werden als Andere: Ansprechzeit, Startzeit, leichter Zugriff auf Befehle. Der Rechner sollte auch nicht sofort den Auslagerungsspeicher benutzen müssen, wenn mehr als eine Anwendung geöffnet ist.
+Die traditionelle Optimierung umfasst Konzepte wie Prozessorlast, Umfang des Codes, die Anzahl der Mausklicks sowie die Speichernutzung des Programms. Die folgende Auflistung sollte die erste Liste ergänzen, wobei ein grundlegender Unterschied besteht: Ein GNOME-Benutzer schenkt der zweiten Liste keine Beachtung, während der ersten Liste sehr wohl Aufmerksamkeit gewidmet wird. Beim Optimieren von GNOME-Programmen sollen die Prozessorlast, der Speicherverbrauch und all diese Dinge optimiert werden, aber das sind die Bedeutungen, nicht das Endziel. Wir optimieren für Benutzer.
+Ausführung der Optimierung
+Aus dem vorigen Abschnitt wurde deutlich: Um etwas optimieren zu können, muss es messbar sein. Sie können Zufriedenheit nicht messen, aber Sie können sehr wohl Startzeiten messen, um sagen zu können, dass Sie sie verbessert haben. Die Zufriedenheit wird dann - hoffentlich - folgen.
+Vergessen Sie nicht das Gesamtbild.
+Hinweise
+Die Grundlagen
+Stellen Sie sicher, dass Ihr Code korrekt und fehlerfrei ist, bevor Sie mit der Optimierung beginnen. Überprüfen Sie nach der Optimierung, ob dies dann auch noch zutrifft.
+Fallen für die Unvorsichtigen
+Verhindern Sie Nebeneffekte.
+Vergessen Sie nicht den Ressourcenverbrauch des X-Servers. Der Speicherverbrauch Ihres Programms enthält nicht die Pixmaps, die vom X-Server verarbeitet werden, aber sie verbrauchen dennoch Speicher. Verwenden Sie
+Gliedern Sie Code aus Schleifen aus. Ein etwas umfangreicheres Stück Code, das nur einmal ausgeführt wird, ist um Einiges schneller als ein simples Stück Code, was dafür tausend Schleifen durchläuft. Vermeiden Sie es, langsamen Code allzu oft aufzurufen.
+Geben Sie dem Compiler so viele Hinweise wie möglich. Verwenden Sie das const-Schlüsselwort. Verwenden Sie
+Verwenden Sie keine Assemblersprachen. Sie sind nicht portierbar. Während sie auf dem einen Prozessor unglaublich schnell sind, ist nicht unbedingt garantiert, dass dies auf jedem von der Architektur unterstützten Prozessor genauso ist (beispielsweise Athlon vs Pentium 4).
+Schreiben Sie eine vorhandene Bibliotheksroutine nicht neu, es sei denn, Sie sind sich sicher, dass sie unakzeptabel langsam ist. Viele prozessorintensive Bibliotheksroutinen wurden bereits optimiert. Andererseits sind einige Routinen tatsächlich langsam, insbesondere diejenigen, die Systemaufrufe an das Betriebssystem absetzen.
+Halten Sie die Zahl der verlinkten Bibliotheken gering. Je weniger Bibliotheken gelinkt werden müssen, umso schneller startet das Programm. Dies ist in GNOME allerdings schwierig.
+Falls alles Andere scheitern sollte, informieren Sie den Benutzer mit einem Fortschrittsbalken drüber, dass es derzeit nur langsam voran geht. Das dürfte ihm lieber sein, als wenn Sie nur die Ergebnisse präsentieren würden. Er möchte zumindest wissen, dass das Programm nicht abgestürzt ist und er dann erst einmal eine Tasse Kaffee trinken gehen kann.
+Verwendung von
+Einführung
+Ihre Befehlszeile sollte daher so aussehen:
+valgrind --tool=massif --depth=5 --alloc-fn=g_malloc --alloc-fn=g_realloc --alloc-fn=g_try_malloc \\
+ --alloc-fn=g_malloc0 --alloc-fn=g_mem_chunk_alloc same-gnome
+Das Programm
+Interpretieren der Ergebnisse
+Die grafische Ausgabe von
+Die Textdatei ist hierarchisch in Abschnitte gegliedert. Am oberen Ende finden sich die größten Speicherverbraucher, in absteigender Ordnung nach Speicherzeit. Darunter finden sich weitere Abschnitte, die je nach dem Platz im Aufruf-Stack feiner detaillierter sind. Um dies zu verdeutlichen, verwenden wir die Ausgabe des oben stehenden Befehls.
+
+Command: ./same-gnome 
+
+== 0 ===========================
+Heap allocation functions accounted for 90.4% of measured spacetime
+
+Called from:
+ 28.8% : 0x6BF83A: gdk_pixbuf_new (in /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+
+ 6.1% : 0x5A32A5: g_strdup (in /usr/lib/libglib-2.0.so.0.400.6)
+
+ 5.9% : 0x510B3C: (within /usr/lib/libfreetype.so.6.3.7)
+
+ 3.5% : 0x2A4A6B: __gconv_open (in /lib/tls/libc-2.3.3.so)
+== 4 ===========================
+Context accounted for 28.8% of measured spacetime
+ 0x6BF83A: gdk_pixbuf_new (in /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+ 0x3A998998: (within /usr/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-png.so)
+ 0x6C2760: (within /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+ 0x6C285E: gdk_pixbuf_new_from_file (in /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+
+Called from:
+ 27.8% : 0x804C1A3: load_scenario (same-gnome.c:463)
+
+ 0.9% : 0x3E8095E: (within /usr/lib/libgnomeui-2.so.0.792.0)
+
+ and 1 other insignificant place
+Interpretieren der Ergebnisse
+Command: ./same-gnome 
+
+== 0 ===========================
+Heap allocation functions accounted for 87.6% of measured spacetime
+
+Called from:
+ 7.7% : 0x5A32A5: g_strdup (in /usr/lib/libglib-2.0.so.0.400.6)
+
+ 7.6% : 0x43BC9F: (within /usr/lib/libgdk-x11-2.0.so.0.400.9)
+
+ 6.9% : 0x510B3C: (within /usr/lib/libfreetype.so.6.3.7)
+
+ 5.2% : 0x2A4A6B: __gconv_open (in /lib/tls/libc-2.3.3.so)
+== 1 ===========================
+Context accounted for 7.7% of measured spacetime
+ 0x5A32A5: g_strdup (in /usr/lib/libglib-2.0.so.0.400.6)
+
+Called from:
+ 1.8% : 0x8BF606: gtk_icon_source_copy (in /usr/lib/libgtk-x11-2.0.so.0.400.9)
+
+ 1.1% : 0x67AF6B: g_param_spec_internal (in /usr/lib/libgobject-2.0.so.0.400.6)
+
+ 0.9% : 0x91FCFC: (within /usr/lib/libgtk-x11-2.0.so.0.400.9)
+
+ 0.8% : 0x57EEBF: g_quark_from_string (in /usr/lib/libglib-2.0.so.0.400.6)
+
+ and 155 other insignificant places
+Optimieren von GNOME-Software
+GNOME-Dokumentationsprojekt
+2004-2005
+Callum McKenzie
+Robert Love
+Callum
+McKenzie
+Robert
+Love
+Das vorliegende Dokument kann gemäß den Bedingungen der GNU Free Documentation License (GFDL), Version 1.1 oder jeder späteren, von der Free Software Foundation veröffentlichten Version ohne unveränderbare Abschnitte sowie ohne Texte auf dem vorderen und hinteren Buchdeckel kopiert, verteilt und/oder modifiziert werden. Eine Kopie der GFDL finden Sie unter diesem
+Bei vielen der von Firmen zur Unterscheidung ihrer Produkte und Dienstleistungen verwendeten Namen handelt es sich um Marken. An den Stellen, an denen derartige Namen in einer GNOME-Dokumentation vorkommen und wenn die Mitglieder des GNOME-Dokumentationsprojekts über diese Marken informiert wurden, sind die Namen in Großbuchstaben oder mit großen Anfangsbuchstaben geschrieben.
+0.1
+November 2007
+William Johnston
+Erstmalige Umwandlung in das DocBook-Format.
+Die Optimierung von Software kann verschiedene Ziele verfolgen: Geschwindigkeit, Programmgröße oder Speicherverbrauch. Dieser Abschnitt enthält Leitfäden und Anleitungen zum Optimieren Ihrer Software.
+Mario Blättermann <mariobl\@gnome\.org>, 2009

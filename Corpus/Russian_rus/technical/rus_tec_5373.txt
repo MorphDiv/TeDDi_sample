@@ -1,0 +1,159 @@
+# language_name_wals:	Russian
+# language_name_glotto:	Russian
+# ISO_6393:	rus
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Cyrl
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ru.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Руководство по PHP
+Пред.
+Глава 7. Типы
+След.
+Строки
+Строка - это набор символов. В PHP символ это то же самое, что и байт, это значит, что возможно ровно 256 различных символов. Это также означает, что PHP не имеет встроенной поддержки Unicode' а. Некоторую поддержку Unicode'а обеспечивают эти функции utf8_enncode() и utf8_decode().
+Замечание: Нет никаких проблем, если строка очень велика. Практически не существует ограничений на размер строк, налагаемых PHP, так что нет абсолютно никаких причин беспокоиться об их длине.
+Синтаксис
+Строка может быть определена тремя различными способами.
+одинарными кавчками
+двойными кавычками
+heredoc-синтаксисом
+Одинарные кавычки
+Простейший способ определить строку - это заключить ее в одинарные кавычки (символ ').
+Чтобы использовать одинарную кавычку внутри строки, как и во многих других языках, ее необходимо предварить символом обратной косой черты (\), т. е. мнемонизировать ее. Если обратная наклонная черта должна идти перед одинарной кавычкой либо быть в конце строки, вам необходимо продублировать ее. Обратите внимание, что если вы попытаетесь мнемонизировать любой другой символ, обратная косая черта также будет напечатана! Так что, как правило, нет необходимости мнемонизировать саму обратную косую черту.
+Замечание: В PHP 3 в данном случае будет выдано сообщение уровня E_NOTICE.
+Замечание: В отличие от двух других синтаксисов, переменные, встречающиеся в строках, заключенных в одинарные кавычки, не обрабатываются.
+echo ''это простая строка'; echo 'Вы можете вставлять в строки символ новой строки таким образом'; echo 'Однажды Арнольд сказал: "I\'ll be back"'; / / вывод:... "I'll be back "echo 'Вы уверены, что хотите удалить C:\\*.* ?'; / / вывод:... удалить C:\*.*? echo 'Вы уверены, что хотите удалить C:\*.* ?'; / / вывод:... удалить C:\*.*? echo 'Я пытаюсь вставить в этой точке: \n символ новой строки'; / / вывод:... в этой точке: \n символ новой строки
+Двойные кавычки
+Если строка заключена в двойные кавычки ("), PHP распознает большее количество мнемоник специальных символов:
+Таблица 7-1. Мнемоники символов
+последовательность
+значение
+
+новая строка (LF или 0x0A (10) в ASCII)
+
+возврат каретки (CR или 0x0D (13) в ASCII)
+
+горизонтальная табуляция (HT или 0x09 (9) в ASCII)
+
+обратная наклонная черта
+
+знак доллара
+
+двойная кавычка
+
+последовательность символов, соответсвующая регулярному выражению, символ в восьмеричной системе счисления
+
+последовательность символов, соответсвующая регулярному выражению, символ в шестнадцатеричной системе счисления
+Повторяем, если вы захотите мнемнонизировать любой другой символ, обратная косая черта также будет напечатана!
+Но самым важным свойством строк в двойных кавычках является обработка переменных. Смотрите более подробно: обработка строк.
+Heredoc
+Другой способ определения строк - это использование heredoc-синтаксиса ("").
+
+
+
+Внимание
+
+
+
+
+
+Пример 7-2.
+
+
+
+
+
+
+Замечание:
+
+Variable parsing
+
+
+
+
+Simple syntax
+
+
+$beer = 'Heineken'; echo "$beer's taste is great"; / / works, "'"is an invalid character for varnames echo "He drank some $beers"; / / won't work, 's' is a valid character for varnames echo "He drank some ${beer}s"; / / works
+
+
+
+$fruits = array( 'strawberry '= 'red', 'banana' = 'yellow'); / / note that this works differently outside string-quotes echo "A banana is $fruits[banana] ."; echo "This square is $square - width meters broad ."; / / Won 't work.
+For a solution, see the complex syntax. echo "This square is $square - width00 centimeters broad .";
+
+Complex (curly) syntax
+
+
+
+
+
+$great = 'fantastic'; echo "This is {$great}"; / / won 't work, outputs:
+This is {fantastic} echo "This is {$great}"; / / works, outputs:
+This is fantastic echo "This square is {$square - width}00 centimeters broad ."; echo "This works: {$arr[4][3]}"; / / This is wrong for the same reason / / as $foo[bar] is wrong outside a string. echo "This is wrong: {$arr[foo][3]}"; echo "You should do it this way: {$arr['foo'][3]}"; echo "You can even write {$obj - values[3] - name}"; echo "This is the value of the var named $name: {${$name}}";
+String access by character
+
+Замечание:
+
+
+Пример 7-3.
+
+?php / / Get the first character of a string $str = 'This is a test .'; $first = $str{0}; / / Get the last character of a string. $str = 'This is still a test .'; $last = $str{strlen($str)-1};?
+Useful functions and operators
+
+
+
+
+
+
+
+
+Converting to string
+
+
+This happens when you use the echo() or print() functions, or when you compare a variable value to a string.
+
+
+An integer or a floating point number is converted to a string representing the number with its digits (includig the exponent part for floating point numbers).
+
+See the information below for more tips.
+
+If you would like to print out the member variable values of an object for debugging reasons, read the paragraphs below.
+
+
+
+
+
+
+
+
+
+String conversion to numbers
+
+
+
+
+
+
+
+
+$foo = 1 + "10.5"; / / $foo is float (11.5) $foo = 1 + "-1.3e3"; / / $foo is float (-1299) $foo = 1 + "bob-1.3e3"; / / $foo is integer (1) $foo = 1 + "bob3"; / / $foo is integer (1) $foo = 1 + "10 Small Pigs"; / / $foo is integer (11) $foo = 4 + "10.2 Little Piggies"; / / $foo is float (14.2) $foo = "10.0 pigs" + 1; / / $foo is float (11) $foo = "10.0 pigs "+ 1.0; / / $foo is float (11)
+
+
+echo "\$foo==$foo; type is". gettype ($foo). "br / \n";
+
+
+Пред.
+Начало
+След.
+Числа с плавющей точкой
+Уровень выше

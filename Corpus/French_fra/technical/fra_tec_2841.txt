@@ -1,0 +1,51 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+crypt() retourne la chaîne str chiffrée avec l 'algorithme standard Unix DES, ou bien un des algorithme qui est disponible sur la machine.
+L 'argument optionnel salt sera utilisée comme base pour le chiffrement.
+Reportez vous aux pages de manuel Unix pour plus de détails sur votre fonction crypt.
+Si l'argument salt n 'est pas fourni, PHP en générera un lui-même.
+Certains systèmes supoprtent plus d 'un type de chiffrage.
+En fait, il arrive que le chiffrage DES standard soit remplacé par un algorithme de chiffrage MD5.
+Le choix du type de chiffrage est effectué en se basant sur la valeur du salt.
+A l'installation, PHP détermine les possibitilités de la fonction crypt(), et acceptera des salt pour d 'autres types de chiffrages.
+Is aucun salt n'est fourni, PHP va en générer un de deux caractères, à moins que le système par défaut soit MD5, auquel cas un salt Is aucun salt n 'est fourni, PHP va en générer un de deux caractères, à moins que le système par défaut soit MD5, auquel cas un salt compatible MD5 sera généré.
+PHP définit une constante appelée CRYPT_SALT_LENGTH qui vous dira si un salt de deux caractères s'applique à votre système, ou bien si c 'est un salt de 12 caractères.
+Si vous utiilsez le salt généré, pensez bien que le salt est généré une seule fois.
+Si vous appelez cette fonction récursivement, cela peut avoir des impacts sur la sécurité et l 'apparence du résultat.
+crypt(), lorsqu 'elle est utilisée avec le chiffrement standard DES, retourne le salt dans les deux premiers caractères de la chaîne retournée.
+Elle n'utilise que les 8 premiers caractères de str, ce qui fait que toutes les chaînes plus longues, qui ont les mêmes premiers 8 octets retourneront le même résultat (tant que le salt est toujours le même).
+Sur les sytèmes où crypt() supporte plusieurs types de chiffrements, les constantes suivantes sont mises à 1 ou 0, suivant que le type correspondant est disponible:
+CRYPT_STD_DES - Chiffrement DES standard à 2 caractères
+CRYPT_EXT_DES - Chiffrement DES étendu à 9 caractères
+CRYPT_MD5 - Chiffrement MD5 à 12 caractères commençant par $1$
+CRYPT_BLOWFISH - Chiffrement Blowfish à 16 caractères commençant par $2$
+
+Il n'existe pas de fonction de déchiffrement, car la fonction crypt() utilise un algorithme à un seul sens (injection).
+Exemple 1.
+Exemple avec crypt()
+?php $mot_de_passe = crypt( "MonM0TdEPa e"); / / laissons le salt initialis eacute; par PHP / * Il vaut mieux passer le r eacute;sultat complet de crypt() comme salt n eacute;cessaire pour le chiffrage du mot de passe, pour eacute;viter les probl egrave;mes entre les algorithmes utilis eacute;s (comme nous le disons ci-dessus, le chiffrage standard DES utilise un salt de 2 caract egrave;res, mais un chiffrement MD5 utilise un salt de 12. * / if (crypt($utilisateur_input,$mot_de_passe_input) == $mot_de_passe) {echo "Mot de passe correct !";}?
+Voir aussi md5() et l 'extension Mcrypt.
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

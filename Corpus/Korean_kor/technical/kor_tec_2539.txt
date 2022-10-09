@@ -1,0 +1,80 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP를 윈도우로 설치하는데는 두가지 방법이 있다. 하나는 직접하는 방법(manually) 과 InstallShield 설치 프로그램을 이용하는 방법이다.
+만약 Microsoft Visual Studio를 가지고 있다면, PHP의 소스코드를 사용하여 PHP를 build 할 수 있다.
+시스템에 PHP를 설치한 다음에는, 추가적인 기능을 위하여 여러분이 원하는 추가 모듈을 적재(load various extensions) 할 수 있다.
+Windows PHP 설치 프로그램은 http://www.php.net/ 의 다운로드 페이지에 있다. 이것은 CGI 버젼의 PHP를 설치하고, IIS와 PWS, Xitami의 웹서버에 대한 설정을 자동으로 해 준다.
+시스템에 선택한 HTTP 서버를 미리 설치해 놓고 동작하도록 만들어 놓아야 한다.
+설치 프로그램을 실행하고 설치 마법사가 시키는대로 따라서 설치하면 된다. 모든 설정에 적당한 기본값을 사용하는 표준(standard) 설치 방법과, 사용자에게 일일이 물어보는 고급(advanced) 설치 방법을 지원한다.
+설치 마법사는 php.ini 을 설정하는데 충분한 정보를 수집하고, 웹서버를 PHP를 사용할 수 있도록 설정한다. IIS와 NT 웍스테이션에서의 PWS에서는 서버의 모든 노드들과 그 각각의 스트립트 맵 설정을 보여준다. 이 때 PHP용 스크립트 맵을 추가할 노드들을 선택 할 수 있다.
+설치프로그램이 시스템을 재 시작할 필요가 있다고 한다면 스스템을 재시작하고 서버를 재실행한다. 아니라면 단지 서버를 실행하면 된다.
+이 설치 안내서는 PHP를 9x/Me/NT/2000 웹서버에서 설치하고 설정하는데 도움을 줄 것입니다. 이 안내서는 Bob Silva 에 의해 작성되었습니다. 따라서 가장 최신의 개정판은 http://www.umesd.k12.or.us/php/win32install.html 에서 찾을 수 있습니다.
+이 안내서는 다음과 같은 웹서버를 대상으로 합니다.:
+Personal Web Server 3와 4 혹은 더 최신
+Internet Information Server 3와 4 혹은 더 최신
+
+
+
+
+windows에서 PHP4는 CGI 형태(php.exe)나 SAPI 모듈의 형태(예: php4isapi.dll)로 만들어 질 수 있습니다. 후자의 형태는 PHP4에서 추가된 형태로, 괄목할만한 성능의 향상을 얻을 수 있고, 새로운 기능도 추가되었습니다. 하지만 SAPI 모듈은 아직 실제로 현장에서 사용될 정도로 안정적이지 않습니다. 그 이유는 SAPI 모듈들은 thread-safe 버젼의 코드를 사용하는데, 이것은 PHP4에서 새로 작성되었고, 아직 충분히 안정적이라고 평가받지 못하기 때문이다. 또한 실제로 알여진 버그도 약간 있다. 다른 면에서, 일부 사용자가 SAPI모듈을 이상 없이 사용하고 있다고 하지만, 우리는 실제 생결론적으로 산적인 사이트가 이것을 사용하고 있는 것을 본적이 없다. 결론적으로 아직 안정성을 보증받지 못했다. 만약 매우 안정적인 동작을 원한다면, SAPI 모듈을 사용해서 얻는 효율의 향상보다는 CGI 버젼의 안정성을 택하기 바란다.
+만약 Windows 95에서 SAPI 모듈을 사용하려 한다면, Microsoft DCOM pages 에서 DCOM 업테이트를 받아서 DCOM을 업데이트해 두어야 한다. 또한 ISAPI 모듈을 사용하려면 ISAPI 4.0 을 지원하는 웹서버가 필요하다. (IIS 4.0과 PWS 4.0, IIS 5.0에서 검사되었다.) IIS 3.0은 지원하지 않는다. 따라서 IIS 3.0을 사용중이라면 Windows NT 4.0 Option Pack with IIS 4.0을 다운로드하여 IIS 4.0으로 업데이트 해야 할 것이다.
+웹 서버의 종류와 관계없이 다음의 설치 과정들이 완료되어야 한다.
+배포 파일을 풀어 놓을 디렉토리를 정한다. 일반적으로 "C:\PHP\" 도 좋다
+'php.ini-dist' 파일을 windows95/98 이라면 '%WINDOWS%' 디렉토리에, Windows NT/2000이라면 '%SYSTEMROOT%' 디렉토리에 'php.ini'라는 이름으로 복사해 둔다. '%WINDOWS%' 나 '%SYSTEMROOT%' 디렉토리는 일반적으로 다음과 같다.
+'php.ini' 파일을 다음과 같이 수정한다.:
+'extension_dir'을 여러분의 php-install-dir로 고쳐주어야 한다. 혹은 'php_*.dll'이 놓여있는 위치를 지정한다. (예. c:\php)
+Omni Httpd의 경우에는 이 과정은 생략! 'doc_root'를 웹서버의 document_root 디렉토리를 지정하도록 합니다. (예. c:\apache\htdocs 혹은 c:\webroot)
+PHP가 시작될 때 적재할 모듈들을 선택한다. 'extension=php_*.dll' 설정을 uncomment하면 해당 모듈을 load하는 것입니다. 일부 모듈은 올바르게 동작하기 위해 시스템에 별도의 라이브러리를 설치해야 하는 경우도 있습니다. 어디서 지원하는 라이브러리를 얻을 수 있는지는 PHP의 FAQ 를 보면 좀더 자세한 정보를 얻을 수 있을 것입니다. 또한 모듈을 dl() 함수를 사용하여 스크립트 내에서 동적으로 적재할 수도 있다. Windows extensions 을 살펴보기 바란다.
+PWS와 IIS에서 browscap.ini는 다음의 위치에 있다. Windows 9x/Me는 'c:\windows\system\inetsrv\browscap.ini', NT/2000 서버에서는 'c:\winnt\system32\inetsrv\browscap.ini'에 있다.
+시작하기 전에 다음 질문을 생각해 보자.: "windows에서 만드는 것이 왜 어려운가?" 다음 두가지 이유가 떠오를 것이다.:
+windows는 자신들의 소스를 자유롭게 공유하고자 하는 개발자들에게는 커다란 공동체를 (아직) 만들지 못하고 있다. 그로인해 개발을 위한 기본적으로 필요한 기초적 투자가 아직 되어 있지 않다. 대체로, 사용 가능한 것들 대부분은 Unix의 기본 유틸리티에서 포팅된 것들이다. 이런 관계는 별로 놀랄만한 것도 아니다.
+아래나오는 설명은 "설정하고 잊어버리는" 내용이 대부분이다. 따라서 조금 휴식한 후에 아래의 설명을 충실히 따르도록 하자.
+시작하기전에 다운로드할 것이 좀 있다.
+처음 사용자는 cygwin 미러사이트에서 Cygwin 툴킷을 다운받는다. 이것은 build 중에 사용할 대부분의 필수 GNU 유틸리티를 제공해 준다.
+http://www.php.net/extra/win32build.zip 에서 PHP build 시에 필요한 나머지 도구들을 받아둔다.
+http://www.php.net/extra/bindlib_w32.zip 에서 PHP가 사용하는 DNS name resolver의 소스 코드를 받아온다. 이것은 win32build.zip 에 포함된 resolv.lib 라이브러리의 대체 파일이다.
+만약 unzip 유틸리티가 없다면 이것도 필요하다. InfoZip 에 가면 무료 버젼을 구할 수 있다.
+마지막으로 당연히 PHP 4의 소스코드가 필요하다. anonymous CVS 를 사용하여 최신 개발 버젼을 얻어올 수도 있다. 만약 snapshot 이나 source tarball을 사용한다면, yntar와 ungzip은 물론이고, Microsoft Visual C++을 사용한 작업을 하기전에 *.dsp 와 *.dsw 파일의 모든 LF를 CRLF로 바꿔 주어야 한다.
+참고: Zend 와 TSRM 디렉토리는 build 과정중에 프로젝트가 찾을 수 있도록 php4 디렉토리 안에 넣어두어야 한다.
+선택한 unzip 유틸리티는 해당 설명의 내용을 따라주세요.
+setup.exe 를 실행한 후, 설치 설명을 따른다. 만약 c:\cygnus 과 다른 경로에 설치하였다면, build 과정중에 Cygwin 환경변수에 이를 지정해야 한다. Windows 95/98 에서는 autoexec.bat 파일에서 지정하면 되고, Windows NT의 경우 내 컴퓨터(My Computer) = 제어판(Control Panel) = 시스템(System) 에 가서 환경(environment) 탭을 선택한 후 설정하면 된다.
+Cygwin이 사용할 임시디렉토리를 만들어 두여야한다. 그렇지않으면 여러 명령(특히 bison)에서 에러가 발생한다. Windows 95/98에서는 mkdir C:\TMP. Windows NT에서는 mkdir %SystemDrive% mp.
+디렉토리를 만들고 여기에 win32build.zip 을 풀어놓는다.
+Microsoft Visual C++을 실행하고, 메뉴의 Tools = Options를 선택한다. 대화창에서 directories 탯을 선택한 후 Executables, Includes, Library files를 각각 cygwin\bin, win32build\include, win32build\lib 으로 차례대로 바꾼다. 보통 다음과 같이 지정된다.
+c:\cygnus\bin
+c:\php-win32build\include
+c:\php-win32build\lib
+OK를 누르고, Visual C++을 빠져나온다.
+다른 디렉토리를 만들고 bindlib_w32.zip 를 여기에 풀어 놓는다. 디버그용 심볼테이블을 포함할 것인가(bindlib - Win32 Debug), 안 포함할 것인가(bindlib - Win32 Release)를 결정한다. 적절한 설정파일을 만든다.
+이제 GUI 사용자는 VC++을 실행하고, File = Open Workspace 를 선택하고 bindlib를 선택한다. 그후 Build= Set Active Configuration 을 선택한 후에 원하는 설정파일을 선택한다. 마지막으로 Build= Rebuild All을 선택한다.
+커맨드라인 사용자는 등록된 C++ 환경 변수를 확인하고, 잘못되어 있으면 vcvars.bat 을 실행한 후, 다음 두개의 명령 중 하나를 실행한다.:
+msdev bindlib.dsp /MAKE "bindlib - Win32 Debug"
+msdev bindlib.dsp /MAKE "bindlib - Win32 Release"
+이제 Debug 나 Release 서브 디렉토리에 알맞은 resolv.lib 가 만들어져 있어야 한다. 이 파일을 win32build\lib 에 있는 동일한 이름의 파일을 덮어 쓴다.
+처음에 하기 가장 좋은 것은 standalone/CGI 버젼으로 만드는 것이다.
+GUI 사용자는, VC++을 실행하고, File = Open Workspace를 선택하고 php4ts를 선택한다. 그런 다음 Build= Set Active Configuration 을 선택하여 원하는 설정파일을 선택한다. 마지막으로 Build= Rebuild All을 선택한다.
+커맨드라인 사용자는 등록된 C++ 환경 변수를 확인하고, 잘못되어 있으면 vcvars.bat 을 실행한 후, 다음 두개의 명령 중 하나를 실행한다.:
+msdev php4ts.dsp /MAKE "php4ts - Win32 Debug_TS"
+msdev php4ts.dsp /MAKE "php4ts - Win32 Release_TS"
+이제 Debug_TS 나 Release_TS 서브 디렉토리에 최종 결과물인 php.exe 가 만들어져 있어야 한다.
+위의 과정을 php4isapi.dsp 를 사용하여 반복하면 (이 파일은 sapi\isapi 에 있다.), Microsoft IIS용 ISAPI 버젼의 PHP를 만들 수 있다.
+windows에 PHP와 웹서버를 설치한 후에는 원하는 기능을 추가하기 위해 확장 모듈을 설치하기를 원할 것이다. 아래 표에 사용할 수 있는 확장 모듈이 표시되어 있다. 직접 설치하는 방법 때 설명한대로 php.ini 파일의 원하는 확장 모듈이 있는 'extension=php_*.dll' 라인을 uncomment하여 원하는 모듈을 포함하여 PHP를 실행할 수 있다. 일부 확장 모듈은 시스템에 추가적인 라이브러리들을 필요로 하기도 한다. PHP FAQ 를 살펴보면 이 추가적인 라이브러리를 어디서 구할 수 있는가에 대한 정보를 얻을 수 있다. 또한 dl() 함수를 사용하면 추가 모듈을 실행중에도 동적으로 적재할 수 있다.
+PHP 확장을 위한 DLL들은 'php_'로 시작한다. 이것은 PHP 확장을 위한 DLL들과 자체적인 지원을 위한 DLL들간의 혼란을 방지하기 위해서이다.
+참고: PHP 4.0.4pl1에서 MySQL, ODBC, FTP, Calendar, BCMath, COM, PCRE, Session, WDDX, XML 지원이 기본적으로 내장 되어 있다. 따라서 이와 관련된 함수를 사용하기 위해 추가로 확장 모듈을 적재할 필요는 없다. 내장된 모듈의 목록은 배포판에 있는 README.txt 나 install.txt 파일을 참조하기 바란다.
+
+표 3-1. PHP Extensions

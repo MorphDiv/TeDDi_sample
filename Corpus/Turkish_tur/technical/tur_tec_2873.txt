@@ -1,0 +1,79 @@
+# language_name_wals:	Turkish
+# language_name_glotto:	Turkish
+# ISO_6393:	tur
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/tr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Kullanım Kılavuzu
+Önceki
+Bölüm 4.
+Güvenlik
+Sonraki
+CGI Kurulum
+Olası saldırılar
+PHP' nin bir nedenden dolayı sunucu yazılımına (Apache gibi) entegre edilmek istenmediği, ya da PHP'yi farklı tipte CGI okuyucuları kullanarak uygulamalar için güvenli chroot ve setuid ortamlarının yaratılmak istendiği durumlarda PHP 'yi CGI bir seçenek olabilir.
+Bu kurulum PHP çalıştırılabilir dosyasının web sunucusunun cgi-bin klasörüne kurulmasıyla gerçekleştirilebilir.
+CERT danışmanı CA-96.11 cgi-bin klasörüne hiçbir yorumlayıcının kurulmamasını tavsiye eder.
+PHP, tek başına okuyucu olarak kullanıldığı takdirde, bu tip kurulumdan kaynaklanan aşağıdaki saldırıları önleyecek biçimde tasarlanmıştır:
+Sistem dosyalarına erişim: http: / /my.host / cgi-bin / php? / etc / passwd
+URL içindeki soru işaretinden (?) sonra gelen sorgu bilgisi, CGI arayüzü tarafından okuyucuya komut satırı parametresi olarak aktarılır.
+Sıklıkla okuyucular komut satırının ilk argümanı olarak belirtilmiş dosyayı açar ve çalıştırırlar.
+CGI olarak çalıştırıldığında, PHP komut satırı parametrelerini işlemeyi reddeder.
+Sunucudaki herhangi bir web dokümanına erişim: http: / /my.host / cgi-bin / php / secret / doc.html
+URL içindeki PHP çalıştırılabilirinden sonraki yol bilgisi, / secret / doc.html, CGI arayüzü tarafından programa iletilecek ve program tarafından açılıp yorumlanacak dosyanın ismini belirtir.
+Bazı web sunucu konfigürasyon direktifleri (Apache:
+Action) bu tip istekleri http: / /my.host / secret / script.php gibi adreslere yönlendirmek için kullanılır.
+Bu tip kurulumla, web sunucusu önce / secret klasörüne erişim hakkını gözden geçirir, ve sonra yönlendirilmiş isteği yaratır http: / /my.host / cgi-bin / php / secret / script.php.
+Ne yazık ki, istek orjinal olarak bu şekilde verildiyse, web sunucusu / secret / script.php dosyasına erişimi kontrol etmeyecek, yalnızca / cgi-bin / php için kontrol yapacaktır.
+Bu şekilde / cgi-bin / php a erişimi olan herhangi bir kullanıcı, web sunucusu üzerindeki korunan herhangi bir dokümana erişebilir olacaktır.
+PHP, bu saldırıları derleme sırasındaki konfigürasyon seçeneği --enable-force-cgi-redirect ve çalışma sırasındaki konfigürasyon direktifi doc_root ve user_dir ile sunucu doküman ağacı erişim kısıtlaması yapılmış bir klasöre sahipse önleyebilir.
+Aşağıdaki örneği inceleyerek farklı birleşimler için açıklamalar bulabilirsiniz.
+Durum 1: yalnızca public dosyaların sunulması
+Sunucunuz parola ile kısıtlanmış bir bölüme sahip değilse ya da IP bazında erişim kontrolü yapılmıyorsa, bu konfigürasyon ayarlarına ihtiyacınız yoktur.
+Web sunucunuz yönlendirme işlemine izin vermiyorsa, ya da sunucunuzun PHP ile iletişim kurup isteğin güvenli bir yönlendirme isteği olduğunu iletme imkanı yoksa, --enable-force-cgi-redirect seçeneğini kullanarak konfigürasyon yapabilirsiniz.
+PHP uygulamalarınızın bu uygulamayı başka bir yoldan ya da direk olarak çalıştırabilir olmadığından emin olmalısınız.
+Bu ne http: / /my.host / cgi-bin / php / dir / script.php olmalıdır, ne de http: / /my.host / dir / script.php olmalıdır.
+Yönlendirme Apache içersinden AddHandler ve Action direktifleri kullanılarak yapılabilir (aşağıya bakın).
+Durum 2: --enable-force-cgi-redirect kullanımı
+Bu derleme sırasında kullanılan komut, PHP 'nin http: / /my.host / cgi-bin / php / secretdir / script.php gibi bir url kullanılarak direk olarak çağrılmasını önler.
+PHP bu modda yalnızca web sunucusu bir yönlendirme kuralı oluşturmuşsa çalışacaktır.
+Apache konfigürasyonu içinde yönlendirme aşağıdaki direktifler izlenerek yapılabilir:
+
+Bu seçenek yalnızca Apache web sunucusu için test edilmiştir, ve Apache' ın yönlendirmede kullandığı CGI ortam değişkeni REDIRECT_STATUS Bu seçenek yalnızca Apache web sunucusu için test edilmiştir, ve Apache 'ın yönlendirmede kullandığı CGI ortam değişkeni REDIRECT_STATUS değişkenine bağımlıdır.
+Web sunucunuz isteğin direk mi yoksa yönlendirme mi olduğunu iletme özelliğine sahip değilse, bu seçeneği kullanamazsınız.
+Bu durumda burada anlatan diğer CGI kurulumlarından birini denemeniz gereklidir.
+Durum 3: setting doc_root ya da user_dir
+Uygulamalar ve çalıştırılabilirler gibi, web sunucu doküman klasörlerine canlı içerik eklemek için, bazı durumlarda güvensiz işlemler yapmanız gerekir.
+Bazı konfigürasyon hataları yüzünden, uygulamalar düzgün çalıştırılmaz ve normal HTML dokümanları gibi görüntülenirse, bu durum parolaların ele verilmesi gibi istenmeyen güvenlik açıklarına neden olacaktır.
+Birçok sistem yöneticisi, yalnızca yorumlayan ve çıktı üretmeyen uygulama dosyaları için yalnızca PHP CGI tarafından erişilebilen farklı bir klasör yapısı yaratmayı tercih etmektedir.
+Bir önceki bölümde anlatıldığı gibi, isteklerin yönlendirilmediğini kontrol eden sistem kullanılamaz olduğunda, web sunucusunun kök doküman klasörü haricinde bir doc_root ayarlanması mutlaka gereklidir.
+PHP uygulama kök doküman klasörünü isterseniz konfigürasyon dosyası içindeki doc_root direktifinden, isterseniz ortam değişkeni olan PHP_DOCUMENT_ROOT değerinden değiştirebilirsiniz.
+Bu değer kullanıldığında, PHP' nin CGI sürümü açılacak dosya ismini doc_root değeriyle belirtilene göre yaratacak, böylece bu klasörün dışındaki hiçbir uygulama çalıştırılmayacaktır (user_dir dışındakiler).
+Bir diğer kullanışlı seçenek user_dir seçeneğidir. user_dir boş olduğunda, açılan dosya yalnızca doc_root ile kontrol edilir. http: / /my.host / ~user / doc.php gibi bir url açılmak istendiğinde, PHP users klasöründeki dosyayı açmak yerine, doc_root altındaki ~user / doc.php isimli bir dosyayı açmaya
+Örneğin user_dir public_php olarak ayarlanmışsa, http: / /my.host / ~user / doc.php gibi bir istek, public_php altındaki aynı isimli dosyaya yönlendirilecektir.
+Eğer kullanıcının ana klasörü / home / user ise, dosya / home / user / public_php / doc.php olarak çalıştırılır.
+user_dir genişlemesi doc_root ayarından bağımsız olarak gerçekleşir, bu şekilde kök klasör erişimi ile kullanıcı klasörlerine erişim birbirinden ayrı kontrol edilebilir.
+Durum 4:
+PHP okuyucusu web ağacının dışında
+PHP okuyucu dosyasının web ağacı dışında bir yere yerleştirilmesi çok güvenli bir kurulumdur.
+Dosya örneğin / usr / local / bin klasörüne konulabilir.
+Bu seçenek tek olumsuz tarafı uygulama dosyalarınızın başına aşağıdakine benzer bir satır koymanızı gerektirmesidir:
+
+Bu kurulumda PHP 'nin PATH_INFO ve PATH_TRANSLATED değerlerini düzgün biçimde alabilmesi için, php okuyucusu --enable-discard-path konfigürasyon seçeneği ile derlenmelidir.
+Önceki
+Baþlangýç
+Sonraki
+Güvenlik
+Yukarý
+Apache Modülü olarak Kurulum

@@ -1,0 +1,113 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+Diese Rubrik behandelt die beim Schreiben von PHP-Skripten am häufigsten auftretenden Fehler.
+
+pre ?php echo "Das soll die erste Zeile sein .";? ?php echo "Das soll nach dem obigen Zeilenumbruch erscheinen .";? / pre
+
+Ich möchte ein PHP-Skript schreiben, das Daten von beliebigen Formularen verarbeiten kann.
+Woher weiß ich, welche Variablen über die POST-Methode verfügbar sind?
+Stellen Sie sicher, dass track_vars in Ihrer php.ini aktiviert ist (Standardeinstellung seit PHP 4.0.3).
+Wenn track_vars aktiviert ist, erstellt PHP einige assoziative Arrays.
+Das wichtige Array ist in diesem Fall $_POST (in PHP-Versionen vor 4.1.0 war der Name hierfür $HTTP_POST_VARS).
+Wenn Sie ein PHP-Skript schreiben möchten, das die Variablen, die über die POST-Methode verfügbar sind, verarbeitet, dann müssen Sie ähnlich wie im folgenden Beispiel vorgehen:
+
+
+Ich möchte alle einfachen Anführungszeichen (') in einen Backslash gefolgt von einem einfachen Anführungszeichen konvertieren.
+Wie kann ich das mit einem regulären Ausdruck machen?
+Schauen Sie sich die addslashes() -Funktion an, die genau das macht.
+Sie sollten sich ebenfalls die magic_quotes_gpc -Direktive in Ihrer php.ini anschauen.
+
+Wenn ich den folgenden Code ausführe, wird die Ausgabe in der falschen Reihenfolge ausgegeben:
+
+Um das Ergebnis Ihrer Funktion in einem Ausdruck verwenden zu können (um es z.B. wie im obigen Beispiel mit dem anderen String zu verbinden), müssen Sie den Wert mit return() zurückgeben und ihn nicht mit echo() ausgeben.
+
+Wo sind meine Zeilenumbrüche geblieben?
+pre ?php echo "Das soll die erste Zeile sein .";? ?php echo "Das soll nach dem obigen Zeilenumbruch erscheinen .";? / pre
+In PHP können Code-Blöcke entweder mit "?" oder mit "? \n" enden (\n steht für Zeilenumbruch).
+Im obigen Beispiel sind die ausgegebenen Zeilen daher in einer Zeile, denn PHP lässt die Zeilenumbrüche nach den Block-Ende-Zeichen weg.
+Wenn Sie möchten, dass PHP einen Zeilenumbruch ausgibt, müssen Sie nach jedem Code-Block einen zusätzlichen Zeilenumbruch einfügen.
+Warum macht PHP das so?
+Wenn Sie normales HTML formatieren, erleichert PHP Ihnen die Arbeit, da Sie meist diesen Zeilenumbruch gar nicht haben möchten.
+Würde PHP diesen Zeilenumbruch ausgeben, müssten Sie sehr lange Zeilen schreiben und Ihren Code damit unlesbar machen.
+
+Ich bekommen die Meldung 'Warning:
+Cannot send session cookie - headers already sent.. .' oder 'Cannot add header information - headers already sent... '.
+Die Funktionen header(), setcookie() und die Session-Funktionen müssen Header dem Output-Stream hinzufügen.
+Header können aber nur gesendet werden, wenn Sie vor allen anderen Daten gesendet werden.
+Prüfen Sie also, ob Ihr Skript Header sendet, nachdem bereits irgendetwas ausgegeben wurde.
+
+Wie kann ich auf Informationen aus dem Request-Header zugreifen?
+Wenn Sie PHP als Apache-Modul laufen lassen, liefert Ihnen die getallheaders() -Funktion die gewünschten Informationen.
+Der folgende Code gibt alle Request-Header aus:
+
+
+Wenn ich versuche, Authentifikation mit IIS zu nutzen, bekomme ich die Meldung 'No Input file specified'.
+Das Sicherheitsmodell des IIS hat Unrecht.
+Dies ist ein Problem, das alle CGI-Programme, die unter dem IIS laufen, haben.
+Als Workaround können Sie eine leere HTML-Datei, die nicht von PHP geparst wird, als Eingangsseite in ein per Authenfikation geschütztes Verzeichnis erzeugen.
+Anschließend leiten Sie den Browser durch ein META-Tag auf die PHP-Seite weiter oder sie setzen einen Link auf die PHP-Seite.
+PHP erkennt dann die Authentifizierung korrekt.
+Dieses Problem tritt mit dem ISAPI-Modul nicht auf.
+Auch auf anderen NT-Web-Servern sollte dieses Problem nicht auftauchen.
+Weitere Informationen finden Sie auch hier: http: / /support.microsoft.com / support / kb / articles / q160 / 4/22.asp.
+
+Mein PHP-Skript funktioniert unter IE und Lynx, aber unter Netscape fehlt ein Teil meiner Ausgabe.
+Wenn ich mir den Quelltext anschaue, sehe ich die Ausgabe unter IE, aber nicht unter Netscape.
+Netscape verarbeitet HTML-Tags (z.B.
+Tabellen) strenger als der IE.
+Meist ist es hilfreich, wenn Sie Ihre HTML-Ausgabe mit einem HTML-Validator (z.B. validator.w3.org) prüfen.
+Z.B. kann ein fehlendes / table den Fehler verursachen.
+IE und Lynx ignorieren auch NULs (\0) im HTML-Stream, Netscape nicht.
+Um dies zu überprüfen, kompilieren Sie am besten die Kommandozeilen -Version von PHP (auch bekannt als die CGI-Version) und führen Sie Ihr Skript auf der Kommandozeile aus.
+Unter Unix pipen Sie es durch od -c und schauen Sie nach \0 Zeichen.
+Unter Windows müssen Sie einen Editor oder ein anderes Programm benutzen, das es Ihnen ermöglicht, binäre Dateien anzuschauen.
+Wenn Netscape ein NUL in einer Datei findet, gibt es normalerweise in dieser Zeile nichts mehr aus, während IE und Lynx die Zeile normal ausgeben.
+
+Wie kann ich XML und PHP mischen?
+PHP beschwert sich über meine ?xml -Tags!
+Sie müssen die Kurzform der öffnenden PHP-Tags abschalten, indem Sie in Ihrer php.ini short_tags Sie müssen die Kurzform der öffnenden PHP-Tags abschalten, indem Sie in Ihrer php.ini short_tags auf 0 setzen oder indem Sie die gleichwertige Apache-Direktive benutzen.
+Sie können dies auch innerhalb einer File -Sektion machen.
+
+Wie kann ich mit PHP mit Frontpage oder einem anderen HTML-Editor, der meinen Code verschiebt, benutzen?
+Die einfachste Möglichkeit ist, ASP-Tags in Ihrem PHP-Code zu aktivieren.
+Sie können dann% und% zur Begrenzung Ihres Codes verwenden.
+Viele HTML-Editoren verarbeiten solche Code-Blöcke intelligenter.
+Um die ASP-Tags zu aktiveren, müssen Sie in Ihrer php.ini asp_tags auf On setzen oder die gleichwertige Apache-Direktive verwenden.
+
+Wo kann ich eine komplette Liste der mir zur Verfügung stehenden Variablen finden und warum sind diese Variablen nicht in der PHP-Dokumentation zu finden?
+Die beste Lösung ist, ?php phpinfo();? in ein PHP-Skript einzufügen und sich die Ausgabe anschauen.
+Sie finden dort dann viele Informationen über Ihr PHP-Setup und eine Liste sowohl der Umgebungsvariablen als auch der speziellen Variablen, die Ihr Webserver zur Verfügung stellt.
+Diese Liste kann nicht in der PHP-Dokumentation dokumentiert werden, da sie stark vom verwendet Server abhängt.
+
+Ich versuche, auf eine der Standard-CGI-Variablen (wie $DOCUMENT_ROOT oder $HTTP_REFERER) in einer selbst-definierten Funktion zuzugreifen, aber anscheinend kann ich nicht darauf zugreifen.
+Was mache ich falsch?
+Umgebungsvariablen sind normale Variablen.
+Sie müssen diese Variablen daher entweder in Ihrer Funktion als globale Variable deklarieren (z.B. mit "global $DOCUMENT_ROOT;") oder das globale Variablen-Array benutzen (z.B. "$GLOBALS["DOCUMENT_ROOT"]").
+Anmerkung:
+Seit PHP 4.1.0 können Sie auch das superglobale Array $_SERVER benutzen.
+Dieses Array steht Ihnen innerhalb jeder Funktion zur Verfügung.
+Statt auf $DOCUMENT_ROOT können Sie also auf $_SERVER[ "DOCUMENT_ROOT"] zugreifen.
+Zurück
+Zum Anfang
+Nach vorne
+Probleme bei der Compilierung
+Nach oben
+PHP und HTML

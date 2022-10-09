@@ -1,0 +1,36 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 3, PHP 4)
+サーチ結果IDを返します。エラーの場合に FALSE を返します。
+ldap_search() は、 LDAP_SCOPE_SUBTREE のスコープを有するディレクトリに関して、 指定されたフィルタにより検索を行います。 これは、ディレクトリ全体を探索することと等価です。 base_dn はディレクトリのベース DN を指定し ます。
+サーバーから返される属性と値を必要なものだけに制限するために オプションの4番目のバラメータを指定することができます。 これは、(全ての属性と関連する値を返す)デフォルトの動作よりも かなり効率的です。 このため、4番目のパラメータを使用することが望ましいです。
+4番目のパラメータは、array("mail","sn","cn") のような 必要な属性を保持する通常の PHP 文字列配列です。 "dn" は要求された属性の型によらず常に返されることに注意して下さい。
+いくつかのあディレクトリサーバホストは、事前に設定されたエントリ 数以上のものを返します。この場合、サーバは部分的な結果集合を返し ただけであることをサーバは示します。この場合、取得するエントリ数 を制限するために6番目のパラメータ sizelimit も使用します。
+属性型のみを取得したい場合、5番目パラメータ attrsonly を1とする必要があります。0に設定 した場合、属性型と属性値がデフォルトの動作として取得されます。
+6番目のパラメータ sizelimit が指定された場合 取得するエントリ数を制限することが可能です。これに0を指定すると制 限を設けないこととなります。 注意: このパラメータはサーバ側で事前に設定されたsizelimitを上書き することはできません。
+7番目のパラメータ timelimit は、検索に要する 最大時間を設定します。これを0にすると制限を設けないこととなります。 注意: このパラメータはサーバ側で事前に設定されたtimelimitを上書き することはできません。これより小さい値を設定することも可能です。
+8番目のパラメータ deref は、検索時に処理する べきエイリアスを指定します。以下のどれかを指定することは可能です。
+LDAP_DEREF_NEVER - (デフォルト) エイリアスは被参照されません。
+LDAP_DEREF_SEARCHING - エイリアスは検索時に被参照されますが、 検索の基本オブジェクトにある場合には参照されません。
+LDAP_DEREF_FINDING - エイリアスは、基本オブジェクトがあるが検索 時にはない時に被参照される必要があります。
+LDAP_DEREF_ALWAYS - エイリアスは常に被参照するべきです。
+注意 これらのオプションのパラメータは4.0.2で追加されました。 attrsonly, sizelimit, timelimit, deref
+検索フィルターは、LDAP ドキュメントに記述されたフォーマットの論理 演算子を用いて、簡単なものまたは高度なものとすることができます。 (フィルターに関する詳細な情報については、 Netscape Directory SDK を参照下さい)
+以下の例は、"My Company" の全員について姓または名に部分文字列 $person を含まれる組織単位、姓、名、電子メールアドレスを取得します。 この例は、複数の属性に関する情報についてサーバーに検索をかける論理 フィルターを使用します。
+例 1LDAP 検索
+4.0.5以降、並行検索も可能となっています。並行検索を行うには、単一 のIDを使うのではなく、リンクIDの配列を使用します。 同じ基本DNを使用したくない場合や全ての検索について同じフィルタを 使用したくない場合、基本DNの配列またはフィルタの配列を使用するこ とが可能です。これらの配列は、リンクIDの配列と同じ大きさである必 要があります。これは、その配列の最初が一回の検索で使用され、2番目 のエントリが他の検索で使用されるといったようになるからです。並行 検索を実行する際、エラーの場合を除き、検索結果IDの配列が返されま す。エラーの場合は対応する検索のエントリは FALSE となります。これは、 通常返される値とよく似ていますが、検索が行われた際に結果IDが常に 返されます。まれに、並行検索はIDを返すにもかかわらず通常の検索は FALSE を返すということがあります。

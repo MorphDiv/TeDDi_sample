@@ -1,0 +1,40 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+yaz_scan() prépare une requête "Z39.50 Scan Request". id yaz_scan() prépare une requête "Z39.50 Scan Request". id spécifie l 'hôte cible.
+Le point de départ est donné avec startterm.
+La forme de spécification du point de départ est donné par type.
+Actuellement, le type rpn est supporté.
+Le paramètre optionnel flags donne des informations supplémentaires pour contrôler le comportement de la requête de scan.
+Actuellement, trois index sont lus dans ce paramètre: number (nombre de termes requis), position (position préférée du terme) et stepSize (taille du pas préférée).
+Pour reéllement envoyer la requête de recherche à l'hôte, et recevoir la réponse, yaz_wait() doit être appelée.
+A la fin de yaz_wait(), yaz_error() et yaz_scan_result() auront les résultats.
+La syntaxe de startterm est similaire aux requêtes RPN, décrites dans yaz_search(). startterm est constitué de zéro ou plus spécifications, avec les opérateurs @attr, suivi par exactement un token.
+Exemple 1.
+Fonction PHP qui scanne les titres
+function scan_titles( $id, $starterm) {yaz_scan($id ,"rpn", "@attr 1=4 ". $starterm); yaz_wait(); $errno = yaz_errno($id); if ($errno == 0) {$ar = yaz_scan_result($id, $options); echo 'Scan ok; '; $ar = yaz_scan_result($id, $options); while(list($key,$val)=each($options)) {echo "$key = $val";} echo' br table tr td '; while(list($key,list($k, $term, $tcount))=each($ar)) {if (empty($k)) continue; echo "tr td $term / td td"; echo $tcount; echo "/ td / tr";} echo' / table ';} else {echo "Echec du scan.
+Erreur: ". yaz_error($id)." br ";}}
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur
+yaz_search

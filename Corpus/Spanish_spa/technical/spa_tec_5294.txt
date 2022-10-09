@@ -1,0 +1,45 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Disco y dispositivos sintonizadores
+Configurar dispositivos
+& kplayer; intentará encontrar cualquier disco y dispositivo sintonizador que tenga en su sistema. Los encontrará en el menú Archivo y en varios menús contextuales que puede seleccionar pulsando el botón derecho, así como en la sección Dispositivos de la biblioteca multimedia.
+Si el dispositivo que desea que utilice & kplayer; no se muestra en estas listas, puede añadirlo manualmente seleccionando el nodo Dispositivos en la biblioteca multimedia y eligiendo la orden Añadir Dispositivos... en el menú Biblioteca o pulsando el botón derecho en el menú contextual. & kplayer; mostrará el diálogo Añadir dispositivo:
+Diálogo añadir dispositivo
+Introduzca un nombre descriptivo único para el dispositivo y la ruta al nodo del dispositivo en la carpeta / dev. Seleccione el tipo de dispositivo en el desplegable. Para un dispositivo de TV seleccione una lista de canales y un controlador de entrada, usualmente Video4Linux 2 o Video4Linux. Un dispositivo de DVB necesita la ruta al archivo del canal en formato « zap ». Puede obtener el archivo de internet o crearlo utilizando la utilidad scan que incluye los controladores para DVB. & kplayer; busca los archivos channels. conf existentes y selecciona el primero que encuentra de forma predeterminada.
+Para establecer opciones adicionales para un dispositivo, selecciónelas en la biblioteca multimedia y seleccione la orden Propiedades... en el menú Biblioteca o pulse el botón derecho en el menú contextual. La mayor parte de las opciones son las mismas propiedades para cada elemento multimedia en & kplayer;.
+Los dispositivos sintonizadores tienen varias opciones específicas detalladas en el capítulo del diálogo Propiedades. La página General tiene varias opciones para seleccionar una lista de canales disponibles para el dispositivo y un controlador de entrada sobre el que hablamos antes. Otras opciones se encuentran en las páginas de Vídeo, Audio y Avanzadas del diálogo.
+Para obtener una descripción detallada de la funcionalidad de la biblioteca multimedia consulte el micro COMO de la biblioteca multimedia.
+Si tiene las opciones -dvd-device o -cdrom-device en el cuadro Parámetros adicionales de la línea de parámetros en la página Avanzadas en Preferencias de & kplayer;, debe borrarlas, porque desde la versión 0.6 de & kplayer; suministra estas opciones a & mplayer; automáticamente.
+Reproducir desde dispositivos
+Cuando coloca un disco en una unidad de CD o DVD, & kplayer; detecta el tipo de disco y cuántas pistas o títulos tiene, y actualiza el submenú de dispositivos del menú Archivo. El submenú incluye las órdenes para reproducir el disco completo o una pista individual o título.
+& kplayer; soporta discos de DVD de vídeo, CD de vídeo, incluyendo SVCD y otras variedades de VCD, CD de audio, DVD de datos y CD de datos. Si & kplayer; no detecta su disco automáticamente por cualquier razón, puede saltarse el proceso de detección manualmente seleccionando la orden Cargar disco en el submenú dispositivo.
+Los dispositivos de sintonización como TV o DVB también tienen sus propios submenús que contienen órdenes para reproducir cada canal individual disponible en el dispositivo. O puede abrir el dispositivo en la biblioteca multimedia, seleccione algunos canales y reprodúzcalos utilizando las órdenes del menú Biblioteca o pulse el botón derecho para mostrar el menú contextual.
+Otra forma de reproducir un disco completo es a través de los esclavos de E/ S media: / o system: /. Si tiene activada la aplicación Dispositivos en el panel de & kicker;, mostrará los discos que inserte en las unidades de disco. Puede entonces pulsar el botón izquierdo sobre el icono del disco y seleccionar la orden Reproducir. Esto iniciará & kplayer; si no se estaba ejecutando y reproducirá el disco. De forma similar, si aparecen en el escritorio los iconos del disco, puede pulsar el botón derecho y seleccionar Reproducir. También puede mostrar los iconos del disco en el administrador de archivos de & konqueror; abriendo media: / o system: / media URL en él.
+Telecine inverso y desentrelazado
+El vídeo en los discos de DVD es con frecuencia telecined. El filtro pullup tiene una inversión decente de telecine. Para utilizarlo, seleccione el disco o uno de sus títulos en la sección Dispositivos de la biblioteca multimedia y elija la orden Propiedades... del menú Biblioteca o pulse el botón derecho en el menú contextual para abrir las propiedades del disco, a continuación vaya a la página Avanzadas e introduzca -vf pullup en el campo Parámetros adicionales de la línea de órdenes antes de reproducir el vídeo. Configurar la propiedad en el disco aplicará el filtro a todos los títulos en el DVD.
+Algunos discos de DVD y muchos canales de TV y DVB están entrelazados. Existen varios filtros de desentrelazado en & mplayer;. Cada uno de ellos tiene sus propias ventajas e inconvenientes, de forma que puede probarlos comenzando con -vf yadif y comprobar cuál da los mejores resultados para el vídeo en particular que está intentando ver. La lista completa está disponible si ejecuta
+mplayer -vf help -pphelp | grep deint
+Desbloquear, reducir zumbidos y ruido
+La opción -vf se encuentra a cargo del filtrado de vídeo en & mplayer;. Para obtener la lista completa de filtros disponibles, ejecute
+mplayer -vf help
+desde la línea de órdenes. La mayor parte de ellos se describen en la página de manual de & mplayer;. Uno de los filtros más prácticos es pp, el filtro de post procesado. Entre otras cosas puede suavizar los MPEG bloqueados utilizando los filtros de desbloqueado hb y vb o h1 y v1, normalmente combinado con el filtro dr de reducción de zumbidos de forma similar a: -vf pp=hb/ vb/ dr o -vf pp=h1/ v1/ dr. Para obtener una lista completa de los filtros pp, ejecute
+mplayer -pphelp
+desde la línea de órdenes. Otro filtro práctico es hqdn3d que tiene gran calidad en la reducción de ruido: -vf hqdn3d.
+Puede combinar varios filtros para utilizarlos en el mismo dispositivo o archivo separándolos con una coma sin espacios, por ejemplo:
+-vf pullup, pp=h1/ v1/ dr, hqdn3d
+Colóquelo en el campo Parámetros adicionales de línea de comandos en la página Avanzadas en Propiedades del archivo.

@@ -1,0 +1,119 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+exif_read_data() lit les entêtes EXIF des images JPEG et TIFF.
+Elle retuorne un tableau associatif avec comme index les noms des entêtes, et en valeur, les valeurs des entêtes.
+Si aucune donnée n 'a pu être lue, elle retourne FALSE.
+filename est le nom du fichier à lire.
+Il ne peut pas être une URL.
+sections est une liste de valeur séparée par des virgules des sections qui devront être présentées dans le tableau de résultat.
+
+FileName (nom du ficher), FileSize(taille du fichier), FileDateTime (date de modification du ficheir), SectionsFound (sections trouvées)
+
+html (attributs HTML), Width (largeur), Height (Hauteur), IsColor (couleur ou noir et blanc) et quelques autres si ils sont disponibles.
+
+Toutes les informations concernant cette balise, comme par exemple IFD0, EXIF,...
+
+Toutes les balises IFD0.
+Dans les images normales, ils contiennent les dimensions de l 'images, etc...
+
+Un fichier qui contient une minitaure, si il y a un second IFD.
+Toutes les informations mises en balises à propos de cette miniature seront stockées dans cette section.
+
+Entête de commentaire des images JPEG.
+
+La section EXIF est une sous section de la section IFD0.
+Elle contient des informations plus détaillées sur les images.
+La plus part de ces index sont reliés aux appareils numériques.
+arrays spécifie si chaque section doit être un tableau ou non.
+Les sections FILE, COMPUTED et THUMBNAIL seront toujours transformées en tableau, car elle contiennent des noms qui risquent d 'être en conflit.
+thumbnail indique si il faut lire la miniature elle-même, et pas seulement les données en balises.
+
+Les entêtes Exif sont souvent présents dans les entêtes d'images JPEG / TIFF, générées par les appareils numériques, mais malheureusement, chaque fabriquant d 'appareils ont tous une idée différente pour étiquetter leurs images, et vous ne pourrez pas compter sur des entêtes communs.
+Exemple 1.
+Exemple avec exif_read_data()
+
+La première commande échoue, car l'image n'a pas d'entêtes d 'informations.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Si l'image contient des données IFD0, alors la section COMPUTED contient l'entrée ByteOrderMotorola qui vaut 0 pour little-endian (intel) et 1 pour big-endian (motorola).
+Ceci a été ajoué en PHP 4.3.
+Lorsqu 'un entête Exif contient une note de Copyright, cet entête peut alors contenir lui même deux valeurs.
+Comme cette solution est incohérente avec les standards Exif 2.10, la section COMPUTED retournera les deux entêtes, Copyright.Photographer et Copyright.Editor, tandis que les sections IFD0 contiennent le tableau d 'octets avec des caractères NULL pour séparer les deux entrées.
+Ou bien, juste la première entére si le type de données était erroné (comportement par défaut de Exif).
+La section COMPUTED va aussi contenir une entrée Copyright, qui sera soit la chaîne originale de copyright, soit une liste de valeur séparée par des virgules de photos et de copyright de l 'auteur.
+
+La balise UserComment présente le même problème que la balise Copyright.
+Elle peut stocker deux valeurs: en premier, le jeu de caractères utilisé, puis la valeur elle-même.
+Si c'est le cas, la section IFD contiendra uniquement le jeu de caractères, ou bien un tableau d 'octets.
+La section COMPUTED va stocker les deux entrées UserCommentEncoding et UserComment.
+L'index UserComment est disponbile dans les deux cas, et il est préférable de l 'utiliser, plutôt que la valeur de la section IFD0.
+Si les commentaires utilisateurs utilisent l 'Unicode ou bien le JIS et que le module mbstring est accessible, ces jeux de caractères seront automatiquement changés en fonction la configuration de EXIF dans le fichier php.ini.
+Cette possibilité a été ajoutée en PHP 4.3.
+
+La hauteur (Height) et la largeur (Width) sont calculés de la même façon que la fonction getimagesize() le fait, et leurs valeurs ne devraient jamais différer.
+De même, l 'index html est la représentation textuelle utilisée dans une balise image HTML classique.
+
+Depuis PHP 4.3, cette fonction peut aussi lire les sections IFD Depuis PHP 4.3, cette fonction peut aussi lire les sections IFD incluent dans les tableaux, et retournée sous cette forme.
+De plus, la taille d'une miniature intégrée est retournée dans le sous tableau THUMBNAIL et la fonction exif_read_data() peut retourner les miniatures au format TIFF.
+Enfin, il n'y a plus de longueur maximale pour les valeurs retournées (hormis la place en mémoire).
+
+Cette fonction est uniquement disponible en PHP 4, si il a été compilé avec l 'option --enable-exif.
+Ses fonctionnalités et comportement ont changés en PHP 4.2.
+Les premières versions étaient très instables.
+Depuis PHP 4.3, les commentaires utilisateurs peuvent être automatiquement convertis d'un jeu de caractères à l'autre avec l 'extension --enable-mbstring.
+Cette fonction ne requiert pas la librairie GD.
+Voir aussi exif_thumbnail() et getimagesize().
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

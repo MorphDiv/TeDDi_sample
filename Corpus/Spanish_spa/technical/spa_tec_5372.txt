@@ -1,0 +1,36 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Uso avanzado
+Opciones de la línea de órdenes
+Cuando ejecute & appname; desde la línea de órdenes, dispondrá de muchas opciones para abrir archivos de datos. Puede consultarlas ejecutando tellico --help.
+Uso: tellico [opciones-Qt] [opciones-KDE] [opciones] [archivo] Tellico - un gestor de colecciones para KDE Opciones: --nofile No reabrir el último archivo abierto --bibtex Importar & lt; filenamegt; como archivo bibtex --mods Importar & lt; filenamegt; como archivo MODS --ris Importar & lt; filenamegt; como archivo RIS Argumentos: archivo Archivo a abrir
+Interfaz & DBus;
+& appname; dispone de una interfaz & DBus; mínima que puede ser útil para scriptar o interactuar con una aplicación en ejecución desde la línea de órdenes. Como en todas las llamadas & DBus;, debe especificar el servicio con el que quiere comunicarse, y la interfaz particular. El nombre del servicio & DBus; es org. kde. tellico.
+Órdenes & DBus;
+Los dos objetos principales disponibles en la interfaz & DBus; de tellico son: Tellico y Colecciones.
+El objeto Tellico
+A continuación se muestra la lista completa de órdenes & DBus; del objeto tellico:
+bool importTellico(QString file, QString action) bool importBibtex(QString file, QString action) bool importMODS(QString file, QString action) bool importRIS(QString file, QString action) bool exportXML(QString file) bool exportZip(QString file) bool exportBibtex(QString file) bool exportHTML(QString file) bool exportCSV(QString file) bool exportPilotDB(QString file) QListlt; intgt; selectedEntries() QListlt; intgt; filteredEntries() void openFile(QString file) void setFilter(QString text) bool showEntry(int id)
+Para las cuatro órdenes de importación, el primer argumento es el archivo a importar y el segundo la acción. Dispone de tres acciones: replace, append, and merge. Four file formats are supported for importing: Tellico & XML; files, Bibtex files, MODS files, and RIS files.
+Puede abrir un nuevo archivo de datos mediante la orden openFile(). Debe especificar la ruta completa.
+Puede establecer un nuevo filtro mediante la orden setFilter(), que equivale a escribir en la caja de filtro de la ventana principal.
+Dado el ID de una entrada, showEntry() la seleccionará y mostrará sus detalles en la ventana principal.
+El objeto Colecciones
+A continuación se muestra la lista completa de órdenes & DBus; del objeto Colecciones:
+int addEntry() bool removeEntry(int entryID) QStringList allValues(QString fieldName) QStringList entryValues(int entryID, QString fieldName) QStringList selectedBibtexKeys() QString entryBibtexKey(int entryID) bool setEntryValue(int entryID, QString fieldName, QString value) bool addEntryValue(int entryID, QString fieldName, QString value)
+Ejemplos de & DBus;

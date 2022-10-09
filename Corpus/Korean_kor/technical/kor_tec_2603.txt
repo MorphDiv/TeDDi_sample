@@ -1,0 +1,28 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+ClibPDF lets you create PDF documents with PHP. It is available at FastIO but it isn't free software. You should definitely read the licence before you start playing with ClibPDF. If you cannot fullfil the licence agreement consider using pdflib by Thomas Merz, which is also very powerful. ClibPDF functionality and API is similar to Thomas Merz's pdflib but, according to FastIO, ClibPDF is faster and creates smaller documents. This may have changed with the new version 2.0 of pdflib. A simple benchmark (the pdfclock.c example from pdflib 2.0 turned into a php script) actually shows no difference in speed at all. The file size is also similar if compression is turned off. So, try them both and see which one does the job for you.
+This documentation should be read alongside the ClibPDF manual since it explains the library in much greater detail.
+Many functions in the native ClibPDF and the PHP module, as well as in pdflib, have the same name. All functions except for cpdf_open() take the handle for the document as their first parameter.
+Currently this handle is not used internally since ClibPDF does not support the creation of several PDF documents at the same time. Actually, you should not even try it, the results are unpredictable. I can't oversee what the consequences in a multi threaded environment are. According to the author of ClibPDF this will change in one of the next releases (current version when this was written is 1.10). If you need this functionality use the pdflib module.
+참고: The function cpdf_set_font() has changed since PHP 3 to support asian fonts. The encoding parameter is no longer an integer but a string.
+One big advantage of ClibPDF over pdflib used to be the possibility to create the pdf document completely in memory without using temporary files. It also provides the ability to pass coordinates in a predefined unit length. This is a handy feature but can be simulated with pdf_translate().
+Another nice feature of ClibPDF is the fact that any page can be modified at any time even if a new page has been already opened. The function cpdf_set_current_page() allows to leave the current page and presume modifying an other page.
+Most of the functions are fairly easy to use. The most difficult part is probably creating a very simple PDF document at all. The following example should help you to get started. It creates a document with one page. The page contains the text "Times-Roman" in an outlined 30pt font. The text is underlined.
+예 1. Simple ClibPDF Example
+The pdflib distribution contains a more complex example which creates a series of pages with an analog clock. Here is that example converted into PHP using the ClibPDF extension:
+예 2. pdfclock example from pdflib 2.0 distribution

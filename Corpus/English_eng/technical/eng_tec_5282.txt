@@ -1,0 +1,85 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 8.
+Variables
+Next
+The scope of a variable is the context within which it is defined.
+For the most part all PHP variables only have a single scope.
+This single scope spans included and required files as well.
+For example:
+?php $a = 1; include "b.inc";?
+Here the $a variable will be available within the included b.inc Here the $a variable will be available within the included b.inc script.
+However, within user-defined functions a local function scope is introduced.
+Any variable used inside a function is by default limited to the local function scope.
+For example:
+?php $a = 1; / * global scope * / function Test() {echo $a; / * reference to local scope variable * /} Test();?
+This script will not produce any output because the echo statement refers to a local version of the $a variable, and it has not been assigned a value within this scope.
+You may notice that this is a little bit different from the C language in that global variables in C are automatically available to functions unless specifically overridden by a local definition.
+This can cause some problems in that people may inadvertently change a global variable.
+In PHP global variables must be declared global inside a function if they are going to be used in that function.
+An example:
+?php $a = 1; $b = 2; function Sum() {global $a, $b; $b = $a + $b;} Sum(); echo $b;?
+The above script will output "3".
+By declaring $a and $b By declaring $a and $b global within the function, all references to either variable will refer to the global version.
+There is no limit to the number of global variables that can be manipulated by a function.
+A second way to access variables from the global scope is to use the special PHP-defined $GLOBALS array.
+The previous example can be rewritten as:
+?php $a = 1; $b = 2; function Sum() {$GLOBALS["b"] = $GLOBALS["a"] + $GLOBALS["b"];} Sum(); echo $b;?
+The $GLOBALS array is an associative array with the name of the global variable being the key and the contents of that variable being the value of the array element.
+Notice how $GLOBALS exists in any scope, this is because $GLOBALS is a superglobal.
+Here 's an example demonstrating the power of superglobals:
+?php function test_global() {/ / Most predefined variables aren't "super "and require / / 'global 'to be available to the functions local scope. global $HTTP_POST_VARS; print $HTTP_POST_VARS['name']; / / Superglobals are available in any scope and do / / not require'global'.
+Superglobals are available / / as of PHP 4.1.0 print $_POST[ 'name'];}?
+Another important feature of variable scoping is the static Another important feature of variable scoping is the static variable.
+A static variable exists only in a local function scope, but it does not lose its value when program execution leaves this scope.
+Consider the following example:
+?php function Test () {$a = 0; echo $a; $a++;}?
+This function is quite useless since every time it is called it sets $a to 0 and prints "0".
+The $a + + which increments the variable serves no purpose since as soon as the function exits the $a variable disappears.
+To make a useful counting function which will not lose track of the current count, the $a variable is declared static:
+?php function Test() {static $a = 0; echo $a; $a++;}?
+Now, every time the Test() function is called it will print the value of $a and increment it.
+Static variables also provide one way to deal with recursive functions.
+A recursive function is one which calls itself.
+Care must be taken when writing a recursive function because it is possible to make it recurse indefinitely.
+You must make sure you have an adequate way of terminating the recursion.
+The following simple function recursively counts to 10, using the static variable $count to know when to stop:
+?php function Test() {static $count = 0; $count++; echo $count; if ($count 10) {Test ();} $count--;}?
+The Zend Engine 1, driving PHP4, implements the static and global modifier for variables in terms of references.
+For example, a true global variable imported inside a function scope with the global statement actually creates a reference to the global variable.
+This can lead to unexpected behaviour which the following example addresses:
+?php function test_global_ref() {global $obj; $obj = new stdclass;} function test_global_noref() {global $obj; $obj = new stdclass;} test_global_ref(); var_dump($obj); test_global_noref(); var_dump($obj);?
+Executing this example will result in the following output:
+NULL object( stdClass)(0) {}
+A similar behaviour applies to the static statement.
+References are not stored statically:
+?php function get_instance_ref() {static $obj; echo "Static object: "; var_dump($obj); if (!isset($obj)) {/ / Assign a reference to the static variable $obj = new stdclass;} $obj - property++; return $obj;} function get_instance_noref() {static $obj; echo "Static object:"; var_dump($obj); if (!isset($obj)) {/ / Assign the object to the static variable $obj = new stdclass;} $obj - property++; return $obj;} $obj1 = get_instance_ref(); $still_obj1 = get_instance_ref(); echo "\n"; $obj2 = get_instance_noref(); $still_obj2 = get_instance_noref();?
+Executing this example will result in the following output:
+Static object:
+NULL Static object:
+NULL Static object:
+NULL Static object: object( stdClass)(1) {["property"]= int(1)}
+This example demonstrates that when assigning a reference to a static variable, it' s not remembered when you call the get_instance_ref() function a second time.
+Prev
+Home
+Next
+Predefined variables
+Up
+Variable variables

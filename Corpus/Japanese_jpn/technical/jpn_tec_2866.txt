@@ -1,0 +1,30 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 3 = 3.0.7, PHP 4)
+PHP は、恣意的にファイルをロックする汎用の手段を提供します。 (これは、アクセスする全プログラムが同一のロックの方法を使用する 必要があり、そうでない場合は動作しないことを意味します)
+flock() は、 fp を用いて 操作を行います。これは、オープンされたファイルポインタである必要が あります。 operation は、次の値のどれかとな ります。
+
+共有ロック(読み手)とするには、 operation に LOCK_SH(PHP 4.0.1より前の場合は1に設定します)をセットします。
+排他的ロック(書き手)とするには、 operation にLOCK_EX(PHP 4.0.1より前の場 合は2に設定します)をセットします。
+(共有または排他的)ロックを開放するには、 operation にLOCK_UN(PHP 4.0.1より前の場 合は3に設定します)をセットします。
+ロック中に flock() でブロックを行いたくない場 合は、 operation に LOCK_NB (PHP 4.0.1 より前の場合は 4 に設定します)を加えます。
+flock() により、(ほとんどのUNIXやWindowsさえ含む) ほとんど全てのプラットフォームで使用可能な簡易な読み手/書き手モデ ルが実現されます。ロックをブロックモードとする場合(EWOULDBLOCK errno 条件)にオプションの3番目の引数に TRUE を設定します。
+flock() は成功時に TRUE 、 (例えばロックが確保できなかった場合等の)エラー時に FALSE を返します。
+注意 flock() は、ファイルポインタを必要とするため、 (fopen() へ引数"w"または"w+"を指定して)書き込 みモードでオープンすることにより丸めるファイルにアクセス保護する 特別なロックファイルを使用する必要があるかもしれません。
+flock() はNFS及び他の多くのネットワークファイ ルシステムでは動作しません。詳細についてはオペレーティングシステ ムのドキュメントを確認下さい。
+いくつかのオーペレーティングシステムで flock() はプロセスレベルで実装されています。ISAPIのようなマルチスレッド 型のサーバーAPIを使用している場合、同じサーバーインスタンスの並 列スレッドで実行されている他のPHPスクリプトに対してファイルを保 護する際に flock() を使用することはできません!

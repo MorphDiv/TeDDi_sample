@@ -1,0 +1,41 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+これらの関数は、Berkeley DB 型データベースへのアクセス用の基本関数を 構成します。
+これらの関数は、複数のファイルベースのデータベース用のアブストラクション ・レイヤーです。その機能は、 Sleepycat Software's DB2 サポートのような近代的なデータベースの機能の サブセットに制限されています。(IBMのソフトウエアDB2と混同しないで 下さい。このデータベースは、 ODBC 関数 を通じてサポートされます。)
+各機能の動作は、使用するデータベースの実装に依存します。 dba_optimize() および dba_sync() の ような関数は、特定のデータベースでは動作しますが、他のデータベース では機能しません。サポートされるdbaハンドラをダウンロードし、イン ストールする必要があります。
+表 1DBAハンドラのリスト
+dba_open() または dba_popen() 関数を実行する際、引数にハンドラ名の一つを指定する必要があります。 実際に利用可能なハンドラのリストは、 phpinfo() または dba_handlers() をコールした際に表示されます。
+設定オプション --enable-dba=shared を使用することにより、dbm形式のデータベースをサポートする動的にロー ド可能なモジュールを有効にしてPHPを構築することができます。 また、PHPのconfigure行に設定スイッチ --with-XXXX を指定することにより、少なくとも以下のハンドラの一つのサポートを追加 する必要があります。
+表 2サポートされるDBAハンドラ
+注意 db2はdb3およびdb4とコンフリクトします。
+注意 db3はdb2およびdb4とコンフリクトします。
+注意 db4はdb2およびdb3とコンフリクトします。
+注意 これは、PHP 5.0.0で追加されました。これ以前のバージョンでは、 --with-db3=DIR を使用し、 DIRにdb4ライブラリのパスを指定する必要する必要があります。 バージョン4.3.0より前のPHPでは、4.1以降のバージョンのdbを使用 することはできません。
+注意 PHP 4.3.0以降、付属するcdbライブラリを使用するためにDIRを省略 することができます。この場合、cdb_makeハンドラが追加され、 cdbファイルを作成し、PHPのストリームを用いてネットワーク上の cdbファイルにアクセスできるようになります。
+注意 これは、古い dbm 拡張モジュール との互換性のためにPHP 4.3.0で追加されました。 このハンドラは、他のハンドラで必要とされるライブラリの１つを インストールすることができない場合、そしれ、付属するcdbハンド ラを使用することができない場合にのみ使用して下さい。
+注意 PHP 4.3.0までは、db2およびdb3ハンドラの両方を追加することができま したが、内部的に使用できるのは片方だけでした。 これは、両方のファイル形式を使用することができないことを意味します。 PHP 5.0.0以降、このような設定ミスを回避するよう設定の確認が行われます。
+この拡張モジュールは設定ディレクティブを全く 定義しません。
+関数 dba_open() および dba_popen() は、指定したデータベースファイルを アクセスするためのハンドルを返します。このハンドルは、他の全ての dba関数コールで使用されます。
+この拡張モジュールは定数を全く定義しませ ん。
+
+例 1DBAの例
+DBAは、バイナリセーフでありいかなる制限も受けません。 DBA は、使用するデータベースの実装による全ての制約を継承します。
+全てのファイルベースのデータベースは、完全に使用可能なものについて 新規に作成されたデータベースのファイルモードを設定する手段を、 提供する必要があります。 ファイルモードは、通常 dba_open() または dba_popen() に4番目の引数として渡されます。
+dba_firstkey() および dba_nextkey() 関数を用いて連続的に全てのエント リにアクセスすることができます。アクセスする際にデータベースを変 更できない可能性があります。
+
+例 2データベースへの連続アクセス

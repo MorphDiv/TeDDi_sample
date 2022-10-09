@@ -1,0 +1,28 @@
+# language_name_wals:	Russian
+# language_name_glotto:	Russian
+# ISO_6393:	rus
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Cyrl
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/ru.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+& J. Hall;
+Сетевые параметры и X
+Неверно настроенная сеть часто может служить причиной причиной медленной загрузки приложений & kde; или, в худшем случае, вообще не дать приложениям загрузиться. & X- Server; включает очень мощный сетевой интерфейс и потому очень сильно зависит от настройки сети.
+X использует имя хоста как для создания уникального ключа для входа в систему, так и для определения того, куда (через переменную $DISPLAY) отправить содержимое окна. Если ваш компьютер не знает своего собственного имени, он будет тратить много времени, пытаясь найти себя. И этого можно легко избежать, научив компьютер своему собственному имени.
+Проверьте файл / etc/ hosts и убедитесь, что в нём есть запись о localhost, которая находится в начале файла (после комментариев) и выглядит примерно так:
+127. 0. 0. 1 localhost
+Вы также должны добавить полное имя вашего компьютера с доменом, краткое имя и IP адрес (в случае, если компьютер имеет статический IP). Если IP назначается динамически с использованием DHCP, вы можете просто использовать адрес для устройства loopback.
+127. 0. 0. 1 hal. btl hal (для dhcp) 192. 168. 0. 1 hal. btl hal (статический)
+Убедитесь, что ваш брандмауэр не настроен на максимальную защиту и не останавливает пакеты для устройства loopback. Например, если в iptables правило по умолчанию параметра INPUT, связанного с этим устройством, установлено в значение, отличающееся от параметра > ACCEPT, то это может вызвать снижение скорости работы в X. Чтобы проверить это, вы должны набрать следующее:
+percnt; iptables- save | grep lo - A INPUT - i lo - j ACCEPT
+Правило - A INPUT - i lo - j ACCEPT должно всегда работать, по меньшей мере, если нет других ненастроенных правил (таких, как DROP на OUTPUT)

@@ -1,0 +1,53 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+Process Control support in PHP implements the Unix style of process creation, program execution, signal handling and process termination.
+Process Control should not be enabled within a webserver environment and unexpected results may happen if any Process Control functions are used within a webserver environment.
+This documentation is intended to explain the general usage of each of the Process Control functions.
+For detailed information about Unix process control you are encouraged to consult your systems documentation including fork( 2), waitpid(2) and signal(2) or a comprehensive reference such as Advanced Programming in the UNIX Environment by W.
+Richard Stevens (Addison-Wesley).
+PCNTL now uses ticks as the signal handle callback mechanism, which is much faster than the previous mechanism.
+This change follows the same semantics as using "user ticks".
+You use the declare() statement to specify the locations in your program where callbacks are allowed to occur.
+This allows you to minimize the overhead of handling asynchronous events.
+In the past, compiling PHP with pcntl enabled would always incur this overhead, whether or not your script actually used pcntl.
+There is one adjustment that all pcntl scripts prior to PHP 4.3.0 must make for them to work which is to either to use declare() on a section where you wish to allow callbacks or to just enable it across the entire script using the new global syntax of declare().
+Note:
+This extension is not available on Windows platforms.
+No external libraries are needed to build this extension.
+Process Control support in PHP is not enabled by default.
+You have to compile the CGI or CLI version of PHP with --enable-pcntl configuration option when compiling PHP to enable Process Control support.
+Note:
+Currently, this module will not function on non-Unix platforms (Windows).
+This extension has no configuration directives defined in php.ini.
+This extension has no resource types defined.
+The following list of signals are supported by the Process Control functions.
+Please see your systems signal( 7) man page for details of the default behavior of these signals.
+This example forks off a daemon process with a signal handler.
+Example 1.
+Process Control Example
+?php declare( ticks=1); $pid = pcntl_fork(); if ($pid == -1) {die("could not fork");} else if ($pid) {exit(); / / we are the parent} else {/ / we are the child} / / detatch from the controlling terminal if (!posix_setsid()) {die("could not detach from terminal");} / / setup signal handlers pcntl_signal(SIGTERM, "sig_handler"); pcntl_signal(SIGHUP, "sig_handler"); / / loop forever performing tasks while(1) {/ / do something interesting here} function sig_handler($signo) {switch($signo) {case SIGTERM: / / handle shutdown tasks exit; break; case SIGHUP: / / handle restart tasks break; default: / / handle all other signals}}?
+A look at the section about POSIX functions may be useful.
+Prev
+Home
+Next
+pg_update
+Up
+pcntl_exec

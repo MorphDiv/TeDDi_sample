@@ -1,0 +1,232 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Crear temas de bienvenida para & kdm;
+Esta sección describe la creación de temas para la pantalla de bienvenida. Por obtener ejemplos y capturas de pantalla, consulte los temas estándar instalados y los temas del sitio web de los temas.
+Visión general de los temas
+Los temas de & kdm; se pueden crear a través de un archivo XML que siga las especificaciones de $KDEDIR / share/ apps/ doc/ kdm/ greeter. dtd. Estos archivos se guardan en la carpeta $KDEDIR / share/ apps/ kdm/ themes/ nombre_tema. La carpeta del tema debería contener un archivo llamado KdmGreeterTheme. desktop con un formato similar a otro. desktop y con un aspecto similar a:
+[KdmGreeterTheme] Greeter=círculos. xml Name=Círculos Description=Tema con círculos azules Author=Bond, James Bond Copyright=(c) 2002 Bond, James Bond Screenshot=captura. png
+Los campos Nombre, Descripción, Autor y Copyright pueden traducirse de la misma forma que en otros archivos. desktop. Todos los archivos mencionados deberán incluirse en la carpeta del tema. El campo Screenshot apunta a un archivo que debería ser una captura de pantalla de 200x150 del tema en acción (también es correcto no tener ninguna, pero es más bonito para el usuario). La entrada Greeter apunta a un archivo XML que contiene la descripción del tema.
+Una vez que haya probado el tema, cree un archivo comprimido tar que contenga la carpeta tal y como debería instalarse en la carpeta $KDEDIR / share/ apps/ kdm/ themes. Éste es el formato estándar para distribuir temas para & kdm;.
+Descripción detallada del formato XML del tema
+Nodo de nivel superior
+Los temas para & kdm; son archivos XML con la marca & lt; greetergt; en la raíz. El nodo del nivel superior es un nodo de elemento del tipo rect con una distribución fija implícita.
+& lt; ?xml version="1.0 "encoding="UTF-8"? gt; & lt; !DOCTYPE greeter SYSTEM "greeter. dtd"gt; & lt; greetergt; [...] & lt; /greetergt;
+Dentro de la marca greeter pueden encontrarse los nodos que describen las siguientes secciones de este documento. Algunos de estos nodos son contenedores (nodos de distribución, nodos de elementos) que pueden contener otros nodos.
+Nodos de elementos
+Un tema & kdm; se crea especificando una jerarquía de elemento y nodos de distribución. Los nodos de elemento pueden tener los siguientes valores para el atributo type:
+button
+Un campo de botón. Este campo utiliza un botón Qt.
+También es posible hacer que cualquier otro elemento actúe como un botón estableciendo su atributo button a true. Sin embargo, es mejor utilizar botones Qt en los temas para & kdm; ya que son accesibles para los usuarios con discapacidades.
+entrada
+Un elemento de entrada como un editor de línea o un desplegable. Tenga en cuenta que simplemente es un lugar para los elementos Qt.
+label
+Una marca de texto. Debe contener bien un nodo text o un nodo stock para especificar el texto.
+list
+Un componente de navegador de caras.
+pixmap
+Imagen de puntos en un formato que Qt soporte, & eg;, PNG, JPEG, Tiff, etc.
+rect
+Un rectángulo plano.
+svg
+Una imagen vectorial en formato SVG.
+Por ejemplo: & lt; item type=quot; labelquot; gt; Un elemento que actúa como botón:
+& lt; item type=quot; rectquot; id=quot; boton_desconectarquot; button=quot; truequot; gt;.
+De forma predeterminada, la pantalla de acceso & kdm; desaparecerá después de la autentificación. Ésto puede dar como resultado un parpadeo entre la pantalla de identificación y la sesión. El atributo background permite a los usuario especificar qué elementos del tema constituyen el fondo de la imagen. Utilizarlo provocará que & kdm; elimine de la pantalla todos los elementos que no pertenezcan al fondo y represente los restantes elementos de background en la ventana de root. Se puede utilizar para crear una transición suave entre la pantalla de identificación y la sesión: & lt; item type=quot; rectquot; background=quot; truequot; gt; & lt; normal file="fondo. svg"/ gt; & lt; pos x=quot; 0quot; y=quot; 0quot; width=quot; 100%quot; height=quot; -75quot; /gt; & lt; /itemgt; Para utilizar un fondo diferente para la transición de acceso de la usada para la identificación, el tema debe especificar dos nodos de elementos (que pueden contener imágenes de mapas de puntos o svg, por ejemplo). El elemento que corresponde al fondo de bienvenida no debería tener la propiedad background mientras que el elemento que corresponde con el fondo de la transición debería incluir la propiedad background. Por ejemplo:
+& lt; ?xml version="1.0 "encoding=quot; UTF-8quot; ?gt; & lt; !DOCTYPE greeter SYSTEM & quot; greeter. dtdquot; gt; & lt; greetergt; & lt; item type=quot; rectquot; background=quot; truequot; gt; & lt; normal file="fondo_para_identificacion. svg" element="background"/ gt; & lt; pos x=quot; 0quot; y=quot; 0quot; width=quot; 100%quot; height=quot; 100%quot; /gt; & lt; /itemgt; & lt; item type=quot; rectquot; gt; & lt; normal file="fondo_de_bienvenida. svg"/ gt; & lt; pos x=quot; 0quot; y=quot; 0quot; width=quot; 100%quot; height=quot; 100%quot; /gt; & lt; /itemgt; [...] & lt; /greetergt;
+Cada elemento puede tener un nombre a través del atributo id. & kdm; reconoce algunos identificadores para dar a estos elementos una función especial:
+Los elementos button y los elementos con el atributo button=quot; truequot;.
+Los botones suelen desencadenar ciertas acciones. Además, & kdm; ocultará los botones cuyas acciones no estén disponibles por alguna razón.
+Id
+Acción
+chooser_button
+Ejecuta el selector XDMCP.
+disconnect_button
+Se desconecta de la sesión remota.
+session_button
+Abre el menú de selección de tipo de sesión.
+system_button
+Abre un menú capturar-todo con varias opciones y acciones, dependiendo de la configuración.
+elementos label
+& kdm; mostrará u ocultará estas etiquetas y establecerá su texto dependiendo del estado del diálogo de identificación.
+Función
+pam-error
+Muestra el mensaje Inicio de sesión fallido.
+Componentes de elementos empotrados
+& kdm; empotrará los componentes Qt particulares en estos elementos.
+user-entry
+Campo para introducir el nombre del usuario.
+pw-entry
+Campo para introducir la contraseña.
+domain-entry
+Algunos complementos de « conversación » utilizan este campo para solicitar un nombre de dominio. Si este campo está presente, los elementos relacionados encerrados deberían tener mostrar nodos con el tipo plugin-domain-entry.
+talker
+Este elemento debería ser del tipo rect. Representa el área « caliente » de la bienvenida: contiene los elementos label y entry que conciernen al proceso de identificación. Si un complemento de « conversación » no coincide con los elementos existentes que él necesita, intentará empotrar un componente complejo con su propia distribución en este elemento, es decir, sobrescribiría por completo el tema « talker ». Hablando estrictamete, los temas de & kdm; no necesitan proporcionar su propio diseño de « talker », ya que todos los complementos de identificación de & kdm; pueden hacer uso del elemento talker.
+userlist
+Este elemento debe ser del tipo list. Si la característica de la lista de usuarios está activada, & kdm; empotrará aquí la lista de usuarios. Sino, este elemento se ocultará.
+xconsole
+Este elemento debería ser del tipo rect. Si se utilizó y activó la característica de compilación xconsole, & kdm; empotrará aquí el componente de registro de la consola. Sino el elemento se ocultará.
+Otros elementos
+& kdm; mostrará u ocultará estos elementos dependiendo de la configuración y del estado actual de la bienvenida. & kdm; no impone el tipo de requisitos en ellos, pero suelen ser de un tipo particular.
+Mostrar solo cuando...
+timed-label
+... el tiempo de acceso está en progreso.
+caps-lock-warning
+... el bloqueo de mayúsculas esté activo.
+xauth-warning
+... el & X-Server; no requiere autorización de conexión X.
+userlist-rect
+... la lista de usuarios está activa. Anidando los elementos userlist dentro de uno, es posible crear algo como un marco alrededor de la lista y hacer que se active solo cuando se muestre la lista.
+xconsole-rect
+... crear xconsole está activada. Análogo a userlist-rect.
+Nodos contenedores de distribución
+Los nodos de la distribución aparecerán dentro de los nodos del elemento y también contendrán los nodos del elemento. El tipo del nodo de la distribución determina la colocación de sus nodos hijo. Un nodo de elemento puede contener un nodo de distribución de cada tipo.
+Nodos box
+Los nodos box colocan automáticamente a sus en una fila. Se especifican de la siguiente forma: & lt; box orientation=quot; alineación quot; min-width=quot; núm quot; min-height=quot; núm quot; xpadding=quot; núm quot; ypadding=quot; núm quot; spacing=quot; núm quot; homogeneous=quot; lógico quot; gt; Donde núm es el número de puntos y lógico significa true (verdadero) o false (falso). El valor alineación puede ser horizontal o vertical. Si deja cualquier atributo sin valor, el valor predeterminado será cero para los números, false (falso) para los lógicos y vertical para la alineación.
+El espaciado es la distancia entre los elementos hijo vecinos. El relleno es el margen exterior de la caja. Si la caja es homogénea, el espacio entre los hijos será el mismo.
+Nodos Fixed
+Fixed es un contenedor que sitúa la distribución de los hijos dentro de unas coordenadas precisas. El tamaño de este contenedor es el rectángulo más pequeño que contenga a todos los hijos. Fixed no tiene más atributos y por eso se usa como: & lt; fixedgt; A continuación sitúe los otros elementos con los nodos de posición correcta dentro de él.
+Nodos de posición
+Cada elemento puede especificar su posición y tamaño a través del nodo pos. Por ejemplo:
+& lt; pos x=quot; 0quot; y=quot; 4quot; width=quot; 100%quot; height=quot; 100%quot; /gt;
+Si no se especifica el tamaño, el tamaño será el « natural » del elemento, llamado tamaño de pista. Tenga en cuenta que no todos los elementos tienen un tamaño de pista práctico.
+Tanto el tamaño como la posición se puede suministrar en porcentajes y se calcularán respecto el tamaño del contenedor que los encierra. Para los elementos de nivel superior es el porcentaje de la pantalla completa. Añadiendo circunflejos (^) a la especificación del tamaño es posible modificarlo para que sea relativo al tamaño de los elementos que encierra.
+Si un elemento contiene una caja, width y height pueden especificarse para box identificando la anchura y altura de la caja, esto es, los elementos de la caja más el relleno.
+Se puede especificar la escala (scale) de la anchura (width) y la altura (height) lo que escalaría la imagen de acuerdo a la dimensión de su tamaño de pista. Utilícelo para preservar la relación de aspecto de las imágenes que se escalan automáticamente.
+Si el atributo expand está especificado como true (verdadero), este elemento se expandirá en la caja que lo encierra lo máximo posible (ocupará todo el espacio disponible).
+Si width o height son un número plano, un valor negativo representa un desplazamiento respecto del tamaño del contenedor que lo encierra. Tenga en cuenta que es posible especificar un desplazamiento positivo escribiendo dos signos menos.
+En cualquier caso es posible forzar el tamaño final de la imagen con los atributos min-width, min-height, max-width y max-height que se pueden especificar de la misma forma que width y height.
+Si x o y son un número plano, un valor negativo representa un desplazamiento respecto al borde inferior derecho, mientras que el valor predeterminado es respecto al borde superior izquierdo.
+También es posible especificar una posición dentro del elemento. Es lo que se llama ancla y puede ser c para centrar o uno de los siguientes: n, ne, e, se, s, sw, w y nw que se corresponden con los diferentes bordes/ esquinas correspondientes a un mapa topográfico. El valor predeterminado es nw, que se refiere a la esquina superior izquierda. Por ejemplo:
+& lt; pos x=quot; 10%quot; y=quot; 50%quot; anchor=quot; wquot; width=quot; 80%quot; height=quot; 95quot; /gt;
+Nodos mostrar
+Puede especificar el atributo del tipo para indicar si un determinado elemento solo debería mostrarse si el tipo es el definido. Prefijar el tipo con un signo de exclamación (!) invierte la condición. Los valores válidos incluidos son los siguientes:
+Tipo
+Mostrar si...
+chooser
+está permitido cambiar a la identificación remota.
+halt y reboot
+está permitido apagar el sitema.
+system
+sin condición (se establece siempre en & kdm;).
+plugin- nombre-entrada
+El complemento de « conversión » incluye el correspondiente campo de entrada.
+Por ejemplo:
+& lt; show type=quot; chooserquot; /gt;
+También puede especificar un valor min-screen-width o min-screen-height para indicar que un determinado elemento debería mostrarse solo si la resolución de la pantalla es al menos del tamaño especificado. Por ejemplo:
+& lt; show min-screen-height=quot; 768quot; /gt;
+Nodos normal/ activo/ iluminado
+El aspecto de la mayor parte de los tipos de elementos puede parametrizarse a través de las siguientes marcas:
+normal
+Estado normal.
+prelight
+Cuando el ratón se mantiene sobre el elemento.
+active
+Cuando se pulsa un botón del ratón sobre el elemento.
+El conjunto exacto de valores para los atributos depende del tipo de elemento:
+rect
+& lt; normal color=quot; #000000quot; alpha=quot; 0.0quot; /gt;
+Se puede omitir cualquier atributo, en cuyo caso se utilizará el valor predeterminado (el ejemplo representa los predeterminados). alpha es un número de coma flotante entre cero (transparente) y uno (opaco). color es una almohadilla seguida por un número de seis dígitos hexadecimales. El formato es « # rrvva ». El color también puede especificarse como un número hexadecimal de ocho dígitos, en el que los dos primero dígitos forman el valor alfa.
+label
+& lt; normal color=quot; #ffffffquot; alpha=quot; 1.0quot; font=quot; Sans 14quot; /gt;
+alpha y color son los mismos que para los elementos « rect ».
+font sigue el formato « lista-familia nbsp; opciones-estilo nbsp; tamaño ». Cada parte es opcional.
+lista-familia es una lista de familias de tipos de letra separada por comas como « helvetica », « monospace », etc.
+opciones-estilo es una lista de estilos de categorías, peso y estirar. Para cada categoría al menos una. El estilo puede ser normal (normal), italic (cursiva) u oblique (oblícua). El peso puede ser ultra-light (muy pesado), light (ligero), medium (medio), semi-bold (semi-negrita), bold (negrita), ultra-bold (muy negrita) o heavy (pesada). Se permite la compresión ultra-condensed (muy condensada), extra-condensed (extra-condensada), condensed (condensada), semi-condensed (semicondensada), normal (normal), semi-expanded (semi-expandida), expanded (expandida), extra-expanded (extra-expandida) y ultra-expanded (ultra-expandida).
+tamaño es cualquier número de coma flotante que represente el tamaño en puntos (1/ 72 pulgadas) o un entero seguido de px que represente el tamaño en puntos. El tamaño de los puntos es preferible, ya que es independiente de la resolución de la pantalla.
+Si cualquier atributo se queda fuera, se utilizarán los valores del nodo de estilo. Sino se ha especificado color del texto de la ventana se utilizará el blanco. El tipo de letra predeterminado es el configurado en & kdmrc;.
+pixmap
+svg
+& lt; normal file=quot; imagen. pngquot; tint=quot; #ddddddquot; alpha=quot; 1.0quot; /gt;
+file especifica el archivo que contiene la imagen. Los nombres de ruta relativos son relativos a la carpeta del tema.
+element especifia el identificador del elemento de un archivo SVG. Si está vacío, se representará la imagen completa.
+Para los nodos pixmap, & kdm; primero intenta abrir una archivo que coincida con nombrebase - anchura x altura. extensión basado en el nombre especificado, de forma que se utilice la imagen que proporcione la mejor calidad para la resolución utilizada.
+tint y alpha componen una especificación de color como en los elementos rect. Cada punto de las imágenes se multiplica con este componente de color.
+Nodos de estilo de componentes
+Esta marca hace posible cambiar el aspecto de las etiquetas y componentes Qt integrados en el tema, p. ej., edición de líneas, botones o la lista de usuarios. Los elementos hijo heredan la configuración del estilo, pero pueden sobrescribirla individualmente. Los valores predeterminados los toman de & kdmrc;.
+El atributo font define el tipo de letra para todos los componentes. Para los componentes que tengan un función de entrada puede ser sobrescrito con el atributo edit-font. Los tipos de letra se especifican de la misma forma que en los Fonts are specified the same way as in nodos normal/ activo/ iluminado.
+Normalmente, el motor de temas intenta eliminar cualquier marco de los componentes Qt, por eso el tema se muestra suavizado. En aquellos casos en que no sea esto lo que se desea, el valor del atributo frame se puede cambiar a true (verdadero).
+Es posible especificar prácticamente la paleta completa para los componentes tal y como se documenta en el sitio de Trolltech. Los nombres de los atributos se componen de un ámbito, un papel de color y un sufijo. Los posibles ámbitos son -en orden de prioridad creciente- all- para todos los grupos de color, no teniendo ámbito para los grupos de color; y active-, inactive- y disabled- para el respectivo grupo de color. Los roles de color soportados son window, window-text, base, alternate-base, text, bright-text, highlight, highlighted-text, button y button-text. El sufijo puede ser -color o -alpha con el significado equivalente a los nodos normal/ activo/ iluminado.
+Ejemplo:
+& lt; style edit-font=quot; Comic 16quot; text-color=quot; #ddddddquot; frame=quot; truequot; /gt;
+Nodos de color del navegador de caras
+Los nodos de color permiten sobrescribir el color del fondo de los elementos en el navegador de caras. labelcolor y altlabelcolor son esencialmente equivalentes a all-base-color respecto de all-alternate-base-color en los nodos de estilo. Si solo se especifica labelcolor se desactivan los demás elementos del fondo.
+& lt; color labelcolor=quot; #80ffffffquot; altlabelcolor=quot; #80f0f0f0quot; /gt;
+Nodos de texto
+Las marcas de texto las utilizan las etiquetas. Puede usarse para mostar texto localizado (si se omite el atributo xml: lang, se asume el POSIX local):
+& lt; text xml: lang=quot; frquot; gt; Optionlt; /textgt;
+Los nodos de texto pueden contener las siguientes secuencias de caracteres especiales que se traducirán de la siguiente forma:
+Secuencia
+Expansión
+%%
+El caracter%
+%c
+Reloj de pared con la hora y la fecha
+%d
+Nombre de la pantalla (variable de entorno DISPLAY)
+%h
+Nombre del servidor (salida de gethostname)
+%m
+Nombre de la máquina (salida de machine como parte de uname)
+%n
+Nombre del nodo (salida de nodename como parte de uname)
+%o
+Nombre de dominio (salida de getdomainname)
+%r
+Nombre de la versión (salida de release como parte de uname)
+%s
+Nombre del sistema (salida de sysname como parte de uname)
+%t
+Número de segundos restantes hasta que se realice el acceso, más la forma i18n apropiada del plural de « segundo »
+%u
+Nombre de usuario para la identificación temporizada
+_
+Hace que el siguiente caracter sea un acelerador
+%t y %u solo se pretenden utilizar internamente para mostrar el mensaje timed-label, que se actualiza automáticamente cada segundo.
+Nodos stock
+Algunas etiquetas localizadas comunes pueden especificarse a través de la marca stock. La marca text se ignora si se utiliza la marca stock. No debería utilizar las etiquetas stock más que para situar las traducciones en los temas. Ésto conduce a tiempos de carga más reducidos y mejores traducciones. Son válidos los siguientes valores:
+Bloqueo de mayúsculas activado
+chooser
+Selecto_r de XDMCP
+quit
+_Salir
+disconnect
+Descon_ectar
+halt
+Apa_gar
+language
+_Idioma
+session
+_Tipo de sesión
+reboot
+Re_iniciar
+system
+_Menú
+El usuario %u se identificará en %t
+domain-label
+_Dominio:
+username-label
+Nombre_usuario:
+password-label
+_Contraseña:
+welcome-label
+Bienvenido a %h
+& lt; stock type=quot; welcome-labelquot; /gt;
+Nodos Buddy
+Los elementos que no provocan directamente una acción pueden asignarse como buddy. El buddy da una entrada cuando se activa el elemento (se pulsa sobre él o el acelerador label).
+El buddy se referencia con el identificador a través del atributo idref. Obviamente, se le debe dar un id. Ejemplo:
+& lt; item type=quot; labelquot; gt; & lt; stock type=quot; username-labelquot; /gt; & lt; buddy idref=quot; user-entryquot; /gt; [...] & lt; /itemgt; [...] & lt; item type=quot; entryquot; id=quot; user-entryquot; gt; [...] & lt; /itemgt;

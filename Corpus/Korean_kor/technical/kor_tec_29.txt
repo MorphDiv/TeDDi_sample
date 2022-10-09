@@ -1,0 +1,54 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP can be used to access COM and DCOM objects on Win32 platforms.
+1. I have built a DLL to calculate something. Is there any way to run this DLL under PHP?
+If this is a simple DLL there is no way yet to run it from PHP. If the DLL contains a COM server you may be able to access it if it implements the IDispatch interface.
+2. What does 'Unsupported variant type: xxxx (0xxxxx)' mean?
+There are dozens of VARIANT types and combinations of them. Most of them are already supported but a few still have to be implemented. Arrays are not completely supported. Only single dimensional indexed only arrays can be passed between PHP and COM. If you find other types that aren't supported, please report them as a bug (if not already reported) and provide as much information as available.
+3. Is it possible manipulate visual objects in PHP?
+Generally it is, but as PHP is mostly used as a web scripting language it runs in the web servers context, thus visual objects will never appear on the servers desktop. If you use PHP for application scripting e.g. in conjunction with PHP-GTK there is no limitation in accessing and manipulating visual objects through COM.
+4. Can I store a COM object in a session?
+No, you can't. COM instances are treated as resources and therefore they are only available in a single script's context.
+5. How can I trap COM errors?
+Currently it's not possible to trap COM errors beside the ways provided by PHP itself (@, track_errors,..), but we are thinking of a way to implement this.
+6. Can I generate DLL files from PHP scripts like i can in Perl?
+No, unfortunately there is no such tool available for PHP.
+7. What does 'Unable to obtain IDispatch interface for CLSID {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}' mean?
+This error can have multiple reasons:
+
+
+the requested component doesn't implement the IDispatch interface
+8. How can I run COM object from remote server?
+Exactly like you run local objects. You only have to pass the IP of the remote machine as second parameter to the COM constructor.
+Make sure that you have set com.allow_dcom=true in your php.ini.
+9. I get 'DCOM is disabled in C:\path...\scriptname.php on line 6', what can I do?
+Edit your php.ini and set com.allow_dcom=true.
+10. Is it possible to load/manipulate an ActiveX object in a page with PHP?
+This has nothing to do with PHP. ActiveX objects are loaded on client side if they are requested by the HTML document. There is no relation to the PHP script and therefore there is no direct server side interaction possible.
+11. Is it possible to get a running instance of a component?
+This is possible with the help of monikers. If you want to get multiple references to the same word instance you can create that instance like shown:
+This will create a new instance if there is no running instance available or it will return a handle to the running instance, if available.
+12. Is there a way to handle an event sent from COM object?
+Starting in PHP 4.3.0, you can define an event sink and bind it as shown in the example below. You can use com_print_typeinfo() to have PHP generate a skeleton for the event sink class.
+예 52-1. COM event sink example
+13. I'm having problems when trying to invoke a method of a COM object which exposes more than one interface. What can I do?
+The answer is as simple as unsatisfying. I don't know exactly but i think you can do nothing. If someone has specific information about this, please let me know:)
+14. So PHP works with COM, how about COM+?
+COM+ extends COM by a framework for managing components through MTS and MSMQ but there is nothing special that PHP has to support to use such components.
+15. If PHP can manipulate COM objects, can we imagine to use MTS to manage components resources, in conjunction with PHP?
+PHP itself doesn't handle transactions yet. Thus if an error occurs no rollback is initiated. If you use components that support transactions you will have to implement the transaction management yourself.

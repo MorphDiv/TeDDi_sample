@@ -1,0 +1,47 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 14.
+Classes and Objects
+Next
+Creating references within the constructor can lead to confusing results.
+This tutorial-like section helps you to avoid problems.
+class Foo {function Foo($name) {/ / create a reference inside the global array $globalref global $globalref; $globalref[] = $this; / / set name to passed value $this - setName($name); / / and put it out $this - echoName();} function echoName() {echo "br ",$this - name;} function setName($name) {$this - name = $name;}}
+Let us check out if there is a difference between $bar1 which has been created using the copy = operator and $bar2 which has been created using the reference = operator...
+$bar1 = new Foo( 'set in constructor'); $bar1 - echoName(); $globalref[0] - echoName(); / * output: set in constructor set in constructor set in constructor * / $bar2 = new Foo('set in constructor'); $bar2 - echoName(); $globalref[1] - echoName(); / * output: set in constructor set in constructor set in constructor * /
+Apparently there is no difference, but in fact there is a very significant one: $bar1 and $globalref[ 0] are _NOT_ referenced, they are NOT the same variable.
+This is because "new" does not return a reference by default, instead it returns a copy.
+Note:
+There is no performance loss (since PHP 4 and up use reference counting) returning copies instead of references.
+On the contrary it is most often better to simply work with copies instead of references, because creating references takes some time where creating copies virtually takes no time (unless none of them is a large array or object and one of them gets changed and the other(s) one(s) subsequently, then it would be wise to use references to change them all concurrently).
+/ / now we will change the name. what do you expect? / / you could expect that both $bar1 and $globalref[ 0] change their names... $bar1 - setName('set from outside'); / / as mentioned before this is not the case. $bar1 - echoName(); $globalref[0] - echoName(); / * output: set from outside set in constructor * / / / let us see what is different with $bar2 and $globalref[1] $bar2 - setName('set from outside'); / / luckily they are not only equal, they are the same variable / / thus $bar2 - name and $globalref[1] - name are the same too $bar2 - echoName(); $globalref[1] - echoName(); / * output: set from outside set from outside * /
+Another final example, try to understand it.
+class A {function A($i) {$this - value = $i; / / try to figure out why we do not need a reference here $this - b = new B($this);} function createRef() {$this - c = new B($this);} function echoValue() {echo "br" ,"class ",get_class($this) ,': ',$this - value;}} class B {function B ($a) {$this - a = $a;} function echoValue() {echo "br" ,"class ",get_class($this) ,': ',$this - a - value;}} / / try to undestand why using a simple copy here would yield / / in an undesired result in the *-marked line $a = new A(10); $a - createRef(); $a - echoValue(); $a - b - echoValue(); $a - c - echoValue(); $a - value = 11; $a - echoValue(); $a - b - echoValue(); / / * $a - c - echoValue(); / * output: class A:
+10 class B:
+10 class B:
+10 class A:
+11 class B:
+11 class B:
+11 * /
+Prev
+Home
+Next
+The magic functions __sleep and __wakeup
+Up
+References Explained

@@ -1,0 +1,25 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP 4 features a redesigned initialization file support. It's now possible to specify default initialization entries directly in your code, read and change these values at runtime, and create message handlers for change notifications.
+To create an .ini section in your own module, use the macros PHP_INI_BEGIN() to mark the beginning of such a section and PHP_INI_END() to mark its end. In between you can use PHP_INI_ENTRY() to create entries.
+The permissions are grouped into three sections: PHP_INI_SYSTEM allows a change only directly in the php.ini file; PHP_INI_USER allows a change to be overridden by a user at runtime using additional configuration files, such as .htaccess; and PHP_INI_ALL allows changes to be made without restrictions. There's also a fourth level, PHP_INI_PERDIR, for which we couldn't verify its behavior yet.
+The fourth parameter consists of a pointer to a change-notification handler. Whenever one of these initialization entries is changed, this handler is called. Such a handler can be declared using the PHP_INI_MH macro:
+The change-notification handlers should be used to cache initialization entries locally for faster access or to perform certain tasks that are required if a value changes. For example, if a constant connection to a certain host is required by a module and someone changes the hostname, automatically terminate the old connection and attempt a new one.
+Access to initialization entries can also be handled with the macros shown in 표 39-1.
+표 39-1. Macros to Access Initialization Entries in PHP
+Finally, you have to introduce your initialization entries to PHP. This can be done in the module startup and shutdown functions, using the macros REGISTER_INI_ENTRIES() and UNREGISTER_INI_ENTRIES():

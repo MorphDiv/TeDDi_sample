@@ -1,0 +1,578 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual del script & kdesvn-build;
+Michael Pyne
+michael. pyne@kdemail. net
+Carlos Woelz
+carloswoelz@imap-mail. com
+Marcos Fouces Lago mfouces@yahoo. es Traductor Miguel Pérez Ibars mpi79470@alu. um. es Traductor
+Michael Pyne
+Carlos Woelz
+& kdesvn-build; es un script que compila e instala & kde; directamente a partir del código fuente descargado desde el repositorio & subversion; de & kde;.
+KDE
+kdesdk
+SVN
+Subversion
+Desarrollo de KDE
+Introducción
+& kdesvn-build; es un script para ayudar a los usuarios a instalar kde; desde el repositorio subversion; de código fuente.
+Aquí se documenta las opciones del archivo de configuración y la sintaxis de & kdesvn-build;, sus opciones en la línea de órdenes, funcionalidades y una visión general de todos los pasos necesarios para compilar & kde; a partir de su código fuente, incluyendo lo que deberá hacer con otras herramientas, es decir, lo que & kdesvn-build; no hace automáticamente.
+Primeros pasos
+En este capítulo se muestra el uso de & kdesvn-build; para descargar módulos del repositorio de & kde; y compilarlos. También se explica un poco la estructura del repositorio & subversion; de & kde; y los preparativos a realizar antes de ejecutar este script.
+Todos los temas de este capítulo están explicados con más detalle en el artículo Building & kde; 4 from Source (en inglés) de la web de kde; Techbase. Si es la primera vez que compila & kde; es recomendable que lo lea antes o lo use como medio de referencia. Encontrará información detallada sobre la herramientas de empaquetado, problemas de compilación y mucha información para usar su nuevo & kde;.
+Preparando el sistema para compilar & kde;.
+Configure una nueva cuenta de usuario
+Es aconsejable que descargue y compile & kde; desde una cuenta de usuario corriente. Si ya tiene instalado & kde; en su sistema, lo mejor es que cree una cuenta de usuario exclusivamente para ejecutar el nuevo & kde;. La ventaja de ésto es que no será posible estropear el sistema base pudiendo entrar con su cuenta habitual si algo sale mal.
+Más tarde, si lo desea, puede realizar una instalación a nivel de sistema. Este documento no cubre esta posibilidad. Si tiene intención de hacerlo seguramente ya sabrá bien lo que hace. Si no, quizá quiera consultar la documentación o sitios web de ayuda para su distribución con el fin de preparar y utilizar la instalación del sistema correctamente.
+Asegúrese de que su sistema está preparado para compilar el código de & kde;.
+Antes de usar el guión & kdesvn-build; (o cualquier otra estrategia de compilación) deberá instalar las herramientas y bibliotecas de desarrollo de & kde;. Puede ver una lista completa de las herramientas necesarias en la página Requisitos de compilación de & kde;. Los requisitos para la serie & kde; 4 pueden obtenerse en la base tecnológica de KDE.
+A continuación se muestra una lista con algunas de las cosas que necesitará:
+Si está compilando & kde; 3, necesitará GNU Autotools (es decir, & automake; y & autoconf;).
+Si está compilando & kde; 4, necesitará & cmake;. La versión requerida variará dependiendo de qué versión de & kde; 4 esté compilando. Consulte TechBase para obtener las especificaciones.
+El cliente & subversion; incluyendo soporte para HTTP seguro (https). Para asegurarse de que dispone de dicho soporte puede ejecutar svn --version. Si la salida indica que puede manejar el esquema https (para poder escribir en kde. svn. org) o el svn (para accesor de solo lectura a anonsvn. kde. org) debería poder continuar.
+El compilador gcc con soporte para C++. Las versiones 3.3 o superior son las que están mejor soportadas.
+No olvide echar un vistazo a la página Requisitos de compilación de & kde; para asegurarse de incluir cualquier otra biblioteca necesaria.
+Una excepción es la biblioteca & Qt;. & kdesvn-build; instalará habitualmente una copia de & Qt; sin importar si la tiene ya instalada o no, por lo que no es necesario que la tenga. Si no desea utilizar la copia de & Qt;, necesitará hacer lo siguiente:
+Asegúrese de eliminar el módulo qt-copy de su archivo de configuración, puesto que no lo necesitará y el tenerlo hará que el tiempo de compilación se incremente.
+Cambie la configuración de la opción qtdir en su archivo de configuración para que apunte a la ubicación de & Qt; en su sistema. Normalmente, ésto es equivalente a establecer el valor de la variable $QTDIR para su sistema.
+Si aún no tiene & Qt; instalado, instálelo, incluyendo cualquier paquete -dev o -devel necesario. Necesitará al menos la versión 3.3 de & Qt; para generar & kde; 3.5, o & Qt; 4.4 si está generando & kde; 4.
+Si está compilando & kde; 4 se recomienda utilizar la versión qt-copy de & Qt;, asegurándose de aplicar los parches recomendados (ésta es la configuración predeterminada, controlada por la opción apply-qt-patches).
+Algunos de estos paquetes están divididos en paquetes que contienen bibliotecas (o programas o utilidades), y paquetes de desarrollo. Necesitará al menos el programa o biblioteca y su correspondiente paquete de desarrollo. Si tiene dudas, lo mejor es instalarlo todo. Las bibliotecas que necesitará dependerán de los modulos que pretenda compilar, puesto que cada módulo tiene sus propios requerimientos. En la base tecnológica de & kde; puede encontrar más detalles acerca de las herramientas y técnicas específicas utilizadas para instalar así como los programas necesarios.
+Configurar & kdesvn-build;
+Instalar & kdesvn-build;
+Con toda probabilidad, ya dispondrá de una versión de & kdesvn-build; instalada en su sistema. De lo contrario, puede descargarla de la página principal de & kdesvn-build;, o bien encontrarla en el repositorio del código fuente de & kde;.
+& kdesvn-build; se incluye con el módulo kdesdk, y éste módulo suele venir ya instalado por las distribuciones. Si ha descargado & kdesvn-build; asegúrese de que está utilizando la versión descargada. Puede utilizar la opción --version para asegurarse de que está ejecutando la versión que desea.
+Para descargar & kdesvn-build; de su página principal, vaya a la página principal de & kdesvn-build; y descargue la versión apropiada, que se encontrará empaquetada en un archivo comprimido, el cual puede extraer usando & ark; o tar. El contenido del archivo incluye el propio & kdesvn-build; y un archivo de configuración de ejemplo (kdesvn-buildrc-sample).
+También puede obtener & kdesvn-build; del repositorio de código fuente, ubicado en: http: / /websvn. kde. org/ trunk/ KDE/ kdesdk/ scripts/. Ésta carpeta contiene los scripts del kit de desarrollo de software (Software Development Kit) de & kde;, que es donde reside & kdesvn-build;. Haga click en la entrada kdesvn-build para ir a la página donde poder descargar la última revisión. Cuando lo haga, guarde el script en un lugar conveniente de su disco duro. Haga lo mismo para kdesvn-buildrc-sample si así lo necesita.
+No importa la técnica que utilice, necesitará asegurarse de que el archivo kdesvn-build sea ejecutable. Por conveniencia, también debería colocarlo en una carpeta que esté contenido en la variable de entorno PATH. De otra manera, podría obtener mensajes diciéndole que la orden no se ha encontrado en su sistema, o que debió ejecutar una versión instalada anteriormente por error.
+Prepare el archivo de configuración
+A pesar de que & kdesvn-build; no necesita crear un archivo de configuración éste hace el trabajo mucho más sencillo. Utilizando un archivo de configuración, puede controlar qué módulos están instalados, o eliminar módulos que no desee instalar. & kdesvn-build; de forma predeterminada instala una instalación de & kde; práctica utilizando modificadores de instalación genéricos, que pueden ser diferentes de aquellos que necesita. Por ello es mejor utilizar un archivo de configuración.
+El archivo de configuración debería llamarse. kdesvn-buildrc. Este archivo ha de instalarse en la carpeta personal (~/), y debe contener todos los datos de configuración requeridos para que el script se ejecute, como opciones de configuración, opciones de compilación, ubicación del código fuente, la carpeta destino de la instalación (prefijo), los módulos que deberían compilarse, & etc;. Los datos de configuración predeterminados se facilitan en el archivo kdesvn-buildrc-sample, que puede copiar encima de ~/. kdesvn-buildrc y después editarlo.
+Puede encontrar más información sobre la sintaxis del archivo de configuración en y en.
+Estableciendo los datos de configuración
+Para usar & kdesvn-build; deberá tener en su carpeta personal un archivo llamado. kdesvn-buildrc en el que se definan las opciones generales así como los módulos que desea descargar y generar.
+Es posible utilizar diferentes archivos de configuración para & kdesvn-build;, tal y como se describe en. Si necesita utilizar múltiples archivos de configuración, consulte esa sección. Aquí asumiremos que el archivo de configuración está guardado en ~/. kdesvn-buildrc.
+La manera más sencilla de crear un archivo de configuración es usar el archivo kdesvn-buildrc-sample como plantilla y cambiar las opciones globales para que se ajusten a sus necesidades. También puede cambiar la lista de modulos que desea generar.
+Las opciones predeterminadas deberían ser lo suficientemente apropiadas para realizar la compilación de & kde;. Algunas de las opciones que podría querer modificar son:
+binpath, para cambiar la lista de carpetas en las que se buscarán las órdenes. Tiene exactamente el mismo significado que la variable PATH del shell.
+use-stable-kde permite cambiar la versión predeterminada para compilar los módulos de & kde;. De forma predeterminada & kdesvn-build; compilará la versión trunk de & kde; (en estos momentos & kde; 4). Si desea compilar la última versión estable de & kde; en lugar de utilizar los paquetes de su distribución (por el momento la versión estable es la rama & kde; 3.5) asigne a esta opción el valor true (verdadero).
+kdedir, que cambia la carpeta en la que se instala & kde;. La carpeta predeterminada es ~/ kde, que es una instalación para un sólo usuario.
+qtdir, que especifica la carpeta de la instalación de & Qt; a utilizar. La opción predeterminada es usar el módulo qt-copy del repositorio & subversion; de & kde;. (~/ kdesvn/ build/ qt-copy).
+Para las versiones de Qt que soporte la instalación, controlará dónde se instalará qt-copy.
+svn-server, que selecciona la & url; de donde descargar el código fuente. Le será útil si es un desarrollador con una cuenta & subversion; en & kde;.
+Después de la sección global se encuentra una lista de módulos a compilar, compuesta por líneas del estilo module... end module. Compruebe si los módulos de la lista son los que realmente desea compilar. Las opciones predeterminadas del archivo kdesvn-buildrc-sample deberían bastar para obtener una instalación de & kde; bastante completa. Guarde los resultados en el archivo. kdesvn-buildrc dentro de su carpeta personal.
+Si desea personalizar su archivo. kdesvn-buildrc, consulte para obtener información detallada sobre todas las opciones de configuración.
+Uso del script & kdesvn-build;
+Ahora ya está preparado para ejecutar el script. Desde una ventana de terminal, identifíquese con el usuario que utilizará para compilar & kde; y ejecute el script:
+percnt; su - nombre-usuario percnt; kdesvn-build
+Ahora, el script debería comenzar a descargar el código fuente y compilarlo. Dependiendo de cuántos módulos esté descargando, es posible que & kdesvn-build; no tenga éxito la primera vez que compile & kde;. ¡No desespere!
+& kdesvn-build; registra la salida de cada orden que va ejecutando. De forma predeterminada, los archivos de registro se guardan en ~/ kdesvn/ log. Para ver la causa de un error para un cierto módulo durante la última ejecución de & kdesvn-build;, normalmente es suficiente con mirar en ~/ kdesvn/ log/ latest/ nombre-modulo / error. log.
+En ese archivo, verá el error que originó el fallo de compilación para ese módulo. Si el archivo dice (al final) que le faltan algunos paquetes, pruebe a instalar el paquete (incluyendo cualquier paquete -dev apropiado) antes de intentar compilar ese módulo, y pasar la opción --reconfigure después de instalar los paquetes que faltan.
+O si el error parece ser un error de compilación entonces es probable que se produzca un error con las fuentes de & kde;, que esperamos se resolverá en unos días. Si en un espacio de tiempo el problema sigue persistiendo, no dude en enviar un correo kde-devel@kde. org (puede que necesite subscribirse primero) informando del fallo de compilación.
+Puede encontrar más ejemplos de errores habituales y sus soluciones, así como consejos generales y estrategias para compilar & kde; en el artículo Building & kde; from Source Step by Step Guide.
+Para más información acerca de las posibilidades de registro de & kdesvn-build;, vea.
+Preparando el sistema para ejecutar su nuevo & kde;.
+Asumiendo que usted está usando un usuario dedicado para compilar & kde; y que ya tiene una versión de & kde; instalada, ejecutar su nuevo & kde; puede ser algo delicado, puesto que el nuevo & kde; tiene que tomar precedencia sobre el antiguo. Cambie las variables de entorno para asegurase de que lo hace.
+Cambiando las preferencias de su perfil de inicio
+. bash_profile es el archivo de preferencias del usuario para el popular intérprete de órdenes bash utilizado por muchas distribuciones de & Linux;. Si utiliza un intérprete diferente, tal vez necesite ajustar los ejemplos dados en esta sección a su intérprete particular.
+Abra o cree el archivo. bash_profile en su carpeta personal con su editor favorito y añada al final del archivo: Si está compilando el módulo qt-copy (lo hará de forma predeterminada), añada en su lugar: QTDIR=(ruta a la carpeta de qt) # Por omisión ~/ kdesvn/ build/ qt-copy. KDEDIR=(ruta a la carpeta de kde) # Por omisión ~/ kde. KDEDIRS=$KDEDIR PATH=$KDEDIR/ bin: $QTDIR/ bin: $PATH MANPATH=$QTDIR/ doc/ man: $MANPATH # Actúa apropiadamente si no se ha establecido un valor para LD_LIBRARY_PATH. if [-z $LD_LIBRARY_PATH]; then LD_LIBRARY_PATH=$KDEDIR/ lib: $QTDIR/ lib else LD_LIBRARY_PATH=$KDEDIR/ lib: $QTDIR/ lib: $LD_LIBRARY_PATH fi export QTDIR KDEDIRS PATH MANPATH LD_LIBRARY_PATH o, si no está compilando qt-copy (y está usando su propio & Qt; en su lugar), añada lo siguiente:
+KDEDIR=(ruta a la carpeta de kde) # Como ~/ kde por defecto. KDEDIRS=$KDEDIR PATH=$KDEDIR/ bin: $QTDIR/ bin: $PATH # Actúa apropiadamente si la variable LD_LIBRARY_PATH no tiene ningún valor. if [-z $LD_LIBRARY_PATH]; then LD_LIBRARY_PATH=$KDEDIR/ lib else LD_LIBRARY_PATH=$KDEDIR/ lib: $LD_LIBRARY_PATH fi export KDEDIRS PATH LD_LIBRARY_PATH
+Si no está usando un usuario dedicado, defina un $KDEHOME distinto para su nuevo entorno en su. bash_profile:
+export KDEHOME="${HOME}/. kde-svn "# Lo crea si lo necesita [! -e ~/. kde-svn] & amp; mkdir ~/. kde-svn
+Si más tarde el menú K se encuentra vacío o demasiado lleno con las aplicaciones de su distribución, tal vez tenga que establecer las variables de entorno XDG en su. bash_profile:
+XDG_CONFIG_DIRS="/ etc/ xdg "XDG_DATA_DIRS="${KDEDIR}/ share: / usr/ share" export XDG_CONFIG_DIRS XDG_DATA_DIRS
+Iniciando & kde;
+Una vez que ha ajustado las preferencias de su entorno para usar el & kde; adecuado, es importante asegurar también que utiliza el script startkde apropiado.
+Abra el archivo de texto. xinitrc en su carpeta personal, o créelo si es necesario. Añada la siguiente línea:
+exec ${KDEDIR}/ bin/ startkde
+En algunas distribuciones, puede ser necesario realizar los mismos pasos con el archivo. xsession, que se encuentra también en su carpeta personal. Ésto ocurre así especialmente cuando está utilizando un gestor gráfico de sesiones como & kdm;, gdm, o xdm.
+Ahora ya puede iniciar su nuevo & kde;: en sistemas & BSD; y & Linux; con soporte para terminal virtual, se utilizan las combinaciones de teclas Ctrl; Alt; F1... Ctrl; Alt; F12 para cambiar entre las consolas virtuales de la 1 a la 12. Ésto le permite ejecutar más de un entorno de escritorio al mismo tiempo. Las seis primeras terminales son terminales de texto y las seis siguientes son terminales gráficas.
+Si cuando arranque su ordenador se le muestra el gestor gráfico de sesiones, puede usar su nuevo entorno & kde;, incluso si no aparece listado como opción. La mayoría de gestores gráficos, incluyendo & kdm; ofrecen la opción de usar una sesión personalizada cuando entra al sistema. Con esta opción, la configuración de su sesión se toma del archivo. xsession que se encuentra en su carpeta personal. Si ya ha modificado este archivo como se explicó anteriormente, esta opción debería cargar su nueva instalación de & kde;.
+Si no es así, hay algo más que puede probar que suele funcionar: pulse Ctrl; Alt; F2 y le aparecerá un terminal de texto. Identifíquese con su usuario dedicado y escriba:
+startx -- :1
+Puede ejecutar su nuevo entorno & kde; y el antiguo al mismo tiempo. Para ello, entre al sistema con su usuario habitual e inicie el entorno & kde; estable. Después, pulse Ctrl; Alt; F2 (o F1, F3, etc..), y podrá ver una terminal de texto. Identifíquese en el sistema con el usuario dedicado y escriba:
+Puede volver al escritorio & kde; de su usuario regular pulsando la tecla de acceso rápido correspondiente al escritorio en ejecución. Ésta suele ser Ctrl; Alt; F7, aunque puede necesitar usar F6 o F8 en su lugar. Para regresar a la versión de & kde; compilada por & kdesvn-build; puede usar la misma secuencia, aunque cambiando la tecla de función siguiente. Por ejemplo, si necesitó pulsar Ctrl; Alt; F7 para cambiar a su versión habitual de & kde;, necesitaría pulsar Ctrl; Alt; F8 para volver a la versión de & kde; compilada por & kdesvn-build;.
+Características del script
+Visión general de las características
+Las características de & kdesvn-build; incluyen:
+Soporte de distintos niveles de detalle en los mensajes de salida, que van desde prácticamente nada hasta un completo nivel de depurado.
+& kdesvn-build;, con la asistencia del sitio web de kdesvn-build y el servidor FTP de & kde; (FTP desde & kdesvn-build; 1.4), permite descargas rápidas de algunos módulos. Si el módulo que está descargando ya estaba empaquetado en el sitio web, kdesvn-build descargará este paquete y lo preparará para ser utilizado en su equipo.
+Esta opción es más rápida, y ayuda a aliviar la carga en los servidores de kde. org que ofrecen acceso anónimo al repositorio de & subversion;.
+Otra forma de aceleración es proporcionar un proceso de compilación para un módulo tan pronto como el código fuente para este módulo se haya descargado (disponible desde la versión 1.6).
+Dispone de un excelente soporte para el módulo qt-copy, incluyendo la posibilidad de corregir fallos y aplicar parches a dicho módulo.
+& kdesvn-build; escribe la salida coloreada..
+& kdesvn-build; no necesita un GUI presente para funcionar. De esta manera, puede compilar & kde; sin necesitar un entorno gráfico alternativo.
+Permite establecer opciones predeterminadas para todos los módulos (como opciones de compilación o de configuración). Tales opciones pueden cambiarse también para algunos módulos específicos.
+Además, & kdesvn-build; añadirá los indicadores especiales apropiados para ahorrarle posibles errores y problemas que puedan surgir de escribirlos usted mismo.
+& kdesvn-build; puede descargar una rama o etiqueta específica de un módulo. También puede asegurarse de que se está descargando una revisión específica de un módulo.
+& kdesvn-build; puede cambiar automáticamente de carpeta fuente para descargar un repositorio diferente, una rama o una etiqueta. Esto se produce automáticamente cuando cambia una opción que cambia la URL del repositorio a utilizar, pero puede utilizar la opción --svn-only para permitir que & kdesvn-build; sepa que es aceptable este cambio.
+& kdesvn-build; puede descargar sólo partes de un módulo, para aquellas situaciones en las que sólo necesita un programa de un módulo de gran tamaño.
+Para desarrolladores: & kdesvn-build; le avisará si está utilizando svn+ssh: / / ssh-agent y no está ejecutándose, puesto que ésto hará que & ssh; le pida continuamente la misma contraseña.
+Puede enviar informes de error por correo electrónico a un usuario.
+Puede eliminar la carpeta de compilación de un módulo después de su instalación para ahorrar espacio en tiempo de compilación.
+La localización de las carpetas utilizadas por & kdesvn-build; es configurable (incluso para cada módulo particular).
+Puede usar & sudo;, o una orden diferente indicada por el usuario para instalar módulos sin necesidad de hacerlo como superusuario.
+& kdesvn-build; se ejecuta con una prioridad reducida por defecto para permitirle utilizar el ordenador mientras se ejecuta el script.
+Posibilidad de usar las etiquetas y ramas de & subversion; en & kde;.
+& kdesvn-build; utilizará una serie de técnicas para intentar y garantizar una compilación con éxito.
+Ofrece soporte para reanudar la compilación de un determinado módulo. Usted puede incluso ignorar ciertos módulos temporalmente durante una compilación determinada.
+& kdesvn-build; puede realizar rápidamente una compilación parcial de un módulo directamente desde la línea de órdenes, cuando solamente necesita actualizar parte de un módulo.
+& kdesvn-build; descargará y creará automáticamente la carpeta / admin necesaria para un módulo si éste no se pudo descargar del repositorio & subversion; la primera vez por alguna razón. Ésto solo se aplica a los módulos de & kde; 3, ya que / admin no se necesita para los módulos qt-copy o & kde; 4.
+& kdesvn-build; mostrará el progreso de la compilación cuando utilice & cmake;, y medirá siempre el tiempo consumido en él para notificárselo después.
+Intenta reconstruir módulos automáticamente que utilizaron make incremental, lo que reducirá los fallos después de algunos tipos de envío.
+Viene con un conjunto de opciones predeterminadas apropiado para compilar un & kde; básico para un único usuario, directamente del repositorio anónimo de & subversion;.
+Expansión de tildes para sus opciones de configuración. Por ejemplo puede indicar:
+qtdir ~/ kdesvn/ build/ qt-copy
+Configurará automáticamente un sistema de compilación, de forma que la carpeta fuente sea diferente de la carpeta de compilación, con el objeto de mantener limpia la carpeta fuente.
+Usted puede especificar las opciones globales que se apliquen sobre cada módulo que se obtiene, y también opciones que se apliquen a módulos individuales.
+Puesto que a veces la herramienta autotools se desincroniza con los cambios en el árbol de código fuente, puede forzar que un módulo se vuelva a compilar creando un archivo. refresh-me en la carpeta de compilación del módulo en cuestión, o ejecutando & kdesvn-build; con la opción --refresh-build.
+Puede especificar varias variables de entorno que se utilizarán durante la compilación, incluyendo KDEDIR, QTDIR, DO_NOT_COMPILE, y CXXFLAGS.
+Registro de órdenes. Los archivos de registros son fechados y numerados de forma que siempre tenga un archivo de registro para cada ejecución del script. Además, se crea un enlace simbólico llamado latest, que apunta al archivo de registro más reciente dentro de la carpeta de registro.
+Si está compilando & kde; para un sólo usuario en lugar de hacerlo para todo el sistema (para lo cual necesitaría ser superusuario), puede utilizar el script para usted. No he revisado este código, y hace un amplio uso de la función system(), por lo que yo no recomendaría utilizarlo como superusuario.
+Puede usar make-install-prefix para añadir un prefijo a la línea de órdenes de make install con una orden separada, lo cual es útil para & sudo;.
+Puede descargar solo una parte del módulo & subversion; de & kde;. Por ejemplo, puede descargar solo taglib desde kdesupport, o solo K3B desde extragear/ multimedia. El script obtendrá kde-common si es necesario para el trabajo de compilación.
+Puede simular que realiza las operaciones. Si le pasa las opciones --pretend o -p en la línea de órdenes, el script le dará una descripción detallada de las órdenes que va a ejecutar, pero sin llegar a ejecutarlas.
+Registro de la compilación con & kdesvn-build;
+Visión general del registro
+El registro es una característica de & kdesvn-build; a través de la cual cada orden que ejecute & kdesvn-build; se guarda en un archivo para su posterior examen, si fuera necesario. Esto se realiza porque con frecuencia es necesario obtener la salida de los programas en los que se produjeron fallos, ya que existen diferentes motivos por los que la compilación puede fallar en un primer momento.
+Esquema de los carpetas de registro
+Los archivos de registro se guardan siempre en la carpeta de registro. La ubicación de esta carpeta la controla la opción log-dir, que tiene como valor predeterminado ${source-dir} / log (donde ${source-dir} es el valor de la opción source-dir. En el resto de esta sección, nos referiremos a este valor como ${log-dir}).
+Bajo ${log-dir} se encuentra un conjunto de carpetas, uno por cada vez que se ejecuta & kdesvn-build;. Cada carpeta se nombra con la fecha y el número de ejecución. Por ejemplo, si & kdesvn-build; se ejecuta por segunda vez el 26 de mayo de 2004, se creará una carpeta llamado 2004-05-26-02, donde 2004-05-26 es la fecha, y el -02 es el número de ejecución.
+& kdesvn-build; creará también un enlace a los archivos de registro generados durante la última compilación, llamado latest. Por lo tanto, los archivos de registro para la última ejecución de & kdesvn-build; deben estar siempre bajo ${log-dir} / latest.
+Ahora bien, cada carpeta de una ejecución de & kdesvn-build; particular, contendrá a su vez un conjunto de carpetas para cada módulo de & kde; que & kdesvn-build; trata de generar. También se incluirá un archivo llamado build-status con el que podrá determinar qué modulos fueron generados y qué módulos fallaron.
+Si un módulo dispone de un submódulo (como por ejemplo extragear/ multimedia, playground/ utils, o KDE/ kdelibs), entonces habrá una jerarquía apropiada en la carpeta de registro. Por ejemplo, los archivos de registro para KDE/ kdelibs tras la última ejecución de & kdesvn-build; estarán en ${log-dir} / latest/ KDE/ kdelibs y no en ${log-dir} / latest/ kdelibs.
+En cada carpeta del registro de módulo, encontrará un conjunto de archivos para cada operación que realice & kdesvn-build;. Si & kdesvn-build; actualiza un módulo, podrá ver nombres de archivo tales como svn-co. log (para la descarga de un módulo) o svn-up. log (cuando se actualiza un módulo que ya se había descargado). Si se ejecutó la orden configure, podría ver un configure. log en esta carpeta.
+Si se produjo algún error, debería ser capaz de ver la explicación de por qué sucedió en alguno de los archivos. Para ayudarle a determinar qué archivo contiene el error, & kdesvn-build; creará un enlace al archivo que contiene el error (como por ejemplo build-1. log a un archivo llamado error. log).
+El motivo de todo esto es conocer los motivos por los que falló la compilación después del último & kdesvn-build;. El archivo al que debería echar un vistazo en primer lugar es ${log-dir} / latest/ nombre-módulo / error. log.
+Si el archivo error. log está vacío (especialmente después de una instalación), entonces es posible que no se produjera ningún error. Algunas de las herramientas utilizadas por el sistema de compilación de & kde;, informarán a veces erróneamente de un error cuando en realidad no había ninguno.
+También puede que algunas órdenes se salten la redirección de la salida de & kdesvn-build; y esquiven el archivo de registro en algunas circunstancias (normalmente cuando se realiza la primera descarga del repositorio & subversion;). La salida de error en esos casos no se encuentra en el archivo de registro, sino en & konsole; o en la terminal donde ejecutó & kdesvn-build;.
+El formato de. kdesvn-buildrc
+Para utilizar el script, debe tener un archivo en su carpeta personal llamado. kdesvn-buildrc, que describe los módulos que le gustaría descargar y generar.
+Éste comienza con las opciones globales, especificadas como sigue:
+global nombre-opción valor-opción [...] end global
+Es seguido a continuación de una o más secciones para cada módulo, especificadas como sigue:
+module nombre-módulo nombre-opción valor-opción [...] end module
+nombre-módulo debe ser un módulo del repositorio & subversion; de & kde; (por ejemplo, kdelibs o kdebase). Algunas opciones pueden sobrescribir las opciones globales, algunas se añaden a las opciones globales, y otras opciones globales simplemente no pueden ser sobrescritas.
+A continuación se muestra una lista ordenada por orden alfabético de las opciones que puede usar. Haga click sobre una opción para averiguar más sobre ella. Si alguna no está documentada, por favor envíe un correo electrónico a los autores usando la dirección que se encuentra arriba.
+apply-qt-patches, para mejorar qt-copy.
+async, para compilar e instalar a la vez.
+binpath, para establecer la variable PATH.
+branch, para obtener el código de una rama en lugar de / trunk.
+build-dir, para establecer la carpeta carpeta donde realizar la compilación.
+checkout-only, para descargar solamente algunas partes de un módulo.
+cmake-options para definir los modificadores con los que configurar un módulo utilizando & cmake;.
+colorful-output para añadir color a la salida del script.
+configure-flags para definir las opciones (flags) con las que configurar un módulo.
+cxxflags para definir la variable CXXFLAGS.
+dest-dir para cambiar el nombre de la carpeta para un módulo.
+disable-agent-check, para que & kdesvn-build; no compruebe el estado de ssh-agent.
+do-not-compile, para señalar las carpetas que debe saltarse la compilación.
+inst-apps, para compilar e instalar solamente algunos carpetas.
+install-after-build, para no realizar la instalación después del proceso de compilación.
+kdedir, para establecer la carpeta donde instalar & kde;.
+kde-languages, para establecer los paquetes de traducción a descargar e instalar.
+libpath, para establecer la variable LD_LIBRARY_PATH.
+make-install-prefix, para ejecutar un programa auxiliar (como & sudo;) durante el make install.
+make-options, para pasar opciones al programa & make;.
+manual-build, para evitar compilar el módulo automáticamente.
+manual-update, para no hacer nada con el módulo automáticamente.
+module-base-path, para cambiar desde dónde se descarga el módulo (útil para ramas y etiquetas).
+niceness, para cambiar la prioridad sobre la CPU.
+no-rebuild-on-fail, para no volver a ejecutar & make; otra vez si falla.
+qtdir, para establecer la ruta de la biblioteca & Qt;.
+set-env, para establecer una variable de entorno.
+source-dir, para cambiar la carpeta destino del código fuente obtenido.
+stop-on-failure, para que & kdesvn-build; se detenga tan pronto como encuentre un fallo.
+svn-server, para cambiar el servidor desde donde se descarga el código fuente.
+La siguiente es una tabla de varias opciones y sus comentarios. Cualquier opción que pueda sobreescribir una opción global, sobreescribirá también cualquier indicación en la línea de órdenes.
+Tabla de opciones
+Nombre de opción
+Módulo -gt; Comportamiento global
+Observaciones
+apidox
+Sobreescribe las opciones globales
+Esta opción se utilizaba para permitir la generación de la documentación del API del módulo de KDE. Se eliminó en & kdesvn-build; 1.6.3 ya que no está soportado en KDE 4. La documentación del API se encuentra disponible en línea desde kde. org. Además es posible generar la documentación del API de KDE 4 utilizando el guión incluido en el módulo kdesdk (carpeta / scripts). Consulte la base tecnológica de KDE para obtener más detalles. Por supuesto, también es posible generar la documentación del API para los módulos antiguos.
+apply-qt-patches
+Esta opción es útil solamente para qt-copy. Si su valor es distinto de cero, se ejecutará primero apply-patches de la carpeta qt-copy antes de la compilación, con el fin de aplicar los parches no oficiales sobre qt-copy. Puesto que estos parches son habitualmente la razón para usar qt-copy en lugar de una versión oficial de & Qt;, no debería ser perjudicial habilitar esta opción. De forma predeterminada se aplicarán los parches.
+async
+No puede ser sobrescrita
+Esta opción activa el modo asíncrono de operación, dónde el código fuente se actualiza y el proceso de compilación se realizará en paralelo, en lugar de esperar a que se actualice todo el código fuente antes de iniciar el proceso de compilación. De modo predeterminado el modo asíncrono está activado. Para desactivar esta opción cambie su valor a false (falso)
+Esta opción está disponible desde la versión 1.6.
+binpath
+Establezca esta opción para definir la variable de entorno PATH durante la compilación. Esta opción no puede sobrescribirse dentro de un módulo. El valor predeterminado es / bin: / usr/ bin: / usr/ local/ bin: / usr/ X11R6/ bin. Esta variable de entorno debería incluir las rutas de cada herramienta de desarrollo separadas por dos puntos. Las rutas $KDEDIR / bin y $QTDIR / bin se añaden automáticamente. Puede usar la tilde (~) para cualquier ruta que añada con esta opción.
+branch
+Establezca esta opción para descargar una rama en particular de & kde; en lugar de la rama predeterminada trunk, donde tiene lugar el desarrollo de & kde;. Por ejemplo, para descargar la rama 3.4 de & kde; escriba en esta opción 3.4.
+Observe que algunos módulos utilizan un nombre de rama diferente. Sin ir más lejos, el módulo arts no sigue la numeración de versiones de & kde;. La versión de arts que incluía & kde; 3.4 era la 1.4.
+Si & kdesvn-build; no consigue descargar correctamente una rama con esta opción, tiene la posibilidad de especificar manualmente el & url; de la descarga usando la opción override-url.
+build-dir
+Utilice esta opción para cambiar la carpeta que contiene las fuentes de compilación. Existen tres formas diferentes de utilizarlo: Relativo a la carpeta fuente & subversion; de & kde; (consulte la opción source-dir). Es el valor predeterminado, y la forma en que trabaja el script a partir de la versión 0.61. Éste modo se selecciona si teclea el nombre de una carpeta que no comienza con una tilde (~) o con una barra (/). El valor predeterminado es build. Ruta absoluta. Si especifica una ruta que comienza con una /, la ruta se utiliza directamente. Por ejemplo, / tmp/ kde-obj-dir/. Relativa a la carpeta personal. Si especifica una ruta que comienza con una ~, la ruta se utiliza de forma relativa a su carpeta personal, de forma análoga a la expansión de la tilde en los intérpretes de órdenes. Por ejemplo, ~/ builddir hará que la carpeta de compilación sea / home/ nombre-usuario/ builddir. Quizá sorprendentemente, esta opción puede cambiarse para cada módulo.
+checkout-only
+Establezca esta opción para descargar las fuentes & subversion; parte a parte. El valor predeterminado para esta opción debería ser un espacio separado por una lista de carpetas de descarga. Si no incluye la carpeta admin, se incluirá automáticamente (si fuera necesario). Cuando descarga por partes, la carpeta admin se colocará en kde-common, que es donde se encuentra en el servidor & subversion;. A pesar de que esta opción sobrescribe la opción global, piense que establecer esta opción como global carece de sentido.
+cmake-options
+Se añade a las opciones globales (no aplicable a qt-copy)
+Use esta opción para especificar los modificadores que se pasarán a & cmake; para crear el sistema de compilación para el módulo. Cuando se utiliza como opción global, se aplica a todos los módulos compilados por este script. Cuando se utiliza como una opción del módulo, se añade al final de las opciones globales. Permite especificar opciones comunes para & cmake; en la sección global.
+Esta opción reemplaza a configure-flags para todos los módulos de & kde; 4, ya que utiliza & cmake; para su compilación.
+Puesto que estas opciones se pasan directamente a la línea de órdenes de & cmake;, deberían darse tal y como se teclearía en & cmake;. Por ejemplo:
+cmake-options -DCMAKE_BUILD_TYPE=RelWithDebInfo
+Puesto que esto puede ser un problema, & kdesvn-build; se asegura de que el resto de las opciones se establezcan correctamente, pudiendo dejar esta opción en blanco.
+configure-flags
+Se añade a las opciones globales (salvo para qt-copy)
+Use esta opción para especificar los indicadores (flags) que se pasarán al script. / configure al crear el sistema de compilación para el módulo. Cuando se utiliza como opción global, se aplica a todos los módulos compilados por este script. qt-copy usa un conjunto de opciones de configuraciones bastante diferente al resto de & kde;, por lo que esta opción sobreescribe las preferencias globales cuando se aplica a qt-copy.
+Esta opción se aplica a qt-copy y a todos los módulos de & kde; 3. Los módulos de & kde; 4 utiliza & cmake;, que se controla utilizando la opción cmake-options.
+colorful-output
+Establezca el valor de esta opción a false (falso) para deshabilitar la salida coloreada de & kdesvn-build;. Esta opción tiene como valor predeterminado true. Observe que & kdesvn-build; sólo imprimirá los códigos correspondientes a los colores en una terminal (como xterm, & konsole;, o la consola habitual de & Linux;).
+cxxflags
+Se añade a las opciones globales
+Utilice esta opción para pasar los indicadores a. / configure como CXXFLAGS cuando se crear el sistema de compilación para el módulo. Esta opción se especifica aquí, en lugar de con configure-flags o cmake-options, puesto que de este modo también se establecerá el valor de la variable de entorno CXXFLAGS durante el proceso de compilación.
+Observe que para & kde; 4 y otros módulos que utilicen & cmake;, es necesario establecer la opción CMAKE_BUILD_TYPE a « none » al configurar el módulo, utilizando la opción cmake-options.
+dest-dir
+Utilice esta opción para cambiar el nombre de un módulo en el disco. Por ejemplo, si su módulo fue extragear/ network, debería cambiar el nombre a extragear-network utilizando esta opción. Tenga en cuenta que a pesar de que ésto cambie el nombre en el disco, no es una buena idea incluir la carpeta o separadores de carpeta en el nombre ya que puede interferir con cualquier opción build-dir o source-dir.
+disable-agent-check
+Normalmente, si está usando & ssh; para descargar el código fuente desde el repositorio de & subversion; (si está usando el protocolo svn+ssh por ejemplo), & kdesvn-build; tratará de asegurarse de que si está usando ssh-agent, éste se ocupe de algunos identidades & ssh;. Ésto es así para evitar que & ssh; le pida la frase de paso para cada módulo. Puede deshabilitar esta comprobación cambiando el valor de disable-agent-check a true (verdadero).
+do-not-compile
+Utilice esta opción para seleccionar un grupo específico de carpetas que no se generarán en el módulo (en lugar de todas ellas). Dichas carpetas se deben separar con espacios.
+Esta funcionalidad está soportada tanto para & kde; 3 como para & kde; 4. El soporte para KDE 4 se añadió en & kdesvn-build; 1.6.3.
+Tenga en cuenta que los fuentes de los programas se descargarán. Debería utilizar la directiva checkout-only para elegir las carpetas que desee descargar.
+Por ejemplo, para mantener & juk; y & kscd; en el módulo kdemultimedia en la compilación, podría añadir « do-not-compile juk kscd » a sus configuraciones de kdemultimedia.
+email-address
+Asigne al valor de esta opción la dirección de correo electrónico que debería utilizar & kdesvn-build; en caso de que fuera necesario. No se preocupe por esta opción si no va a utilizar ninguna característica que pueda enviar un correo electrónico (de forma predeterminada están todas deshabilitadas).
+Actualmente sólo email-on-compile-error necesita esta opción.
+email-on-compile-error
+Puede poner en esta opción la dirección de correo electrónico en la que desea recibir el informe de fallos cuando un módulo no compila correctamente. & kdesvn-build; esperará a que todos los módulos hayan acabado y almacenará todos los resultados en el informe. Este informe sólo es enviado si un módulo falla al compilar.
+Por favor, consulte la opción email-address para establecer la dirección de correo desde la que & kdesvn-build; debería mandar cualquier mensaje, puesto que la opción predeterminada no suele ser la deseada.
+inst-apps
+Es la opuesta a la opción do-not-compile. Esta opción hace que solo se compilen las carpetas de nivel superior proporcionados. Las carpetas deberían estar separados por espacios en blanco.
+Cualquier cambio no tendrá efecto hasta la próxima vez que se ejecute make -f Makefile. cvs, bien automáticamente por el script, o bien manualmente por las opciones --refresh-build o --recreate-configure.
+Esta opción no funciona todavía con aquellos módulos que utilicen el sistema de compilación & cmake;.
+install-after-build
+Esta opción se utiliza para instalar el paquete una vez que se ha compilado satisfactoriamente. Está habilitada de forma predeterminada. Si desea deshabilitarla, debe poner esta opción a 0 en el archivo de configuración. También puede utilizar el modificador --no-install en la línea de órdenes.
+kdedir
+Esta opción establece la carpeta en la que se instalará & kde; tras su generación. La carpeta predeterminada es ~/ kde. Si cambia esta carpeta por una que necesite permisos de superusuario, tal vez quiera leer también acerca de la opción make-install-prefix.
+kde-languages
+Esta opción le permite indicar que, junto con & kde;, se descarguen e instalen paquetes de localización. Puede querer esta opción si usted no vive en los Estados Unidos y le gustaría tener & kde; traducido a su idioma.
+Para usar esta opción, indique una lista de los idiomas a instalar separados por un espacio en blanco. Cada idioma tiene asociado un código que puede consultar en esta página: http: / /i18n. kde. org/ teams/.
+Es perfectamente válido seleccionar un sólo idioma. Por omisión, no se descarga ningún paquete de localización, lo que quiere decir que & kde; aparecerá en inglés americano.
+Por ejemplo, para elegir instalar el soporte para el francés, debería establecer la opción a algo como: kde-languages fr. No obstante, después debe utilizar & systemsettings; para seleccionar el idioma francés.
+libpath
+Esta opción se utiliza para dar valor a la variable de entorno LD_LIBRARY_PATH durante la compilación. Puede sobreescribir esta opción dentro de un módulo. El valor predeterminado es una cadena vacía, pero las rutas $KDEDIR / lib y $QTDIR / lib se añaden automáticamente. Puede utilizar la tilde (~) para cualquier ruta que añada usando esta opción.
+log-dir
+Use esta opción para cambiar la carpeta en la que se guardarán los archivos de registro generados por el script. Esta opción puede establecerse dentro de un módulo desde la versión 0.64 o posterior.
+make-install-prefix
+Indique en esta variable una lista separada por espacios, que será interpretada como una orden y sus argumentos y que precederá a la orden make install usada para instalar los módulos. Es útil para instalar paquetes utilizando & sudo; por ejemplo, pero por favor tenga cuidado con los permisos de administrador.
+make-options
+En esta variable se incluyen las opciones que se pasarán a la orden make en la línea de órdenes. Es útil para programas como distcc o sistemas con más de un núcleo de proceso.
+manual-build
+Establezca esta opción a true (verdadero) para que el proceso de compilación no intente compilar este módulo. Aún así, el módulo seguirámanteniéndose actualizado desde el repositorio & subversion;. Esta opción es exactamente equivalente a la opción --no-build en la línea de órdenes.
+manual-update
+Establezca el valor de esta opción a true (verdadero) para mantener el proceso de compilación actualizado (y por extensión, la compilación e instalación) para este módulo. Si establece esta opción para un módulo, coméntelo.
+module-base-path
+Asigne un valor a esta opción para sobreescribir la ruta a la carpeta predeterminado de & kdesvn-build; para el módulo en cuestión. Se puede utilizar, por ejemplo, para ramas específicas o versiones etiquetadas de bibliotecas. El visor de las fuentes de & kde; puede ayudarle de forma importante para establecer la ruta correcta.
+Observe que & kdesvn-build; construye la ruta final según la siguiente plantilla: $svn-server / home/ kde/ $module-base-path / $module-name.
+La opción predeterminada es trunk o bien trunk/ KDE, dependiendo del nombre del módulo.
+Utilice las opciones branch o tag siempre que sean aplicables.
+niceness
+Establezca esta opción a un número entre 20 y 0. Cuanto mayor sea el número, menor será la prioridad otorgada a & kdesvn-build;. El valor predeterminado es 10.
+no-svn
+Si esta opción vale true (verdadero) entonces & kdesvn-build; no actualizará el código fuente para el módulo automáticamente. Intentará compilar el módulo como si lo hubiera hecho de cualquier otra forma.
+no-rebuild-on-fail
+Asigne a esta opción el valor true (verdadero) para evitar que & kdesvn-build; intente volver a compilar este módulo si falla la compilación incremental. Normalmente & kdesvn-build; intentará volver a compilar el módulo desde cero para contrarrestar el efecto de desviación de la actualización del & subversion; que puede terminar con un sistema de compilación desordenado.
+override-url
+Si usa esta opción, & kdesvn-build; utilizará este valor como & url; a pasar a & subversion; sin ningún cambio. Debería utilizar esta opción si desea descargar una versión específica y & kdesvn-build; no puede comprender lo que quiere decir utilizar una rama.
+qtdir
+Establezca esta opción para definir la variable de entorno QTDIR durante la compilación. Esta opción no puede ser sobreescrita dentro de un módulo. Si no especifica esta opción, se pondrá como valor predeterminado ${source-dir} / build/ qt-copy, que usa el módulo qt-copy incluido en el repositorio de código fuente de & kde;. Puede usar la tilde (~) para referirse a su carpeta personal.
+remove-after-install
+Si dispone de poco espacio en disco, tal vez quiera usar esta opción para eliminar automáticamente la carpeta de compilación (o también la carpeta fuente para instalaciones de una sóla vez) después de haber instalado el módulo satisfactoriamente.
+Los posibles valores para esta opción son:
+none - No borra nada (opción predeterminada).
+builddir - Elimina la carpeta de compilación, pero no la fuente.
+all - Elimina tanto la carpeta con el código fuente como la de compilación.
+Observe que usar esta opción puede suponer un impacto negativo sobre el uso de ancho de banda (si usa al -todo-) y el tiempo empleado para compilar & kde;, puesto que & kdesvn-build; no podrá realizar compilaciones incrementales.
+revision
+Si se utiliza esta opción con un valor diferente de 0, & kdesvn-build; forzará a & subversion; a que actualice el módulo a la revisión proporcionada, inclusive si se utilizan opciones como branch. Si el módulo ya está en la revisión, no se actualizará a menos que esta opción se cambie o se elimine de la configuración.
+set-env
+Esta opción acepta un conjunto de valores separados por espacios, donde el primer valor es la variable de entorno a definir, y el resto de valores lo que contendrá la variable. Por ejemplo, para establecer la variable RONALD a McDonald, debería poner esta orden en la sección apropiada:
+set-env RONALD McDonald
+Esta opción es especial, ya que puede repetirse sin sobreescribir opciones set-env anteriores en la misma sección del archivo de configuración. De esta manera puede definir más de una variable de entorno por módulo (o globalmente).
+source-dir
+Esta opción se usa para establecer la carpeta en la que se guardará el código fuente de & kde; una vez descargado del repositorio & subversion;. Si no especifica ningún valor, la carpeta predeterminada es ~/ kdesvn. Si especifica la carpeta, hágalo con la ruta absoluta.
+stop-on-failure
+Asigne a esta opción el valor true (verdadero) para que el script se detenga después de un error durante el proceso de compilación o instalación. Esta opción está desactivada por omisión.
+svn-server
+Esta opción se usa para establecer el servidor & subversion; desde donde obtener el código fuente. El servidor predeterminado es el repositorio & subversion; anónimo, svn: / /anonsvn. kde. org/
+tag
+Use esta opción para descargar una versión específica de un módulo.
+NOTA: Si no desea utilizar esta opción las posibilidades de que todo salga correctamente son muy altas. Las versiones de & kde; están disponibles en un archivo comprimido tar en el sitio FTP de & kde; o en uno de sus espejos.
+Si está utilizando & kdesvn-build; porque ha tenido problemas al obtener una versión de & kde; y compilarla en su distribución, considere utilizar la herramienta de compilación Konstruct en su lugar, que funciona a partir de las versiones comprimidas con tar.
+use-cmake
+Esta opción se eliminó en & kdesvn-build; 1.4 ya que todos los módulos de & kde; 4 precisan de & cmake;, y & cmake; no está permitido en los demás módulos.
+use-qt-builddir-hack
+A pesar de que esta opción sobreescribe la opción global, solo tiene sentido para qt-copy. Asigne a esta opción el valor true (verdadero) para activar el modo srcdir! = builddir experimental del script. Cuando se activa, & kdesvn-build; copiará el módulo fuente qt-copy en la carpeta de compilación, y realizará su compilación ahí. Ésto significa que su variable de entorno QTDIR debería tener el valor ${qt-copy-build-dir}/ qt-copy/ lib. También debería cambiar su opción qtdir de forma similar. El make incremental debería funcionar en este modo, y como los indicadores se conservarán después de la copia. Si utiliza la opción apply-qt-patches, se aplicarán los parches en la carpeta de compilación, no en la carpeta con las fuentes. El valor predeterminado de esta opción es true (verdadero).
+use-stable-kde
+Puesto que & kdesvn-build; tiene soporte para compilar & kde; 3 y 4, debe haber alguna manera de decirle que versión compilar. De forma predeterminada & kdesvn-build; compilará la línea principal de desarrollo de & kde; (llamada / trunk). Pero ésto se refiere a & kde; 4, que no está preparado aún para su uso generalizado.
+Puede utilizar la opción & branch; de forma global o para un módulo para descargar & kde; 3.5 (o 3.4, etc.). Sin embargo, no es muy conveniente porque algunos módulos (como kdesupport) se comparten por 3.5 y 4. Además, existen más opciones relativas a las ramas que se pueden añadir al archivo de configuración.
+Por tanto, si asigna a esta opción el valor global true (verdadero), & kdesvn-build; descargará automáticamente la versión 3.5 de módulos de & kde; tales como kdelibs y qt-copy, en lugar de la versión 4 de & kde;. Puede utilizar las opciones & branch; o & tag; para sobreescribir la configuración para & kdesvn-build;. De esta forma, puede elegir fácilmente descargar & kde; 3.5 en lugar de & kde; 4.
+Opciones de línea de órdenes y variables de entorno
+El script no utiliza variables de entorno. Si necesita establecer alguna variable de entorno para el proceso de compilación o instalación, eche un vistazo a la opción set-env.
+El script acepta las siguientes opciones en la línea de órdenes:
+--async
+Activa el modo asíncrono para actualizar y compilar a la vez. De forma predeterminada, esta opción solo necesita especificarse si la tiene desactivada en la configuración.
+--help
+Mostrar solo ayuda sobre el script.
+--version
+Muestra la versión del programa.
+--author
+Muestra información de contacto sobre el autor.
+--color
+Habilita la salida en color.
+--nice= valor
+Establece el valor & niceness; a valor mientras dura la ejecución. valor debe estar entre 0 y 20.
+--no-async
+Desactiva el modo asíncrono de la actualización. En su lugar la actualización se realizará antes de de comenzar la compilación. Esta opción hará más lento el proceso global, pero si encuentra errores IPC durante la ejecución de & kdesvn-build; debería probar a utilizar esta opción y enviar un informe de fallo.
+--no-color
+Deshabilita la salida en color.
+--pretend (o -p)
+No hace nada realmente, pero actúa como si lo hiciera.
+--quiet (o -q)
+Hace la salida menos detallada. Con esta opción se imprime sólo la información básica.
+--really-quiet
+Imprime sólo las advertencias y los errores.
+--verbose
+Hace que el programa describa lo que va a hacer y lo que está haciendo & kdesvn-build;.
+--svn-only
+Realiza solamente la actualización del código fuente.
+--build-only
+Realiza solamente el proceso de compilación.
+--ignore-modules
+No incluye el resto de módulos pasados en la línea de órdenes en el proceso de actualización y compilación.
+--no-svn
+Se salta la conexión al servidor & subversion;.
+--no-build
+Se salta el proceso de compilación.
+--no-install
+No instala automáticamente los paquetes después de compilarlos.
+--debug
+habilita el modo de depuración para el script. Actualmente ésto significa que toda la salida se volcará a la salida estándar además de registrarse en la carpeta de registro de la forma habitual. Además, se detalla mucho más la actividad de las funciones en el modo de depuración.
+--no-rebuild-on-fail
+No intenta recompilar los módulos que han fallado desde cero. & kdesvn-build; no intentará nunca hacer ésto a un módulo que ya se haya intentado compilar desde cero.
+--refresh-build
+Vuelve a crear el sistema de compilación y ejecuta make desde cero.
+--reconfigure
+Ejecuta de nuevo el script configure sin limpiar la carpeta de compilación.
+--recreate-configure
+Ejecuta make -f Makefile. cvs de nuevo para crear el script configure y continúa la compilación como es habitual. Esta opción implica --reconfigure.
+--resume-from
+Esta opción se usa para reanudar la compilación comenzando por un módulo determinado, que debería ser la siguiente opción en la línea de órdenes. Esta opción implica --no-svn. No debería especificar los nombres de otros módulos en la línea de órdenes.
+--rc-file
+que interpreta el siguiente argumento en la línea de órdenes como el archivo desde el que leer las opciones de configuración. El valor predeterminado para este parámetro es ~/. kdesvn-buildrc.
+--run
+Esta opción interpreta el siguiente elemento en la línea de órdenes como un programa a ejecutar y & kdesvn-build; terminará leyendo el archivo de configuración, actualizando el entorno como normal, y ejecutando el programa proporcionado.
+No funcionará para iniciar un intérprete de órdenes con el entorno de & kdesvn-build;, aunque en la mayor parte de los casos, sin embargo, puesto que los intérpretes de órdenes interactivos reinician al menos parte de las variables de entorno (como PATH y KDEDIRS) en la secuencia de inicio.
+--prefix=lt; /ruta/ a/ kdegt;
+Le permite cambiar la carpeta en la que & kde; se instalará desde la línea de órdenes. Esta opción implica --reconfigure.
+--build-system-only
+Se detiene después de ejecutar make -f Makefile. cvs. El script configure aún necesitará ser ejecutado, lo cual hará & kdesvn-build; la próxima vez. Ésto le permite preparar todos los scripts configure de una vez, de forma que pueda ver la salida de. / configure --help para cada módulo, y editar configure-flags acorde con el resultado.
+--install
+Si ésta es la única opción de la línea de órdenes, intentará instalar todos los módulos contenidos en una compilación correcta, excepto qt-copy, que no necesita instalación. Si existen opciones después de --install, se asume que son los módulos a instalar.
+--lt; nombre-de-opcióngt; =
+Puede usar esta opción para sobrescribir una opción en su archivo de configuración para cada módulo. Por ejemplo, para sobrescribir la opción log-dir, podría escribir: --log-dir=/ ruta/ a/ la/ carpeta.
+--lt; nombre-de-módulogt;, lt; nombre-de-opcióngt; =
+Puede usar esta opción para sobreescribir alguna otra en el archivo de configuración de un módulo concreto.
+Cualquier otra opción en la línea de órdenes será considerada un módulo para actualizar y compilar. Por favor, no confunda compilar con instalar.
+Uso del script & kdesvn-build;
+Introducción
+Normalmente, usar & kdesvn-build; después de haber pasado por es tan sencillo como escribir lo siguiente en una terminal:
+percnt; kdesvn-build
+& kdesvn-build; descargará entonces el código fuente de & kde;, tratará de configurarlo y compilarlo, y después lo instalará.
+Siga leyendo para descubrir cómo & kdesvn-build; hace todo ésto, y qué más puede hacer con esta herramienta.
+Características básicas de & kdesvn-build;
+soporte para qt-copy
+& kdesvn-build; se esfuerza por mantener un excelente soporte para el módulo qt-copy incluido en el repositorio & subversion; de & kde;.
+qt-copy es una copia del código fuente para la última versión de las herramientas & Qt; utilizadas por & kde;. También contiene un conjunto de parches de optimización y eliminación de errores que se pueden aplicar opcionalmente. Estos parches son compatibles con las bibliotecas & Qt;, por tanto, el código producido utilizando qt-copy funcionará con las & Qt; normales.
+La mayoría de las diferencias requeridas por qt-copy son manejadas automáticamente por & kdesvn-build;. Sin embargo, hay unas pocas diferencias que puede necesitar conocer.
+Normalmente el valor de & configure-flags; para un módulo se añadirá a las preferencias globales para & configure-flags;. Sin embargo, las preferencias de & configure-flags; para qt-copy reemplazará las preferencias globales porque no tienen equivalencia en la línea de órdenes.
+& kdesvn-build; definirá automáticamente algunas variables de entorno adicionales para compilar qt-copy que no son necesarias habitualmente para el resto de & kde;.
+qt-copy también tiene soporte para un parche opcional que contiene alguna eliminación de fallos y optimizaciones que no están incluídos en el & Qt; oficial. Para activarlos, asigne el valor true a & apply-qt-patches;. Después de realizar este cambio debe ejecutar kdesvn-build --refresh-build qt-copy.
+Indicadores estándares añadidos por & kdesvn-build;
+Para ahorrarle tiempo, & kdesvn-build; añade algunas rutas estándares a su entorno para usted:
+La ruta a las bibliotecas de & kde; y & Qt; se añade automáticamente a la variable LD_LIBRARY_PATH. Ésto significa que no necesita editar & libpath; para incluirlas.
+La ruta a las programas de ayuda al desarrollo de & kde; y & Qt; se añade automáticamente a la variable PATH. Ésto significa que no necesita editar & binpath; para incluirlas.
+La ruta a la aplicación pkg-config provista por & kde; se añade automáticamente a la variablela variable LD_LIBRARY_PATH. Ésto significa que no necesita usar & set-env; para añadirla.
+La opción para & kdedir; se propaga automáticamente a la variable de entorno KDEDIR durante la compilación. (KDEDIRS no se ve afectada).
+La opción para & qtdir; se propaga automáticamente a la variable de entorno QTDIR durante la compilación.
+Cambiando la prioridad de compilación de & kdesvn-build;.
+Los programas pueden ejecutarse con distintos niveles de prioridad en los sistemas operativos actuales, incluyendo & Linux; y & BSD;. Ésto le permite al sistema otorgar tiempo de CPUa los programas en función de su importancia.
+& kdesvn-build; se asignará normalmente una baja prioridad con el fin de que otros programas de su sistema no se vean afectados por él y puedan ejecutarse normalmente. Usando esta técnica, & kdesvn-build; utilizará el tiempo de CPU extra que haya disponible.
+& kdesvn-build; mantendrá un nivel de prioridad suficiente para poder ejecutarse antes de las rutinas de procesos por lotes y de programas de donación de CPU tales como Seti@Home.
+Para conseguir que & kdesvn-build; use un nivel de prioridad más o menos bajo de forma permanente, necesita establecer el valor de la opción & niceness; en el archivo de configuración. La opción & niceness; controla cómo de « amable » (nice en inglés) es & kdesvn-build; con el resto de programas. En otras palabras, un valor mayor de & niceness; da a & kdesvn-build; una menor prioridad. De esta manera, para dar una prioridad alta a & kdesvn-build; reduzca el valor de & niceness; (y viceversa). El valor de & niceness; puede ir desde 0 (la más alta prioridad) hasta 20 (la más baja prioridad).
+También dispone de la posibilidad de cambiar la prioridad de & kdesvn-build; usando la opción de la línea de órdenes & cmd-nice;. El valor de la opción es exactamente el mismo que para & niceness;.
+Es posible que algunos programas ejecutados por el superusuario tengan un valor de nice negativo, con el correspondiente aumento de prioridad para tales programas. Darle a & kdesvn-build; un valor de & niceness; negativo (o incluso 0) no es una buena idea, ya que no repercutirá significativamente en el tiempo de ejecución, pero sí hará que su máquina parezca muy lenta si aún necesita hacer uso de ella.
+Para ejecutar & kdesvn-build; con un valor nice de 15 (una prioridad más baja de lo normal):
+percnt; kdesvn-build --nice= 15
+O puede editar el archivo de configuración para hacer permanente el cambio:
+& niceness; 15
+Instalación como superusuario
+Puede que desee que & kdesvn-build; lleve a cabo la instalación con privilegios de superusuario, por ejemplo, si escoge la opción no recomendada de instalarlo en el sistema. También puede ser útil cuando va a compilar & kde; para un sólo usuario, no obstante. Ésto es así debido a que algunos módulos (especialmente kdebase) instalan programas que necesitan brevemente permisos elevados cuando se ejecutan. Dichos programas no son capaces de alcanzar esos privilegios elevados a menos que sean instalados con tales privilegios.
+Usted podría simplemente ejecutar & kdesvn-build; directamente como superusuario, pero no se recomienda, puesto que el programa no ha sido revisado para ese tipo de uso. Aunque sería seguro ejecutar el programa de esta manera, es mejor evitar la ejecución como superusuario siempre que sea posible.
+Con este fin, & kdesvn-build; proporciona la opción & make-install-prefix;. Puede utilizar esta opción para especificar una orden con la que realizar la instalación como otro usuario. Se recomienda usar esta opción junto con la aplicación & sudo;, el cual ejecutará la orden de instalación como superusuario.
+Por ejemplo, para instalar todos los módulos usando & sudo;, podría hacer lo siguiente:
+global & make-install-prefix; sudo # Otras opciones end global
+Para utilizar & make-install-prefix; para un único módulo, esto podría funcionar:
+module kdemultimedia & make-install-prefix; sudo end module
+Mostrando el progreso de compilación de un módulo.
+Esta característica siempre está disponible y se activará automáticamente cuando sea posible. Lo que hace es mostrar una indicación estimada del progreso de la compilación de un módulo. De esa manera, puede conocer cuánto tiempo llevará compilar un módulo.
+Características avanzadas
+Compilación parcial de un módulo
+Es posible compilar solamente fragmentos de un módulo de & kde;. Por ejemplo, quizás pueda desear compilar solamente un programa de un módulo. & kdesvn-build; le ofrece la posibilidad de hacerlo fácilmente. Hay varias maneras complementarias de hacer ésto.
+Descargar fragmentos de un módulo
+Ésta es quizá la mejor forma de hacerlo. Si sale bien, le ahorrará tiempo de descarga y espacio en disco. & kdesvn-build; descargará únicamente las partes del módulo que se indiquen. Ello es posible gracias al uso de la opción & checkout-only; para un módulo, que contendrá una lista de carpetas a descargar.
+Si aún no sabe lo que descargar de un módulo, puede ser una buena idea navegar en primer lugar por el repositorio de & subversion; en busca de un módulo, usando WebSVN.
+Para obtener solamente & kuser; y & kdat; de kdeadmin, podría utilizar & checkout-only; de la siguiente manera:
+module kdeadmin & checkout-only; kuser kdat end module
+Las carpetas se compilarán en el orden en el que se listen en la opción. Si una de las carpetas necesita algo de un módulo a compilar, necesitará asegurarse de que ambos se encuentran en la línea & checkout-only;, y que la dependencia requerida va antes que la carpeta que la necesita.
+También algunas veces pasa que una aplicación necesita otras carpetas y es difícil averiguar cuáles son, lo cual puede requerir un proceso constante de ensayo y error añadiendo carpetas a esta opción.
+Una nota final sobre esta opción: Si cambia el valor de esta opción, debería utilizar kdesvn-build cmd-refresh-build; módulo para asegurarse de que el módulo se vuelve a configurar de la forma adecuada. Adicionalmente, & kdesvn-build; nunca eliminará los archivos existentes si ha quitado algunas carpetas de la opción & checkout-only;, o ha añadido la opción al módulo que ha descargado.
+Eliminar carpetas de una compilación
+En lugar de restringir lo que se descarga, es posible descargarlo todo y decirle al sistema de compilación que se salte unos pocas carpetas cuando haga la compilación. Ésto puede ser útil si una carpeta falla continuamente y no es necesario para el resto del módulo.
+Esta posibilidad se maneja con la opción & do-not-compile;. Es similar a la opción & checkout-only; que se acaba de describir, en cuanto a que se reduce a una simple lista de carpetas que no deberían compilarse.
+Al igual que & checkout-only;, esta opción necesita al menos que el script configure se ejecute de nuevo para el módulo una vez modificada. Ésto se hace usando la orden kdesvn-build cmd-reconfigure; módulo.
+Para eliminar la carpeta dcoppython del proceso de compilación de kdebindings:
+module kdebindings & do-not-compile; dcoppython end module
+Compilar algunas carpetas de un módulo completo
+Puede usar la opción & inst-apps; para indicar que se compilen solamente unos pocas carpetas de un módulo completo (aunque se descargará el módulo entero).
+Usar esta opción equivale a combinar las opciones & checkout-only; y & do-not-compile;: el script descargará el módulo completo como & do-not-compile; pero sólo compilará aquellos carpetas que especifique, como & checkout-only;. Debido a ésto, normalmente es mejor usar simplemente & checkout-only; en su lugar.
+Se aplican las mismas advertencias que se hicieron para las dos opciones anteriores: debe volver a configurar el módulo si cambia el valor de & inst-apps;.
+Soporte de ramas y etiquetas en & kdesvn-build;
+¿Qué son las ramas y etiquetas?
+& subversion; ofrece la posibilidad de gestionar el histórico del código fuente de & kde;. & kde; aprovecha este soporte para crear ramas en el desarrollo y etiquetar el repositorio con cada lanzamiento de una nueva versión.
+Por ejemplo, los desarrolladores de & kmail; podrían estar trabajando en una nueva característica en una rama diferente, con el fin de no interferir en la versión usada por la mayoría de desarrolladores. Esta rama tendría un desarrollo activo dentro de ella, incluso mientras la rama principal (llamada / trunk) continuara con su desarrollo.
+Una etiqueta, por otra parte, es una instantánea del repositorio de código fuente en un instante determinado del tiempo. Las etiquetas son utilizadas por el equipo administrativo de & kde; para marcar una versión de código como apropiada para su lanzamiento, mientras que permiten a los desarrolladores seguir trabajando en el código.
+En & subversion; no hay diferencia entre las ramas, etiquetas o la rama principal (trunk) dentro del código. Es tan sólo una convención usada por los desarrolladores. Ésto dificulta dar un soporte adecuado a las ramas y etiquetas dentro de & kdesvn-build;. No obstante, hay algunas cosas que sí pueden hacerse.
+Cómo usar las ramas y etiquetas
+El soporte para las ramas y etiquetas es manejado por un conjunto de opciones, que van desde una petición genérica para una versión, hasta especificar el & url; de descarga para los usuarios avanzados.
+El modo más sencillo es usar las opciones & branch; y & tag;. Usted simplemente indica la opción junto con el nombre de la rama o etiqueta deseada para un cierto módulo, y & kdesvn-build; tratará de determinar la ubicación apropiada dentro del repositorio de & kde; desde la que realizar la descarga. Para la mayoría de módulos de & kde; esta opción funciona bastante bien.
+Para descargar kdelibs de & kde; 3.5 (que se conoce simplemente como la rama 3.5):
+module kdelibs branch 3.5 # otras opciones... end module
+O, para descargar kdemultimedia tal como salió con & kde; 3.4.3:
+module kdemultimedia tag 3.4.3 # otras opciones... end module
+También puede especificar un nombre de rama de manera global. Pero si se elige esta opción, ¡no olvide especificar una rama distinta para los módulos que no deben usar la rama global!
+Opciones avanzadas de soporte de ramas
+& kdesvn-build; admite dos opciones para situaciones en las que & branch; y & tag; suponen una ruta incorrecta: & module-base-path; y & override-url;.
+& module-base-path; se usa para ayudar a & kdesvn-build; a rellenar la parte restante de la ruta de un módulo. En el repositorio de & kde;, todas las rutas son de la forma svnRoot/ module-base-path/ nombre-módulo. Normalmente, & kdesvn-build; puede averiguar la parte de en medio por sí mismo. Cuando no pueda, use & module-base-path; como sigue:
+module qt-copy # branch no funciona aquí todavía module-base-path branches/ qt/ 3.3 end module
+Ésto hará que & kdesvn-build; descargue qt-copy de (en este ejemplo), svn: / /anonsvn. kde. org/ home/ kde/ branches/ qt/ 3.3 / qt-copy.
+La opción & override-url;, por otro lado, precisa que especifique la ruta exacta desde dónde descargarla. Sin embargo, ésto le permite establecer rutas de las que no esperaría que & kdesvn-build; realizase descargas.
+module qt-copy # Especifica la ruta exacta de donde obtener el código fuente. override-url svn: / /anonsvn. kde. org/ home/ kde/ branches/ qt/ 3.3/ qt-copy end module
+& kdesvn-build; no tocará ni corregirá el valor que usted especifique para la opción & override-url;, por lo que si modifica la opción & svn-server;, puede necesitar actualizar ésta también.
+Cómo & kdesvn-build; trata de garantizar una compilación satisfactoria.
+Reintentos automáticos
+Debido a varias cuestiones del sistema de compilación & kde;, & kdesvn-build; realizará automáticamenteuna serie de pasos para intentar que un módulo compile cuando este falle.
+Al primer fallo, & kdesvn-build; simplemente volverá a ejecutar la orden make. Lo crea o no, ésto a veces funciona realmente, y además si vuelve a fallar lo hará rápidamente.
+Al segundo fallo, & kdesvn-build; intentará reconfigurar el módulo y recompilarlo. Esto suele resolver las situaciones en las que un archivo del sistema de compilación cambia la reconfiguración requerida, pero el sistema de compilación no realizó este paso automáticamente.
+La carpeta de compilación del módulo se deja intacta en este paso, así que salvo por el paso de reconfigurar, esta opción también fallará rápidamente si no se puede realizar la compilación.
+Si el módulo sigue fallando, & kdesvn-build; desistirá y continuará con el siguiente módulo. Hay todavía algunas cosas que puede hacer para intentar manualmente que un módulo compile, no obstante.
+& kdesvn-build; detectará la mayoría de casos en los que el sistema de compilación necesita ser reconfigurado y lo volverá a configura automáticamente en esos casos.
+Además, si & kdesvn-build; compiló el módulo la primera vez, todos estos pasos se saltarán desde el momento en que la recompilación limpia normalmente no falla, excepto para un error real.
+Recompilar manualmente un módulo
+Si realiza un cambio en alguna opción de un módulo, o si el código fuente del módulo cambia de manera que & kdesvn-build; no pueda reconocerlo, quizás necesite recompilar manualmente el módulo.
+Puede hacer ésto ejecutando simplemente kdesvn-build --refresh-build módulo.
+Si desea que & kdesvn-build; recompile el módulo automáticamente durante la siguiente actualización de compilación normal, puede crear un archivo especial. Cada módulo tiene una carpeta de compilación. Si crea un archivo llamado. refresh-me en la carpeta de compilación para un módulo, & kdesvn-build; recompilará el módulo la siguiente vez que se realice el proceso de compilación, incluso si se realiza la más rápida compilación incremental.
+De forma predeterminada la carpeta de compilación es ~/ kdesvn/ build/ módulo /. Si modifica la opción & build-dir;, utilice el valor de dicha opción en lugar de ~/ kdesvn/ build.
+Volver a compilar usando. refresh-me para el módulo arts:
+% touch ~/ kdesvn/ build/ arts. refresh-me% kdesvn-build
+Controlar el comportamiento de recompilación
+Puede que no quiera que & kdesvn-build; intente siempre recompilar un módulo. Puede deshabilitar permanentemente este comportamiento modificando la opción & no-rebuild-on-fail; para que tenga el valor true (verdadero).
+Para deshabilitar este comportamiento temporalmente (para una orden), use la opción & cmd-no-rebuild-on-fail; en la línea de órdenes.
+% kdesvn-build --no-rebuild-on-fail
+Cambiar la configuración de las variables de entorno
+& kdesvn-build; no obtiene el entorno de su invocador de la manera en que lo hacen la amplia mayoría de programas. En su lugar, utiliza las preferencias del archivo de configuración para construir su entorno. Ésto es así principalmente para garantizar que el proceso de compilación sea repetible. En otras palabras, & kdesvn-build; puede compilar un módulo incluso si usted olvidó lo que puso en las variables de entorno del intérprete de órdenes desde donde ejecutó & kdesvn-build;.
+Sin embargo, usted puede querer establecer algunas variables de entorno para las que & kdesvn-build; no ofrece ninguna opción directamente. Ésto es posible con la opción & set-env;.
+A diferencia de la mayoría de opciones, puede establecerse más de una vez, y acepta dos argumentos separados por un espacio. El primero es el nombre de la variable de entorno a establecer, y el resto de la línea es el valor de dicha variable.
+Asigne DISTRO = BSD a todos los módulos:
+global set-env DISTRO BSD end global
+Reanudar la compilación
+Reanudar una compilación fallida o cancelada
+Puede decirle a & kdesvn-build; que comience compilando un módulo diferente al que normalmente iría en primer lugar. Ésto puede ser útil cuando una serie de módulos falla o si canceló una compilación a mitad. Para ello, use la opción & cmd-resume-from;.
+Usar & cmd-resume-from; hará que no se actualice el código fuente.
+Reanudar la compilación comenzando por kdebase:
+% kdesvn-build --resume-from= kdebase
+Ignorar módulos en la compilación
+De igual manera que puede reanudar la compilación comenzando por un módulo específico, también puede, por el contrario, actualizar y compilar todo normalmente, pero ignorando un conjunto de módulos.
+Puede hacer ésto usando la opción & cmd-ignore-modules;. Esta opción le dice a & kdesvn-build; que ignore el resto de módulos en la línea de órdenes cuando lleva a cabo la actualización y posterior compilación.
+Ignorar extragear/ multimedia y kdenonbeta durante una ejecución completa:
+% kdesvn-build --ignore-modules extragear/ multimedia kdereview
+Cambiar las opciones desde la línea de órdenes
+Cambiar las opciones globales
+Puede modificar las preferencias de las opciones del archivo de configuración directamente desde la línea de órdenes. Este cambio sobrescribirá las preferencias del archivo de configuración, pero sólo temporalmente, es decir, sólo tendrá efecto mientras permanezca en la línea de órdenes.
+& kdesvn-build; le permite cambiar las opciones con nombre del tipo nombre-opción pasando un argumento en la línea de órdenes de la forma -- nombre-opción =valor. & kdesvn-build; sabrá cuándo no conoce una opción y la buscará en su lista de nombres de opciones. Si no reconoce el nombre, le avisará. En otro caso le recordará el valor que puso y sobrescribirá cualquier preferencia del archivo de configuración.
+Establecer la opción & source-dir; a / dev/ null para hacer pruebas:
+% kdesvn-build --pretend -- source-dir = / dev/ null
+Cambiar las opciones de los módulos
+Es posible también cambiar las opciones para un módulo específico. La sintaxis es similar: -- módulo, nombre-de-opción = valor.
+Este cambio sobreescribe cualquier preferencia similar para el módulo en el archivo de configuración y se aplica únicamente cuando la opción se pasa desde la línea de órdenes.
+Usar una carpeta de compilación diferente para el módulo kdeedu:
+% kdesvn-build -- kdeedu, build-dir = temp-build
+Características para los desarrolladores de & kde;
+Comprobación del agente & ssh;
+& kdesvn-build; puede asegurarse de que los desarrolladores que usan & ssh; para acceder al repositorio de código fuente de & kde;, no olvidan dejarse accidentalmente la herramienta del agente & ssh; activada. Ésto puede provocar que & kdesvn-build; se quede esperando indefinidamente a que el desarrollador introduzca su contraseña & ssh;, así que de forma predeterminada, & kdesvn-build; comprobará si el agente se está ejecutando antes de realizar cualquier actualización del código fuente.
+Ésta comprobación se hace solamente para los desarrolladores de & kde; que usen & ssh;, ya que para acceder de forma anónima al repositorio no hace falta contraseña. & subversion; manejará las contraseñas para el segundo protocolo posible para los desarrolladores de & kde;, https.
+Quizá quiera deshabilitar la comprobación del agente & ssh; en los casos en los que & kdesvn-build; detecta la presencia del agente de forma errónea. Para deshabilitar esta comprobación, establezca la opción disable-agent-check a true (verdadero).
+Deshabilitar la comprobación del agente & ssh;:
+global disable-agent-check true end global
+Otras características de & kdesvn-build;
+Establecer la cantidad de información que produce & kdesvn-build;
+& kdesvn-build; dispone de varias opciones para controlar la cantidad de datos que genera el script. En cualquier caso, los errores siempre aparecerán en la salida.
+La opción --quiet (la forma abreviada es -q), hace que & kdesvn-build; sea generalmente silencioso. Sólo se mostrarán aquellos mensajes importantes, las advertencias o los errores. Cuando esté disponible, se seguirá mostrando la indicación de progreso de la compilación.
+La opción --really-quiet (sin forma abreviada) hace que & kdesvn-build; muestre solamente advertencias importantes o errores mientras se esté ejecutando.
+La opción --verbose (la forma abreviada es -v) hace que & kdesvn-build; produzca una salida muy detallada.
+La opción --debug es solamente para propósitos de depuración. Esta opción hace que & kdesvn-build; actúe como si se activase la opción --verbose, hace que las órdenes también muestren su salida en la terminal, y muestra información de depuración para muchas funciones.
+Salida en color
+Cuando & kdesvn-build; se esté ejecutando desde & konsole; u otra terminal diferente, la salida será normalmente en color.
+Puede deshabilitar este comportamiento usando la opción --no-color en la línea de órdenes, o asignando a la opción & colorful-output; el valor false en el archivo de configuración.
+Deshabilitar la salida en color en el archivo de configuración:
+global colorful-output false end global
+Informes de fallos de compilación al correo electrónico
+& kdesvn-build; puede enviar un informe de error a una dirección de correo electrónico de su elección cuando un módulo falla al compilar por cualquier razón. Para hacerlo funcionar, usted elige una dirección de correo electrónico desde la que & kdesvn-build; realizará el envío y una dirección en donde notificar del error.
+& kdesvn-build; construirá entonces un mensaje de correo electrónico al final de la compilación global si algún módulo fallo al compilar. El mensaje contendrá una indicación abreviada del fallo para cada módulo. Por cada ejecución sólo se envía un mensaje, incluso si fallaron 15 módulos al compilar.
+Esta característica no está habilitada de forma predeterminada. Para habilitarla, necesita establecer las opciones & email-address; y & email-on-compile-error;. email-address especifica la dirección desde la que & kdesvn-build; realizará el envío, mientras que email-on-compile-error especifica dónde se enviará el mensaje.
+& kdesvn-build; usa el módulo estándar de Perl Mail: :Mailer para enviar mensajes de correo electrónico. Este módulo está incluido en Perl 5.8 y es instalable para Perl 5.6. Mail: :Mailer soporta Sendmail (incluyendo clientes de correo compatibles con Sendmail), transporte SMTP nativo y qmail.
+Enviar un mensaje de foo@ejemplo. com para bar@ejemplo. com al fallar la compilación:
+global email-address foo@ejemplo. com # De: dirección cualquierakdesvn-build e-mail email-on-compile-error bar@ejemplo. com # Para: dirección donde enviar el falloe-mail end global
+Eliminar carpetas innecesarias después de compilar
+¿Tiene poco espacio en disco pero aún quiere descargar la última versión de & kde;? & kdesvn-build; puede ayudarle a reducir el uso de espacio en disco al compilar & kde; a partir del código fuente en el repositorio & subversion;.
+Asegúrese de que compilar & kde; no utiliza demasiado espacio. Para utilizar & kdesvn-build;, en algunas partes, se necesita un cantidad de espacio importante:
+La descarga de las fuentes actuales ocupa gran cantidad de espacio. Los módulos predeterminados ocupan alrededor de 1,6 gigabytes de espacio libre. Puede reducir éste asegurándose de compilar solo aquellos módulos que desee. & kdesvn-build; no borrará el código fuente del disco aunque borre la entrada del archivo de configuración, por tanto, asegúrese de borrar las fuentes descargadas que no vaya a utilizar. Tenga en cuenta que los archivos fuente se descargan de internet, y no debería borrarlos si los está utilizando, al menos hasta que haya terminado de utilizar & kdesvn-build;.
+También, si usted ya tiene instalada la biblioteca & Qt; en su distribución (y está contento con esa versión), probablemente no necesite instalar el módulo qt-copy. Ésto le ahorrará aproximadamente 200 megabytes de fuentes en el disco.
+Un aspecto a tener en cuenta es que debido a la forma en que funciona & subversion;, existen dos archivos en disco para cada archivo descargado del repositorio. & kdesvn-build; no tiene código para intentar minimizar el tamaño de los fuentes cuando éstas no se utilizan.
+& kdesvn-build; creará una carpeta de compilación aparte para compilar el código fuente en ella. En ocasiones, & kdesvn-build; tendrá que copiar una carpeta fuente para crear una carpeta de compilación falsa. En ese caso, se usarán enlaces simbólicos para ahorrar espacio, por lo que no debería haber problema con el espacio en disco. La carpeta de compilación en general será más grande que la carpeta fuente del módulo. Por ejemplo, la carpeta de compilación para kdebase ocupa unos 1050 MB, mientras que la carpeta de código fuente ocupa alrededor de 550 MB.
+Por fortuna, la carpeta de compilación no es necesario una vez que un módulo ha sido compilado e instalado con éxito. & kdesvn-build; puede eliminar automáticamente la carpeta de compilación después de instalar un módulo, vea los ejemplos abajo para más información. Observe que este paso imposibilitará a & kdesvn-build; realizar compilaciones incrementales que reducen el tiempo total de compilación.
+Finalmente, se necesita espacio en el disco para la instalación actual de & kde;, que no se ejecuta desde la carpeta de compilación. Suele ocupar menos espacio que la carpeta de compilación. No obstante es complicado obtener estadísticas exactas.
+¿Cómo puede reducir los requisitos de espacio de & kde;? Una forma es utilizar los indicadores (flags) adecuados por el compilador, para optimizar la reducción de espacio en lugar de la velocidad. Otra forma, que tiene un efecto más amplio, es eliminar la información de depuración de su compilación de & kde;.
+Debería estar muy seguro de saber lo que está haciendo antes de decidir eliminar información de depuración. Ejecutar software inestable implica que está ejecutando software con muchas más posibilidades de colgarse que su versión estable. Si está ejecutando software sin información de depuración, puede ser muy complicado crear un buen informe del fallo con el que poder resolverlo, y lo más probable es que tenga que reactivar la información de configuración para la aplicación afectada y recompilar para ayudar a los desarrolladores a eliminar el fallo. Por tanto, elimine la información de depuración bajo su propio riesgo.
+Eliminar la carpeta de compilación después de la instalación de un módulo. La carpeta del código fuente se mantiene y se muestra información de depuración:
+global configure-flags --enable-debug remove-after-install builddir # Elimina la carpeta de compilación tras la instalación end global
+Eliminar la carpeta de compilación tras la instalación, sin información de depuración, y con optimización en base al tamaño.
+global cxxflags -Os # Optimizar en base al tamaño configure-flags --disable-debug remove-after-install builddir # Eliminar carpeta de compilación tras instalar end global
+& cmake;, el sistema de compilación de & kde; 4
+Introducción a & cmake;
+En marzo de 2006, el programa & cmake; eliminó a varios competidores y fue elegido como sistema de compilación para & kde; 4, reemplazando el sistema basado en autotools que & kde; usaba al principio.
+Una introducción a la página de & cmake; está disponible en la kde; TechBase. Básicamente, en lugar de ejecutar make -f Makefile. cvs, después configure y por último & make;, ejecute simplemente & cmake; y a continuación & make;.
+& kdesvn-build; tiene soporte para & cmake;. Algunas características de & kdesvn-build; realmente eran características del sistema de compilación subyacente, incluyendo inst-apps, configure-flags y do-not-compile. Cuando haya características equivalentes disponibles, se proporcionarán. Por ejemplo, la opción equivalente a configure-flags es cmake-options, y la opción do-not-compile también está soportada para & cmake; desde & kdesvn-build; versión 1.6.3.
+Sin embargo, algunas opciones (como inst-apps) no tienen equivalente directo y están desactivadas. Debería encontrar una forma de implementarlas con & cmake;, y en el momento que la encuentre, reactivaré la opción. Sin embargo, funcionará todo más o menos de la misma forma.
+Créditos y licencias
+Traducido por Marcos Fouces Lago mfouces@yahoo. es, Miguel Pérez Ibars mpi79470@alu. um. es y Cristina Yenyxe González García the. blue. valkyrie@gmail. com
+& underFDL;

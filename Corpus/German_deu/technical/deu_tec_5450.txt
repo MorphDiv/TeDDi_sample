@@ -1,0 +1,26 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Funktionsweise
+Übersicht
+PolicyKit hat eine einfache Arbeitsweise, benötigt aber ein paar Veränderungen der Anwendung zur Nutzung der Passwortabfrage.
+Das Problem
+Bei grafischen Anwendungen ist der einfachste Weg zum Erlangen der root -Rechte, diese als root -Benutzer aufzurufen. Jedoch entstehen durch diese Methode einige Sicherheitsrisiken und erlaubt zudem keine gute Zuordnung der Aktionen. Es gibt keine Möglichkeit, um die Aktionen zu unterteilen (z. B. Paketinstallation bei der Systemaktualisierung). Alle Benutzer, die diese verwenden möchten, müssen das root -Passwort eingeben. Eine weitere geläufige Möglichkeit ist die Verwendung von sudo. Jedoch werden auch hier alle Rechte des root -Benutzers gewährt. Wenn beispielsweise eine grafische Anwendung einen Dialog zur Auswahl von Dateien besitzt und dieser als root -Benutzer ausgeführt wird, kann der Benutzer möglicherweise alle Dateien auf diesem System löschen oder auch Zugriff auf die Dateien anderer Benutzer erlangen.
+Die Lösung
+Mit PolicyKit ist dieses Problem gelöst. Die betreffende Anwendung muss lediglich so aufgeteilt werden, damit der Programmkode für die Berechtigung in einer eigenen Anwendung (sog. Hilfsprogramm ohne grafische Oberfläche) ausgeführt wird und die gewünschten Aktionen in einer .policy -Datei aufgeführt werden. PolicyKit lädt diese Datei und kann nun diese Anwendungen für die Nutzung dieser Aktionen berechtigen. Die Verwendung von & DBus;-Anwendungen ist der beste aber nicht der einzigste Weg für die Ausführung von Hilfsprogrammen mit root -Rechten.
+Auf diese Weise ruft die grafische Oberfläche eine Aktion des Hilfsprogramms mittels & DBus; auf, welche dann das Hilfsprogramm mit root -Rechten aufruft und dieses darüber informiert, welche Aktion von welcher Anwendung aufgerufen wurde. Das Hilfsprogramm ruft nun den PolicyKit-Agenten auf, um zu sehen, ob die Anwendung die Aufgabe ausführen kann (das Hilfsprogramm sollte nun berichten, ob die angefragte Aktion ausgeführt werden kann). In diesem Fall sah das Hilfsprogramm, dass die Anwendung nicht die benötigten Rechte besaß und die grafische Oberfläche muss bei PolicyKit für eine Berechtigung anfragen.
+Sobald PolicyKit eine Anfrage für eine Berechtigung erhält, ruft es einen verfügbaren Agenten auf, der möglicherweise & policykit-kde; ist (falls verfügbar). Nach einer erfolgreichen Genehmigung muss die grafische Oberfläche das Hilfsprogramm nochmals mit der gleichen Aktion aufrufen.

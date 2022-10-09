@@ -1,0 +1,37 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP は、全てのRFC-1867対応ブラウザ(Netscape Navigator 3 以上、 MicrosoftからのパッチをあてたMicrosoft Internet Explorer 3または パッチ無しのそれ以降の版を含みます)からファイルのアップロードを 受けることができます。 この機能では、テキストとバイナリファイルの両方のアップロードが可能です。 PHPの認証機構およびファイル操作関数を用いて、アップロードを許可する ユーザーとアップロード後にそのファイルを使用して行う動作を完全に制御する ことが可能です。
+関係する設定に関する注記 php.ini の file_uploads, upload_max_filesize, upload_tmp_dir post_max_size ディレクティブ も参照下さい。
+PHPはNetscape ComposerおよびW3CのAmayaクライアントにより使用される PUTメソッドによるファイルアップロードもサポートしていることに注意 して下さい。詳細は、 PUTメソッドのサポート を参照下さい。
+ファイルアップロード画面は、次のような特別なフォームを作成すること により、作成することができます。
+例 18-1ファイルアップロード用のフォーム
+MAX_FILE_SIZEはブラウザへの勧告に過ぎません。この最大値を 出し抜くのは簡単なことなので信頼してはいけません。しかし、 PHP側の最大サイズの設定を欺くことはできません。
+ファイルのアップロードに際して定義される変数はPHPのバージョン及び 設定により異なります。 オートグローバル $_FILES は、PHP 4.1.0以降に存在します。 $HTTP_POST_FILES は、PHP 4.0.0以降に存在します。 これらの配列には、全てアップロードされたファイルの情報が 含まれています。 $_FILES の使用が推奨されています。 PHPディレクティブ register_globals が on の場合、関係する変数名も存在します。 register_globals は、PHP 4.2.0 以降、 off がデフォルトとなっています。
+$_FILES の内容は次のようになります。ここでは、上の例のスクリプトで使われたように、 アップロードファイルの名前として userfile を使用する ことを仮定していることに注意して下さい。
+クライアントマシンの元のファイル名。
+ファイルのMIME型。ただし、ブラウザがこの情報を提供する場合。 例えば、 "image/gif" のようになります。
+アップロードされたファイルのバイト単位のサイズ。
+アップロードされたファイルがサーバー上で保存されているテンポラ リファイルの名前。
+このファイルアップロードに関する エラーコード ['error'] は、PHP 4.2.0で追加されました。
+注意 4.1.0より前のバージョンのPHPでは、この変数は $HTTP_POST_FILES で、 $_FILES の ような オートグローバル 変数ではありませんでした。PHP 3は、 $HTTP_POST_FILES をサポートしていません。
+php.ini で register_globals が on となっている場合、追加の変数が利用可能となります。 例えば、 $userfile_name は、 $_FILES['userfile']['name'] と同じで、 $userfile_type は、 $_FILES['userfile']['type'] と同じといったようになります。 PHP 4.2.0以降は、register_globalsのデフォルトはoffであることを 留意下さい。このディレクティブに依存しないことが推奨されます。
+php.ini の upload_tmp_dir ディレクティブで 他の場所を指定しない限り、ファイルはサーバーにおけるデフォルトのテ ンポラリディレクトリに保存されます。サーバーのデフォルトディレクト リは、PHP を実行する環境において環境変数 TMPDIR を設 定することにより変更することができます。しかし、PHP スクリプトの内 部から putenv() 関数により設定しても上手くいきま せん。この環境変数は、アップロードされたファイルに他の処理を行う際 にも同様に使用することが可能です。
+例 18-2ファイルのアップロードを検証する
+以下の例は、4.0.2 より後のバージョンの PHP 4 用です。 is_uploaded_file() および move_uploaded_file() の関数のエントリを 参照下さい。
+アップロードされたファイルを受け取る PHP スクリプトは、アップロー ドされたファイルを用いて何をするべきかを決めるために必要なロジック を全て実装する必要があります。例えば、変数 $_FILES['userfile']['size'] を使用して、小さすぎ たり、大きすぎたりするファイルを捨てることができます。指定した型以 外のファイルを全て捨てるために変数 $_FILES['userfile']['type'] を用いることができま す。 PHP 4.2.0以降、 $_FILES['userfile']['error'] を使用することができ、 エラーコード に基づき、ロジックを構成することができます。 何らかの方法により、テンポラリディレクトリからファイルを削除し たり、他の場所に移動したりする必要があります。
+移動または名前の変更が行われていない場合、リクエストの終了時にその ファイルはテンポラリディレクトリから削除されます。

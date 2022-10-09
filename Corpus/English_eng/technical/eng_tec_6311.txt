@@ -1,0 +1,26 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+How it works
+Overview
+PolicyKit has a simple way of working, but it requires some design changes from the applications that want to use it to request passwords.
+The problem
+In GUI applications the common way to gain root privileges is to start it as root, but there are several security risks in doing this method and it does not allow a good actions mapping. There is no way to separate actions like package-install of system-upgrading. All the users who want to use it must have the root password. Another common approach is using sudo but once you start an application with sudo you will have all the rights the root user will have. If for example the GUI application has a dialog to select files that dialog is running as root which means that the user might be able to delete any file on his machine or even coping others user files.
+The solution
+With PolicyKit this problem is solved. The application in question just need to separate the privileged code into another application, often called helper (which will not have a GUI), then maps the desired actions into a. policy file. PolicyKit then loads this file and it can now authenticate applications to use those actions. The use of & DBus; activated applications is the best if not the only, way of putting an helper application to run with root privileges.
+With this design the GUI application calls an action of the helper application through & DBus;, which will start the helper with root privileges, and informing it which action was requested and which application has requested it. The helper application now calls the PolicyKit agent to see if that application can do the given task, the helper should report if it could do the requested action. In case the helper saw that the application did n't have enough rights the GUI will then need to ask PolicyKit to obtain an authorization.
+When PolicyKit receives the request to obtain an authorization it issues an available Agent, which might happen to be & policykit-kde; if available. After a successful authentication the GUI application needs to call the helper repeating the same operation again.

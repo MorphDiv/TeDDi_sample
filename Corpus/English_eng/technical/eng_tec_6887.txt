@@ -1,0 +1,178 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+translator-credits
+Disk Seeks Considered Harmful
+Disk seeks are one of the most expensive operations you can possibly perform. You might not know this from looking at how many of them we perform, but trust me, they are. Consequently, please refrain from the following suboptimal behavior:
+Placing lots of small files all over the disk.
+Opening, stating, and reading lots of files all over the disk
+Doing the above on files that are laid out at different times, so as to ensure that they are fragmented and cause even more seeking.
+Doing the above on files that are in different directories, so as to ensure that they are in different cylinder groups and cause even more seeking.
+Repeatedly doing the above when it only needs to be done once.
+Ways in which you can optimize your code to be seek-friendly:
+Consolidate data into a single file.
+Keep data together in the same directory.
+Cache data so as to not need to reread constantly.
+Share data so as not to have to reread it from disk when each application loads.
+Consider caching all of the data in a single binary file that is properly aligned and can be mmaped.
+The trouble with disk seeks are compounded for reads, which is unfortunately what we are doing. Remember, reads are generally synchronous while writes are asynchronous. This only compounds the problem, serializing each read, and contributing to program latency.
+Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. You may obtain a copy of the GNU Free Documentation License from the Free Software Foundation by visiting
+Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and those trademarks are made aware to the members of the GNOME Documentation Project, the names have been printed in caps or initial caps.
+2004-2005
+Callum McKenzie
+Robert Love
+Software can be optimized in many ways: for speed, program size, or memory use. This section contains guides and tutorials for optimizing your software.
+Optimization Guide
+Introduction
+This is a brief introduction to optimization, both the hows and thewhys. Details of individual tools and techniques are left for later articles, but a collection of hints and tricks is provided.
+Massif
+This article describes how to use the
+Harmfulness
+What are we Optimizing?
+When we optimize for GNOME the first thing to remember is this: we are not trying to make the program better, we are trying to make the person using the computer happier.
+Better programs make people happier, but there are some improvements that will make them a lot happier than others: Responsiveness, start-up time, easy to access commands and not having the computer go into swap the moment more than two programs are open.
+Traditional optimization tackles concepts like CPU use, code size, the number of mouse clicks and the memory use of the program. This second list has been chosen to correlate with the first list, however there is an important difference: The person using GNOME doesn't care about the second list, but they care a lot about the first list. When optimizing GNOME programs we will reduce CPU use, memory use and all those things, but these are the means to the end, not the final goal. We are optimizing for people.
+Doing the Optimization
+The previous section omitted one important qualifier: To optimize something it has to be measurable. You can't measure happiness. However, you can measure start-up time so you can tell if you have improved it. Happiness will then, hopefully, follow.
+Optimization is the process of measurement, refinement and re-measurement. So the first thing you must do is find a way to measure what you are optimizing. Ideally this measurement is a single number, for example: the time taken to perform a task. This is your benchmark, it is the only way to tell if you are winning or losing. There is a big difference between a program that
+Once you have a basic benchmark you need to find out why your code is not doing as well as it should. It is tempting to do this by inspection: just looking at the code and trying to spot something that looks like it needs improvement. You will invariably be wrong. Using a profiler to get a detailed break-down of what your program really does is the only way to be sure.
+Usually the problem is isolated to small sections of code. Pick the worst place and concentrate on that first. Once that is done, rerun the profiler and repeat. As you proceed the gains made at each step will get less and less, at some point you will have to decide that the results are good enough. If your efforts are only extracting 10% improvements then you are well past the point where you should have stopped.
+Don't forget the big picture. For example, rather than just trying to speed up a piece of code, ask yourself if it needs to be run at all. Could it be combined with another piece of code? Can the results of previous calculations be saved and reused? It won't even need to be optimized if it is in a place where the user is never going to notice it. Worse still, the code may already be optimized and is doing the heavy calculations now to avoid doing them later. Code does not run in isolation and neither does the optimization process.
+Hints
+The Fundamentals
+Re-run your benchmark after every change you make to the code and keep a log of everything you change and how it affects the benchmark. This lets you undo mistakes and also helps you not to repeat mistakes.
+Make sure your code is correct and bug-free before optimizing it. Check that it remains correct and bug-free after optimization.
+Optimize at the high level before optimizing the details.
+Use the right algorithm. The classic text-book example is using quick-sort instead of bubble-sort. There are many others, some save memory, some save CPU. Also, see what shortcuts you can make: you can do quicker than quick-sort if you are prepared to make some compromises.
+Optimization is a trade-off. Caching results speeds up calculations, but increases memory use. Saving data to disk saves memory, but costs time when it is loaded back from disk.
+Make sure you choose a wide variety of inputs to optimize against. If you don't it is easy to end up with a piece of code carefully optimized for one file and no others.
+Avoid expensive operations: Multiple small disk reads. Using up lots of memory so disk swapping becomes necessary. Avoid anything that writes or reads from the hard disk unnecessarily. The network is slow too. Also avoid graphics operations that need a response from the X server.
+Traps for the Unwary
+Beware of side effects. There can often be strange interactions between different sections of code, a speed-up in one part can slow another part down.
+When timing code, even on a quiet system, events outside the program add noise to the timing results. Average over multiple runs. If the code is very short, timer resolution is also a problem. In this case measure the time the computer takes to run the code 100 or 1000 times. If the times you are recording are longer than a few seconds, you should be OK.
+It is very easy to be misled by the profiler. There are stories of people optimizing the operating system idle-loop because that is where it spent all its time! Don't optimize code that does nothing the user cares about.
+Remember the resources on the X server. Your program's memory usage doesn't include the pixmaps that are stored in the X server's process, but they are still using up memory. Use xrestop to see what resources your program is using.
+Low Level Hints
+When optimizing memory use, be wary of the difference between peak usage and average memory usage. Some memory is almost always allocated, this is usually bad. Some is only briefly allocated, this may be quite acceptable. Tools like massif use the concept of space-time, the product of memory used and the duration it was allocated for, instead.
+Time simplified bits of code that do only the things you know are essential, this gives an absolute lower limit on the time your code will take. For example, when optimizing a loop time the empty loop. If that is still too long no amount of micro-optimization will help and you will have to change your design. Make sure the compiler doesn't optimize away your empty loop.
+Move code out from inside loops. A slightly more complicated piece of code that is executed once is far quicker than a simple piece of code executed a thousand times. Avoid calling slow code often.
+Give the compiler as many hints as possible. Use the const keyword. Use
+Don't use assembly language. It is not portable and, while it may be fast on one processor, it is not even guaranteed to be fast on every processor that supports that architecture (e.g. Athlon vs. Pentium 4).
+Don't rewrite an existing library routine unless you are sure it is unnecessarily slow. Many CPU-intensive library routines have already been optimized. Conversely, some library routines are slow, especially ones that make system calls to the operating system.
+Minimize the number of libraries you link to. The fewer libraries to link in, the faster the program starts. This is a difficult thing to do with GNOME.
+High Level Tricks
+Take advantage of concurrency. This doesn't just mean using multiple processors, it also means taking advantage of the time the user spends thinking about what they are going to do next to perform some calculations in anticipation. Do calculations while waiting for data to be loaded off disk. Take advantage of multiple resources, use them all at once.
+Cheat. The user only has to think that the computer is fast, it doesn't matter whether it actually is or not. It is the time between the command and the answer that is important, it doesn't matter if the response is pre-calculated, cached, or will in fact be worked out later at a more convenient time, as long as the user gets what they expect.
+Do things in the idle loop. It is easier to program than using full multi-threading but still gets things done out of the users eye. Be careful though, if you spend too long in the idle loop your program will become sluggish. So regularly give control back to the main loop.
+If all else fails, tell the user that the code is going to be slow and put up a progress bar. They won't be as happy as if you had just presented the results, but they will at least know the program hasn't crashed and they can go get a cup of coffee.
+external ref='figures/massif-before.png' md5='1a6b2ace548e6789ab8bfacb3727b345'
+external ref='figures/massif-after.png' md5='36d1b4ad7ab49b28b69ad3eabbaa7069'
+Using
+
+The heap is the region of memory which is allocated with functions like malloc. It grows on demand and is usually the largest region of memory in a program. The stack is where all the local data for functions is stored. This includes the "automatic" variables in C and the return address for subroutines. The stack is typically a lot smaller and a lot more active than the heap. We won't consider the stack explicitly since
+
+Using
+
+It is also useful to tell
+Your command-line should therefore look something like:
+valgrind --tool=massif --depth=5 --alloc-fn=g_malloc --alloc-fn=g_realloc --alloc-fn=g_try_malloc \\
+ --alloc-fn=g_malloc0 --alloc-fn=g_mem_chunk_alloc swell-foop
+
+Interpreting the Results
+The graphical output of
+The text file is arranged as a hierarchy of sections, at the top is a list of the worst memory users arranged in order of decreasing spacetime. Below this are further sections, each breaking the results down into finer detail as you proceed down the call-stack. To illustrate this we will use the output of the command above.
+
+
+At the top of the graph we see a large yellow band labelled gdk_pixbuf_new. This seems like an ideal candidate for optimization, but we will need to use the text file to find out what is calling gdk_pixbuf_new. The top of the text file will look something like this:
+Command: ./swell-foop
+
+== 0 ===========================
+Heap allocation functions accounted for 90.4% of measured spacetime
+
+Called from:
+ 28.8% : 0x6BF83A: gdk_pixbuf_new (in /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+
+ 6.1% : 0x5A32A5: g_strdup (in /usr/lib/libglib-2.0.so.0.400.6)
+
+ 5.9% : 0x510B3C: (within /usr/lib/libfreetype.so.6.3.7)
+
+ 3.5% : 0x2A4A6B: __gconv_open (in /lib/tls/libc-2.3.3.so)
+The line with the '=' signs indicates how far down the stack trace we are, in this case we are at the top. After this it lists the heaviest users of memory in order of decreasing spacetime. Spacetime is the product of the amount of memory used and how long it was used for. It corresponds to the area of the bands in the graph. This part of the file tells us what we already know: most of the spacetime is dedicated to gdk_pixbuf_new. To find out what called gdk_pixbuf_new we need to search further down the text file:
+== 4 ===========================
+Context accounted for 28.8% of measured spacetime
+ 0x6BF83A: gdk_pixbuf_new (in /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+ 0x3A998998: (within /usr/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-png.so)
+ 0x6C2760: (within /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+ 0x6C285E: gdk_pixbuf_new_from_file (in /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+
+Called from:
+ 27.8% : 0x804C1A3: load_scenario (swell-foop.c:463)
+
+ 0.9% : 0x3E8095E: (within /usr/lib/libgnomeui-2.so.0.792.0)
+
+ and 1 other insignificant place
+The first line tells us we are now four levels deep into the stack. Below it is a listing of the function calls that leads from here to gdk_pixbuf_new. Finally there is a list of functions that are at the next level down and call these functions. There are, of course, also entries for levels 1, 2, and 3, but this is the first level to reach right down through the GDK code to the
+Now that we know what part of our code is using all the spacetime we can look at it and find out why. It turns out that the load_scenario is loading a pixbuf from file and then never freeing that memory. Having identified the problem code, we can start to fix it.
+Acting on the Results
+Reducing spacetime consumption is good, but there are two ways of reducing it and they are not equal. You can either reduce the amount of memory allocated, or reduce the amount of time it is allocated for. Consider for a moment a model system with only two processes running. Both processes use up almost all the physical RAM and if they overlap at all then the system will swap and everything will slow down. Obviously if we reduce the memory usage of each process by a factor of two then they can peacefully coexist without the need for swapping. If instead we reduce the time the memory is allocated by a factor of two then the two programs can coexist, but only as long as their periods of high memory use don't overlap. So it is better to reduce the amount of memory allocated.
+Unfortunately, the choice of optimization is also constrained by the needs of the program. The size of the pixbuf data in
+
+The spacetime use of gdk_pixbuf_new is now a thin band that only spikes briefly (it is now the sixteenth band down and shaded magenta). As a bonus, the peak memory use has dropped by 200 kB since the spike occurs before other memory is allocated. If two processes like this were run together the chances of the peak memory usage coinciding, and hence the risk of swapping, would be quite low.
+Can we do better ? A quick examination of
+Command: ./swell-foop
+
+== 0 ===========================
+Heap allocation functions accounted for 87.6% of measured spacetime
+
+Called from:
+ 7.7% : 0x5A32A5: g_strdup (in /usr/lib/libglib-2.0.so.0.400.6)
+
+ 7.6% : 0x43BC9F: (within /usr/lib/libgdk-x11-2.0.so.0.400.9)
+
+ 6.9% : 0x510B3C: (within /usr/lib/libfreetype.so.6.3.7)
+
+ 5.2% : 0x2A4A6B: __gconv_open (in /lib/tls/libc-2.3.3.so)
+If we look closer though we see that it is called from many, many, places.
+== 1 ===========================
+Context accounted for 7.7% of measured spacetime
+ 0x5A32A5: g_strdup (in /usr/lib/libglib-2.0.so.0.400.6)
+
+Called from:
+ 1.8% : 0x8BF606: gtk_icon_source_copy (in /usr/lib/libgtk-x11-2.0.so.0.400.9)
+
+ 1.1% : 0x67AF6B: g_param_spec_internal (in /usr/lib/libgobject-2.0.so.0.400.6)
+
+ 0.9% : 0x91FCFC: (within /usr/lib/libgtk-x11-2.0.so.0.400.9)
+
+ 0.8% : 0x57EEBF: g_quark_from_string (in /usr/lib/libglib-2.0.so.0.400.6)
+
+ and 155 other insignificant places
+We now face diminishing returns for our optimization efforts. The graph hints at another possible approach: Both the "other" and "heap admin" bands are quite large. This tells us that there are a lot of small allocations being made from a variety of places. Eliminating these will be difficult, but if they can be grouped then the individual allocations can be larger and the "heap admin" overhead can be reduced.
+Caveats
+There are a couple of things to watch out for: Firstly, spacetime is only reported as a percentage, you have to compare it to the overall size of the program to decide if the amount of memory is worth pursuing. The graph, with its kilobyte vertical axis, is good for this.
+Secondly,
+The Quick Guide to Optimizing GNOME Programs
+Optimizing GNOME Software
+GNOME Documentation Project
+Callum
+McKenzie
+Robert
+Love
+0.1
+November 2007
+William Johnston
+Intial conversion to docbook format.

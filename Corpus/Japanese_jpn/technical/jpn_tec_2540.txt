@@ -1,0 +1,31 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 3, PHP 4)
+crypt() は、Unix 標準の DES 暗号を使って文字列を暗号化します。引数には暗号化したい文字列を指 定し、オプションで暗号化のベースとなる 2 文字の'salt' 文字列を指 定します。暗号化に関する関数の詳細は Unix man ページを参照してく ださい。
+salt引数が指定されない場合、PHPによりランダムに生成されます。
+いくつかのオペレーティングシステムは、複数の暗号化方式をサポート しています。実際、標準のDES暗号の替わりにMD5に基づく暗号化アルゴ リズムが使用されることが時々あります。暗号化手法は、salt引数によ り選定されます。インストール時に、PHPはcrypt関数の機能を定義し、 他の暗号化方式用のsaltを受付ます。saltが指定されない場合、システ ムのデフォルトの暗号化手法がMD5でない限りPHPはデフォルトで標準の2 文字DES saltを自動的に生成します。暗号化手法がMD5の場合、MD5互換 のsaltが生成されます。PHPは、定数CRYPT_SALT_LENGTH を設定します。 この定数により、標準の2文字のsaltまたはより長い12文字MD5 saltのど ちらが適用可能であるかを知ることが可能です。
+生成されたsaltを使用する場合、saltが生成されるのは一回限りである ことに気付く必要があります。この関数を再帰的にコールする場合、こ のことは、出力だけでなく、セキュリティにも影響を与える可能性があ ります。
+標準DES暗号 crypt() は、出力の最初の2文字をsalt として使用します。 str の最初の8文字を使用するだけです。 このため、(同じsaltを使用した場合、)同じ8文字から始まるより長い文 字列について同じ結果が生成されます。
+crypt() 関数が複数の暗号化手法をサポートするシステムにおいては、 指定した型を利用可能であるかにより、次の定数を0又は1に設定します。
+CRYPT_STD_DES - 2文字 SALT の標準 DES 暗号
+CRYPT_EXT_DES - 9文字の拡張DES暗号
+CRYPT_MD5 - $1$ で始まる12文字のSALTを有するMD5暗号
+CRYPT_BLOWFISH - $2$ で始まる16文字の拡張DES暗号
+注意 crypt() は単方向アルゴリズムを使用している ため、復号化するための関数 (decrypt) はありません。
+例 1 crypt() の例
+md5() および mcrypt拡 張モジュール も参照下さい。

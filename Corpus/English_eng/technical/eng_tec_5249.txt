@@ -1,0 +1,46 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 14.
+Classes and Objects
+Next
+Note:
+In PHP 3, objects will lose their class association throughout the process of serialization and unserialization.
+The resulting variable is of type object, but has no class and no methods, thus it is pretty useless (it has become just like an array with a funny syntax).
+Caution
+The following information is valid for PHP 4 only.
+serialize() returns a string containing a byte-stream representation of any value that can be stored in PHP. unserialize() can use this string to recreate the original variable values.
+Using serialize to save an object will save all variables in an object.
+The functions in an object will not be saved, only the name of the class.
+In order to be able to unserialize() an object, the class of that object needs to be defined.
+That is, if you have an object $a of class A on page1.php and serialize this, you 'll get a string that refers to class A and contains all values of variabled contained in $a.
+If you want to be able to unserialize this on page2.php, recreating $a of class A, the definition of class A must be present in page2.php.
+This can be done for example by storing the class defintion of class A in an include file and including this file in both page1.php and page2.php.
+classa.inc: class A {var $one = 1; function show_one() {echo $this - one;}} page1.php: include("classa.inc"); $a = new A; $s = serialize($a); / / store $s somewhere where page2.php can find it. $fp = fopen("store", "w"); fputs($fp, $s); fclose($fp); page2.php: / / this is needed for the unserialize to work properly. include("classa.inc"); $s = implode("", @file("store")); $a = unserialize($s); / / now use the function show_one() of the $a object. $a - show_one();
+If you are using sessions and use session_register() to register objects, these objects are serialized automatically at the end of each PHP page, and are unserialized automatically on each of the following pages.
+This basically means that these objects can show up on any of your pages once they become part of your session.
+It is strongly recommended that you include the class definitions of all such registered objects on all of your pages, even if you do not actually use these classes on all of your pages.
+If you don 't and an object is being unserialized without its class definition being present, it will lose its class association and become an object of class stdClass without any functions available at all, that is, it will become quite useless.
+So if in the example above $a became part of a session by running session_register( "a"), you should include the file classa.inc on all of your pages, not only page1.php and page2.php.
+Prev
+Home
+Next
+parent
+Up
+The magic functions __sleep and __wakeup

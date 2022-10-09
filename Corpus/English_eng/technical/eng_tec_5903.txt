@@ -1,0 +1,645 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+& kdesvn-build; Script Manual
+Michael Pyne
+michael. pyne@kdemail. net
+Carlos Woelz
+carloswoelz@imap-mail. com
+ROLES_OF_TRANSLATORS
+Michael Pyne
+Carlos Woelz
+& kdesvn-build; is a script which builds and installs & kde; directly from the sources found in the & kde; & subversion; repository.
+KDE
+kdesdk
+SVN
+Subversion
+KDE development
+Introduction
+& kdesvn-build; is a script to help users install kde; from its subversion; source repository.
+Here we document the & kdesvn-build; configuration file syntax and options, its command line options, features, and an overview of all necessary steps required to build & kde; from source, including the steps which you should perform using other tools, or in other words, steps that are not automatically performed by the & kdesvn-build; script.
+Getting Started
+In this chapter, we show how to use the & kdesvn-build; to checkout modules from the & kde; repository and build them. We also provide a basic explanation of the & kde; & subversion; structure and the steps you have to perform before running the script.
+All topics present in this chapter are covered with even more detail in the Building & kde; 4 from Source, at the kde; Techbase site. If you are compiling & kde; for the first time, it is a good idea to read it, or consult it as a reference source. You will find detailed information about packaging tools and requirements, common compilation pitfalls and strategies and information about running your new & kde; installation.
+Preparing the System to Build & kde;
+Setup a new user account
+It is recommended that you download and build & kde; using a separate user account. If you already have & kde; packages installed, the best choice would be to create a different (dedicated) user to build and run the new & kde;. The advantage of building & kde; with a dedicated user is you can not break the base system, and you will always have a way to comfortably work when things go wrong.
+Later, you can do a system installation if you wish. This document does not cover a system installation. If you are performing a system wide install, you should already know what you are doing. If not, then you may want to consult the documentation, or help sites, for your distribution in order to prepare and use the system installation correctly.
+Ensure your system is ready to build & kde; source
+Before using the & kdesvn-build; script (or any other building strategy) you must install the development tools and libraries needed for & kde;. The complete list of required tools can be found from the kde; Compilation Requirements page. Requirements for the & kde; 4 series may be obtained from the KDE TechBase.
+Here is a list of some of the things you will need:
+If you are building & kde; 3, you will need the GNU Autotools (i. e. & automake; and & autoconf;).
+If you are building & kde; 4, you will need & cmake;. The required version will vary depending on what version of & kde; 4 you are building, see the TechBase for specifics.
+The & subversion; client program, including support for Secure HTTP (https). To ensure needed support, you can run svn --version. If the output says that it handles the https scheme (for write access to svn. kde. org) or svn scheme (for readonly access to anonsvn. kde. org) then you should be set to go.
+The gcc compiler, with support for C++. Versions 3.3 or higher are the best supported.
+Be sure to check the kde; Compilation Requirements page to make sure that any other needed libraries are included.
+One exception is the & Qt; library. & kdesvn-build; will normally install a copy of & Qt; whether you have it installed or not, so it is not necessary for you to have it. If you do not want to use the & Qt; copy, you need to do these things:
+Make sure to remove the qt-copy module from your configuration file, as you will not need it, and having it would add extra time to your build.
+Change the setting of the qtdir option in your configuration file to point to your system & Qt;. This is normally equal to the setting of $QTDIR for your system.
+If you do not already have & Qt; installed, install it, including any relevant -dev or -devel packages. You will need at least & Qt; 3.3 if you are building & kde; 3.5, or & Qt; 4.5 if you are building & kde; 4.
+If you are building & kde; 4 it is highly recommended to use the qt-copy version of & Qt;, making sure to apply recommended patches (this is the default setting, controlled by the apply-qt-patches option).
+Some of these packages are divided into libraries (or programs or utilities), and development packages. You will need at least the program or library and its development package. If in doubt, install all. The libraries you need will change depending on the modules you intend to build, as each module has its own requirements. The kde; TechBase has more details about the specific tools and techniques used to install and find the required software.
+Setup & kdesvn-build;
+Install & kdesvn-build;
+You probably already have a version of the & kdesvn-build; script installed in your system. However, if you do not, you can download it from kdesvn-build; home page, or you can find it from its home in the & kde; source repository.
+& kdesvn-build; is included with the kdesdk module, and the module is often installed by distributions already. If you have downloaded & kdesvn-build; ensure that you are using the version you downloaded. You can use the --version option to be sure you are running the version you think you are.
+To download & kdesvn-build; from its home page, simply go to the kdesvn-build; home page and download the latest appropriate release. The release is packaged as a compressed tarball archive, which you can extract using & ark; or tar. The contents of the archive include the actual & kdesvn-build; script, and a sample configuration file (kdesvn-buildrc-sample).
+Or, you can obtain & kdesvn-build; from its source repository, located at: http: / /websvn. kde. org/ trunk/ KDE/ kdesdk/ scripts/. This is the & kde; Software Development Kit scripting directory, which is the home of & kdesvn-build;. You can click on the kdesvn-build entry which will bring you to a page where you can download the latest revision. Do so, and save it to a convenient spot on your hard disk. Do the same for kdesvn-buildrc-sample if you need to.
+No matter which technique you use, you need to make sure that the kdesvn-build file is executable. For convenience you should make sure it is in a directory contained in the PATH environment variable, otherwise you may get messages saying that the command was not found, or you may run a previously-installed version by mistake.
+Prepare the configuration file
+Although & kdesvn-build; does not require you to create a configuration file, it makes the work flow much easier. Using a configuration file, you can control which modules are installed, or remove modules you do not want to install. & kdesvn-build; by default installs a useful & kde; installation using very generic installation flags, which may be different from your needs. So it is best to use a configuration file.
+The configuration file should be called. kdesvn-buildrc. This file should be installed on the home folder (~/), and contain all configuration data required for the script to run, like configuration options, compiling options, location of the sources, the destination of the installation (prefix), the modules that should be built, & etc;. The default configuration data is provided by the kdesvn-buildrc-sample file, which you can copy over as ~/. kdesvn-buildrc and then edit.
+You can find more information about the syntax of the configuration file in and in.
+Setting the Configuration Data
+To use & kdesvn-build;, you should have a file in your home directory called. kdesvn-buildrc, which sets the general options and sets the modules you would like to download and build.
+It is possible to use different configuration files for & kdesvn-build;, which is described in. If you need to use multiple configurations, please see that section. Here, we will assume the configuration is stored in ~/. kdesvn-buildrc.
+The easiest way to proceed is to use the kdesvn-buildrc-sample file as a template, changing global options to match your wants, and also change the list of modules you want to build.
+The default settings should actually already be appropriate to perform a & kde; build. Some settings that you may wish to alter include:
+binpath, to change the list of directories that will be searched for commands. This is exactly the same as the PATH variable in the shell.
+use-stable-kde to change the default version to build of & kde; modules. By default & kdesvn-build; will build the trunk version of & kde; (currently & kde; 4). If you want to build the latest stable release of & kde; instead of using your distribution packages (right now the & kde; 3.5 branch is stable) you would set this option to true.
+kdedir, which changes the destination directory that & kde; is installed to. This defaults to ~/ kde, which is a single-user installation.
+qtdir, which controls the path to the installation of & Qt; to use. The defaults to using the qt-copy module from the & kde; & subversion; repository (~/ kdesvn/ build/ qt-copy).
+For Qt versions that support installation, this also controls where to install qt-copy.
+svn-server, which selects what & url; to download the sources from. This is useful if you are a developer with a kde; & subversion; account.
+After the global section is a list of modules to build, bracketed by module... end module lines. Check if the listed modules are in fact the modules you want to build. The default options from the kdesvn-buildrc-sample file should be enough to get a fairly complete & kde; installation. Save the result as. kdesvn-buildrc in your home folder.
+If you wish to fine tune your. kdesvn-buildrc, consult for detailed information about all configuration options.
+Using the & kdesvn-build; script
+Now you are ready to run the script. From a terminal window, log in to the user you are using to compile & kde; and execute the script:
+percnt; su - devel-username percnt; kdesvn-build
+Now, the script should start downloading the sources and compiling them. Depending on how many modules you are downloading, it is possible that & kdesvn-build; will not succeed the first time you compile & kde;. Do not despair!
+& kdesvn-build; logs the output of every command it runs. By default, the log files are kept in ~/ kdesvn/ log. To see what the caused an error for a module in the last & kdesvn-build; command, usually it is sufficient to look at ~/ kdesvn/ log/ latest/ module-name / error. log.
+In that file, you will see the error that caused the build to fail for that module. If the file says (at the bottom) that you are missing some packages, try installing the package (including any appropriate -dev packages) before trying to build that module, and pass the --reconfigure option after install the missing packages.
+Or, if the error appears to be a build error then it is probably an error with the & kde; source, which will hopefully be resolved within a few days. If it is not resolved within that time, feel free to mail the kde-devel@kde. org (subscription may be required first) in order to report the build failure.
+You can find more common examples of things that can go wrong and their solutions, as well as general tips and strategies to build & kde; in the Building & kde; 4 from Source.
+For more information about & kdesvn-build; 's logging features, please see.
+Setting the Environment to Run Your Fresh & kde;
+Assuming you are using a dedicated user to build & kde;, and you already have an installed & kde; version, running your new & kde; may be a bit tricky, as the new & kde; has to take precedence over the old. Change the environment variables to make sure it does.
+Changing your startup profile settings
+The. bash_profile is the login settings file for the popular bash shell used by many & Linux; distributions. If you use a different shell, then you may need to adjust the samples given in this section for your particular shell.
+Open or create the. bash_profile file in the home directory with your favorite editor, and add to the end of the file: If you are building the qt-copy module (you are by default), add instead: QTDIR=(path to qtdir) # Such as ~/ kdesvn/ build/ qt-copy by default. KDEDIR=(path to kdedir) # Such as ~/ kde by default. KDEDIRS=$KDEDIR PATH=$KDEDIR/ bin: $QTDIR/ bin: $PATH MANPATH=$QTDIR/ doc/ man: $MANPATH # Act appropriately if LD_LIBRARY_PATH is not already set. if [-z $LD_LIBRARY_PATH]; then LD_LIBRARY_PATH=$KDEDIR/ lib: $QTDIR/ lib else LD_LIBRARY_PATH=$KDEDIR/ lib: $QTDIR/ lib: $LD_LIBRARY_PATH fi export QTDIR KDEDIRS PATH MANPATH LD_LIBRARY_PATH or, if you are not building qt-copy (and are using your system & Qt; instead), add this instead:
+KDEDIR=(path to kdedir) # Such as ~/ kde by default. KDEDIRS=$KDEDIR PATH=$KDEDIR/ bin: $QTDIR/ bin: $PATH # Act appropriately if LD_LIBRARY_PATH is not already set. if [-z $LD_LIBRARY_PATH]; then LD_LIBRARY_PATH=$KDEDIR/ lib else LD_LIBRARY_PATH=$KDEDIR/ lib: $LD_LIBRARY_PATH fi export KDEDIRS PATH LD_LIBRARY_PATH
+If you are not using a dedicated user, set a different $KDEHOME for your new environment in your. bash_profile:
+export KDEHOME="${HOME}/. kde-svn "# Create it if needed [! -e ~/. kde-svn] & amp; mkdir ~/. kde-svn
+If later your K Menu is empty or too crowded with applications from your distribution, you may have to set the XDG environment variables in your. bash_profile:
+XDG_CONFIG_DIRS="/ etc/ xdg "XDG_DATA_DIRS="${KDEDIR}/ share: / usr/ share" export XDG_CONFIG_DIRS XDG_DATA_DIRS
+Starting & kde;
+Now that you have adjusted your environment settings to use the correct & kde;, it is important to ensure that the correct startkde script is used as well.
+Open the. xinitrc text file from the home directory, or create it if necessary. Add the line:
+exec ${KDEDIR}/ bin/ startkde
+On some distributions, it may be necessary to perform the same steps with the. xsession file, also in the home directory. This is especially true when using graphical login managers such as & kdm;, gdm, or xdm.
+Now start your fresh & kde;: in & BSD; and & Linux; systems with virtual terminal support, Ctrl; Alt; F1... Ctrl; Alt; F12 keystroke combinations are used to switch to Virtual Console 1 through 12. This allows you to run more than one desktop environment at the same time. The fist six are text terminals and the following six are graphical displays.
+If when you start your computer you are presented to the graphical display manager instead, you can use the new & kde; environment, even if it is not listed as an option. Most display managers, including & kdm;, have an option to use a Custom Session when you login. With this option, your session settings are loaded from the. xsession file in your home directory. If you have already modified this file as described above, this option should load you into your new & kde; installation.
+If it does not, there is something else you can try that should normally work: Press Ctrl; Alt; F2, and you will be presented to a text terminal. Log in using the dedicated user and type:
+startx -- :1
+You can run the & kde; from sources and the old & kde; at the same time! Log in using your regular user, start the stable & kde; desktop. Press Ctrl; Alt; F2 (or F1, F3, etc..), and you will be presented with a text terminal. Log in using the dedicated & kde; & subversion; user and type:
+You can go back to the & kde; desktop of your regular user by pressing the shortcut key for the already running desktop. This is normally Ctrl; Alt; F7, you may need to use F6 or F8 instead. To return to your & kdesvn-build; -compiled & kde;, you would use the same sequence, except with the next function key. For example, if you needed to enter Ctrl; Alt; F7 to switch to your regular & kde;, you would need to enter Ctrl; Alt; F8 to go back to your & kdesvn-build; & kde;.
+Script Features
+Feature Overview
+& kdesvn-build; features include:
+Supports output message levels ranging from being very quiet to a full debug level.
+& kdesvn-build; can, with the assistance of the kdesvn-build; website and the & kde; FTP server (FTP since & kdesvn-build; 1.4), allow for speedy checkouts of some modules. If the module you are checking out has already been packaged at the website, then & kdesvn-build; will download the snapshot and prepare it for use on your computer.
+This is faster for you, and helps to ease the load on the kde. org anonymous & subversion; servers.
+Another speedup is provided by starting the build process for a module as soon as the source code for that module has been downloaded. (Available since version 1.6)
+Has excellent support for the qt-copy module, including optionally applying bugfix and optimization patches to the qt-copy module.
+& kdesvn-build; has colorized output.
+& kdesvn-build; does not require a GUI present to operate. So, you can build & kde; without needing an alternate graphical environment.
+Supports setting default options for all modules (such as the compilation settings or the configuration options). Such options can normally be changed for specific modules as well.
+Also, & kdesvn-build; will add standard flags as appropriate to save you the trouble and possible errors from typing them yourself.
+& kdesvn-build; can checkout a specific branch or tag of a module. You can also ensure that a specific revision is checked out of a module.
+& kdesvn-build; can automatically switch a source directory to checkout from a different repository, branch, or tag. This happens automatically when you change an option that changes what the repository & url; should be, but you must use the --svn-only option to let & kdesvn-build; know that it is acceptable to perform the switch.
+& kdesvn-build; can checkout only portions of a module, for those situations where you only need one program from a large module.
+For developers: & kdesvn-build; will remind you if you use svn+ssh: / / but ssh-agent is not running, as this will lead to repeated password requests from & ssh;.
+Can e-mail reports of errors to a user.
+Can delete the build directory of a module after its installation to save space at the expense of future compilation time.
+The locations for the directories used by & kdesvn-build; are configurable (even per module).
+Can use & sudo;, or a different user-specified command to install modules so that & kdesvn-build; does not need to be run as the super user.
+& kdesvn-build; runs with reduced priority by default to allow you to still use your computer while & kdesvn-build; is working.
+Has support for using & kde; 's & subversion; tags and branches.
+& kdesvn-build; will use a set of techniques to try and guarantee a successful build.
+There is support for resuming a build from a given module. You can even ignore some modules temporarily for a given build.
+& kdesvn-build; can quickly perform a partial build of a module directly from the command line, when you only need to update part of a module.
+& kdesvn-build; will automatically download and create the required / admin directory for a module if it is not downloaded from & subversion; the first time for some reason. This only applies to & kde; 3 modules, as / admin is not required for qt-copy or & kde; 4 modules.
+& kdesvn-build; will show the progress of your build when using & cmake;, and will always time the build process so you know after the fact how long it took.
+Automatically tries to rebuild modules that were using incremental make, which is prone to failure after certain kinds of commits.
+Comes built-in with a sane set of default options appropriate for building a base & kde; single-user installation from the anonymous & subversion; repository.
+Tilde-expansion for your configuration options. For example, you can specify:
+qtdir ~/ kdesvn/ build/ qt-copy
+Automatically sets up a build system, with the source directory not the same as the build directory, in order to keep the source directory pristine.
+You can specify global options to apply to every module to check out, and you can specify options to apply to individual modules as well.
+Since the autotools sometimes get out of sync with changes to the source tree, you can force a rebuild of a module by creating a file called. refresh-me in the build directory of the module in question, or by running & kdesvn-build; with the --refresh-build option.
+You can specify various environment values to be used during the build, including KDEDIR, QTDIR, DO_NOT_COMPILE, and CXXFLAGS.
+Command logging. Logs are dated and numbered so that you always have a log of a script run. Also, a special symlink called latest is created to always point to the most recent log entry in the log directory.
+If you are using a user build of & kde; instead of a system build (for which you must be root to install), you can use the script to install for you. I haven not audited this code, and it makes ample use of the system() call, so I would not recommend running it as root at this point.
+You can use make-install-prefix to prefix the make install command line with a separate command, which is useful for & sudo;.
+You can check out only a portion of a & kde; & subversion; module. For example, you could check out only the taglib from kdesupport, or only K3B from extragear/ multimedia. The script will automatically pull in kde-common if necessary to make the build work.
+You can pretend to do the operations. If you pass --pretend or -p on the command line, the script will give a very verbose description of the commands it is about to execute, without actually executing it.
+& kdesvn-build; 's build logging
+Logging overview
+Logging is a & kdesvn-build; feature whereby the output from every command that & kdesvn-build; runs is saved to a file for examination later, if necessary. This is done because it is often necessary to have the output of these programs when there is a build failure, because there are so many reasons why a build can fail in the first place.
+Logging directory layout
+The logs are always stored under the log directory. The destination of the log directory is controlled by the log-dir option, which defaults to ${source-dir} / log (where ${source-dir} is the value of the source-dir option. The in rest of this section, this value will be referred to as ${log-dir}).
+Under ${log-dir}, is a set of directories, one for every time that & kdesvn-build; was run. Each directory is named with the date, and the run number. For instance, the second time that & kdesvn-build; is run on May 26, 2004, it would create a directory called 2004-05-26-02, where the 2004-05-26 is for the date, and the -02 is the run number.
+For your convenience, & kdesvn-build; will also create a link to the logs for your latest run, called latest. So the logs for the most recent & kdesvn-build; run should always be under ${log-dir} / latest.
+Now, each directory for a & kdesvn-build; run will itself contain a set of directories, one for every & kde; module that & kdesvn-build; tries to build. Also, a file called build-status will be contained in the directory, which will allow you to determine which modules built and which failed.
+If a module itself has a submodule (such as extragear/ multimedia, playground/ utils, or KDE/ kdelibs), then there would actually be a matching layout in the log directory. For example, the logs for KDE/ kdelibs after the last & kdesvn-build; run would be found in ${log-dir} / latest/ KDE/ kdelibs, and not under ${log-dir} / latest/ kdelibs.
+In each module log directory, you will find a set of files for each operation that & kdesvn-build; performs. If & kdesvn-build; updates a module, you may see filenames such as svn-co. log (for a module checkout) or svn-up. log (when updating a module that has already been checked out). If the configure command was run, then you would expect to see a configure. log in that directory.
+If an error occurred, you should be able to see an explanation of why in one of the files. To help you determine which file contains the error, & kdesvn-build; will create a link from the file containing the error (such as build-1. log to a file called error. log).
+The upshot to all of this is that to see why a module failed to build after your last & kdesvn-build;, the file you should look at first is ${log-dir} / latest/ module-name / error. log.
+If the file error. log is empty (especially after an installation), then perhaps there was no error. Some of the tools used by the & kde; build system will sometimes mistakenly report an error when there was none.
+Also, some commands will evade & kdesvn-build; 's output redirection and bypass the log file in certain circumstances (normally when performing the first & subversion; checkout), and the error output in that case is not in the log file but is instead at the & konsole; or terminal where you ran & kdesvn-build;.
+The Format of. kdesvn-buildrc
+To use the script, you must have a file in your home directory called. kdesvn-buildrc, which describes the modules you would like to download and build.
+It starts with the global options, specified like the following:
+global option-name option-value [...] end global
+It is then followed by one or more module sections, specified like the following:
+module module-name option-name option-value [...] end module
+module-name must be a module from the & kde; & subversion; repository (for example, kdelibs or kdebase). Some options override global options, some add to global options, and some global options simply cannot be overridden.
+The following is an alphabetized list of options you can use. Click on the option to find out more about it. If one is not documented, please e-mail the authors using the address you can find above.
+apply-qt-patches, to enhance qt-copy.
+async, to update and build at the same time.
+binpath, to set the PATH variable.
+branch, to checkout from a branch instead of / trunk.
+build-dir, to set the directory to build in.
+checkout-only, to checkout only parts of a module.
+cmake-options to define what flags to configure a module with using & cmake;.
+colorful-output to add color to the script output.
+configure-flags to define what flags to configure a module with.
+cxxflags to define the CXXFLAGS variable.
+dest-dir to change the directory name for a module.
+disable-agent-check, to keep & kdesvn-build; from checking on ssh-agent's status.
+do-not-compile, to mark directories to skip building.
+inst-apps, to only build and install some directories.
+install-after-build, to avoid installing after the build process.
+kdedir, to set the directory to install & kde; to.
+kde-languages, to set the translation packages to download and install.
+libpath, to set the LD_LIBRARY_PATH variable.
+make-install-prefix, to run a helper program (like & sudo;) during make install.
+make-options, to pass options to the & make; program.
+manual-build, to avoid building the module automatically.
+manual-update, to avoid doing anything to the module automatically.
+module-base-path, to change where to download the module from (useful for branches and tags).
+niceness, to change the CPU priority.
+no-rebuild-on-fail, to avoid running & make; again if it fails.
+qtdir, to set the path to & Qt;.
+set-env, to set an environment variable.
+source-dir, to change where to download the source code to.
+stop-on-failure, to make & kdesvn-build; stop as soon as a failure is encountered.
+svn-server, to change the server the sources are downloaded from.
+Here is a table of the various options, and some comments on them. Any option which overrides the global option will override a command line setting as well.
+Table of Options
+Option-name
+Module -gt; Global Behavior
+Notes
+apidox
+Overrides global
+This option was used to allow for building KDE module API documentation. It was removed in & kdesvn-build; 1.6.3 due to it not being supported in KDE 4. Online API documentation is available from kde. org. In addition it is possible to build KDE 4's API documentation using a script included in the kdesdk module (/ scripts directory). See KDE TechBase for more details. It is still possible to manually build API documentation for older modules of course.
+apply-qt-patches
+This option is only useful for qt-copy. If it is set to a non-zero value, then the apply-patches script in qt-copy will be run prior to building, in order to apply the non-official patches to the qt-copy. Since these patches are normally the reason for using qt-copy instead of a stock & Qt;, it should not do any harm to enable it. The default is to enable the patches.
+async
+Cannot be overridden
+This option enables the asynchronous mode of operation, where the source code update and the build process will be performed in parallel, instead of waiting for all of the source code updates before starting the build process. This option defaults to enabling asynchronous mode. To disable, set this option to false
+This option is available since the 1.6 release.
+binpath
+Set this option to set the environment variable PATH while building. You cannot override this setting in a module option. The default value is / bin: / usr/ bin: / usr/ local/ bin: / usr/ X11R6/ bin. This environment variable should include the colon-separated paths of your development toolchain. The paths $KDEDIR / bin and $QTDIR / bin are automatically added. You may use the tilde (~) for any paths you add using this option.
+branch
+Set this option to checkout from a branch of & kde; instead of the default of trunk, where & kde; development occurs. For instance, to checkout & kde; 3.4 branch, you would set this option to 3.4.
+Note that some modules use a different branch name. Notably, the required arts module does not go by & kde; version numbers. The arts that accompanied & kde; 3.4 was version 1.4.
+If & kdesvn-build; fails to properly download a branch with this option, you may have to manually specify the & url; to download from using the override-url option.
+build-dir
+Use this option to change the directory to contain the built sources. There are three different ways to use it: Relative to the & kde; & subversion; source directory (see the source-dir option). This is the default, and the way the script worked up to version 0.61. This mode is selected if you type a directory name that does not start with a tilde (~) or a slash (/). The default value is build. Absolute path. If you specify a path that begins with a /, then that path is used directly. For example, / tmp/ kde-obj-dir/. Relative to your home directory. If you specify a path that begins with a ~, then the path is used relative to your home directory, analogous to the shell's tilde-expansion. For example, ~/ builddir would set the build directory to / home/ user-name/ builddir. Perhaps surprisingly, this option can be changed per module.
+checkout-only
+Set this option to checkout & subversion; sources piece by piece. The value for this option should be a space separated list of directories to checkout. If you do not include the admin directory, it will automatically be included (if necessary). When checking out piece by piece, the admin directory will be pulled in from kde-common, which is where it exists on the & subversion; server. Although this option overrides the global option, be aware that setting this as a global option makes no sense.
+cmake-options
+Appends to global options (not applicable to qt-copy)
+Use this option to specify what flags to pass to & cmake; when creating the build system for the module. When this is used as a global option, it is applied to all modules that this script builds. When used as a module option, it is added to the end of the global options. This allows you to specify common & cmake; options in the global section.
+This option replaces configure-flags for all & kde; 4 modules, since they use & cmake; to build.
+Since these options are passed directly to the & cmake; command line, they should be given as they would be typed into & cmake;. For example:
+cmake-options -DCMAKE_BUILD_TYPE=RelWithDebInfo
+Since this is a hassle, & kdesvn-build; takes pains to ensure that as long as the rest of the options are set correctly, you should be able to leave this option blank.
+configure-flags
+Appends to global options (except for qt-copy)
+Use this option to specify what flags to pass to. / configure when creating the build system for the module. When this is used as a global-option, it is applied to all modules that this script builds. qt-copy uses a much different set of configure options than the rest of & kde;, so this option overrides the global settings when applied to qt-copy.
+This option applies to qt-copy and all & kde; 3 modules. & kde; 4 modules use & cmake;, which is controlled using the cmake-options option.
+colorful-output
+Set this option to false to disable the colorful output of & kdesvn-build;. This option defaults to true. Note that & kdesvn-build; will not output the color codes to anything but a terminal (such as xterm, & konsole;, or the normal & Linux; console).
+cxxflags
+Appends to global option
+Use this option to specify what flags to pass to. / configure as the CXXFLAGS when creating the build system for the module. This option is specified here instead of with configure-flags or cmake-options because this option will also set the environment variable CXXFLAGS during the build process.
+Note that for & kde; 4 and any other modules that use & cmake;, it is necessary to set the CMAKE_BUILD_TYPE option to "none" when configuring the module. This can be done using the cmake-options option.
+dest-dir
+Use this option to change the name a module is given on disk. For example, if your module was extragear/ network, you could rename it to extragear-network using this option. Note that although this changes the name of the module on disk, it is not a good idea to include directories or directory separators in the name as this will interfere with any build-dir or source-dir options.
+disable-agent-check
+Normally if you are using & ssh; to download the & subversion; sources (such as if you are using the svn+ssh protocol), & kdesvn-build; will try and make sure that if you are using ssh-agent, it is actually managing some & ssh; identities. This is to try and prevent & ssh; from asking for your pass phrase for every module. You can disable this check by setting disable-agent-check to true.
+do-not-compile
+Use this option to select a specific set of directories not to be built in a module (instead of all of them). The directories not to build should be space-separated.
+This feature is supported for both & kde; 3 and & kde; 4. KDE 4 support was added in & kdesvn-build; 1.6.3.
+Note that the sources to the programs will still be downloaded. You can use the checkout-only directive to choose directories that you want to check out.
+For example, to hold & juk; and & kscd; in the kdemultimedia module from compiling, you would add "do-not-compile juk kscd" to your kdemultimedia settings.
+email-address
+Set this option to the e-mail address & kdesvn-build; should send from should it ever need to send e-mail. You do not need to worry about this if you do not use any feature which send e-mail. (They are all disabled by default).
+Currently only email-on-compile-error needs this option.
+email-on-compile-error
+You can set this option to the email address to send a report to when a module fails to build. & kdesvn-build; will wait until all the modules are done and collate all of the results in the report. The report is only sent if a module fails to build.
+Please see the email-address option to set the address & kdesvn-build; should send from, since the default is usually not what you want.
+inst-apps
+This is the opposite of the do-not-compile option. This option makes it so that only the given top-level directories are built. The directories should be space-separated.
+Any changes do not take effect until the next time make -f Makefile. cvs is run, either automatically by the script, or manually by the --refresh-build or --recreate-configure options.
+This option does not yet work with modules built using the & cmake; build system.
+install-after-build
+This option is used to install the package after it successfully builds. This option is enabled by default. If you want to disable this, you need to set this option to 0 in the configuration file. You can also use the --no-install command line flag.
+kdedir
+This option sets the directory that & kde; will be installed to after it is built. It defaults to ~/ kde. If you change this to a directory needing root access, you may want to read about the make-install-prefix option as well.
+kde-languages
+This option allows you to choose to download and install localization packages along with & kde;. You might do this if you do not live in the United States and would like to & kde; translated into your native language.
+To use this option, set it to a space-separated list of languages to install. Each language has a language code associated with it, which you can look up at this page: http: / /i18n. kde. org/ teams/.
+It is alright to choose only one language. By default, none are downloaded, which means & kde; will display in American English.
+For instance, to choose to install French, you would set the option to something like: kde-languages fr. You would still need to use & systemsettings; in order to choose the French language, however.
+libpath
+Set this option to set the environment variable LD_LIBRARY_PATH while building. You cannot override this setting in a module option. The default value is blank, but the paths $KDEDIR / lib and $QTDIR / lib are automatically added. You may use the tilde (~) for any paths you add using this option.
+log-dir
+Use this option to change the directory used to hold the log files generated by the script. This setting can be set on a per-module basis as of version 0.64 or later.
+make-install-prefix
+Set this variable to a space-separated list, which is interpreted as a command and its options to precede the make install command used to install modules. This is useful for installing packages with & sudo; for example, but please be careful while dealing with root privileges.
+make-options
+Set this variable in order to pass command line options to the make command. This is useful for programs such as distcc or systems with more than one processor core.
+manual-build
+Set the option value to true to keep the build process from attempting to build this module. It will still be kept up-to-date when updating from & subversion;. This option is exactly equivalent to the --no-build command line option.
+manual-update
+Set the option value to true to keep the build process from attempting to update (and by extension, build or install) this module. If you set this option for a module, then you have pretty much commented it out.
+module-base-path
+Set this option to override & kdesvn-build; 's default directory path to the module in question. This can be used, for example, to pull specific branches or tagged versions of libraries. The & kde; Source Viewer is invaluable in helping to pick the right path.
+Note that & kdesvn-build; constructs the final path according to the following template: $svn-server / home/ kde/ $module-base-path / $module-name.
+The default value is either trunk or trunk/ KDE, depending on the module name.
+Use the branch or tag options instead whenever they are applicable.
+niceness
+Set this option to a number between 20 and 0. The higher the number, the lower a priority & kdesvn-build; will set for itself. The default is 10.
+no-svn
+If this option is set to true then & kdesvn-build; will not update the source code for the module automatically. It will still try to build the module if it normally would have tried anyways.
+no-rebuild-on-fail
+Set this option value to true to always prevent & kdesvn-build; from trying to rebuild this module if it should fail an incremental build. Normally & kdesvn-build; will try to rebuild the module from scratch to counteract the effect of a stray & subversion; update messing up the build system.
+override-url
+If you set this option, & kdesvn-build; will use its value as the & url; to pass to & subversion; completely unchanged. You should generally use this if you want to download a specific release but & kdesvn-build; cannot figure out what you mean using branch.
+qtdir
+Set this option to set the environment variable QTDIR while building. You cannot override this setting in a module option. If you do not specify this option, it defaults to ${source-dir} / build/ qt-copy, which uses the qt-copy module included in the & kde; source repository. You may use a tilde (~) to represent your home directory.
+remove-after-install
+If you are low on hard disk space, you may want to use this option in order to automatically delete the build directory (or both the source and build directories for one-time installs) after the module is successfully installed.
+Possible values for this option are:
+none - Do not delete anything (This is the default).
+builddir - Delete the build directory, but not the source.
+all - Delete both the source code and build directory.
+Note that using this option can have a significant detrimental impact on both your bandwidth usage (if you use all) and the time taken to compile & kde;, since & kdesvn-build; will be unable to perform incremental builds.
+revision
+If this option is set to a value other than 0 (zero), & kdesvn-build; will force the & subversion; update to bring the module to the exact revision given, even if options like branch are in effect. If the module is already at the given revision then it will not be updated further unless this option is changed or removed from the configuration.
+set-env
+This option accepts a space-separated set of values, where the first value is the environment variable to set, and the rest of the values is what you want the variable set to. For example, to set the variable RONALD to McDonald, you would put in the appropriate section this command:
+set-env RONALD McDonald
+This option is special in that it can be repeated without overriding earlier set-env settings in the same section of the configuration file. This way you can set more than one environment variable per module (or globally).
+source-dir
+This option is used to set the directory on your computer to store the & kde; & subversion; sources at. If you do not specify this value, the default is ~/ kdesvn. If you do specify this value, use an absolute path name.
+stop-on-failure
+Set this option value to true to cause the script to stop execution after an error occurs during the build or install process. This option is off by default.
+svn-server
+This option is used to set the server used to check out from & subversion;. The default is the anonymous & subversion; repository, svn: / /anonsvn. kde. org/
+tag
+Use this option to download a specific release of a module.
+Note: The odds are very good that you do not want to use this option. & kde; releases are available in tarball form from The & kde; FTP site or one of its mirrors.
+If you are using & kdesvn-build; because you have having trouble getting a & kde; release to build on your distribution, consider using the Konstruct build tool instead, which works from the release tarballs.
+use-cmake
+This option was removed in & kdesvn-build; 1.4 as all & kde; 4 modules require & cmake;, and & cmake; use is not permitted on any other modules.
+use-qt-builddir-hack
+Although this option overrides the global option, it only makes sense for qt-copy. Set this option to true to enable the script's srcdir! = builddir mode. When enabled, & kdesvn-build; will copy the qt-copy source module to the build directory, and perform builds from there. That means your QTDIR environment variable should be set to ${qt-copy-build-dir} / qt-copy/ lib instead. You should also change your qtdir option accordingly. Incremental & make; should still work in this mode, as the timestamps will be preserved after the copy. If you use the apply-qt-patches option, the patches will be applied in the build directory, not the source directory. This option defaults to true.
+use-stable-kde
+Since & kdesvn-build; has support for building & kde; 3 and 4, there needs to be some way to tell which version to build. By default, & kdesvn-build; will build the main line of & kde; development (called / trunk). But, this is for & kde; 4, which is not yet ready for wide release.
+You can use the & branch; option globally or for a module in order to download for & kde; 3.5 (or 3.4, etc.). However, this is not convenient as some modules (such as kdesupport) are shared by 3.5 and 4. In addition, it is a lot of branch options that must be added to the configuration file.
+So, if you set this global option to true, & kdesvn-build; will automatically download the & kde; 3.5 version of modules such as kdelibs and qt-copy, instead of downloading the & kde; 4 version. You can still use the & branch; or & tag; options for a module to override the setting that & kdesvn-build; picks. This way you can easily choose to download & kde; 3.5 instead of the release & kde; 4.
+Command Line Options and Environment Variables
+This script does not use environment variables. If you need to set environment variables for the build or install process, please see the set-env option.
+The script accepts the following command-line options:
+--async
+Enables the asynchronous mode to update and build at the same time. This is the default, this option only needs specified if you have disabled it in the configuration.
+--help
+Only display simple help on this script.
+--version
+Display the program version.
+--author
+Display contact information for the author.
+--color
+Enable colorful output.
+--nice= value
+Sets the & niceness; value to value for the duration of this run. value should be between 0 and 20.
+--no-async
+Disables the asynchronous mode of updating. Instead the update will be performed in its entirety before the build starts. This option will slow down the overall process, but if you encounter IPC errors while running & kdesvn-build; try using this option, and submitting a bug report.
+--no-color
+Disable colorful output.
+--pretend (or -p)
+Do not actually do anything, but act like you did.
+--quiet (or -q)
+Do not be as noisy with the output. With this switch only the basics are output.
+--really-quiet
+Only output warnings and errors.
+--verbose
+Be very descriptive about what is going on, and what & kdesvn-build; is doing.
+--svn-only
+Only perform the source update.
+--build-only
+Only perform the build process.
+--ignore-modules
+Do not include the modules passed on the rest of the command line in the update/ build process.
+--no-svn
+Skip contacting the & subversion; server.
+--no-build
+Skip the build process.
+--no-install
+Do not automatically install packages after they are built.
+--debug
+Enables debug mode for the script. Currently this means that all output will be dumped to the standard output in addition to being logged in the log directory like normal. Also, many functions are much more verbose about what they are doing in debugging mode.
+--no-rebuild-on-fail
+Do not try to rebuild modules that have failed building from scratch. & kdesvn-build; will never try to do this to a module that already was tried to be built from scratch.
+--refresh-build
+Recreate the build system and make from scratch.
+--reconfigure
+Run the configure script again without cleaning the build directory.
+--recreate-configure
+Run make -f Makefile. cvs again to create the configure script, and continue building as normal. This option implies --reconfigure.
+--resume-from
+This option is used to resume the build starting from the given module, which should be the next option on the command line. This option implies --no-svn. You should not specify other module names on the command line.
+--rc-file
+which interprets the next command line parameter as the file to read the configuration options from. The default value for this parameter is ~/. kdesvn-buildrc.
+--run
+This option interprets the next item on the command line as a program to run, and & kdesvn-build; will then finish reading the configuration file, update the environment as normal, and then execute the given program.
+This will not work to start a shell with the & kdesvn-build; environment in most cases however, since interactive shells typically reset at least part of the environment variables (such as PATH and KDEDIRS) in the startup sequence.
+--prefix=lt; /path/ to/ kdegt;
+This allows you to change the directory that & kde; will be installed to from the command line. This option implies --reconfigure.
+--build-system-only
+Stop after running make -f Makefile. cvs. The configure script will still need to be run, which & kdesvn-build; will do next time. This lets you prepare all the configure scripts at once so you can view the. / configure --help for each module, and edit your configure-flags accordingly.
+--install
+If this is the only command-line option, it tries to install all of the modules contained in successfully-built, except for qt-copy, which does not need installation. If command-line options are specified after --install, they are all assumed to be modules to install.
+--lt; option-namegt; =
+You can use this option to override an option in your configuration file for every module. For instance, to override the log-dir option, you would do: --log-dir= / path/ to/ dir.
+--lt; module-namegt;, lt; option-namegt; =
+You can use this option to override an option in your configuration file for a specific module.
+Any other command-line options are assumed to be modules to update and build. Please, do not mix building with installing.
+Using & kdesvn-build;
+Preface
+Normally using & kdesvn-build; after you have gone through is as easy as doing the following from a terminal prompt:
+percnt; kdesvn-build
+& kdesvn-build; will then download the sources for & kde;, try to configure and build them, and then install them.
+Read on to discover how & kdesvn-build; does this, and what else you can do with this tool.
+Basic & kdesvn-build; features
+qt-copy support
+& kdesvn-build; strives to maintain excellent support for the qt-copy module included in the & kde; & subversion; repository.
+qt-copy is a copy of the source code for the latest release of the & Qt; toolkit used by & kde;. It also contains a patchset of optimization and bug improvement patches which may optionally be applied. These patches are still compatible with the & Qt; library so that code produced using qt-copy will run with normal & Qt;.
+Most of the differences required for qt-copy are handled automatically by & kdesvn-build;. However, there are a few differences you may need to know about.
+Normally the value for & configure-flags; for a module is appended to the global setting for & configure-flags;. However, the & configure-flags; setting for qt-copy will replace the global setting since they are not equivalent command lines.
+& kdesvn-build; will automatically define some extra environment variables to build qt-copy that are not normally required for the rest of & kde;.
+qt-copy also has support for an optional patch set containing some bug fixes and optimizations that have not yet made it to the official & Qt;. To enable these, set the & apply-qt-patches; option to true. After making this change you may have to run kdesvn-build --refresh-build qt-copy.
+Standard flags added by & kdesvn-build;
+To save you time, & kdesvn-build; adds some standard paths to your environment for you:
+The path to the & kde; and & Qt; libraries is added to the LD_LIBRARY_PATH variable automatically. This means that you do not need to edit & libpath; to include them.
+The path to the & kde; and & Qt; development support programs are added to the PATH variable automatically. This means that you do not need to edit & binpath; to include them.
+The path to the & kde; -provided pkg-config is added automatically to PKG_CONFIG_PATH. This means that you do not need to use & set-env; to add these.
+The setting for & kdedir; is automatically propagated to the KDEDIR environment variable while building. (KDEDIRS is not affected).
+The setting for & qtdir; is automatically propagated to the QTDIR environment variable while building.
+Changing & kdesvn-build; 's build priority
+Programs can run with different priority levels on Operating Systems nowadays, including & Linux; and & BSD;. This allows the system to allocate time for the different programs in accordance with how important they are.
+& kdesvn-build; will normally allocate itself a low priority so that the rest of the programs on your system are unaffected and can run normally. Using this technique, & kdesvn-build; will use extra CPU when it is available.
+& kdesvn-build; will still maintain a high enough priority level so that it runs before routine batch processes and before CPU donation programs such as Seti@Home.
+To alter & kdesvn-build; so that it uses a higher, or lower priority level permanently, then you need to adjust the & niceness; setting in the configuration file. The & niceness; setting controls how nice & kdesvn-build; is to other programs. In other words, having a higher & niceness; gives & kdesvn-build; a lower priority. So to give & kdesvn-build; a higher priority, reduce the & niceness; (and vice versa). The & niceness; can go from 0 (not nice at all, highest priority) to 20 (super nice, lowest priority).
+You can also temporarily change the priority for & kdesvn-build; by using the & cmd-nice; command line option. The value to the option is used exactly the same as for & niceness;.
+It is possible for some programs run by the super user to have a negative nice value, with a correspondingly even higher priority for such programs. Setting a negative (or even 0) & niceness; for & kdesvn-build; is not a great idea, as it will not help run time significantly, but will make your computer seem very sluggish should you still need to use it.
+To run & kdesvn-build; with a niceness of 15 (a lower priority than normal):
+percnt; kdesvn-build --nice= 15
+Or, you can edit the configuration file to make the change permanent:
+& niceness; 15
+Installation as the superuser
+You may wish to have & kdesvn-build; run the installation with super user privileges. This may be for the unrecommended system-wide installation. This is also useful when using a recommended single user & kde; build, however. This is because some modules (especially kdebase) install programs that will briefly need elevated permissions when run. They are not able to achieve these permission levels unless they are installed with the elevated permissions.
+You could simply run & kdesvn-build; as the super user directly, but this is not recommended, since the program has not been audited for that kind of use. Although it should be safe to run the program in this fashion, it is better to avoid running as the super user when possible.
+To take care of this, & kdesvn-build; provides the & make-install-prefix; option. You can use this option to specify a command to use to perform the installation as another user. The recommended way to use this command is with the & sudo; program, which will run the install command as the super user.
+For example, to install all modules using & sudo;, you could do something like this:
+global & make-install-prefix; sudo # Other options end global
+To use & make-install-prefix; for only a single module, this would work:
+module kdemultimedia & make-install-prefix; sudo end module
+Showing the progress of a module build
+This feature is always available, and is automatically enabled when possible. What this does is display an estimated build progress while building a module; that way you know about how much longer it will take to build a module.
+Advanced features
+Partially building a module
+It is possible to build only pieces from a single & kde; module. For example, you may want to compile only one program from a module. & kdesvn-build; has features to make this easy. There are several complementing ways to do this.
+Checking out portions of a module
+This is perhaps the best way to do this. When it works, it will save you download time and disk space. What happens is that & kdesvn-build; will download only the parts of a module that you specify. This is done using the & checkout-only; option for a module, which will specify a list of directories to download.
+If you do not already know what to download from a module, it may be a good idea to browse the & subversion; layout for a module first, using WebSVN.
+To only grab & kuser; and & kdat; from kdeadmin, you could use & checkout-only; like this:
+module kdeadmin & checkout-only; kuser kdat end module
+The directories will be built in the order they are listed in the option. If one of the directories needs something else from the module to compile, then you need to make sure they are both in the & checkout-only; line, and that the required dependency goes before the directory that needs it.
+Also, sometimes an application may need other directories and it is hard to figure out what they are, which may require some trial and error of constantly adding directories to the option to figure out.
+One final note to make about this option: If you change the value of this option, you should use kdesvn-build cmd-refresh-build; module in order to ensure that the module is reconfigured properly. In addition, & kdesvn-build; will never remove existing files if you take away the number of directories from your & checkout-only; option, or add the option to a module that has already been checked out.
+Removing directories from a build
+Instead of restricting what is downloaded, it is possible to download everything but have the build system leave out a few directories when it does the build. This may be useful if one directory always breaks and is unnecessary to the rest of the module.
+This is controlled with the & do-not-compile; option. It works similar to the & checkout-only; option just described, in that it is simply a list of directories that should not be compiled.
+Also like & checkout-only;, this option requires at least that the configure script is run again for the module after changing it. This is done using the kdesvn-build cmd-reconfigure; module command.
+To remove the dcoppython directory from the kdebindings build process:
+module kdebindings & do-not-compile; dcoppython end module
+Compiling a few directories from a full module
+You can use the & inst-apps; option to specify that only a few directories out of a full module are to be built (but the entire module is still downloaded).
+This option is like the combination of & checkout-only; and & do-not-compile;: it downloads the entire module like & do-not-compile;, but only compiles the directories you specify, like & checkout-only;. Because of this it is usually better to simply use & checkout-only; instead.
+The same warnings apply as for the other two options: you must reconfigure the module if you change the value of & inst-apps;.
+Branching and tagging support for & kdesvn-build;
+What are branches and tags?
+& subversion; supports managing the history of the & kde; source code. & kde; uses this support to create branches for development, and to tag the repository every so often with a new version release.
+For example, the & kmail; developers may be working on a new feature in a different branch in order to avoid breaking the version being used by most developers. This branch has development ongoing inside it, even while the main branch (called / trunk) may have development going on inside of it.
+A tag, on the other hand, is a snapshot of the source code repository at a position in time. This is used by the & kde; administration team to mark off a version of code suitable for release and still allow the developers to work on the code.
+In & subversion;, there is no difference between branches, tags, or trunk within the code. It is only a convention used by the developers. This makes it difficult to properly support branches and tags within & kdesvn-build;. However, there are some things that can be done.
+How to use branches and tags
+Support for branches and tags is handled by a set of options, which range from a generic request for a version, to a specific & url; to download for advanced users.
+The easiest method is to use the & branch; and & tag; options. You simply use the option along with the name of the desired branch or tag for a module, and & kdesvn-build; will try to determine the appropriate location within the & kde; repository to download from. For most & kde; modules this works very well.
+To download kdelibs from & kde; 3.5 (which is simply known as the 3.5 branch):
+module kdelibs branch 3.5 # other options... end module
+Or, to download kdemultimedia as it was released with & kde; 3.4.3:
+module kdemultimedia tag 3.4.3 # other options... end module
+You can specify a global branch value. But if you do so, do not forget to specify a different branch for modules that should not use the global branch!
+Advanced branch support options
+& kdesvn-build; supports two options for situations where & branch; and & tag; guess the correct path improperly: & module-base-path; and & override-url;.
+& module-base-path; is used to help & kdesvn-build; fill in the missing part of a module's path. In the & kde; repository, all of the paths are of the form svnRoot/ module-base-path/ module-name. Normally & kdesvn-build; can figure out the appropriate middle part by itself. When it cannot, you can use & module-base-path;, like this:
+module qt-copy # branch does not work here yet module-base-path branches/ qt/ 3.3 end module
+This would cause & kdesvn-build; to download qt-copy from (in this example), svn: / /anonsvn. kde. org/ home/ kde/ branches/ qt/ 3.3 / qt-copy.
+The & override-url; option, on the other hand, requires you to specify the exact path to download from. However, this allows you to pull from paths that & kdesvn-build; would have no hope of downloading from.
+module qt-copy # Specify exact path to grab. override-url svn: / /anonsvn. kde. org/ home/ kde/ branches/ qt/ 3.3/ qt-copy end module
+& kdesvn-build; will not touch or correct the value you specify for & override-url; at all, so if you change your & svn-server; setting, you may need to update this as well.
+How & kdesvn-build; tries to ensure a successful build
+Automatic rebuilds
+Due to various issues with the & kde; build system & kdesvn-build; will automatically perform a series of steps to automatically try to get a module to compile when it fails.
+On the first failure, & kdesvn-build; will simply re-run the make. Believe it or not, but this sometimes actually works, and is quick to fail if it will not work.
+On the second failure, & kdesvn-build; will try to reconfigure the module and then rebuild it. This usually catches situations where a build-system file that requires reconfiguration changed, but the build system did not perform that step automatically.
+The module build directory is left intact for this step, so, except for the reconfigure step, this will also fail quickly if the build cannot be performed.
+If the module still fails to build, & kdesvn-build; will give up and move on to the next module. There are still things that you can do to manually try to get the module to build, however.
+& kdesvn-build; will detect most cases where the build system needs to be reconfigured, and will reconfigure automatically in that case.
+Also, if & kdesvn-build; was building the module for the first time, all of these steps are skipped, since the clean rebuild does not usually fail except for a real error.
+Manually rebuilding a module
+If you make a change to a module's option settings, or the module's source code changes in a way & kdesvn-build; does not recognize, you may need to manually rebuild the module.
+You can do this by simply running kdesvn-build --refresh-build module.
+If you would like to have & kdesvn-build; automatically rebuild the module during the next normal build update instead, you can create a special file. Every module has a build directory. If you create a file called. refresh-me in the build directory for a module, & kdesvn-build; will rebuild the module next time the build process occurs, even if it would normally perform the faster incremental build.
+By default, the build directory is ~/ kdesvn/ build/ module /. If you change the setting of the & build-dir; option, then use that instead of ~/ kdesvn/ build.
+Rebuild using. refresh-me for module arts:
+% touch ~/ kdesvn/ build/ arts. refresh-me% kdesvn-build
+Controlling rebuild behavior
+You may not want & kdesvn-build; to always try and rebuild a module. You can permanently disable this behavior by changing the option & no-rebuild-on-fail; to have the value true.
+You can disable this behavior temporarily (for one command) by using the & cmd-no-rebuild-on-fail; command line option.
+% kdesvn-build --no-rebuild-on-fail
+Changing environment variable settings
+& kdesvn-build; does not read the environment from the caller like the vast majority of most programs do. Instead, it uses the settings it reads from the configuration file to construct the environment. This is done mainly to ensure that builds are repeatable. In other words, & kdesvn-build; can build a module even if you forgot what you set your environment variables to in the shell you ran & kdesvn-build; from.
+However, you may want to change the setting for environment variables that & kdesvn-build; does not provide an option for directly. This is possible with the & set-env; option.
+Unlike most options, it can be set more than once, and it accepts two entries, separated by a space. The first one is the name of the environment variable to set, and the remainder of the line is the value.
+Set DISTRO = BSD for all modules:
+global set-env DISTRO BSD end global
+Resuming builds
+Resuming a failed or canceled build
+You can tell & kdesvn-build; to start building from a different module than it normally would. This can be useful when a set of modules failed, or if you canceled a build run in the middle. You can control this using the & cmd-resume-from; option.
+Using & cmd-resume-from; will skip the source code update.
+Resuming the build starting from kdebase:
+% kdesvn-build --resume-from= kdebase
+Ignoring modules in a build
+Similar to the way you can resume the build from a module, you can instead choose to update and build everything normally, but ignore a set of modules.
+You can do this using the & cmd-ignore-modules; option. This option tells & kdesvn-build; to ignore all the modules on the command line when performing the update and build.
+Ignoring extragear/ multimedia and kdereview during a full run:
+% kdesvn-build --ignore-modules extragear/ multimedia kdereview
+Changing options from the command line
+Changing global options
+You can change the setting of options read from the configuration file directly from the command line. This change will override the configuration file setting, but is only temporary. It only takes effect as long as it is still present on the command line.
+& kdesvn-build; allows you to change options named like option-name by passing an argument on the command line in the form -- option-name =value. & kdesvn-build; will recognize whether it does not know what the option is, and search for the name in its list of option names. If it does not recognize the name, it will warn you, otherwise it will remember the value you set it to and override any setting from the configuration file.
+Setting the & source-dir; option to / dev/ null for testing:
+% kdesvn-build --pretend -- source-dir = / dev/ null
+Changing module options
+It is also possible to change options only for a specific module. The syntax is similar: -- module, option-name = value.
+This change overrides any duplicate setting for the module found in the configuration file, and applies only while the option is passed on the command line.
+Using a different build directory for the kdeedu module:
+% kdesvn-build -- kdeedu, build-dir = temp-build
+Features for & kde; developers
+& ssh; Agent checks
+& kdesvn-build; can ensure that & kde; developers that use & ssh; to access the & kde; source repository do not accidentally forget to leave the & ssh; Agent tool enabled. This can cause & kdesvn-build; to hang indefinitely waiting for the developer to type in their & ssh; password, so by default, & kdesvn-build; will check if the Agent is running before performing source updates.
+This is only done for & kde; developers using & ssh;. This is because no password is required for the default anonymous checkout. & subversion; will handle passwords for the second possible protocol for & kde; developers, https.
+You may wish to disable the & ssh; Agent check, in case of situations where & kdesvn-build; is mis-detecting the presence of an agent. To disable the agent check, set the disable-agent-check option to true.
+Disabling the & ssh; agent check:
+global disable-agent-check true end global
+Other & kdesvn-build; features
+Changing the amount of output from & kdesvn-build;
+& kdesvn-build; has several options to control the amount of output the script generates. In any case, errors will always be output.
+The --quiet option (short form is -q) causes & kdesvn-build; to be mostly silent. Only important messages, warnings, or errors will be shown. When available, build progress information is still shown.
+The --really-quiet option (no short form) causes & kdesvn-build; to only display important warnings or errors while it is running.
+The --verbose option (short form is -v) causes & kdesvn-build; to be very detailed in its output.
+The --debug option is for debugging purposes only, it causes & kdesvn-build; to act as if --verbose was turned on, causes commands to also output to the terminal, and will display debugging information for many functions.
+Color output
+When being run from & konsole; or a different terminal, & kdesvn-build; will normally display with colorized text.
+You can disable this by using the --no-color on the command line, or by setting the & colorful-output; option in the configuration file to false.
+Disabling color output in the configuration file:
+global colorful-output false end global
+E-mailing build failure reports
+& kdesvn-build; can send a e-mail report to an e-mail address of your choice when a module fails to build for whatever reason. The way it works is that you choose an e-mail address that & kdesvn-build; will send from, and an e-mail address to notify when there is an error.
+& kdesvn-build; will then, at the end of a complete run, construct an e-mail if there were any modules that failed to build. The e-mail will contain an abbreviated failure log for each module. Only one e-mail is sent for a run, even if 15 modules failed to build.
+This feature is not enabled by default. To enable it, you need to set both the & email-address; and & email-on-compile-error; options. email-address controls the address & kdesvn-build; sends from, and email-on-compile-error controls where to send the e-mail message to.
+& kdesvn-build; uses the Perl-standard Mail: :Mailer module to send e-mail. It is included with Perl 5.8, and is installable with Perl 5.6. Mail: :Mailer supports Sendmail (including Sendmail -compatible e-mail clients), native SMTP transport, and qmail.
+Sending email from foo@example. com to bar@example. com on a build failure:
+global email-address foo@example. com # From: address for any kdesvn-build e-mail email-on-compile-error bar@example. com # To: address for build failure e-mail end global
+Removing unneeded directories after a build
+Are you short on disk space but still want to run a bleeding-edge & kde; checkout? & kdesvn-build; can help reduce your disk usage when building & kde; from & subversion;.
+Be aware that building & kde; does take a lot of space. There are several major space-using pieces when using & kdesvn-build;:
+The actual source checkout can take up a fair amount of space. The default modules take up about 1.6 gigabytes of on-disk space. You can reduce this amount by making sure that you are only building as many modules as you actually want. & kdesvn-build; will not delete source code from disk even if you delete the entry from the configuration file, so make sure that you go and delete unused source checkouts from the source directory. Note that the source files are downloaded from the Internet, you should not delete them if you are actually using them, at least until you are done using & kdesvn-build;.
+Also, if you already have a & Qt; installed by your distribution (and the odds are good that you do), you probably do not need to install the qt-copy module. That will shave about 200 megabytes off of the on-disk source size.
+One thing to note is that due to the way & subversion; works: there are actually two files on disk for every file checked-out from the repository. & kdesvn-build; does not have code at this point to try and minimize the source size when the source is not being used.
+& kdesvn-build; will create a separate build directory to build the source code in. Sometimes & kdesvn-build; will have to copy a source directory to create a fake build directory. When this happens, space-saving symlinks are used, so this should not be a hassle on disk space. The build directory will typically be much larger than the source directory for a module. For example, the build directory for kdebase is about 1050 megabytes, whereas kdebase's source is only around 550 megabytes.
+Luckily, the build directory is not required after a module has successfully been built and installed. & kdesvn-build; can automatically remove the build directory after installing a module, see the examples below for more information. Note that taking this step will make it impossible for & kdesvn-build; to perform the time-saving incremental builds.
+Finally, there is disk space required for the actual installation of & kde;, which does not run from the build directory. This typically takes less space than the build directory. It is harder to get exact figures however.
+How do you reduce the space requirements of & kde;? One way is to use the proper compiler flags, to optimize for space reduction instead of for speed. Another way, which can have a large effect, is to remove debugging information from your & kde; build.
+You should be very sure you know what you are doing before deciding to remove debugging information. Running bleeding-edge software means you are running software which is potentially much more likely to crash than a stable release. If you are running software without debugging information, it can be very hard to create a good bug report to get your bug resolved, and you will likely have to re-enable debugging information for the affected application and rebuild to help a developer fix the crash. So, remove debugging information at your own risk!
+Removing the build directory after installation of a module. The source directory is still kept, and debugging is enabled:
+global configure-flags --enable-debug remove-after-install builddir # Remove build directory after install end global
+Removing the build directory after installation, without debugging information, with size optimization.
+global cxxflags -Os # Optimize for size configure-flags --disable-debug remove-after-install builddir # Remove build directory after install end global
+& cmake;, the & kde; 4 build system
+Introduction to & cmake;
+In March 2006, the & cmake; program beat out several competitors and was selected to be the build system for & kde; 4, replacing the autotools-based system that & kde; has used from the beginning.
+A introduction to & cmake; page is available on the kde; TechBase. Basically, instead of running make -f Makefile. cvs, then configure, then & make;, we simply run & cmake; and then & make;.
+& kdesvn-build; has support for & cmake;. A few features of & kdesvn-build; were really features of the underlying buildsystem, including inst-apps, configure-flags, and do-not-compile. When equivalent features are available, they are provided. For instance, the equivalent to the configure-flags option is cmake-options, and the do-not-compile option is also supported for & cmake; as of & kdesvn-build; version 1.6.3.
+However, some options (like inst-apps) have no direct equivalent, and are disabled. Should I find a way to implement them with & cmake; I will do so and re-enable the option. However, more or less everything works the same.
+Credits And Licenses
+CREDIT_FOR_TRANSLATORS
+& underFDL;
+Comes with & unsermake; support.
+use-unsermake, to use the advanced & unsermake; build system.
+unsermake-options
+This option is just like make-options but for & unsermake;, which accepts some options that & make; cannot understand.
+use-unsermake
+Set this option to true in order to use the experimental & unsermake; program instead of & automake; when running the configure script. This can lead to some serious decreases in build time, especially for distributed building systems. This option defaults to true (for most modules).
+Normally if you use this option & kdesvn-build; will automatically keep & unsermake; up-to-date. This may start to get annoying, especially if you are managing & unsermake; yourself. If this is the case, you can set this option to self, and & kdesvn-build; will still use & unsermake;, but will not do anything special to keep it updated.
+You can use this option to override an option in your configuration file for a specific module. For instance, to override the use-unsermake option for kdemultimedia, you would do: --kdemultimedia, use-unsermake=false.
+& kdesvn-build; will automatically adjust the environment as necessary to account for the setting of the & use-unsermake; option.
+In order to use this feature, the & use-unsermake; option must be enabled for the module. This option is normally enabled by default, but some modules do not support it and are automatically stopped from using & unsermake;. So if you think you have enabled & unsermake; and you still do not see a progress report when building the module, it may be possible that the module does not support & unsermake;.
+Using & unsermake;
+& unsermake; is an application designed to hook into the & kde; build system and improve the build process by replacing some of the tools normally used (including & automake; and & make;). It is especially useful for those who are performing distributed compilation as it is much faster than the normal build system in this situation. However, even for a single computer build, & unsermake; is faster than the competitors.
+In addition, & unsermake; includes support for estimating the progress of the current build procedure. & kdesvn-build; takes advantage of this to provide a build progress indication when compiling. See also.
+& kdesvn-build; provides support for using & unsermake; automatically. & kdesvn-build; will use & unsermake; by default when it is possible to use it with a module.
+To disable & unsermake; support for every module, do the following:
+global use-unsermake false end global
+To enable & unsermake; for a single module, even if it is disabled globally, do the following:
+module module-name use-unsermake true # other options go here... end module
+& kdesvn-build; will automatically update or checkout & unsermake; while performing the other updates. If you prefer to manage & unsermake; yourself, then it is possible to do so, by setting the value for & use-unsermake; to self instead of true.
+When this is done, & kdesvn-build; will still try to use & unsermake;, but will not perform the updates. You can either alter & binpath; to point to the correct & unsermake; directory, or checkout and update & unsermake; yourself from its module (currently kdenonbeta/ unsermake).
+Disabling & unsermake; from the command line. --refresh-build is used to force the changes to & unsermake; to take effect.
+% kdesvn-build --pretend --refresh-build -- use-unsermake = false
+& automake; version 1.7, or higher. (kde; 3 only)
+& autoconf; version 2.57, or higher. (kde; 3 only)
+For developers: Supports building the API documentation for a module. Note that this only works for & kde; 3 modules when not using the & unsermake; script.
+apidox, to build API Documentation.
+Set this option to true in order to have & kdesvn-build; automatically build and install the API documentation for the module after the normal build/ install process. This only works for modules where make apidox does something, including kdelibs, kdebase and koffice, among others.
+Use this option to set the DO_NOT_COMPILE environment variable prior to running the configure script. According to the kde; Developer FAQ, this should cause any top-level directory you pass to not be built. The directories should be space-separated.
+This option does not yet work with modules built using & cmake;.
+Building API Documentation
+& kdesvn-build; can automatically install additional documentation generated from the sources in a module. This only works on some modules, and is only useful for & kde; developers.
+This feature does not work for modules built using the unsermake; build system. Since this is the default build system for modules that can use & unsermake;, you would need to disable & unsermake; support. See example below for more information.
+To enable this, simply set the & apidox; option to true in the configuration file, for the module that you would like documentation for. Not all modules have documentation. Modules that do include kdelibs, kdebase and kdepim.
+If you have access to the Internet, the API documentation for & kde; is also available online. In & konqueror;, you can use the shortcut kde: className.
+You can also visit the & kde; documentation web site at English Breakfast Network.
+Finally, it is possible to download the documentation in an archived form, from The & kde; Developer's Corner. Click on the & kde; version you want documented, and then you can download an offline copy for the module you want.
+Installing API Documentation for kdelibs:
+module kdelibs use-unsermake false # unsermake cannot build apidox apidox true # build and install apidox end module
+Not all of & kde; has been ported to use & cmake; at this point. For example, the apidox option is rather useless until the equivalent infrastructure is ready. I have tried to warn about such things but not all deficiencies may be caught by & kdesvn-build; for now.
+Use this option to change the name a module is given on disk. For example, if your module was extragear/ network, you could rename it to extragear-network using this option.
+Set DISTRO=BSD for all modules:
+global colorful-output false end global
+CMake 2.4.0, or higher. Some version 2.3 snapshots may compile KDE 4 as well, please see the CMake Introduction Wiki page. (KDE 4 only)
+& kdesvn-build; also supports using the ~/ sequence to stand for your home directory in the & rcfile;.
+Automatically checks out or updates modules from & svn;, as appropriate.
+Can resume a build from a particular module.
+Configurable build, source, and logging directories
+Automatically sets up a build system, with the source directory not the same as the build directory, in order to keep the source directory pristine. The exception is qt-copy, which is not designed to be built like that (unless you would like to test the qt with a separate build directory hack).
+You can use the apidox option to automatically build and install the API documentation for some modules.
+Support for checking out specific branches of & svn; modules. This work still needs to be completed, but you already select the branch you want to build using the module-base-path configuration option.
+This option does not work for modules using & unsermake; support, due to deficiencies in the unsermake build system.
+This option allows you to force & kdesvn-build; to try (or not try) to use CMake with a given module. Normally & kdesvn-build; will always try to use CMake if it is present in the module, as this will be required to build KDE 4. This option is available to ease the transition from unsermake to CMake. This option will be removed once all KDE 4 modules require CMake.
+A good way to get the latest version is to browse the kdesdk/ scripts page at the websvn. kde. org website. You will see a list of the files available in the kdesdk/ scripts directory in the & kde; & svn; repository. Click the & kdesvn-build; link and download the latest version of the script. Do the same for the kdesvn-buildrc-sample file. Make the script executable, and be sure it is in your path.
+Select the server used to check out from & svn;, by setting the svn-server global option. The default is the anonymous & svn; repository, svn: / /anonsvn. kde. org/, but change it if you have a kde; & svn; account, or if there is a mirror close to you.
+Now, the script should start downloading the sources and compiling them. It is unlikely that you will succeed in the first time you compile & kde;. Do not despair! Check the log files to see if you are missing some tools or development packages (the location of the log files is set by the log-dir variable in the configuration file). Sometimes, the main development branch get very unstable and hard to build, especially when a development freeze is close. Be patient. You can find more common examples of things that can go wrong and their solutions, as well as general tips and strategies to build & kde; in the Building & kde; from Source Step by Step Guide.
+Now that we are done with the you have to make sure that the right startkde script is going to be used:
+If when you boot you are presented to the graphical display manager instead, you can use the new KDE environment, even if it is not listed as an option. Press Crtl + Alt + F2, and you will be presented to a text terminal. Log in using the dedicated user and type:
+startx -- :1
+You can run the KDE from sources and the old KDE at the same time! Log in using your regular user, start the stable KDE desktop. Press Crtl + Alt + F2 (or F1, F3, etc..), and you will be presented to a text terminal. Log in using the dedicated user and type "startx -- :1". You can go back to the regular user by pressing Crtl + Alt + F6 (Or F7, F8, etc... Try them out! One of them is the right one.) To return to KDE from sources, press Crtl + Alt + F7 (or F6, F8, etc..). Now you can switch between your KDE versions, and test the new one knowing you can quickly return to the safety of the stable KDE desktop.
+Times the build process for modules.
+Comes with Unsermake support.
+Things that & kdesvn-build; does NOT do:
+Find the fastest & kde; & svn; mirror. There is not even a list shipped with the script at this point, although the default server should work fine.
+Brush your teeth. You should remember to do that yourself.
+The script probably is not bug-free. Sorry.
+use-qt-builddir-hack, to give Qt a separate build directory from its source like KDE.
+which tries to continue building from where the script stopped last time. The script starts building the module after the last module to be compiled last time the script was run, whether or not it succeeded. This option implies --no-svn. You should not specify other module names on the command line.

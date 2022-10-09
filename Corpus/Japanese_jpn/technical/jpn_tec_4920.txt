@@ -1,0 +1,44 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHPとJavaの連携をとして考えられる手段は2種類あります。PHPをJavaサーブ レット環境に統合する方法とJavaサポートをPHPに統合する方法です。前者の 方がより安定で効率的な手法です。前者は、サーブレットサーバへのインター フェイスとしてSAPIモジュールにより提供され、後者は、Java拡張モジュール として提供されます。
+Java拡張モジュールは、PHPからJavaオブジェクトのメソッドを生成し、 コールする簡単で効率的な手段を提供します。このJVMはJNIを用いて作 成され、全てはこのプロセスで動作します。
+このモジュールは、 実験的 なものです。これは、これらの関数の動作、関数名は、このドキュメントに書かれて事項と同様に告知なく将来的なPHPのリリースで変更される可能性があります。注意を喚起するとともに、このモジュールは使用者のリスクで使用して下さい。
+この拡張モジュールを使用するには、使用するマシンにJava VMがインス トールされていることが必要です。
+この拡張モジュールの構築手順は、 php4/ext/java/README にあります。
+Win32ユーザへの注意 この拡張モジュールを有効にするには、PHP/Win32バイナリパッケージの DLLフォルダから jvm.dll を使用するWindowsマシン のSYSTEM32フォルダ(例:C:\WINNT\SYSTEM32または C:\WINDOWS\SYSTEM32) にコピーする必要があります。
+これらの関数の動作は、 php.ini の設定により変化します。
+
+表 1Java設定オプション
+この拡張モジュールはリソース型を全く定義し ません。
+この拡張モジュールは定数を全く定義しませ ん。
+
+例 1Javaの例
+例 2AWTの例
+new Java() は、有効なコンストラクタがある場合、 クラスのインスタンスを生成します。引数が指定されない場合には、 デフォルトのコンストラクタにより java.lang.System のようなクラスにアクセスすると 良いでしょう。このクラスは、静的な手法でそのクラスの機能の多くを 公開しています。
+あるインスタンスのメンバーにアクセスする際には、まずbeanプロパティ が探されてから、次にpublicフィールドが探されます。言い換えると、 print $date.time はまず $date.getTime() と解釈され、続いて $date.time と解釈されます。
+静的メンバおよびインスタンスメンバは共に同じ構文でアクセス可能です。 さらに、javaオブジェクトが java.lang.Class 型の場 合、このクラスの静的メンバ(フィールドとメソッド)にアクセス可能です。
+例外が発生するとPHPの警告が出力され、結果は NULL となります。警告は "@"記号を付けてメソッドをコールすることに抑圧できます。以下のAPI を直近のエラーを取得し、リセットするために使用することができます。
+java_last_exception_get()
+java_last_exception_clear()
+オーバーロードの解決は、二つの言語の間で型の違いがあるため一般には 困難な問題です。PHP のJava拡張機能は簡単ですが最も一致するオーバー ロードを定義するかなり効率的な手段を使用しています。
+加えて、PHPのメソッド名は大文字小文字を区別しないため、選択される オーバーロードの数は増加する傾向があります。
+メソッドが一度選択されると、パラメータの値は必要に応じて調整されま す。このため、(倍精度実数が論理値に変換されるといった)データの劣化 が発生する可能性があります。
+PHPでは伝統的に配列とハッシュテーブルは相互に完全に可換でした。PHPの ハッシュテーブルは整数または配列の添字のみを使用できることに注意して 下さい。また、Javaのprimitive型の配列は疎とすることができないことに も注意して下さい。これらの構造は値で渡されるため、メモリと時間の消 費量が大きくする可能性があります。
+Java Servlet SAPIは、PHPプロセッサ全体をサーブレットとして実行す るためにJava拡張モジュールにより定義された機構の上に構築されています。 この形態のPHPの側からこの実装が基本的に優れている点は、サーブレットを サポートするWebサーバが通常JVMをプールし、再利用することに注力している ことです。このサーブレットSAPIモジュールの構築手順は、 php4/sapi/README にあります。 注意:
+このコードは、全てのサーブレットエンジンで実行可能であるように作成 されていますが、現在ApacheのJakarta/tomcatでしかテストされていませ ん。他のエンジンでこのコードを実行する際に必要なパッチ、バグレポー ト、成功事例等をお知らせ下さい。
+PHP は、動作ディレクトリを変更する特徴があります。sapi/サーブレット はもとに戻そうとしますが、PHPが実行されている間、サーブレットエンジ ンはCLASSPATHい相対ディレクトリにより指定されている全てのクラスをロ ードできないか、管理用およびJSPコンパイル用に使用されている作業ディ レクトリを見つけることができなくなる可能性があります。

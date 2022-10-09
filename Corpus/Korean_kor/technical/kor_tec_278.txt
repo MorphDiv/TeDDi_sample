@@ -1,0 +1,64 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 3, PHP 4)
+주어진 정수형 timestamp 나 timestamp 가 주어지지 않았다면 현재 로컬 시간으로 주어진 format 문자열에 따라 형식화된 문자열을 반환한다.
+참고: 전형적인 timestamp의 유효 범위는 1901년 12월 13일 금요일 20:45:54 GMT부터 2038년 1월 19일 화요일 03:14:07 GMT이다. (이것은 부호 있는 32비트 정수형의 최소와 최대값에 대응한다. 윈도우즈에서는 이 값은 1970-01-01부터 2038-01-19로 제한된다)
+날짜 표시의 문자열로부터 timestamp를 를 생성하기 위해서, strtotime() 을 사용할 수 있다. 또, 몇몇 데이터베이스는 그들의 날짜 형식으로부터 timestamp로 변환하는 함수를 가지고 있다. (MySQL의 UNIX_TIMESTAMP 함수와 같은)
+다음에 주어진 문자는 format 문자열로 인식한다:
+a - "am"이나 "pm"
+A - "AM"이나 "PM"
+B - 스왓치 인터넷 시간 (역자 주: 하루를 1000으로 나눈 단위)
+d - 일, 앞에 0이 붙은 2자리; 즉, "01"부터 "31"
+D - 요일, 3글자 문자; 예를 들면, "Fri"
+F - 월, 긴 형태의 문자; 예를 들면, "January"
+g - 시, 0이 붙지 않는 12시간 형식; 즉, "1"부터 "12"
+G - 시, 0이 붙지 않는 24시간 형식; 즉, "0"부터 "23"
+h - 시, 12시간 형식; 즉, "01"부터 "12"
+H - 시, 24시간 형식; 즉, "00"부터 "23"
+i - 분; 즉, "00" to "59"
+I (대문자 i) - 일광 절약 시간이라면 "1", 아니라면 "0".
+j - 앞에 0이 없는 일; 즉, "1"부터 "31"
+l (소문자 'L') - 요일, 긴 형태의 문자; 예를 들면, "Friday"
+L - 윤년인지 아닌지를 확인하는 boolean; 즉, "0"나 "1"
+m - 월; 즉, "01"부터 "12"
+M - 월, 3글자 문자; 예를 들면, "Jan"
+n - 0이 붙지 않는 월; 즉, "1"부터 "12"
+O - 그리니치 시간과의 차이; 예를 들면, "+0200"
+r - RFC 822 형식 날짜; 예를 들면, "Thu, 21 Dec 2000 16:01:07 +0200" (PHP 4.0.4에서 추가)
+s - 초; 즉, "00"부터 "59"
+S - 날짜를 위한 영어의 서수 접미사, 2문자; 즉, "st", "nd", "rd" 또는 "th"
+t - 주어진 월의 일수; 즉, "28"부터 "31"
+T - 이 기계의 표준 시간대 설정; 예를 들면, "EST" 또는 "MDT"
+U - 유닉스 Epoch(1970년 1월 1일 00:00:00 GMT)로부터의 초
+w - 요일, 숫자형; 즉, "0"(일요일)부터 "6"(토요일)
+W - ISO-8601 연도의 주차, 주는 월요일에 시작함 (PHP 4.1.0에서 추가)
+Y - 연도, 4자리; 예를 들면, "1999"
+y - 연도, 2자리; 예를 들면, "99"
+z - 그 연도의 일차; 즉, "0"부터 "365"
+Z - 표준 시간대의 오프셋 초. (즉, "-43200"부터 "43200") UTC로부터 서쪽의 오프셋은 항상 음수이고, UTC로부터 동쪽의 오프셋은 항상 양수이다.
+
+예 1. date() 예제
+format 문자열로 인식하는 문자 바로 앞에 백슬래쉬를 붙여서 이스케이프를 함으로써, 전개하는 것 막을 수 있다. 백슬래쉬가 붙은 문자가 이미 특별한 의미를 가지고 있다면, 백슬래쉬를 이스케이프 할 필요가 있을것이다.
+예 2. date() 에서 문자를 이스케이프 하기.
+date() 와 mktime() 을 함께 사용함으로써 미래나 과거의 시간을 얻을 수 있다.
+예 3. date() 와 mktime() 예제
+참고: 이것은 일광 절약 시간 때문에, 단순히 timestamp에 하루나 한달의 초를 더하는 것보다 신뢰할 수 있다.
+date() 형식화의 몇몇 예제. 모든 다른 문자들도 이스케이프 해야함에 주의하라. 현재 특별한 의미를 가진 어떤 것이 바람직하지 못한 결과를 가져올 수 있고, 앞으로의 PHP 버전에서는 다른 문자들도 지정될 수가 있다. 이스케이프 할 때는, \n이 줄바꿈으로 인식 되는 것과 같은 예을 피하기 위해서는 작은 따옴표를 사용해야만 한다.
+예 4. date() 형식화
+다른 언어로 날짜를 형식화 하기 위해서는, setlocale() 과 strftime() 함수를 이용해야만 한다.
+getlastmod(), gmdate(), mktime(), strftime() 그리고 time() 도 참고하라.

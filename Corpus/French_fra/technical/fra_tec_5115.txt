@@ -1,0 +1,41 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Chapitre 5.
+Sécurité
+Suivant
+Une fonctionnalité de PHP qui peut être utilisée pour améliorer la sécurité est de configurer PHP en inactivant l 'option register_globals.
+En supprimant la possibilité que les variables envoyées par les internautes soient injectées automatiquement dans le script PHP, vous pouvez restreindre la quantité de variables non-protégées.
+Les intrus devront prendre beaucoup plus de temps pour corrompre les mécanismes d 'envoi de données, et vos variables internes seront nettement mieux protégées.
+Bien que cela augmente d 'autant les efforts à fournir pour écrire un script PHP, les bénéfices peuvent en être nettement plus interessants.
+Exemple 5-8.
+Travailler avec register_globals actif
+?php if ($username) {/ / attention, cette valeur peut être parasitée via GET / POST / COOKIES $good_login = 1;} if ($good_login == 1) {/ / attention, cette valeur peut être parasitée via GET / POST / COOKIES fpassthru (" / données / très / très / sensibles / index.html");}?
+Exemple 5-9.
+Travailler avec register_globals actif
+?php if( $HTTP_COOKIE_VARS["username"]) {/ / ne peut provenir que d'un cookie, corrompu ou pas $good_login = 1; / / Impossible à parasiter fpassthru (" / données / très / très / sensibles / index.html");}?
+Exemple 5-10.
+Détection de corruption de variables
+?php if ($HTTP_COOKIE_VARS['username'] !$HTTP_POST_VARS['username'] !$HTTP_GET_VARS['username']) {/ / D'autres vérifications pour vérifier l'origine du nom d'utilisateur fourni $good_login = 1; fpassthru (" / données / très / très / sensibles / index.html");} else {mail("admin@example.com", "Tentative de piratage", $HTTP_SERVER_VARS['REMOTE_ADDR']); echo "Problème de sécurité, l'administrateur est alerté ."; exit;}?
+Précédent
+Sommaire
+Suivant
+Rapport d 'erreur
+Niveau supérieur
+Données transmises par les internautes

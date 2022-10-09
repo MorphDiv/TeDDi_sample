@@ -1,0 +1,48 @@
+# language_name_wals:	Hebrew (Modern)
+# language_name_glotto:	Modern Hebrew
+# ISO_6393:	heb
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hebr
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/he.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+מדריך PHP
+קודם
+הבא
+(unknown)
+דואר() שולחת באופן אוטומטי את ההודעה המתוארת ב - message לנמען המתואר ב - to. שליחה להרבה נמענים יכולה להתבצע על ידי כתיבת פסיק בין כל כתובת בפרמטר to. דואל עם קובצים מצורפים (attachments) ועם סוגים מיוחדים של תוכן יכולים להשלח עם הפונקציה הזאת. תהליך זה מושלם דרך ה - MIME-encoding - תקן המאפשר להעביר בדואל כל סוג קובץ. לעוד מידע, עיין ב מאמר מ-Zend או ב - PEAR Mime Classes.
+הקישורים הבאים ל-RFC יכולים להיות גם כן שימושיים:
+RFC 1896, RFC 2045, RFC 2046, RFC 2047, RFC 2048, ו RFC 2049.
+דואר() מחזירה TRUE אם הדואר נשלח בהצלחה, ו - FALSE אחרת.
+דוגמה 1. שליחת דואר
+
+אם משתנה רביעי מסוג מחרוזת נשלח בנוסף, מחרוזת זו מוכנסת בסוף הכותרת (header). השימוש במשתנה זה הוא לרוב בשביל להוסיף עוד כותרות (headers). בכדי להוסיף כמה כותרות, יש להפרידם בעזרת החזרת הסמן להתחלת השורה (/ r) ושורה חדשה (/ n).
+הערה: אתה חייב להשתמש בתווים \r\n כדי להפריד כותרות, למרות שסוכני העברת דואר מסויימים של Unix יכולים לעבוד רק עם שורה חדשה (\n). הכותרת Cc: היא רגישה להבדל בין אותיות קטנות לגדולות (-באנגלית) וחייב להכתב במערכות Win32 כך:
+Cc:. הכותרת Bcc: אינה נתמכת במערכות Win32.
+דוגמה 2. שליחת דואר עם כותרות נוספות.
+
+
+הפרמטרים הנוספים (additional_parameters) יכולים לשמש להעברת פרמטרים נוספים לתוכנה המוגדרת לשימוש כששולחים דואר בעזרת התוכנה המוגדרת בתיקיה sendmail_path. לדוגמה, אפשר להשתמש באפשרות זו בשביל לקבוע את מעטפת כתובת השולח כשמשתמשים בתוכנה Sendmail. אתה תהיה צריך להוסיף את המשתמש ששרת האינטרנט מפעיל בהגדרות התוכנה Sendmail בשביל למנוע את הוספת הכותרת 'X-Warning 'להודעה שלך, כשאתה קובע את מעטפת כתובת עם השיטה הזאת.
+דוגמה 3. שליחת דואר עם תורות נוספות וקביעת פקודה נוספת כפרמטר.
+
+הערה: הפרמטר החמישי הוסף בגירסה PHP 4.0.5.
+אתה יכול גם כן להשתמש בטכניקות פשוטות של בניית מחרוזות כדי לבנות הודעות דואל מורכבות.
+דוגמה 4. שליחת הודעות מורכבות.
+/* recipients * / $to = "Moshe moshe@example.com". ","; / /אל תשכח את הפסיק! $to .= "David david@example.com "; / * subject * / $subject = "Birthday Reminders for August"; / * message * / $message = 'html head title Birthday Reminders for August / title / head body p Here are the birthdays upcoming in August! / p table tr th Person / th th Day / th th Month / th th Year / th / tr tr td Joe / td td 3rd / td td August / td td 1970 / td td Sally / td td 17th / td td August / td td 1973 / td / tr / table / body / html'; / * בכדי לשלוח דואר מסוג HTML, את יכול לקבוע את כותרות סוג התוכן (Content-type).* / $headers = "MIME-Version:
+1.0\r\n"; $headers .= "Content-type: text / html; charset=iso-8859-1\r\n"; / * כותרות נוספות * / $headers .= "From:
+Birthday Reminder birthday@example.com \r\n"; $headers .= "Cc: birthdayarchive@example.com\r\n"; $headers .= "Bcc: birthdaycheck@example.com\r\n"; / * ועכשיו - שלח את זה! * / mail($to, $subject, $message, $headers);
+הערה: וודא את זה שאין לך שום תו של שורה חדשה בפרמטר to או בפרמטר subject, אחרת הדואר לא ישלח היטב.
+קודם
+ראשי
+הבא
+
+למעלה

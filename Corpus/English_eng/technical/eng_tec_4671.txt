@@ -1,0 +1,72 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3 CVS only)
+Returns an array that corresponds to the fetched row, or FALSE if there are no more rows.
+The number of columns in the result set is returned in an associative array element $array[ "count"].
+Because some of the result columns may be empty, the count() function can not be used on the result row returned by sesam_fetch_row().
+result_id is a valid result id returned by sesam_query() (select type queries only!).
+whence is an optional parameter for a fetch operation on "scrollable" cursors, which can be set to the following predefined constants:
+Table 1.
+Valid values for "whence" parameter
+Value
+Constant
+Meaning
+0
+SESAM_SEEK_NEXT
+read sequentially (after fetch, the internal default is set to SESAM_SEEK_NEXT)
+1
+SESAM_SEEK_PRIOR
+read sequentially backwards (after fetch, the internal default is set to SESAM_SEEK_PRIOR)
+2
+SESAM_SEEK_FIRST
+rewind to first row (after fetch, the default is set to SESAM_SEEK_NEXT)
+3
+SESAM_SEEK_LAST
+seek to last row (after fetch, the default is set to SESAM_SEEK_PRIOR)
+4
+SESAM_SEEK_ABSOLUTE
+seek to absolute row number given as offset (Zero-based.
+After fetch, the internal default is set to SESAM_SEEK_ABSOLUTE, and the internal offset value is auto-incremented)
+5
+SESAM_SEEK_RELATIVE
+seek relative to current scroll position, where offset can be a positive or negative offset value.
+When using "scrollable" cursors, the cursor can be freely positioned on the result set.
+If the whence parameter is omitted, the global default values for the scrolling type (initialized to:
+SESAM_SEEK_NEXT, and settable by sesam_seek_row()) are used.
+If whence is supplied, its value replaces the global default.
+offset is an optional parameter which is only evaluated (and required) if whence is either SESAM_SEEK_RELATIVE or SESAM_SEEK_ABSOLUTE.
+This parameter is only valid for "scrollable" cursors.
+sesam_fetch_row() fetches one row of data from the result associated with the specified result identifier.
+The row is returned as an array (indexed by values between 0 and $array["count"]-1).
+Fields may be empty, so you must check for the existence of a field by using the php isset() function.
+The type of the returned fields depend on the respective SQL type declared for its column (see SESAM overview for the conversions applied).
+SESAM "multiple fields" are "inlined "and treated like a sequence of columns.
+Subsequent calls to sesam_fetch_row() would return the next (or prior, or n'th next / prior, depending on the scroll attributes) row in the result set, or FALSE if there are no more rows.
+Example 1.
+SESAM fetch rows
+?php $result = sesam_query ("SELECT * FROM phone\n". "WHERE LASTNAME='".strtoupper($name) ."'\n"." ORDER BY FIRSTNAME", 1); if (!$result) {... error...} / / print the table in backward order print "TABLE BORDER \n"; $row = sesam_fetch_row ($result, SESAM_SEEK_LAST); while (is_array ($row)) {print" TR \n"; for ($col = 0; $col $row["count"]; ++$col) {print "TD ".htmlspecialchars ($row[$col])." / TD \n";} print "/ TR \n"; / / use implied SESAM_SEEK_PRIOR $row = sesam_fetch_row ($result);} print" / TABLE \n"; sesam_free_result ($result);?
+See also: sesam_fetch_array() which returns an associative array, and sesam_fetch_result() which returns many rows per invocation.
+Prev
+Home
+Next
+sesam_fetch_result
+Up
+sesam_field_array

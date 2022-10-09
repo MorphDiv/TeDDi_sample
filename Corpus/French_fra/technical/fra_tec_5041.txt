@@ -1,0 +1,148 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Hyperwave a été développé par IICM à Graz.
+Son nom original était Hyper-G et il a pris le nom de Hyperwave lors de sa commercialisation (en 1996, si mes souvenirs sont bons).
+Hyperwave n 'est pas gratuit.
+La version actuelle est la 4.1, disponible à http: / /www.hyperwave.com /.
+Une version limitée à 30 jours peut être demandée.
+HIS est un système d'information similaire à une base de données, (HIS, Hyperwave Information Server).
+HIS se concentre sur l 'enregistrement et la gestion des documents.
+Un document peut être n 'importe quelle donnée, qui peut être stockée dans un fichier.
+Chaque document est accompagné par un enregistrement.
+Cet enregistrement contient des méta données à propos du document.
+Ces méta données sont des listes d'attributs qui peuvent être étendues par l 'utilisateur.
+Un attribut est une paire clé / valeur de la forme: clé =valeur.
+L'enregistrement complet contient autant de paire que le désire l 'utilisateur.
+Le nom d'un attribut n'a pas besoin d'être unique, c'est-à-dire qu 'une même clé peut apparaître plusieurs fois dans un enregistrement.
+Cela peut être utile si vous devez donner un titre à votre document en plusieurs langues, par exemple.
+Dans un cas pareil, la convention est que chaque valeur de titre est précédée par deux lettres et deux points, tel que: 'fr:Titre en français' ou 'ge:Titel in deutsch '.
+D 'autres attributs comme une description ou des mots clés sont aussi susceptibles de recourir à ce genre de procédé.
+Vous pouvez aussi remplacer l'abréviation de langage par une autre chaîne, tant qu 'elle est séparée de la valeur par les deux points.
+Chaque enregistrement a une représentation native qui contient toutes les paires clé / valeur, séparées par un retour à la ligne.
+L 'extension Hyperwave reconnaît une autre représentation qui est un tableau associatif, où les attributs servent de clés.
+Les attributs multilingues étant géré sous la forme d 'un autre tableau associatif, dont les clés sont les chaînes de langue.
+En fait, tous les attributs multiformes sont gérés sous la forme de tableau associatif. (Cela n 'est pas encore complètement codé.
+Uniquement les attributs de titre, description et mot clés sont traités correctement).
+En dehors des documents, tous les hyper liens contenus dans un documents sont enregistrés dans un autre enregistrement.
+Les hyperliens qui sont à l'intérieur d'un document en seront supprimés, et enregistrés dans des objets particuliers, au moment de l 'insertion dans la base de données.
+L'enregistrement des hyper-liens contient les informations d'origine et d 'objectif.
+Afin d'accéder au document original, vous devrez lire le document sans les liens, puis lire les liens, et les réinsérer (les hw_pipedocument() et hw_gettext() le font pour vous.
+L'avantage de séparer les liens du document est évident: une fois qu'un document, cible d 'un hyperlien, a été renommé, le liens peut facilement être modifié.
+Le document contenant le lien n 'est pas modifié pour autant.
+Vous pouvez même ajouter un lien à un document sans le modifier.
+Dire que hw_pipedocument() et hw_gettext() font l'insertion automatiquement n'est pas aussi simple qu'il n 'y paraît.
+L 'insertion implique une certaine hiérarchie de documents.
+Sur un serveur web, la hiérarchie est fournie par le système de fichiers, mais Hyperwave dispose de sa propre hiérarchie et les noms de fichiers ne reflètent pas la position d 'un objet dans cette hiérarchie.
+Ainsi, la création de liens requiert en premier lieu la construction de la hiérarchie et de l 'espace des noms dans une hiérarchie web et un espace de nom web.
+La différence fondamentale entre Hyperwave et le web est qu 'il y a une distinction claire en les noms et la hiérarchie dans Hyperwave.
+Le nom ne contient aucune information à propos de la position de l 'objet dans la hiérarchie.
+Sur le web, le nom contient les informations de localisation dans la hiérarchie.
+Cela conduit à deux méthodes de d'accès: soit la hiérarchie Hyperwave et le nom de l'objet sont inscrits dans l 'URL.
+Pour simplifier les choses, une deuxième approche est pratiquée.
+L'objet Hyperwave de nom 'mon_objet 'correspond à l'URL 'http: / /hote / mon_objet', peu importe alors où il est rangé dans la hiérarchie.
+Un objet dont le nom est 'parent / mon_objet' peut être le fils de l'objet 'mon_objet 'dans la hiérarchie Hyperwave, bien que ce soit le contraire en convention web, et cela risque de perturber l 'utilisateur.
+Ayant pris cette décision, un deuxième problème surgit: comment faire l 'interface avec PHP?
+L'URL http: / /hote / mon_objet n'appellera aucun script PHP à moins que vous ne demandiez à votre serveur web de le remplacer par autre chose, comme par exemple: 'http: / /host / php3_script / mon_objet 'et le script 'php3_script' utilise la variable $PATH_INFO pour rechercher l'objet 'mon_objet 'sur le serveur Hyperwave.
+Il y a juste un petit inconvénient, qui peut facilement être corrigé.
+Réécrire une URL ne vous permettra aucun accès aux autres documents du serveur web.
+Un script de recherche dans le serveur Hyperwave serait impossible.
+Il vous faudra donc au moins une autre règle pour exclure certaines URL, comme par exemple celles qui commencent par http: / /host / Hyperwave.
+Voici, de manière simple, la manière de partager un espace de nom entre un serveur web et un serveur Hyperwave serveur.
+Basé sur le mécanisme précédent, on trouve l 'insertion dans les documents.
+Il est plus compliqué d 'avoir PHP ne fonctionne pas comme un module de serveur, ou un script CGI, mais comme une application indépendante.
+Dans ce cas, il est utile d 'inscrire la hiérarchie et le nom de fichier Hyperwave dans le système de fichier.
+Mais comme cela risque d'entrer en conflit avec le séparateur de dossier (' / '), il faut le remplacer par un autre caractère,. '_ '.
+Le protocole réseau pour communiquer avec un serveur Hyperwave est appelé HG-CSP (Hyper-G Client / Server Protocol).
+Il est basé sur des messages qui initie des actions, comme par exemple, lire l 'en-tête de fichier.
+Dans les premières versions de Hyperwave Server deux clients natifs (Harmony, Amadeus) étaient fournis pour permettre la communication avec le serveur.
+Ils ont disparu lors de la commercialisation de Hyperwave.
+En tant qu 'ersatz, un client appelé wavemaster est désormais fourni. wavemaster est un espèce ce convertisseur de protocole de HTTP en HG-CSP.
+L'idée est de faire toute l 'administration de la base et la visualisation des documents par une interface web.
+Le wavemaster implémente un jeu d'emplacement pour certaines actions de personnalisation de l 'interface.
+Ce jeu est appelé PLACE Ce jeu est appelé PLACE language.
+PLACE pêche encore par le manque de nombreuses fonctions de programmation, et le manque d 'évolutivité.
+Cela a conduit à l 'utilisation de JavaScript ce qui ne rend pas la vie facile.
+Que PHP supporte Hyperwave permet de combler ces manques.
+PHP implémente tous les messages définis par HG-CSP mais fourni d 'autres commandes puissantes, comme par exemple, celle de lire des documents complets.
+Hyperwave dispose de sa propre terminologie pour localiser certaines informations.
+Cette terminologie a été largement étendue.
+Presque toutes les fonctions utilisent l 'un des types de données suivants:
+object ID: un entier, unique pour chaque objet sur le serveur Hyperwave.
+C'est aussi un des attributs de l'enregistrement de l'objet (ObjectID).Les object ids sont souvent utilisées comme paramètre d 'entrée pour spécifier un objet.
+
+Une chaîne contenant des paires clé=valeur.
+Les paires sont séparées par un retour à la ligne.
+Un enregistrement d'objet peut facilement être converti en tableau, avec la fonction hw_objrec2array().
+De nombreuses fonctions retournent un object records.
+Ces fonctions ont leur nom qui finit par obj.
+
+Un tableau associatif qui contient tous les attributs d 'un objet.
+La clé est l 'attribut.
+Si un attribut apparaît plusieurs fois, il sera représenté sous la forme d 'un tableau associatif ou indexé.
+Les attributs qui dépendent des langues (comme title, keyword ou description) seront représentés sous la forme d 'un tableau associatif, dont les clés seront les abréviations de langues.
+Tous les autres attributs à valeur multiple prendront la forme d 'un tableau indexé.
+
+Ce type est un nouveau type de données, qui contient le document lui-même, comme par exemple HTML, PDF etc.
+Il est optimisé pour les documents HTML mais peut s'utiliser avec n 'importe quel format.
+De nombreuses fonctions qui retournent un tableau d 'enregistrements, retournent aussi un tableau associé, avec des informations statistiques.
+Ce tableau est le dernier élément du tableau d 'enregistrements.
+Les statistiques contiennent les entrées suivantes:
+Nombre d'objets dont l 'attribut PresentationHints est Hidden.
+Nombre d'objet dont l 'attribut PresentationHints est CollectionHead.
+Nombre d'objet dont l 'attribut PresentationHints est FullCollectionHead.
+Index du premier objet du tableau d'enregistrement avec l 'attribut PresentationHints à CollectionHead.
+Index du premier objet du tableau d'enregistrement avec l 'attribut PresentationHints est FullCollectionHead.
+
+Nombre d 'enregistrements.
+L 'extension Hyperwave est utilisée de manière optimale lorsque PHP est compilé comme module Apache.
+Dans ce cas, le serveur Hyperwave sous jacent peut être caché quasiment totalement aux utilisateurs, si Apache utilise son moteur d 'écriture.
+Les explications suivantes vous éclaireront:
+Etant donné que PHP avec l'extension Hyperwave et Apache tend à remplacer la solution native basée sur Wavemaster, je vais supposer que le serveur Apache servira seulement d 'interface Hyperwave.
+Ce n 'est pas nécessaire, mais cela simplifie grandment la configuration.
+Le concept est très simple.
+Premièrement, vous avez besoin d 'un script PHP qui évalue la variable PATH_INFO et considère que cette valeur est un objet Hyperwave.
+Appelons ce script 'Hyperwave'.
+L'URL http: / /votre.hote / Hyperwave / nom_objet retourne alors l'objet Hyperwave dont le nom est 'nom_objet '.
+Le script doit alors réagir suivant le type de l 'objet.
+Si c 'est un groupe, il devra probablement retourner une liste de fils.
+Si c 'est un document, il pourra retourner son type MIME et son contenu.
+Une amélioration peut être obtenue en utilisant le moteur de réécriture d 'Apache.
+D'un point de vue utilisateur, il est plus direct si l'URL http: / /votre.hote / nom_objet retourne l 'objet.
+La règle de réécriture est simple:
+
+
+
+Retourne l 'objet lui-même
+Pour autoriser la recherche
+S 'identifier
+Choisir une configuration
+Un script pour chaque fonction supplémentaire, comme afficher un objet, afficher des informations sur les utilisateurs, afficher le statut du serveur, etc...
+Il reste encore beaucoup à faire:
+La fonction hw_InsertDocument doit être séparée en deux: hw_insertobject() et hw_putdocument().
+Les noms de nombreuses fonctions ne sont pas encore fixés.
+La majorité des fonctions requièrent la connexion courante comme premier paramètre.
+Cela conduit à beaucoup de frappe clavier, même s'il n'y a souvent qu 'une seule connexion en jeu.
+Une connexion par défaut améliorerait ceci.
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

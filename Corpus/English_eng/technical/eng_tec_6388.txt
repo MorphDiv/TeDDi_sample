@@ -1,0 +1,77 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Troubleshooting
+Getting support
+There are several ways to get help with & kplayer;. If you want to ask a question, go to the #kplayer channel on FreeNode IRC or post it on the user forum where other users will be able to see it, as well as the developer who is of course subscribed to receive e-mail when a message is posted there. The IRC channel and the user forum are also good places to get help with a problem.
+Bugs should be reported through the bug tracking system, following the instructions in the Bug reporting micro-HOWTO. Also there are special sections at the kplayer; project on SourceForge for support requests, feature requests and code patches.
+Common problems
+Most commands on the menu and on the toolbar are missing
+The kplayerui. rc file was misplaced during installation, and & kplayer; cannot find it. If you installed using a binary package, complain to the package maintainer. When compiling from source, be sure to follow the instructions in the Compilation micro-HOWTO, especially the part about kde-config. Before starting, run
+kde-config --prefix
+from the command line to make sure that it returns the & kde; prefix path.
+After a & kplayer; upgrade new features are missing
+You may have a file called kplayerui. rc in ~/. kde/ share/ apps/ kplayer. Removing it will get you the new menus, but it will also reset any keyboard shortcuts you may have changed in the Key Bindings dialog.
+& kplayer; is not showing up on the Multimedia submenu of the & kmenu;
+The kplayer. desktop file needs to be installed in the correct place, under either share/ applnk/ Multimedia or share/ applications/ kde in the global & kde; directory.
+There also may be a file called kde-kplayer. desktop in ~/. local/ share/ applications. Removing it will get the Multimedia menu updated automatically again when you install or uninstall & kplayer;, but it will also reset changes you made to & kplayer; associations with media types on the File Associations page in & konqueror; configuration dialog or in & kcontrolcenter;.
+The Contents tab in & khelpcenter; should also list & kplayer; in the Multimedia section under Application Manuals.
+Could not start & mplayer;
+If you get this error when trying to play a file, you need to install & mplayer; before you can use & kplayer;. This error can also happen if the name of your & mplayer; executable is not mplayer or it is not in the current path. In that case go to the Advanced page in kplayer; Settings and give the executable name or the full path in the Executable path field.
+configure: error: Ca n't find X includes
+That means that you are missing the X include files, which normally come with the X development package. So look for a package in your distribution that has files like X. h and XEvent. h. For example, on Debian it is called xlibs-dev.
+Similarly, if configure complains about missing Qt files, you need to find and install the Qt development package. If you look in the config. log, it will probably tell you the exact name of the file it could n't find, somewhere near the bottom. The config. log file is quite verbose, so you would have to scroll a few pages up from the bottom to find the place where it reports the error.
+Cannot play any files
+Look at the end of the message log to see what errors & mplayer; gives when trying to play the files. Hit Ctrl; G if & kplayer; does not show the log automatically.
+Try playing the files with mplayer from the command line. If & mplayer; can play them, compare the options you used on the command line to the ones & kplayer; passed to & mplayer;. Set the required options in kplayer; Settings. The most important ones are the Driver options on the Video and Audio pages. On the Advanced page check the Executable path option to make sure & kplayer; will be able to find the & mplayer; executable, and if there are any options that are not found anywhere in the kplayer; Settings dialog, put them in the Additional command line arguments field.
+Cannot play a specific file
+Look at the end of the message log to see what errors & mplayer; gives when trying to play the file. Hit Ctrl; G if & kplayer; does not show the log automatically.
+Try playing the file with mplayer from the command line. If & mplayer; can play it, but requires special option to play this particular file, put them in the File Properties for that file. Two options that sometimes help & mplayer; when it cannot detect the file type automatically are -vc and -ac, which correspond to the Codec options on the Video and Audio pages in File Properties. If there are any options that are not found anywhere in the File Properties dialog, put them in the Additional command line arguments field.
+If it is a playlist file but it does not have one of the standard playlist file extensions, go to the General page in the File Properties and set the Playlist option to yes. In rare cases a file that is not a playlist may have a playlist extension. Then you will need to set the Playlist property to no. For more details see the Playlist files section in the Playlist micro-HOWTO.
+Cannot play any video files
+If & kplayer; only plays audio files but not video files, there may be a problem with the video output. By default & kplayer; uses XVideo extension for video output. If the extension is not enabled or is being used by another program like Kino, & kplayer; may not be able to use a different video output. You can either enable the XVideo extension or tell & kplayer; to use another video output. See the Configuration micro-HOWTO for details.
+Video plays fine, but there is no sound
+Look in the Message Log to see why & mplayer; cannot play audio. The most common problem is the audio device being locked by another program. In this case the chief suspect is artsd. Try running
+killall artsd
+from the command line. If that helps then the permanent solution is to go to the & kcontrolcenter; and disable & arts;. & arts; and everything based on it is by far the worst part of & kde;. Fortunately it seems there are plans to finally get rid of it in & kde; 4.
+For more information on audio setup in & kplayer; see the Configuration micro-HOWTO.
+& kplayer; cannot play a file that plays fine with & mplayer;
+When & kplayer; is in Running or Playing state, run
+ps auxww
+from the command line. Compare the command line options that & kplayer; uses to run & mplayer; to what you are using to play the file with & mplayer;. Then start adding missing options one by one until you get the same problem you are getting in & kplayer;. After you find out what option is causing the problem, you can open the configuration dialog in & kplayer; and remove or change that option. If you need to make the change just for that one file, go to the File Properties instead.
+Problems when coming back from full screen mode
+If you are getting problems when you try to go back to normal window size from full screen mode, for example the window becomes too large or you are seeing endless flickering, you can try unselecting the Resize main window automatically option on the General page in kplayer; Settings. Also read the thread about this problem at the kplayer; user forum and watch it for updates.
+Radio station takes too long to start playing
+By default & kplayer; lets & mplayer; choose an optimal cache size. When playing low bitrate media like a radio station, it may take a long time to fill the cache if it is too big. If that happens, you can either choose a lower Cache size setting or give a lower minimum cache size on the Advanced page either globally in kplayer; Settings or in the individual File Properties. Enter the minimum cache size into the Additional command line parameters field, for example -cache-min 5, or choose set size for the Cache option and enter a size in kilobytes. For more information on playing online media see the Streams micro-HOWTO.
+Large video files take too long to start playing
+You may have set the Cache size option too low in kplayer; Settings. If you need to set it higher or lower for an individual file or stream, you can do so on the Advanced page in File Properties.
+Only the video area is shown in & konqueror;
+If you open a web page with an embedded multimedia object in & konqueror;, only the video area is displayed, with no controls. Then you should right click the video area and choose the Start & kplayer; command. Playback will then stop, and the full & kplayer; will open up and start playing the file or URL.
+Contrast and brightness controls do not work
+You need to enable the XVideo extension in your X11 configuration and make sure the XVideo video output is selected on the Video page in kplayer; Settings. However, if you cannot use the XVideo output, you can still make the video controls to work by putting the -vf eq2 or -vf eq option into the Additional command line parameters field on the Advanced page in kplayer; Settings.
+Bugs should be reported through the bug tracking system, following the instructions in the Bug reporting micro-HOWTO. Bugs reported using the Report a bug option on the Help menu are still accepted, but are less helpful.
+Cannot play a DVD, video CD or audio CD
+Choose Open URL from File menu. Enter a URL like dvd: / /1 or vcd: / /1. For more information about playback from various kinds of hardware devices see the Devices micro-HOWTO.
+You need to enable the XVideo extension in your X11 configuration.
+Cannot upgrade kdelibs-data because of a conflict
+In Debian the kdelibs-data package contains rtsp. protocol file, which & kplayer; replaces with its own version. If later you try to upgrade the kdelibs-data package, apt-get will complain about a conflict. This is a bug in apt-get. To work around it, run the following commands:
+apt-get remove kplayer
+apt-get install kdelibs-data
+apt-get install kplayer
+If you run apt-get install kdelibs-data before apt-get remove kplayer, another apt-get bug will prevent you from removing the kplayer package. The workaround is:
+dpkg -r kplayer
+apt-get -f install

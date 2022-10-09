@@ -1,0 +1,100 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+aRts Interfaces de programación de aplicaciones (APIs)
+Introducción
+aRts no es sólo un conjunto de software, también proporciona una serie de APIs para propósitos variados.
+En esta sección trataré de describir de una forma resumida lo que se suponen que hacen esas APIs, y cómo interaccionan.
+Hay que hacer una importante distinción: la mayoría de las APIs son independientes del lenguaje y la localización ya que están especificadas como mcopidl.
+Es decir, se pueden utilizar los servicios que ofrecen desde cualquier lenguaje, implementarlas en cualquier lenguaje y no será necesario tener en cuenta si se trata de objetos locales o remotos.
+Esta es una lista de las primeras:
+core.idl
+Definiciones básicas que forman el núcleo de la funcionalidad MCOP, como el propio protocolo, definiciones del objeto, el intercambiador, el sistema de flujo y demás.
+artsflow.idl
+Aquí está contenido el sistema de flujo que se utilizará para conectar flujos de audio, la definición de Arts::SynthModule que es la base de cualquier interfaz que tenga flujos y finalmente algunos objetos de audio útiles.
+kmedia2.idl
+Aquí, se define un objeto que puede reproducir un medio, Arts::PlayObject.
+Los reproductores de medios como noatun de KDE serán capaces de reproducir cualquier medio para el que se encuentre un objeto PlayObject.
+Así que cobra sentido implementar objetos PlayObject para varios formatos (como mp3, video mpeg, midi, wav,...) en esa base, y, de hecho, ya hay muchos.
+soundserver.idl
+Aquí, se define un interfaz para el servidor de sonido global del sistema.
+El interfaz se llama Arts::SoundServer, que implementa funcionalidad como aceptar flujos desde la red, reproducir muestras, crear objetos de aRts propios y demás.
+La transparencia de red está implícita debido al uso de MCOP (como para todo lo demás).
+artsbuilder.idl
+Este módulo define funcionalidad básica de la gráfica de flujo, es decir, la combinación de obtejos sencillos en otro más complejos, definiendo una gráfica de ellos.
+Define los interfaces básicos Arts::StructureDesc, Arts::ModuleDesc y Arts::PortDesc que contienen una descripción de una estructura, un módulo y un puerto.
+También hay un modo de obtener una "red viviente de objetos" de estas conexiones y descripciones de valor, utilizando una factoría.
+artsmidi.idl
+Este módulo define funcionalidad MIDI básica, como objetos que producen eventos MIDI, lo que es un evento MIDI, un Arts::MidiManager para conectar los productores y consumidores de eventos MIDI, etc.
+Como siempre, se implica transparencia de red.
+artsmodules.idl
+Aquí hay varios filtros adicionales, osciladores, efectos, retardos y demás, todo lo requerido para poder realizar procesamiento de señal y construir instrumentos complejos a partir de estos elementos básicos.
+artsgui.idl
+Este se encarga de los objetos visuales.
+Define el tipo básico Arts::Widget de donde se derivan todos los módulos del entorno gráfico.
+Esto proporciona independencia del conjunto de herramientas, edición visual del entorno gráfico y entornos gráficos serializables.
+Además, al tener los elementos del entorno gráfico atributos normales, sus valores puede estar conectados directamente a algunos módulos de procesamiento de señal. (Por ejemplo, el valor de un control al corte de un filtro).
+Como siempre: transparencia de red.
+Donde es posible, el propio aRts está implementado usando IDL.
+Por otro lado, hay algunas APIs específicas del lenguaje que utilizan C o C++.
+Lo más correcto es utilizar interfaces IDL donde se pueda, y las otras APIs donde sea necesario.
+Esta es una lista de APIs específicas del lenguaje:
+KNotify, KAudioPlayer (incluido en libkdecore)
+Estas son APIs convenientes para los casos más sencillos y comunes, donde sólo se quiere reproducir una muestra.
+Las APIs están en C++, optimizado para Qt / KDE, y son tan sencillas como se puede.
+libartsc
+Interfaz de C para el servidor de sonido.
+Muy útil para portar aplicaciones antíguas.
+libmcop
+Toda la magia de MCOP se produce aquí.
+La biblioteca contiene los elementos básicos necesarios que debe conocer para escribir una aplicación MCOP sencilla, el repartidor, temporizadores, administración de entrada / salida, pero también los elementos internos que hacen que funcione el propio protocolo MCOP.
+libartsflow
+Además de la implementación de artsflow.idl, algunas utilidades como la conversión del ratio de muestreo.
+libqiomanager
+Integración de MCOP en el bucle de eventos de Qt, cuando escriba aplicaciones Qt utilizando MCOP.
+knotify
+kaudioplayer
+libkmid
+kmedia2
+servidor de sonido
+artsflow
+API de C
+Introducción
+El API de C de aRts se diseñó para facilitar la escritura y adaptación de aplicaciones en C al servidor de sonido aRts.
+Proporciona funcionalidad de flujos (envío de suceciones de muestras a artsd), ya sea exclusivas o no.
+En la mayoría de las aplicaciones, basta con eliminar unas pocas llamadas al sistema que realizan la comunicación con el dispositivo de audio y sustituirlas por las llamadas a aRts correspondientes.
+Yo he realizado dos adaptaciones como demostración del concepto: mpg123 y quake.
+Los parches se puede obtener aquí.
+Usted mismo puede enviar sus propios parches al mantenedor de aRts o de otros paquetes de software para facilitar el uso de aRts en su código.
+Un vistazo rápido
+Enviar audio al servidor de sonido a través de la API es muy sencillo:
+incluya el archivo de cabecera utilizando #include <artsc.h>
+inicialice la API con arts_init()
+construya un flujo de muestras con arts_play_stream()
+configure los parámetros específicos con arts_stream_set()
+escriba los datos de las muestras en el flujo con arts_write()
+cierre el flujo con arts_close_stream()
+libere la API con arts_free()
+Este ejemplo es un pequeño programa que ilustra el funcionamiento:
+Compilación y enlace: artsc-config
+Para compilar y enlazar de un forma sencilla los programas que utilicen la API para C de aRts, se proporciona la utilidad artsc-config que conoce la bibliotecas que son necesarias para el enlace y dónde se encuentran los archivos de inclusión.
+Se ejecuta utilizando
+para determinar las bibliotecas y
+para establecer parámetros de compilación de C adicionales.
+El ejemplo anterior se compilaría con la línea de comandos:
+Referencia de la biblioteca
+[POR HACER: generar la documentación de artsc.h utilizando kdoc]

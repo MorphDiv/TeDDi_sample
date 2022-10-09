@@ -1,0 +1,47 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Connexions distantes
+Connexions distantes
+Les connexions distantes sont facilement réalisées en saisissant l'URL; dans la barre d'emplacement. Il y a actuellement KIO Slaves. Remarquez que le panneau de & krusader; ne gère pas tous les KIO Slaves & pex; http: / / ne fonctionnera pas dans le panneau, mais fonctionnera dans l'afficheur. Quelques exemples & #160;:
+ftp: / / public. ftpserver. org/ directory/
+fish: / / username@hostname/
+sftp: / / username: password@sftp. foo. org/
+ftp: / / username@my. server. org:21/ directory/
+smb: / / username: password@server/ share
+ftp: / / username@proxyusername: password@proxipassword@hostname/ directory
+nfs: / / lt; hostgt;: lt; portgt; lt; url-pathgt;
+webdav: / / www. server. com/ path/
+Vous pouvez créer de signets pour ces & URL;, cependant, veuillez lire la section Bookman pour enregistrer de manière sécurisée les mots de passe. Pour se connecter à plusieurs emplacements, créez des signets pour ces & URL; et ouvrez les un par un, ou ouvrez les tous ensemble en utilisant les profils de panneau. Pour passer d'un emplacement à un autre, ouvrez simplement un onglet de dossiers pour chaque.
+Il y a trois façons de lancer une connexion distante & #160;:
+Saisir l'URL; dans la barre d'outils d' emplacement
+Sélectionnez Outils Nouvelle connexion réseau qui va ouvrir une boite de dialogue qui vous demandera les détails du site distant. Cette boîte de dialogue est manuelle si vous ne saisissez pas l'URL; distant dans la barre d'emplacement. Laisser le mot de passe et le nom d'utilisateur vide vous connectera comme anonyme. REMARQUE & #160;: nous planifions de réécrire cette fenêtre de dialogue.
+Vous pouvez créer un signet pour un dossier sur un hôte distant et retourner dans ce dossier depuis les boutons de signets sur le coin en haut à droite de votre panneau comme un navigateur web.
+Après vous être connecté à un serveur distant, vous pouvez naviguer dedans comme si c'est un disque dur local avec les exceptions suivantes & #160;:
+Vous ne pouvez pas exécuter des fichiers sur des serveurs distants.
+Les droits d'accès ne peuvent pas toujours être calculés sur des serveurs distants (cela dépend du serveur et de la méthode de droit d'accès), vous aurez alors un « & #160;? & #160; » dans la colonne de droits d'accès pour certains fichiers.
+Les informations de l'utilisation du disque ne sont pas disponible pour les systèmes de fichiers distants.
+Pour modifier le jeu de caractères sur un hôte distant, utilisez Affichage Sélectionner le jeu de caractères distant.
+Vous pouvez fermer une connexion distante active par deux méthodes distinctes & #160;:
+Manuellement & #160;: ajouter un bouton de déconnexion à la barre principale et cliquez dessus.
+Automatiquement & #160;: saisir l'URL; dans la barre d'emplacement.
+& krusader; est un gestionnaire de fichiers qui gère les connexions distantes via & kioslaves1-url;, mais si vous recherchez encore plus de fonctionnalités avancées de connexions distantes, & pex; un client de & FTP; avancé, nous vous recommandons d'utiliser & pex; Kasablanca ou Kftpgrabber.
+Connexions LAN via le protocole fish: / (zeroconf)
+Connexions LAN distantes (zeroconf)
+Cette section est rédigée par Andrew Svet (z-vet), les commentaires à propos de ce chapitre sont appréciés. Merci & #160;!
+Ceci fonctionne sur un système Debian, et donc ses dérivés (Kubuntu & etc;), même si cela devrait fonctionner sur les autres distributions Linux. Nous assumons que vous avez installé et configuré SSH et que cela fonctionne sur toutes les machines en LAN que vous voulez connecter. Il y a plein de très bon tutoriaux à propos de SSH sur le web, & pex; linuxhomenetworking. com ou cherchez simplement sur Google. Nous utilisons par défaut le port (22) SSH pour ce chapitre. Souvenez vous de le modifier si vous utilisez un port différent. Toutes les modifications et changements doivent être réalisés en mode superutilisateur.
+Commençons avec l'installation de tous les paquetages dont nous avons besoin & #160;: # apt-get install avahi-daemon libnss-mdns kdnssd Tous est installé, nous allons maintenant faire quelques configurations. Premièrement, nous avons besoin de nos « & #160; services & #160; » pour s'identifier sur un LAN. C'est pourquoi nous avons installé avahi-daemon & #160;: il représente votre ordinateur sur un réseau local et permet aux autres applications de publier des services qu'ils fournissent. Avahi-daemon vient avec un ficheir de configuration d'exemple ssh. service localisé dans / usr/ share/ doc/ avahi-daemon/ examples. Pour que le service soit déclaré sur un LAN, nous avons besoin de copier ce fichier dans le dossier / etc/ avahi/ services & #160;: # cp / usr/ share/ doc/ avahi-daemon/ examples/ ssh. service / etc/ avahi/ services Maintenant nous avons besoin que le protocole fish: / soit aussi déclaré, nous utilisons donc le fichier ssh. service comme un modèle pour fish. service: # cp / etc/ avahi/ services/ ssh. service / etc/ avahi/ services/ fish. service This file is just a copy of ssh. service, Edit the fish. service file and replace "Remote Terminal on %h" with "Fish to %h" and "_ssh. _tcp" with "_fish. _tcp". Here's how it looks after edit: & lt; ?xml version="1.0 "standalone='no '? gt; lt; !--*-nxml-*-- > & lt; !DOCTYPE service-group SYSTEM" avahi-service. dtd"gt; & lt; !-- $Id: remote-connections. docbook, v 1.6 2007/ 05/ 02 18:07:28 codeknight Exp $-- > & lt; !-- This file is part of avahi. avahi is free software; you can redistribute it and/ or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version. avahi is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR & lt; !-- See avahi. service(5) for more information about this configuration file -- > & lt; service-group > & lt; name replace-wildcards="yes "> FISH to %hlt; /name > & lt; service > & lt; type > _fish. _tcplt; /type > & lt; port > 22lt; /port > & lt; /service > & lt; /service-group > Save the modified file. Now we need to create a new file _fish. _tcp, open a text editor and add the next lines: Name=FISH Protocol (ssh) Type=_fish. _tcp UserEntry=u PathEntry=path PasswordEntry=p Et enregistrez le fichier / usr/ share/ apps/ zeroconf/ _fish. _tcp. Faites la même chose sur chaque ordinateur sur votre LAN, et ensuite redémarrez avahi-daemon & #160;: # / etc/ init. d/ avahi-daemon restart Ouvrez ensuite & krusader; et saisissez dans la & location-toolbar-lnk; & #160;: zeroconf: / pour ouvrir la connexion zeroconf. Entrez dans le dossier Fish Protocol. Ci-dessous vous trouverez les liens pour chaque ordinateur qui déclarent fish: / sur votre LAN, la & location-toolbar-lnk; se dirigera vers zeroconf: / _fish. _tcp. Faites un double-clic sur n'importe quelles machines, le shell affichera un emplacement pour saisir le mot de passe, vous demandant le mot de passe de la clé ssh (si le mot de passe a été défini). Saisissez votre mot de passe. Félicitations & #160;: vous êtes connecté à votre machine distante en utilisant & krusader; & #160;!

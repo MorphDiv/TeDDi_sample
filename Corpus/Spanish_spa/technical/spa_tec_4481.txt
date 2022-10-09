@@ -1,0 +1,70 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+El conector para Informix Online (ODS) 7.x, SE 7.x y Universal Server (IUS) 9.x se encuentra implementado en "functions / ifx.ec "y "functions / php3_ifx.h".
+Para ODS 7.x está completado, con total soporte para columnas de tipo BYTE y TEXT.
+Para IUS 9.x está parcialmente finalizado: los tipos de datos nuevos están allí (en el IUS 9.x), pero la funcionalidad para SLOB y CLOB se encuentra bajo construcción todavía.
+Notas de configuración:
+Antes de ejecutar el guión (script) "configure", asegúrate que la variable "INFORMIXDIR "ha sido definida.
+Si ejecutas "configure --with_informix=yes" entonces el guión de configuración detectará automáticamente las librerías y los directorios include.
+Puedes obviar esta detección definiendo las variables de entorno "IFX_LIBDIR", "IFX_LIBS" y "IFX_INCDIR ".
+Definirás la variable de compilación condicional "HAVE_IFX_IUS" si la versión de Informix es 9.00 o superior.
+Algunas notas sobre el uso de BLOBs (columnas de tipo TEXT y BYTE):
+BLOBs son normalmente manipulados por enteros, los cuales representan identificadores de BLOB.
+Las consultas de selección devuelven un "blob id" para columnas de tipo BYTE y TEXT.
+Si eliges trabajar con los BLOBs en memoria (con: "ifx_blobinfile(0) ;") entonces puedes obtener el contenido con "string_var = ifx_get_blob($blob_id); ".
+Si prefieres manipularlos en ficheros usa "ifx_blobinfile(1);" y "ifx_get_blob($blob_id); "devolverá el nombre del archivo.
+En este caso, utiliza las funciones habituales de entrada y salida de ficheros para obtener el contenido de los blob.
+Para consultas de inserción y actualización debes crear estos identificadores de blob con "ifx_create_blob(..);".
+Entonces pondrás los identificadores de blob en un array y sustituirás en la cadena de la consulta las columnas de tipo blob por una interrogación (?).
+Para inserciones y actualizaciones eres responsable de definir el contenido de los blob con ifx_update_blob(...).
+La conducta de columnas BLOB puede ser modificada mediante variables de configuración, las cuales pueden ser definidas en tiempo de ejecución mediante funciones.
+variable de configuración: ifx.textasvarchar
+variable de configuración: ifx.byteasvarchar
+funciones en tiempo de ejecución:
+ifx_textasvarchar( 0): usa identificadores de blob para columnas de tipo TEXT en las consultas de selección
+ifx_byteasvarchar( 0): usa identificadores de blob para columnas de tipo BYTE en las consultas de selección
+ifx_textasvarchar( 1): devuelve columnas de tipo TEXT como si fueran de tipo VARCHAR, sin tener que usar identificadores de blob en las consultas de selección
+ifx_byteasvarchar( 1): devuelve columnas de tipo BYTE como si fueran de tipo VARCHAR, sin tener que usar identificadores de blob en las consultas de selección.
+variable de configuración: ifx.blobinfile
+función en tiempo de ejecución:
+ifx_blobinfile_mode( 0): devuelve columnas de tipo BYTE en memoria, el identificador de blob te permite obtener el contenido.
+ifx_blobinfile_mode( 1): devuelve columnas de tipo BYTE en un fichero, el identificador te permite saber el nombre de dicho archivo.
+Si defines ifx_text / byteasvarchar a 1 entonces puedes usar columnas de tipo TEXT y BYTE en las consultas de selección como campos de tipo VARCHAR, pero teniendo en cuenta que tendrán un mayor tamaño que el habitual.
+Ya que en PHP todas las cadenas son posibles, esto permite datos binarios.
+De esta forma, se pueden manejar correctamente.
+La información devuelta puede contener cualquier cosa, tú eres responsable del contenido.
+Si defines ifx_blobinfile a 1, utiliza el nombre del archivo devuelto por ifx_get_blob(..) para acceder a los contenidos del blobs.
+En este caso, ERES REPONSABLE DE ELIMINAR EL ARCHIVO TEMPORAL GENERADO POR INFORMIX cuando accedas a los registros.
+Cada nueva fila obtenida creará un nuevo archivo temporal para cada columna de tipo BYTE.
+El directorio donde se guardan los archivos temporales puede ser definido por la variable de entorno blobdir, por defecto es ".", es decir, el directorio actual.
+Así, putenv( blobdir=tmpblob"); definirá un directorio donde se localizarán todos los ficheros temporales y facilitará su borrado.
+Todos los nombres de los archivos comienzan por "blb".
+Recortado (trimming) automático de datos de tipo "char "(SQLCHAR y SQLNCHAR):
+Puede ser definido con la variable de configuración
+ifx.charasvarchar: si se define a 1 eliminará automáticamente los espacios en blanco al final de la cadena.
+Valores NULL:
+La variable de configuración ifx.nullformat (y en tiempo de ejecución ifx_nullformat()) cuando sea definida a TRUE devolverá columnas NULL como la cadena "NULL", si es definida a FALSE La variable de configuración ifx.nullformat (y en tiempo de ejecución ifx_nullformat()) cuando sea definida a TRUE devolverá columnas NULL como la cadena "NULL", si es definida a FALSE entonces la cadena vacía.
+Esto permite distinguir entre columnas NULL y vacías.
+Anterior
+Inicio
+Siguiente
+
+Subir

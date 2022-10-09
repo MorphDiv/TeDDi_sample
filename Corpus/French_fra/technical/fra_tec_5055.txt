@@ -1,0 +1,147 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Avertissement
+Ce module est EXPERIMENTAL.
+Cela signifie que le comportement de ces fonctions, leurs noms et concrètement, TOUT ce qui est documenté ici peut changer dans un futur proche, SANS PREAVIS!
+Soyez-en conscient, et utiliser ce module à vos risques et périls.
+Avertissement
+Ce module est expérimental.
+Les noms des fonctions sont sujets à des changaments probables.
+Actuellement, les conversions ne supportent que le Japonais.
+De nombreuses langues dont les signes ne peuvent pas être exprimés sur un seul octet.
+Des codes multi-octets sont utilisés pour pallier à cette insuffisance. mbstring est développé pour supporter les caractères japonais.
+Cependant, de nombreuses fonctions mbstring peuvent supporter d 'autres jeux de caractères.
+Les jeux de caractères multi-octets représentent les caractères sur plusieurs octets consécutifs (d'où leur nom).
+Certains systèmes d'encodages ont des caractères d 'échappement dédiés, pour démarrer / finir une séquence de caractères multi-octets.
+De ce fait, certains caractères peuvent être détruit lorsqu 'une chaîne est coupée en plusieurs morceaux, ou bien conduire à des résultats erronnés lorsque le nombre de caractère est compté.
+Il faut utiliser des fonctions qui supportent ces encodages.
+Les fonctions mbstring supportent les jeux de caractères multi-octets, ainsi que les conversions.
+Etant donné que PHP supporte essentiellement le jeu de caractères ISO-8859-1, certains jeux de caractères ne fonctionnent pas bien avec PHP.
+Par conséquent, il est important de donner une valeur à l 'option de configuration mbstring.internal_encoding qui permettent à PHP de travailler correctement.
+Pré-requis PHP 4
+Encodage par octet
+Les caractères d'un octet dans l 'intervalle 00h-7fh doivent être compatibles avec le code ASCII
+Jeux de caractères multi-octets, qui n'utilisent pas l 'intervalle 00h-7fh.
+Voici des exemples d 'encodage internes:
+Jeu de caractères qui fonctionnent avec PHP:
+ISO-8859-*, EUC-JP, UTF-8 Jeu de caractères qui NE fonctionnent PAS avec PHP:
+
+Les jeux de caractères qui ne fonctionnent pas comme encodage interne à PHP, peuvent toutefois être utilisé avec les fonctions de conversion de mbstring.
+
+SJIS ne doit pas être utilisé comme encodage interne, à moins que vous ne soyez familier de l 'analyseur / compilateur, et des problèmes liés aux jeux de caractères.
+
+SI vous utilisez une base de données avec PHP, il est recommandé que vous utilisiez le même jeu de caractère pour la base de données et le jeu de caractère interne de PHP, pour améliorer les performances.
+Si vous utilisez PostgreSQL, il supporte des jeux de caractères qui peuvent être différents de ceux du client.
+Reportez vous au manuel de PostgreSQL pour plus de détails.
+mbstring est un module PHP.
+Vous devez activer le module avec le script de configuration configure.
+Reportez vous à la section installation pour plus de détails.
+Les options de configurations suivantes sont liées au module mbstring.
+
+Active les fonctions mbstring.
+Cette option est nécessaire pour utiliser les fonctions mbstring.
+
+Active la conversion automatique des données par HTTP, avec le moteur de conversion de mbstring.
+Si cette option est activée, les données venants du web via HTTP seront converties dans le jeu de caractères mbstring.internal_encoding, automatiquement.
+La conversion automatiques des entrées / sorties HTTP peuvent aussi convertir des données binaires.
+Les utilisateurs doivent contrôler les conversions, si des données binaires doivent être utilisées via HTTP.
+Si l'option enctype d 'un formulaire HTML vaut multipart / form-data, mbstring ne convertira pas les données du POST.
+Dans ce cas, les chaînes de caractères doivent être convertis manuellement.
+Entrée HTTP
+Il n 'y a pas de moyen de contrôler la conversion des caractères HTTP en entrée, depuis un script PHP.
+Pour désactiver cette conversion, il faut le faire dès le fichier php.ini.
+Exemple 1.
+Inactive la conversion HTTP dans le php.ini
+;; Inactive la conversion HTTP mbstring.http_input = pass
+Lorsque vous utilisez PHP comme module Apache, il est possible d 'annuler la configuration du php.ini pour chaque Virtual Host dans le fichier httpd.conf ou par dossier avec le fichier .htaccess.
+Reportez vous à la section de configuration ainsi qu 'au manuel Apache.
+Sorties HTTP
+Il y a plusieurs moyens d 'activer la conversion en sortie de script PHP.
+L'un d'entre eux utilise php.ini, un autre utilise ob_start() avec la fonction mb_output_handler() comme fonction de call-back.
+
+Pour les utilisateurs PHP3-i18n, le système de conversion de mbstring diffère de celui de PHP3-i18n.
+Le jeu de caractère est converti avec un buffer de sortie.
+Exemple 2.
+Exemple de configuration de mbstring dans php.ini
+;; Active la conversion de sortie pour toute les pages PHP;; Active la bufferisation de sortie output_buffering = On;; Choisi mb_output_handler pour effectuer la conversion de sortie output_handler = mb_output_handler
+Exemple 3.
+
+?php / / Active la conversion de caractère uniquement pour cette page / / Choisi le jeu de caractères SJIS mb_http_output( 'SJIS'); / / Commence la bufferisation et spécifie "mb_output_handler "/ / comme fonction de callback ob_start('mb_output_handler');?
+Actuellement, les jeux de caractères suivants sont supportés par mbstring.
+L 'encodage de caractère peut être spécifié par les paramètres encoding dans les fonctions mbstring.
+Les jeux de caractères suivants sont supportés par mbstring:
+UCS-4, UCS-4BE, UCS-4LE, UCS-2, UCS-2BE, UCS-2LE, UTF-32, UTF-32BE, UTF-32LE, UCS-2LE, UTF-16, UTF-16BE, UTF-16LE, UTF-8, UTF-7, ASCII, EUC-JP, SJIS, eucJP-win, SJIS-win, ISO-2022-JP, JIS, ISO-8859-1, ISO-8859-2, ISO-8859-3, ISO-8859-4, ISO-8859-5, ISO-8859-6, ISO-8859-7, ISO-8859-8, ISO-8859-9, ISO-8859-10, ISO-8859-13, ISO-8859-14, ISO-8859-15, byte2be, byte2le, byte4be, byte4le, BASE64, 7bit, 8bit et UTF7-IMAP.
+Les entrées du fichiers php.ini, qui acceptent des noms de jeux de caractères, acceptent aussi les valeurs "auto" et "pass".
+Les fonctions mbstring ,qui acceptent des noms de jeux de caractères, acceptent aussi la valeur "auto" /
+Si "pass" est utilisée, aucune conversion n 'est effectuée.
+Si "auto" est utilisée, elle est remplacée par "ASCII,JIS,UTF-8,EUC-JP,SJIS".
+Voir aussi mb_detect_order().
+
+Un jeu de caractère supporté n 'est pas forcément un bon choix comme jeu de caractères interne.
+mbstring.internal_encoding définit le jeu de caractères interne par défaut.
+mbstring.http_input définit le jeu de caractères d 'entrée HTTP par défaut.
+mbstring.http_output defines définit le jeu de caractères d 'affichage HTTP par défaut.
+mbstring.detect_order définit l'ordre de détection des jeux de caractères (lors de la lecture sur une source externe.
+Voir aussi la fonction mb_detect_order().
+mbstring.substitute_character définit le caractère de substitution pour les codes invalides.
+Les navigateurs web utilisent tout le temps le même encodage lorsqu'ils émettent les données d 'un formulaire.
+Cependant, les navigateurs peuvent ne pas tous utiliser le même encodage.
+Voyez la fonction mb_http_input() pour détecter les jeux de caractères utilisés par les navigateurs.
+Si enctype vaut multipart / form-data dans un formulaire HTML, mbstring Si enctype vaut multipart / form-data dans un formulaire HTML, mbstring n 'effectue aucune conversion des données.
+Il faut les faire manuellement, dans le script.
+Bien que les navigateurs soivent généralement assez intelligents pour détecter les jeux de caractères automatiquement, il est recommandé de l'indiquer dans l 'en-tête charset.
+Modifiez default_charset en fonction du jeu de caractères.
+Exemple 4.
+Exemple de configuration php.ini pour mbstring
+;; Set default internal encoding;; Note:
+Make sure to use character encoding works with PHP mbstring.internal_encoding = UTF-8; Set internal encoding to UTF-8;; Set default HTTP input character encoding;; Note:
+
+
+Exemple 5.
+Exemple de configuration php.ini pour mbstring pour utiliser EUC-JP
+;; Disable Output Buffering output_buffering = Off;; Set HTTP header charset default_charset = EUC-JP;; Set HTTP input encoding conversion to auto mbstring.http_input = auto;; Convert HTTP output to EUC-JP mbstring.http_output = EUC-JP;; Set internal encoding to EUC-JP mbstring.internal_encoding = EUC-JP;; Do not print invalid characters mbstring.substitute_character = none
+Exemple 6.
+Exemple de configuration php.ini pour mbstring pour utiliser SJIS
+;; Enable Output Buffering output_buffering = On;; Set mb_output_handler to enable output conversion output_handler = mb_output_handler;; Set HTTP header charset default_charset = Shift_JIS;; Set http input encoding conversion to auto mbstring.http_input = auto;; Convert to SJIS mbstring.http_output = SJIS;; Set internal encoding to EUC-JP mbstring.internal_encoding = EUC-JP;; Do not print invalid characters mbstring.substitute_character = none
+La plupart des caractères japonais demandent plus d 'un octet pour être représentés.
+De plus, plusieurs jeux de caractères japonais existent: il y a notamment EUC-JP, Shift_JIS et ISO-2022-JP.
+Unicode devient de plus en plus populaire, et UTF-8 aussi.
+Pour développer des applications Web en environnement japonais, il faut savoir que les encodages ci-dessus dépendent de l'application qu 'on en fait: entrée / sortie HTTP, bases de données ou courrier électronique.
+La taille nécessaire à un caractère peut aller jusqu 'à 4 octets.
+Un caractère multi-octets occupe généralement deux octets, à comparer avec les caractères simple-octet traditionnellement utilisé.
+Les caractères les plus gros sont appelés "zen-kaku" (i.e. grande largeur) et les plus petits sont appelés "han-kaku "(i.e. demi-largeur).
+Les caractères "zen-kaku" sont généralement de taille constante.
+Certains encodage de caractères définissent des séquences de début / fin pour les sections multi-octets.
+Les bases de données allouent des tailles de stockages différentes de celles utilisées par PHP, même si le même encodage de caractère est utilisé (par exemple, PostGreSQL).
+Le courrier électronique utilise généralement ISO-2022-JP.
+Les sites web en "i-mode" utilisent Shift_JIS.
+Les jeux de caractères multi-octets et leurs techniques sont très complexes.
+Il n 'est pas possible de couvrir tous les aspects en détails ici.
+Reportez-vous aux URL suivantes, pour d 'autres ressouces complémentaires:
+
+
+Japanais / coréen / Chinois
+
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

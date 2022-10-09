@@ -1,0 +1,228 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+The & konsolekalendar; Handbook
+Tuukka Pasanen
+illuusio@mailcity. com
+Allen Winter
+winterz@kde. org
+Malcolm Hunter
+malcolm. hunter@gmx. co. uk
+Reviewer
+ROLES_OF_TRANSLATORS
+Tuukka Pasanen
+Allen Winter
+& konsolekalendar; is a command line interface to & kde; calendars.
+KDE
+& package;
+& kappname;
+KOrganizer
+Introduction
+& konsolekalendar; is a command line interface to & kde; calendars. It lets you view, insert, remove, or modify calendar events by way of the command line or from a scripting language. Additionally, & konsolekalendar; can create a new & kde; calendar, export a & kde; calendar to a variety of other formats, and import another & kde; calendar.
+In its basic mode, & konsolekalendar; displays the list of events in your default calendar for the current day (from 7:00 to 17:00).
+Main features of & konsolekalendar;:
+View calendar entries from a start date/ time to end date/ time
+Insert (add) calendar entries
+Remove (delete) calendar entries
+Modify (change) calendar entries
+Create a new calendar
+Export calendar entries to other file formats
+Import an existing & kde; calendar
+& konsolekalendar; is not another graphical user interface to a & kde; calendar (i. e. & korganizer;). & konsolekalendar; is intended solely for uses where a graphical user interface is not practical or possible.
+& konsolekalendar; does not provide a full-featured language for making queries of the user's calendar: nor is it the intention of the authors to ever write such a capability. Primitive command line options are provided for accessing calendar events within a consecutive range of dates/ time stamps.
+Features
+In this chapter you'll learn about the main features of & konsolekalendar; and how to control them using the command line parameters (remember that & konsolekalendar; is not a graphical user interface; it is a command line program only).
+You'll learn about inserting, deleting, and changing calendar events, and how to export events to other file formats. The creation and importation of & kde; calendars will also be covered in this chapter.
+Viewing Events
+In its default mode, or by using the --view option, & konsolekalendar; will list all events within the range of a specified date/ time.
+To view all of today's events (from 7:00 to 17:00), simply run:
+% konsolekalendar
+In this next example, we view all events for the week of August 18-22:
+% konsolekalendar --view --date 2003-08-18 --end-date 2003-08-22
+Show the next event(s) on the calendar from the current time forward:
+% konsolekalendar --next
+To view all events for the next 5 days run:
+% konsolekalendar --show-next 5
+Inserting Events
+& konsolekalendar; can insert events into a & kde; calendar or calendar resource using the --add command line argument. Events successfully inserted will be immediately shown by & kde; calendar applications (like & korganizer;).
+In the following example, an event starting on 2003-06-04 (June 4, 2003) at 1000 and ending at 1200 with summary "Doctor Visit" will be inserted into the user's default calendar resource:
+% konsolekalendar --add --date 2003-06-04 --time 10:00\\ --end-time 12:00 --summary "Doctor Visit"
+In this example, a birthday event is added into the user's default calendar resource:
+% konsolekalendar --add --date 2003-06-06 --summary "My Birthday"\\ --description "Party Time"
+Here a one week vacation is inserted into a shared vacation calendar:
+% konsolekalendar --add --file vacation. ics --date 2003-08-01\\ --end-date 2003-08-07 --summary "Vacation" --description "Nobody will ever find me!"
+Removing Entries
+& konsolekalendar; supports the removal of entries in a calendar file or resource using the --delete command line argument. Calendar entries to be removed are specified exactly by their Unique-string identifier (UID) using the --uid option. UIDs are found by first viewing the event, using the --view option.
+Events successfully deleted will be immediately removed from within & kde; calendar applications (korganizer; for example).
+When you delete something from the calendar you cannot undo it! In other words, when you delete an entry you cannot reverse the deletion. It's gone for good.
+Here we delete a calendar entry with UID konsolekalendar; -1887551750.196:
+% konsolekalendar --delete --uid konsolekalendar; -1887551750.196
+Modifying Entries
+& konsolekalendar; supports the modification of existing entries in a calendar file or resource using the --change command line argument. Calendar entries to be modified are specified exactly by their Unique-string identifier (UID) using the --uid option. UIDs are found by first viewing the event, using the --view option.
+Changing behaves in the same way as inserting: you can change an event's start date and time, end date and time, summary, location, and description. Events successfully changed will be immediately shown modified within & kde; calendar applications (korganizer;).
+Example: Here we change the summary and description of a calendar entry with UID konsolekalendar; -1887551750.196:
+% konsolekalendar --change --uid konsolekalendar; -1887551750.196 --summary "Get my head examined" --description "do n't go to that doctor anymore!"
+Creating a New Calendar File
+& konsolekalendar; can be used to create a new & kde; calendar file. Since you cannot insert an entry into a calendar that does not exist, you must create the file first using the --create and --file command line arguments.
+Create a calendar file named / data/ share/ calendars/ vacation. ics:
+% konsolekalendar --create --file / data/ share/ calendars/ vacation. ics
+Exporting to Other Formats
+& konsolekalendar; can export a & kde; calendar to other well known formats. Exporting is a special form of viewing. By default, events are viewed in konsolekalendar; text format. To change the viewing format use the --export-type command line argument.
+To see a list of all supported export formats, use the --export-list option, as in:
+% konsolekalendar --export-list
+Export Formats
+Some, but not necessarily all, of the supported formats are described in the this section.
+& konsolekalendar; Text Format
+& konsolekalendar; Text Format is & konsolekalendar; 's native format and is designed to be comfortable to read and to be parsed by follow-on scripts.
+The & konsolekalendar; Text Format is:
+Date: \ lt; Incidence Dategt; (dddd yyyy-MM-dd) [\ lt; Incidence Start Timegt; (hh: mm) - & lt; Incidence End Timegt; (hh: mm)] Summary: \ lt; Incidence Summary | "(no summary available)"gt; Location: \ lt; Incidence Location |" (no location available)"gt; Description: \ lt; Incidence Description | "(no description available)"gt; UID: \ lt; Incidence UIDgt; --------------------------------------------------
+For example:
+Date: Tuesday 2003-11-01 08:00 - 09:00 Summary: Staff Meeting Location: Conference Room Description: Meet with the entire staff to discuss the project. UID: & konsolekalendar; -1128954167.1013 --------------------------------------------------
+& konsolekalendar; Short Text Format
+Short Text Format provides a more compact, less verbose version of & konsolekalendar; 's native format.
+The & konsolekalendar; Short Text Format is:
+[--------------------------------------------------] {lt; Incidence Dategt; (dddd yyyy-MM-dd)] [lt; Incidence Start Timegt; (hh: mm) - & lt; Incidence End Timegt; (hh: mm) | "\ "] \ lt; Incidence Summary | \ gt; [, & lt; Incidence Locationgt;] \ \ lt; Incidence Description | "\ "gt;
+-------------------------------------------------- Tuesday 2003-11-01 08:00 - 09:00 Staff Meeting, Conference Room Meet with the entire staff to discuss the project.
+Comma-Separated Values (CSV) Format
+Comma-Separated Value Format displays the event values in the same order as & konsolekalendar; Text format. The only difference is that all the information is on the same row with each field separated by a comma. The resulting exported files can be imported directly into spreadsheet programs like & kspread;, OpenOffice. org Calc, and Microsoft; Excel. Also, CSV format is easy to parse with follow-on scripts.
+The Comma-Separated Value (CSV) format is:
+YYYY-MM-DD, HH: MM, YYYY-MM-DD, HH: MM, Summary, Location, Description, UID
+2003-11-01,08:00,2003-11-01,09:00, Staff Meeting, Conference Room, Meet in the big conference\\ room with the entire staff. ,konsolekalendar; -1128954167.1013
+& HTML; Format
+The & HTML; export format will produce a valid & HTML; file that can be published to the WWW. This export format is not suitable for follow-on script parsing, but is very nice for publishing calendars for easy public viewing.
+TODO: Insert screenshot here
+HTMLmonth Format
+This format produces an & HTML; file showing all appointments in the months specified by the date range. This export format is not suitable for follow-on script parsing, but is very nice for publishing calendars for easy public viewing.
+Importing Calendars
+& konsolekalendar; can import an iCal or vCal calendar file into a & kde; calendar. All events from the calendar being imported from will be inserted, including identical events. In the next & konsolekalendar; release identical events will not be inserted.
+To import calendar file another. ics into calendar current. ics run:
+% konsolekalendar --import another. ics --file current. ics
+Command Line Arguments
+& konsolekalendar; supports the following options:
+Option
+Description
+--help, --help-all
+Shows help about the program options.
+--author
+Shows the program author information.
+-v, --version
+Shows the program version information.
+--license
+Shows the program license information.
+--verbose
+Print helpful runtime messages.
+--dry-run
+Print what would have been done, but do not execute. Do not change any files; do not insert, remove, modify any existing files, nor create any new files.
+--allow-gui
+Permit resources which might need an interactive user interface. In normal operation, only resources which never will require a user interface are used (like file-based calendars).
+--file nbsp; calendar-file
+Specify a calendar file to use.
+If not specified then your default & korganizer; resource is used.
+Major Operation Modes:
+--view
+Print calendar events in specified export format.
+--add
+Insert an event into the calendar.
+--change
+Modify an existing calendar event.
+--delete
+Remove an existing calendar event.
+--create
+Create a new calendar file if one does not exist.
+--import nbsp; import-file
+Import this calendar to the main calendar.
+Operation modifiers:
+--all
+View all calendar entries.
+--next
+View next activity in calendar.
+--show-next nbsp; days
+Starting at specified date show next # days' activities.
+--uid nbsp; UID
+View, delete, or change the event with this Unique-string IDentifier.
+--date nbsp; date
+Start at this day [YYYY-MM-DD]. Default date is Today
+--time nbsp; time
+Start at this time [HH: MM]. Default time for viewing is 07:00.
+To add or change a floating event, use the --time float or the --end-time float options.
+--end-date nbsp; end-date
+End at this day [YYYY-MM-DD]. Default is set by --date.
+--end-time nbsp; end-time
+End at this time [HH: MM]. Default end-time for viewing is 17:00.
+--epoch-start nbsp; epoch-time
+Start at this time [seconds since epoch].
+--epoch-end nbsp; epoch-time
+End at this time [seconds since epoch].
+--summary nbsp; summary
+Add summary to event (works with add and change).
+--description nbsp; description
+Add description to event (works with add and change).
+--location nbsp; location
+Add location to event (works with add and change).
+Export options:
+--export-type nbsp; export-type
+Export file type. Default export file type is Text
+--export-file nbsp; export-file
+Export to file. By default, output is written to standard output.
+--export-list
+Print list of export types supported and exit.
+Questions and Answers
+& reporting. bugs; & updating. documentation;
+What configuration files does & konsolekalendar; use?
+None.
+What are the application names of & konsolekalendar;?
+& konsolekalendar; 's application name is konsolekalendar.
+What is the date specification format?
+& konsolekalendar; will reject dates specified on the command line unless they are specified according to ISO 8601 standards, namely: YYYY-MM-DD. Where YYYY represents a four-digit year (like 2003), MM represents a two-digit month (01,02,.. ,12), and DD represents a two-digit day (01,02,... ,31).
+& konsolekalendar; always exports dates according to the ISO 8601 format.
+What is the time specification format?
+& konsolekalendar; will reject times specified on the command line unless they are specified according to ISO 8601 standards, namely: HH: MM: SS. Where HH represents a two-digit hour (01,02,... ,24), MM represents a two-digit minute (01,02,.. ,60), and SS represents a two-digit second (01,02,... ,60).
+& konsolekalendar; always exports times according to the ISO 8601 format.
+Will & konsolekalendar; insert a new event that is identical to one that already exists in the calendar?
+No. See next question.
+How does & konsolekalendar; determine if an event is identical to one that already exists in the calendar?
+& konsolekalendar; checks the specified start date and time, end date and time, and summary against all events in the calendar. An event match is determined if all three values match to an existing event.
+Can a non-floating event be changed to a floating event?
+Yes. Use the --time float option with --change.
+Why are event UIDs printed in most export formats?
+Because you need to specify UIDs to delete or change events. If you do not want to see event UIDs then use the short export type (--export-type short).
+How do I have my question added to this FAQ?
+Send your questions to winter@kde. org.
+Credits and License
+& konsolekalendar; Program copyright 2002-2007:
+Tuukka Pasanen illuusio@mailcity. com
+Allen Winter winter@kde. org
+Documentation copyright 2003:
+Tuukka Pasanen illuusio@mailcity. com
+CREDIT_FOR_TRANSLATORS
+& underFDL; & underGPL;
+Installation
+How to obtain & konsolekalendar;
+& install. intro. documentation;
+& konsolekalendar; comes included with & kde; 4 and is not available separately.
+Requirements
+& konsolekalendar; requires the standard & kde; libraries to be installed (the kdelibs package and kdepimlibs). To compile from source, you also need the & Qt;, kdelibs and kdepimlibs development packages.
+You can find a list of changes in the ChangeLog file.
+Configuration
+No special configuration is required to set up & konsolekalendar; to run on the & kde; desktop.
+awinterz@users. sourceforge. net
+Compilation and installation
+This section provides a quick overview of the build process. Please read Compiling & kde; 3.2. x for complete instructions.
+If you cannot obtain a suitable precompiled binary package, you need to compile & konsolekalendar; yourself from source files. Get the source package file kdepim-x. x. tar. bz2. Unpack it in a new folder using a command similar to tar xvfj package. tar. bz2, and change to the folder which has been created.
+& install. compile. documentation;
+If you have more than one version of & kde; installed (e. g. & kde; 2 and & kde; 3), this may possibly install & konsolekalendar; into the wrong & kde; folder. If necessary, you can give the & kde; folder as a parameter to. / configure. For example, if your & kde; is installed in / opt/ kde3:
+. / configure --prefix= / opt/ kde3

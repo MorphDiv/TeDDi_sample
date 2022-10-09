@@ -1,0 +1,95 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+PHP und HTML interagieren stark:
+PHP kann HTML generieren und HTML kann Informationen an PHP weitergeben.
+
+Wie muss ich enkodieren / dekodieren, wenn ich einen Wert über ein Formular / einen URL weitergeben möchte?
+Es gibt mehrere Stufen, für die Enkodierung wichtig ist.
+Angenommen, Sie haben einen String $data, der den String, den Sie in nicht-enkodierter Weise weitergeben möchten, enthält.
+Dann sind dies die relevanten Stufen:
+HTML-Interpretation:
+Wenn Sie einen zufälligen String angeben wollen, müssen Sie ihn in die doppelte Anführungszeichen einschließen und htmlspecialchars() auf den gesamten Wert anwenden.
+
+Ein URL besteht aus mehreren Teilen.
+Wenn Sie wollen, dass Ihre Daten als ein Element interpretiert werden, dann müssen Sie Ihre Daten mit urlencode() enkodieren.
+Beispiel 51-1.
+Ein verstecktes HTML-Formular-Element
+
+Anmerkung:
+Es wäre falsch, urlencode() auf $data anzuwenden, da es die Aufgabe des Browsers ist, die Daten zu enkodieren.
+Alle populären Browser machen dies auch korrekt.
+Beachten Sie, dass dies unabhängig von der verwendeten Methode (also z.B.
+GET oder POST) geschieht.
+Feststellen werden Sie dies aber nur bei GET-Anfragen, da POST-Anfragen meist versteckt geschehen.
+Beispiel 51-2.
+Daten, die vom Benutzer bearbeitet werden sollen
+
+Anmerkung:
+Die Daten werden wie Browser wie gewünscht ausgegeben, da der Browser die HTML-escapten Symbole interpretiert.
+Nach dem Abschicken, egal ob via GET oder POST, werden die Daten für den Transfer enkodiert (mit urlencode()) und von PHP direkt wieder dekodiert (mit urldecode()).
+Sie müssen also für die En - und Dekodierung nicht selbst sorgen, die Browser und PHP erledigen dies automatisch für Sie.
+Beispiel 51-3.
+In einem URL
+
+Anmerkung:
+Hier wird eine HTML-GET-Anfrage gefakt, deswegen müssen Sie die Daten manuell mit urlencode() enkodieren.
+Anmerkung:
+Sie müssen htmlspecialchars() auf den gesamten URL anwenden, da der URL als Wert eines HTML-Attributs auftritt.
+In diesem Fall wird der Browser zuerst etwas wie "un - htmlspecialchars()" auf den Wert anwenden und dann erst den URL weitergeben.
+PHP wird den URL korrekt verstehen, da Sie die Daten mit urlencode() enkodiert haben.
+Sie werden feststellen, dass das im URL durch amp; ersetzt wird.
+Auch wenn die meisten Browser richtig arbeiten, falls Sie diese Ersetzung vergessen sollten, sollten Sie sich trotzdem nicht darauf verlassen.
+Das bedeutet, dass Sie - auch wenn Ihr URL nicht dynamisch ist - trotzdem htmlspecialchars() auf den URL anwenden müssen.
+
+Ich versuche ein input type=" image "-Tag zu benutzen, aber die Variablen $foo.x and $foo.y sind nicht verfügbar.
+Wo finde ich diese?
+Wenn ein Formular abgeschickt werden soll, ist es möglich, ein Bild statt des Standard-Submit-Buttons zu verwenden, indem Sie ein Tag wie das folgende verwenden:
+
+Da $foo.x und $foo.y in PHP keine gültigen Namen für Variablen sind, werden Sie automatisch in $foo_x und $foo_y konvertiert.
+Die Punkte werden also durch Unterstriche ersetzt.
+
+Wie kann ich Array aus einem HTML-Formular erstellen?
+Um die Formularwerte als Array im PHP-Skript zur Verfügung zu haben, müssen Sie die input, select or textarea -Felder wie folgt benennen:
+input name=" MeinArray[] "input name="MeinArray[]" input name="MeinArray[] "input name="MeinArray[]"
+input name=" MeinArray[] "input name="MeinArray[]" input name="MeinAnderesArray[] "input name="MeinAnderesArray[]"
+input name=" AnderesArray[] "input name="AnderesArray[]" input name="AnderesArray[email] "input name="AnderesArray[telefon]"
+Anmerkung:
+Die Angabe eines Array-Schlüssels ist in HTML optional.
+Wenn Sie keinen Schlüssel angeben, wird das Array in der Formular-Reihenfolge gefüllt.
+Im ersten Beispiel enthält das Array MeinArray also die Schlüssel 0, 1, 2 und 3.
+Siehe auch:
+Array-Funktionen und Variablen außerhalb von PHP.
+
+Wie bekomme ich alle Werte aus einem "select multiple "-HTML-Tag?
+Mit einem "select multiple "-Tag können Benutzer mehrere Werte aus einer Liste auswählen.
+Diese Werte werden dann an den "action handler" des Formulars (z.B. ein PHP-Skript) übergeben.
+Problematisch ist dabei, dass alle mit demselben Namen übergeben werden, z.B.:
+
+
+
+Beachten Sie, dass, falls Sie JavaScript benutzen, die eckigen Klammern [] im Feldnamen Probleme machen können, wenn Sie versuchen, über den Namen auf das Feld zu verweisen.
+Benutzen Sie stattdessen die numerische ID des Formularfelds oder schließen Sie den Variablennamen in einfache Anführungszeichen ein und benutzen Sie dies als den Index, z.B.:
+
+Zurück
+Zum Anfang
+Nach vorne
+PHP benutzen
+Nach oben

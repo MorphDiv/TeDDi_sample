@@ -1,0 +1,60 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+Anmerkung:
+Folgendes trifft auf die Versionen 3.0.7 und später zu.
+PHP erhält intern einen Verbindungsstatus.
+Dieser kann drei Zustände annehmen:
+
+
+
+Wenn ein PHP-Skript aktiv ist, ist der Status üblicherweise NORMAL.
+Sollte der Client-Rechner die Verbindung beenden, wird der Status auf ABORTED gesetzt.
+Ein clientseitiges Beenden der Verbindung wird für gewöhnlich veranlaßt, wenn der Benutzer den STOP-Button seines Browsers drückt.
+Wenn das eingestellte Zeitlimit (siehe set_time_limit()) überschritten wird, wird der Status TIMEOUT gesetzt.
+Sie können entscheiden, ob der Verbindungsabbruch seitens des Clients den Abbruch des Skriptes zur Folge haben soll.
+Manchmal ist es sinnvoll, Skripte sauber zu beenden, auch wenn kein Browser mehr zur Verfügung steht, der die Ausgabe empfängt.
+Die Abarbeitung eines Skriptes wird standardmäßig abgebrochen, wenn der Client die Verbindung beendet.
+Dieses Verhalten kann sowohl durch die Option ignore_user_abort in der Konfigurationsdatei php3.ini, durch die entsprechende Option php3_ignore_user_abort in der Apache-Konfigurationsdatei als auch durch ignore_user_abort() beeinflußt werden.
+Wenn PHP nicht angewiesen wird, einen Verbindungsabbruch durch den Benutzer zu ignorieren und die Verbindung dann durch den Benutzer beendet wird, wird die Abarbeitung des Scriptes abgebrochen.
+Die einzige Ausnahme ist, wenn durch die Funktion register_shutdown_function() eine Shutdown-Funktion angegeben wird, die bei clientseitigem Abbruch ausgeführt wird.
+Wenn dann der Benutzer den STOP-Button seines Browsers drückt, wird PHP bei der nächsten Ausgabe des Skriptes feststellen, dass die Verbindung abgebrochen wurde und die Shutdown-Funktion aufrufen.
+Diese Shutdown-Funktion wird auch aufgerufen, wenn das Skript auf normalem Wege beendet wird, daher sollte man, wenn man für den Fall eines Benutzerabbruchs etwas anderes vorgesehen hat, die Funktion connection_aborted() verwenden.
+Sie gibt TRUE zurück, wenn die Verbindung abgebrochen wurde.
+Ein Skript kann ebenfalls durch den eingebauten Script-Timer beendet werden.
+Der Standard-Timeout beträgt 30 Sekunden.
+Er kann durch die Option max_execution_time in der php3.ini, durch den entsprechenden Eintrag php3_max_execution_time in der Apache-Konfigurationsdatei oder durch die Funktion set_time_limit() beeinflußt werden.
+Bei Zeitüberschreitung wird das Skript beendet und, genau wie im obigen Fall des Verbindungsabbruchs, eine registrierte Shutdown-Funktion ausgeführt.
+Um zu überprüfen, ob es sich um einen Abbruch aufgrund von Zeitüberschreitung handelt, kann die Funktion connection_timeout() benutzt werden.
+Sie gibt TRUE zurück, wenn es sich um eine Zeitüberschreitung handelt.
+Zu bemerken ist, dass der ABORTED und der TIMEOUT-Status gleichzeitig auftreten können.
+Dies ist möglich, wenn PHP angewiesen wird, Benutzerabbrüche zu ignorieren.
+PHP wird feststellen, dass der Benutzer die Verbindung abgebrochen hat, das Skript allerdings läuft weiter.
+Sollte es dann das Zeitlimit erreichen, wird es abgebrochen und eine Shutdown-Funktion, wenn definiert, wird aufgerufen.
+Zu diesem Zeitpunkt kann man feststellen, dass connection_timeout() und connection_aborted() TRUE zurückgeben.
+Diese beiden Statusmöglichkeiten können auch durch einen Aufruf der Funktion connection_status() abgefragt werden.
+Sie liefert ein Bitfeld des aktiven Status.
+Wenn beispielsweise TIMEOUT und ABORTED aktiv sind, wird 3 zurückgegeben.
+Zurück
+Zum Anfang
+Nach vorne
+Zugriff auf entfernte Dateien
+Nach oben
+Persistente Datenbankverbindungen

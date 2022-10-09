@@ -1,0 +1,144 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Le support des sessions de PHP est un moyen de préserver des données entre plusieurs accès.
+Cela vous permet de créer des applications personnalisées, et d'augmenter l 'attractivité de votre site.
+SI vous êtes familier avec la gestion de session de la librairie PHPLIB, vous remarquerez que certains concepts sont similaires.
+Chaque visiteur accédant à votre page web se voit assigné un identifiant unique, appelé 'identifiant de session'.
+Il peut être stocké soit dans un cookie, soit propagé dans l 'URL.
+Le support des sessions vous permet d 'enregistrer un nombre illimité de variables qui doivent être préservées entre les requêtes.
+Lorsqu'un visiteur accède à votre site, PHP va vérifier automatiquement (si session.auto_start est activé1) ou sur demande (explicitement avec session_start() ou implicitement avec session_register()) si il existe une session du même nom.
+Si c'est le cas, l 'environnement précédemment sauvé sera recréé.
+Toutes les variables sont sérialisées après l 'exécution du script PHP.
+Les variables qui sont indéfinies sont marquées comme telles.
+Lors des accès ultérieurs, elles ne seront pas définies, jusqu'à ce que l 'utilisateur le fasse.
+Les options de configuration track_vars et register_globals influencent la manière de stockage et déstockage des variables.
+
+Depuis PHP 4.0.3, track_vars est toujours activé.
+
+Depuis PHP 4.1.0, $_SESSION est disponible comme variable tout comme $_POST, $_GET, $_REQUEST, etc..
+Contrairement à $HTTP_SESSION_VARS, $_SESSION est toujours global.
+Par conséquent, global should not be used for $_SESSION.
+Si track_vars est activé et register_globals est désactivé, seuls les éléments du tableau global $HTTP_SESSION_VARS contiendront les variables enregistrées dans la session.
+Les variables de sessions relues seront uniquement disponibles dans $HTTP_SESSION_VARS.
+Exemple 1.
+Enregistrer une variable avec track_vars activé
+?php session_start(); if (isset($HTTP_SESSION_VARS['compteur'])) {$HTTP_SESSION_VARS['compteur']++;} else {$HTTP_SESSION_VARS['compteur'] = 0;}?
+L'utilisation de la variable $_SESSION (ou $HTTP_SESSION_VARS avec PHP 4.0.6 ou plus ancien) est recommandé pour des raisons de sécurité et de lisibilité du code.
+Avec $_SESSION et $HTTP_SESSION_VARS, il n'y a pas besoin d'utiliser les fonctions session_register(), session_unregister() et session_is_registered().
+Les utilisateurs peuvent utiliser une variable de session comme toute variable classique.
+Exemple 2.
+Enregistrer une variable avec $_SESSION.
+?php session_start(); / / Utilisez $HTTP_SESSION_VARS avec PHP 4.0.6 ou plus ancien if (!isset($_SESSION['count'])) {$_SESSION['count'] = 0;} else {$_SESSION['count']++;}?
+Exemple 3.
+Annuler l'enregistrement d 'une variable avec $_SESSION.
+?php session_start(); / / Utilisez $HTTP_SESSION_VARS avec PHP 4.0.6 ou plus ancien unset($_SESSION['count']);?
+Si register_globals est activé, alors toutes les variables globales peuvent être enregistrées comme variables de session, et toutes les variables de sessions seront reconstituées comme variables globales.
+Comme PHP doit savoir quels variables globales sont enregistrées comme variables de sessions, l'utilisateur doit enregistrer les variables avec session_register() tandis que $HTTP_SESSION_VARS et $_SESSION ne nécessitent pas session_register().
+Attention
+Si vous utilisez $HTTP_SESSION_VARS et $_SESSION et désactivez register_globals, n'utilisez pas session_register(), session_is_registered() et session_unregister().
+Si vous activez register_globals, session_unregister() doit être utilisé, car les variables de session sont enregistrés comme variables globales lorsque les données de sessions sont relues.
+Inactiver register_globals est recommandé pour des raisons de sécurité et de performances.
+Exemple 4.
+Enregistrer une variable avec register_globals activé
+?php if (!session_is_registered('compteur')) {session_register("compteur"); $compteur = 0;} else {$compteur++;}?
+Si les deux options track_vars et register_globals sont activés, alors les variables globales $HTTP_SESSION_VARS / $_SESSION représenteront les mêmes valeurs que celles qui sont enregistrées avec les variables de même nom.
+Si l'utilisateur utilise session_register() pour enregistrer des variables de sessions, $HTTP_SESSION_VARS / $_SESSION ne contiendront pas ces variables jusqu 'à ce le tableau soit de nouveau générés à partir des informations stockées en session.
+Il y a deux méthodes de propagation de l 'identifiant de session:
+
+Paramèter URL
+Le module de session supporte les deux méthodes.
+Les cookies sont optimaux, mais comme ils ne sont pas sûrs (tous les internautes ne les acceptent pas), ils ne sont pas fiables.
+La seconde méthode place l 'identifiant de session directement dans les URL.
+PHP est de faire cela de manière transparente, lorsqu'il est compilé avec l 'option --enable-trans-sid.
+Si vous activez cette option, les URL relatives seront modifiées pour contenir l 'identifiant de session automatiquement.
+Alternativement, vous pouvez utiliser la constante SID, qui est définie, si le client n 'a pas envoyé le cookie approprié.
+SID est soit de la forme session_name=session_id ou une chaîne vide.
+
+L'option arg_separator.output de php.ini vous permet de personnaliser le séparateur d 'arguments.
+LMexemple suivant vous montre comment enregistrer une variable et comment réaliser un lien correct avec une autre page, avec SID.
+Exemple 5.
+Compter le nombre de hits d 'un utilisateur sur une page
+?php if (!session_is_registered('compteur')) {session_register('compteur'); $compteur = 1;} else {$compteur++;}?
+Bonjour visiteur, vous avez vu cette page ?php echo $compteur;? fois. p; ?php / / Le ?php echo SID? (?=SID? est aussi possible suivant votre configuration) / / est n eacute;cessaire pour pr eacute;server l'identifiant de sessions / / si jamais l'utilisateur a d eacute;sactiv eacute; les cookies.?
+Pour continuer, A HREF=" nextpage.php? ?php echo SID? "cliquez ici / A.
+?=SID? n 'est pas nécessair, si --enable-trans-sid a été activé à la compilation de PHP.
+
+Les URLS non relatives sont considérées comme externes au site, et ne recevront pas le SID, car c'est une fuite d'information vers un autre site (envoi d'informations importantes).
+Pour implémenter un stockage en base de données, ou toute autre méthode, vous aurez besoin de la fonction session_set_save_handler() pour paramétrer vos propres fonctions de stockage.
+Le système de session supporte un grand nombre d 'options, que vous pouvez placer dans le fichier php.ini file.
+En voici une présentation.
+session.save_handler session.save_handler defines the name of the handler which is used for storing and retrieving data associated with a session.
+
+session.save_path session.save_path définit le chemin qui doit être passé au gestionnaire de sauvegarde.
+Si vous décidez de choisir le gestionnaire par défaut (par fichier), cet argument sera utilisé comme dossier de sauvegarde des sessions.
+Par défaut, il vaut / tmp.
+Si le niveau d'imbrication de session.save_path est supérieur à 2, le nettoyage des sessions obsolètes ne s 'opérera pas.
+Avertissement
+Si vous laissez cette option configurée avec un dossier accessible en lecture à tout le monde, comme par exemple / tmp (par défaut), les autres utilisateurs pourront exploiter ces sessions en obtenant la liste de fichiers dans ce dossier.
+session.name spécifie le nom de la session, qui sera utilisé comme nom de cookie.
+Il ne doit contenir que des caractères alphanumérique.
+Par défaut, c 'est PHPSESSID.
+session.auto_start session.auto_start spécifie si le module de session doit démarrer automatiquement, au début de chaque script PHP.
+Par défaut, c'est 0 (inactivé).
+session.cookie_lifetime session.cookie_lifetime spécifie la durée de vie du cookie en secondes.
+La valeur de 0 siginifie: "Jusqu'à ce que le navigateur soit éteind".
+session.serialize_handler définit le nom du gestionnaire qui est utilisé pour linéariser / délinéariser les données.
+Actuellement, un format interne à PHP (nommé php) et WDDX (nommé wddx) sont supportés.
+WDDX est seulement disponible, si PHP a été compilé avec l 'option WDDX.
+Par défaut, c 'est php.
+session.gc_probability session.gc_probability specifies the probability that the gc (garbage collection) routine is started on each request in percent.
+
+session.gc_maxlifetime session.gc_maxlifetime spécifie la durée de vie des données sur le serveur, en nombre de secondes.
+Après cette durée, les données seront considérées comme obsolètes, et supprimées.
+session.referer_check session.referer_check contient une sous-chaîne que vous souhaitez retrouver dans tous les entêtes HTTP Referer.
+Si cet entêtes a été envoyé par le client, et que la sous-chaîne n'a pas été trouvé, l 'identifiant de session sera considéré comme invalide.
+Par défaut, cette option est la chaîne vide.
+session.entropy_file session.entropy_file est un chemin jusqu'à une source externe (un fichier), qui sera utilisée comme source additionnelle d'entropie pour la création de l 'identifiant de session.
+Des exemples valides sont / dev / random et / dev / urandom, qui sont disponibles sur tous les systèmes Unix.
+session.entropy_length session.entropy_length spécifie le nombre d 'octets qui seront lus dans le fichier défini ci-dessus.
+Par défaut, il vaut 0, c 'est à dire inactif.
+session.use_cookies session.use_cookies spécifie si le module utilisera les cookies pour stocker les données de session sur le client.
+Par défaut, il vaut 1, c 'est à dire actif.
+session.use_only_cookies spécifie si le module doit utiliser seulement les cookies pour stocker les identifiants de sessions du coté du navigateur.
+Par défaut, cette option vaut 0 (inactif, pour compatibilité ascendante).
+En l 'activant, vous éviterez les attaques qui utilisent des identifiants de sessions dans les URL.
+Cette configuration a été ajoutée en PHP 4.3.0.
+session.cookie_path session.cookie_path spécifie le chemin utilisé lors de la création du cookie.
+Par défaut, il vaut /.
+session.cookie_domain session.cookie_domain spécifie le domaine utilisé lors de la création du cookie.
+Par défaut, il ne vaut rien.
+session.cache_limiter session.cache_limiter spécifie le type de contrôle de cache utilisé pour les pages avec sessions.
+Les valeurs possibles sont: none, nocache, private, private_no_expire, public.
+Par défaut, il vaut nocache.
+session.cache_expire session.cache_expire spécifie la durée de vie des données de sessions, en minute.
+Cette option n 'a aucune conséquence sur le contrôle de cache.
+Par défaut, il vaut 180 (3 heures).
+session.use_trans_sid indique si le support transparent du SID est activé, grâce à l 'option de compilation --enable-trans-sid.
+Par défaut, il vaut 1 (activé).
+url_rewriter.tags url_rewriter.tags spécifie quels sont les balises HTML qui doivent être réécrites si le support transparent du SID est activé.
+Par défaut, il vaut a=href,area=href,frame=src,input=src,form=fakeentry
+
+La gestion des sessions a été ajoutée en PHP 4.0.
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

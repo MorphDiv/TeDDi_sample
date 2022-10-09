@@ -1,0 +1,23 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP は、Netscape Composer や W3C Amaya のようなクライアントで サポートされる HTTP PUT メソッドをサポートします。 PUT リクエストは、ファイルアップロードよりもかなり簡単であり、 次のようなものになります。
+これは、通常、リモートクライアントが /path/filename.html が指す内 容を Web ツリーに保存したいことを意味します。 Apache または PHP に おいて全ての人がWebツリー上の任意のファイルを自動的に上書きできる ようにするというのは明らかに良い発想ではありません。よって、このよ うなりクエストを処理する際には、まずそのリクエストを処理する特定の PHPスクリプトが必要なことをwebサーバーに通知する必要があります。 Apacheにおいては、 Script ディレクティブにより これを行うことができます。これは、Apache設定ファイルのほぼ任意の場 所に置くことができます。一般的なのは、 Directory ブロックま たは Virtualhost ブロックの中です。次のように指定します。
+これにより、この行を指定したコンテキストにマッチするURIを有する全 てのPUTリクエストが put.php スクリプトに送られるよう Apache に指 定します。 もちろん、拡張子 .php により PHP が実行されるよう設定 され、PHP がアクティブであることが必要です。
+put.php ファイルの中で次のように処理を行う必要があります。
+
+これは、リモートクライアントによりリクエストされた位置にファイルを コピーします。このファイルコピーを実行する前に何らかの確認やユーザー の認証を実行することが望ましいでしょう。上記のスクリプトでは、PHP がPUTメソッドのリクエストを受けた際に POSTメソッド と全く同様にテンポラリファイルにアップロードされたファイルを保存す るということを利用しています。リクエストが終了した際に、テンポラリ ファイルは削除されます。よって、PUTを処理するPHPスクリプトは、この ファイルをどこかにコピーする必要があります。このテンポラリファイル のファイル名は $PHP_PUT_FILENAME 変数に保持されており、 $REQUEST_URI (Apache以外のWebサーバーでは変わる可能性があります) で指定された送信先ファイル名を得ることができます。送信先ファイル名 は、リモートクライアントが指定したものです。このクライアントの指定 を必ずしも受ける必要はありません。例えば、アップロードされた全ての ファイルを特別なアップロード用ディレクトリにコピーすることも可能で す。

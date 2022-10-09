@@ -1,0 +1,533 @@
+# language_name_wals:	Mandarin
+# language_name_glotto:	Mandarin Chinese
+# ISO_6393:	cmn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hans
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/zh_CN.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+电子表格函数
+/text/scalc/01/04060109.xhp
+电子表格; 函数
+函数向导; 电子表格
+函数; 电子表格
+电子表格函数
+电子表格
+函数并提供相关示例。
+ADDRESS 函数
+ADDRESS
+按照指定行编号和列编号，返回文字格式的单元格引用地址。
+您可以自己决定是采用绝对地址（如 $A$1）还是相对地址（如 A1）或是综合型地址（A$1 或 $A1）来表示引用的单元格，还可以指定工作表的名称。
+为了协同工作，ADDRESS 和 INDIRECT 函数支持一个可选参数，以指定是使用 R1C1 地址符号还是惯用的 A1 符号。
+在 ADDRESS 中，该参数被插入到第四参数的位置，可选的工作表名称参数移至第五位。
+在 INDIRECT 中，该参数被设置为第二参数。
+在两个函数中，如果该参数值为 0，使用 R1C1 符号。如果未给定该参数值或值不为 0，则使用 A1 符号。
+假设使用的是 R1C1 符号，ADDRESS 使用感叹号 '!' 作为工作表名称分隔符返回地址字符串，INDIRECT 就把感叹号当做工作表名称分隔符。如果使用的是 A1 符号，两个函数都使用圆点 '.' 作为工作表名称分隔符。
+当使用 ODF 1.0/1.1 格式打开文档时，原本将工作表名称作为第四参数的 ADDRESS 函数会将其转换为第五参数。一个新的第四参数会被插入，值为 1。
+当使用 ODF 1.0/1.1 格式存储文档时，如果 ADDRESS 函数有第四参数，该参数将会被删除。
+如果 ADDRESS 函数新设置的第四参数值为 0 的话，请不要使用旧的 ODF 1.0/1.1 格式保存电子表格。
+INDIRECT 函数会被保存，但不会被转换为 ODF 1.0/1.1 格式。如果存在第二参数，则对于该函数，较旧版本的 Calc 会返回错误。
+语法
+ADDRESS(Row; Column; Abs; A1; )
+Row
+表示引用的单元格的行号
+Column
+表示引用的单元格的列号（是数字，而非字母）
+Abs
+确定引用类型：
+1: absolute ($A$1)
+2：行号采用绝对引用；列号采用相对引用(A$1)
+3：行号采用相对引用；列号采用绝对引用($A1)
+4：相对引用(A1)
+A1
+（可选的）- 如果设置为 0，使用 R1C1 符号。如果省略该参数，或被设置为其他非 0 的值，则使用 A1 符号。
+Sheet
+代表工作表的名称。必须放在双引号中。
+示例
+=ADDRESS(1;1;2; &quot; Sheet2 &quot; )
+返回：Sheet2.A$1
+-6
+，通过输入
+=ABS(INDIRECT(B2))
+，使用 B2 中的函数间接引用单元格。结果是单元格 B2 中给出的单元格引用的绝对值，即等于 6。
+AREAS 函数
+AREAS
+返回多重区域中含有的单个区域的数目。
+一个区域可以由多个邻近的单元格组成，也可以由一个单元格组成。
+此函数需要一个单独的参数。如果您声明了多个范围，则必须将它们括在附加的括号中。可以使用分号 (;) 作为分隔符输入多个范围，但此符号会自动转换为波浪号 (~) 运算符。波浪号用于合并范围。
+语法
+AREAS(reference)
+Reference 表示对一个单元格或者一个单元格区域的引用。
+示例
+=AREAS((A1:B3;F2;G1))
+返回 3，因为它引用了三个单元格和/或区域。此项在输入后会转换为 =AREAS((A1:B3~F2~G1))。
+数据 - 定义范围
+定义名称为 All 的区域，则
+=AREAS(All)
+返回 1。
+DDE 函数
+DDE
+返回一个基于 DDE 的链接。
+编辑 - 链接
+来查看更新后的链接。不支持跨平台链接，例如从运行于 Windows 计算机上安装的
+%PRODUCTNAME
+链接到 Linux 计算机上创建的文档。
+语法
+DDE( &quot; Server &quot; ; &quot; File &quot; ; &quot; Range &quot; ; Mode)
+Server
+是服务器应用程序的名称。
+%PRODUCTNAME
+应用程序的服务器名称是 Soffice。
+file
+是具备完整路径的文件名。
+range
+是一个要读取数据的区域。
+mode
+是一个可选参数，用来控制 DDE 服务器中的数据与数字的转换方式。
+模式
+效果
+0 或空缺
+采用“默认”单元格样式中的数字格式
+1
+采用英语(美国)标准格式来表示数据
+2
+数据只是当作文字采用，而不转化成数字。
+示例
+=DDE( &quot; soffice &quot; ; &quot; c:\office\document\data1.sxc &quot; ; &quot; sheet1.A1 &quot; )
+读取
+%PRODUCTNAME
+Calc 电子表格 data1.sxc 工作表 Sheet1 中的单元格 A1 的内容。
+=DDE( &quot; soffice &quot; ; &quot; c:\office\document\motto.sxw &quot; ; &quot; Today's motto &quot; )
+返回公式所在的单元格内的当日格言。您必须事先在包含格言的 motto.sxw 文档中输入一条格言，并且其所在行是指定的区域
+当日格言
+的第一行（在
+%PRODUCTNAME
+Writer 下的
+插入 - 区域
+）。如果在
+%PRODUCTNAME
+Writer 文档中的格言被修改（或保存），则
+%PRODUCTNAME
+Calc 文档中所有定义了 DDE 链接的单元格内均会显示这个更改后的当日格言。
+ERRORTYPE 函数
+ERRORTYPE
+错误值
+可以利用此数字生成错误消息文本。
+%PRODUCTNAME
+状态栏中。
+语法
+ERRORTYPE(reference)
+reference
+是一个出现错误值的单元格引用。
+示例
+=ERRORTYPE(A1)
+返回数字 518。
+INDEX 函数
+INDEX
+INDEX 返回子区域，该区域由行号和列号或者可选的区域索引指定。依赖于上下文，INDEX 返回一个引用或内容。
+语法
+INDEX(Reference; Row; Column; Range)
+Reference
+是一个单元格引用，可以直接输入，也可以通过指定区域名称来输入。如果该引用含有多重区域，则必须用圆括号将引用或区域名称括起来。
+Row
+（可选的）代表所引用区域的行索引，将为该行返回一个值。若为零（未指定行），则返回所有引用行。
+Column
+（可选择的）代表所引用区域的列索引，将为该列标返回一个值。若为零（未指定列），则返回所有引用的列。
+Range
+（可选择的）代表子区域的索引。
+示例
+=INDEX(Prices;4;1)
+返回通过菜单
+数据 - 定义
+所定义的数据库区域
+Prices
+中的第 4 行第 1 列的值。
+=INDEX(SumX;4;1)
+返回通过菜单
+插入 - 名称 - 定义
+所定义的区域
+SumX
+中第 4 行第 1 列的值。
+=INDEX(A1:B6;1)
+返回 A1:B6 中第一行的引用。
+=INDEX(A1:B6;0;1)
+返回 A1:B6 中第一列的引用。
+=INDEX((multi);4;1)
+indicates the value contained in row 4 and column 1 of the (multiple) range, which you named under
+Insert - Names - Set
+as
+multi
+.
+The multiple range may consist of several rectangular ranges, each with a row 4 and column 1.
+If you now want to call the second block of this multiple range enter the number
+2
+as the
+range
+parameter.
+=INDEX(A1:B6;1;1)
+的结果是 A1:B6 区域中左上角单元格处的数值。
+=INDEX((multi);0;0;2)
+返回多个区域中的第二个区域的引用。
+INDIRECT 函数
+INDIRECT
+引用
+此函数也可用于返回相应字符串的区域。
+语法
+INDIRECT(Ref; A1)
+Ref
+表示对要返回其内容的单元格或区域的引用 (以文字格式表示)。
+A1
+（可选的）- 如果设置为 0，使用 R1C1 符号。如果省略该参数，或被设置为其他非 0 的值，则使用 A1 符号。
+如果您打开了一个使用字符串函数计算间接地址的 Excel 电子表格，则不会自动转换工作表地址。例如，INDIRECT( &quot; filename!sheetname &quot; & B1) 中的 Excel 地址不会被转换为 INDIRECT( &quot; filename.sheetname &quot; & B1) 中的 Calc 地址。
+在 INDIRECT( &quot; RangeName &quot; ) 中，INDIRECT 不能决定区域名称。
+示例
+100
+，则
+=INDIRECT(A1)
+等于 100。
+=SUM(INDIRECT( &quot; a1: &quot; & ADDRESS(1;3)))
+计算单元格 A1 与地址定义为第 1 行第 3 列的单元格之间的单元格总和。即计算区域 A1:C1 的总和。
+COLUMN 函数
+COLUMN
+返回单元格引用的列号。
+如果引用的是一个单元格，函数返回的是单元格的列号；如果参数是一个单元格区域，则以一个单行
+矩阵
+来返回相应的列号。如果函数公式
+作为矩阵公式
+使用。 如果函数 COLUMN 引用的是一个单元格范围，且函数不是作为矩阵公式使用的，则只返回范围中第一个单元格的列号。
+语法
+COLUMN(Reference)
+reference
+是一个要获得其列号的单元格或单元格区域。
+在省略对参数 reference 的输入时，函数反馈的便是公式所在处的单元格列号($[officename] Calc 会自动引用光标所在之处的单元格)。
+示例
+=COLUMNS(A1)
+等于 1。A 列是表格中的第一列。
+=COLUMNS(C3:E3)
+等于 3。C 列是表格中的第三列。
+=COLUMN(D3:G10)
+返回 4，因为 D 列是表格中的第四列，并且函数 COLUMN 不能用作数组公式。（在这种情况下，数组的第一个数值被作为结果。）
+{=COLUMN(B2:B7)}
+和
+=COLUMN(B2:B7)
+都返回 2，因为引用仅包含在表格中作为第二列的 B 列。由于单列区域仅有一个列编号，所以公式是否作为数组公式使用对结果没有影响。
+=COLUMN()
+返回 3。
+{=COLUMN(Rabbit)}
+返回单行数组 (3, 4)。
+COLUMNS 函数
+COLUMNS
+返回给定引用中的列数。
+语法
+COLUMNS(Array)
+Array
+用于指定要计算其列数的单元格区域，该参数也可以是一个单元格
+示例
+=COLUMNS(B5)
+返回 1，因为单元格仅包含 1 列。
+=COLUMNS(A1:C5)
+等于 3。该引用包含 3 列。
+Rabbit
+是命名的区域 (C1:D3)，则
+=COLUMNS(Rabbit)
+返回 2。
+垂直查找函数
+VLOOKUP 函数
+VLOOKUP
+垂直搜索并引用右侧相邻单元格。
+此函数检查是否数组首列包含某个特定的值。然后函数返回由
+Index
+命名的列的同一行中的数值。如果忽略参数
+SortOrder
+或者设置为 TRUE 或 1，假定数据以升序排序。在这种情况下，如果精确的
+SearchCriterion
+没有找到，将返回小于条件的最后一个值。如果
+SortOrder
+设置为 FALSE 或 0，则必须找到精确匹配，否则，将返回
+错误：数值不可用
+。因此带有零值的数据不需要以升序排序。
+语法
+=VLOOKUP(SearchCriterion; Array; Index; SortOrder)
+SearchCriterion
+是在数组的第一列中要查找的值。
+Array
+是至少包括两列的引用。
+Index
+是数组中的列编号，该数组包含要返回的数值。第一列编号为 1。
+SortOrder
+是可选的参数，用于指示数组中的第一列是否按照升序排序。如果第一列未按升序排列，请输入逻辑值 FALSE 或 0。已排序的列查找比较快并且函数有返回值，即使没有精确地找到要搜索的数值，但只要这个数值介于排序列表的最小值和最大值之间，函数就能够返回一个数值。在未排序列表中，查找的数值必须精确匹配。否则，函数会返回错误信息：
+错误：找不到该值
+。
+示例
+100
+，E1 包含名称
+蔬菜汤
+，100 道菜都具有这样的格式。列 D 中的编号按升序排列，因此可以省略可选参数
+SortOrder
+。
+请在 B1 处输入下列公式：
+=VLOOKUP(A1;D1:E100;2)
+这样一旦您在单元格A1处键入一道菜的号码后，单元格B1处便会显示这道菜的名称(菜的名称在单元格区域 D1:E100 的第2列内)。键入一个在单元格区域 D1:E100 内不存在的号码，单元格B1处显示的便是小于等于此号码的最大值。如果您不希望这种近似匹配，可在公式的可选参数sort order处键入逻辑值FALSE，这样在键入一个单元格区域 D1:E100 内不存在的号码时，函数便会反馈一个错误值。
+工作表数目;查找
+SHEET 函数
+SHEET
+返回引用的工作表号或代表工作表名称的字符串。
+如果不输入任何参数，返回的将是包含公式的电子表格的工作表号。
+语法
+SHEET(Reference)
+Reference
+是一个可选参数，是对单元格、区域或工作表名称字符串的引用。
+示例
+=SHEET(Sheet2.A1)
+返回 2。
+工作表数目; 函数
+SHEETS 函数
+SHEETS
+确定引用中工作表的数目。
+如果不输入任何参数，将返回当前文档中的工作表数目。
+语法
+SHEETS(Reference)
+Reference
+是对工作表或区域的引用，这是一个可选参数。
+示例
+=SHEETS(Sheet1.A1:Sheet3.G12)
+返回 3。
+MATCH 函数
+MATCH
+返回与指定值匹配的项在矩阵中的相对位置。
+此函数以数字形式返回找到的数值在 lookup_array 中的位置。
+语法
+MATCH(SearchCriterion; LookupArray; Type)
+SearchCriterion
+是在单行或单列数组中要查找的数值。
+LookupArray
+是查找的引用。查找数组可以是单行或单列，或者是单行或单列的一部分。
+Type
+可取值为 1, 0, 或 -1。如果 Type = 1 或未设置这个可选参数，则认为查找矩阵的第一列按升序排列。如果 Type = -1，则认为列按降序排列。这与 Microsoft Excel 中相同的函数一致。
+如果 type=0，仅查找完全匹配的内容。如果查找条件多次找到，则函数返回第一个匹配值的索引。只有在 Type = 0 时才允许通过正则表达式进行搜索。
+如果 Type = 1 或者 未指定第三个参数，将返回最后一个小于或等于查找条件的数值。即使查找的数组未排序也同样适用。对于 Type = -1，将返回第一个大于或等于查找条件的数值。
+示例
+=MATCH(200;D1:D100)
+在按列 D 排序的 D1:D100 区域中查找数值 200。一旦找到这个数值，就会返回该数值所在的行号。如果在搜寻该列的过程中发现了一个更大的数值，将返回它前一行的编号。
+OFFSET 函数
+OFFSET
+返回从指定引用点偏移特定行数及列数的单元格值。
+语法
+OFFSET(Reference; Rows; Columns; Height; Width)
+Reference
+是函数查找新引用点的位置。
+Rows
+是单元格向上（负数）或向下移动的行数。
+Columns
+（可选的）是单元格向左（负数）或向右移动的列数。
+Height
+（可选择的）是从新引用位置开始的区域的垂直高度。
+Width
+（可选择的）是从新引用位置开始的区域的水平宽度。
+Rows
+和
+Columns
+不能为零或者以负数开始的行或列
+Height
+和
+Width
+不能为零或者以负数表示的行或列。
+示例
+=OFFSET(A1;2;2)
+返回单元格 C3 的值（A1 向下移动两行两列）。如果 C3 包含数值
+100
+，此函数返回 100。
+=OFFSET(B2:C3;1;1)
+返回从 B2:C3 向下移动一行、向右移动一列后的引用区域 (C3:D4)。
+=OFFSET(B2:C3;-1;-1)
+返回从 B2:C3 向上移动一行、向左移动一列后的引用区域 (A1:B2)。
+=OFFSET(B2:C3;0;0;3;4)
+返回从 B2:C3 开始，大小为 3 行 4 列 的引用区域 (B2:E4)。
+=OFFSET(B2:C3;1;0;3;4)
+返回从 B2:C3 向下偏移一行，大小为 3 行 4 列 的引用区域 (B2:E4)。
+=SUM(OFFSET(A1;2;2;5;6))
+确定以单元格 C3 为出发点，共包含五行六列的单元格区域，即单元格区域 C3:H7。
+LOOKUP 函数
+LOOKUP
+从一行或一列的范围返回单元格内容。
+或者，可以返回不同列和行的指定值（相同索引）。与
+VLOOKUP
+和
+HLOOKUP
+相反，查找和结果矢量可在不同的位置；它们不必相邻。另外，必须对 LOOKUP 的查找矢量进行排序，否则不会返回任何有用的结果。
+如果 LOOKUP 找不到搜索条件，将与小于或等于搜索条件的搜索矢量中的最大值匹配。
+语法
+LOOKUP(SearchCriterion; SearchVector; ResultVector)
+SearchCriterion
+是要查找的数值；直接输入或作为引用输入。
+SearchVector
+是要查找的单行或单列区域。
+ResultVector
+是另一个单行或单列区域，用于存放函数的结果。结果是结果向量单元格中的与在搜索向量中找到的向量具有相同的索引。
+示例
+=LOOKUP(A1;D1:D100;F1:F100)
+根据单元格 A1 中输入的数值，在区域 D1:D100 查找相应的单元格。如果找到匹配的单元格，则确定其索引。例如，如果找到的是该区域中第十二个单元格，则将第十二个单元格的内容作为函数值返回到结果向量中。
+STYLE 函数
+STYLE
+将样式应用到包含公式的单元格。
+一定时间之后，可以再应用另一个样式。此函数始终返回值 0，您可以将该值原封不动地添加到另一个函数中。与 CURRENT 函数一起使用可以将颜色应用到单元格，而不受该值的影响。例如：=...+STYLE(IF(CURRENT() > 3; &quot; red &quot; ; &quot; green &quot; )) 在值大于 3 时将样式 &quot; 红色 &quot; 应用到单元格，否则应用 &quot; 绿色 &quot; 。两种单元格格式都必须预先定义。
+语法
+STYLE( &quot; Style &quot; ; Time; &quot; Style2 &quot; )
+style
+是为当前单元格指定的样式名称。样式名称前后必须加上引号。
+Time
+是一个可选式的以秒为单位的时间参数。如果不填入这个实际参数，单元格样式就不会在某一时间之后发生变化。
+Style2
+是一个可选的单元格样式名称，在设置的时间之后单元格就会采用这个样式。如果未设置此参数，单元格将采用“默认”样式。
+示例
+=STYLE( &quot; Invisible &quot; ;60; &quot; Default &quot; )
+定义单元格在重新计算或装入文档 60 秒后为透明格式，然后为该单元格指定默认格式。这两种单元格格式都必须事先定义。
+因为 STYLE() 有数字的返回值 0，此返回值附加到一个字符串。这样可以避免在接下来的示例中使用 T()
+= &quot; Text &quot; & T(STYLE( &quot; myStyle &quot; ))
+另请参阅示例 CURRENT()。
+CHOOSE 函数
+CHOOSE
+使用索引从多达 30 个值的列表中返回一个值。
+语法
+CHOOSE(Index; Value1; ...; Value30)
+Index
+是某一个1至30的之中的要反馈数值的引用数。
+value 1...value 30
+是一个数值顺序表，它是当作一个单元格的引用参数或是一个直接输入的数值。
+示例
+=CHOOSE(A1;B1;B2;B3; &quot; Today &quot; ; &quot; Yesterday &quot; ; &quot; Tomorrow &quot; )
+，若 A1 = 2，返回单元格 B2 的内容；若 A1 = 4，函数返回文本 &quot; Today &quot; 。
+HLOOKUP 函数
+HLOOKUP
+在选定区域的下方搜索某个数值和对单元格的引用。
+此函数检验矩阵的第一行是否含有特定数值，然后返回由
+Index
+指定的矩阵行中、与搜索到的数值在同一列中的数值。
+语法
+HLOOKUP(SearchCriteria; Array; Index; Sorted)
+VLOOKUP
+(交换列和行)
+ROW 函数
+ROW
+返回单元格引用的行号。
+如果引用的是单元格，函数返回单元格的行号。如果引用的是单元格范围，将在一个单列
+矩阵
+中返回相应的行号（如果公式是
+作为矩阵公式
+输入）。如果 ROW 函数引用的是一个单元格范围，且函数不是作为矩阵公式输入的，则只返回范围中第一个单元格的行号。
+语法
+ROW(Reference)
+reference
+是指一个单元格、一个区域或一个区域的名称。
+%PRODUCTNAME
+Calc 自动在当前单元格中设置引用。
+示例
+=ROW(B3)
+返回 3，因为引用表示表格中的第三行。
+{=ROW(D5:D8)}
+返回单列数组 (5, 6, 7, 8)，因为指定的引用包含行 5 至 8。
+=ROW(D5:D8)
+返回 5，因为函数 ROW 未作为数组公式使用，所以只返回引用的第一行的行号。
+{=ROW(A1:E1)}
+和
+=ROW(A1:E1)
+都返回 1，因为引用仅包含在表格中作为第一列的第一行。（由于单行区域只有一个行号，所以是否作为数组公式使用对结果没有影响。）
+=ROW()
+返回 3。
+{=ROW(Rabbit)}
+返回单列数组 (1, 2, 3)。
+ROWS 函数
+ROWS
+返回引用或数组中的行数。
+语法
+ROWS(Array)
+Array
+是一个已确定总行数的引用或者命名区域。
+示例
+=Rows(B5)
+返回 1，因为一个单元格仅包含一行。
+=ROWS(A10:B12)
+返回 3。
+=ROWS(Rabbit)
+返回 3。
+HYPERLINK 函数
+HYPERLINK
+单击包含 HYPERLINK 函数的单元格时，超链接将会打开。
+cell text
+参数，公式会查找 URL，然后显示文本或数字。
+打开超链接
+。
+语法
+HYPERLINK( &quot; URL &quot; ) 或 HYPERLINK( &quot; URL &quot; ; &quot; CellText &quot; )
+URL
+指定链接目标。可选的参数
+CellText
+是单元格中显示的文本和函数结果。如果未指定参数
+CellText
+URL
+将显示在单元格文本和函数结果中。
+对于空单元格和矩阵元素返回数字 0。
+示例
+=HYPERLINK( &quot; http://www.example.org &quot; )
+在单元格中显示文本 &quot; http://www.example.org &quot; ，并在单击后执行超链接 &quot; http://www.example.org &quot; 。
+=HYPERLINK( &quot; http://www.example.org &quot; ; &quot; 单击此处 &quot; )
+在单元格中显示文本 &quot; 单击此处 &quot; ，并在单击后执行超链接 &quot; http://www.example.org &quot; 。
+=HYPERLINK( &quot; http://www.example.org &quot; ;12345) 显示数字 12345 并在单击时执行超链接 http://www.example.org。
+=HYPERLINK($B4)
+其中单元格 B4 包含
+http://www.example.org
+。该函数将 &quot; http://www.example.org &quot; 添加到超链接单元格的 URL，并返回用作公式结果的相同文本。
+=HYPERLINK( &quot; http://www. &quot; ; &quot; 单击 &quot; ) & &quot; example.org &quot;
+在单元格中显示文本“单击 example.org”，并在单击后执行超链接 http://www.example.org。
+=HYPERLINK( &quot; #Sheet1.A1 &quot; ; &quot; 跳至顶部 &quot; )
+显示文字 “跳至顶部”，并跳转到此文档的工作表 1 中的单元格 A1。
+=HYPERLINK( &quot; file:///C:/writer.odt#Specification &quot; ; &quot; 跳至 Writer 书签 &quot; )
+显示文本“跳至 Writer 书签”，载入指定的文本文档，并跳转到书签 &quot; Specification &quot; 。
+GETPIVOTDATA 函数
+GETPIVOTDATA
+GETPIVOTDATA 函数从 DataPilot 表格中返回一个结果数值。因为数值是通过 Field 和 Item 名称寻址计算的，所以即使 DataPilot 表格的布局更改，数值仍然有效。
+语法
+可以使用两种不同的语法定义：
+GETPIVOTDATA(TargetField; DataPilot; [ Field 1; Item 1; ... ])
+GETPIVOTDATA(DataPilot; Constraints)
+如果精确给出两个参数，且其中第一个参数是单元格或单元格区域引用，则采用的是第二语法。其他全部情况则采用的是第一语法。“函数向导”显示第一语法。
+第一语法
+TargetField
+是一个字符串，此字符串选择 DataPilot 表格的某个数据字段。字符串可以是数据源列的名称，或者在表格中显示的数据字段名称（如 &quot; Sum - Sales &quot; ）。
+DataPilot
+是单元格或单元格区域的引用，它位于 DataPilot 表格内或包含某个 DataPilot 表格。如果单元格区域包含几个 DataPilot 表格，则使用最后创建的表格。
+Field n / Item n
+对没有给出，则返回总计。否则，每一对增加一个结果必须满足的约束。
+Field n
+是 DataPilot 表格中某个字段的名称。
+Item n
+是此字段中某个项目的名称。
+如果 DataPilot 表格中包含唯一的满足全部约束的结果，或者某分类汇总结果概括了全部匹配值，则返回此结果。如果没有匹配的结果，或者有些匹配结果但没有分类汇总结果，则返回错误。这些条件应用于包含在 DataPilot 表格中的结果。
+如果源数据包含被 DataPilot 表格的设置隐藏的条目，则忽略它们。Field/Item 对的顺序不重要。Field 和 Item 名称不区分字母大小写。
+如果没有给定某个页面字段的约束，则字段的选定值被隐式使用。如果给定某个页面字段的约束，则必须与字段的选定值匹配，否则返回错误。页面字段是位于“数据助理”表格左上方的字段，用于填充“数据助理版式”对话框中的“页面字段”区域。对于每一个页面字段，可以选定某一项（值），表示只有该项包含在计算中。
+第二语法
+）才能使用。
+第二语法
+DataPilot
+与第一语法中的含义相同。
+Constraints
+是一个用空格分隔的列表。条目可以被引号（单引号）引起。整个字符串必须用引号（双引号）引起，除非您引用的字符串来自其他单元格。
+条目之一可以作为数据字段名称。如果 DataPilot 表格只包含一个数据字段，则数据字段名可以被省略，否则必须出现。
+Field[Item]
+形式指定约束（使用字符 [ 和 ]），或者，当项目名称在用于“数据助理”表格的所有字段中唯一时，简化为
+Item
+。
+Field[Item;Function]
+的形式添加，这将使得约束只能匹配使用了此函数的分类汇总值。可能的函数名为 Sum、Count、Average、Max、Min、Product、Count（仅适用于数字）、StDev（抽样）、StDevP（总体样本）、Var（抽样）和 VarP（总体样本），不区分大小写。
+UFI:
+Example from spec doc is quite difficult to localize.
+Try to find other one

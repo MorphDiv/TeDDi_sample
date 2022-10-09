@@ -1,0 +1,39 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+Warnung
+Diese Funktion ist EXPERIMENTELL.
+Das Verhalten, der Funktionsname und alles Andere was hier dokumentiert ist, kann sich in zukünftigen PHP-Versionen ohne Ankündigung ändern.
+Seien Sie gewarnt und verwenden Sie diese Funktion auf eigenes Risiko.
+Rückgabewert: im Erolgsfall die Länge der versiegelten Daten, FALSE bei einem Fehler.
+War der Aufruf der Funktion erfolgreich, sind die versiegelten Daten in sealed_data enthalten und der Umschlag Schlüssel steht in env_keys zur Verfügung.
+Die Funktion openssl_seal() versiegelt (verschlüsselt) data unter Verwendung von RC4 mit einem zufällig erzeugten geheimen Schlüssel.
+Dieser Schlüssel wird mit jedem öffentlichen Schlüssel verschlüsselt, der mit der Kennung in pub_key_ids verknüpft ist.
+Jeder verschlüsselte Schlüssel wird in env_keys zurückgegeben.Das bedeutet, dass Sie versiegelte Daten an mehrere Empfänger versenden können (unter der Voraussetzung, dass Sie irgendwann die öffentlichen Schlüssel der Empfänger erhalten haben.
+Jeder Empfänger muss sowohl die versiegelten Daten als auch den entsprechenden Umschlag Schlüssel erhalten, der mit dem öffentlichen Schlüssel des Empfängers versiegelt wurde.
+Beispiel 1. openssl_seal() Beispiel
+/ / Annahme: $data enthält die zu versiegelnden Daten / / holen und vorbereiten der öffentlichen Schlüssel unserer Empfänger $fp = fopen( "/ src / openssl-0.9.6 / demos / maurice / cert.pem", "r"); $cert = fread($fp, 8192); fclose($fp); $pk1 = openssl_get_publickey($cert); / / Wiederholung für den zweiten Empfänger $fp = fopen(" / src / openssl-0.9.6 / demos / sign / cert.pem", "r"); $cert = fread($fp, 8192); fclose($fp); $pk2 = openssl_get_publickey($cert); / / versiegeln der Nachricht, nur Besitzer von $pk1 und $pk2 können / / mit Schlüsseln $sealed entschlüsseln, / / entsprechendes gilt für $ekeys[0] und $ekeys[1]. openssl_seal($data, $sealed, $ekeys, array($pk1,$pk2)); / / Löschen der Schlüssel aus dem Speicher openssl_free_key($pk1); openssl_free_key($pk2);
+Siehe auch openssl_open().
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

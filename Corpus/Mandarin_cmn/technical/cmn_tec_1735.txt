@@ -1,0 +1,75 @@
+# language_name_wals:	Mandarin
+# language_name_glotto:	Mandarin Chinese
+# ISO_6393:	cmn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hans
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/zh_CN.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+CreateUnoListener 函数 [运行时]
+/text/sbasic/shared/03132000.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe dedr: fixed #i31078#
+CreateUnoListener 函数
+CreateUnoListener 函数 [运行时]
+建立一个收听者实例。
+许多 Uno 接口允许您在特定的侦听器接口上注册侦听器，这样就可以侦听特定的事件，并可以调用适当的侦听器方法。CreateUnoListener 函数等待调用的侦听器接口，然后将一个该接口支持的对象传送给接口。接着该对象被传送到注册侦听器的方法中。
+语法：
+oListener = CreateUnoListener( Prefixname, ListenerInterfaceName )
+示例：
+以下示例以一个 Basic 库对象为例。
+Dim oListener
+oListener = CreateUnoListener( &quot; ContListener_ &quot; , &quot; com.sun.star.container.XContainerListener &quot; )
+CreateUnoListener 方法需要两个参数。第一个参数是一个前缀，下面对它进行了详细介绍。第二个参数是要使用的收听者接口的全限定名称。
+然后，需要将收听者加入到广播对象中，通过调用相应的方法来加入收听者即可实现此操作。有关方法通常位于“addFooListener”模式后面，其中“Foo”是收听者接口类型 (无“X”)。在此示例中，调用 addContainerListener 方法来注册 XContainerListener：
+Dim oLib
+oLib = BasicLibraries.Library1 ' Library1 必须存在！
+oLib.addContainerListener( oListener ) ' 注册收听者
+这样就注册了侦听器。当事件发生时，相应的侦听器将从 com.sun.star.container.XContainerListener 接口中调用适当的方法。
+前缀将从 Basic 子例程中调用已注册的收听者。Basic 运行时系统搜寻并调用名为“PrefixListenerMethode”的 Basic 子例程或函数。如果不成功，将发生运行时错误。
+在此示例中，收听者接口使用了以下方法：
+disposing：
+收听者基本接口 (com.sun.star.lang.XEventListener)：所有收听者接口的基本接口
+elementInserted：
+com.sun.star.container.XContainerListener 接口的方法
+elementRemoved：
+com.sun.star.container.XContainerListener 接口的方法
+elementReplaced：
+com.sun.star.container.XContainerListener 接口的方法
+在此示例中，前缀是 ContListener_，因此，需要在 Basic 中执行以下子例程：
+ContListener_disposing
+ContListener_elementInserted
+ContListener_elementRemoved
+ContListener_elementReplaced
+每个收听者类型中都存在一个含有事件信息的事件结构类型。当调用收听者方法时，会将此事件的一个实例作为参数传送到方法。只要子程序声明中传送了相应的参数，Basic 收听者方法就会调用这些事件对象。例如：
+Sub ContListener_disposing( oEvent )
+MsgBox &quot; disposing &quot;
+MsgBox oEvent.Dbg_Properties
+End Sub
+Sub ContListener_elementInserted( oEvent )
+MsgBox &quot; elementInserted &quot;
+MsgBox oEvent.Dbg_Properties
+End Sub
+Sub ContListener_elementRemoved( oEvent )
+MsgBox &quot; elementRemoved &quot;
+MsgBox oEvent.Dbg_Properties
+End Sub
+Sub ContListener_elementReplaced( oEvent )
+MsgBox &quot; elementReplaced &quot;
+MsgBox oEvent.Dbg_Properties
+End Sub
+如果不使用事件对象，则无需包括对象参数：
+' 最小的子程序处置实现
+Sub ContListener_disposing
+End Sub
+始终
+都必须实现收听者方法，以避免 Basic 运行时错误。

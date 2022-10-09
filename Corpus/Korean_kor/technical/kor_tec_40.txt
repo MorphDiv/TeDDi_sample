@@ -1,0 +1,45 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+This section gathers most common errors you can face, while writing PHP scripts.
+1. I would like to write a generic PHP script that can handle data coming from any form. How do I know which POST method variables are available?
+Make sure that the track_vars feature is enabled in your php.ini file. Since PHP 4.0.3, this feature is always on. When track_vars is on, it creates some associative arrays, the most important here is: $_POST (this used to be called $HTTP_POST_VARS in PHP versions prior 4.1.0). So, to write a generic script to handle POST method variables you would need something similar to the following:
+2. I need to convert all single-quotes (') to a backslash followed by a single-quote. How can I do this with a regular expression?
+First off, take a look at the addslashes() function. It will do exactly what you want. You should also have a look at the magic_quotes_gpc directive in your php.ini file.
+3. When I do the following, the output is printed in the wrong order:
+To be able to use the results of your function in an expression (such as concatenating it with other strings in the example above), you need to return() the value, not echo() it.
+4. Hey, what happened to my newlines?
+In PHP, the ending for a block of code is either "? "or "? \n" (where \n means a newline). So in the example above, the echoed sentences will be on one line, because PHP omits the newlines after the block ending. This means that you need to insert an extra newline after each block of PHP code to make it print out one newline.
+Why does PHP do this? Because when formatting normal HTML, this usually makes your life easier because you don't want that newline, but you'd have to create extremely long lines or otherwise make the raw page source unreadable to achieve that effect.
+5. I get the message 'Warning: Cannot send session cookie - headers already sent...' or 'Cannot add header information - headers already sent...'.
+The functions header(), setcookie() and the session functions need to add headers to the output stream. But headers can only be sent before all other content, check if your script is sending headers after having already sent content.
+6. I need to access information in the request header directly. How can I do this?
+The getallheaders() function will do this if you are running PHP as an Apache module. So, the following bit of code will show you all the request headers:
+7. When I try to use authentication with IIS I get 'No Input file specified'.
+The security model of IIS is at fault here. This is a problem common to all CGI programs running under IIS. A workaround is to create a plain HTML file (not parsed by PHP) as the entry page into an authenticated directory. Then use a META tag to redirect to the PHP page, or have a link to the PHP page. PHP will then recognize the authentication correctly. With the ISAPI module, this is not a problem. This should not effect other NT web servers. For more information, see: http://support.microsoft.com/support/kb/articles/q160/4/22.asp.
+8. My PHP script works on IE and Lynx, but on Netscape some of my output is missing. When I do a "View Source" I see the content in IE but not in Netscape.
+Netscape is more strict regarding html tags (such as tables) then IE. Running your html output through a html validator, such as validator.w3.org, might be helpful. For example, a missing /table might cause this.
+Also, both IE and Lynx ignore any NULs (\0) in the HTML stream, Netscape does not. The best way to check for this is to compile the command line version of PHP (also known as the CGI version) and run your script from the command line. In *nix, pipe it through od -c and look for any \0 characters. If you are on Windows you need to find an editor or some other program that lets you look at binary files. When Netscape sees a NUL in a file it will typically not output anything else on that line whereas both IE and Lynx will.
+9. How am I supposed to mix XML and PHP? It complains about my ?xml tags!
+You need to turn off the short tags by setting short_tags to 0 in your php.ini file, or by using the appropriate Apache directive. You could even use a File section to do this selectively.
+10. How can I use PHP with FrontPage or some other HTML editor that insists on moving my code around?
+One of the easiest things to do is to enable using ASP tags in your PHP code. This allows you to use the ASP-style% and% code delimiters. Some of the popular HTML editors handle those more intelligently (for now). To enable the ASP-style tags, you need to set the asp_tags php.ini variable, or use the appropriate Apache directive.
+11. Where can I find a complete list of pre-set variables available to me, and why are these not documented in the PHP documentation?
+The best way is to stick a ?php phpinfo();? part on a page and load it up. This will show you all sorts of information about your PHP setup, including a list of both environment variables and also special variables set by your web server. This list can't really be documented in the PHP documentation because it will change from one server to another.
+12. I'm trying to access one of the standard CGI variables (such as $DOCUMENT_ROOT or $HTTP_REFERER) in a user-defined function, and it can't seem to find it. What's wrong?
+Environment variables are normal global variables, so you must either declare them as global variables in your function (by using "global $DOCUMENT_ROOT; ", for example) or by using the global variable array (ie," $GLOBALS["DOCUMENT_ROOT"] ").
+참고: Since PHP 4.1.0 you can also use the superglobal array $_SERVER which is available in every function. For example, you can now use $_SERVER["DOCUMENT_ROOT"] instead of $DOCUMENT_ROOT.

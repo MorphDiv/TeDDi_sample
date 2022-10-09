@@ -1,0 +1,70 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+udm_load_ispell_data() lädt ISpell-Daten.
+Gibt TRUE bei Erfolg, FALSE bei einem Fehler zurück.
+agent - Zeiger auf einen Agenten, erhalten nach einem Aufruf von udm_alloc_agent().
+var - Parameter, der die Quelle der ISpell-Daten angibt.
+Kann folgende Werte annehmen.
+Nachdem diese Funktion aufgerufen wurde, sollte nicht vergessen werden, mittels udm_free_ispell_data() den durch ISpell belegten Speicher wieder freizugeben, auch wenn UDM_ISPELL_TYPE_SERVER verwendet wird.
+Der schnellste Modus ist UDM_ISPELL_TYPE_SERVER.
+UDM_ISPELL_TYPE_TEXT ist langsamer, und UDM_ISPELL_TYPE_DB ist der langsamste.
+Dies gilt zumindest für mnoGoSearch 3.1.10 - 3.1.11, es ist jedoch geplant, den DB-Modus in zukünftigen Versionen schneller als den TEXT-Modus zu machen.
+UDM_ISPELL_TYPE_DB - Gibt an, dass die ISpell-Daten aus einer SQL-Datenbank gelesen werden sollen.
+In diesem Fall werden val1 und val2 ignoriert und sollten leer gelassen werden.
+Der Parameter flag sollte 1 sein.
+Anmerkung:
+Der Parameter flag gibt an, dass die ISpell-Daten nach dem Laden sortiert werden sollen, dies ist für ein korrektes Arbeiten von ISpell nötig.
+Werden die ISpell-Daten aus Dateien gelesen, kann es vorkommen, dass mehrere Aufrufe von udm_load_ispell_data() vorkommen, was es wenig Effektiv macht, die Daten nach jedem Aufruf zu sortieren.
+Der Datenbank-Modus lädt jedoch alle Daten auf einmal, in diesem Fall sollte der Wert also 1 betragen.
+Sollte ein Fehler auftreten, wird FALSE zurückgegeben, Fehler und Fehlercode sind in diesem Fall über udm_error() und udm_errno() verfügbar.
+Beispiel:
+if (! udm_load_ispell_data($udm,UDM_ISPELL_TYPE_DB ,'' ,'',1)) {printf("Error #%d: '%s'\n",udm_errno($udm),udm_error($udm)); exit;}
+UDM_ISPELL_TYPE_AFFIX - Gibt an, dass die ISpell-Daten aus einer Datei geladen werden sollen und initiiert das Laden der Anhangsdaten.
+In diesem Fall gibt der Parameter val1 den zweibuchstabigen Sprachcode an, für den die Anhänge geladen werden sollen, val2 gibt den Dateipfad an.
+Wird kein absoluter Pfad angeben, werden die Dateien nicht in UDM_CONF_DIR, sondern in im zum aktuellen Pfad relativen gesucht.
+Kann die Datei nicht geladen werden, gibt die Funktion FALSE zurück, und eine Fehlermeldung wird ausgegeben.
+Die Fehlercodes können nicht über udm_error() oder udm_errno() ausgelesen werden.
+Zur Erlärung des Parameters flag schauen Sie bitte bei UDM_ISPELL_TYPE_DB nach.
+Beispiel:
+
+UDM_ISPELL_TYPE_SPELL - Gibt an, dass die ISpell-Daten aus einer Datei gelesen werden sollen, und initiiert das Laden des ISpell-Wörterbuches.
+In diesem Fall gibt der Parameter val1 den zweibuchstabigen Sprachcode an, für den die Anhänge geladen werden sollen, val2 gibt den Dateipfad an.
+Wird kein absoluter Pfad angeben, werden die Dateien nicht in UDM_CONF_DIR, sondern in im zum aktuellen Pfad relativen gesucht.
+Kann die Datei nicht geladen werden, gibt die Funktion FALSE zurück, und eine Fehlermeldung wird ausgegeben.
+Die Fehlercodes können nicht über udm_error() oder udm_errno() ausgelesen werden.
+Zur Erklärung des Parameters flag schauen Sie bitte bei UDM_ISPELL_TYPE_DB nach.
+
+UDM_ISPELL_TYPE_SERVER - schaltet den Spell-Server support ein. val1 gibt den Host an, auf dem der Spell-Server läuft.. val2 ist noch ohne Funktion, wird in Zukunft aber den Port des Spell-Servers angeben. flag wird nicht benötigt, da die Daten bereits sortiert im Spell-Server vorliegen.
+Der Spell-Server (Spelld) liest die Rechtschreibdaten aus einer seperaten Konfigurationsdatei (Standardmäßig / usr / local / mnogosearch / etc / spelld.conf), sortiert sie und speichert sie im Speicher.
+Die Funktion udm_load_ispell_data() in UDM_ISPELL_TYPE_SERVER lädt eigentlich nicht die ISpell-Daten, sondern legt nur die Serveradresse fest.
+Eigentlich wird dieser Server automatisch von udm_find() benutzt, wenn eine Suche durchgeführt wird.
+Sollte ein Fehler auftreten, wird keine Fehlermeldung ausgegeben, eine ISpell-Konvertierung kann dann jedoch natürlich auch nicht stattfinden.
+Anmerkung:
+Diese Funktion ist seit mnoGoSearch 3.1.12 verfügbar.
+Beispiel:
+if (!
+Udm_Load_Ispell_Data( $udm,UDM_ISPELL_TYPE_SERVER ,'' ,'',1)) {printf("Error loading ispell data from server lt;br gt;\n"); exit;}
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

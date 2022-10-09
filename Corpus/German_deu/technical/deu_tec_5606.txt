@@ -1,0 +1,128 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Nicht in & kcontrol; verfügbare & CUPS; Optionen
+Dieses Kapitel gibt Ihnen einige Hinweise zu weiteren Konfigurationsmöglichkeiten von & CUPS;,die möglicherweise nicht über das & kdeprint; & GUI; verfügbar.
+Überblick der bereitgestellten Funktionen
+Die meistverwendeten Funktionen, die & CUPS; zur Verfügung stellt, werden von & kdeprint; unterstützt.
+Unterstützt wird die Druckerverwaltung: Hinzufügen, Entfernen, Ändern, Einrichten, Testen, Deaktivieren, Aktivieren...
+Unterstützt wird die Druckauftragsverwaltung: Abbrechen, Anhalten, Freigeben, Zuweisung an einen anderen Drucker
+Druckoptionen: vollständig, so wie sie von & CUPS;. bereitgestellt wird.
+Wo Sie Hilfe finden, wenn Sie & CUPS; benutzen
+Eine Menge Informationen finden sich in der Web-Schnittstelle, die von & CUPS; immer unterstützt wird. Diese funktioniert mit jedem Browser (sogar mit textbasierten). Gehen sie zum Start einfach auf http://localhost:631 /. Dort finden sie einen Link, zur lokal verfügbaren & CUPS;-Dokumentation im HTML - und PDF -Format.
+Sie können & CUPS; nicht nur über & kdeprint; steuern. Die Befehlszeile und der Browser sind zwei & CUPS;-Schnittstellen, die direkt unterstützt werden. Mit den vielen Befehlszeilenprogrammen haben sie die umfangreichste Kontrolle über & CUPS;. Die Web-Schnittstelle zeigt nur einen Teil der zur Verfügung stehenden Möglichkeiten zur Steuerung und Einstellung.
+Dies gilt auch für & kdeprint;. Generell stehen mit der weiteren Entwicklung von & CUPS; die neusten Funktionen immer erst über die Befehlszeile zur Verfügung. Schauen Sie sich nach der Installation einer neuen & CUPS;-Version die Handbuchseiten an, um über die neusten Funktionen auf dem Laufenden zu bleiben.
+Je nachdem, welche Aktualisierungsmethode sie für & CUPS; verwenden, kann es vorkommen, dass Ihre Konfigurationsdatei bei der Aktualisierung nicht durch eine neue ersetzt wird. Deshalb kann es passieren, dass der neue, erweiterte & CUPS;-Dämon von der alten Konfiguationsdatei nichts über die neu eingebauten Fähigkeiten erfährt.
+Eine komplette Liste der verfügbaren Dateien und Handbücher sollte immer in im & CUPS;-Handbuch für den Software Administrator unter (http://localhost:631/sam.html#FILES zu finden sein. Geben Sie in der Adresszeile von & konqueror; folgende & URL; ein, um mehr über die wichtigsten Befehle und Konfigurationsdateien herausfinden: man:/lpadmin und man:/cupsd.conf. Kennen Sie bereits & konqueror;s Fähigkeit traditionelle & UNIX;-Manpages anzuzeigen? Lesen Sie dies. Dort finden Sie interessante Hinweise und Verknüpfungen zu weiteren Mappages und Dokumentationen.
+Wie sie zu & CUPS; gehörende Handbücher finden
+Hier sehen sie einen Weg, wie sie zu & CUPS; gehörende Handbücher auf ihrem System finden:
+kurt@transmeta:~ > apropos cups cups-calibrate (8)- ESP Printer Calibration Tool lpstat (1) - print cups status information cups-lpd (8) - receive print jobs + report printer status to lpd clients classes.conf (5) - class configuration file for cups backend (1) - cups backend transmission interfaces filter (1) - cups file conversion filter interfaces cups-polld (8) - cups printer polling daemon mime.types (5) - mime type description file for cups cupsd (8) - common unix printing system daemon lpadmin (8) - configure cups printers and classes cupsd.conf (5) - server configuration file for cups mime.convs (5) - mime type conversion file for cups printers.conf (5) - printer configuration file for cups mime.convs (5) - mime type conversion file for cups cups-polld (8) - cups printer polling daemon lpstat (1) - print cups status information backend (1) - cups backend transmission interfaces mime.types (5) - mime type description file for cups cupsd (8) - common unix printing system daemon lpadmin (8) - configure cups printers and classes printers.conf (5) - printer configuration file for cups cupsd.conf (5) - server configuration file for cups filter (1) - cups file conversion filter interfaces
+Tipps und Tricks zu & CUPS; auf der Befehlszeile, die nichts mit & kdeprint; zu tun haben
+Hier sind einige Beispiele von Optionen, die momentan verfügbar sind, wenn sie die Befehlszeile benutzen.
+Bestimmten Benutzern den Zugang zu Druckern erlauben oder verbieten
+Wenn sie einen Drucker mit Hilfe der Befehlszeile installieren oder ändern,können sie bestimmten Benutzern dabei den Zugang zum Drucker erlauben oder verbieten:
+lpadmin -p HeidelbergDigimaster9110 -v lpd:/10.160.16.99/mqueue -u allow:kurt,sylvi,hansjoerg -E -P /home/kurt/PPDs/DVHV.ppd
+Dies wird den Zugriff zu dem Drucker nur den drei erwähnten Benutzern erlauben und zur gleichen Zeit allen anderen den Zugriff verbieten. Wenn ein anderer Benutzer etwas über den & CUPS; Server auf dem DigiMaster ausdrucken will, wird er eine Fehlermeldung mit der Zeile client-error-not-possible bekommen.
+lpadmin -p HeidelbergDigimaster9110 -v lpd:/10.160.16.99/mqueue -u deny:tackat,boss,waba -E -P /home/kurt/PPDs/DVHV.ppd
+Wird den drei erwähnten Benutzern den Zugriff auf den Drucker verbieten und zur gleichen Zeit allen anderen Benutzern den Zugriff gewähren. Wenn der gesperrte Benutzer über den & CUPS; Server auf den DigiMaster zugreifen will, wird er eine Fehlermeldung mit der Zeile client-error-not-possible erhalten.
+Nur eine der beiden Einstellungen kann gleichzeitig genutzt werden. Zurzeit gibt es keine Unterstützung, die eine ähnliche Einstellung auf Gruppenbasis ermöglichen würde. Dies wird aber in der Zukunft eingebaut werden.
+Festlegen von Beschränkungen für bestimmte Drucker
+Manchmal könnte es sein, dass die Beschränkungen für bestimmte Drucker festlegen möchten. Mit den Beschränkungen haben sie die Möglichkeit Limits für die Zahl der Seiten oder die Datenmenge, die in einer bestimmten Zeit gedruckt werden darf festzulegen.
+Beschränkungen können mit der -o Einstellung festgelegt werden, wenn sie einen Drucker mit dem Befehl lpadmin einrichten. Natürlich können sie dies auch nachträglich für einen schon eingerichteten Drucker einstellen. Nun folgen einige Richtlinien, die zum Zeitpunkt der Verfassung dieser Dokumentation in der offiziellen & CUPS; Dokumentation fehlen.
+Mit & CUPS; können sie für jeden Drucker seitenbasierte oder datenmengenbasierte Beschränkungen einrichten.
+Die Beschränkungen werden für jeden Benutzer individuell berechnet. Eine einfache Beschränkung gilt deshalb für alle Benutzer des Druckers.
+Bei den Beschränkungen werden auch die Vorspann- und Nachspannseiten mit einkalkuliert.
+Das heißt, dass sie die Benutzung bei einem teuren Drucker auf 20 Seiten pro Tag und Benutzer beschränken können. Sie können allerdings nicht eine Beschränkung für jeden Benutzer außer Kurt oder root angeben.
+Es gibt beim Einrichten eines neuen Druckers job-k-limit, job-page-limit, und job-quota-period Einstellungen.
+job-quota-period gibt ein Zeitintervall für die Berechnung der Beschränkung an.(Das Intervall wird in Sekunden berechnet, ein Tag entspricht also 60x60x24=86.400, eine Woche 60x60x24x7=604,800, und ein Monat 60x60x24x30=2.592.000 Sekunden.)
+Um eine Beschränkung wirksam zu machen muss mindestens ein Zeitintervall und eine Auftragsbeschränkung als nicht-null definiert sein.
+Die Voreinstellung von 0 für job-k-limit gibt an, dass es keine Beschränkung gibt.
+Die Voreinstellung von 0 für job-page-limit gibt an, dass es keine Beschränkung gibt.
+Die Voreinstellung von 0 für job-quota-period gibt an, dass die Beschränkungen für alle Aufträge gelten, die von Benutzern ausgeführt werden, die dem System bekannt sind.
+Funktionierende Beispiele:
+Funktionsfähig, da Zeitintervall plus und Auftragsbeschränkung definiert sind.
+lpadmin -p danka_infotec_4850 -o job-quota-period=604800 -o job-k-limit=1024
+Dies legt die Größe der Datei auf 1 MB für jeden Benutzer auf dem Drucker danka_infotec_4850 während einer Woche fest.
+lpadmin p danka_infotec_4105 -o job-quota-period=604800 -o job-page-limit=100
+Hiermit wird für jeden Benutzer des Druckers danca_infotec eine Beschränkung maximal auf 100 Seiten pro Woche festgelegt.
+lpadmin -p danka_infotec_P450 -o job-quota-period=604800 -o job-k-limit=1024 -o job-page-limit=100
+Dies legt eine kombinierte Beschränkung von 1 MB und 100 Seiten für den Drucker danka_infotec_P450 während einer Woche fest.Die Beschränkung, die als erstes erreicht wird, tritt in Kraft.
+Nicht funktionierende Beispiele
+Funktioniert NICHT, da nur Zeitintervall oder Auftragsbeschränkung angegeben sind.
+lpadmin -p danka_infotec_P320 -o job-quota-period=604800 lpadmin -p danka_infotec_FullColor -o job-page-limit=100 lpadmin -p danka_infotec_HiSpeed -o job-k-limit=1024
+Fehlermeldungen in diesem Zusammenhang
+Wenn ein Benutzer eine Beschränkung erreicht, erhält er eine client-error-not-possible Meldung, wenn er drucken will.
+Einen Rohdatendurcker einrichten
+Es gibt mehrere Möglichkeiten um eine Rohdatendrucker einzurichten. Ein bequemer Weg ist die Benutzung des lpadmin Befehls. Geben sie einfach keine & PPD; Datei an und schon wird ihr Drucker zum Rohdatendrucker.
+lpadmin -p Raw_Danka_infotec -E -v lpd://10.160.16.137/PORT1
+Rohdatendrucker verändern die Druckdatei nicht und versuchen nicht die Datei in ein anderes Format umzuwandeln. Dies brauchen sie beispielsweise, wenn die von einer & Windows; Arbeitsstation über Samba und einen & CUPS; Server auf einem PCL Drucker drucken wollen. In diesem Fall würde der Treiber des & Windows; Systems eine fertige Druckdatei erzeugen und der & CUPS; Filter würde diese Datei dann nur beschädigen. Unter bestimmten Umständen, wenn sie sicher sein wollen, dass die Datei ungefiltert von & CUPS; an den Drucker übergeben wird, ist der lpadmin Befehl ohne & PPD; sehr nützlich.
+Fehlerbehebung von & CUPS; in & kdeprint;
+Dieser Teil des & kdeprint; Handbuchs wird von den Rückmeldungen der Benutzer leben. Dies hier ist lediglich ein kleiner Anfang.
+Fehlermeldungen
+Was bedeutet des Fehler client-error-bad-request?
+Der Benutzer sendete an & CUPS; eine Datei, die der Server nicht verarbeiten konnte. Sie bekommen diese Meldung, wenn sie eine leere Datei senden.
+Und client-error-not-possible?
+Der Benutzer darf entweder auf einem bestimmten Drucker nicht drucken oder er hat seine Beschränkung erreicht (entweder datenmengenbasiert oder nach Anzahl der Seiten).
+Wie sieht es mit client-error-not-found aus?
+Der Benutzer hat versucht, auf eine nicht existierende Ressource auf dem & CUPS;-Server zuzugreifen. Es wurde versucht eine nicht vorhandene Datei zu drucken oder der Benutzer besitzt keine Zugriffsrechte für die betreffende Datei.
+Fragen und Antworten
+Warum kann ich meine Aufträge nicht erneut starten?
+Damit Sie Ihre fertigen Aufträge über die Web-Schnittstelle erneut starten können,müssen Sie in der Datei /etc/cups/cupsd.conf die Einstellung PreserveJobFiles True eintragen.
+Wie werde ich die lange Liste der abgeschlossenen Aufträge in der Web-Schnittstelle los?
+TODO
+Wie funktioniert das Zählen von Seiten?
+& CUPS; erledigt das Zählen der Seiten, indem fast jeder Auftrag an denFilter pstops übergeben wird. Dieser übernimmt neben anderen Dingen das Zählen der Seiten. Die Ausgabe dieses Filters kann wieder an andere Filter übergeben (z.B. pstoraster -- > rastertopcl) oder direkt an den Drucker geschickt werden, wenn es ein & PostScript; Drucker ist.
+Dies funktioniert für mit allen Netzwerk-, Parallelen-, Seriellen-, und USB -Druckern. Es wird allerdings eine DSC (Document Structuring Convention), die & PostScript; kompatibel ist als Input benötigt. Durch dieses Prinzip werden also die Seiten während des Filterns vom Druckserver berechnet. Danach finden sie Informationen über jede einzelne Seite (Zeit, Benutzer, Auftragsnummer, Name, Anzahl der Kopien, Datenmenge) unter /var/log/cups/page_log.
+Übrigens: Auf meiner persönlichen Wunschliste steht eine Anpassung des Webalizers, damit er die Datei page_log liest und auswertet und einen ähnlichen Output erzeugt. Ist jemand daran interessiert diese Anpassung vorzunehmen?
+Die Seitenzählung liefert jedoch in den folgenden Fällen nicht den richtigen Wert:
+Der Drucker hat eine Störung und löscht deswegen den Auftrag. (dies ist schon öfters vorgekommen) oder er löscht den Auftrag wegen Problemen mit dem Datenformat.
+Aufträge mit Rohdaten werden immer als eine Seite gezählt, es können mehrere Kopien sein.
+Deswegen ist das Zählsystem von & CUPS; nur eine Schätzung, die aber in vielen Fällen sehr gut oder zumindest befriedigend ist. In manchen Fällen kann die Schätzung allerdings auch sehr schlecht sein. Die einzige wirklich zuverlässige Zählweise ist die des internen Zählers im Drucker. Bei einigen, aber längst nicht allen Druckern kann diese Information über SNMP (Simple Network Management Protocol) abgefragt werden. In größeren Netzwerken mit vielen verschiedenen Druckern gibt es letztendlich einfach kein zuverlässiges und genaues Zählwerkzeug.
+Warum funktioniert das Zählen mit & Windows;-Arbeitsstationen nicht?
+& Windows;-Arbeitsstationen müssen Aufträge fast immer als Rohdaten gesendet werden. Warum? Wenn & CUPS; als Druckserver für & Windows; Arbeitsstationen eingesetzt wird, sollte die Arbeitsstation den Druckertreiber des & Windows;-Systems verwenden. Dieser Treiber garantiert die richtige Formatierung für den Drucker und deshalb soll der Server die Datei nicht mehr ändern und als Rohdatendatei drucken. Es wird kein Filter gestartet, da die Datei nicht im & PostScript; Format vorliegt, pstops dies aber voraussetzt. Folglich wird auch immer nur eine Seite gezählt.
+Wie bekomme ich eine Liste der verfügbaren Einstellungen für einen Drucker oder eine & PPD;-Datei?
+Schauen sie sich das Handbuch zum lpoptions Befehl an.Sie können damit über einen & CUPS; Rechner jede Einstellung der verfügbaren Drucker auslesen. Der Drucker muss nicht lokal angeschlossen sein. Solange der Drucker lokal verfügbar ist, kann auch auf Drucker von anderen Rechnern zugegriffen werden.
+Um Informationen über einen Drucker zu erhalten können sie beispielsweise lpoptions -p HitachiDDP70MicroPress -l eingeben. Sie erhalten dann eine lange Liste von Einstellungen, die aus der & PPD; Datei des Hitachi Druckers auf dem Server transmeta ausgelesen werden. Natürlich muss sowohl auf transmeta als auch auf ihrem eigenen Rechner & CUPS; aktiv sein.
+Wie lese ich die von lpoptions Befehl erhaltene Liste?
+Für & PostScript; Drucker ist es zulässig, dass die Hersteller eigene interne Namen und Prozeduren definieren. Dies gilt sogar für Standardeinstellungen von & PostScript;. Solange der Benutzer die Einstellungen von der & PPD; empfangen und verstehen kann ist dieses Verfahren in Ordnung. Was aber machen sie, wenn sie einige dieser speziellen Einstellungen von der Befehlszeile aus benutzen wollen? Wie finden sie den exakten Syntax?
+Nehmen wir ein Beispiel. Wir betrachten den DDP70 Drucker von Hitachi und schauen nach, wie dieser beidseitiges Drucken implementiert. Wie geben sie dem Drucker Anweisungen, dass er beidseitig drucken soll? Duplex oder duplex? Oder doch ein ganz anderer Befehl?
+lpoptions -h transmeta -p Hitachi_DDP70_ClusterPrintingSystem -l | grep uplex
+Durch diesen Befehl erhalten sie die Ausgabe
+TR-Duplex/Duplex: False *True
+Dies muss folgendermaßen interpretiert werden:
+Der Name der untersuchten Einstellung ist TR-Duplex;
+Hinter dem Schrägstrich sehen die die Übersetzung der Einstellung, die in einer & GUI; oder Webschnittstelle angezeigt werden soll (Duplex);
+Sie können eine der beiden werde einstellen (False oder True);
+Die momentane Einstellung ist True, was sie an dem Stern (*) erkennen.
+Wenn sie nun von der Standardeinstellung auf einseitigen Druck umstellen wollen müssen sie folgenden Befehl eingeben:
+lpr -P Hitachi_DDP70_ClusterPrintingSystem -o TR-Duplex=False /pfad/zu/dem/Auftrag
+Wie bekomme ich eine aufbereitete Liste der verfügbaren Optionen für einen Drucker oder eine & PPD;?
+Benutzen Sie den Befehl lphelp, der auf ihrem lokalen System installiert sein könnte. Bis jetzt gibt es allerdings noch keine Handbuchseite für lphelp.
+lphelp infotecP450
+Dies listet die verfügbaren Einstellungen für den genannten Drucker auf. Die Ausgabe ist formatiert und erklärt jede Einstellung und wie die Einstellungen benutzt werden. Sie können die Einstellungen von verschiedenen Druckern auch gemeinsam abfragen:
+lphelp infotec7410color DANKA_fullcolor_D2000 HP_ColorLaserJet8550
+Der Befehl funktioniert auch für & PPD; Dateien. Geben sie einfach den Pfad an:
+lphelp /home/kurt/PPDs/HP-ColorLaserJet8550.ppd
+Das Lösen von Problemen
+Kein System ist perfekt. Hier einige der häufigsten Fehler.
+Mein Drucker mit dem Namen 3-lp-duplex zeigt ein merkwürdiges Verhalten. Was mache ich falsch?
+Die Druckernamen in & CUPS; sollten mit einem Buchstaben anfangen und können bis zu 128 Buchstaben, Nummern und Unterstriche enthalten. Das Benutzen von Gedankenstrichen kann zu Problemen führen. Die Drucker in & CUPS; unterscheiden nicht zwischen Groß- und Kleinschreibung. Die Namen Best_of_Danka, best_of_danka, BEST_OF_DANKA beziehen sich alle auf denselben Drucker. Dieses Verhalten ist von & IPP; vorgegeben, an dessen Standard & CUPS; sich vollkommen hält.
+Warum bekomme ich die Meldung Unable to connect to SAMBA host: Success wenn ich auf einem & Windows; Rechner mittels Samba drucken will?
+Haben sie die richtigen Rechte auf dem & Windows; System? Haben sie überhaupt die Erlaubnis auf dem & Windows; System zu drucken?
+Meine Dateien für den Drucker lp verschwinden merkwürdigerweise manchmal, und nach drei Tagen wird mir dann mitgeteilt, dass die Dateien auf einem Drucker drei Etagen unter meinem Büro gedruckt wurden. Was geht da vor?
+Es ist sehr unwahrscheinlich, dass ihr Drucker in einem großen Netzwerk der einzige mit dem Namen lp ist. Vielleicht trickst & CUPS; sie aus. Wenn sie die Einstellung ImplicitClasses On aktiviert haben, versucht & CUPS; alle Drucker in eine gemeinsame Klasse mit dem Namen lp zu gruppieren. Alle Aufträge für lp werden dann an den ersten verfügbaren Drucker der Klasse geschickt.
+Benutzen sie bitte immer einen eindeutigen Namen für ihren Netzwerkdrucker! Bedenken sie, dass der Drucker am parallelen Anschluss auch zum Netzwerkdrucker wird, wenn sie nicht aufpassen.

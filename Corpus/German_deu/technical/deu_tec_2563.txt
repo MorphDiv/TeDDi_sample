@@ -1,0 +1,152 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Fragen und Antworten
+Fragen zur Einwahl
+Ich kann kppp nicht zum laufen bringen. kppp erz\xE4hlt mir, dass pppd beendet wurde oder dass eine Zeit\xFCberschreitung eingetreten ist!
+Haben Sie dieses Handbuch sorgf\xE4ltig gelesen?
+Hier sind nochmal die h\xE4ufigsten Fallen:
+Klicken Sie auf den Details -Knopf. kppp zeigt Ihnen dann einen Auszug aus dem PPP -Log (funktioniert evtl. nur auf Linux -System und nicht mit allen Distributionen).
+Diese Meldungen k\xF6nnen Ihnen Helfen, den Fehler zu finden.
+Stellen Sie sicher, dass pppd wirklich das pppd -Programm ist, und kein Skript!
+Das Programm pppd muss als setuid root ausgef\xFChrt werden.
+Stellen Sie sicher, das die Datei /etc/ppp/options existiert und keine widerspr\xFCchlichen Eintr\xE4ge enth\xE4lt.
+Falls Sie sich nicht sicher sind, lassen Sie diese Datei leer.
+Stellen Sie sicher, dass Sie NICHT den Parameter lock f\xFCr pppd angegeben haben (kppp k\xFCmmert sich bereit um die Ger\xE4tesperrung)!
+Entfernen Sie den ` ` lock''-Parameter aus den Dateien /etc/ppp/options und /.ppprc!
+Wenn Sie den symbolischen Link /dev/modem benutzen, kann das zu Konflikten f\xFChren.
+Verhindern Sie diese Art \xC4rger, indem Sie das reale Ger\xE4t verwenden, z.B. /dev/cuaX oder /dev/ttySX.
+Hinweis:
+COM1 ist ttyS0, COM2 ist ttyS1 usw.
+COM1 entspricht ttyS0, COM2 entspricht ttyS1 und so weiter.
+Stellen Sie sicher, dass Sie die richtigen Berechtigungen eingestellt haben.
+Im Fall von Problemen sollten Sie es vielleicht zuerst als root ausf\xFChren, und dann, wenn alles gut funktioniert, weniger gef\xE4hrliche Berechtigungen nehmen, wenn Sie es sich nicht leisten k\xF6nnen kppp mit root -Rechten laufen zu lassen.
+Die richtige Vorgehensweise w\xE4re vermutlich die Erzeugung einer eigenen modem -Gruppe.
+Eventuell starten Sie pppd zu fr\xFCh, z.B. bevor der entfernte Server bereit ist, eine PPP -Verbindung aufzubauen.
+Wenn Sie ein Login-Skript benutzen, sollten Sie das eingebaute Terminal benutzen, um Ihre Login-Prozedur zu \xFCberpr\xFCfen.
+Manche Provider erwarten von Ihnen ein einfaches Send oder Send ppp, um PPP zu starten.
+Einige Benutzer berichteten, dass Sie Pause 1 oder Pause 2 an Ihr Skript anh\xE4ngen mussten, um Timing-Probleme zu l\xF6sen.
+Wenn gar nichts hilft, sollten Sie evtl.
+Debug-Informationen aus Ihrem Systemlog erhalten, indem Sie folgendes eingeben:
+Das bedeutet, dass kppp keine Berechtigung hat, das Modemger\xE4t zu \xF6ffnen, oder dass Sie ein ung\xFCltiges Modemger\xE4t auf der Modem -Karteikarte gew\xE4hlt haben.
+Stellen Sie zun\xE4chst sicher, dass Sie das richtige Modemger\xE4t gew\xE4hlt haben.
+Wenn Sie sicher sind, dass dies der Fall ist, m\xFCssen Sie kppp die richtige Berechtigung geben, um auf das Modemger\xE4t zugreifen zu k\xF6nnen, und in der Lage zu sein, /etc/resolv.conf zu \xE4ndern, im Fall, dass Sie m\xF6chten, dass kppp den DNS richtig f\xFCr Sie einstellt.
+Falls Sie in der Lage sind, kppp als setuid root auszuf\xFChren, w\xFCrde das alle Zugriffsprobleme f\xFCr Sie l\xF6sen, wenn nicht, m\xFCssen Sie herausfinden, was die richtigen Berechtigungen f\xFCr Ihre Zwecke sind.
+Um kppp setuid root -Berechtigung zu geben, machen Sie Folgendes:
+kppp sagt mir, dass es keine Modemsperrung erzeugen kann.
+In den meisten F\xE4llen bedeutet das, dass Sie kppp mit gesetztem SETUID-Bit installiert haben, w\xE4hrend Sie, die Person, die kppp ausf\xFChrt, keine Schreiberechtigung f\xFCr das Sperrdateiverzeichnis haben, das standardm\xE4\xDFig /var/lock ist.
+Das ist zum Beispiel der Fall auf RedHat-Systemen.
+\xDCberpr\xFCfen Sie den Modem-Dialog nach der genauen Position der Sperrdatei.
+Die L\xF6sung ist einfach, entweder kppp SETUID laufen zu lassen, falls Sie k\xF6nnen, oder normalen Benutzern Schreibzugriff auf /var/lock zu gew\xE4hren oder eine modem-Gruppe zu erstellen, die Zugriff auf die /var/lock -Datei hat.
+Warum wird kppp mit gesetztem SETUID-Bit installiert?
+Das SETUID-Bit muss nicht gesetzt sein, wenn Sie sich ein bisschen mit Unix-Systemadministration auskennen.
+Erstellen Sie einfach eine Modemgruppe, f\xFCgen Sie alle Benutzer, denen Sie Zugriff auf das Modem gew\xE4hren wollen, dieser Gruppe hinzu und machen Sie das Modemger\xE4t les- und schreibbar f\xFCr diese Gruppe.
+Wenn Sie auch DNS-Konfiguration mit kppp benutzen wollen, muss /etc/resolv.conf les- und schreibbar von den Mitgliedern dieser Gruppe sein.
+Das gleiche gilt f\xFCr /etc/ppp/pap-secrets und /etc/ppp/chap-secrets, wenn Sie die eingebaute PAP- und CHAP-Unterst\xFCtzung benutzen wollen.
+Das kppp -Team hat in letzter Zeit sehr viel daran gearbeitet, um kppp SETUID-Sicher zu machen.
+Aber es liegt an Ihnen, ob und wie Sie es installieren.
+Was mache ich, wenn kppp nichts tut und nur mit der Meldung OK erwartet (Expecting OK) wartet?
+Haben Sie an der CR/LF-Einstellung herumgespielt?
+Probieren Sie CR, LF oder CR/LF.
+Ihr Modem braucht vielleicht einige Zeit, um auf seine Initialisierung zu antworten.
+\xD6ffnen Sie den Modembefehle-Dialog auf der Modem-Karteikarte und stellen Sie die Verz\xF6gerungen Pre-Init und Post-Init ein.
+Probieren Sie, ob Sie erfolgreich sind, wenn Sie die Werte drastisch senken und stellen Sie sie dann sp\xE4ter genauer ein.
+Der Verbindungsaufbau funktioniert gut, aber ich kann keine Programme starten.
+Sie haben vielleicht die Option "Konfiguriere Hostname automatisch von dieser IP" aktiviert und der X-Server hat Probleme zum neu eingestellten Hostnamen zu verbinden.
+Falls Sie diese Option wirklich ben\xF6tigen (wahrscheinlich eher nicht), m\xFCssen Sie auf eigene Faust die n\xF6tigen Authorisationen einstellen.
+Eingabe von "xhost +" l\xF6st das Problem, aber seien Sie gewarnt vor Sicherheitsrisiken, die sich daraus ergeben, da dann jeder Zugang zu Ihrem X-Server hat.
+Versuchen Sie, mit ping einen anderen Server \xFCber seine IP -Adresse, zu erreichen, ping 195.0.254.76.
+Wenn das funktioniert, sollten Sie das Folgende versuchen:
+Pr\xFCfen Sie, ob Sie f\xFCr kppp mindestens eine DNS -Adresse angegeben haben.
+den Inhalt von /etc/host.conf pr\xFCfen.
+Es sollte eine Zeile vorhanden sein, in der etwas \xE4hnliches wie order hosts, bind steht.
+Der bind -Schl\xFCsselbegriff sagt der resolver-Bibliothek, dass sie einen Nameserver einbinden soll, wenn Sie eine Adresse sucht.
+Wie kann man \xFCber kppp ein \n oder ein \r senden?
+Schicken Sie einfach eine leere Zeichenfolge, so wie im folgenden Skript:
+Wie kann man die Fehlermeldung Kann Sperrdatei nicht erzeugen (Can't create lock file von kppp beseitigen?
+Das bedeutet, dass Sie keine Berechtigung haben, eine Sperrdatei zu erzeugen.
+Wenn Sie eine Sperrdatei benutzen wollen, m\xFCssen Sie Schreibrechte in dem Verzeichnis haben, indem die Datei erzeugt werden soll (typischerweise /var/lock).
+Das ist nat\xFCrlich kein Problem, wenn Sie kppp SETUID-Berechtigung gegeben haben.
+Lesen Sie bitte den Abschnitt \xFCber die Modem-Sperrdatei.
+Warum macht mein Modem beim W\xE4hlen gro\xDFen L\xE4rm?
+Klicken Sie auf Einstellungen/Modem Sie k\xF6nnen die Lautst\xE4rke des Modems hier in drei Schritten einstellen: aus, mittel, gro\xDF.
+Bei den meisten Modems bekommen Sie die gleiche Lautst\xE4rke f\xFCr "mittel" und "gro\xDF".
+Falls das nicht funktioniert, stellen Sie sicher, dass Sie die richtigen Einstellungen in Einstellungen/Modem/Modembefehle eingestellt haben "
+Ich habe die Modemlautst\xE4rke ausgeschaltet und die Modembefehle \xFCberpr\xFCft.
+Warum h\xF6re ich immer noch W\xE4hlger\xE4usche?
+Die Zeichenkette zur Initialisierung der Lautst\xE4rke kann verloren gehen, wenn das Modem nicht mit der \xDCbertragungsgeschwindigkeit von kppp zurechtkommt.
+In diesem Fall sollte man den Wert in Post-Init Verz\xF6gerung unter Einstellungen, Modem, Modembefehle erh\xF6hen.
+kppp meldet ungew\xF6hnliche Modemgeschwindigkeiten, wie 115200, 57600 oder \xC4hnliches.
+Viele Modems melden standardm\xE4\xDFig nur die Geschwindigkeit der seriellen Schnittstelle und nicht die Geschwindigkeit \xFCber die Telefonleitung.
+Sie m\xFCssen diese Modem erst so einstellen, dass Sie die wirkliche Daten\xFCbertragungsgeschwindigkeit melden (f\xFCgen Sie dies dem Init- oder W\xE4hlstring bei).
+Bei vielen Modems ist der Befehl ATW2.
+Wenn Sie dies dem W\xE4hlstring (typischerweise ATD) beif\xFCgen wollen, w\xE4re der neue W\xE4hlstring ATW2D.
+Warum meldet kppp Unbekannte Geschwindigkeit (Unknown speed)?
+Neue Modems haben oft komplizierte Verbindungsmeldungen wie "CONNECT LAP.M/V42.bis/115000:RX/31200:TX", und kppp kann die Nachrichten nicht korrekt behandeln.
+Schalten Sie Zeige Log-Fenster ein, und Sie werden die Verbindungsgeschwindigkeit sehen.
+Ich arbeite gerade an einer L\xF6sung dieses Problems, und der Parser ist schon viel besser, aber immer noch nicht perfekt.
+Die \xDCbertragungsgeschwindigkeit ist langsam.
+Wenn Sie mit der Modemgeschwindigkeit nicht zufrieden sind, stellen Sie sicher, dass die Verbindungsgeschwindigkeit (Einstellungen/Ger\xE4t/Geschwindigkeit) auf 57600 oder h\xF6her eingestellt ist.
+Stellen Sie sicher, dass Ihre serielle Schnittstelle h\xF6here Geschwindigkeiten unterst\xFCtzt.
+Viele auf i486 basierende Systeme arbeiten nicht korrekt, wenn die Geschwindigkeit auf 115200 eingestellt ist.
+Wenn Sie einen 8250 UART Chip haben, wird es nicht funktionieren.
+Wenn Sie einen 16550 oder 16550A haben, sollte es problemlos funktionieren.
+Schauen Sie zus\xE4tzlich in Ihrem Modem-Handbuch nach Init-Strings, die den Hochgeschwindigkeit-Modus aktivieren.
+Die \xDCbertragungsgeschwindigkeit ist sehr langsam.
+Wenn die Daten\xFCbertragungsrate nur ein paar Byte pro Sekunde betr\xE4gt, sollten Sie Ihre Hardware-Einstellungen \xFCberpr\xFCfen.
+Falls Bewegungen der Maus die Daten\xFCbertragung beschleunigen, ist das auf jeden Fall ein Hardwareproblem.
+Sie erhalten Informationen \xFCber Ihre serielle Schnittstelle mit setserial -a /dev/ttySx.
+Schauen Sie nach Interrupt-Konflikten mit anderen Komponenten Ihres Systems.
+Meine Telefonleitung benutzt das Impuls- anstatt das Tonwahlverfahren (oder umgekehrt).
+Wie kann ich die Einstellung \xE4ndern?
+Sie m\xFCssen den Modem-W\xE4hlstring ver\xE4ndern.
+Fast alle Modems unterst\xFCtzen die folgenden AT-Befehle:
+ATDT
+Aktiviert das Tonwahlverfahren
+ATDP
+Aktiviert das Impulswahlverfahren
+Fragen \xFCber Telefongeb\xFChren-Regeln
+Wie erstelle ich eine Telefongeb\xFChren-Regeldatei?
+Sehen Sie sich die TEMPLATE -Regeldatei, die bei kppp dabei ist, an.
+Sie sollten eine Kopie davon in $KDEDIR/doc/HTML/en/kppp finden.
+Benutzen Sie den Kommandozeilen-Parameter -r von kppp, um die Syntax Ihrer Geb\xFChrenregel-Datei zu \xFCberpr\xFCfen.
+Ich habe eine Geb\xFChrenregel-Datei f\xFCr meine Region geschrieben.
+Wem kann ich sie schicken, so dass auch andere sie nutzen k\xF6nnen?
+Kann meine Telefongeb\xFChren-Regeldatei Bruchteile einer Zeiteinheit enthalten, z.B. "(0.17,45.5)"?
+Ja, das ist m\xF6glich.
+Aber Sie sollten kein ungew\xF6hnlich kleinen Bruchteile benutzen (unter einer 1/10 Sekunde), da dies in einer h\xF6heren CPU -Belastung resultieren w\xFCrde. (Obwohl ich nicht glaube, dass Sie das bei einer modernen CPU bemerken w\xFCrden.:-)
+Mein Land hat au\xDFer Ostern noch weiter verschiebbare Feiertage.
+In diesem Fall m\xFCssen Sie neuen Code schreiben, der Ihnen die Berechnung dieses Feiertags erm\xF6glicht.
+Sehen Sie in ruleset.cpp nach und imitieren Sie das ` ` easter''-Beispiel.
+Dann senden Sie mir die Patches.
+Fragen zu den System-Logdateien
+Eine Meldung besagt Serial line is looped back.
+Was bedeutet das?
+Kurze Antwort:
+Sie haben die PPP -Software auf dem entfernten System nicht gestartet.
+Die Logdateien zeigen Signal 15.
+Wenn Sie die folgenden Zeilen sehen, haben Sie evtl. gerade einen Fehler wegen Zeit\xFCberschreitung von kppp erhalten. kppp hat darauf gewartet, dass das PPP -Interface startete, und hat dann nach einer bestimmten Zeit aufgegeben.
+Dem pppd wurde mit dem Signal 15 (i.A.
+SIGTERM) signalisiert, abzubrechen.
+Was bedeutet Receive serial link is not 8-bit clean?
+Der PPP -D\xE4mon wurde misstrauisch, da alle empfangenen Daten das Bit 8 auf Null gesetzt hatten.
+In den meisten F\xE4llen zeigt das an, dass der entfernte PPP -Server noch nicht gestartet ist.
+Es wird dort vielleicht immer noch einen Anmeldeprompt geben, der alle Daten, die von Ihrem pppd gesendet wurden, zur\xFCcksendet.
+Was bedeutet can't locate module ppp-compress?
+Bekommen Sie folgende Nachrichten?
+F\xFCgen Sie einfach diese Zeilen
+zu Ihrer Datei /etc/conf.modules hinzu.

@@ -1,0 +1,96 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Éric Bischoff
+ROLES_OF_TRANSLATORS
+2006-05-05 0.05.01
+KDE
+KTuberling
+technical reference
+Technical References
+& ktuberling; offers a gentle and rewarding introduction to & kde; customization and programming. The application can be extended. For example, without any coding, new playgrounds can be added by changing the graphics files. By adding appropriate sound files, translators can change the sounds to their native tongue!
+If you extend or add to the game please consider sending your additions to the developer Albert Astals Cid for inclusion in future releases.
+For Artists
+To create a new KTuberling playground you have to:
+Draw the playground in a SVG file, there you have to:
+Name the place where items can dragged "background".
+Name each of the draggable items with an unique name.
+Create a. theme file, it has to follow this schema:
+& lt; playground gameboard= "yourSVGFile" name= "theDesktopFile" gt; & lt; object name= "itemName" sound= "soundName" scale= "someValue" / gt;......... & lt; /playgroundgt;
+yourSVGFile is the name of the svg file that has the drawing.
+theDesktopFile is the name of the desktop file that has the name of the theme.
+For each object you need a & lt; objectgt; entry. itemName is the unique name you used on the SVG file, soundName is the sound name that will be played when dragging it, see sound themes howto for more information.
+scale is optional and someValue is the scale factor that will be used when drawing this object outside the warehouse, if not specified is 1.
+Create a. desktop file, it has to follow this schema
+[KTuberlingTheme] Name= themeName
+themeName is the name that identifies the theme, will be shown in the Playground menu.
+If you are adding the theme to KTuberling SVN, add. svg. theme. desktop files to FILES section of the CMakeLists. txt in the pics/ directory
+If you want to install it for yourself, place. svg. theme. desktop files in ` kde4-config --prefix`/ share/ apps/ ktuberling/ pics
+For Translators
+Besides the usual. po files mechanism for translating program labels and prompts, the sounds can be localized too.
+To create a new KTuberling sound theme you have to:
+Record the sounds in OGG Vorbis rc3 file format.
+Create a yourLanguageTwoLetterCode. soundtheme file, it has to follow this schema:
+& lt; language code= "yourLanguageTwoLetterCode" gt; & lt; sound name= "soundName" file= "relativePath" / gt;......... & lt; /languagegt;
+yourLanguageTwoLetterCode is your language two letter code, for example gl for Galician.
+For each sound a & lt; soundgt; entry. soundName should match with the soundName specified in the playground theme (see themes HOWTO). relativePath should be the relative path you are going to install the file with this sound to, typically it will be someUniquePath/ soundName. format (someUniquePath can be your language two letter code for example).
+If you are adding the sound theme to KTuberling SVN:
+Add the sound files and the. soundtheme files to the data/ kdegames/ ktuberling directory of your language translations.
+On that very same dir you need a CMakeLists. txt describing how to install the files, typically it will be.
+FILE(GLOB datafiles *. ogg) install( FILES ${datafiles} DESTINATION ${DATA_INSTALL_DIR}/ ktuberling/ sounds/ yourLanguageTwoLetterCode) install( FILES yourLanguageTwoLetterCode. soundtheme DESTINATION ${DATA_INSTALL_DIR}/ ktuberling/ sounds/)
+If you want to install it for yourself:
+Place yourLanguageTwoLetterCode. soundtheme file in ` kde4-config --prefix`/ share/ apps/ ktuberling/ sounds
+Place yourSoundFiles in ` kde4-config --prefix`/ share/ apps/ ktuberling/ sounds/ someUniquePath
+Information on how to work with the translation mechanisms in & kde; is available in The & kde; Translation HOWTO.
+For Programmers
+& ktuberling; is n't really difficult to extend for programmers.
+C++ classes
+TopLevel
+Top-level window and basic program management
+PlayGround
+Description of one of the game levels
+ToDraw
+Description of one of the graphical objects to be drawn
+SoundFactory
+Description of one of the languages and its sounds
+Action
+One of the user's manipulation in the undo/ redo stack
+The size and shape of the playground and the number of objects can be changed. New playgrounds can be added. Only two image files need to be created for each playground: a gameboard and a mask. A maximum of 8 playgrounds is allowed, out of which only 3 are currently used.
+Six images are used in & ktuberling;: potato-game. png, potato-mask. png, penguin-game. png, penguin-mask. png, aquarium-game. png and aquarium-mask. png. The standard location for these files is the folder $KDEDIR/ share/ apps/ ktuberling/ pics/.
+The first type of images, *-game. png holds the playground and the objects that the user selects. This is the graphic that the user sees when playing the game.
+The second type of images, *-mask. png, contains only masks of the objects. The masks are used to delimit the borders of the objects and, in some cases, give the object some transparency (for example, the spectacles). It is mandatory to put the objects at the same position in the gameboard file as in the mask file.
+In the same folder, a file named layout. xml. ($KDEDIR/ share/ apps/ ktuberling/ pics/ layout. xml) tells which images to use and links them to menu entries. It also contains the position parameters of the playground and the objects in the gameboard and in the masks. It assigns the sounds to objects and places the objects in groups. It finally declares languages as sets of translated sounds. It follows standard & XML; syntax (see details below).
+Still in the same folder, a file named layout. i18n ($KDEDIR/ share/ apps/ ktuberling/ pics/ layout. xml) recapitulates the strings in layout. xml that can be translated:
+The menu entries that allow to choose the playground and the language
+The names of the categories of objects
+One folder above, a file named ktuberlingui. rc ($KDEDIR/ share/ apps/ ktuberling/ ktuberlingui. rc) is a second & XML; file describing the menus of & ktuberling;. It should contain one lt; actiongt; tag per playground and language. The symbolic name of the action in this file should be identical to the symbolic name of the action in layout. xml.
+If the various translators can record their voice to a. wav file, they can store that file to the language-specific subfolder of the sounds folder. The name of the sound is then assigned to a file in the layout. xml file. For example, if destination language is Italian, translators can record their voice in. wav files located in $KDEDIR/ share/ apps/ ktuberling/ sounds/ it. Then they can assign the sound named hat to the filename it/ cappello. wav.
+In a future release, & ktuberling; will use OGG Vorbis rc3 file format for sounds. At that moment, it will be possible to convert the WAV files to OGG Vorbis rc3 through the following command line:
+$oggenc -q 10 -o sound. ogg sound. wav
+. tuberling files structure
+A. tuberling file holds all the necessary data to redraw a tuberling. It can be edited with an ordinary text editor.
+The first line holds the number of the playground.
+On all other lines, there is one graphical object per line, in the order that is used to draw them. Each line contains 5 numbers: the identifier of the object, and the rectangle where it should be drawn (left, top, right, bottom). The numbers are separated by whitespaces.
+Structure of the layout file (layout. xml)
+The top-level tag is unique and is named lt; ktuberlinggt;. It contains several lt; playgroundgt; tags, one per playground, and several lt; languagegt; tags, one per language.
+The lt; playgroundgt; tag has two attributes: gameboard and masks. These attributes give the name of the files holding the pictures. The lt; playgroundgt; tag also contains one lt; menuitemgt; tag, one lt; editableareagt; tag, several lt; categorygt; tags, and several lt; objectgt; tags.
+The lt; menuitemgt; tag describes the action identifier of the menu item allowing to select position of the area where you can drop objects, and the label of this menu item. This action identifier should be identical to the one in ktuberlingui. rc.
+The lt; editableareagt; tag describes the position of the area where you can drop objects, and the name of the sound associated with it.
+The lt; categorygt; tag describes the position and the label of a text describing a group of objects. For example, it can describe the position and the text of the group of goodies.
+The lt; objectgt; tag describes the position (in the gameboard and in the masks) of an object, as well as the name of the sound associated with it.
+The lt; languagegt; tag has one attribute: code This attribute give the code of the locale for that language. The lt; languagegt; tag also contains one lt; menuitemgt; tag and several lt; soundgt; tags.
+The lower level tags are not explained here, since their meaning is quite straightforward. If you modify layout. xml, do n't forget to modify layout. i18n and ktuberlingui. rc accordingly.

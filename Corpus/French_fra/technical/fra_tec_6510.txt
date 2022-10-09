@@ -1,0 +1,182 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	2014
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Le guide rapide pour optimiser les programmes GNOME
+Voici une brève introduction à l'optimisation, à la fois le comment et le pourquoi. Les détails des divers outils et techniques sont laissés pour des articles à venir, mais nous donnerons ici un ensemble de trucs et astuces.
+Qu'optimisons nous ?
+Quand nous optimisons pour GNOME, voici une première chose dont il faut se souvenir : nous ne tentons pas d'améliorer un programme, nous essayons de mieux satisfaire l'utilisateur.
+Meilleur est le programme, plus les gens sont satisfaits, mais il est des améliorations qui les satisfont plus que d'autres : réactivité, temps de démarrage, facilité d'accès aux commandes et le fait de ne pas avoir l'ordinateur qui utilise la mémoire virtuelle dès que plus de deux programmes sont ouverts.
+Une optimisation traditionnelle s'attaque à des concepts comme l'utilisation de la CPU, la taille du code, le nombre de clics de souris et la mémoire utilisée par le programme. Cette deuxième énumération est corrélée avec celle de l'alinéa précédent, cependant il y a une différence importante : l'utilisateur de GNOME ne se soucie absolument pas des critères de cette deuxième énumération, mais beaucoup plus de ceux de la première. En optimisant les programmes GNOME, nous réduisons l'utilisation de la CPU, de la mémoire et beaucoup d'autres choses, mais ce sont des aboutissements et non des finalités. Nous optimisons pour les personnes.
+Réalisation d'une optimisation
+Le paragraphe précédent a omis de citer un qualifiant important : on ne peut optimiser que ce qui est mesurable. La satisfaction n'est pas quantifiable. Mais, vous pouvez mesurer un temps de démarrage et dire si vous l'avez amélioré. Nous avons quelques espoirs qu'une satisfaction s'ensuive.
+L'optimisation est le processus qui consiste à mesurer, affiner et mesurer à nouveau. Donc la première chose à faire est de trouver une mesure de ce que vous optimisez. L'idéal est que cette quantité soit représentée par un chiffre unique, par exemple : le temps nécessaire à la réalisation d'une tâche. Cette mesure constitue le test d'évaluation, elle est l'unique moyen de dire si vous êtes gagnant ou perdant. La différence est énorme entre un programme qui
+Une fois que vous avez un point de référence, il faut savoir pourquoi le code ne fonctionne pas aussi bien qu'il le devrait. Il est tentant de le faire par inspection : en regardant simplement le code pour essayer de repérer quelque chose d'améliorable. Vous serez invariablement dans l'erreur. La seule façon d'être sûr est d'utiliser un profileur pour obtenir la décomposition détaillée de ce que votre programme fait réellement.
+Habituellement vous cernerez les problèmes dans de petites portions de code. Repérez la pire et centrez votre attention d'abord sur elle. Quand vous avez terminé, relancez le profileur et recommencez. À mesure que vous avancez, les progrès réalisés à chaque étape sont de plus en plus faibles, jusqu'au moment où vous aurez à décider si les résultats sont assez bons. Si vos efforts aboutissent à ne serait-ce que 10 % d'améliorations, alors vous êtes bien au delà du point où vous auriez pu vous arrêter.
+Ayez une vue d'ensemble. Par exemple, plutôt que d'essayer de rendre plus rapide un morceau du code, demandez-vous plutôt s'il doit être exécuté. Peut-il être combiné avec une autre partie de code ? Les résultats de calculs antérieurs peuvent-ils être sauvegardés et réutilisés ? Ce code a-t-il même besoin d'être optimisé, s'il est à un endroit où l'utilisateur ne va jamais le parcourir ? Pire encore, le code peut déjà avoir été optimisé et effectuer maintenant des calculs lourds pour éviter d'avoir à les faire plus tard. Un morceau de code ne s'exécute pas isolément, pas plus que le processus d'optimisation.
+Conseils pratiques
+Les Fondamentaux
+Relancez le test de performance après chaque changement apporté au code ; gardez un journal de toutes les modifications en notant la manière dont elles affectent le test de performance. Procéder ainsi vous permet d'annuler les erreurs et vous aide à ne pas les répéter.
+Assurez vous que le code est correct et ne contient pas de bogues avant de l'optimiser. Vérifiez qu'il est toujours correct et sans bogues après optimisation.
+Optimisez au général avant d'optimiser les détails.
+Utilisez le bon algorithme. L'exemple classique des ouvrages est de conseiller l'utilisation d'un tri rapide plutôt qu'un tri à bulle. Il en existe beaucoup d'autres, certains économisent la mémoire, d'autres la CPU. Également, voyez quels sont les raccourcis possibles : vous pouvez faire plus rapide que le tri rapide si vous êtes prêt à quelques compromis.
+L'optimisation est un arbitrage. Mettre en cache des résultats accélère les calculs, mais augmente l'utilisation de la mémoire. Enregistrer les données sur disque économise la mémoire, mais prend plus de temps quand il faut les rappeler.
+Mettez en concurrence les optimisations sur un large éventail d'entrées. À défaut, il est courant de se retrouver avec une portion de code soigneusement optimisée pour un fichier donné et pas les autres.
+Évitez des opérations coûteuses : la multiplication de petites lectures sur les disques, l'utilisation de grosses quantités de mémoire qui nécessitent l'emploi de la mémoire virtuelle, les écritures ou lectures inutiles sur disque dur. Le réseau est également lent. Évitez aussi les opérations graphiques qui ont besoin d'une réponse du serveur X.
+Pièges pour imprudents
+Méfiez-vous des effets collatéraux. Il y a souvent d'étranges interactions entre diverses parties du code, l'accélération d'une partie peut ralentir l'autre.
+Pendant le chronométrage du temps, même sur un système peu chargé, les événements en dehors du programme ajoutent du bruit au résultat. Moyennez-les sur plusieurs exécutions. Si le code est très court, la résolution du chronomètre peut devenir aussi un problème. Dans ce cas, mesurez le temps que l'ordinateur met pour exécuter le code 100 ou 1000 fois. Si le temps que vous enregistrez est plus long que quelques secondes, cela devrait être correct.
+Il est très facile d'être induit en erreur par le profileur. On raconte des histoires de personnes optimisant la boucle d'attente du système d'exploitation parce que c'est là que l'ordinateur passait tout son temps ! N'optimisez pas le code des choses dont l'utilisateur n'a rien à faire.
+N'oubliez pas les ressources sur le serveur X. Le décompte de la mémoire utilisée par votre programme ne comprend pas les images
+Conseils niveau système
+Quand vous optimisez l'utilisation de la mémoire, faites la différence entre usage de crête et usage moyen. Que de la mémoire soit allouée de manière pratiquement permanente est en règle générale mauvais. Que de la mémoire soit allouée sur de brèves périodes est tout à fait acceptable . Des outils comme
+Chronométrez des portions de code simplifiées qui n'exécutent que les choses que vous savez être essentielles ; vous obtiendrez ainsi une limite inférieure absolue du temps que votre code prendra. Par exemple, pour optimiser une boucle, chronométrez la boucle d'attente. Si elle est encore trop longue, les micro-optimisations, aussi nombreuses soient-elles, ne vous seront d'aucun secours : vous devez modifier votre conception. Assurez-vous que le compilateur n'a pas optimisé par ailleurs votre boucle d'attente.
+Déplacez le code en dehors des boucles. Une portion de code légèrement plus complexe exécutée une seule fois est beaucoup plus rapide qu'une portion de code simple exécutée une centaine de fois. Évitez d'appeler trop souvent du code lent.
+Utilisez toutes les astuces possibles avec le compilateur. Servez-vous du mot-clé
+N'utilisez pas le langage assembleur. Il n'est pas portable et, quand il est plus rapide sur un processeur, ce n'est pas garanti qu'il le soit sur tous les processeurs qui supportent cette architecture (par ex. Athlon versus Pentium 4).
+Ne réécrivez pas une routine existante de bibliothèque, à moins d'être sûr qu'elle est inutilement lente. Beaucoup de routines de bibliothèques utilisant intensivement la CPU ont déjà été optimisées. Inversement, certaines routines de bibliothèque sont lentes, en particulier celles faisant appel au système d'exploitation.
+Minimisez le nombre de bibliothèques auxquelles vous liez votre code. Moins il y a de bibliothèques à lier, plus le programme se lancera rapidement. Ce n'est pas facile à faire avec GNOME.
+Astuces niveau abstractions
+Utilisez la concomitance. Ce conseil ne vise pas uniquement la simultanéité des processus multiples, mais le fait qu'il faut mettre à profit le temps que l'utilisateur passe à réfléchir à ses actions futures pour anticiper quelques calculs. Faites des opérations en attendant le chargement des données disque. Exploitez la multiplicité des ressources, utilisez-les toutes ensemble.
+Trichez. L'utilisateur doit imaginer un ordinateur rapide, aucune importance qu'il le soit effectivement ou non. L'important est le délai entre commande et réponse ; peu importe que la réponse soit calculée par avance, en cache ou mise au point plus tard à un moment plus opportun pourvu que l'utilisateur obtienne ce qu'il attend.
+Faites quelque chose pendant la boucle d'attente. C'est plus facile à programmer qu'une pleine utilisation de processus multiples, mais faites toujours faire les choses hors de la vue de l'utilisateur. Attention cependant, si vous passez trop de temps dans la boucle d'attente, votre programme deviendra mollasson. Donc, redonnez régulièrement le contrôle à la boucle principale.
+Si tout ce qui précède échoue, avouez à l'utilisateur que le code est lent et programmez une barre de progression. Ils ne seront pas aussi satisfaits que par la présentation des résultats, mais ils sauront au moins que le programme ne s'est pas arrêté brutalement et qu'ils peuvent aller chercher une tasse de café.
+@@image: 'figures/massif-before.png'; md5=1a6b2ace548e6789ab8bfacb3727b345
+@@image: 'figures/massif-after.png'; md5=36d1b4ad7ab49b28b69ad3eabbaa7069
+Utilisation de
+Ce chapitre décrit comment utiliser le profileur du tas mémoire
+Introduction
+
+Le tas est une zone mémoire dans laquelle des fonctions comme
+
+Utilisation de
+
+Il est également utile d'indiquer à
+Votre ligne de commande devrait par conséquent ressembler à quelque chose comme :
+valgrind --tool=massif --depth=5 \\
+ --alloc-fn=g_malloc \\
+ --alloc-fn=g_realloc \\
+ --alloc-fn=g_try_malloc \\
+ --alloc-fn=g_malloc0 \\
+ --alloc-fn=g_mem_chunk_alloc \\
+ same-gnome
+
+Interprétation des résultats
+La sortie graphique de
+Le fichier texte est constitué de paragraphes hiérarchisés, avec en tête de liste les utilisateurs de mémoire les plus gourmands rangés en ordre décroissant d'espace*temps. Au dessous se trouvent d'autres paragraphes ; chacun analyse les résultats de plus en plus finement au fur et à mesure que vous vous enfoncez dans les profondeurs de la pile des appels de fonctions. Pour illustrer cela, nous utiliserons la sortie de la commande précédente.
+Sortie
+La
+En haut du graphique, est affichée une grande bande jaune étiquetée
+Command: ./same-gnome 
+
+== 0 ===========================
+Heap allocation functions accounted for 90.4% of measured spacetime
+
+Called from:
+ 28.8% : 0x6BF83A: gdk_pixbuf_new (in /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+
+ 6.1% : 0x5A32A5: g_strdup (in /usr/lib/libglib-2.0.so.0.400.6)
+
+ 5.9% : 0x510B3C: (within /usr/lib/libfreetype.so.6.3.7)
+
+ 3.5% : 0x2A4A6B: __gconv_open (in /lib/tls/libc-2.3.3.so)
+Le numéro dans la ligne avec les signes « = » indique la profondeur d'imbrication dans la pile des appels de fonctions où nous nous trouvons ; dans notre cas, nous sommes au sommet. Suit la liste des utilisateurs d'espace*temps mémoire du plus gourmand au moins gourmand. L'espace*temps mémoire représente la quantité de mémoire occupée multipliée par le temps d'utilisation. Il correspond à la surface des bandes sur le graphe. Cette première partie du fichier texte confirme ce que nous savions déjà : le gros de l'espace*temps est occupé par
+== 4 ===========================
+Context accounted for 28.8% of measured spacetime
+ 0x6BF83A: gdk_pixbuf_new (in /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+ 0x3A998998: (within /usr/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-png.so)
+ 0x6C2760: (within /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+ 0x6C285E: gdk_pixbuf_new_from_file (in /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+
+Called from:
+ 27.8% : 0x804C1A3: load_scenario (same-gnome.c:463)
+
+ 0.9% : 0x3E8095E: (within /usr/lib/libgnomeui-2.so.0.792.0)
+
+ and 1 other insignificant place
+La première ligne indique que nous nous trouvons au quatrième niveau dans la profondeur de pile. Au dessous, suit une liste des appels de fonctions menant de ce point à
+Maintenant que nous connaissons la partie du code qui utilise tout l'espace*temps mémoire, nous pouvons l'examiner et rechercher pourquoi. Il s'avère que
+Modification des résultats
+Réduire la consommation d'espace*temps mémoire est une bonne chose, mais il y a deux façons de faire et elles ne sont pas égales. Vous pouvez, soit réduire la quantité de mémoire allouée, soit réduire la durée d'allocation. Considérons un instant un système théorique avec uniquement deux processus en cours. Ces deux processus utilisent tous deux pratiquement la totalité de la mémoire RAM physique ; s'ils se superposent pleinement, alors le système va utiliser la partition de mémoire virtuelle et tout va ralentir. Il est évident que, si nous divisons par deux la quantité de mémoire utilisée par chaque processus, ils peuvent paisiblement coexister sans avoir besoin de l'utiliser. Si, au lieu de cela, nous divisons par deux les durées d'allocation mémoire, les deux programmes peuvent coexister, toujours sans virtualiser la mémoire, mais uniquement tant que leurs périodes d'utilisation de la mémoire haute ne se chevauchent pas. Réduire la quantité de mémoire allouée est donc préférable.
+Hélas, les choix d'une optimisation sont également contraints par les besoins du programme. La taille des données de l'image
+Sortie
+L'espace*temps utilisé par
+Pouvons-nous faire mieux ? Un examen rapide de la sortie texte de
+Command: ./same-gnome 
+
+== 0 ===========================
+Heap allocation functions accounted for 87.6% of measured spacetime
+
+Called from:
+ 7.7% : 0x5A32A5: g_strdup (in /usr/lib/libglib-2.0.so.0.400.6)
+
+ 7.6% : 0x43BC9F: (within /usr/lib/libgdk-x11-2.0.so.0.400.9)
+
+ 6.9% : 0x510B3C: (within /usr/lib/libfreetype.so.6.3.7)
+
+ 5.2% : 0x2A4A6B: __gconv_open (in /lib/tls/libc-2.3.3.so)
+Si nous regardons de plus près, nous voyons qu'il est appelé en de très, très nombreux endroits.
+== 1 ===========================
+Context accounted for 7.7% of measured spacetime
+ 0x5A32A5: g_strdup (in /usr/lib/libglib-2.0.so.0.400.6)
+
+Called from:
+ 1.8% : 0x8BF606: gtk_icon_source_copy (in /usr/lib/libgtk-x11-2.0.so.0.400.9)
+
+ 1.1% : 0x67AF6B: g_param_spec_internal (in /usr/lib/libgobject-2.0.so.0.400.6)
+
+ 0.9% : 0x91FCFC: (within /usr/lib/libgtk-x11-2.0.so.0.400.9)
+
+ 0.8% : 0x57EEBF: g_quark_from_string (in /usr/lib/libglib-2.0.so.0.400.6)
+
+ and 155 other insignificant places
+Nous voila maintenant confrontés à la diminution du rendement de nos efforts d'optimisation. Le graphique suggère une autre approche possible : les deux bandes
+Avertissements
+Il faut faire attention à deux choses : d'une part, la quantité espace*temps est uniquement restituée en pourcentage ; il faut la rapporter à la taille globale du programme pour décider si la quantité de mémoire mérite une optimisation. L'axe vertical du graphique, gradué en kilo-octets, vous aidera à prendre cette décision.
+D'autre part,
+Effets dommageables des recherches sur disque
+La recherche sur disque est une des opérations les plus coûteuses que vous puissiez peut-être réaliser. Vous pouvez ne pas le savoir à partir de l'examen du décompte des recherches effectuées, mais croyez-moi, elles sont coûteuses. Par conséquent, abstenez-vous des piètres comportements ci-après :
+disperser nombre de petits fichiers un peu partout dans le disque,
+ouvrir, inspecter et lire beaucoup de fichiers partout sur le disque.
+exécuter les opérations précédentes sur des fichiers montés à plusieurs reprises, comme pour s'assurer de leur fragmentation et provoquer des recherches encore plus coûteuses,
+exécuter les opérations précédentes sur des fichiers situés dans des répertoires différents, comme pour s'assurer qu'ils soient dans des groupes de pistes différents et provoquer des recherches encore plus coûteuses,
+faire les opérations précédentes plusieurs fois alors qu'on aurait pu se contenter d'une.
+Voici des conseils pour optimiser votre code pour des recherches optimales :
+rassemblez les données dans un seul fichier,
+gardez l'ensemble des données dans un même répertoire,
+mettez en cache les données afin de ne pas avoir à les relire constamment,
+partagez les données afin de ne pas avoir à les relire à partir du disque à chaque chargement de l'application,
+envisagez la mise en cache de toutes les données dans un fichier binaire unique, bien aligné et qui peut être mappé.
+Le problème de la recherche sur disque est aggravé dans le cas des lectures, qui est malheureusement ce que nous faisons. N'oubliez pas, les lectures s'effectuent en règle générale de manière synchrone tandis que les écritures s'effectuent de manière asynchrone. Ce seul fait complique le problème : sérialiser chaque lecture contribue à la latence du programme.
+Optimisation d'un logiciel GNOME
+Projet de Documentation GNOME
+2004-2005
+Callum McKenzie
+Robert Love
+Callum
+McKenzie
+Robert
+Love
+Permission vous est donnée de copier, distribuer et/ou modifier ce document selon les termes de la
+La plupart des noms utilisés par les entreprises pour distinguer leurs produits et services sont des marques déposées. Lorsque ces noms apparaissent dans la documentation GNOME et que les membres du projet de Documentation GNOME sont informés de l'existence de ces marques déposées, soit ces noms entiers, soit leur première lettre est en majuscule.
+0.1
+Novembre 2007
+William Johnston
+Conversion initiale au format docbook.
+Un logiciel peut être optimisé de plusieurs façons : pour la vitesse, la taille du programme ou l'utilisation de la mémoire. Cette section contient conseils et tutoriels pour optimiser les logiciels.
+Nicolas Repentin <nicolas\.repentin\@gmail\.com>, 2009
+Gérard Baylard <Geodebay\@gmail\.com>, 2010
+Bruno Brouard <annoa\.b\@gmail\.com>, 2010

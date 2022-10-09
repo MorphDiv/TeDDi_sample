@@ -1,0 +1,64 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+& DCOP; Functions
+
+ROLES_OF_TRANSLATORS
+& DCOP; can be called in several ways in & kommander;. First is the console method
+dcop kmdr-executor-@pid KommanderIf changeWidgetText myWidget new text
+This assumes you are inside a & kommander; file and have access to the special @pid which contains the process ID. In fact it is simpler to replace kmdr-executor-@pid with @dcopid. However, you can use this syntax (obviously without the specials) from the command line or any external script to alter the & kommander; window.
+Because & kommander; does not have a full parser in it's Alpha stage, if you want to use the much faster internal & DCOP; from another application window (console & DCOP; is very slow) it is more complicated because you must give lots of information, including a prototype of the call. The above call would become:
+@dcop(@dcopid, KommanderIf, enableWidget(QString, bool), Widget, true)
+At the time of this writing you should be aware that nesting & DCOP; calls inside script language structures (like bash) means that you must use console method calls. If you use internal & DCOP; all & kommander; specials will be executed first and then the script will be executed.
+There is a new simplified way to use & DCOP; inside & kommander; using an object syntax. Let's say you want to change the text in a widget name @LineEdit1. It would look like this.
+@LineEdit1. changeWidgetText(New text)
+As you can see the new syntax is very easy, as well as consistent visually with function groups. All the & DCOP; reference here will use the new object syntax listed above. Please note that if you are referencing a widget using & DCOP; from another window or another application the first parameter will always be the widget name. All functions are listed here starting with the second parameter.
+& DCOP; for Global Variables
+global(QString variableName)
+Returns the value of the specified global variable. When a script is run from within a & kommander; window any (non-global) variables set in that script will cease to exist after the script completes and therfore will not be available to other script processes or in a new instance of the calling process. The global scope means the variable will exist for any process of the window until that window is closed. You may change these variables at any time with a new call to @setGlobal.
+setGlobal(QString variableName, QString value)
+Creates a variable that is global to the window process and assigns the value to it. This value can be retrieved with global(QString variableName) or set again.
+& DCOP; for all Widgets
+changeWidgetText(QString text)
+This should be renamed setWidgetText and this name will probably be deprecated. This removes the text displayed in the widget and replaces it with the text supplied.
+enableWidget(bool enable)
+Enables or disables a widget.
+associatedText
+Returns the text associated with the specified widget. This is not the same as the displayed text. It would be @widgetText or the text and/ or scripting used to arrive at the displayed value.
+setAssociatedText(QString text)
+This sets the & kommander; Text default string. This is typically set to @widgetText to display what is entered into the widget. It is unlikely you will have much need for this, but if you do it is there. Applies to all widgets that can contain data.
+& DCOP; for ListBox and ComboBox Widgets
+addListItem(QString item, int index)
+Adds an item to a ListBox widget at the specified index. List index starts at zero. To add to the end of the list use -1.
+addListItems(QStringList items, int index)
+This adds a list of strings all at once. The list should be delimited by EOL (\ - newlines). This is handy as you can use bash to derive the list rather easily. For instance, using @exec(ls -l ~/ projects | grep kmdr) for items will give you a directory listing of & kommander; files in your projects folder. List index starts at zero. Use -1 to add to the end of the list.
+addUniqueItem(QString item)
+addUniqueItem will add an item to the end of the list only if it is unique.
+clearList
+Removes all items.
+removeListItem(int index)
+Removes the item at the specified index.
+item(int index)
+Returns the text of the item at the specified index.
+setCurrentListItem(int index)
+Set the current (or selected) item to the index specified. Applies to ListBox and ComboBox widgets.
+& DCOP; for CheckBox and RadioButton Widgets
+setChecked(QString widgetName, bool checked)
+Checks/ unchecks CheckBox or RadioButton widgets.
+& DCOP; for TabWidget Widgets
+setCurrentTab(QString widgetName, int index)
+Selected the tab by index for TabWidgets. Index starts at 0.

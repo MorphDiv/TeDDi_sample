@@ -1,0 +1,42 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+Wenn die Unterstützung für den "URL fopen wrapper" bei der Konfiguration von PHP vorhanden ist (welche standardmäßig eingestellt ist, es sei denn, die Option --disable-url-fopen-wrapper wurde bei der Installation verwendet (Versionen bis 4.0.3) oder der Parameter allow_url_fopen in der php.ini deaktiviert wurde (neuere Versionen), können HTTP und FTP URLs bei den meisten Funktionen verwendet werden, die einen Dateinamen als Parameter benötigen, inklusive require() und include() Anweisungen.
+Anmerkung: remote files funktionieren nicht mit include() und require() Anweisungen unter Windows.
+Beispielsweise kann eine Datei auf einem anderen Webserver geöffnet und verarbeitet werden.
+Diese Daten können zur Abfrage einer Datenbank benutzt werden oder passend zum Rest der eigenen Website ausgegeben werden.
+Beispiel 19-1.
+Den Titel einer entfernten Seite auslesen
+?php $file = fopen ("http: / /www.example.com / ", "r"); if (!$file) {echo" p Datei konnte nicht geöffnet werden.\n"; exit;} while (!feof ($file)) {$line = fgets ($file, 1024); / * Funktioniert nur, wenn Titel und title-Tags in einer Zeile stehen * / if (eregi ("title (.*) / title", $line, $out)) {$title = $out[1]; break;}} fclose($file);?
+Auch eine Datei auf einem FTP-Server kann geschrieben werden, solange man sich über einen Benutzer mit entsprechenden Zugriffsrechten verbindet und die Datei noch nicht existiert.
+Um sich mit einem anderen Benutzer als 'anonymous' zu verbinden muß ein username (und möglichst ein Passwort) innerhalb der URL angegeben werden, wie z.B. 'ftp: / /user:password@ftp.example.com / pfad / zur / datei'. (Die selbe Syntax kann verwendet werden, um auf Daten via HTTP zuzugreifen, wenn diese eine Basic Authentication benötigen.)
+Beispiel 19-2.
+Daten auf einen entfernten Server speichern
+?php $file = fopen ("ftp: / /ftp.example.com / incoming / outputfile", "w"); if (!$file) {echo "p Datei konnte zum schreiben nicht geöffnet werden.\n"; exit;} / * Schreibe die Daten hier hin. * / fputs ($file, "$HTTP_USER_AGENT\n"); fclose ($file);?
+Anmerkung:
+Obiges Beispiel könnte dazu verleiten, dieses Verfahren zu benutzen, um in ein 'remote log-file' zu schreiben.
+Wie oben erwähnt kann man jedoch ausschließlich neue Dateien anlegen, wenn man URL fopen() wrapper benutzt.
+Für 'distributed logging' sollte man sich die Funktion syslog() anschauen.
+Zurück
+Zum Anfang
+Nach vorne
+PUT-Unterstützung
+Nach oben
+Verbindungssteuerung

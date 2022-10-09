@@ -1,0 +1,24 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+注意 PHP 3では、オブジェクトはシリアル化、非シリアル化の課程でクラスの 相関を失ってしまいました。復元される変数は、オブジェクト型ですが、 クラスもメソッドもありません。このため、全く実用的ではありません でした。(変わった構文の配列のようになっていました。)
+以下の情報は、PHP 4でのみ有効です。
+serialize() は、PHPで保存可能な全ての値のバイト ストリーム表現を有する文字列を返します。 unserialize() は、この文字列を使用して元の変数 値を再生することが可能です。オブジェクトを保存するためにシリアル化 を行うと、オブジェクトの全ての変数が保存されます。オブジェクトの関 数は保存されません。クラス名だけが保存されます。
+オブジェクトの unserialize() を可能とするために、 そのオブジェクトのクラスが定義される必要があります。つまり、クラス Aのオブジェクト$aを page1.phpで定義し、これをシリアル化した場合、 クラスAを指す文字列が得られ、そこには、$aに含まれる変数の全ての値 が含まれます。page2.phpでこの文字列を非シリアル化したい場合、クラ スAの$aを再生します。クラスAの定義が、page2.phpに現れます。これは、 例えば、クラスAのクラス定義をインクルードファイルの中に保存し、 page1.php および page2.php の中で共にこのファイルを読み込むことに より実行可能です。
+セッションを使用している場合に、オブジェクトを登録するために session_register() を使用すると、これらのオブジェ クトは各PHPページの最後で自動的にシリアル化され、次のページで自動 的に非シリアル化されます。これは、基本的に、これらのオブジェクトが 一旦セッション変数となると、全てのページに現れることを意味します。
+全てのページでこれらのクラスを実際には使用しない場合でも、全てのペー ジでこのような登録された全てのオブジェクトのクラス定義を読み込むこ とが強く推奨されます。これを行わずに、クラス定義が存在しない状態で オブジェクトが非シリアル化された場合、クラスの相関は失われ、全ての 関数が利用できなくなるため、クラスのオブジェクト stdClass は利用価値がかなり低くなります。
+このため、上の例で、 session_register("a") を実行 することにより $a がセッションの一部となった場合、page1.php および page2.phpだけでなく、全てのページでファイル classa.inc を読み込むべきです。

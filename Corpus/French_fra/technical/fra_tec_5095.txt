@@ -1,0 +1,72 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Les flôts ("streams "en anglais) on été introduits en PHP 4.3.0 comme méthode de généralisation des fichiers, sockets, connexions réseau, données compressées et autres opérations du même type, qui partagent des opérations communes.
+Dans sa définition la plus simple, un flôt est une ressource qui présente des capacités de flux: c'est à dire que ces objets peuvent être lus ou recevoir des écritures de manière linéaire, et dispose aussi de moyen d 'accèder à des positions arbitraires dans le flux.
+Un gestionnaire (dit wrapper en anglais), est une fonction qui indique comment le flôt se comporte spécifiquement.
+C 'est le cas du gestionnaire http, qui sait comment traduire une URL en une requête sur un serveur distant.
+Il existe de nombreux gestionnaires intégré à PHP par défaut (voir Annexe I), et de plus, des gestionnaires spécifiques peuvent être ajouté dans les scripts PHP avec la fonction stream_register_wrapper(), ou bien directement par une autre extension, en utilisant l 'API C de Chapitre 43.
+Grâce à la souplesse des gestionnaires qui peuvent être ajoutés à PHP, il n 'y a pas de limites aux possibilités offertes.
+Pour connaître la liste des gestionnaires actuellement enregistrés, utilisez la fonction stream_get_wrappers().
+Un filtre est une fonction finale qui effectue des opérations sur les données qui sont lues ou écrites dans un flôt.
+Un nombre arbitraire de filtre peuvent être ajoutés sur un flôt.
+Des filtres personnalisés peuvent aussi être ajoutés avec la fonction stream_register_filter(), ou bien dans une extension avec l 'API C de Chapitre 43.
+Pour connaître la liste des gestionnaires actuellement enregistrés, utilisez la fonction stream_get_filters().
+Un flôt est identifié dans la forme protocole: / / serveur
+protocole (chaîne de caractéres) - Le nom du protocole utilisé.
+Par exemple: file, http, https, ftp, ftps, compress.zlib, compress.bz2, ssl, tls et php.
+Voyez Annexe I pour une liste de gestionnaires intégrés à PHP.
+Si aucun gestionnaire n'est spécifié, la fonction utilise par défaut file: / /).
+serveur - Dépend du gestionnaire utilisé.
+Pour les flôts liés au système de fichier, c 'est généralement un chemin et un nom de fichier.
+Pour les objets réseau, c 'est généralement un nom de serveur, et un chemin.
+Encore une fois, reportez vous à Annexe I pour une description des différents serveurs de gestionnaire.
+Ces fonctions sont disponibles dans le module PHP standard, qui est toujours accessible.
+Les flôts font partie de PHP depuis la version 4.3.0.
+Aucune étape supplémentaire n 'est requise pour les activer.
+Cette extension ne définit aucune directive de configuration.
+Des gestionnaires personnalisés peuvent être enregistrés via la fonction stream_register_wrapper(), en utilisant la définition de classe décrite dans ce manuel.
+La classe php_user_filter est prédéfinie et est une classe abstraite à utiliser avec les filtres personnalisés.
+Voyez le manuel de la fonction stream_register_filter() pour plus de détails sur les implémentation de filtres utilisateurs.
+Constante
+
+
+Flag indique si le flôt fait partie de l 'include_path.
+
+Flag indiquant si le gestionnaire est responsable de la levée des erreurs via trigger_error() durant les opérations de flôts.
+Si cette option n'est pas activé, vous ne pourrez pas générer d 'erreurs.
+Comme avec n'importe quel fichier ou socket, les opérations sur un flôt peuvent échouer pour une grande variété de raisons (par exemple: impossible de se connecter au serveur distant, fichier introuvable, etc...).
+Un flôt peut aussi échouer parceque le gestionnaire n 'est pas configuré sur le système en cours.
+Voyez le tableau retourné par la fonction stream_get_wrappers() pour connaître la liste des gestionnaires configurés sur votre installation de PHP.
+Comme avec la plus part des fonctions internes de PHP, si une erreur survient, un message de type E_WARNING sera généré pour indiquer la nature de l 'erreur.
+Exemple 1.
+Exemples avec file_get_contents()
+?php / / Lit un fichier local dans le dossier / home / bar $localfile = file_get_contents( "/ home / bar / foo.txt"); / / Identique au pr eacute;c eacute;dent, mais utilise explicitement le gestionnaire FILE $localfile = file_get_contents("file: / //home / bar / foo.txt"); / / Lit un fichier distant sur le serveur www.exemple.com avec le protocole HTTP $httpfile = file_get_contents("http: / /www.exemple.com / foo.txt"); / / Lit le m ecirc;me fichier sur le serveur www.exemple.com avec le protocole HTTPS $httpsfile = file_get_contents("https: / /www.exemple.com / foo.txt"); / / Lit un fichier distant sur le serveur ftp.exemple.com en utilisant le protocole FTP $ftpfile = file_get_contents("ftp: / /user:pass@ftp.example.com / foo.txt"); / / Lit un fichier distant sur le serveur ftp.exemple.com en utilisant le protocole FTPS $ftpsfile = file_get_contents("ftps: / /user:pass@ftp.example.com / foo.txt");?
+Exemple 2.
+Envoie d 'une requête de type POST sur une serveur sécurisé
+?php / * Envoi d'une requ ecirc;te POST sur le serveur https: / /secure.example.com / form_action.php * Inclusion des variables "foo "et "bar" * / $sock = fsockopen("ssl: / /secure.example.com", 443, $errno, $errstr, 30); if (!$sock) die("$errstr ($errno)\n"; $data = "foo= ". urlencode("Valeur de Foo")." bar= ". urlencode("Valeur de Bar"); fputs($sock, "POST / form_action.php HTTP / 1.0\r\n"); fputs($sock, "Host: secure.example.com\r\n"); fputs($sock, "Content-type: application / x-www-url-encoded\r\n"); fputs($sock, "Content-length:". strlen($data). "\r\n"); fputs($sock, "Accept: * / *\r\n"); fputs($sock, "\r\n"); fputs($sock, "$data\r\n"); fputs($sock, "\r\n"); $headers = ""; while ($str = trim(fgets($sock, 4096))) $headers .= "$str\n"; print "\n"; $body =""; while (!feof($sock)) $body .= fgets($sock, 4096); fclose($sock);?
+Exemple 3.
+Ecrire des données dans un fichier compressé
+?php / * Cr eacute; ation d'un fichier compress eacute; contenant une cha icirc;ne arbitraire * Le fichier peut ecirc;tre lu en utilisant le gestionnaire compress.zlib * ou simplement d eacute;compress eacute; en ligne de commande avec 'gzip -d foo-bar.txt.gz '* / $fp = fopen("compress.zlib: / /foo-bar.txt.gz" ,"w"); if (!$fp) die("Impossible de cr eacute;er le fichier ."); fwrite($fp, "Ceci est un test.\n"); fclose($fp);?
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

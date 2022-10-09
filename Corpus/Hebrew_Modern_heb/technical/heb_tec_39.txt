@@ -1,0 +1,190 @@
+# language_name_wals:	Hebrew (Modern)
+# language_name_glotto:	Modern Hebrew
+# ISO_6393:	heb
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hebr
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/he.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+מדריך PHP
+קודם
+הבא
+Since version 4.3, PHP supports a new SAPI type (Server Application Programming Interface) named CLI which means Command Line Interface.
+
+There are quite some differences between the CLI SAPI and other SAPI s which are further explained throughout this chapter.
+The CLI SAPI was released for the first time with PHP 4.2.0, but was still experimental back then and had to be explicitely enabled with --enable-cli when running. / configure.
+Since PHP 4.3.0 the CLI SAPI is no longer experimental and is therefore always built and installed as the php (called php.exe on Windows) binary.
+
+Unlikely the CGI SAPI, no headers are written to the output.
+Though the CGI SAPI provies a way to suppress HTTP headers, there 's not equivalent switch to enable them in the CLI SAPI.
+The are certain php.ini directives which are overriden by the CLI SAPI because the do not make sense in shell environments:
+טבלה 24-1.
+
+
+
+
+
+
+
+
+
+It is desired that any output coming from print(), echo() and friends is immidiately written to the output and not cached in any buffer.
+
+
+
+
+Whereas applications written for the web are executed within splits of a seconds, shell application tend to have a much longer execution time.
+
+
+The global PHP variables $argc (number of arguments passed to the application) and $argv (array of the actual arguments) are always registered and filled in with the appropriate values when using the CLI SAPI.
+הערה:
+This directives cannot be initialzied with another value from the configuration file php.ini or a custom one (if specified).
+
+
+
+
+? / * Our simple test application * / echo getcwd(), "\n";?
+When using the CGI version, the output is
+$pwd / tmp $php-cgi -f another_directory / test.php / tmp / another_directory
+
+
+הערה:
+The CGI SAPI supports the CLI SAPI behaviour by means of the -C switch when ran from the command line.
+The list of command line options provided by the PHP binary can be queryied anytime by running PHP with the -h switch:
+
+
+
+
+
+
+
+
+הערה:
+Read the example carefully, thera are no beginning or ending tags!
+
+
+
+
+
+Like every shell application not only the PHP binary accepts a number of arguments but also your PHP script can receive them.
+The number of arguments which can be passed to your script is not limited by PHP (the shell has a certain size limit in numbers of characters which can be passed; usually you won't hit this limit).
+
+
+
+
+
+To prevent this use the argument list separator - -.
+After the argument has been parsed by PHP, every argument following it is passed untoched / unparsed to your script.
+
+
+You can write a script which 's first line starts with #! / usr / bin / php and then following the normal PHP code included within the PHP starting and end tags and set the execution attributes of the file appropriately.
+This way it can be executed like a normal shell or perl script:
+#! / usr / bin / php? var_dump( $argv);?
+
+טבלה 24-2.
+
+
+
+
+
+
+
+הערה:
+
+
+
+הערה:
+
+
+
+
+
+
+
+$php -v PHP 4.3.0-dev (cli), Copyright (c) 1997-2002 The PHP Group Zend Engine v1.2.1, Copyright (c) 1998-2002 Zend Technologies
+
+
+
+
+
+
+This option allows to set a custom value for any of the configuration directives allowed in php.ini.
+
+
+
+# Ommiting the value part will set the given configuration directive to "1" $php -d max_execution_time -r '$foo = ini_get("max_execution_time"); var_dump($foo); 'string(1) "1 "# Passing an empty value part will set the configuration directive to" "php -d max_execution_time= -r '$foo = ini_get("max_execution_time"); var_dump($foo);' string(0)" "# The configuration directive will be set to anything passed after the '= 'character $php -d max_execution_time=20 -r '$foo = ini_get("max_execution_time"); var_dump($foo);' string(2) "20" $php -d max_execution_time=doesntmakesense -r '$foo = ini_get("max_execution_time"); var_dump($foo); 'string(15) "doesntmakesense "
+
+
+
+
+
+
+
+
+
+
+
+
+
+הערה:
+
+
+
+
+
+
+If PHP is not working well, it is advisable to make a php -i and see if any error messages are printed out before or in place of the information tables.
+
+
+
+The PHP start and end tags (?php and?) are not needed and will cause a parser errors.
+הערה:
+
+
+
+
+
+
+
+
+
+
+
+
+
+דוגמה 24-1.
+
+
+
+
+
+In the script above, we used the special first line to indicate, that this file should be run by PHP.
+
+
+
+
+
+
+
+
+
+דוגמה 24-2.
+
+@c:\php\php.exe script.php %1 %2 %3 %4
+Assuming, you named the above program as script.php, and you have your php.exe in c:\php\php.exe this batch file will run it for you with your added options: script.bat echothis or script.bat -h.
+
+קודם
+ראשי
+הבא
+Safe Mode
+למעלה
+מפרט הפונקציות

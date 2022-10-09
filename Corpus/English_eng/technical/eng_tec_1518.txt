@@ -1,0 +1,64 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/en_GB.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Input# Statement [Run-time]
+/text/sbasic/shared/03020202.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+Input statement
+Input# Statement [Run-time]
+Reads data from an open sequential file.
+Syntax:
+Input #FileNumber As Integer; var1[, var2[, var3[,...]]]
+Parameters:
+FileNumber:
+Number of the file that contains the data that you want to read.
+The file must be opened with the Open statement using the key word INPUT.
+var:
+A numerical or string variable that you assign the values read from the opened file to.
+Input#
+statement reads numerical values or strings from an open file and assigns the data to one or more variables.
+A numerical variable is read up to the first carriage return (Asc=13), line feed (Asc=10), space, or comma.
+String variables are read to up to the first carriage return (Asc=13), line feed (Asc=10), or comma.
+Data and data types in the opened file must appear in the same order as the variables that are passed in the &quot; var &quot; parameter.
+If you assign non-numerical values to a numerical variable, &quot; var &quot; is assigned a value of &quot; 0 &quot; .
+Line Input#
+statement to read pure text files (files containing only printable characters) line by line.
+If the end of the file is reached while reading a data element, an error occurs and the process is aborted.
+Example:
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; This is a line of text &quot;
+Print #iNumber, &quot; This is another line of text &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
+End Sub

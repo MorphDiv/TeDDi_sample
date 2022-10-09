@@ -1,0 +1,139 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Das Handbuch zu & kabcclient;
+Kevin Krammer
+kevin.krammer@gmx.at
+Burkhard Lück lueck@hube-lueck.de Übersetzung
+Kevin Krammer
+& kabcclient; ist ein Befehlszeilenprogramm für das & kde;-Adressbuch.
+KDE
+& package;
+& kappname;
+KAddressBook
+Einleitung
+& kabcclient; ist ein Befehlszeilenprogramm für das & kde;-Adressbuch. Es können Kontakte angezeigt, gesucht, eingefügt, gelöscht oder zusammengeführt werden, entweder über die Befehlszeile oder mit Skripten. & kabcclient; kann verschiedene Formate für die Ein- und Ausgabe verarbeiten. Es ist möglich, mit dem Programm vollständige & kde;-Adressbücher zu importieren oder zu exportieren.
+Beim Aufruf ohne Argumente arbeitet & kabcclient; im Suchmodus. Zu den auf der Standardeingabe eingelesenen Daten werden passende Kontakte im & kde;-Adressbuch gesucht.
+Hauptfunktionen von & kabcclient;:
+Anzeige aller Kontakte aus dem & kde;-Adressbuch
+Suche nach passenden Kontakten für die Eingaben
+Einfügen von Kontakten
+Löschen von Kontakten
+Zusammenführen und Ändern passender Kontakte mit neuen Daten
+& kabcclient; ist keine weitere grafische Benutzerschnittstelle zum & kde;-Adressbuch wie zum Beispiel & kaddressbook;, & kabcclient; wird ausschließlich dann benutzt, wenn die Arbeit mit einer grafischen Benutzerschnittstelle nicht praktikabel oder nicht möglich ist.
+& kabcclient; bietet keine vollständige Befehlssprache für die Abfrage der Einträge im Adressbuch, das ist auch nicht beabsichtigt. Dafür gibt es andere Befehlszeilenprogramme.
+Um alle Möglichkeiten der Verarbeitung von Daten anzuzeigen, kann jede Option, die ein Argument erfordert, mit dem Wert help aufgerufen werden. Dann werden alle gültigen Werte der Argumente für diese Option ausgegeben.
+Funktionen
+Dieses Kapitel erläutert die Funktionen von & kabcclient; und deren Kontrolle über Befehlszeilenparameter (wiederum: & kabcclient; ist keine grafische Benutzeroberfläche, sondern lediglich ein Befehlszeilenprogramm).
+Das Einfügen, Löschen und die Suche von Kontaktdaten wird hier erläutert, ebenso die Verwendung der verschiedenen Formate für Ein- und Ausgabe.
+Anzeige der Einträge im Adressbuch
+Dies ist die Hauptarbeitsweise von & kabcclient;, sie wird mit der Option --list oder -L gestartet. Damit werden alle Kontakte des & kde;-Adressbuchs auf der Standardausgabe des Programms angezeigt. Menge und Format der Daten hängt von dem gewählten Ausgabeformat ab.
+Zur Ausgabe aller Kontakte im Standard-VCard-Format geben Sie ein:
+% kabcclient -L
+Um jeden Kontakt auf einer eigenen Zeile zum Beispiel zum Zählen anzuzeigen, geben Sie ein:
+% kabcclient -L -of uid
+Mit dem nächsten Beispiel werden alle E-Mail-Adressen ausgegeben:
+% kabcclient --list -of email
+Suche nach passenden Kontakten für Eingabedaten
+& kabcclient; kann Daten von der Befehlszeile oder über die Standardeingabe des Programms einlesen und nach passenden Werten in allen Kontakten des & kde;-Adressbuchs suchen. Suchen ist der Standard-Verabeitungsmodus, dies kann aber auch ausdrücklich mit den Befehlszeilenargumenten --search oder -S ausgewählt werden.
+Im folgenden Beispiel werden alle Kontakte mit jane in einem Teil eines beliebigen Namensfeldes oder der E-Mail-Adresse im Format vCard auf der Standardausgabe angezeigt. Das Format vCard ist die Voreinstellung für die Option --output-format:
+% kabcclient --search jane
+Die gleiche Abfrage, diesmal wird der Suchtext auf der Standardeingabe des Programms gelesen:
+% echo jane | kabcclient --search
+Mit der Option --match-case kann eingestellt werden, ob bei der Suche die Groß-/Kleinschreibung beachtet wird.
+Kontakte hinzufügen
+Mit & kabcclient; ist es möglich, neue Kontakte mit dem Befehlszeilenargument --add oder -A zum & kde;-Adressbuch hinzuzufügen. Die Daten können entweder als zusätzliche Argumente der Befehlszeile angegeben oder über die Standardeingabe gelesen werden. Bei erfolgreicher Ausführung werden die hinzugefügten Kontakte zur Standardausgabe des Programms geschrieben. Da mit dieser Operation Daten des Adressbuchs verändert werden, kann ein Probelauf mit der Option --nosave durchgeführt werden.
+Hinzufügen eines Kontaktes mit Namen und E-Mail-Adresse, die Daten werden durch ein zusätzliches Befehlszeilenargument angegeben:
+% kabcclient --add --input-format email "John Doe & lt;j.doe@example.comgt;"
+Hinzufügen aller Kontakte aus einer vCard-Datei, die über die Standardeingabe des Programms eingelesen wird:
+% cat beispiel-datei.vcf | kabcclient --add --input-format vcard
+Kontakte löschen
+Mit & kabcclient; ist es möglich, neue Kontakte mit dem Befehlszeilenargument --remove oder -R aus dem & kde;-Adressbuchzu löschen. Die Eingabedaten werden wie bei der Suche im Adressbuch angegeben. Bei erfolgreicher Ausführung werden die entfernten Kontakte zur Standardausgabe des Programms geschrieben. Da mit dieser Operation Daten des Adressbuchs verändert werden, kann ein Probelauf mit der Option --nosave durchgeführt werden.
+Das Löschen eines Eintrages aus dem Adressbuch kann nicht rückgängig gemacht werden. Ein entfernter Eintrag ist und bleibt gelöscht.
+Probelauf des Löschens aller Kontakte mit jane in einem Teil eines beliebigen Namensfeldes oder der E-Mail-Adresse:
+% kabcclient --remove --nosave jane
+Ein- und Ausgabeformate
+& kabcclient; kann nach verschiedenen Formatierungsregeln Eingabedaten interpretieren oder Ausgabedaten formatieren. Die besten Ergebnisse für diese Funktionen werden bei verschiedenen Aufgaben mit bestimmten Kombinationen der Formate erzielt. Für einige Formate gibt es zusätzliche Parameter, um den Ablauf der Verarbeitung genauer zu steuern.
+Da Textdaten in unterschiedlichen Kodierungen vorliegen können, kann für die Ein- und Ausgabe eine bestimmte Kodierung vorgegeben werden.
+Für alle diese Befehlszeilenoptionen gibt es den speziellen Wert help, damit werden alle zulässigen Werte dieser Optionen angezeigt.
+vCard-Format
+vCard (RFC 2426) ist das Standardformat für Kontaktdaten, Es kann alle Informationen aufnehmen, so dass andere Adressbuchprogramme wie & kaddressbook; darauf zugreifen können. Daher ist das vCard-Format der Standard für die Formatierung der Ausgaben.
+Durch Komma getrennte Werte (CSV -Format)
+Das CSV-Format kann als Eingabeformat benutzt werden, um Daten in bestimmte Felder eines Kontakteintrages einzufügen. Als Ausgabeformat wird es verwendet, um die Datenmenge zu verringern oder die Daten für eine weitere Bearbeitung umzusortieren. Eine beliebige Zuordnung von Kontaktfeldern zu CSV-Spalten kann durch Beschreibungsdateien für CSV-Vorlagen festgelegt werden. Diese Beschreibungsdateien werden von & kaddressbook; ebenfalls für diesen Zweck benutzt.
+Befehlszeilenargumente
+& kabcclient; unterstützt folgende Optionen:
+Option
+Beschreibung
+--help, --help-all
+Zeigt Hilfetexte zu den Optionen an.
+--author
+Zeigt Informationen über die Programmautoren.
+-v, --version
+Zeigt die Versionsnummer des Programms an.
+--license
+Zeigt Informationen zu den Lizenzbestimmungen.
+--verbose
+Gibt nützliche Laufzeitmeldungen aus.
+--nosave
+Führt den Befehl aus und zeigt das Ergebnis an. Es werden jedoch keine Daten im & kde;-Adressbuch geändert, vorhandene Kontakte werden nicht bearbeitet, es werden keine Daten eingefügt oder gelöscht.
+--match-case
+Verwendet Groß-/Kleinschreibungeibun, wenn der Eingabetext mit den Kontakteinträgen verglichen wird.
+Hauptarbeitsmodi:
+-L, --list
+Gibt alle Kontakte in vorgegebenen Format aus.
+-A, --add
+Fügt Kontakte in das Adressbuch ein.
+-R, --remove
+Löscht Kontakte aus dem Adressbuch.
+-M, --merge
+Führt die Daten aus der Eingabe mit den zugehörigen Kontakten aaus dem Adressbuch zusammen.
+Formatierung und Kodierung
+-if, --input-format format
+Legt fest, wie die Eingabedaten interpretiert werden sollen. Mit help wird eine Liste aller möglichen Werte angezeigt.
+-of, --output-format format
+Legt fest, wie die Ausgabedaten formatiert werden sollen. Mit help wird eine Liste aller möglichen Werte angezeigt.
+-if-opts, --input-format-options optionen
+Benutzerdefinierte Optionen für das Eingabeformat. Mit help wird eine Liste aller möglichen Werte angezeigt.
+-of-opts, --output-format-options optionen
+Benutzerdefinierte Optionen für das Ausgabeformat. Mit help wird eine Liste aller möglichen Werte angezeigt.
+-ic, --input-codec encoding
+Textkodierung für die Anzeige der Eingabedaten. Mit help wird eine Liste aller möglichen Werte angezeigt.
+-oc, --output-codec encoding
+Textkodierung für die Anzeige der Ausgabedaten. Mit help wird eine Liste aller möglichen Werte angezeigt.
+Fragen und Antworten
+& reporting.bugs; & updating.documentation;
+Welche Konfigurationsdateien verwendet & kabcclient;?
+Keine.
+Wie lautet der Programmname von & kabcclient;?
+Der Programmname von & kabcclient; lautet kabcclient.
+Wie kann ich eine Frage zu den FAQ hinzufügen?
+Senden Sie Ihre Fragen an kevin.krammer@gmx.at.
+Danksagungen und Lizenz
+& kabcclient; Programm Copyright 2005-2008:
+Kevin Krammer kevin.krammer@gmx.at
+Dokumentation Copyright 2008:
+Übersetzung Burkhard Lück lueck@hube-lueck.de
+& underFDL; & underGPL;
+& #160; Installation
+Bezugsquellen von & kabcclient;
+& install.intro.documentation;
+& kabcclient; ist Bestandteil von & kde;4 und nicht einzeln erhältlich.
+Anforderungen
+Für & kabcclient; müssen die & kde;-Standardbibliotheken (also das kdelibs und das kdepimlibs -Paket) installiert sein. Zur Kompilierung wird außerdem & Qt; und die Entwicklerpakete zu kdelibs und kdepimlibs benötigt.
+Ein Liste von Änderungen finden Sie in der Datei ChangeLog.
+Einrichtung
+Zur Verwendung von & kabcclient; mit der & kde;-Arbeitsoberfläche sind keine weiteren Konfigurationen notwendig.

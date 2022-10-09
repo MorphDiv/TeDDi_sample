@@ -1,0 +1,35 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 3 = 3.0.7, PHP 4)
+This command allows to remove, add, or modify individual attributes of an object record. The object is specified by the Object ID object_to_change. The first array remove is a list of attributes to remove. The second array add is a list of attributes to add. In order to modify an attribute one will have to remove the old one and add a new one. hw_modifyobject() will always remove the attributes before it adds attributes unless the value of the attribute to remove is not a string or array.
+The last parameter determines if the modification is performed recursively. 1 means recurive modification. If some of the objects cannot be modified they will be skiped without notice. hw_error() may not indicate an error though some of the objects could not be modified.
+The keys of both arrays are the attributes name. The value of each array element can either be an array, a string or anything else. If it is an array each attribute value is constructed by the key of each element plus a colon and the value of each element. If it is a string it is taken as the attribute value. An empty string will result in a complete removal of that attribute. If the value is neither a string nor an array but something else, e.g. an integer, no operation at all will be performed on the attribute. This is neccessary if you want to to add a completely new attribute not just a new value for an existing attribute. If the remove array contained an empty string for that attribute, the attribute would be tried to be removed which would fail since it doesn't exist. The following addition of a new value for that attribute would also fail. Setting the value for that attribute to e.g. 0 would not even try to remove it and the addition will work.
+If you would like to change the attribute 'Name' with the current value 'books' into 'articles' you will have to create two arrays and call hw_modifyobject().
+예 1. modifying an attribute
+예 2. adding a completely new attribute
+
+참고: Multilingual attributes, e.g. 'Title', can be modified in two ways. Either by providing the attributes value in its native form 'language':'title' or by providing an array with elements for each language as described above. The above example would than be:
+예 3. modifying Title attribute
+예 4. modifying Title attribute
+예 5. removing attribute
+참고: This will remove all attributes with the name 'Title' and adds a new 'Title' attribute. This comes in handy if you want to remove attributes recursively.
+참고: If you need to delete all attributes with a certain name you will have to pass an empty string as the attribute value.
+참고: Only the attributes 'Title', 'Description' and 'Keyword' will properly handle the language prefix. If those attributes don't carry a language prefix, the prefix 'xx' will be assigned.
+참고: The 'Name' attribute is somewhat special. In some cases it cannot be complete removed. You will get an error message 'Change of base attribute' (not clear when this happens). Therefore you will always have to add a new Name first and than remove the old one.
+참고: You may not suround this function by calls to hw_getandlock() and hw_unlock(). hw_modifyobject() does this internally.
+Returns TRUE if no error occurs otherwise FALSE.

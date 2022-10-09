@@ -1,0 +1,68 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Capítulo 12.
+Estructuras de Control
+Siguiente
+La sentencia include() incluye y evalúa el archivo especificado.
+Si "URL fopen wrappers" esta activada en PHP (como está en la configuración inicial), se puede especificar el fichero que se va a incluir usando una URL en vez de un fichero local (con su Path) Ver Ficheros remotos y fopen() para más información.
+Un punto importante sobre su funcionamiento es que cuando un archivo se incluye con include() o se requiere con require(), el intérprete sale del modo PHP y entra en modo HTML al principio del archivo referenciado, y vuelve de nuevo al modo PHP al final.
+Por esta razón, cualquier código dentro del archivo referenciado que debiera ser ejecutado como código PHP debe ser encerrado dentro de etiquetas válidas de comienzo y fin de PHP.
+Esto sucede cada vez que se encuentra la sentencia include(), así que se puede usar una sentencia include() dentro de una estructura de bucle para incluir un número de archivos diferentes.
+$archivos = array ('primero.inc', 'segundo.inc', 'tercero.inc'); for ($i = 0; $i count($archivos); $i++) {include $archivos[$i];}
+include() difiere de require() en que la sentencia include se re-evalúa cada vez que se encuentra (y sólo cuando está siendo ejecutada), mientras que la sentencia require() se reemplaza por el archivo referenciado cuando se encuentra por primera vez, se vaya a evaluar el contenido del archivo o no (por ejemplo, si está dentro de una sentencia if cuya condición evaluada es falsa).
+Debido a que include() es una construcción especial del lenguaje, se debe encerrar dentro de un bloque de sentencias si está dentro de un bloque condicional.
+/* Esto es ERRÓNEO y no funcionará como se desea. * / if ($condicion) include($archivo); else include($otro); / * Esto es CORRECTO. * / if ($condicion) {include($archivo);} else {include($otro);}
+En ambos, PHP3 y PHP4, es posible ejecutar una sentencia return dentro de un archivo incluido con include(), para terminar el procesado de ese archivo y volver al archivo de comandos que lo llamó.
+Existen algunas diferencias en el modo en que esto funciona, no obstante.
+La primera es que en PHP3, return no puede aparecer dentro de un bloque a menos que sea un bloque de función, en el cual return se aplica a esa función y no al archivo completo.
+En PHP4, no obstante, esta restricción no existe.
+También, PHP4 permite devolver valores desde archivos incluidos con include().
+Se puede capturar el valor de la llamada a include() como se haría con una función normal.
+Esto genera un error de intérprete en PHP3.
+Ejemplo 12-1. include() en PHP3 y PHP4
+Asumamos la existencia del siguiente archivo (llamado test.inc) en el mismo directorio que el archivo principal:
+?php echo "Antes del return br \n"; if (1) {return 27;} echo "Después del return br \n";?
+Asumamos que el archivo principal (main.html) contiene lo siguiente:
+?php $retval = include( 'test.inc '); echo "El archivo devolvió: '$retval' br \n";?
+Cuando se llama a main.html en PHP3, generará un error del intérprete en la linea 2; no se puede capturar el valor de un include() en PHP3.
+En PHP4, no obstante, el resultado será:
+Antes del return El archivo devolvió: '27'
+Ahora, asumamos que se ha modificado main.html para que contenga lo siguiente:
+?php include( 'test.inc '); echo "De vuelta en main.html br \n";?
+En PHP4, la salida será:
+Antes del return De vuelta en main.html
+Antes del return 27De vuelta en main.html Parse error: parse error in / home / torben / public_html / phptest / main.html on line 5
+El error del intérprete es resultado del hecho de que la sentencia return está encerrada en un bloque de no-función dentro de test.inc.
+Cuando el return se mueve fuera del bloque, la salida es:
+Antes del return 27De vuelta en main.html
+El '27' espúreo se debe al hecho de que PHP3 no soporta devolver valores con return desde archivos como ese.
+When a file is include() ed, the code it contains inherits the variable scope of the line on which the include() When a file is include() ed, the code it contains inherits the variable scope of the line on which the include() occurs.
+Any variables available at that line in the calling file will be available within the called file.
+If the include() occurs inside a function within the calling file, then all of the code contained in the called file will behave as though it had been defined inside that function.
+If the include() ed file is called via HTTP using the fopen wrappers, and if the target server interprets the target file as PHP code, variables may be passed to the include() ed file using an URL request string as used with HTTP GET.
+This is not strictly speaking the same thing as include() ing the file and having it inherit the parent file's variable scope; the script is actually being run on the remote server and the result is then being included into the local script.
+/* This example assumes that someserver is configured to parse .php * files and not .txt files.
+Also, 'works' here means that the variables * $varone and $vartwo are available within the include()ed file. * / / * Won't work; file.txt wasn't handled by someserver. * / include ("http: / /someserver / file.txt?varone=1 vartwo=2"); / * Won't work; looks for a file named 'file.php?varone=1 vartwo=2 '* on the local filesystem. * / include ("file.php?varone=1 vartwo=2"); / * Works. * / include ("http: / /someserver / file.php?varone=1 vartwo=2"); $varone = 1; $vartwo = 2; include ("file.txt"); / * Works. * / include ("file.php"); / * Works. * /
+See also require(), require_once(), include_once(), readfile(), and virtual().
+Anterior
+Inicio
+Siguiente
+
+Subir

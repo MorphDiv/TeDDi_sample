@@ -1,0 +1,139 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+The & kabcclient; Handbook
+Kevin Krammer
+kevin. krammer@gmx. at
+ROLES_OF_TRANSLATORS
+Kevin Krammer
+& kabcclient; is a command line interface to & kde; address books.
+KDE
+& package;
+& kappname;
+KAddressBook
+Introduction
+& kabcclient; is a command line interface to & kde; address book. It lets you list, search, insert, remove, or merge contacts by way of the command line or from a scripting language. & kabcclient; can handle a variety of formats on both input and output, enabling it to be used for import and export of whole & kde; address books.
+When invoked without arguments & kabcclient; will be put into search mode and try to match any input it can read from standard input to contact entries in the & kde; address book
+Main features of & kabcclient;:
+List all contacts of the & kde; address book
+Search for contacts matching the input
+Insert (add) contacts
+Remove (delete) contacts
+Merge (change) matching contacts with new data
+& kabcclient; is not another graphical user interface to the & kde; address book (i. e. & kaddressbook;). & kabcclient; is intended solely for uses where a graphical user interface is not practical or possible.
+& kabcclient; does not provide a full-featured language for making queries of the user's address book nor is it the intention of the authors to ever write such a capability. Any such processing can be done through other command line tools or the script's own language's capabilities.
+To ease discoverability of its capabilities, any option requiring an argument can be called with the value help. This will then list all the valid values one can pass to that option.
+Features
+In this chapter you'll learn about the main features of & kabcclient; and how to control them using the command line parameters (remember that & kabcclient; is not a graphical user interface; it is a command line program only).
+You'll learn about inserting, deleting, and searching for contact data, and how to use different formats for input and output.
+Listing the address book
+This is the most basic operation mode, initiated using the --list or -L option. & kabcclient; will list all contacts in the & kde; address book, writing the data to the program's standard output. Amount and format of the output will depend on the chosen output format.
+To list all contacts as standard vCard entries, simply run:
+% kabcclient -L
+To get just one line per contact, e. g. for counting, simply run:
+% kabcclient -L -of uid
+In this next example, we list all e-mail addresses:
+% kabcclient --list -of email
+Searching for contacts matching the input data
+& kabcclient; can take data from the command line or from the program's standard input and check it for similarities against all contacts in the & kde; address book. Searching is the default mode but it can be explicitly be chosen using the --search or -S command line argument.
+In the following example, all contacts with jane as part of any name field or e-mail address will be written to the program's standard output, formatted as vCards (since this is the default for the --output-format option):
+% kabcclient --search jane
+Same query again, this time reading the search string from the program's standard input:
+% echo jane | kabcclient --search
+Case sensitivity of queries can be toggled using the --match-case option.
+Adding contacts
+& kabcclient; supports adding new contacts to the & kde; address book using the --add or -A command line argument. The data can either be passed as additional command line arguments or read from standard input. On success the resulting contacts will be written to the program's standard output. Since this is an operation which applies changes to the address book it can be run in a "Dry run" mode using the --nosave option.
+Add a contact with name and e-mail address by interpreting an additional command line argument as the input data:
+% kabcclient --add --input-format email "John Doe & lt; j. doe@example. comgt;"
+Add all contacts from a vCard file streamed into the program's standard input:
+% cat example-file. vcf | kabcclient --add --input-format vcard
+Deleting contacts
+& kabcclient; supports deleting contacts from the & kde; address book using the --remove or -R command line argument. The input data is basically a query like when searching the address book. On success the removed contacts will be written to the program's standard output. Since this is an operation which applies changes to the address book it can be run in a "Dry run" mode using the --nosave option.
+When you delete something from the address book you cannot undo it! In other words, when you delete a contact you cannot reverse the deletion. It's gone for good.
+Test removing all contacts with jane in any contact name field or any e-mail address:
+% kabcclient --remove --nosave jane
+Input and Output Formats
+& kabcclient; can interpret input data and format output data according to various formatting rules. Depending on the actual usage scenario certain combinations will render the most useful result. Some of the formats understand additional parameters for further customizing their behavior.
+Since textual data can be encoded both input and output can be subjected to additional decoding or encoding respectively.
+All those command line options will react to the special value help by listing the allowed values.
+vCard Format
+vCard (RFC 2426) is the standard format for contact data and as such can present all information other address book applications such as & kaddressbook; can access. It is therefore the default format for output formatting.
+Comma-Separated Values (CSV) Format
+Comma-Separated Value Format can be used as input format to fill data into specific field of a contact entry and as an output format to reduce or re-order data for further processing. To allow for enough flexibility mapping of contact fields to CSV columns can be specified using CSV-template description files also used by & kaddressbook; for the same purpose.
+Command Line Arguments
+& kabcclient; supports the following options:
+Option
+Description
+--help, --help-all
+Shows help about the program options.
+--author
+Shows the program author information.
+-v, --version
+Shows the program version information.
+--license
+Shows the program license information.
+--verbose
+Print helpful runtime messages.
+--nosave
+Print what would have been done, but do not execute. Do not change anything in the & kde; address book; do not insert, remove, modify any existing contacts.
+--match-case
+Use case sensitive matching when comparing input data with contact data from the address book.
+Major Operation Modes:
+-L, --list
+Print all contacts in specified export format.
+-A, --add
+Insert contacts into the address book.
+-R, --remove
+Delete contacts from the address book.
+-M, --merge
+Merge data from the input with matching contacts from the address book.
+Formatting and Encoding:
+-if, --input-format format
+How to interpret the input data. Use help for a list of available values.
+-of, --output-format format
+How to format the output data. Use help for a list of available values.
+-if-opts, --input-format-options options
+Input format specific customization options. Use help for a list of available values.
+-of-opts, --output-format-options options
+Output format specific customization options. Use help for a list of available values.
+-ic, --input-codec encoding
+Text encoding used to present the input data. Use help for a list of available values.
+-oc, --output-codec encoding
+Text encoding which should be used to present the output data. Use help for a list of available values.
+Questions and Answers
+& reporting. bugs; & updating. documentation;
+What configuration files does & kabcclient; use?
+None.
+What are the application names of & kabcclient;?
+& kabcclient; 's application name is kabcclient.
+How do I have my question added to this FAQ?
+Send your questions to kevin. krammer@gmx. at.
+Credits and License
+& kabcclient; Program copyright 2005-2008:
+Kevin Krammer kevin. krammer@gmx. at
+Documentation copyright 2008:
+CREDIT_FOR_TRANSLATORS
+& underFDL; & underGPL;
+Installation
+How to obtain & kabcclient;
+& install. intro. documentation;
+& kabcclient; comes included with & kde; 4 and is not available separately.
+Requirements
+& kabcclient; requires the standard & kde; libraries to be installed (the kdelibs package and kdepimlibs). To compile from source, you also need the & Qt;, kdelibs and kdepimlibs development packages.
+You can find a list of changes in the ChangeLog file.
+Configuration
+No special configuration is required to set up & kabcclient; to run on the & kde; desktop.

@@ -1,0 +1,92 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+MIDI
+Aperçu
+La gestion du MIDI dans aRts permet de faire beaucoup de choses.
+Tout d'abord, elle permet la communication entre différentes parties d'un logiciel qui produit ou utilise des événements MIDI.
+Si par exemple vous avez un séquenceur et un échantillonneur qui sont compatibles avec aRts, aRts peut envoyer des événements MIDI du séquenceur vers l'échantillonneur.
+D'un autre côté, aRts peut aussi aider des applications à interagir avec le matériel.
+Si une partie d'un logiciel (par exemple l'échantillonneur) travaille avec aRts, il sera capable de recevoir des événements MIDI depuis un clavier MIDI externe aussi.
+Finalement, aRts constitue un synthétiseur modulaire sympathique.
+Il est exactement conçu pour cela.
+Vous pouvez donc construire des instruments à partir de petits modules en utilisant artsbuilder, puis ensuite les réutiliser pour composer et jouer de la musique.
+Synthèse ne signifie pas forcément synthèse pure, il y a des modules qui vous permettent de jouer des échantillons. aRts peut donc être un échantillonneur, un synthétiseur, etc. et étant entièrement modulaire, il est très facile de l'étendre, facile à prendre en main, puissant et flexible.
+Le gestionnaire MIDI
+Le composant central de aRts qui garde une trace de quelles applications sont connectées et comment les événements midi doivent circuler entre elles est le gestionnaire midi.
+Pour voir ou modifier ce qu'il fait, démarrez artscontrol.
+Sur la gauche, vous verrez Entrées Midi.
+Ici, tous les objets qui produisent des événements MIDI, comme un port MIDI externe qui envoie des données depuis un clavier MIDI, un séquenceur qui joue un morceau, etc. sont listés.
+Sur la droite, vous verrez Sorties Midi.
+Ici, vous trouverez la liste de tous ce qui utilise les événements MIDI, comme un échantillonneur logiciel, ou un port MIDI externe sur lequel un échantillonneur matériel peut être connecté.
+Les nouvelles applications, comme les séquenceurs, s'enregistrent toutes seules de telle sorte que cette liste est susceptible de changer au cours du temps.
+Vous pouvez connecter les entrées aux sorties si vous marquez l'entrée à droite et la sortie à gauche, et choisissez Connecter... avec le bouton en bas.
+Déconnecter fonctionne de la même manière.
+Vous verrez ce qui est connecté grâce à de petites lignes entre les entrées et les sorties, au milieu de la fenêtre.
+Notez que vous pouvez connecter un émetteur vers plus d'un récepteur (et vice versa).
+Port Midi (OSS)
+Ceci créera un nouvel objet aRts qui communique avec un port midi externe.
+Comme les ports midi peuvent à la fois envoyer et recevoir des données, choisir cette option ajoutera une entrée midi et une sortie midi.
+Sous Linux, vous devriez avoir soit un OSS (ou OSS /Free, qui est fourni avec le noyau de Linux) ou un pilote ALSA permettant de faire fonctionner votre carte son.
+On vous demandera le nom du périphérique.
+Habituellement, il s'agit de /dev/midi ou /dev/midi00.
+Cependant, si vous avez plus d'un périphérique MIDI ou un pilote MIDI loopback installé, vous devriez avoir plus de choix.
+Sortie Midi du synthétiseur aRts
+Ceci va ajouter une nouvelle sortie MIDI avec un instrument synthétisé par aRts.
+Si vous choisissez cette entrée du menu, une boîte de dialogue va apparaître, vous permettant de choisir un instrument.
+Vous pouvez créer de nouveaux instruments en utilisant artsbuilder.
+Tous les fichiers .arts dont le nom commence par instrument_ apparaîtront ici.
+Utiliser aRts & Brahms
+En réalité, c'est facile de débuter.
+Vous avez besoin d'une version de Brahms pour KDE 2.1, qui se trouve dans le module CVS kmusic.
+Il y a aussi des informations sur la façon de se procurer Brahms sur le site web de aRts dans la section Download.
+Lorsque vous le démarrez, il affiche le gestionnaire MIDI.
+Choisissez un instrument (par exemple organ2).
+Connectez -les en utilisant le bouton Connect.
+Enfin, vous pouvez commencer à composer avec Brahms, et la sortie sera synthétisée avec aRts.
+Il est conseillé d'ouvrir une fenêtre du artscontrol, et de vérifier que le volume n'est pas trop fort (la qualité est moins bonne lorsque les bargraphs atteignent la limite supérieure).
+Maintenant, vous pouvez commencer à travailler sur un nouveau morceau de démo de aRts, et lorsque ce sera fait, vous pouvez le publier sur aRts-project.org ;-).
+midisend
+Création d' instruments
+Lorsqu'un événement MIDI arrive, aRts crée de nouvelles structures pour les notes suivant les besoins, leur passe les paramètres, et les efface une fois qu'elles ont terminé leur travail.
+Pour démarrer, la façon la plus simple est d'ouvrir template_Instrument.arts dans aRts-builder.
+Vous obtiendrez alors une structure vide avec les paramètres requis, que vous devrez simplement remplir.
+Pour traiter le paramètre pressed, il est préférable d'utiliser Synth_ENVELOPE_ADSR, ou s'il s'agit d'un son de percussions, jouez -le simplement sans vous soucier du paramètre pressed.
+La structure devrait indiquer lorsqu'elle n'est plus utile avec la sortie done.
+Si done est égal à 1, aRts supprime alors les structures.
+Très pratique, l'enveloppe ADSR fournit un paramètre lorsqu'elle se termine, donc vous devez simplement le connecter à la sortie done de la structure.
+Enfin, une fois que vous l'avez enregistré, vous pourrez l'utiliser avec le artscontrol dans le gestionnaire MIDI.
+Oh, et bien sûr, votre structure devrait jouer les données audio qu'elle génère sur les sorties droite et gauche de la structure, qui sera joué ensuite par le gestionnaire audio (visible depuis le artscontrol), ou vous pouvez enfin les entendre (ou leur ajouter un post-traitement avec des effets).
+Instruments mappés
+Les instruments mappés sont des instruments qui se comportent différemment suivant la hauteur, le programme (son), le canal ou la vélocité.Vous pourriez par exemple construire un piano sur 5 octaves, en utilisant un échantillon pour chaque octave (en le transposant en conséquence).
+Ça sonne beaucoup mieux qu'avec l'utilisation d'un seul échantillon.
+Vous pourriez aussi construire un "drum map" qui joue un échantillon de batterie spécifique par touche.
+Enfin, il est très utile de placer différents sons dans un instrument mappé.
+De cette façon, vous pouvez utiliser votre séquenceur, clavier externe ou autre source MIDI pour basculer entre les sons sans avoir à revenir à aRts lorsque vous travaillez.
+pitch
+Hauteur du son qui doit être joué.
+Vous utiliserez ceci si vous voulez découper votre instrument en fonction de la hauteur.
+Dans nos exemples initiaux, un piano qui utilise différents échantillons pour différentes octaves utiliserait cette condition.
+program
+Le programme actif sur le canal sur lequel est envoyée la note.
+Habituellement ,les séquenceurs vous permettent de choisir l'instrument par un réglage du programme.
+Les programmes possibles sont compris entre 0 et 127.
+channel
+Le canal sur lequel la note est envoyée.
+Les valeurs possibles sont comprises entre 0 et 15.
+velocity
+Les structures qui sont utilisées par les maps peuvent être données soit avec un chemin absolu, soit relativement au dossier contenant le fichier map.

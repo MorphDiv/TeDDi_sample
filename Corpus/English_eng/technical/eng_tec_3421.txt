@@ -1,0 +1,47 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3, PHP 4)
+Returns an IMAP stream on success and FALSE on error.
+This function can also be used to open streams to POP3 and NNTP servers, but some functions and features are only available on IMAP servers.
+A mailbox name consists of a server part and a mailbox path on this server.
+The special name INBOX stands for the current users personal mailbox.
+The server part, which is enclosed in '{' and '}', consists of the servers name or ip address, an optional port (prefixed by ':'), and an optional protocol specification (prefixed by' / ').
+The server part is mandatory in all mailbox parameters.
+Mailbox names that contain international characters besides those in the printable ASCII space have to be encoded with imap_utf7_encode().
+The options are a bit mask with one or more of the following:
+OP_READONLY - Open mailbox read-only
+OP_ANONYMOUS - Dont use or update a .newsrc for news (NNTP only)
+OP_HALFOPEN - For IMAP and NNTP names, open a connection but dont open a mailbox
+CL_EXPUNGE - Expunge mailbox automatically upon mailbox close
+To connect to an IMAP server running on port 143 on the local machine, do the following:
+$mbox = imap_open ("{localhost:143}INBOX", "user_id", "password");
+$mbox = imap_open ("{localhost:110 / pop3}INBOX", "user_id", "password");
+$mbox = imap_open ("{localhost:993 / imap / ssl}INBOX", "user_id", "password");
+$mbox = imap_open ("{localhost:995 / pop3 / ssl / novalidate-cert}", "user_id", "password");
+$nntp = imap_open ("{localhost:119 / nntp}comp.test", "", "");
+Example 1. imap_open() example
+$mbox = imap_open ("{your.imap.host:143}", "username", "password"); echo "p h1 Mailboxes / h1 \n"; $folders = imap_listmailbox ($mbox, "{your.imap.host:143}", "*"); if ($folders == false) {echo "Call failed br \n";} else {while (list ($key, $val) = each ($folders)) {echo $val." br \n";}} echo "p h1 Headers in INBOX / h1 \n"; $headers = imap_headers ($mbox); if ($headers == false) {echo "Call failed br \n";} else {while (list ($key,$val) = each ($headers)) {echo $val." br \n";}} imap_close($mbox);
+Prev
+Home
+Next
+imap_num_recent
+Up
+imap_ping

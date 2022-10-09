@@ -1,0 +1,62 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PostgreSQLデータベースはオープンソースのプロダクツであり、無料で 使用可能できます。Postgresは元々UCB(カリフォルニア大学バークレイ校) コンピュータ・サイエンス学部で開発されたものです。このPostgresは、 現在、いくつかの商用データベースにおいてサポートされつつあるオブジェク トリレーショナルデータベース的概念の多くの先駆けでした。 Postgresは、SQL92/SQL3言語サポート、トランザクションインテグリティ、 拡張可能な型を提供しています。PostgreSQLは、Postgresのオリジナルの バークレイ・コードのオープンソースの子孫にあたります。
+PostgreSQLサポートを使用するには、PostgreSQL 6.5以降が必要です。 PostgreSQL 7.0以降ではPostgreSQLモジュールの全ての機能を使用可能 です。PostgreSQLは、マルチバイト文字エンコーディングを含む多くの 文字エンコーディングをサポートしています。現在のバージョン及び PostgreSQLに関するより詳細な情報は、 http://www.postgresql.org/ で入手可能です。
+PostgreSQLサポートを利用可能とするには、PHPコンパイル時に --with-pgsql[=DIR] を指定することが必要です。 共有オブジェクトモジュールが利用可能な場合、 php.ini の extension ディレクティブ または dl() 関数によりPostgreSQLモジュール をロードすることが可能です。
+これらの関数の動作は、 php.ini の設定により変化します。
+
+表 1PostgreSQL設定オプション
+以下に設定ディレクティブの簡単な説明を示します。
+持続的なPostgres接続を可能にするかどうか。
+プロセス毎の持続的Postgres接続の最大数。
+持続的接続を含むプロセス毎のPostgres接続の最大数。
+通知メッセージを処理するコードにバグがあるため、PHP 4.0.6で PostgreSQLモジュールを使用することは推奨されません。 4.1.0以降を使用してください。
+PostgreSQLモジュールの関数名は、現在のコーディング標準に準拠する ために 4.2.0以降変更されます。新しい関数名の多くには、 pg_lo_open()のようにアンダースコアが付きます。 いくつかの関数は、pg_exec()からpg_query()というように、統一を とるために関数名が変更されます。 古い名前も4.2.0とそれに続くいくつかのバージョンで使用可能ですが、 将来的には削除される可能性があります。
+表 2変更された関数名
+従来のpg_connect()/pg_pconnect() 構文は、将来的に非同期接続 機能をサポートするために過去のものとなる可能性があります。 pg_connect() 、 pg_pconnect() では、接続文字列を使用してください。
+全ての関数が全ての構築環境でサポートされるわけではありません。サ ポートされる関数は、使用するlibpq(PostgreSQLのCクライアントインター フェイス)のバージョンとlibpqのコンパイル方法に依存します。足りな い関数がある場合、libpqはその関数を必要とする機能をサポートしませ ん。
+接続するPostgreSQLサーバーよりも新しいlibpqを使用することも重要で す。使用するlibpqのバージョンがPostgreSQLサーバが期待するよりも古 い場合、問題を生じる可能性があります。
+バージョン6.3(1998/3/2)以降、PostgreSQLはUNIXドメインソケットを 使用しています。これらの新しいコネクションの使用例を以下に示す表に 示します。このソケットは /tmp/.s.PGSQL.5432 に あります。このオプションは postmaster に対して'- i'フラグを指定することで有効となります。これは "Unixドメインソケッ ト以外のTCP/IPソケットもlisten する"という意味です。
+表 3postmasterとPHP
+PostgreSQL サーバへの接続は、以下のようにコマンド文字列の中に 値の組を羅列することにより、確立することができます。 $conn = pg_Connect("host=myHost port=myPort tty=myTTY options=myOptions dbname=myDB user=myUser password=myPassword");
+以前の構文: $conn = pg_connect ("host", "port", "options", "tty", "dbname") は古い構文であり、推奨されません。
+環境変数は、PostgreSQLサーバ/クライアントの動作に影響を与えます。 例えば、PostgreSQLモジュールは、ホスト名が接続文字列で省略された場 合、環境変数PGHOSTを探します。サポートされる環境変数は、バージョン 毎に異なります。詳細は、PostgreSQLプログラマ用マニュアル(libpq - 環境変数)を参照下さい。
+適切なユーザ用に環境変数が設定されていることを確認して下さい。 カレントのプロセスで利用可能な環境変数を確認するには、 $_ENV または getenv() を使用して下さい。
+例 1デフォルトのパラメータを設定する
+これらの定数は、この拡張モジュールで定義されており、 この拡張モジュールがPHP内部にコンパイルされているか実行時に動的にロー ドされるかのどちらかの場合のみ使用可能です。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PostgreSQL 7.1.0から、textデータ型の最大サイズは1GBとなっています。 古いPostgreSQLのtextデータ型はブロックサイズ(デフォルトは8KB、最大 32KBをコンパイル時に定義可能)の制限を受けていました。
+ラージオブジェクト(lo)インターフェースを使用するには、そのクエリーを トランザクション・ブロックの中に入れてやる必要があります。 トランザクション・ブロックは BEGIN で始まり、 そのトランザクションが有効な場合は COMMIT または END で終わります。トランザクションが失敗した場合、 そのトランザクションは ROLLBACK または ABORT により閉じる必要があります。
+例 2ラージオブジェクトの使用例

@@ -1,0 +1,850 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+translator-credits
+external ref='figures/jhbuild_sample_dot_output.png' md5='af9fe7edb29fcaefeadfb2f5987aa6e4'
+JHBuild Manual
+
+
+
+
+
+
+
+JHBuild is a tool used to build the whole GNOME desktop from the version control system. JHBuild can also be customized to build other projects too.
+Introduction
+JHBuild is a tool designed to ease building collections of source packages, called
+JHBuild was originally written for building
+JHBuild can build modules from a variety of sources, including
+JHBuild is not intended as a replacement for the distribution's package management system. Instead, it makes it easy to build software into a separate install prefix without interfering with the rest of the system.
+Getting Started
+JHBuild requires a few set up steps to be run before building software. JHBuild requires some prerequisite software, and it is necessary to install prerequisite tools needed to obtain and build the software modules.
+Installing JHBuild
+JHBuild requires a Python runtime. Verify Python &gt;= 2.3 is installed.
+The recommended way to download JHBuild is via the version control system,
+
+This will download JHBuild into a new folder named
+
+If
+If the above steps complete successfully, a small shell script will be installed in
+
+To permanently add
+
+Configuring JHBuild
+JHBuild can be configured via a configuration file. The default location is
+The sample configuration will make JHBuild build the
+Configuration variables are documented in
+
+A dictionary that can be used to specify an alternative repository location for a particular repository. This configuration variable is useful to a module developer. By default, JHBuild will check out code from repositories using an anonymous repository location. The dictionary keys are short repository names and the values are alternative repository location strings. For example:
+repos['git.gnome.org'] = 'ssh://
+
+A string or list of strings specifying the name(s) of the module set(s) to use. This can either be the filename of a moduleset included with JHBuild (excluding the path and extension), or a full HTTP URL to an externally managed moduleset. HTTP URL modulesets are cached locally. If a module with the same name is present in more than one moduleset, the last set listed takes priority. Modulesets provided with JHBuild are updated to match the current GNOME development release.
+
+A list of strings specifying the modules to build. The list of modules actually built will be recursively expanded to include all the dependencies unless the
+
+A string specifying the directory to unpack source trees to. Unless
+
+A string specifying the prefix to install modules to.
+
+A string containing arguments passed to the
+
+A string listing additional arguments to be passed to
+Build Prerequisites
+Before any modules can be built, it is necessary to have certain build tools installed. Common build tools include the GNU Autotools (
+JHBuild can check the tools are installed using the
+
+If this command displays any messages, please install the required package from your distribution's repository. A list of
+Using JHBuild
+After set up is complete, JHBuild can be used to build software. To build all the modules selected in the
+
+JHBuild will download, configure, compile and install each of the modules. If an error occurs at any stage, JHBuild will present a menu asking what to do. The choices include dropping to a shell to fix the error, rerunning the build from various stages, giving up on the module, or ignore the error and continue.
+Giving up on a module will cause any modules depending on the module to fail.
+Below is an example of the menu displayed:
+[1] Rerun phase build
+ [2] Ignore error and continue to install
+ [3] Give up on module
+ [4] Start shell
+ [5] Reload configuration
+ [6] Go to phase "wipe directory and start over"
+ [7] Go to phase "configure"
+ [8] Go to phase "clean"
+ [9] Go to phase "distclean"
+It is also possible to build a different set of modules and their dependencies by passing the module names as arguments to the
+
+If JHBuild is cancelled part way through a build, it is possible to resume the build at a particular module using the
+
+To build one or more modules, ignoring their dependencies, JHBuild provides the
+
+When actively developing a module, you are likely in a source working directory. The
+
+To get a list of the modules and dependencies JHBuild will build, and the order they will be built, use the
+
+To get information about a particular module, use the
+
+To download or update all the software sources without building, use the
+
+Later, JHBuild can build everything without downloading or updating the sources:
+
+To run a particular command with the same environment used by JHBuild, use the
+
+To start a shell with the same environment used by JHBuild, use the
+
+JHBuild and GNOME
+This section provides guidance on building, installing and running GNOME.
+Building GNOME
+To build GNOME some development packages are required. This includes:
+DocBook XML DTD and XSLT stylesheets. These need to be registered in the XML catalog (
+X libraries
+
+
+
+If installing distribution packages, and if applicable for your distribution, install the corresponding
+Running a Single GNOME Application
+This section details how to run a single GNOME application. The application will run within the current desktop environment. To run the application within the complete JHBuild GNOME see
+Launch a JHBuild shell. The JHBuild shell has all the necessary environment variables set.
+
+Verify the correct application will be run. For example:
+
+Run the application:
+
+Alternatively, run the application using the
+
+Running the GNOME Desktop Environment
+Create a new user account to run the JHBuild GNOME. Running JHBuild GNOME using different user account is recommended to avoid problems caused by user settings stored in the home directory. This manual refers to the new account as
+Setup JHBuild on the new
+Open a terminal as the user
+
+Test JHBuild works:
+
+Setup GNOME to run from the display manager
+Build and install JHBuild GNOME.
+Enable system services. JHBuild GNOME will use the
+
+Create a GNOME startup script at
+#!/bin/sh
+
+GNOME=
+Make the file
+
+To add a new session entry in the display manager, create
+[Desktop Entry]
+Name=GNOME (JHBuild)
+Comment=This session logs you into GNOME testing session
+TryExec=/usr/bin/gnome-jhbuild-session
+Exec=/usr/bin/gnome-jhbuild-session
+Icon=
+Type=Application
+Restart
+Running GNOME from the display manager
+To run the JHBuild GNOME, select the GNOME (JHBuild) session at the display manager before entering
+Buildbot Integration
+Coupled with the
+Configuring a Buildbot Slave
+A Buildbot slave is a variation of a normal JHBuild installation that serves the requests of a Buildbot master. It is recommended to set up JHBuild and complete a build with most modules building successfully before adding the Buildbot customizations.
+Buildbot commands are options to the
+
+Once this step has completed successfully, three new configuration variables are required in
+It is not possible to use an alternate configuration file, the
+jhbuildbot_master = 'build.gnome.org:9070'
+jhbuildbot_slavename = 'slavename'
+jhbuildbot_password = 'password'
+
+The administrators of
+Command Reference
+JHBuild uses a command line syntax similar to tools like CVS:
+
+The global JHBuild options are:
+
+Use an alternative configuration file instead of the default
+
+Use a module set other than the module set listed in the configuration file. This option can be a relative path if the module set is located in the JHBuild moduleset folder, or an absolute path if located elsewhere.
+
+Do not prompt the user for any input. This option is useful if leaving a build unattended, in order to ensure the build is not interrupted.
+
+Modify the condition flags to be different than those determined on the basis of the OS and those specified in jhbuildrc. Modifications are specified like
+Command specific options are listed below.
+autobuild
+The
+
+The
+
+This option specifies the JhAutobuild URL to report to.
+
+If specified, JHBuild's output will be more verbose.
+bootstrap
+The
+
+The
+See the
+build
+The
+
+If no module names are provided on the command line, the
+
+Always run
+
+Run
+
+Run
+
+Run
+
+Run
+
+For git modules, run
+This option will delete any uncommited changes.
+
+Do not build soft dependencies.
+
+Do not access the network when building modules. This will skip download or update stages in a build. If a module can't be built without network access, the module build will fail.
+
+Do not build the listed modules. Used to skip the building of specified dependencies.
+
+Ignore modules that do not match
+
+Start at the named module rather than at the beginning of the list. This option is useful if the build was interrupted.
+
+If supported by the underlying version control system, update the source tree to the specified date before building. An ISO date format is required, e.g.
+
+Run graphical tests on the actual X server rather than in a simulated Xvfb.
+
+If the build fails, and if supported by the version control system, force a checkout and run
+
+If one or more of a module's dependencies failed, this option forces JHBuild to try to build the module anyway.
+
+Build the modules even if policy states it is not required.
+
+Modules listed as optional dependencies, may not be required to build the module. This option forces JHBuild to build optional dependencies.
+
+Skip modules installed more recently than the specified relative time. The
+
+Ignore missing system dependencies. To ignore a single system dependency add the module to
+make
+The
+
+The options are the same as those available for the
+buildone
+The
+
+The
+At least one module must be listed on the command line.
+checkbranches
+The
+
+
+The branch to check.
+
+clean
+The
+
+See the
+dot
+The
+
+The
+The output of the dot command can be piped to the dot utility to generate a PostScript file:
+
+Or a PNG image:
+
+Sample JHBuild dot output
+gui
+The
+
+The graphical interface is rendered using GTK, so extra support libraries are required.
+info
+The
+
+The command displays the module name, type, dependencies, dependent packages, the source directory, and the time it was last installed with JHBuild. If available, information specific to the module type such as the CVS repository or download URL will also be displayed.
+If there is no module specified the command will display information about all the modules defined in the module set.
+list
+The
+
+The
+
+List all the modules from the module set regardless of the build dependencies.
+
+If a module is set to a branch, show the branch name with the module name.
+
+This option forces JHBuild to list optional dependencies.
+rdepends
+The
+
+
+Show dependency path next to modules.
+
+Limit display to modules directly depending on specified module.
+run
+The
+
+If using JHBuild to build GNOME, this command can be useful in X startup scripts.
+
+Run the command in the build directory of the specified module.
+
+Run the command in the source directory of the specified module.
+sanitycheck
+The
+
+Some of the checks include:
+The checkout and install prefixes are writable.
+The required build tools are installed.
+Some commonly used macros are available in the search paths of the
+The XML catalog contains the DocBook DTD and stylesheets.
+shell
+The
+
+This command is equivalent to the following:
+
+The
+ if [ -n "$UNDER_JHBUILD" ]; then
+ PS1="[jhbuild] $PS1"
+ fi
+This will make your bash shell display
+sysdeps
+The
+a list of installed system packages which will be used during the build. JHBuild will not build these modules and opt to use the system package instead.
+a list of required packages. To begin a build the packages must be provided by your system.
+a list of optional packages. The corresponding system package was not found or too old. JHBuild will build the module. Optional packages will not be displayed if
+
+
+This option installs system packages which are dependencies of the moduleset. The installation method depends on your distribution. System packages are installed using
+
+
+tinderbox
+The
+
+The
+
+The directory to write the HTML files. JHBuild will create an index (
+uninstall
+The
+
+update
+The
+
+The
+updateone
+The
+
+The
+Configuration File Reference
+The
+Boolean configuration variables are set using syntax as demonstrated in the following example:
+use_local_modulesets = True
+String configuration variables are set using syntax as demonstrated in the following example:
+autogenargs = '--disable-static --disable-gtk-doc'
+List configuration variables are set using syntax as demonstrated in the following example:
+skip = ['mozilla', 'pulseaudio']
+Dictionary configuration variables are set using syntax as demonstrated in the following example:
+repos['git.gnome.org'] = 'ssh://username@git.gnome.org/git/'
+Configuration Variables
+
+A boolean value if set to
+
+A string containing arguments passed to the
+
+A dictionary specifying which branch to use for specific modules. This is useful if you are making some changes on a branch of a module and want JHBuild to build that branch instead of the one listed in the module set.
+The definition of branches depends on the module VCS:
+CVS: revision. E.g.
+Bazaar: URI of module branch. E.g.
+Git: tuple, with first part being an optional repository (or the None value) and the second part the name of the branch. E.g.
+Simple example
+branches['modulename'] = (None, 'branchname')
+Subversion: URI of module branch E.g.
+
+A
+
+A string specifying the parent directory to place build trees. Defaults to
+
+A string specifying which buildscript to use. The recommended setting is the default,
+
+A string specifying which modules to build. The three possible options are
+
+A string specifying the directory to unpack source trees to. Unless
+
+A string specifying how the checkout is performed for directories in version control. Defaults to
+
+A string specifying the directory to copy to, if the copy
+
+A string specifying which program to use for CVS support. This can be
+
+A string specifying a local mirror directory. JHBuild will create local mirrors of repositories at the specified directory. The mirrors can be shared by multiple repository groups, saving space and time because hard-links will be used for local clones. The commands
+
+A list of strings specifying, in precedence order, the list of extra prefixes. JHBuild sets many environment variables (such as
+
+A tuple specifying a help website name and URL. The website is displayed in the tinderbox html for failed modules.
+
+A string specifying a program to use as replacement for
+
+A boolean value specifying whether to ignore soft dependencies when calculating the dependency tree. Defaults to
+
+A boolean value specifying whether to interact with the user. Setting this value to
+
+
+A boolean value specifying whether to run
+
+A boolean value specifying whether failures when running
+
+A boolean value specifying whether to run
+
+A boolean value specifying whether to run
+
+A boolean value specifying whether to run
+
+A dictionary mapping module names to strings specifying the arguments to be passed to
+
+A dictionary specifying which checkout mode to use for modules. This overrides the global
+
+A dictionary mapping module names to strings specifying the arguments to pass to
+
+A dictionary mapping module names to boolean values specifying whether to run
+
+A dictionary mapping module names to boolean values. If a module is set to
+
+A dictionary mapping module names to dictionaries with extra environment variables to pass when executing commands for the module.
+
+
+
+A string specifying the directory containing the modulesets to use. Defaults to the
+
+Run builds under the
+
+A boolean value, if set to
+
+A boolean value specifying whether to access the network. This affects checking out or updating CVS modules, downloading tarballs and updating module sets. Setting this to
+
+A boolean value specifying whether to emit notifications using the notification daemon. If set to
+
+A boolean value, if set to
+
+A boolean value specifying whether to show an icon in the system tray using Zenity. If set to
+
+A boolean value, if set to
+
+A boolean value, if set to
+
+
+A boolean value specifying whether to pretty format the subprocess output. Only CVS output supports pretty printing. Disable if the pretty printing causes problems. Defaults to
+
+A string displayed before JHBuild executes a command.
+
+A boolean value specifying whether to display a progress bar during
+
+A boolean value, if set to
+
+A dictionary specifying an alternative repository location for a particular repository. This configuration variable is useful to a module developer. By default, JHBuild will check out code from repositories using an anonymous repository location. The dictionary keys are short repository names and the values are the alternative repository location strings. For example:
+
+A list of modules to skip. This
+
+A string if set, and if supported by the underlying version control system, JHBuild will update the source tree to the specified date before building. An ISO date format is required, e.g.
+
+A string specifying which program to use for subversion support. This can be
+
+A list of strings specifying the system library paths. This is used when setting the default values of some environment variables, such as
+
+A string if set, tarballs will be downloaded to the specified directory instead of
+
+A string specifying the directory to store
+
+A boolean value, if set to
+
+A boolean value that specifies to use modulesets that were checked out along the JHBuild source code; instead of downloading them on-the-fly from GNOME version control system. Defaults to
+
+A string listing arguments to pass to
+
+A set of condition (strings) that can influence the modules that are built and the options that are used for building them. You should use
+The original set of conditions is determined on a per-OS basis and can be modified using the --conditions= commandline argument. The changes made by --conditions are visible at the time that jhbuildrc is sourced, so you can set other variables based on the current value of the set, but --conditions will be applied again after any changes made by jhbuildrc.
+Other Configuration File Structures
+In addition to the above variables, there are other settings that can be set in the configuration file:
+
+A dictionary representing the environment. This environment is passed to processes that JHBuild spawns.
+Some influential environment variables include
+os.environ['CFLAGS'] = '-O0 -g'
+
+This will add a directory to the
+
+
+After processing the configuration file, JHBuild will alter some paths based on variables such as
+The
+Module Set File Syntax
+JHBuild uses XML files to describe the dependencies between modules. A RELAX-NG schema and Document Type Definition are included with JHBuild in the
+The top-level element in a module set file is
+Content in the moduleset file can be conditionally included by use of the &lt;ifgt; tag to surround the conditional content. It is currently only possible to predicate the inclusion on whether a particular condition flag is set or not, using &lt;if condition-set='cond'gt; or &lt;if condition-unset='cond'gt;. Conditions are set by default on a per-OS basis but can be influenced by way of the
+Module Sources
+Rather than listing the full location of every module, a number of "module sources" are listed in the module set, and then referenced by name in the module definitions. As well as reducing the amount of redundant information in the module set, it makes it easy for a user to specify an alternative source for those modules (for CVS and Subversion, it is common for developers and users to use different repository access methods).
+The
+&lt;repository name="
+The
+The
+The
+The
+The
+&lt;branch
+ [ repo="
+All atributes have sensible defaults and depend on the module and repository definitions. Common attributes are described here.
+The
+The
+The
+Other attributes are described below
+Bazaar
+This repository type is used to define a Bazaar repository. It is recommended to have Bazaar 1.16 or higher.
+&lt;repository type="bzr" name="launchpad.net"
+ href="lp:"/gt;
+Additional attributes are:
+An addition
+For example repository with
+&lt;repository type="bzr" name="launchpad.net"
+ href="lp:"
+ trunk-template="~bzr-pqm/%(module)s/bzr.dev"
+ branches-template="~bzr-pqm/%(module)s/%(branch)s"/gt;
+Example
+&lt;branch repo="launchpad.net"
+ module="bzr"
+ checkoutdir="bzr-next"/gt;
+&lt;branch repo="launchpad.net"
+ module="bzr"
+ branch="2.2"
+ checkoutdir="bzr-beta"/gt;
+CVS
+This repository type is used to define a CVS repository.
+The
+The
+&lt;repository type="cvs" name="tango.freedesktop.org"
+ cvsroot=":pserver:anoncvs@anoncvs.freedesktop.org:/cvs/tango"
+ password=""/gt;
+Additional attributes are:
+Darcs
+This repository type is used to define a Darcs repository.
+&lt;repository type="darcs" name="telepathy.freedesktop.org"
+ href="http://projects.collabora.co.uk/darcs/telepathy/"/gt;
+Git
+This repository type is used to define a Git repository.
+&lt;repository type="git" name="git.freedesktop.org"
+ href="git://anongit.freedesktop.org/git/"/gt;
+It allows the following attributes on the
+The
+The
+&lt;branch repo="git.freedesktop.org" module="swfdec/swfdec"
+ checkoutdir="swfdec"
+ revision="
+Mercurial
+This repository type is used to define a Mercurial repository.
+&lt;repository type="hg" name="hg.gtk-vnc"
+ href="http://gtk-vnc.codemonkey.ws/hg/" /gt;
+&lt;branch repo="hg.gtk-vnc" module="outgoing.hg" checkoutdir="gtk-vnc"/gt;
+Monotone
+This repository type is used to define a Monotone repository.
+The
+The
+The
+&lt;repository type="mtn" name="pidgin.im"
+ server="pidgin.im" database="pidgin.im.mtn"
+ defbranch="im.pidgin.pidgin"/gt;
+Subversion
+This repository type is used to define a Subversion repository.
+&lt;repository type="svn" name="svn.gnome.org" default="yes"
+ href="http://svn.gnome.org/svn/"/gt;
+It allows a
+&lt;branch revision="gnome-2-20"/gt;
+It is possible to specify custom
+System
+This repository type is used to define a fake system repository. A system repository is required to create
+&lt;repository type="system" name="system"/gt;
+Tarballs
+This repository type is used to define a tarball repository.
+&lt;repository type="tarball" name="dbus/dbus-python"
+ href="http://dbus.freedesktop.org/releases/dbus-python/"/gt;
+The
+The
+Any number of
+For module sets shipped with JHBuild, the patch files are looked up in the
+&lt;branch module="dbus-python-0.80.2.tar.gz" version="0.80.2"
+ repo="dbus/dbus-python"
+ hash="md5:2807bc85215c995bd595e01edd9d2077" size="453499"gt;
+ &lt;patch file="dbus-glib-build.patch" strip="1" /gt;
+&lt;/branchgt;
+A tarball
+Including Other Module Sets
+JHBuild allows one module set to include the contents of another by reference using the
+&lt;include href="
+The
+Only module definitions are imported from the referenced module set - module sources are not. Multiple levels of includes are allowed, but include loops are not (there isn't any code to handle loops at the moment).
+Module Definitions
+There are various types of module definitions that can be used in a module set file, and the list can easily be extended. Only the most common ones will be mentioned here.
+They are all basically composed of a
+Any modules listed in the
+After generating the modules list, the modules listed in the
+autotools
+The
+&lt;autotools id="
+The
+The
+The
+The
+The
+%(srcdir)s/%(autogen-sh)s --prefix %(prefix)s --libdir %(libdir)s %(autogenargs)s
+The
+cmake
+The
+&lt;cmake id="
+distutils
+The
+&lt;distutils id="
+linux
+The
+&lt;linux id="
+perl
+The
+The
+&lt;perl id="
+systemmodule
+The
+&lt;systemmodule id="
+If the system module does not provide a pkg-config file,
+
+
+&lt;systemmodule id="
+waf
+The
+The
+The
+&lt;waf id="
+testmodule
+The
+&lt;testmodule id="
+The
+Unless the noxvfb configuration option is set, an Xvfb server is started to run the tests in
+metamodule
+The
+For example, meta-gnome-desktop depends on all the key components of the GNOME desktop, therefore telling JHBuild to install it actually installs the full desktop.
+&lt;metamodule id="
+The
+Deprecated Elements
+cvsroot
+The
+The
+&lt;cvsroot name="
+The
+The
+The
+svnroot
+The
+The
+&lt;svnroot name="
+The
+If
+The
+Deprecated Module Types
+This section describes deprecated elements, they may still be used in existing module sets but it is advised not to use them anymore.
+tarball
+This deprecated element is just a thin wrapper around both
+The
+&lt;tarball id="
+The
+The
+The
+The other attributes and the
+James
+Henstridge
+C.J.
+Adams-Collier
+Frederic
+Peters
+David
+Turner
+2004, 2008
+James Henstridge
+JHBuild Manual v0.5
+January 2008
+JHBuild Manual v0.1
+August 2007
+$
+git clone git://git.gnome.org/jhbuild
+...
+cd jhbuild
+./autogen.sh
+make install
+Alternatively, if autotools or gnome-doc-utils is not installed, install JHBuild as follows:
+make -f Makefile.plain
+make -f Makefile.plain install
+PATH=$PATH:~/.local/bin
+Before running JHBuild, it is necessary to set up a configuration file located at
+repos
+moduleset
+modules
+checkoutroot
+prefix
+autogenargs
+makeargs
+If this command displays any messages, the errors can be fixed in one of two ways:
+Run the
+When complete, run the
+The
+The build tools dependencies include
+jhbuild build
+choice:
+jhbuild build gtk+
+jhbuild build --start-at=pango
+jhbuild buildone gtk+
+jhbuild list
+jhbuild info gtk+
+jhbuild update
+jhbuild build --no-network
+program
+jhbuild run
+jhbuild shell
+which gedit
+
+gedit &
+jhbuild run gedit
+
+There are three different methods to run JHBuild GNOME:
+Nested window
+Display manager.
+Setup GNOME to run in a nested window
+Install the
+Test
+Xephyr -ac -screen 800x600 :1 2gt; /dev/null &
+If successful, a window with black background will be displayed. Close the
+/opt/gnome
+rm -rf
+ln -s /var/run/dbus
+Create a GNOME startup script at
+Make the file
+chmod u+x ~/.local/bin/gnome-jhbuild-xephyr-session
+Running GNOME in a nested window
+Open a terminal as the user
+Run
+#
+Set the
+export DISPLAY=:1
+Start GNOME:
+gnome-jhbuild-xephyr-session
+If successful, JHBuild GNOME will be displayed in Xephyr window. If unsuccessful, check the output of the terminal window.
+jhbuild bot --setup
+jhbuild
+global-options
+command
+command-arguments
+--no-interact
+jhbuild autobuild
+--autogen
+--clean
+module
+--skip=
+--start-at=
+reporturl
+--report-url=
+--verbose
+The
+--check
+--dist
+--distcheck
+--no-network
+tags
+--tags=
+date
+-D
+--no-xvfb
+--try-checkout
+--no-poison
+--force
+--build-optional-modules
+time
+--min-age=
+Always run
+-D
+jhbuild buildone
+jhbuild checkbranches
+branch
+--branch=
+jhbuild -m gnome-2.20 checkbranches
+jhbuild clean
+jhbuild dot
+--soft-deps
+--clusters
+jhbuild gui
+jhbuild info
+-a
+-r
+-s
+--list-optional-modules
+jhbuild rdepends
+--dependencies
+--direct
+jhbuild run
+--in-builddir
+--in-checkoutdir
+argument
+jhbuild run $SHELL
+jhbuild tinderbox
+directory
+--output=
+-C
+-N
+-f
+The directory to write the HTML files.
+jhbuild uninstall
+jhbuild updateone
+alwaysautogen
+branches
+buildroot
+buildscript
+build_policy
+checkout_mode
+copy_dir
+cvs_program
+installprog
+interact
+makecheck
+makeclean
+makedist
+makedistcheck
+modulesets_dir
+nobuild
+nonetwork
+nonotify
+nopoison
+notrayicon
+noxvfb
+pretty_print
+progress_bar
+quiet_mode
+skip
+A list of modules to skip. This
+sticky_date
+svn_program
+tarballdir
+trycheckout
+use_lib64
+A boolean value that specifies whether to install libraries to
+xvfbargs
+os.environ
+Arch
+This repository type is used to define a Arch repository.
+The
+&lt;repository type="arch" name="rhythmbox"
+ archive="rhythmbox-devel@gnome.org--2004"
+ href="http://web.rhythmbox.org/arch/2004"/gt;
+Ant
+The
+&lt;ant id="
+Example of a module built with ant
+arch-archive
+The
+&lt;arch-archive name="
+The
+The

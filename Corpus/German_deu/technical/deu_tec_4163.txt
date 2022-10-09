@@ -1,0 +1,71 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+Liefert ein Array entsprechend der gelesenen Zeile oder FALSE nach de letzten gefundenen Zeile.
+Die Anzahl der Spalten im Ausgabesatz wird als Element des assoziativen Arrays $array[ "count"] geliefert.
+Da Ergebnisspalten auch leer sein können, kann die Funktion count() nicht auf das Ergebnis der Funktion sesam_fetch_row() angewendet werden.
+result_id ist eine gültige Ergebniskennung (???) der Funktion sesam_query() (nur Abfragen vom Typ select!).
+whence ist ein optionaler Parameter für eine "fetch"-Operation (???) bei "scrollable" Cursor und kann auf folgende vordefinierte Werte gesetzt werden:
+Tabelle 1.
+Gültige Werte für Parameter "whence"
+
+
+
+
+
+sequentielles Lesen (nach "fetch "wird der interne Standardwert auf SESAM_SEEK_NEXT gesetzt)
+
+
+sequentielles Lesen rückwärts (nach "fetch "wird der interne Standardwert auf SESAM_SEEK_PRIOR gesetzt)
+
+
+zurück zur ersten Zeile (nach "fetch "wird der interne Standardwert auf SESAM_SEEK_NEXT gesetzt)
+
+
+suche letzte Zeile (nach "fetch "wird der interne Standardwert auf SESAM_SEEK_PRIOR gesetzt)
+
+
+suche Zeilen mit der Nummer definiert durch offset (Null-basierte Indizierung (nach "fetch "wird der interne Standardwert auf SESAM_SEEK_ABSOLUTE gesetzt und der interne offset-Wert wird automatisch hochgesetzt)
+
+
+suche relativ zur aktuellen Position; offset kann positiv oder negativ sein.
+Bei "scrollable" kann der Cursor beliebig im Ausgabesatz positioniert werden.
+Wird der optionale Parameter whence nicht benutzt, werden die globalen Standardwerte für den Scroll-Typ verwendet (Initialiwert:
+SESAM_SEEK_NEXT, einstellbar mit der Funktion sesam_seek_row()).
+Bei Verwendung des Parameters whence ersetzen dessen Werte die golbalen Standardwerte.
+offset ist ein optionaler Parameter, der nur wirkt (und auch nur benötigt wird), wenn whence entweder den Wert SESAM_SEEK_RELATIVE oder SESAM_SEEK_ABSOLUTE hat.
+Dieser Parameter ist nur für "scrollable" Cursors gültig.
+sesam_fetch_row() holt eine Datenzeile aus dem Ergebnis mit der zugeordneten Ergebniskennung (???).
+Die Zeile wird als Array geliefert, wobei die indizierten Werte zwischen 0 und $array[ "count"]-1) liegen.
+Da Felder auch leer sein können, muss die Existenz eines mit der PHP-Funktion isset() verifiziert werden.
+Der Typ der gelieferten Felder ist abhängig von der entsprechenden SQL-Typdeklaration düe die Spalten (siehe SESAM overview für die angewendeten Umsetzungen).
+SESAM "multiple fields" sind "inlined "(???) und werden wie eine Spaltenfolge behandelt.
+Nachfolgende Aufrufe von sesam_fetch_row() liefern die nächste Zeile (oder die vorhergehende, höchste / niedrigste je nach den Attributen) im Ausgabesatz oder FALSE wenn keine Zeilen mehr verfügabr sind.
+Beispiel 1.
+
+?php $result = sesam_query ("SELECT * FROM phone\n". "WHERE LASTNAME='".strtoupper($name) ."'\n"." ORDER BY FIRSTNAME", 1); if (! $result) {... error...} / / print the table in backward order print "TABLE BORDER \n"; $row = sesam_fetch_row ($result, SESAM_SEEK_LAST); while (is_array($row)) {print" TR \n"; for($col = 0; $col $row["count"]; ++$col) {print "TD ".htmlspecialchars($row[$col])." / TD \n";} print "/ TR \n"; / / use implied SESAM_SEEK_PRIOR $row = sesam_fetch_row ($result);} print" / TABLE \n"; sesam_free_result ($result);?
+Siehe auch:
+Funktion sesam_fetch_array() (liefert ein assoziatives Array) und sesam_fetch_result() (liefert viele Zeilen pro Aufruf (???))
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

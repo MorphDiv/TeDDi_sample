@@ -1,0 +1,41 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3 = 3.0.4, PHP 4)
+OCIBindByName() binds the PHP variable variable to the Oracle placeholder ph_name.
+Whether it will be used for input or output will be determined run-time, and the necessary storage space will be allocated.
+The length The length parameter sets the maximum length for the bind.
+If you set length to -1 OCIBindByName() will use the current length of variable to set the maximum length.
+If you need to bind an abstract Datatype (LOB / ROWID / BFILE) you need to allocate it first using OCINewDescriptor() function.
+The length is not used for abstract Datatypes and should be set to -1.
+The type variable tells oracle, what kind of descriptor we want to use.
+Possible values are:
+OCI_B_FILE (Binary-File), OCI_B_CFILE (Character-File), OCI_B_CLOB (Character-LOB), OCI_B_BLOB (Binary-LOB) and OCI_B_ROWID (ROWID).
+Example 1.
+OCIDefineByName
+?php / * OCIBindByPos example thies@thieso.net (980221) inserts 3 records into emp, and uses the ROWID for updating the records just after the insert. * / $conn = OCILogon("scott" ,"tiger"); $stmt = OCIParse($conn ,"insert into emp (empno, ename) ". "values (:empno,:ename)". "returning ROWID into :rid"); $data = array(1111 = "Larry", 2222 = "Bill", 3333 = "Jim"); $rowid = OCINewDescriptor($conn,OCI_D_ROWID); OCIBindByName($stmt ,":empno", $empno,32); OCIBindByName($stmt ,":ename", $ename,32); OCIBindByName($stmt ,":rid", $rowid,-1,OCI_B_ROWID); $update = OCIParse($conn ,"update emp set sal = :sal where ROWID = :rid"); OCIBindByName($update ,":rid", $rowid,-1,OCI_B_ROWID); OCIBindByName($update ,":sal", $sal,32); $sal = 10000; while (list($empno,$ename) = each($data)) {OCIExecute($stmt); OCIExecute($update);} $rowid - free(); OCIFreeStatement($update); OCIFreeStatement($stmt); $stmt = OCIParse($conn ,"select * from emp where empno in (1111,2222,3333)"); OCIExecute($stmt); while (OCIFetchInto($stmt, $arr,OCI_ASSOC)) {var_dump($arr);} OCIFreeStatement($stmt); / * delete our "junk "from the emp table.... * / $stmt = OCIParse($conn ,"delete from emp where empno in (1111,2222,3333)"); OCIExecute($stmt); OCIFreeStatement($stmt); OCILogoff($conn);?
+Warning
+It is a bad idea to use magic quotes and OciBindByName() simultaneously as no quoting is needed on quoted variables and any quotes magically applied will be written into your database as OciBindByName() is not able to distinguish magically added quotings from those added by intention.
+Prev
+Home
+Next
+Oracle 8 functions
+Up
+OCICancel

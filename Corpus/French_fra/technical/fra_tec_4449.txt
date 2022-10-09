@@ -1,0 +1,71 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+sesam_fetch_row() retourne un tableau qui correspond à la ligne lue dans le résultat result_id, ou FALSE s'il n 'y a plus de ligne.
+Le nombre de colonnes du résultat est retourné dans un élémen du tableau associatif retourné $array[ "count"].
+Comme certaines lignes peuvent être vides, la fonction count() ne peut être utilisée avec le tableau ainsi retourné par sesam_fetch_row().
+result_id est un identifiant de résultat valide retourné par sesam_query() (avec une requête de selection seulement!).
+whence est un parmètre optionnel lors d 'une opération de lecture sur un curseur à défilement, qui peut prendre une des valeurs suivantes:
+Tableau 1.
+Valeurs valides pour whence
+Valeur
+Constante
+Signification
+
+
+Lecture séquentielle (après la lecture, la position est déplacé à SESAM_SEEK_NEXT)
+
+
+Lecture séquentielle à rebours (après la lecture, la position est déplacé à SESAM_SEEK_PRIOR)
+
+
+Repositionnement au début (après la lecture, la position est déplacée à SESAM_SEEK_NEXT)
+
+
+Repositionnement à la fin (après la lecture, la position est déplacée à SESAM_SEEK_PRIOR)
+
+
+Repositionnement absolu à offset Repositionnement absolu à offset (index commencant à 0.
+Après la lecture, la position est placé à SESAM_SEEK_ABSOLUTE, et le pointeur interne est auto-incrémenté).
+
+
+Repositionnement relatif à offset, où offset peut être positif ou négatif
+Lors de l 'utilisation de curseurs à défilement, le curseur peut être librement repositionné.
+Si le paramètre whence est omis, les valeur par défaut seront utilisées (initialisées à:
+SESAM_SEEK_NEXT, et modifiée par sesam_seek_row()).
+Si whence est fourni, sa valeur remplacera les valeurs par défaut.
+offset est un parmètre optionnel qui n'est utilisé (et nécessaire) que si whence vaut soit SESAM_SEEK_RELATIVE ou SESAM_SEEK_ABSOLUTE.
+Ce paramètre n 'est valable que pour les curseurs à défilement.
+sesam_fetch_row() lit une ligne de données dans le résultat result_id.
+La ligne est retournée sous forme d'un tableau (indexé de 0 à $array["count"]-1).
+Les champs peuvent être vides: il faut vous assurer de leur existence en utilisant la fonction isset().
+Le type de la valeur retournée dépend du type SQL déclaré dans la base (voir introduction SESAM pour connaître les conversion utilisées).
+Les champs multiples SESAM sont linéarisés, et traités comme autant de colonnes.
+Les prochains appels à sesam_fetch_row() liront la prochaine ligne (ou la précédente, ou la n-ième, suivant le type de défilement) dans le résultat, ou FALSE, s'il n 'y a plus de lignes.
+Exemple 1.
+Exemple avec sesam_fetch_row()
+?php $result = sesam_query ("SELECT * FROM phone\n". "WHERE LASTNAME='".strtoupper($name) ."'\n"." ORDER BY FIRSTNAME", 1); if (! $result) {... erreur...} / / Affiche la table dans l'ordre inverse print "TABLE BORDER \n"; $row = sesam_fetch_row ($result, SESAM_SEEK_LAST); while (is_array($row)) {print" TR \n"; for($col = 0; $col $row["count"]; ++$col) {print "TD ".htmlspecialchars($row[$col])." / TD \n";} print "/ TR \n"; / / utilise la valeur implicite de SESAM_SEEK_PRIOR $row = sesam_fetch_row ($result);} print" / TABLE \n"; sesam_free_result ($result);?
+Voir aussi: sesam_fetch_array() qui retourne un tableau associatif, et sesam_fetch_result() qui retourne plusieurs lignes en même temps.
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

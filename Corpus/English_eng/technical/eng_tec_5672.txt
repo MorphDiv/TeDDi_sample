@@ -1,0 +1,362 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+The & kappname; Handbook
+Gael Kleag de Chalendar
+Kleag@free. fr
+ROLES_OF_TRANSLATORS
+Gael de Chalendar
+& ksirk; is a computerized version of a well known strategy game. It is fully skinable. This manual explains how to create new skins from scratch, using a file browser, a SVG image editor and & kappname;.
+KDE
+kdegames
+game
+strategy
+Risk
+free
+GPL
+skin
+editor
+Introduction
+Here's a screenshot of & kappname;
+Screenshot
+There is three main steps to create a new skin: creating the folders hierarchy; creating the graphics, all pooled inside a SVG file; and then placing sprites and naming things using & kappname;.
+Creating a & ksirk; skin
+& ksirk; is fully skinable. For who have graphic capabilities, creating a new skin is as simple as copying an existing one, editing or changing the graphics and updating the data in a. desktop configuration file, which is done using the & kappname;. A last step is to edit the file describing what to install.
+All examples (text and images) are taken from the default skin of & ksirk;
+Structure of folders and files
+Data/: Data used by the program to handle the images of the skin.
+CMakeLists. txt: Describes what to install.
+onu. desktop: Main file for the description of the skin. See its description below.
+Images/: The images of the skin (map, sprites, etc.)
+pool. svg: the map and all the sprites used in this skin.
+map-mask. png: the image allowing the program to find which country the mouse is over during the game (see below).
+*. png: the other images here are buttons images.
+CMakeLists. txt/: Describes what to install.
+Sounds/: sound files for the skin.
+The Data folder
+This folder contains only one file, world. desktop. This file is a description of the content of the skin. It is used to describe the organization of the world and how to display it. You do n't have to fill it manualy as it will be handled by the & kappname;. But, for the sake of completeness, we will now describe its structure.
+An onu group contains a number of country entries, a number of nationality entries and lastly a number of continent entries. Then various groups contain the description of the different sprites, the description of the different countries, continents, nationalities and goals.
+The following sections describe the content of each group.
+The onu group
+The onu group entries
+Entry name
+Signification
+width
+The width of the skin's map
+height
+The height of the skin's map
+skinpath
+The path of the skin relative to the application data path (e. g. skins/ default)
+nb-countries
+The number of countries (42 in the default skin). There should be the same number of country groups below
+nb-nationalities
+The number of nationalities (6 in the default skin). There should be the same number of nationality groups below
+nb-continents
+The number of continents (6 in the default skin). There should be the same number of continent groups below
+pool
+The path and name of the pool file relative to the skin path (e. g. Images/ pool. svg)
+map-mask
+The path and name of the map mask file relative to the skin path (e. g. Images/ map-mask. png)
+format-version
+The version of the skin file format (2.0)
+name
+The display name of the skin
+desc
+The long description of the skin
+fighters-flag-y-diff
+The height difference between flags and cannons sprites
+width-between-flag-and-fighter
+The number of pixels between the left most pixel of the flag and the right most pixel of the simple cannon (when not firing nor exploding)
+The sprites description groups
+Each type of sprite (flag, infantry, cavalry, cannon, firing cannon and exploding cannon) is defined by a group. Only some sprites have a width entry. This entry is used for relative positioning during animations: the cannons, firing or exploding should not "move" around the country's flag during fight.
+Sprite description group entries
+Entry
+The reference width of the flag sprite frames
+The reference height of the flag sprite frames
+frames
+The number of frames of the sprite
+versions
+The number of versions of the flag sprites
+The countries description groups
+Each country listed in the onu group, countries entry has its own group whose label is the country name. The table below lists the entries of these groups.
+Country entries
+id
+The integer unique identification number of the country, must start at zero (0)
+The displayed name of the country
+& lt; spritegt; -point
+Each type of sprite (flag, infantry, etc.) in the country is displayed at a certain position defined by this entry made of two integers separated by a comma
+neighbours
+The list of the ids of the neighbors of the current country
+The nationalities description groups
+Each nationality listed in the onu group, nationalities entry has its own group whose label is the nationality name. The table below lists the entries of these groups.
+Nationality entries
+The name of the nationality (e. g. Japan)
+leader
+The name that will be proposed to the player choosing this nationality
+flag
+The name of the country's flag sprite element in the onu SVG file
+The continents description groups
+Each continent listed in the onu group, continents entry has its own group whose label is the continent name. The table below lists the entries of these groups.
+Continent entries
+The name of the continent (e. g. Africa)
+The integer unique identification number of the continent
+bonus
+The number of armies obtained at the end of the turn by the player owning all the countries of the continent
+continent-countries
+The list of the ids of the countries inside the current continent
+The goals description groups
+Each goal listed in the onu group, goals entry has its own group whose label is the goal name. The table below lists the entries of these groups.
+Goal entries
+type
+The type of goal. Can be continents, countries or player
+nbArmiesByCountry
+set the minimal number of armies the player will have to put on each country
+nbCountries
+set the number of countries the player must possess
+nbCountriesFallback
+For a player goal type, if the target player is killed by another one, this sets the number of countries the player will have to conquer instead
+A full text description of the goal with appropriate placeholders (needs more doc here)
+continents
+The list of continents ids the player will have to conquer
+The Images folder
+This folder contains the buttons specific to & ksirk; and the pool SVG file that contains the map and all sprites.
+The pool. svg file
+This SVG file contains the map and all the sprites of the game. Each element is named such that the game can select and render separately each of them.
+In the default skin, the sprites are flags, infantry, cavalry and cannon. Infantry represents one army, five for cavalry and ten for cannons. Cannons are also used to display fighting armies. That's why there is three kinds of cannon sprites: normal static or moving cannon, firing one and exploding one.
+Each sprite image is the concatenation of the various views of the object and for each view, its frames. Views are organized vertically and frames horizontally. Where to cut the image in individual frames is found by dividing the height of the image by the number of views and the width by the number of frames. These data are found in the onu. desktop file.
+An example of a sprite image: cannon. png
+For armies sprites, there is three different views, from top to bottom:
+looking right
+looking left and
+facer
+For flags, there is only one view. All sprites backgrounds should be set to transparent.
+An example of a flag sprite image: italy. png
+The elements of the pool
+Element name
+Sample Image
+map
+Map of the skins's world. Countries can have arbitrary shapes, but should be grouped in eye-recognizable continents, by location only or by color
+italy
+The flag of the Italy nation. There is one such entry for each nation
+infantry
+Icon representing one army
+cavalry
+Icon representing five armies
+cannon
+Icon representing ten armies
+firing
+Icon representing armies during a fight
+exploding
+Icon representing armies when losing a fight
+Alaska
+The shape of the Alaska country. This is used to highligth the country. There is one such shape for each country. Its color is not used. As such, the color is free.
+reddices
+The red dices used to show battles results
+bluedices
+The blue dices used to show battles results
+mark1
+This mark is added to fighting sprites to show the number of armies they represent, here 1. There is also a mark2 and a mark3 elements.
+The map-mask. png file
+This is a png file representing also the map of the skins's world, but with coded colors that allows one to identify uniquely each country. Countries must have at least the same shapes as the corresponding countries on the map. png file so that users can click anywhere in a viewable country and select the good one. Countries, like little islands as Indonesia in the default map can be greater than the equivalent in the map. png file to facilitate the selection of the country.
+A sample map-mask
+The blue component (in RGB model) of a country's color identifies the country: index 0 is country 0 in the onu. xml file, index 1 is country 1, & etc;. White (0xFFFFFF in RGB) identifies the absence of country (sees or, why not, no man's lands).
+The buttons images
+The filenames are hard-coded in the code, so they should not be modified. The table below shows all the buttons that should be provided.
+The buttons of the & GUI;
+Image
+Filename
+newNetGame. png
+Tries to join a network game
+recycling. png
+After all players have put their armies, it is possible to modify the distributions (named recycling). This button asks to do such a redistribution
+recyclingFinished. png
+Chooses not to redistribute. All clients windows must have this button clicked to really end the distribution
+nextPlayer. png
+Ends the current player's turn and switch to the next one or to the next turn if the current player was the last one
+attackOne. png
+Chooses to start an attack with one army
+attackTwo. png
+Chooses to start an attack with two armies
+attackThree. png
+Chooses to start an attack with three armies
+defendOne. png
+Chooses to defend an attacked country with one army
+defendTwo. png
+Chooses to defend an attacked country with two armies
+moveArmies. png
+Chooses to start the moving of armies between two countries (last action in the turn)
+The Sounds folder
+This folder contains three sound files:
+roll. wav played when armies are moving
+cannon. wav played when firing and
+crash. wav played when a cannon explodes
+Using the & kappname;
+After creating the graphics in the right folder and SVG file, you just have to create countries, players, etc. and associate them with the right SVG element in the pool. This can be done with the & kappname;. Note that each part of this application is auto-described by tooltips and contextual help usualy reachable through the Ctrl+F1 shortcut.
+Command Reference
+The main & kappname; window
+The buttons
+Load
+Load
+Causes the program to load an existing skin.
+Save
+Save
+Saves the currently edited skin
+Developer's Guide to & kappname;
+Please refer to http: / /api. kde. org/ for the documentation of the API.
+Questions and Answers
+& updating. documentation;
+Credits and License
+& kappname;
+Program copyright 2009 Gael de Chalendar kleag@free. fr
+Documentation copyright 2009 Gael de Chalendar kleag@free. fr
+CREDIT_FOR_TRANSLATORS
+& underFDL; & underGPL;
+Installation
+How to obtain & kappname;
+& install. intro. documentation;
+Compilation and Installation
+& install. compile. documentation;
+What will be the first question concerning & ksirk;?
+& kappname; is a computerized version of a well known strategy game. Commercial and other Free Software versions exist but I (Gaël de Chalendar) created this game initially as a C++ learning exercise and so, I developed it up to this point (see README for details).
+In the current version, & kappname; is a multi-player network-enabled game with an AI. (see TODO for details)
+This documentation gives the major information you need to start playing. Please read the tooltips and the status bar messages to complete your information. A chapter explains how to create new skins for & kappname;
+The goal of the game is simply to conquer the World... It is done by attacking your neighbors with your armies. Peaceful, is n't it: -)
+AI
+This documentation gives only the major information you need to start playing. Please read the tooltips and the status bar messages to complete your information.
+The goal of the game is simply to conquer the World... It is done by attacking your neighbors with your armies. Peaceful, is n't it?: -)
+Playing & kappname;
+Preliminary note: the map can be scrolled by three methods:
+You can put your mouse near a border of the window and the map will scroll in that direction
+You can use your mouse wheel: with no modifier, it will scroll vertically; when pressing the & Alt; key, it will scroll horizontally
+You can use the keyboard arrows
+Starting a game
+When & kappname; starts, you are presented with a main menu.
+The main menu of & kappname;
+Main menu
+New Game
+Starts a new game
+Join
+Allow to join a network game as a client
+Load
+Use this to load a previously saved game
+Quit
+Maybe you finally do n't want to play?
+If you hit New Game you will be presented with the New game properties dialog where you will be able to choose the number of players, the skin (or theme) to use, the game type (conquer the goal or have a specific goal) and finally if this game will be played with online players or if it is purely local.
+The New Game dialog
+The New Game dialog
+To start a network game, check the Network game check box on the right of the number of players spin box. After clicking OK, you will be able to choose the network parameters: number of network players and TCP port on which waiting for connections.
+Network game parameters dialog
+Network game parameters dialog
+Then, network players will be able to connect by choosing Join on the introduction screen and by indicating the IP or hostname of the host and the port number you just set.
+Joining network game dialog
+Joining network game dialog
+Each connection is indicated by the message below in the status bar.
+Connection message
+Connection message
+Let's suppose you keep all the default settings and hit OK. You will then setup two players, one after one. For each one, you'll choose a name, a nationality and, if you want, setup a password such that nobody else than you can reuse this player when reloading this saved game. Lastly, you will here specify if this player is played by the computer or by a human being.
+The Player Setup dialog
+The Player Setup dialog
+Then, if you choose to play with goal, the goal of each local player is displayed, preceded by a warning such that other players looking at the same computer can discreetly turn away while the goal is being viewed.
+The Goal Display dialog
+The Goal Display dialog
+The Goal Display warning message
+The Goal Display warning message
+Distribution
+At the beginning of the game, countries are distributed to all the players. Each country contains one army (represented by an infantryman) at the start. Each player has some armies to distribute to his countries at their turn (indicated by the presence of their name and their flag in the status bar). Note that five armies are represented by a cavalryman and 10 by a cannon.
+To put an army on one of your countries, click on it with the left mouse button. To remove an army, click with the right button. Note, as a general rule, that you will never be able to remove more armies than the number you placed.
+Placing armies
+Placing armies
+When a player has distributed all there armies, the next player is automatically selected to do the same task. When all players have finished to distributing their armies, there is two possibilities that can be selected by two buttons showed in the right panel:
+Redistribution
+Recycle
+One player wants to change some of his choices. The first player can then remove an army he just put in a country with the right mouse button and put it in another one with the left mouse button. When he finishes, he gives control to next player with the Valid button. When all players have finished their redistribution, the two buttons are displayed again.
+End of redistribution
+Done
+The redistribution is finished and the game can continue.
+Fight
+After the redistribution, a turn starts. Each player plays at his turn. He has the choice to:
+Next player
+The turn of the current player finishes and it's the turn of the next one.
+Attack 1
+& nbsp; Attack 2 & nbsp; Attack 3 Attack with one, two or three armies & nbsp; Auto attack Auto attack
+To attack, drag with the mouse from the attacking country and drop to the attacked one. You will then be presented with a contextual menu showing the above entries. Attack menu Attack menu For a country X to attack a country Y with x armies, 2 conditions must be fulfilled:
+the two countries must be neighbors;
+country X must have at least x+1 armies before the attack.
+If the attack is valid, a dialog is displayed if necessary for the defender to choose if he wants to defend with one or two armies or let the computer decide.
+When the defenders choice is done, the fight will occur and be completed. This will described below.
+Defense dialog
+Defense dialog
+Move armies
+Move Armies from one country to another
+This is the last action of a player's turn. It gives the possibility to move some armies from one of his country to another, neighboring the first one. To choose the two countries, please drag and drop like you use during an attack. When both countries are selected, a slider is displayed on which you can choose how many armies there will be on each country afterwards.
+Solution of the fight
+For each army in the fight there is a corresponding die cast. The player who rolls a higher number on the dice, whether being from the attacker or defender, wins and the one to roll a smaller number on the dice loses armies according to the number of dice thrown.
+Attack result displayed
+Attack result displayed
+If the number of armies in the defender country reaches 0, the ownership of this country changes to the attacker: his flag is set up and one of his attacking armies is installed in his new country. The "Move armies" slider is displayed as for the moves of the end of the turn.
+Invasion slider
+Invasion slider
+End of the turn
+To finish your current turn, if you do n't want to move armies, you can hit the Next Player button in the toolbar.
+When everybody has played, the turn is finished. Some armies are distributed to the players, in function of the countries they own: 1 for each group of three countries, with a minimum of 3. There is also a bonus for players that own a complete continent, different for each one. The values of the bonuses for the default skin are:
+Bonus due to the continents
+Continent
+Bonus
+North America
+5
+South America
+2
+Europe
+Africa
+3
+Asia
+7
+Pacific Area
+When a player has finished distributing his armies, he clicks the Valid button to allow the next player to distribute his bonus armies. As for the initial distribution, when all player have placed their armies, they can start a new redistribution cycle or start a new turn...
+Sending messages to other players
+If you play a local game and want to communicate with the other players, well, let's speak (supposing you have no accessibility problems)... But if you are playing a network game, you can use the chat frame at the bottom of the window (it can be hidden or showed using the arrows). Just type in your message and hit & Enter;.
+Sending messages
+Sending messages
+Quit Game
+Starts a new game. It will cause the displaying of a dialog asking the number of players. After that, each player will be asked its name with another dialog.
+Note that I originally developed this game under & Windows; with Borland C++ and WinG. I ported it to & Java; before converting back to C++ and & kde;. At the beginning I used French or a mix of French and English to name the identifiers (classnames, methods, members, & etc;). I also used French for the comments. When I decided to distribute this game, I decided to convert all to english... but I am clearly not a native English speaker: please suggest or make and submit corrections, to the code comments or to this documentation
+The onu. desktop file
+joueurSuivant. png
+Contributors: Robin Doer, Albert Astals Cid, Michal Golunski (Polish translation).
+Configuration
+The settings menu entry opens a dialog that allows you tonbsp;:
+Preferences dialog
+Preferences dialog
+enable or disable the soundsnbsp;;
+set the speed of the sprites (from slow to immediate)nbsp;;
+enable or disable the contextual helps displayed in popupsnbsp;;
+show or hide the number of armies on each country. The following snapshot shows the map when the number of armies are displayed.
+Display of the number of armies
+Display of the number of armies
+distributionArmees. png
+distributionArmeesFinie. png
+Preliminary note: the map can be scrolled by three methods. First, you can put your mouse near a border of the window and the map will scroll in that direction. Second, you can use your mouse wheel: with no modifier, it will scroll vertically; when pressing the Meta key, it will scroll horizontally. And lastly, you can use the keyboard arrows.
+New game
+Quit
+: Redistribution
+: End of redistribution
+: Give hand to the next player (button in the toolbar)
+Attack auto
+: Quit Game
+New Game
+: New Game
+This folder contains three sound files: roll. wav played when armies are moving; cannon. wav played when firing and crash. wav played when a cannon exploses.

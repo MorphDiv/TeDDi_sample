@@ -1,0 +1,120 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Programmbeispiele für Kontrollfelder im Dialog-Editor
+/text/sbasic/guide/sample_code.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+Programmierbeispiele für Kontrollfelder
+Dialog;laden (Beispiel)
+Dialoge;anzeigen (Beispiel)
+Kontrollfelder;Eigenschaften lesen oder ändern (Beispiel)
+Listenfelder;Einträge aus Listenfeldern löschen (Beispiel)
+Listenfelder;Einträge in Listenfelder einfügen (Beispiel)
+Beispiele; Programmierung von Kontrollfeldern
+Dialog-Editor;Programmierbeispiele für Kontrollfelder
+Programmbeispiele für Kontrollfelder im Dialogeditor
+Dialog
+mit dem Namen
+Dialog1
+anlegen.
+Im Dialogeditor legen Sie folgende Kontrollfelder an: ein
+Markierfeld
+mit dem Namen
+CheckBox1
+, ein
+Beschriftungsfeld
+mit dem Namen
+Label1
+, eine
+Schaltfläche
+mit dem Namen
+CommandButton1
+und ein
+Listenfeld
+mit dem Namen
+ListBox1
+.
+Beim Zuweisen des Kontrollfeldes an eine Objektvariable ist die Schreibweise wichtig.
+Wenn der Name des Kontrollfeldes klein geschrieben wurde, muss dieser auch mit der selben Schreibweise abgefragt werden.
+Globale Funktion zum Laden von Dialogen
+Function LoadDialog(Libname as String, DialogName as String, Optional oLibContainer)
+Dim oLib as Object
+Dim oLibDialog as Object
+Dim oRuntimeDialog as Object
+If IsMissing(oLibContainer ) then
+oLibContainer = DialogLibraries
+End If
+oLibContainer.LoadLibrary(LibName)
+oLib = oLibContainer.GetByName(Libname)
+oLibDialog = oLib.GetByName(DialogName)
+oRuntimeDialog = CreateUnoDialog(oLibDialog)
+LoadDialog() = oRuntimeDialog
+End Function
+Dialog anzeigen
+rem globale Variablendefiniton
+Dim oDialog1 AS Object
+Sub StartDialog1
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+oDialog1.Execute()
+end sub
+Eigenschaften von Kontrollfeldern im Programm abfragen oder ändern
+Sub Sample1
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM Model des Dialogs holen
+oDialog1Model = oDialog1.Model
+REM Beschriftung des Kontrollfelds Label1 anzeigen
+oLabel1 = oDialog1.GetControl( &quot; Label1 &quot; )
+MsgBox oLabel1.Text
+REM Neuen Text am Kontrollfeld Label1 setzen
+oLabel1.Text = &quot; New Files &quot;
+REM Anzeigen der Model-Eigenschaften für das Kontrollfeld CheckBox1
+oCheckBox1Model = oDialog1Model.CheckBox1
+MsgBox oCheckBox1Model.Dbg_Properties
+REM Neuen State für CheckBox1 am Model des Kontrollfelds setzen
+oCheckBox1Model.State = 1
+REM Anzeigen der Model-Eigenschaften für das Kontrollfeld CommandButton1
+oCMD1Model = oDialog1Model.CommandButton1
+MsgBox oCMD1Model.Dbg_Properties
+REM Anzeigen der Eigenschaften des Kontrollfelds CommandButton1
+oCMD1 = oDialog1.GetControl( &quot; CommandButton1 &quot; )
+MsgBox oCMD1.Dbg_Properties
+REM Dialog ausführen
+oDialog1.Execute()
+End Sub
+Eintrag in einer ListBox hinzufügen
+Sub AddEntry
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM setzt einen neuen Eintrag in die Listbox
+oDialog1Model = oDialog1.Model
+oListBox = oDialog1.GetControl( &quot; ListBox1 &quot; )
+dim iCount as integer
+iCount = oListbox.ItemCount
+oListbox.additem( &quot; New Item &quot; & iCount,0)
+end sub
+Eintrag in einer ListBox löschen
+Sub RemoveEntry
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM löscht den ersten Eintrag aus der Listbox
+oDialog1Model = oDialog1.Model
+oListBox = oDialog1.GetControl( &quot; ListBox1 &quot; )
+oListbox.removeitems(0,1)
+end sub

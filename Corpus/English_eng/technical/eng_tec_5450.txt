@@ -1,0 +1,64 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(no version information, might be only in CVS)
+php_stream_cast() attempts to convert stream into a resource indicated by castas.
+If ret is NULL, the stream is queried to find out if such a conversion is possible, without actually performing the conversion (however, some internal stream state *might* be changed in this case).
+If flags is set to REPORT_ERRORS, an error message will be displayed is there is an error during conversion.
+Note:
+This function returns SUCCESS for success or FAILURE for failure.
+Be warned that you must explicitly compare the return value with SUCCESS or FAILURE because of the underlying values of those constants.
+A simple boolean expression will not be interpreted as you intended.
+Table 43-1.
+Resource types for castas
+Value
+Meaning
+PHP_STREAM_AS_STDIO
+Requests an ANSI FILE* that represents the stream
+PHP_STREAM_AS_FD
+Requests a POSIX file descriptor that represents the stream
+PHP_STREAM_AS_SOCKETD
+Requests a network socket descriptor that represents the stream
+In addition to the basic resource types above, the conversion process can be altered by using the following flags by using the OR operator to combine the resource type with one or more of the following values:
+Table 43-2.
+Resource types for castas
+Value
+Meaning
+PHP_STREAM_CAST_TRY_HARD
+Tries as hard as possible, at the expense of additional resources, to ensure that the conversion succeeds
+PHP_STREAM_CAST_RELEASE
+Informs the streams API that some other code (possibly a third party library) will be responsible for closing the underlying handle / resource.
+This causes the stream to be closed in such a way the underlying handle is preserved and returned in ret.
+If this function succeeds, stream should be considered closed and should no longer be used.
+Note:
+If your system supports fopencookie() (systems using glibc 2 or later), the streams API will always be able to synthesize an ANSI FILE* pointer over any stream.
+While this is tremendously useful for passing any PHP stream to any third-party libraries, such behaviour is not portable.
+You are requested to consider the portability implications before distributing you extension.
+If the fopencookie synthesis is not desireable, you should query the stream to see if it naturally supports FILE* by using php_stream_is()
+Note:
+If you ask a socket based stream for a FILE*, the streams API will use fdopen() to create it for you.
+Be warned that doing do may cause data that was buffered in the streams layer to be lost if you intermix streams API calls with ANSI stdio calls.
+See also php_stream_is() and php_stream_can_cast().
+Prev
+Home
+Next
+php_stream_make_seekable
+Up
+php_stream_can_cast

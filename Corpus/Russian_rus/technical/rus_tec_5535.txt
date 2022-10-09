@@ -1,0 +1,36 @@
+# language_name_wals:	Russian
+# language_name_glotto:	Russian
+# ISO_6393:	rus
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Cyrl
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ru.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Руководство по PHP
+Пред.
+Глава 5. Безопасность
+След.
+Использование опции register-globals
+Еще одно средство PHP для повышения безопасности - конфигурация с использованием register_globals = off. Это отключает внедрение пользовательских переменных в среду переменных программы на PHP, сводя попытки внедрения злоумышленником нужных ему значений на нет. Опция полностью изолирует внутренние переменные от предоставляемых пользователем данных.
+Конечно, это немного увеличивает количество усилий, необходимых для обработки пользовательского ввода. Но все-таки игра стоит свеч, и плюсы такого подхода гораздо более существенны, нежели минусы.
+Пример 5-14. Программа с register_globals=on
+?php if ($username) {/ / может быть подменена пользователем в get / post / cookies $good_login = 1;} if ($good_login == 1) {/ / также может быть подменена пользователем в get / post / cookies fpassthru (" / highly / sensitive / data / index.html");}?
+Пример 5-15. Программа с register_globals = off
+?php if( $_COOKIE['username']) {/ / может прийти только из записи cookie, нормальной или поддельной $good_login = 1; fpassthru (" / highly / sensitive / data / index.html");}?
+Пример 5-16. Простейшая проверка на подмену данных
+?php if ($_COOKIE['username'] !$_POST['username'] !$_GET['username']) {/ / произвести проверку имени пользователя $good_login = 1; fpassthru (" / highly / sensitive / data / index.html");} else {mail("admin@example.com", "Возможна подмена данных ", $_SERVER['REMOTE_ADDR']); echo "Ошибка безопасности. Произведено оповещение администратора ."; exit;}?
+Пред.
+Начало
+След.
+Отчеты об ошибках
+Уровень выше
+Данные, отправленные пользователем

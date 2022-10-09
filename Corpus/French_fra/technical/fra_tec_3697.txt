@@ -1,0 +1,68 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+ldap_search retourne un identifiant de résultat, ou bien FALSE en cas d 'erreur.
+ldap_search() effectue une recherche avec le filtre filter dans le dossier base_dn avec le paramétrage LDAP_SCOPE_SUBTREE.
+C'est l'équivalent d 'une recherche dans le dossier. base_dn spécifie le DN de base du dossier.
+Il y a un quatrième paramètre optionnel, qui peut être fourni pour restreindre les attributs et valeurs retournées par le serveur, afin de les adapter à vos besoins.
+C'est bien plus efficace que le comportement par défaut (qui retourne tous les attributs et leurs valeurs associées).
+L 'utilisation de ce quatrième est donc vivement recommandé.
+Le quatrième paramtère est un tableau de chaînes PHP avec les attributs demandé, comme par exemple: array( "mail" ,"sn" ,"cn").
+Notez que le "dn" est toujours retourné, indépendamment des attributs demandés.
+Notez aussi que certains serveurs de dossiers sont configurés pour retourner un nombre limité d 'entrées.
+Si cette situation survient, le serveur indiquera qu 'il a retourné un résultat partiel.
+C'est aussi le cas si le sixième paramètre sizelimit a été utilisé pour limiter le nombre d 'entrées retournées.
+Le cinquième paramètre attrsonly doit être mis à 1 si seul les types d 'attributs sont désirés.
+Si ce paramètre est mis à 0, les types d'attributs et leurs valeurs seront retournées: c 'est le comportement par défaut.
+Avec le sixième paramètre sizelimit, il est possible de limiter le nombre d 'entrées lues dans le résultat.
+En utilisant 0, on indique qu'il n 'y a pas de limite.
+NOTE: ce paramètre NE peut PAS remplacer la configuration du serveur.
+Vous pouvez au mieux baisser encore cette limite.
+Le septième paramètre timelimit permet de spécifier le nombre de secondes de duréee de la recherche.
+En utilisant la valeur 0, la recherche pourra durée indéfiniment.
+NOTE: ce paramètre NE peut PAS remplacer la configuration du serveur.
+Vous pouvez au mieux baisser encore cette limite.
+Le huitième paramètre deref spécifie comment les alias doivent être géré durant la rechercheé.
+Ce paramètre peut prendre l 'une des valeurs suivantes:
+LDAP_DEREF_NEVER - (par défaut) les alias ne sont jamais déréférencés.
+LDAP_DEREF_SEARCHING - les alias sont déréférencés durant la recherche, mais pas durant la localisation du dossier de recherche.
+LDAP_DEREF_FINDING - les alias sont déréférencés durant la localisation du dossier de recherche, mais pas durant la recherche.
+LDAP_DEREF_ALWAYS - les alias sont toujours déréférencés.
+
+Ces paramètres optionnels ont été ajoutés en 4.0.2: attrsonly, sizelimit, timelimit et deref.
+Le filtre de recherche peut être simple ou avancé, et utiliser ces opérateurs booléen au format décrit dans la documentation LDAP (reportez vous à Netscape Directory SDK pour plus d'informations sur les filtres).
+L'exemple ci-dessous lit le nom du service, le nom, le prénom et le email des employés de la société "Ma Compagnie ", dont le nom ou le prénom contient la sous chaîne: $person.
+Cet exemple illustre l 'utilisation de filtres pour indiquer au serveur de faire une recherche sur deux attributs.
+Exemple 1.
+Recherche LDAP
+?php / / $ds doit ecirc; tre une ressource de connexion valide / / $person est un nom ou une partie de nom (par exemple, "Jean") $dn = "o=Ma Compagnie, c=FR"; $filter="(|(sn=$person*)(givenname=$person*))"; $justthese = array ("ou", "sn", "givenname", "mail"); $sr=ldap_search($ds, $dn, $filter, $justthese); $info = ldap_get_entries($ds, $sr); print $info["count"]. "entr eacute;es trouv eacute;es. p";?
+Depuis PHP 4.0.5, il est possible de faire des recherches paralelles.
+Pour cela, vous devez utiliser un tableau de ressources de connexion comme premier argument, au lieu d 'une ressource simple.
+Si vous ne voulez pas utiliser le même dossier de base DN et le même filtre pour toutes les recherches, vous pouvez aussi utiliser un tableau de DN et de filtres.
+Ces tableaux doivent alors etre de la même taille que le table de ressources de connexion: la première entrée du tableau de ressources sera utilisé avec le premier DN et le premier filtre, etc...
+Lorsque vous faite une recherche paralelle, un tableau de résultats est retourné, sauf en cas d'erreur, auquel cas l 'entrée contiendra FALSE.
+C'est très proche du comportement habituel, hormis le fait qu'un résultat est toujours retourné lorsqu 'une recherche est faite.
+Il y a de rares cas où une recherche retourne FALSE, alors qu 'une recherche en paralelle retourne un identifiant.
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

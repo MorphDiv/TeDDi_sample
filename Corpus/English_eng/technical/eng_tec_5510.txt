@@ -1,0 +1,51 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+Sooner or later, you may need to assign the contents of one zval container to another.
+This is easier said than done, since the zval This is easier said than done, since the zval container doesn' t contain only type information, but also references to places in Zend's internal data.
+For example, depending on their size, arrays and objects may be nested with lots of hash table entries.
+By assigning one zval to another, you avoid duplicating the hash table entries, using only a reference to them (at most).
+To copy this complex kind of data, use the copy constructor.
+Copy constructors are typically defined in languages that support operator overloading, with the express purpose of copying complex types.
+If you define an object in such a language, you have the possibility of overloading the "=" operator, which is usually responsible for assigning the contents of the lvalue (result of the evaluation of the left side of the operator) to the rvalue (same for the right side).
+Overloading means assigning a different meaning to this operator, and is usually used to assign a function call to an operator.
+Whenever this operator would be used on such an object in a program, this function would be called with the lvalue and rvalue as parameters.
+Equipped with that information, it can perform the operation it intends the "=" operator to have (usually an extended form of copying).
+This same form of "extended copying" is also necessary for PHP's zval containers.
+Again, in the case of an array, this extended copying would imply re-creation of all hash table entries relating to this array.
+For strings, proper memory allocation would have to be assured, and so on.
+Zend ships with such a function, called zend_copy_ctor() (the previous PHP equivalent was pval_copy_constructor()).
+A most useful demonstration is a function that accepts a complex type as argument, modifies it, and then returns the argument:
+zval *parameter; if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z", parameter) == FAILURE) return;} / / do modifications to the parameter here / / now we want to return the modified container: *return_value == *parameter; zval_copy_ctor(return_value);
+The first part of the function is plain-vanilla argument retrieval.
+After the (left out) modifications, however, it gets interesting:
+The container of parameter is assigned to the (predefined) return_value container.
+Now, in order to effectively duplicate its contents, the copy constructor is called.
+The copy constructor works directly with the supplied argument, and the standard return values are FAILURE on failure and SUCCESS on success.
+If you omit the call to the copy constructor in this example, both parameter and return_value would point to the same internal data, meaning that return_value would be an illegal additional reference to the same data structures.
+Whenever changes occurred in the data that parameter points to, return_value might be affected.
+Thus, in order to create separate copies, the copy constructor must be used.
+The copy constructor' s counterpart in the Zend API, the destructor zval_dtor(), does the opposite of the constructor.
+Prev
+Home
+Next
+Creating Constants
+Up
+Returning Values

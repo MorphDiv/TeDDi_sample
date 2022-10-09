@@ -1,0 +1,56 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 13.
+Functions
+Next
+Information may be passed to functions via the argument list, which is a comma-delimited list of variables and / or constants.
+PHP supports passing arguments by value (the default), passing by reference, and default argument values.
+Variable-length argument lists are supported only in PHP 4 and later; see Variable-length argument lists and the function references for func_num_args(), func_get_arg(), and func_get_args() for more information.
+A similar effect can be achieved in PHP 3 by passing an array of arguments to a function:
+function takes_array( $input) {echo "$input[0] + $input[1] = ", $input[0]+$input[1];}
+By default, function arguments are passed by value (so that if you change the value of the argument within the function, it does not get changed outside of the function).
+If you wish to allow a function to modify its arguments, you must pass them by reference.
+If you want an argument to a function to always be passed by reference, you can prepend an ampersand () to the argument name in the function definition:
+function add_some_extra( $string) {$string .= 'and something extra .';} $str = 'This is a string, '; add_some_extra($str); echo $str; / / outputs'This is a string, and something extra.'
+A function may define C++-style default values for scalar arguments as follows:
+function makecoffee ($type = "cappuccino") {return "Making a cup of $type.\n";} echo makecoffee (); echo makecoffee ("espresso");
+The output from the above snippet is:
+Making a cup of cappuccino.
+Making a cup of espresso.
+The default value must be a constant expression, not (for example) a variable or class member.
+Note that when using default arguments, any defaults should be on the right side of any non-default arguments; otherwise, things will not work as expected.
+Consider the following code snippet:
+function makeyogurt ($type = "acidophilus", $flavour) {return "Making a bowl of $type $flavour.\n";} echo makeyogurt ("raspberry"); / / won't work as expected
+The output of the above example is:
+Warning:
+Missing argument 2 in call to makeyogurt() in / usr / local / etc / httpd / htdocs / php3test / functest.html on line 41 Making a bowl of raspberry.
+Now, compare the above with this:
+function makeyogurt ($flavour, $type = "acidophilus") {return "Making a bowl of $type $flavour.\n";} echo makeyogurt ("raspberry"); / / works as expected
+The output of this example is:
+Making a bowl of acidophilus raspberry.
+PHP 4 has support for variable-length argument lists in user-defined functions.
+This is really quite easy, using the func_num_args(), func_get_arg(), and func_get_args() functions.
+No special syntax is required, and argument lists may still be explicitly provided with function definitions and will behave as normal.
+Prev
+Home
+Next
+Functions
+Up
+Returning values

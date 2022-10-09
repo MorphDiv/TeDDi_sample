@@ -1,0 +1,39 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+include() 文は指定されたファイルを読み込み、評価します。
+以下の記述内容は require() にも当てはまります。これら2つの 構文はエラーの扱い方を除けば、その振る舞いは全く同じです。エラーが発生すると include() は Warning を出力しますが require() を使用している場合は Fatal Error となります。 言い換えると、指定されたファイルが無い場合に処理を停止したい場合は require() を使用した方が良い、ということになります。 include() を使用すると、読み込むべきファイルが存在しない 場合も処理が続行されます。 include_path を適切に設定することも忘れないで下さい。
+ファイルが読み込まれるとそのファイルに含まれるコードは、 include() もしくは require() が実行された 行の 変数スコープ を継承します。 呼び出し側の行で利用可能である全ての変数は、読み込まれたファイル内で利用可能です。
+
+例 12-3基本的な include() の例
+呼び出し側のファイルの関数定義の中で読み込みが行われ場合は、読み込まれる ファイルに含まれる全てのコードは、その関数内で定義されているものとして 動作します。従って変数スコープのその関数のものが継承されます。
+
+例 12-4関数内での読み込み
+ファイルが読み込まれるときには、読み込まれるファイルの先頭で PHPモードを抜けてHTMLモードになり、最後に再びPHPモードに戻ります。 このため、読み込むファイル中のPHPコードとして実行する必要がある コードは、 有効なPHPの開始タグおよび終了タグ で括る必要があります。
+"URL fopenラッパー "が 有効になっている場合(デフォルト設定では有効です)、ローカルなパス名 の代わりにURL(HTTP経由)を用いて読み込むファイルを指定することが可能です。 URLで指定されたサーバがファイルをPHPコードとして解釈することが 出来る場合には、HTTP GETを使用してURLリクエストに引数を指定することが 出来ます。これはファイルの読み込み云々やスコープの継承とは関係なく、 ただ単純にスクリプトがリモートのサーバで実行されて結果がローカルの スクリプトに読み込まれる、というだけのことです。
+Windows版の PHP は、現在この関数に関してリモートファイルアクセス機能をサポートしていません。これは、 allow_url_fopen を有効にした場合でも同様です。
+
+例 12-5HTTP経由の include()
+include() と require() は特殊な 言語構造であるため、条件構造内にある場合は命令ブロックとして 括っておく必要があります。
+
+例 12-6include() と 条件ブロック
+値の返し方: 読み込まれたファイル内では、ファイルの実行処理を終了し呼出側の スクリプトに戻るために return() 文を実行することが可能です。 同時に値を返すことや、通常の関数と同様に呼び出しの値を取得することも出来ます。
+注意 PHP 3では関数ブロック以外のブロック内でreturnを 使用することはできません。 return() が適用されるのは関数であり、ファイル全体ではありません。
+
+例 12-7 include() と return() 文
+読み込みが成功すると $bar の値は1となります。上の2つの例の違いに 注目してください。最初の例では読み込まれるファイル側で return() を使用し、もう一方では使用していません。ファイルを"読み込む"ための他の方法としては fopen() や file() 、そして include() を 出力制御関数 と共に使用する方法があります。
+require(), require_once(), include_once(), readfile(), virtual(), include_path も参照してください。

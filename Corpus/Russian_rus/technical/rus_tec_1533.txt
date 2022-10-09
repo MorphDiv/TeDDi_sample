@@ -1,0 +1,73 @@
+# language_name_wals:	Russian
+# language_name_glotto:	Russian
+# ISO_6393:	rus
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Cyrl
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/ru.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Функция Dir [время выполнения]
+/text/sbasic/shared/03020404.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe; bug fix: i29276
+функция Dir
+Функция Dir [время выполнения]
+Возвращает имя файла, каталога или всех файлов и каталогов на диске или в каталоге, соответствующих указанному пути поиска.
+Синтаксис:
+Dir [(Текст As String) [, Атрибут As Integer]]
+Возвращаемое значение:
+String
+Параметры:
+Текст
+.
+Любое выражение типа String, которое указывает путь поиска, каталог или файл.
+Данный аргумент может быть указан, только когда функция Dir вызывается в первый раз.
+При необходимости можно ввести путь в
+URL-нотации
+.
+Атрибут
+.
+Любое целое выражение, указывающее побитовые атрибуты файла.
+Функция Dir возвращает только файлы или каталоги, которые соответствуют указанным атрибутам.
+Можно объединять несколько атрибутов, складывая значения атрибутов.
+0 .
+Обычные файлы.
+16 .
+Возвращает только имя каталога.
+Используйте этот атрибут, чтобы проверить, существует ли файл или каталог, или чтобы определить все файлы и папки в конкретном каталоге.
+Чтобы проверить, существует ли файл, введите полный путь и имя файла.
+Если имя файла или каталога не существует, функция Dir возвращает строку нулевой длины ( &quot; &quot; ).
+Чтобы создать список всех существующих файлов в конкретном каталоге, выполните следующие действия.
+При вызове функции Dir в первый раз укажите полный путь поиска для файлов, например &quot; D:\Files\*.sxw &quot; .
+Если путь верный и во время поиска найден хотя бы один файл, функция Dir возвращает имя первого файла, соответствующего пути поиска.
+Чтобы получить дополнительные имена файлов, которые соответствуют этому пути, снова вызовите функцию Dir, но без аргументов.
+Чтобы возвратить только каталоги, используйте параметр &quot; Атрибут».
+Он применяется также, когда нужно определить имя тома (например, раздел жесткого диска)
+Пример:
+Sub ExampleDir
+REM Отображает все файлы и каталоги
+Dim sPath As String
+Dim sDir as String, sValue as String
+sDir= &quot; Каталоги: &quot;
+sPath = CurDir
+sValue = Dir$(sPath + &quot; \* &quot; ,16)
+Do
+If sValue < > &quot; . &quot; and sValue < > &quot; .. &quot; Then
+if (GetAttr( sPath + getPathSeparator + sValue) AND 16) > 0 then
+REM получение каталогов
+sDir = sDir & chr(13) & sValue
+End If
+End If
+sValue = Dir$
+Loop Until sValue = &quot; &quot;
+MsgBox sDir,0,sPath
+End sub

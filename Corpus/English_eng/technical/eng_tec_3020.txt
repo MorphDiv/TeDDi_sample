@@ -1,0 +1,62 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3, PHP 4)
+The getimagesize() function will determine the size of any GIF, JPG, PNG, SWF, SWC, PSD, TIFF, BMP or IFF image file and return the dimensions along with the file type and a height / width text string to be used inside a normal HTML IMG tag.
+Returns an array with 4 elements.
+Index 0 contains the width of the image in pixels.
+Index 1 contains the height.
+Index 2 is a flag indicating the type of the image:
+1 = GIF, 2 = JPG, 3 = PNG, 4 = SWF, 5 = PSD, 6 = BMP, 7 = TIFF( intel byte order), 8 = TIFF(motorola byte order), 9 = JPC, 10 = JP2, 11 = JPX, 12 = JB2, 13 = SWC, 14 = IFF.
+These values correspond to the IMAGETYPE constants that were added in PHP 4.3.
+Index 3 is a text string with the correct height=" yyy "width="xxx" string that can be used directly in an IMG tag.
+Example 1. getimagesize (file)
+?php $size = getimagesize ("img / flag.jpg"); echo "img src=\"img / flag.jpg\" {$size[3]} ";?
+Example 2. getimagesize (URL)
+?php $size = getimagesize ("http: / /www.example.com / gifs / logo.gif");?
+With JPG images, two extra indexes are returned: channels and bits. channels will be 3 for RGB pictures and 4 for CMYK pictures. bits is the number of bits for each color.
+Beginning with PHP 4.3, bits and channels are present for other image types, too.
+However, the presence of these values can be a bit confusing.
+As an example, GIF always uses 3 channels per pixel, but the number of bits per pixel cannot be calculated for an animated GIF with a global color table.
+Some formats may contain no image or may contain multiple images.
+In these cases, getimagesize() might not be able to properly determine the image size. getimagesize() will return zero for width and height in these cases.
+Beginning with PHP 4.3, getimagesize() also returns an additional parameter, mime, that corresponds with the MIME type of the image.
+This information can be used to deliver images with correct HTTP Content-type headers:
+Example 3. getimagesize() and MIME types
+?php $size = getimagesize ($filename); $fp=fopen($filename, "rb"); if ($size $fp) {header("Content-type: {$size['mime']}"); fpassthru($fp); exit;} else {/ / error}?
+If accessing the filename image is impossible, or if it isn' t a valid picture, getimagesize() will return FALSE and generate a warning.
+The optional imageinfo The optional imageinfo parameter allows you to extract some extended information from the image file.
+Currently, this will return the different JPG APP markers as an associative array.
+Some programs use these APP markers to embed text information in images.
+A very common one is to embed IPTC http: / /www.iptc.org / A very common one is to embed IPTC http: / /www.iptc.org / information in the APP13 marker.
+You can use the iptcparse() function to parse the binary APP13 marker into something readable.
+Example 4. getimagesize() returning IPTC
+?php $size = getimagesize ("testimg.jpg", $info); if (isset ($info["APP13"])) {$iptc = iptcparse ($info["APP13"]); var_dump ($iptc);}?
+Note:
+TIFF support was added in PHP 4.2.
+This function does not require the GD image library.
+See also image_type_to_mime_type(), exif_imagetype(), exif_read_data() and exif_thumbnail().
+URL support was added in PHP 4.0.5.
+Prev
+Home
+Next
+gd_info
+Up
+image_type_to_mime_type

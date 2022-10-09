@@ -1,0 +1,60 @@
+# language_name_wals:	Turkish
+# language_name_glotto:	Turkish
+# ISO_6393:	tur
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/tr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Kullanım Kılavuzu
+Önceki
+Sonraki
+Bölüm 21.
+Bağlantı İşleme
+Not:
+Burada yazanlar 3.0.7 ve sonrası sürümler için geçerlidir.
+PHP 'nin içinde bağlantı durumu saklanır.
+Olası durumlar 3 tanedir:
+0 - NORMAL (normal)
+1 - ABORTED (iptal edilmiş)
+2 - TIMEOUT (zaman aşımına uğramış)
+PHP betiği normal olarak çalışırken NORMAL durumu aktiftir.
+Eğer alıcı taraf bağlantıyı keserse ABORTED durum anahtarı aktifleştirilir.
+Alıcı tarafın bağlantıyı kesmesi genellikle uzaktaki kullanıcının STOP düğmesine basmasından kaynaklanır.
+Eğer PHP' ye bildirilen zaman sınırına (bkz. set_time_limit()) ulaşılırsa, TIMOUT durum anahtarı aktifleştirilir.
+Alıcının bağlantıyı kesmesi durumunda PHP betiğinin çalışmasının durdurulup durdurulmayacağını seçebilirsiniz.
+Bazı durumlarda karşı taraftaki internet gezgini yolladığınız çıktıyı almıyor olsa bile PHP betiğinin normal olarak sonlanması kullanışlı olabilir.
+Ancak PHP 'nin öntanımlı davranışı karşı taraftaki internet gezgini bağlantıyı kestiğinde betiği sonlandırmaktır.
+Bu davranış ignore_user_abort php.ini direktifiyle ayarlanabileceği gibi bunun Apache .conf karşılığı olan php3_ignore_user_abort direktifiyle veya ignore_user_abort() fonksiyonuyla da ayarlanabilir.
+Tek istisna register_shutdown_function() fonksiyonu ile bir kapanış fonksiyonu tanımlamanızdır.
+Tanımlı bir kapanış fonkiyonu varken, betiğiniz çıktı yollamaya çalıştığında PHP alıcının STOP düğmesine bastığını algılayacak ve tanımladığınız fonksiyonu çağıracaktır.
+Bu kapanış fonksiyonu ayrıca betiğiniz normal olarak sonlandığında da çağrılacağı için, sadece bağlantının kesilmesi durumunda yapılmasını istediğiniz işler varsa connection_aborted() fonksiyonunu kullanabilirsiniz.
+Bu fonksiyon eğer bağlantı kesilmişse TRUE değerini döndürecektir.
+Betiğiniz ayrıca yerleşik betik süre-ölçeri tarafından da sonlandırılabilir.
+Öntanımlı zaman 30 saniyedir.
+Bu değer max_execution_time php.ini direktifi veya bunun Apache .conf karşılığı olan php3_max_execution_time direktifi ile ayarlanabileceği gibi set_time_limit() fonksiyonuyla da ayarlanabilir.
+Belirlenen azami sürenin dolması durumunda betik sonlandırılacak, ve yukarıdaki bağlantı kesilmesi durumunda olduğu gibi, varsa, tanımlanmış kapanış fonksiyonu çağrılacaktır.
+Bu kapanış fonksiyonunun içinde, çağrılmasının sebebinin süre dolması olup olmadığını öğrenmek isterseniz connection_timeout() fonksiyonunu kullanabilirsiniz.
+Bu fonksiyon sürenin dolmuş olması durumunda TRUE değerini döndürecektir.
+Dikkat edilmesi gereken bir nokta hem ABORTED hem de TIMEOUT durumlarının aynı anda aktif olabileceğidir.
+Bu, PHP 'ye karşı tarafın bağlantıyı sonlandırmasını gözardı etmesini söylerseniz mümkün olur.
+PHP 'nin bağlantının kapandığını anlamasına rağmen betik çalışmaya devam edecektir.
+Süre sınırı aşıldığında betik sonlandırılır ve, varsa, kapanış fonksiyonu çağrılır.
+Bu noktada connection_timeout() ve connection_aborted() fonksiyonları TRUE değerini döndürür. İki durumu aynı anda connection_status() fonksiyonu ile kontrol edebilirsiniz.
+Bu fonksiyon aktif durumları içeren bit alanını döndürür.
+Örneğin, iki durum da aktifse geriye dönüş değeri olarak 3 'ü verecektir.
+Önceki
+Baþlangýç
+Sonraki
+Uzaktaki Dosyaları Kullanmak
+Yukarý
+Kalıcı Veritabanı Bağlantıları

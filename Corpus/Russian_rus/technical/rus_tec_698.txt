@@ -1,0 +1,44 @@
+# language_name_wals:	Russian
+# language_name_glotto:	Russian
+# ISO_6393:	rus
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Cyrl
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/ru.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Фильтры и формы HTML
+/text/shared/02/01170700.xhp
+формы; фильтры HTML
+Фильтры и формы HTML
+В HTML-документах можно использовать все элементы управления и события форм.
+До данного момента происходило множество событий (например, событий фокусировки), которые не изменялись.
+Они продолжают импортироваться и экспортироваться как ONFOCUS, ONBLUR и т.д. для JavaScript и как SDONFOCUS, SDONBLUR и т.д. для $[officename] Basic.
+Для всех остальных событий используются общие имена, состоящие из имени интерфейса Listener и имени метода: событие, зарегистрированное в виде XListener::method, экспортируется в виде
+SDEvent-XListener-method = &quot; /* event-code */ &quot;
+Необходимо помнить, что компоненты XListener- и методов вводятся с учетом регистра.
+Обработка событий элементов управления выполняется с использованием $[officename] API.
+Если настроить обработку события для элемента управления, объект регистрируется как &quot; Listener &quot; для события этого элемента управления.
+Для этого должен использоваться специальный интерфейс, например интерфейс XFocusListener, так чтобы он мог реагировать на события фокуса.
+При возникновении события элемент управления вызывает специальный метод интерфейса, когда элемент управления получает фокус.
+Затем зарегистрированный объект вызывает программу JavaScript или $[officename] Basic, которая была назначена этому событию.
+Теперь фильтр HTML использует такие интерфейсы слушателя (Listener interfaces) и имена методов, что события можно импортировать и экспортировать по желанию.
+Таким образом, можно зарегистрировать событие, связанное с изменением фокуса, следующим образом:
+< INPUT TYPE=text ONFOCUS= &quot; /* code */ &quot;
+вместо
+< INPUT TYPE=text SDEvent-XFocusListener-focusGained= &quot; /* code */ &quot;
+Таким образом, события можно регистрировать произвольно, включая события, не перечисленные в списках.
+Чтобы указать язык сценария для событий, можно ввести следующую строку в заголовок документа:
+< META HTTP-EQUIV= &quot; content-script-type &quot; CONTENT= &quot; ... &quot; >
+В качестве CONTENT можно использовать, например, &quot; text/x-StarBasic &quot; для $[officename] Basic или &quot; text/JavaScript &quot; для JavaScript.
+Если атрибут CONTENT пропущен, используется JavaScript.
+Во время экспорта язык сценария по умолчанию определяется на основе первого модуля, найденного в списке макросов.
+Таким образом, для событий в одном документе можно использовать только один язык.

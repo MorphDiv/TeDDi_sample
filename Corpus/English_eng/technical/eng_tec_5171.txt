@@ -1,0 +1,42 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 4 = 4.0.5)
+This function prepares for a Z39.50 Scan Request.
+Argument id specifies connection.
+Starting term point for the scan is given by startterm.
+The form in which is the starting term is specified is given by type.
+Currently type rpn is supported.
+The optional flags specifies additional information to control the behaviour of the scan request.
+Three indexes are currently read from the flags: number (number of terms requested), position (preferred position of term) and stepSize (preferred step size).
+To actually tranfer the Scan Request to the target and receive the Scan Response, yaz_wait() must be called.
+Upon completion of yaz_wait() call yaz_error() and yaz_scan_result() to handle the response.
+The syntax of startterm is similar to the RPN query as described in yaz_search().
+The startterm consists of zero or more @attr -operator specifications, then followed by exactly one token.
+Example 1.
+PHP function that scans titles
+function scan_titles( $id, $startterm) {yaz_scan($id ,"rpn", "@attr 1=4 ". $startterm); yaz_wait(); $errno = yaz_errno($id); if ($errno == 0) {$ar = yaz_scan_result($id, $options); echo'Scan ok; '; while(list($key,$val)=each($options)) {echo "$key = $val nbsp ;";} echo' br table tr td '; while(list($key,list($k, $term, $tcount))=each($ar)) {if (empty($k)) continue; echo" tr td $term / td td "; echo $tcount; echo" / td / tr ";} echo' / table ';} else {echo "Scan failed.
+Error: ". yaz_error($id)." br ";}}
+Prev
+Home
+Next
+yaz_scan_result
+Up
+yaz_schema

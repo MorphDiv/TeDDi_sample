@@ -1,0 +1,65 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Traitement des cellules vides
+/text/scalc/05/empty_cells.xhp
+Cellules vides;traitement
+i86303
+Traitement des cellules vides
+À partir de OpenOffice.org 3.0 et de StarOffice 9, le traitement des cellules vides est modifié.
+Précédemment, les cellules vides étaient forcées à un 0 numérique dans certains contextes et à des chaînes vides dans d'autres, excepté dans les comparaisons directes ou =A1=0 et =A1= &quot; &quot; , les deux résultaient en VRAI si A1 était vide.
+L'état vide est maintenant hérité jusqu'à son utilisation, ainsi =RECHERCHEV(...)=0 et =RECHERCHEV(...)= &quot; &quot; renvoient VRAI si la recherche résulte en le renvoi d'une cellule vide.
+Une référence simple à une cellule vide est toujours affichée comme 0 numérique mais n'est plus nécessairement de type numérique, ainsi les comparaisons avec les cellules de références fonctionnent aussi comme elles le doivent.
+Dans les exemples suivants, A1 contient un nombre, B1 est vide et C1 contient une référence à B1 :
+A1:
+1 B1: < vide > C1: =B1 (affiche 0)
+=B1=0 = > VRAI
+=B1= &quot; &quot; = > VRAI
+=C1=0 = > VRAI
+=C1= &quot; &quot; = > VRAI (précédemment était FAUX)
+=ESTNUM(B1) = > FAUX
+=ESTNUM(C1) = > FAUX (précédemment était VRAI)
+=ESTNUM(RECHERCHEV(1;A1:C1;2)) = > FAUX (B1)
+=ESTNUM(RECHERCHEV(1;A1:C1;3)) = > FAUX (C1, précédemment était VRAI)
+=ESTTEXTE(B1) = > FAUX
+=ESTTEXTE(C1) = > FAUX
+=ESTTEXTE(RECHERCHEV(1;A1:C1;2)) = > FAUX (B1, précédemment était VRAI)
+=ESTTEXTE(RECHERCHEV(1;A1:C1;3)) = > FAUX (C1)
+=ESTVIDE(B1) = > VRAI
+=ESTVIDE(C1) = > FAUX
+=ESTVIDE(RECHERCHEV(1;A1:C1;2)) = > VRAI (B1, précédemment était FAUX)
+=ESTVIDE(RECHERCHEV(1;A1:C1;3)) = > FAUX (C1)
+Notez que Microsoft Excel se comporte différemment et renvoie toujours un nombre comme résultat d'une référence à une cellule vide ou d'une cellule de formule qui a pour résultat une cellule vide.
+Par exemple :
+A1: < vide >
+B1: =A1 = > affiche 0, mais est juste une référence à une cellule vide
+=ISNUM(A1) = > FAUX
+=ESTTEXTE(A1) = > FAUX
+=A1=0 = > VRAI
+=A1= &quot; &quot; = > VRAI
+=ESTNUM(B1) = > FAUX (MS-Excel:
+VRAI)
+=ESTTEXTE(B1) = > FAUX
+=B1=0 = > VRAI
+=B1= &quot; &quot; = > VRAI (MS-Excel:
+FAUX)
+C1: =RECHERCHEV(...) avec une cellule de résultat vide = > affiche vide (MS-Excel: affiche 0)
+=ESTNUM(RECHERCHEV(...)) = > FAUX
+=ESTTEXTE(RECHERCHEV(...)) = > FAUX
+=ESTNUM(C1) = > FAUX (MS-Excel:
+VRAI)
+=ESTTEXTE(C1) = > FAUX

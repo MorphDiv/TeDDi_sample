@@ -1,0 +1,66 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+The HTTP Authentication hooks in PHP are only available when it is running as an Apache module and is hence not available in the CGI version.
+In an Apache module PHP script, it is possible to use the header() function to send an "Authentication Required "message to the client browser causing it to pop up a Username / Password input window.
+Once the user has filled in a username and a password, the URL containing the PHP script will be called again with the predefined variables PHP_AUTH_USER, PHP_AUTH_PW, and PHP_AUTH_TYPE Once the user has filled in a username and a password, the URL containing the PHP script will be called again with the predefined variables PHP_AUTH_USER, PHP_AUTH_PW, and PHP_AUTH_TYPE set to the user name, password and authentication type respectively.
+These predefined variables are found in the $_SERVER and $HTTP_SERVER_VARS These predefined variables are found in the $_SERVER and $HTTP_SERVER_VARS arrays.
+Only "Basic" authentication is supported.
+See the header() function for more information.
+PHP Version Note:
+Autoglobals, such as $_SERVER, became available in PHP version 4.1.0. $HTTP_SERVER_VARS has been available since PHP 3.
+An example script fragment which would force client authentication on a page is as follows:
+Example 16-1.
+HTTP Authentication example
+?php if (!isset($_SERVER['PHP_AUTH_USER'])) {header( 'WWW-Authenticate:
+Basic realm=" My Realm"'); header('HTTP / 1.0 401 Unauthorized'); echo'Text to send if user hits Cancel button'; exit;} else {echo "p Hello {$_SERVER['PHP_AUTH_USER']}. / p"; echo "p You entered {$_SERVER['PHP_AUTH_PW']} as your password. / p";}?
+Compatibility Note:
+Please be careful when coding the HTTP header lines.
+In order to guarantee maximum compatibility with all clients, the keyword "Basic" should be written with an uppercase "B", the realm string must be enclosed in double (not single) quotes, and exactly one space should precede the 401 code in the HTTP / 1.0 401 header line.
+Instead of simply printing out PHP_AUTH_USER and PHP_AUTH_PW, as done in the above example, you may want to check the username and password for validity.
+Perhaps by sending a query to a database, or by looking up the user in a dbm file.
+Watch out for buggy Internet Explorer browsers out there.
+They seem very picky about the order of the headers.
+Sending the WWW-Authenticate header before the HTTP / 1.0 401 header seems to do the trick for now.
+As of PHP 4.3.0, in order to prevent someone from writing a script which reveals the password for a page that was authenticated through a traditional external mechanism, the PHP_AUTH variables will not be set if external authentication is enabled for that particular page and safe mode is enabled.
+Regardless, REMOTE_USER can be used to identify the externally-authenticated user.
+So, you can use $_SERVER[ 'REMOTE_USER'].
+Configuration Note:
+PHP uses the presence of an AuthType directive to determine whether external authentication is in effect.
+Note, however, that the above does not prevent someone who controls a non-authenticated URL from stealing passwords from authenticated URLs on the same server.
+Both Netscape Navigator and Internet Explorer will clear the local browser window 's authentication cache for the realm upon receiving a server response of 401.
+This can effectively "log out" a user, forcing them to re-enter their username and password.
+Some people use this to "time out" logins, or provide a "log-out "button.
+Example 16-2.
+HTTP Authentication example forcing a new name / password
+?php function authenticate() {header( 'WWW-Authenticate:
+Basic realm=" Test Authentication System"'); header('HTTP / 1.0 401 Unauthorized'); echo "You must enter a valid login ID and password to access this resource\n"; exit;} if (!isset($_SERVER['PHP_AUTH_USER']) | | ($_POST['SeenBefore'] == 1 $_POST['OldAuth'] == $_SERVER['PHP_AUTH_USER'])) {authenticate();} else {echo "p Welcome: {$_SERVER['PHP_AUTH_USER']} br"; echo "Old: {$_REQUEST['OldAuth']}"; echo "form action='{$_SERVER['PHP_SELF']} 'METHOD='POST' \n"; echo" input type='hidden 'name='SeenBefore' value='1 '\n"; echo "input type='hidden' name='OldAuth 'value='{$_SERVER['PHP_AUTH_USER']}' \n"; echo" input type='submit 'value='Re Authenticate' \n"; echo "/ form / p \n";}?
+This behavior is not required by the HTTP Basic authentication standard, so you should never depend on this.
+Testing with Lynx has shown that Lynx does not clear the authentication credentials with a 401 server response, so pressing back and then forward again will open the resource as long as the credential requirements haven 't changed.
+The user can press the '_' key to clear their authentication information, however.
+Also note that this does not work using Microsoft 's IIS server and the CGI version of PHP due to a limitation of IIS.
+Note:
+If safe mode is enabled, the uid of the script is added to the realm part of the WWW-Authenticate header.
+Prev
+Home
+Next
+Features
+Up
+Cookies

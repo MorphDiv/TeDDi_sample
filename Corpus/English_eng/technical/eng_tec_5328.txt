@@ -1,0 +1,113 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+These functions build the foundation for accessing Berkeley DB style databases.
+This is a general abstraction layer for several file-based databases.
+As such, functionality is limited to a common subset of features supported by modern databases such as Sleepycat Software' s DB2. (This is not to be confused with IBM's DB2 software, which is supported through the ODBC functions.)
+The behaviour of various aspects depends on the implementation of the underlying database.
+Functions such as dba_optimize() and dba_sync() will do what they promise for one database and will do nothing for others.
+You have to download and install supported dba-Handlers.
+Table 1.
+List of DBA handlers
+Handler
+Notes
+dbm
+Dbm is the oldest (original) type of Berkeley DB style databases.
+You should avoid it, if possible.
+We do not support the compatibility functions built into DB2 and gdbm, because they are only compatible on the source code level, but cannot handle the original dbm format.
+ndbm
+Ndbm is a newer type and more flexible than dbm.
+It still has most of the arbitrary limits of dbm (therefore it is deprecated).
+gdbm
+Gdbm is the GNU database manager.
+db2
+DB2 is Sleepycat Software 's DB2.
+It is described as "a programmatic toolkit that provides high-performance built-in database support for both standalone and client / server applications.
+db3
+DB3 is Sleepycat Software 's DB3.
+db4
+DB4 is Sleepycat Software 's DB4.
+This is available since PHP 5.0.0.
+cdb
+Cdb is "a fast, reliable, lightweight package for creating and reading constant databases." It is from the author of qmail and can be found here.
+Since it is constant, we support only reading operations.
+And since PHP 4.3.0 we support writing (not updating) through the internal cdb library.
+cdb_make
+Since PHP 4.3.0 we support creation (not updating) of cdb files when the bundeled cdb library is used.
+flatfile
+This is available since PHP 4.3.0 for compatibility with the deprecated dbm extension only and should be avoided.
+However you may use this where files were created in this format.
+That happens when configure could not find any external library.
+When invoking the dba_open() or dba_popen() functions, one of the handler names must be supplied as an argument.
+The actually available list of handlers is displayed by invoking phpinfo() or dba_handlers().
+By using the --enable-dba=shared configuration option you can build a dynamic loadable modul to enable PHP for basic support of dbm-style databases.
+You also have to add support for at least one of the following handlers by specifying the --with-XXXX configure switch to your PHP configure line.
+Table 2.
+Supported DBA handlers
+Handler
+Configure Switch
+dbm
+To enable support for dbm add --with-dbm[ =DIR].
+ndbm
+To enable support for ndbm add --with-ndbm[ =DIR].
+gdbm
+To enable support for gdbm add --with-gdbm[ =DIR].
+db2
+Note: db2 conflicts with db3 and db4.
+db3
+Note: db3 conflicts with db2 and db4.
+db4
+Note: db4 conflicts with db2 and db3.
+Note:
+This was added in PHP 5.0.0.
+In earlier version you need to use --with-db3=DIR with DIR being the path to db4 librarie.
+It is not possible to use db versions starting from 4.1 with PHP prior to version 4.3.0.
+cdb
+Note:
+Since PHP 4.3.0 you can omit DIR to use the bundeled cdb library that adds the cdb_make handler which allows creation of cdb files and allows to access cdb files on the network using php 's streams.
+flatfile
+Note:
+This was added in PHP 4.3.0 to add compatibility with deprecated dbm This was added in PHP 4.3.0 to add compatibility with deprecated dbm extension.
+Uee this handler only when you cannot install one of the libraries required by the other handlers and when you cannot use bundeled cdb handler.
+Note:
+Up to PHP 4.3.0 you are able to add both db2 and db3 handler but only one of them can be used internally.
+That means that you cannot have both file formats.
+Starting with PHP 5.0.0 there is a configuration check avoid such missconfigurations.
+This extension has no configuration directives defined in php.ini.
+The functions dba_open() and dba_popen() return a handle to the specified database file to access which is used by all other dba-function calls.
+This extension has no constants defined.
+Example 1.
+DBA example
+?php $id = dba_open ("/ tmp / test.db", "n", "db2"); if (!$id) {echo "dba_open failed\n"; exit;} dba_replace ("key", "This is an example !", $id); if (dba_exists ("key", $id)) {echo dba_fetch ("key", $id); dba_delete ("key", $id);} dba_close ($id);?
+DBA is binary safe and does not have any arbitrary limits.
+However, it inherits all limits set by the underlying database implementation.
+All file-based databases must provide a way of setting the file mode of a new created database, if that is possible at all.
+The file mode is commonly passed as the fourth argument to dba_open() or dba_popen().
+You can access all entries of a database in a linear way by using the dba_firstkey() and dba_nextkey() functions.
+You may not change the database while traversing it.
+Example 2.
+Traversing a database
+?php / / ...open database... $key = dba_firstkey ($id); while ($key != false) {if (...) {/ / remember the key to perform some action later $handle_later[] = $key;} $key = dba_nextkey ($id);} for ($i = 0; $i count($handle_later); $i++) dba_delete ($handle_later[$i], $id);?
+Prev
+Home
+Next
+ctype_xdigit
+Up
+dba_close

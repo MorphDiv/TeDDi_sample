@@ -1,0 +1,44 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+Dieses Modul bietet Unterstützung für die Nutzung von Semaphoren und gemeinamen Speichersegmenten mit Hilfe der UNIX System V Mechanismen zur Interprozess-Kommunikation.
+Mit Hilfe von Semaphoren kann der exklusive Zugriff auf Resourcen eines Systems sichergestellt oder die Anzahl der Prozesse begrenzt werden, die gleichzeitig eine bestimmte Systemresource nutzen.
+Mit Hilfe gemeinsamer Speichersegmente (shared memory) können system-globale Variablen angelegt und bereitgestellt werden.
+Diese Speicherbereiche stehen allen Prozessen des Systems, insbesondere aber allen parallel laufenden PHP-Instanzen zum Datenaustausch zur Verfügung.
+Beachten Sie bitte, dass gemeinsame Speichersegmente keinen Schutze vor konkurrierenden gleichzeitigen Zugriffen bieten.
+Benutzen Sie Semaphore für die Koordination solcher Zugriffe.
+Tabelle 1.
+
+
+Maximalgröße eines gemeinsamen Speicherbereichs, üblich sind 131072 Byte (128KB)
+
+Minimalgröße eines gemeinsamen Speicherbereichs, normalerweise 1 Byte
+
+maximale Anzahl unterschiedlicher Speichersegmente, üblich sind 100
+
+Anzahl der Speichersegmente, die ein einzelner Prozess einbinden darf, üblich sind 6
+Beispiel 1.
+Koordinierter Zugriff auf gemeinsamen Speicher
+?php / / gemeinsames Speichersegment beschaffen if(! ($mkey = shm_attach(0x2328,1024,OctDec("666")))) {echo "shmem_attach fehlgeschlagen br \n"; exit;} / / Semaphor für Zugriffskoordination auf / / Speichersegment beschaffen if(! ($skey = sem_get(0x2328,1,OctDec("666")))) {echo "sem_get fehlgeschlagen br \n"; exit;} / / Zugriff anfordern if(! sem_acquire($skey)) {echo "sem_acquire fehlgeschlagen br \n"; exit;} / / Wert lesen, aktualisieren und schreiben $val = @shm_get_var($mkey,1); if($val===false) $val=1; else $val++; print "new value is $val br \n"; shm_put_var($mkey,1,$val); / / Zugriff freigeben sem_release($skey);?
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

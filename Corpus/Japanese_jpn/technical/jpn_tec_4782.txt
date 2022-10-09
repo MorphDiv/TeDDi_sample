@@ -1,0 +1,62 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+本節では、PHPをIIS(Microsoft Internet Information Server) にインス トールする際の注意およびヒントについて説明します。 PWS/IIS 3 、 PWS 4 以降 、 IIS 4 以降 のバージョンに ついて説明します。
+これらのサーバーを設定するために推奨される方法は、配布ファイルに 含まれるREGファイル (pws-php4cgi.reg)を使用する方法です。この ファイルを編集し、拡張機能および PHP インストールディレクトリを自 分用の設定に調整することが可能です。さもなくば、以下の手順により、 手動でこの設定を行うことも可能です。
+これらの手順は、windows レジストリに直接修正します。エラーを一つ でも生じた場合、システムの状態が不安定になる可能性があります。ま ずレジストリのバックアップをとることを強く推奨します。PHP 開発チー ムは、レジストリが損傷した場合の責任を負いません。
+
+Regedit を実行して下さい。
+次の場所に進んでください: HKEY_LOCAL_MACHINE /System /CurrentControlSet /Services /W3Svc /Parameters /ScriptMap.
+editメニューで次のものを選択して下さい: New- String Value
+PHP スクリプトで使用したい拡張子を入力して下さい。 例: .php
+新しい文字列値をダブルクリックし、 php.exe へのパスをデータのフィールドに入力して下さい。例えば、 c:\php\php.exe となります。
+PHP スクリプトに関連付けたい全ての拡張子に関してこれらの手順を 繰り返します。
+以下の手順は、Webサーバのインストールには影響を与えません。 (c:\myscripts est.php のように) PHPスクリプ トをコマンドラインやディレクトリビュアウインドウでPHPスクリプトを ダブルクリックして実行したい場合にのみ関係します。PHPファイルをダ ブルクリックした際にテキストエディタにロードしたい場合には、以下 の手順を飛ばしたいと思うかもしれません。
+
+HKEY_CLASSES_ROOT に進んでください。
+編集メニューから次のものを選んでください: 新規作成- キー
+前のセクションで設定した拡張子をキーに入力して下さい。例: .php
+新規のキーをハイライト表示にし、右側ペーンで、"デフォルト値" を ダブルクリックした後、 phpfile を入力して下 さい。
+各拡張子に関して先のセクションの設定手順を繰り返してください。
+ここで他の 新規作成- キー を HKEY_CLASSES_ROOT のもとに作成し、 phpfile と名前を付けます。
+新規キー phpfile をハイライト表示し、 右側ペーン上で、"デフォルト値" をダブルクリックし、 PHPスクリプト を入力します。
+phpfile キーを右クリックし、 新規作成- キー を選択し、 Shell という名前をつけます。
+Shell キーを右クリックし、 新規作成- キー を選択し、 open という名前を つけます。
+open キーを右クリックし、 新規作成- キー を選択し、 command という名前をつけます。
+新規キー command をハイライト表示し、 右側ペーンにて "デフォルト値" をダブルクリックし、 php.exe へのパスを入力します。例: c:\php\php.exe -q %1. (%1 を忘れないで下さい。)
+Regedit を終了して下さい。
+Windows で PWS を使用した場合、レジストリを再ロードするために リブートして下さい。
+ここまでの作業で、PWSおよび IIS 3用のシステムインストールは完了します。 IIS 3 ユーザーは、Steven Genusa が作成したスクリプトマップ設定用の すばらしい ツール を使用すること ができます。
+PWS 4以降を実行するWindows上にPHPをインストールする際には、二つの 方法があります。一つは、PHP CGIバイナリを設定する方法で、もう一つ は、ISAPIモジュール dllを使用する方法です。
+CGIバイナリを選択した場合は、次のようにします。
+添付の(sapiディレクトリにある) pws-php4cgi.reg ファイルを使用するphp.exe の位置に合うように編集します。前向きスラッシュは、エスケープす る必要があります。例えば、 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\w3svc\parameters\Script Map] ".php"="C:\\php\\php.exe"
+PWSマネージャにおいて、PHPサポートを追加したいディレクトリで右 クリックし、プロパティを選択します。'実行'チェックボックスを チェックし、確認します。
+ISAPIモジュールを選択した場合、次のようにします。
+添付されている pws-php4isapi.reg ファイルを 編集し(sapiディレクトリを参照)、php4isapi.dllの位置をシステム にあったものに修正して下さい。前向きスラッシュはエスケープする 必要があります。例えば、 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\w3svc\parameters\Script Map] ".php"="C:\\PHP\\sapi\\php4isapi.dll"
+PWS マネージャで、PHPサポートを追加したいディレクトリで右クリッ クす、プロパティを選択します。「実行」チェックボックスをチェッ クし、確認を押します。
+PHPをIIS 4以降を実行しているNT/2000サーバ上にインストールするには、 以下の指示に従って下さい。PHPを設定するには、CGIバイナリ(php.exe) 版とISAPIモジュール版の2種類あります。
+どちらの場合も、マイクロソフトマネージメントコンソールを起動する 必要があります。(「インターネットサービスマネージャ」またはNT 4.0 オプションパックまたはWindows 2000では、コントロールパネル= 管 理ツールに現れます。)つづ意で、Webサーバノード上で右クリック (「デフォルトのWebサーバ」としてこれが現れていることが多い)
+CGIバイナリを使用したい場合、次のようにします。
+'ホームディレクトリ'、'仮想ディレクトリ'、'ディレクトリ'の下で' 設定'ボタンをクリックし、Appマッピングタブに移ります。
+追加をクリックし、実行ボックスで次のように入力します。 c:\php\php.exe %s %s (PHPのzipアーカイブを c:\php\で解凍したと仮定します) %s %s を終端に付ける必要があり ます。これを行わないと、PHPは正しく機能しません。
+実行ボックスの中で、PHPスクリプトを関連づけるファイル名の拡張 子を入力して下さい。'除外メソッド'を空白のままにし、スクリプト エンジンチェックボックスをチェックして下さい。 手順3および4をPHPスクリプトに関連づけたい拡張毎に繰り返して下 さい。( .php と .phtml が一般的です)
+適切にセキュリティを設定して下さい。(これは、インターネットセキュ リティマネージャにおいて行われます) NTサーバがNTFSファイルシス テムを使用している場合、I_USR_に関する実行権限を php.exe を有するディレクトリに追加して下さ い。
+ISAPIモジュールを使用するには、次のようにして下さい。
+PHPを使用してHTTP認証を実行したくない場合は、この手順を飛ばす ことも可能です(そして、そうするべきです)。ISAPIフィルタの元で 新規フィルタを追加して下さい。PHPをフィルタ名として使用し、 php4isapi.dllへのパスを入力して下さい。
+'Home Directory'以下で'Configuration'ボタンをクリックして下さ い。アプリケーションマネージャへの新規エントリを追加します。 実行ファイルにphp4isapi.dllへのパスを入力して下さい。拡張子と して .php を指定、除外メソッドは空白のまま、スクリプトエンジン チェックボックスをチェックして下さい。
+IISを完全に停止
+IISを再度開始

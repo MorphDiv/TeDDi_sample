@@ -1,0 +1,100 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Les secrets de & kde;
+Nicolas Goutte goutte@kde. org
+Fichiers de configuration à modifier à la main
+Introduction
+Dans & kde;, les fichiers de configuration sont faciles à modifier avec un simple éditeur de texte comme & kate; puisque les fichiers de configuration sont des fichiers texte.
+Un exemple de fichier texte & #160;:
+[General] AutoSave=1 LastFile=/ var/ tmp/ test. txt
+Les fichiers de configuration propres à l'utilisateur sont stockés dans. kde/ share/ config (remplacez. kde par votre paramètre $KDEHOME) et les fichiers globaux dans le sous-dossier share/ config du chemin d'installation de & kde; (vous pouvez trouver ce chemin d'accès en exécutant la commande kde4-config --prefix). Leurs noms de fichiers se terminent généralement par « & #160; rc & #160; » (sans point initial), par exemple kopeterc.
+Modifier des fichiers de configuration à la main peut mettre en péril la stabilité de votre installation & kde;. Les applications ne vérifient d'ordinaire ce qu'elles lisent dans les fichiers de configuration. Cela signifie qu'elles peuvent être perturbées par ce qu'elles obtiennent comme configuration, voire planter & #160; ».
+Sauvegardes
+Donc, la première règle est de faire une sauvegarde de votre fichier avant de le modifier. Il vaut mieux stocker la sauvegarde en dehors de tout sous-dossier. kde (ou le dossier $KDEHOME correspondant). Les sauvegardes sont de toute façon une bonne idée en cas de dysfonctionnement majeur de & kde; qui endommagerait des fichiers de configuration importants (par exemple vos paramètres & kmail; qui sont dans le fichier kmailrc). Un tel dysfonctionnement majeur a peu de chances de se produire, mais cela peut toujours arriver.
+Édition
+Donc pourquoi voudriez -vous toucher aux fichiers de configuration en fait & #160;? Bien, en premier lieu, vous devrez le faire quand vous voulez mettre en application le mode KIOSK. Peut-être un développeur vous a -t-il demandé d'ajouter un élément pour l'aider à résoudre un problème avec l'application. Peut-être voulez -vous vous tirer d'un problème sans avoir à supprimer tout le dossier. kde. Ou alors voulez -vous approfondir les arcanes de & kde;.
+De toute façon, quelle que soit votre motivation, vous voulez modifier à la main un fichier de configuration.
+Lorsque vous projetez de modifier un tel fichier, assurez -vous que l'application qui l'utilise ne tourne pas. Si c'est un des fichiers de configuration fondamentaux, pensez à le modifier quand & kde; ne tourne pas du tout.
+Prêt & #160;? Donc, faites une sauvegarde du fichier (vous l'ai -je déjà dit & #160;?), démarrez votre éditeur favori (supposons que ce soit & kate;), chargez le fichier (veillez à le charger au format UTF-8, & kate; l'affiche en tant que « & #160; utf8 & #160; »).
+Maintenant, vous avez un fichier comme & #160;:
+[Group] Key1=Value1 Key2=Value2 Key3=Value3
+Vous pouvez maintenant le modifier (avec prudence & #160;!) puis l'enregistrer (à nouveau, soyez sûr qu'il est au format UTF-8).
+À présent, vous pouvez tester l'application et, si cette dernière ne fonctionne plus correctement, la fermer et restaurer la sauvegarde du fichier de configuration.
+Informations connexes
+offre plus d'informations sur la structure de & kde; pour vous aider à chercher le fichier que vous devez modifier.
+Scriptage du bureau
+& kde; fournit un système de communication interprocessus puissant nommé & DCOP; (Deskop COmmunication Protocol ou protocole de communication pour l'environnement de bureau). En utilisant & DCOP;, vous pouvez contrôler un large ensemble de fonctions dans & kde; depuis la ligne de commande ou en écrivant un script dans votre langage de scripts favori. Vous pouvez également obtenir des informations sur les applications & kde;. Par exemple, plusieurs lecteurs multimédia de & kde; fournissent des méthodes pour les interroger à propos du morceau en cours de lecture.
+De manière plus générale, chaque application & kde; fournit une ou plusieurs interfaces & DCOP;, qui à leur tour fournissent des méthodes (ou, si vous préférez, des fonctions) qu'une autre application peut appeler. Ainsi, la première étape dans l'utilisation de & DCOP; est de trouver la méthode appropriée pour la tâche en question. La façon la plus simple pour cela est d'utiliser l'interface graphique kdcop pour les méthodes & DCOP; disponibles.
+Lancez kdcop depuis une & konsole; ou le mini CLI (la fenêtre qui apparaît avec Alt; F2). La fenêtre de kdcop affiche les applications en cours d'exécution qui fournissent des interfaces & DCOP;, en utilisant une vue arborescente. En général, trouver la méthode correcte nécessite un peu de recherche dans cette arborescence, mais voici une petite astuce & #160;: les interfaces marquées (défaut) contiennent habituellement les fonctions les plus souvent utilisées.
+Afin de tester que la fonction fait bien ce qu'on attend d'elle, double-cliquez sur l'élément setColor. Pour régler la couleur v, cliquez sur le bouton de sélection de couleurs, et choisissez une couleur. Choisissez si la couleur doit être une couleur A avec la case à cocher. Cliquez sur OK et la couleur de fond est appliquée.
+Pour accéder aux méthodes & DCOP; à partir de votre langage de script favori, vous pouvez soit utiliser les bindings & DCOP; s'ils sont disponibles dans le module kdebindings, soit appeler l'application cdop en ligne de commande. Pour des utilisations simples, l'appel en ligne de commande de dcom est suffisant. Pour appeler une méthode & DCOP; depuis la ligne de commande, nous avons besoin de spécifier l'application et l'interface auxquelles appartient la méthode, la méthode elle-même, et les arguments, dans une forme adéquate pour la console.
+Nous spécifions l'application, l'interface et la méthode dans cet ordre, suivi des arguments dans le même ordre que celui montré dans kdcop. kdcop dispose de beaucoup d'autres options & #160;: jetez un coup d 'œ il à la sortie de dcop --help.
+C'en est en fini de la théorie, il est temps maintenant de passer à la pratique & #160;:
+Voici un script permettant de changer la couleur de fond avec & DCOP;
+Avec l'application en ligne de commande dcop et un peu de Perl, nous allons faire un script simple qui modifie lentement la couleur de fond du bureau de manière cyclique, en passant par toutes les couleurs de l'arc-en-ciel.
+Tout d'abord, nous cherchons la méthode appropriée avec kdcop. Pour cet exemple, nous court-circuitons la recherche, et y allons directement & #160;: la méthode qui nous intéresse est kdesktop KBackgroundIface setColor. Les types des arguments et de la valeur retournée sont montrés avec le style du langage C++. Pour setColor, les arguments sont une couleur, c, qui spécifie la nouvelle couleur d'arrière-plan, et une valeur booléenne (vrai ou faux), isColorA, qui spécifie s'il s'agit de la première ou de la seconde couleur (ceci est utile pour configurer des gradients).
+Pour utiliser notre méthode setColor depuis la ligne de commande, nous utilisons ce qui suit & #160;:
+% dcop kdesktop KBackgroundIface setColor '#ffffff 'false
+Pour spécifier la couleur, nous utilisons une valeur RGB hexadécimale, comme en & HTML;. Notez qu'elle est entourée par des guillemets simples pour protéger le # depuis la console.
+Pour trouver la valeur RGB hexadécimale de la couleur, ouvrez n'importe quelle boîte de dialogue de sélection de couleur dans une application & kde; (par exemple, dans & centreConfiguration;, Apparence et thèmes Couleurs), choisissez la couleur et utilisez la valeur donnée dans la zone de texte HTML.
+C'est tout ce dont nous avons besoin pour & DCOP;, maintenant il s'agit d'écrire le script correspondant. C'est une implémentation (extrêmement & #160;!) difficile & #160;:
+< ![CDATA[ $min =49; # Minimum value of R, G, or B colour $max=174; # Maximum value of R, G, or B colour $step=5; # Amount to step colour by on each step $sleeptime=15; # Interval in seconds between each step @start = ($max, $min, $min); @colour = @start; while (1) {foreach (0..5) {my $which = $_% 3; # Which colour (R, G or B) to change my $updown = $_% 2; # Whether to increase or decrease the colour value do {if ($updown == 0) {$colour[$which]+=$step;} if ($updown == 1) {$colour[$which]-=$step;} my $dcopcall=sprintf "dcop kdesktop KBackgroundIface setColor '#%x%x%x'true\ ", @colour; system($dcopcall); sleep $sleeptime;} while (($colour[$which] > = $min) and ($colour[$which ]< = $max));}}]] >
+Exécutez simplement le scripts sans arguments, et l'arrière plan changera de manière cyclique sur tout le spectre des couleurs, jusqu'à ce que le script soit arrêté, et voilà & #160;!
+Bien évidemment, Perl n'est pas le seul langage que vous pouvez utiliser pour écrire des scripts avec & DCOP; mdash; si vous préférez le scripts shell, c'est également possible & #160;:
+Régler l'arrière plan depuis internet
+Le script suivant récupère l'image principale de la BD User Friendly et la met comme papier peint du bureau, en utilisant les outils disponibles classiques et un peu de & DCOP; & #160;:
+< ![CDATA[ #!/bin/sh COMICURL=`wget -qO - http://www .userfriendly.org/static/index.html |\\ grep Latest | sed -e "s,. *SRC=\\",, "-e "s,\\" > .*,," ` TMPFILE=`mktemp / tmp/ $0. XXXXXX ` || exit 1 wget -q -O $TMPFILE $COMICURL dcop kdesktop KBackgroundIface setWallpaper $TMPFILE 1]] >
+La première ligne après #! /bin/ sh utilise wget et des expressions rationnelles magiques pour extraire l'emplacement de l'image depuis le source de la page principale & HTML;. La deuxième et la troisième ligne téléchargent l'image, et enfin dcop met l'image téléchargée en fond d'écran.
+Ajout d'associations de touches supplémentaires à & kde;
+De nombreux claviers modernes contiennent des touches supplémentaires qui ne sont par défaut affectées à aucune action.
+Les claviers « & #160; multimédia & #160; » offrent souvent de générer un signal et on peut simplement les choisir en tant qu'association de touches à l'intérieur d'une application exactement comme on choisirait n'importe quelle autre touche. Certaines touches, cependant, ne sont pas détectées et appuyer dessus dans Configurer les raccourcis clavier... n'a aucun effet.
+Certains ordinateurs portables IBM, par exemple, ont des touches supplémentaires autour des touches fléchées gauche et droite, qui ressemblent à page gauche et page droite.
+Utilisez xev pour chercher le code des touches. Dans ce cas, il s'agit de 233 et234.
+Choisissez les symboles des touches. Comme il y en a toute une série qui ne sont pas utilisées par défaut, beaucoup sont libres. Vous pouvez en trouver la liste dans / usr/ X11R6/ include/ X11/ keysymdef. h (ou son équivalent sur votre système).
+Créez un fichier dans votre dossier personnel appelé. Xmodmap et ajoutez -le à ceci & #160;:
+keycode 233 = Ecran_Virtuel_Suivant keycode 234 = Ecran_Virtuel_Precedent
+Exécutez la commande xmodmap ~/. Xmodmap
+À ce stade, vous devriez pouvoir exécuter xev à nouveau et constater que les touches génèrent maintenant les symboles de touches que vous avez affectés. Vous pouvez à présent simplement les affecter à n'importe quelle action, normalement.
+La page de manuel xev. Vous pouvez la consulter en saisissant man: / xev dans une fenêtre & konqueror; ou en saisissant man xev dans un terminal.
+Ajout d'associations de touches pour de nouvelles actions
+La plupart des actions, soit dans le bureau, soit dans les applications, sont aisément disponibles pour une association de touche. Si l'action pour laquelle vous voulez un raccourci est quelque chose que vous avez écrit vous -même ou n'est pas disponible autrement, vous pouvez toujours affecter un raccourci.
+Pour relier les deux sections précédentes, peut-être voulez -vous affecter une touche inutilisée autrement sur votre clavier, à un script ou à une commande dcop. Notre exemple ici consistera à affecter les deux touches que nous avons ajoutées dans pour aller sur le bureau virtuel précédent ou suivant, deux fonctions pour lesquelles vous aurez besoin de DCOP (comme étudié dans.
+Vous y arriverez facilement à l'aide de la méthode suivante & #160;:
+Ouvrez le & centreConfiguration; et, dans la section Régionalisation et accessibilité, sélectionnez Actions d'entrées,
+choisissez Nouvelle action,
+nommez la nouvelle action, & pex; Écran virtuel suivant,
+sélectionnez Raccourcis clavier - > Commande & #160; / & #160; URL (simple) pour le Type de l'action & #160;:,
+dans l'onglet Raccouci clavier, cliquez sur bouton dont vous souhaitez qu'il déclenche la commande. Pour cet exemple, cliquez sur celui sur lequel il y a l'image Page suivante. Ecran_virtuel_suivant apparaît alors dans l'image de la touche,
+dans l'onglet Paramètres de la commande / de l'URL, saisissez la commande à exécuter dans le champ & #160;: dcop kwin default nextDesktop.
+Répétez l'opération avec la touche Ecran_virtuel_precedent et dcop kwin default previousDesktop.
+Maintenant, appuyer sur Ecran_virtuel_precedent ou Ecran_virtuel_suivant vous fera basculer sur le bureau virtuel précédent et suivant, respectivement.
+Évidemment, vous pouvez affecter n'importe quelle touche libre à n'importe quelle action.
+Reportez -vous à la documentation de KHotKeys en la cherchant dans le & centreAide; ou en saisissant help: / khotkeys dans une fenêtre & konqueror;.
+Adriaan de Groot groot@kde. org
+& kdebugdialog; - Contrôle de la sortie de débogage de & kde;
+Utilisation de base
+& kdebugdialog; n'est pas dans le & menuk; par défaut. Vous devez le lancer depuis le shell ou le mini-CLI avec la commande kdebugdialog. & kdebugdialog; fait apparaître une fenêtre avec une longue liste de zones de débogage. Chaque zone comporte une case que vous pouvez (dé)cocher afin de (dés)activer la sortie de débogage pour cette partie de & kde;.
+Comme la liste des zones de débogage est triée numériquement et non alphabétiquement, « & #160; kio & #160; » (127) vient avant « & #160; artskde & #160; » (400). Les nombres vont jusqu'à 200000 ou environ, mais il n'y a réellement que 400 & #160; zones. Vous n'avez donc pas à faire défiler la liste entière pour trouver la zone dont vous avez besoin. Il y a une zone de modification au début de la boîte de dialogue, où vous pouvez saisir une partie du nom de la zone que vous voulez. La liste des éléments qui est affichée est filtrée de façon à n'inclure que les zones de débogage qui contiennent le texte que vous avez saisi. Par exemple, la saisie de k ne filtre rien du tout, mais la saisie de kont vous affichera juste les zones de débogage de & kontact;. Comme moyen encore plus rapide de (dés)activer la sortie de débogage, il y a également les boutons Tout sélectionner et Tout désélectionner, qui amèneront & kde; à produire une énorme quantité de sortie de débogage ou très peu.
+KDebugDialog en mode complet
+En mode complet, ce que vous obtenez quand vous démarrez kdebugdialog en kdebugdialog --fullmode, la même liste de zones de débogage qu'en mode plein est disponible, mais vous ne pouvez en sélectionner qu'une à la fois dans une liste déoulante. Vous pouvez ensuite définir la sortie pour divers types de messages & #160;: Informations, Avertissement, Erreur et Erreur fatale. Pour chacun de ces types, vous pouvez choisir où sont envoyés les messages. Les choix sont & #160;:
+Fichier, dans lequel vous pouvez saisir un nom de fichier. Ce fichier est écrit dans votre dossier $HOME.
+Boîte de dialogue. Chaque message de débogage est affiché dans une boîte de dialogue d'information et vous devez cliquer sur OK pour continuer avec l'application.
+Shell, l'élément par défaut. Les messages sont affichés sur stderr et apparaîtront soit dans la fenêtre du shell où l'application a été démarrée, soit dans. xsession-errors.
+Journal système. Cette option envoie chaque message de débogage à la fonction de journalisation système, qui peut effectuer son propre traitement du message.
+Aucun. Cette option supprime la sortie de ce type de message.
+Pour les messages générés par des erreurs fatales, il est en principe peu judicieux de choisir « & #160; Aucun & #160; » ou « & #160; Syslog & #160; », puisque dans les deux cas, vous ne verrez probablement pas le message et que l'application qui rencontre l'erreur fatale disparaîtra sans laisser d'indices quant à la raison de sa disparition. Vous pouvez contrôler que l'application disparaisse ou non sur une erreur fatale avec la case Arrêter lors de problèmes critiques, qui est cochée par défaut & mdash; mais vous pourriez vous attendre à ce qu'une application « & #160; plante & #160; » (d'une manière brutale) si elle rencontre une erreur fatale, de toute façon.

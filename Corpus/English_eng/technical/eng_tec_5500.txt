@@ -1,0 +1,154 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 32.
+Accepting Arguments
+Next
+To access arguments, it 's necessary for each argument to have a clearly defined type.
+Again, PHP 's extremely dynamic nature introduces some quirks.
+Because PHP never does any kind of type checking, it 's possible for a caller to pass any kind of data to your functions, whether you want it or not.
+If you expect an integer, for example, the caller might pass an array, and vice versa - PHP simply won 't notice.
+To work around this, you have to use a set of API functions to force a type conversion on every argument that' s being passed (see Table 32-1).
+Note:
+All conversion functions expect a **zval as parameter.
+Table 32-1.
+Argument Conversion Functions
+Function
+Description
+convert_to_boolean_ex()
+Forces conversion to a Boolean type.
+Boolean values remain untouched.
+Longs, doubles, and strings containing 0 as well as NULL values will result in Boolean 0 (FALSE).
+Arrays and objects are converted based on the number of entries or properties, respectively, that they have.
+Empty arrays and objects are converted to FALSE; otherwise, to TRUE.
+All other values result in a Boolean 1 (TRUE).
+convert_to_long_ex()
+Forces conversion to a long, the default integer type.
+NULL values, Booleans, resources, and of course longs remain untouched.
+Doubles are truncated.
+Strings containing an integer are converted to their corresponding numeric representation, otherwise resulting in 0.
+Arrays and objects are converted to 0 if empty, 1 otherwise.
+convert_to_double_ex()
+Forces conversion to a double, the default floating-point type.
+NULL values, Booleans, resources, longs, and of course doubles remain untouched.
+Strings containing a number are converted to their corresponding numeric representation, otherwise resulting in 0.0.
+Arrays and objects are converted to 0.0 if empty, 1.0 otherwise.
+convert_to_string_ex()
+Forces conversion to a string.
+Strings remain untouched.
+NULL values are converted to an empty string.
+Booleans containing TRUE are converted to "1", otherwise resulting in an empty string.
+Longs and doubles are converted to their corresponding string representation.
+Arrays are converted to the string "Array" and objects to the string "Object ".
+convert_to_array_ex( value)
+Forces conversion to an array.
+Arrays remain untouched.
+Objects are converted to an array by assigning all their properties to the array table.
+All property names are used as keys, property contents as values.
+NULL values are converted to an empty array.
+All other values are converted to an array that contains the specific source value in the element with the key 0.
+convert_to_object_ex( value)
+Forces conversion to an object.
+Objects remain untouched.
+NULL values are converted to an empty object.
+Arrays are converted to objects by introducing their keys as properties into the objects and their values as corresponding property contents in the object.
+All other types result in an object with the property scalar, having the corresponding source value as content.
+convert_to_null_ex( value)
+Forces the type to become a NULL value, meaning empty.
+Note:
+You can find a demonstration of the behavior in cross_conversion.php on the accompanying CD-ROM.
+Figure 32-2 shows the output.
+Figure 32-2.
+Cross-conversion behavior of PHP.
+Using these functions on your arguments will ensure type safety for all data that 's passed to you.
+If the supplied type doesn' t match the required type, PHP forces dummy contents on the resulting value (empty strings, arrays, or objects, 0 for numeric values, FALSE for Booleans) to ensure a defined state.
+Following is a quote from the sample module discussed previously, which makes use of the conversion functions:
+zval **parameter; if((ZEND_NUM_ARGS() != 1) | | (zend_get_parameters_ex(1, parameter) != SUCCESS)) {WRONG_PARAM_COUNT;} convert_to_long_ex(parameter); RETURN_LONG(Z_LVAL_P(parameter));
+Example 32-2.
+PHP / Zend zval type definition.
+typedef pval zval; typedef struct _zval_struct zval; typedef union _zvalue_value {long lval; / * long value * / double dval; / * double value * / struct {char *val; int len;} str; HashTable *ht; / * hash table value * / struct {zend_class_entry *ce; HashTable *properties;} obj;} zvalue_value; struct _zval_struct {/ * Variable information * / zvalue_value value; / * value * / unsigned char type; / * active type * / unsigned char is_ref; short refcount;};
+Actually, pval (defined in php.h) is only an alias of zval (defined in zend.h), which in turn refers to _zval_struct.
+This is a most interesting structure. _zval_struct is the "master" structure, containing the value structure, type, and reference information.
+The substructure zvalue_value is a union that contains the variable 's contents.
+Depending on the variable' s type, you'll have to access different members of this union.
+For a description of both structures, see Table 32-2, Table 32-3 and Table 32-4.
+Table 32-2.
+Zend zval Structure
+Entry
+Description
+value
+Union containing this variable 's contents.
+See Table 32-3 for a description.
+type
+Contains this variable 's type.
+For a list of available types, see Table 32-4.
+is_ref
+0 means that this variable is not a reference; 1 means that this variable is a reference to another variable.
+refcount
+The number of references that exist for this variable.
+For every new reference to the value stored in this variable, this counter is increased by 1.
+For every lost reference, this counter is decreased by 1.
+When the reference counter reaches 0, no references exist to this value anymore, which causes automatic freeing of the value.
+Table 32-3.
+Zend zvalue_value Structure
+Entry
+Description
+lval
+Use this property if the variable is of the type IS_LONG, IS_BOOLEAN, or IS_RESOURCE.
+dval
+Use this property if the variable is of the type IS_DOUBLE.
+str
+This structure can be used to access variables of the type IS_STRING.
+The member len contains the string length; the member val points to the string itself.
+Zend uses C strings; thus, the string length contains a trailing 0x00.
+ht
+This entry points to the variable 's hash table entry if the variable is an array.
+obj
+Use this property if the variable is of the type IS_OBJECT.
+Table 32-4.
+Zend Variable Type Constants
+Constant
+Description
+IS_NULL
+Denotes a NULL (empty) value.
+IS_LONG
+A long (integer) value.
+IS_DOUBLE
+A double (floating point) value.
+IS_STRING
+A string.
+IS_ARRAY
+Denotes an array.
+IS_OBJECT
+An object.
+IS_BOOL
+A Boolean value.
+IS_RESOURCE
+A resource (for a discussion of resources, see the appropriate section below).
+IS_CONSTANT
+A constant (defined) value.
+To access a long you access zval.value.lval, to access a double you use zval.value.dval, and so on.
+Because all values are stored in a union, trying to access data with incorrect union members results in meaningless output.
+Accessing arrays and objects is a bit more complicated and is discussed later.
+Prev
+Home
+Next
+Dealing with a Variable Number of Arguments / Optional Parameters
+Up
+Dealing with Arguments Passed by Reference

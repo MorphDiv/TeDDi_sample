@@ -1,0 +1,66 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Chapitre 8.
+Les variables
+Suivant
+La portée d 'une variable dépend du contexte dans lequel la variable est définie.
+Pour la majorité des variables, la portée concerne la totalité d 'un script PHP.
+Mais, lorsque vous définissez une fonction, la portée d 'une variable définie dans cette fonction est locale à la fonction.
+Par exemple:
+
+Ici, la variable $a sera accessible dans le script inclus b.inc.
+Cependant, dans les fonctions définies par l 'utilisateur, une nouvelle définition de cette variable sera donnée, limitée à la fonction.
+Toute variable utilisée dans une fonction est par définition, locale.
+Par exemple:
+?php $a = 1; / * portée globale * / function test() {echo $a; / * portée locale * /} test();?
+Le script n'affichera rien à l'écran car la fonction echo() Le script n'affichera rien à l'écran car la fonction echo() utilise la variable locale $a, et celle-ci n 'a pas été assignée préalablement dans la fonction.
+Vous pouvez noter que ce concept diffère un petit peu du langage C dans lequel une variable globale est automatiquement accessible dans les fonctions, à moins d 'être redéfinie localement dans la fonction.
+Cela peut poser des problèmes si vous redéfinissez des variables globales localement.
+En PHP, une variable globale doit être déclarée à l 'intérieur de chaque fonction afin de pouvoir être utilisée dans cette fonction.
+Par exemple:
+?php $a = 1; $b = 2; function somme() {global $a, $b; $b = $a + $b;} somme(); echo $b;
+Le script ci-dessus va afficher la valeur "3".
+En déclarant globales les variables $a et $b locales de la fonction somme(), toutes les références à ces variables concerneront les variables globales.
+Il n 'y a aucune limite au nombre de variables globales qui peuvent être manipulées par une fonction.
+Une deuxième méthode pour accéder aux variables globales est d 'utiliser le tableau associatif prédéfini $GLOBALS.
+Le précédent exemple peut être réécrit de la manière suivante:
+?php $a = 1; $b = 2; function somme() {$GLOBALS["b"] = $GLOBALS["a"] + $GLOBALS["b"];} somme(); echo $b;?
+Le tableau $GLOBALS est un tableau associatif avec le nom des variables globales comme clef et les valeurs des éléments du tableau comme valeur des variables.
+Une autre caractéristique importante de la portée des variables est la notion de variable static.
+Une variable statique a une portée locale uniquement, mais elle ne perd pas sa valeur lorsque le script appelle la fonction.
+Prenons l 'exemple suivant:
+?php function test() {$a = 0; echo $a; $a++;}?
+Cette fonction est un peu inutile car à chaque fois qu'elle est appelée, elle initialise $a à 0 et affiche "0 ".
+L'incrémentation de la variable ($a++) ne sert pas à grand chose, car dès que la fonction est terminée la variable disparaît.
+Pour faire une fonction de comptage utile, c 'est-à-dire qui ne perdra pas la trace du compteur, la variable $a est déclarée comme une variable statique:
+?php function test() {static $a = 0; echo $a; $a++;}?
+Maintenant, à chaque fois que la fonction Test() est appelée, elle affichera une valeur de $a incrémentée de 1.
+Les variables statiques sont essentielles lorsque vous faites des appels récursifs à une fonction.
+Une fonction récursive est une fonction qui s 'appelle elle-même.
+Il faut faire attention lorsque vous écrivez une fonction récursive car il est facile de faire une boucle infinie.
+Vous devez vérifier que vous avez bien une condition qui permet de terminer votre récursivité.
+La fonction suivante compte récursivement jusqu 'à 10:
+?php function test() {static $count = 0; $count++; echo $count; if ($count 10) {test();} $count--;}?
+Précédent
+Sommaire
+Suivant
+Missing title
+Niveau supérieur
+Les variables dynamiques

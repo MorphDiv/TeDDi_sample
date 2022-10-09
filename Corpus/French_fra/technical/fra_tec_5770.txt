@@ -1,0 +1,64 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Fonctions & DCOP;
+
+& traducteurYohannHamon;
+Les & DCOP; peuvent être appelés de différentes façon dans & kommander;. Premièrement à l'aide d'un terminal
+dcop kmdr-executor-@pid KommanderIf changeWidgetText ÉlémentGraphique Nouveau texte
+Ceci implique que vous soyez dans un fichier & kommander; et que vous ayez accès au spécial @pid qui contient le numéro ID du processus. En fait il est plus simple de remplacer kmdr-executor-@pid par @dcopid. Cependant, vous pouvez utiliser cette syntaxe (bien évidement sans les spéciaux) depuis la ligne de commande ou tout script externe pour modifier la fenêtre de & kommander;.
+Parce que & kommander; ne dispose pas d'un parseur complet dans sa phase Alpha, si vous voulez utiliser le & DCOP; interne beaucoup plus rapide depuis la fenêtre d'une autre application (le & DCOP; en mode ligne de commande est très lent) c'est plus compliqué parce que vous devez donner beaucoup d'informations, le prototype de l'appel inclu. L'appel vu précédement deviendrait & #160;:
+@dcop(@dcopid, KommanderIf, enableWidget(QString, bool), Widget, true)
+Vous devez savoir qu'au moment de l'écriture de ce manuel les appels & DCOP; imbriqués à l'intérieur de langages de script (comme bash) signifient que vous devez utiliser la méthode d'appel par terminal. Si vous utilisez le & DCOP; interne tous les spéciaux & kommander; seront executés en premier et le script ne sera exécuté qu'ensuite.
+Il y a un nouveau moyen simplifié d'utiliser & DCOP; dans & kommander; en utilisant une syntaxe objet. Disons que vous voulez changer le texte dans un élément graphique de nom @LineEdit1. Cela ressemblerais à ceci.
+@LineEdit1. changeWidgetText(Nouveau Texte)
+Comme vous pouvez le voir la nouvelle syntaxe est très simple, et également visuellement consistante avec les groupes de fonctions. Toutes les références & DCOP; utiliserons la nouvelle syntaxe d'objet décrite plus haut. Merci de noter que si vous référencez un élément graphique utilisant & DCOP; depuis une autre fenêtre ou une autre application le premier paramètre sera toujours le nom de l'élément graphique. Toutes les fonctions sont listées ici commencent avec le second paramètre.
+& DCOP; pour les variables globales
+global(QString NomDeLaVariable)
+Retourne la valeur de la variable globale spécifiée. Lorsqu'un script est exécuté depuis l'intérieur de la fenêtre de & kommander; toutes les variables (non globales) créées dans ce script cesseront d'exister à la fin du script et en conséquence ne seront plus disponibles pour d'autres scripts ou dans une nouvelle instance du proccessus appellant. La portée globale signifie que la variable existera pour tout processus de la fenêtre jusque ce que la fenêtre soit fermée. Vous pouvez changer ces variables à tout moment à l'aide d'un nouvel appel à @setGlobal.
+setGlobal(QString NomDeLaVariable, QString Valeur)
+Créé une variable qui est globale pour la fenêtre et lui assigne la valeur. Cette valeur peut être récupérée à l'aide de global(QString NomDeLaVariable) ou bien modifiée.
+& DCOP; pour tous les éléments graphiques
+changeWidgetText(QString texte)
+Ceci sera probablement renommé en setWidgetText et ce nom sera sans doute obsolète. Cela supprime le texte affiché dans l'élément graphique et le remplace par le texte fourni.
+enableWidget(bool enable)
+Active ou désactive un élément graphique.
+associatedText
+Retourne le texte associé à l'élément graphique spécifié. Ce n'est pas le même chose que le texte affiché. Cela serait @widgetText ou le texte et & #160; / & #160; ou le script utilisé pour obtenir la valeur affichée.
+setAssociatedText(QString texte)
+Ceci configure la chaîne de caractère Texte & kommander; par défaut. Elle est généralement configuré à @widgetText pour afficher ce qui est saisi dans l'élément graphique. Il est peu probable que vous ayez besoin de ceci, mais si c'est le cas vous l'avez ici. Cela s'applique à tous les éléments graphiques pouvant contenir des données.
+& DCOP; pour les listes de choix et les listes déroulantes
+addListItem(QString élément, int index)
+Ajoûte un élément à un élément graphique liste de choix à l'index spécifié. L'index de liste commence à zéro. Pour ajouter à la fin d'une liste utilisez -1.
+addListItems(QStringList éléments, int index)
+Ceci ajoute une liste d'éléments d'un seul coup. La liste devrait être délimitée par EOL (\ - nouvelle ligne). C'est très utile puisque vous pouvez utiliser bash pour produire une liste facilement.
+addUniqueItem(QString élément)
+addUniqueItem ajoutera un élément à la fin de la liste uniquement si il n'en fait pas déjà parti.
+clearList
+Supprime tous les éléments.
+removeListItem(int index)
+Supprime l'élément dont la position est l'index spécifié.
+item(int index)
+Retourne le texte de l'élément situé à l'index spécifié.
+setCurrentListItem(int index)
+Positionne l'élément courant (ou l'élément sélectionné) à l'index spécifié. S'applique aux listes de choix et aux listes déroulantes.
+& DCOP; pour les éléments graphiques case à cocher et bouton radio
+setChecked(QString NomÉléméntGraphique, bool checked)
+Coche & #160; / & #160; décoche les éléments graphiques case à cocher et bouton radio.
+& DCOP; pour les éléments graphiques de type Onglet
+setCurrentTab(QString NomÉlémentGraphique, int index)
+Sélectionne un onglet à l'aide de son index dans l'élément graphique Onglet. L'index commence à 0.

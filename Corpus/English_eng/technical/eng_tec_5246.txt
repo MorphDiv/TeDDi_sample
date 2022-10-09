@@ -1,0 +1,66 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+A class is a collection of variables and functions working with these variables.
+A class is defined using the following syntax:
+?php class Cart {var $items; / / Items in our shopping cart / / Add $num articles of $artnr to the cart function add_item ($artnr, $num) {$this - items[$artnr] += $num;} / / Take $num articles of $artnr out of the cart function remove_item ($artnr, $num) {if ($this - items[$artnr] $num) {$this - items[$artnr] -= $num; return true;} else {return false;}}}?
+This defines a class named Cart that consists of an associative array of articles in the cart and two functions to add and remove items from this cart.
+Caution
+The following cautionary notes are valid for PHP 4.
+The name stdClass is used interally by Zend and is reserved.
+You cannot have a class named stdClass in PHP.
+The function names __sleep and __wakeup The function names __sleep and __wakeup are magical in PHP classes.
+You cannot have functions with these names in any of your classes unless you want the magic functionality associated with them.
+See below for more information.
+PHP reserves all function names starting with __ as magical.
+It is recommended that you do not use function names with __ in PHP unless you want some documented magic functionality.
+Note:
+In PHP 4, only constant initializers for var variables are allowed.
+To initialize variables with non-constant values, you need an initialization function which is called automatically when an object is being constructed from the class.
+Such a function is called a constructor (see below).
+?php / * None of these will work in PHP 4. * / class Cart {var $todays_date = date("Y-m-d"); var $name = $firstname; var $owner = 'Fred '. 'Jones'; var $items = array("VCR", "TV");} / * This is how it should be done. * / class Cart {var $todays_date; var $name; var $owner; var $items; function Cart() {$this - todays_date = date("Y-m-d"); $this - name = $GLOBALS['firstname']; / * etc... * /}}?
+Classes are types, that is, they are blueprints for actual variables.
+You have to create a variable of the desired type with the new operator.
+?php $cart = new Cart; $cart - add_item("10", 1); $another_cart = new Cart; $another_cart - add_item("0815", 3);
+This creates the objects $cart and $another_cart, both of the class Cart.
+The function add_item() of the $cart object is being called to add 1 item of article number 10 to the $cart.
+3 items of article number 0815 are being added to $another_cart.
+Both, $cart and $another_cart, have functions add_item(), remove_item() and a variable items.
+These are distinct functions and variables.
+You can think of the objects as something similar to directories in a filesystem.
+In a filesystem you can have two different files README.TXT, as long as they are in different directories.
+Just like with directories where you 'll have to type the full pathname in order to reach each file from the toplevel directory, you have to specify the complete name of the function you want to call:
+In PHP terms, the toplevel directory would be the global namespace, and the pathname separator would be -.
+Thus, the names $cart - items and $another_cart - items name two different variables.
+Note that the variable is named $cart - items, not $cart - $items, that is, a variable name in PHP has only a single dollar sign.
+/ / correct, single $$cart - items = array( "10 "= 1); / / invalid, because $cart - $items becomes $cart -" "$cart - $items = array("10" = 1); / / correct, but may or may not be what was intended: / / $cart - $myvar becomes $cart - items $myvar = 'items'; $cart - $myvar = array("10 "= 1);
+Within a class definition, you do not know under which name the object will be accessible in your program: at the time the Cart class was written, it was unknown that the object will be named $cart or $another_cart later.
+Thus, you cannot write $cart - items within the Cart class itself.
+Instead, in order to be able to access it' s own functions and variables from within a class, one can use the pseudo-variable $this which can be read as'my own 'or'current object'.
+Thus, '$this - items[$artnr] += $num' can be read as'add $num to the $artnr counter of my own items array 'or'add $num to the $artnr counter of the items array within the current object'.
+Note:
+There are some nice functions to handle classes and objects.
+You might want to take a look at the Class / Object Functions
+Prev
+Home
+Next
+Variable functions
+Up
+extends

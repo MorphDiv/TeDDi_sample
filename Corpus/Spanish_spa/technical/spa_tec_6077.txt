@@ -1,0 +1,1507 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	2011
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Shaun McCance
+shaunm@gnome.org
+2008-2009
+Crear un documento de múltiples páginas en sólo diez minutos.
+Tour de diez minutos
+shaunm
+Esto es un borrador. Aún no estoy contento con el tono.
+En esta página se presentará cómo crear un documento simple multipágina para Mallard. Se creará un documento para la aplicación ficticia
+Un documento Mallard está compuesto de múltiples páginas independientes. Las
+Se puede comenzar un documento Mallard escribiendo una página frontal para la documentación. Generalmente la página frontal de cualquier documento será una página de guía, ya que su propósito es ayudar a los usuarios a navegar por otros contenidos. En Mallard, la página frontal de cualquier documento se llama
+index.page
+Este sencillo ejemplo es una página válida de guía Mallard. Por si sola, también es un documento Mallard válido, aunque no sirve para nada. Se puede añadir otra página al documento creando un nuevo archivo de página.
+plantando.page
+Note que se ha establecido el atributo
+Explicar el enlazado e introducir el siguiente ejemplo.
+Rellenar con más contenido.
+2009
+Completar la especificación del vocabulario XML de Mallard.
+Especificación de idioma
+Añadir algún texto introductorio
+Los principios guía detrás del diseño de Mallard.
+Principios de diseño
+Añadir contenido introductorio
+Añadir los principios: complementos, velocidad de implementación, l10n, información fácil de asimilar
+Principios para el lector
+Para el lector
+Los lectores son los últimos árbitros de la calidad de un sistema de documentación. Los mejores esfuerzos de los escritores y hackers son en vano si la documentación no ayuda al lector a encontrar rápidamente la información que necesita. Las necesidades del lector están por encima del resto de requerimientos.
+Principios para el escritor
+Para el escritor
+Añadir
+Principios para el programador
+Para el programador
+Evitar forzar a los escritores para que escriban lo mismo dos veces
+Reducir la redundancia
+Proporcionar suficiente marcado para marcar lo importante
+Usar el marcado justo
+Asegurarse de que el lector no se pierde en una maraña de enlaces
+Guiar al lector
+Por hacer
+Filas y grupos de filas
+mal_table_tr = element tr {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Celdas de tablas
+mal_table_td = element td {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+ attribute rowspan { text } ?,
+ attribute colspan { text } ?,
+Tablas
+mal_table = element table {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+ attribute frame {
+ "all" | "none" |
+ list { ("top" | "bottom" | "left" | "right") * }
+ } ?,
+ attribute rules {
+ "all" | "groups" | "none" |
+ list { ("rows" | "rowgroups" | "cols" | "colgroups") * }
+ } ?,
+ attribute shade {
+ "all" | "groups" | "none" |
+ list { ("rows" | "rowgroups" | "cols" | "colgroups") * }
+ } ?,
+Contenido
+Atributos
+Ejemplos
+El atributo
+Ponga reglas entre cada fila:
+Ánade real
+Anas platyrhynchos
+56-65 cm
+900-1200 g
+Silbón europeo
+Anas penelope
+45-50 cm
+680 g
+Cerceta común
+Anas crecca
+34-43 cm
+360 g
+Ánade rabudo
+Anas acuta
+59-76 cm
+450-1360 g
+Ponga reglas entre cada columna:
+Ponga reglas entre cada grupo de filas:
+Ponga reglas entre cada grupo de columnas:
+El atributo
+Sombrear filas alternativas:
+Sombrear columnas alternativas:
+Sombrear grupos de filas alternativas:
+Sombrear grupos de columnas alternativas:
+Notas de diseño
+Comparación con HTML
+Comparación con DocBook
+Columnas y grupos de columnas
+mal_table_col = element col {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *
+}
+mal_table_colgroup = element colgroup {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+
+ mal_table_col *
+}
+Rompa páginas en elementos lógicos para ayudar a que los lectores encuentren información rápidamente.
+Secciones
+mal_section = element section {
+ attribute id { xsd:ID },
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Una sección es una parte lógica destacada de una página o de otra sección. Romper el material en secciones puede ayudar a los lectores a encontrar información más rápidamente. En Mallard, las secciones pueden participar en el
+Notas
+El elemento
+El elemento
+El atributo
+El atributo
+El elemento
+Procesar las expectativas
+Cada sección se muestra como un bloque. El título de una sección se muestra de forma destacada, seguido de un bloque hijo de contenido y finalmente por cada sección hija. Note que los enlaces automáticos, consejos de estilo u otras características especiales puede introducir material o cambiar la forma en la que se muestran las páginas. Las secciones deberían estar claramente separadas del contenido de alrededor para hacer que las secciones de inicio y final sean obvias. La profundidad de cada sección deberá estar clara, aunque esto puede que no sea posible para secciones muy encadenadas.
+Las secciones pueden tener enlaces asociados con ellas. Todas las secciones deberían tener enlaces guía y enlaces de consultar también mostrados cuando sea necesario. Para obtener más información consulte la
+Tutoriales individuales, visiones generales, referencias y guías de navegación.
+Páginas
+namespace local = ""
+default namespace mal = "http://projectmallard.org/1.0/"
+start = mal_page
+mal_page = element page {
+ attribute id { xsd:ID },
+ attribute type { "guide" | "topic"} ?,
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+El elemento
+El elemento
+El elemento
+El atributo
+El atributo
+El elemento
+Páginas de guía
+Las páginas de guía tienen el atributo
+Las páginas de guía tienen enlaces automáticamente insertados en su contenido basados en enlaces de temas en sus propios elementos
+Las páginas de guía también tienen enlaces «Ver también» generados automáticamente. Para obtener más información consulte la
+Generalmente las páginas de guía contienen algún contenido introductorio para ayudar a los lectores a entender los temas presentados. El contenido introductorio debe ser corto y conciso.
+Páginas de temas
+Las páginas de temas tienen el atributo
+Las páginas de temas tienen enlaces automáticamente insertados a todas las guías que los enlazan. Las páginas de temas contienen secciones para ayudar a organizar el material y presentar pedazos de información depurados al lector. Cada sección en una página de temas tiene una guía de enlaces automáticamente insertada. Para obtener más detalles acerca de los enlaces automáticos de guía, consulte la
+Los temas también tienen enlaces «Ver también» generados automáticamente. Para obtener más información consulte la
+En las pantallas se muestra un elemento
+El elemento hijo
+El título de una página se muestra de forma destacada al principio, seguido de un bloque hijo de contenido y finalmente por cada sección hija. Note que los enlaces automáticos, consejos de estilo u otras características especiales puede introducir material o cambiar la forma en la que se muestran las páginas.
+2007-2009
+Marque el lugar del texto que debería ser reemplazado por el usuario.
+Texto variable
+mal_inline_var = element var {
+Use el elemento
+El elemento
+El elemento
+El elemento
+El elemento
+Consulte la
+El texto variable generalmente se muestra en una tipografía cursiva u oblicua. Al usar un elemento de tipografía de anchura fija tal como
+Comparación con otros formatos
+El elemento
+Marque identificadores generales encontrados en los sistemas.
+Elementos del sistema
+mal_inline_sys = element sys {
+Use el elemento
+El elemento
+El elemento
+El elemento
+El elemento
+Use
+El núcleo de Linux está hospedado en
+Los elementos del sistema se muestran con una tipografía de anchura fija. En las tipografías de anchura fija, caracteres similares suelen ser más distinguibles visualmente entre si. Esto es especialmente importante en los elementos del sistema, ya que a menudo las letras aparecen sin contexto de una palabra conocida que ayude a hacerlas distinguibles de la prosa alrededor.
+El elemento
+Un elemento genérico en línea que se puede usar para propósitos semánticos, de localización y de estilo.
+Span
+mal_inline_span = element span {
+Use el elemento
+El elemento
+El elemento
+El elemento
+El elemento
+Use
+Esta
+No se necesita un renderizado especial para los elementos
+El elemento
+Elementos semánticos ricos para marcar el contenido en línea.
+Elementos en línea
+mal_inline = {
+Mallard proporciona un pequeño pero rico conjunto de elementos semánticos en línea. Los elementos proporcionados están seleccionados a través de experiencias en primera persona en documentación de software y otros formatos de documentación. Los elementos en línea definidos en esta especificación servirán las necesidades de la mayoría de los escritores de documentación.
+A veces los autores, editores u otros productores de contenido necesitan proporcionar más información en sus documentos. Ya que esta información puede no estar cubierta por las herramientas de mostrado, se puede usar para varios propósitos de seguimiento interno. Mallard permite que los elementos se extiendan con atributos de espacios de nombres externos. Para obtener más información consulte la
+Los elementos de Mallard permiten que elementos de espacios de nombres externos se usen en un contexto en línea. Para obtener más información consulte la
+Elementos
+Instrucciones de procesado en línea
+Los elementos en línea se encuentran entre bloques de elementos u otros elementos en línea. Mallard nunca permite bloques de elementos entre elementos en línea. Los elementos en línea nunca deberían introducir una nueva línea en la salida renderizada.
+Diferentes elementos en línea pueden introducir diferentes efectos de estilo, tales como variaciones de tipografía, colores de texto y fondo y fondos en general. Generalmente, si un efecto de estilo está establecido para un elemento en particular, se aplica a todos sus elementos descendientes, a menos que se sobreescriban explícitamente.
+Mallard permite usar elementos de espacios de nombres externos en cualquier contexto en línea. Las herramientas de procesado pueden tener un comportamiento especial para elementos particulares que entienden. De otra forma, un elemento en línea desconocido se procesará como si se reemplazase por su contenido hijo.
+Marcar la salida de un programa.
+Salida del equipo
+mal_inline_output = element output {
+Use el elemento
+Puede usar el atributo
+El elemento
+El elemento
+El elemento
+Los valores típicos para el atributo
+salida
+Salida estándar de un programa en ejecución
+error
+Error estándar de un programa en ejecución
+aviso
+La línea de comandos para una shell interactiva
+El elemento
+Se puede usar el elemento
+Use
+La salida de
+Use
+$
+ls mal_inline_output.xml
+mal_inline_output.xml
+Use
+ls mal_inline_computeroutput.xml
+ls: mal_inline_computerouput.xml: No such file or directory
+La salida del equipo se muestra con una tipografía de anchura fija o tipografía ancha. En las tipografías de anchura fija, caracteres similares suelen ser más distinguibles visualmente entre si. Se puede usar un borde o un color de fondo para marcar el principio y final de la salida.
+El elemento
+@@image: 'figures/mallard.png'; md5=cad876c6dcbc63f3d050754f7e5ee7b1
+Insertar una imagen, vídeo o un objeto multimedia.
+Objetos multimedia en línea
+mal_inline_media = element media {
+Use el elemento
+El elemento
+El elemento
+El elemento
+El atributo
+El elemento
+El elemento
+Use
+Drake, la mascota de Mallard
+Cuando un elemento
+El tipo
+Algunas herramientas de mostrado no serán capaces de mostrar todos los tipos de objetos. Por ejemplo, un documento imprimido no podrá mostrar una reproducción de vídeo o sonido. Incluso cuando una herramienta de mostrado puede mostrar el tipo de objeto, quizá pueda no funcionar con el tipo MIME proporcionado debido a otros motivos.
+Cuando una herramienta de mostrado no puede mostrar un elemento
+En algunas pantallas, los objetos multimedia pueden tener textos alternativos. Se pueden mostrar cuando un usuario posiciona el ratón sobre el objeto o las tecnologías de asistencia pueden proporcionarlo. Al mostrarlo en tal medio, las herramientas de mostrado deberían extraer el valor del texto de un elemento
+Se puede usar el elemento
+Enlazar otras páginas, secciones o páginas web.
+Hiperenlaces
+mal_inline_link = element link {
+ ( attribute xref { texto } |
+ attribute href { texto } |
+ ( attribute xref { texto }, attribute href { texto } )
+ ),
+ attribute role { texto } ?,
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Use el elemento
+El elemento
+Para enlaces hacia el mismo documento, el contenido se puede generar automáticamente.
+El elemento
+El atributo
+El atributo
+El atributo
+El elemento
+Enlazar a otra página en el mismo documento:
+Para información acerca de los atributos de enlazado consulte
+Enlazar a una sección en la misma página:
+Para detalles acerca del texto de enlace automático consulte
+Enlazar a una sección otra página:
+Para más opciones de procesado consulte la
+Enlazar un recurso externo:
+Consulte la
+Se muestra un elemento
+El destino de un elemento
+Si el elemento
+Si el elemento
+Si el elemento
+De otra forma, si esa página o sección tiene un
+De otra forma se usará el contenido del título primario de la pagina.page o sección
+De otra forma, si el elemento
+De otra forma se usará como contenido de texto el objetivo del enlace.
+El elemento
+DocBook proporciona el atributo
+&gt;2008-2009
+Marcar una combinación o secuencia de teclas
+Secuencias de teclas
+mal_inline_keyseq = element keyseq {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute type { "combo" | "sequence" } ?,
+ attribute * - (mal:* | local:*) { text } *,
+
+ mixed {
+ (
+Use el elemento
+El elemento
+El elemento
+El elemento
+El elemento
+Use
+Pulse
+Use
+Pulse
+Use
+
+Use elementos
+Pulse
+Ya que las clases de teclas y las acciones del ratón están escritas sin marcado alrededor, no puede tener dos clases de teclas o acciones del ratón consecutivas. Puede solucionar esta limitación usando patrones de elementos
+Existe varias formas de modificar el comportamiento de arrastrado usando
+Cada uno de los elementos
+Los elementos
+El elemento
+Marcar una tecla para que se pulse en el teclado del usuario.
+Pulsaciones de teclas
+mal_inline_key = element key {
+Use el elemento
+No use
+No use
+El elemento
+El elemento
+El elemento
+El elemento
+El elemento
+Use
+Pulse
+Use
+Pulse
+Use
+Pulse la tecla
+No se necesita ningún renderizado especial para los elementos
+El elemento
+Marcar texto que el usuario debe introducir en un programa del equipo.
+Entrada del usuario
+mal_inline_input = element input {
+Use el elemento
+El elemento
+El elemento
+El elemento
+El elemento
+Se puede usar el elemento
+Use
+Para proceder pulse
+Use
+La entrada del usuario se muestra con una tipografía de anchura fija o tipografía ancha. En las tipografías de anchura fija, caracteres similares suelen ser más distinguibles visualmente entre si. Se puede usar un borde o un color de fondo para marcar el principio y final de la entrada.
+El elemento
+Marcar una secuencia de controles de interfaz para navegación.
+Secuencias del IGU
+mal_inline_guiseq = element guiseq {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+
+ mixed {
+Use el elemento
+El elemento
+El elemento
+El elemento
+Use
+Para abrir un documento nuevo seleccione
+Cada uno de los elementos
+Los elementos
+El elemento
+Marque etiquetas de controles de una interfaz gráfica de usuario.
+Etiquetas del IGU («gui»)
+mal_inline_gui = element gui {
+Use el elemento
+El elemento
+El elemento
+El elemento
+El elemento
+Los estilos típicos de sugerencias incluyen:
+button
+El texto de un botón
+checkbox
+La etiqueta para una caja de verificación
+group
+La etiqueta para un grupo de controles
+input
+La etiqueta para cualquier control de entrada de texto
+menu
+El nombre de un menú
+menuitem
+El nombre de un elemento en un menú
+radiobutton
+La etiqueta para un botón de radio
+pestaña
+La etiqueta en una pestaña
+El elemento
+Use
+Pulse el botón
+Use
+La pestaña
+No se requiere ningún renderizado especial para los elementos
+En determinados entornos, las etiquetas de interfaz pueden decorarse con un icono u otro efecto basado en el atributo
+El elemento
+Marcar el nombre de un archivo o directorio.
+Nombres de archivo
+mal_inline_file = element file {
+Use el elemento
+El elemento
+El elemento
+El elemento
+El elemento
+Los nombres de archivo se deben mostrar en una tipografía de anchura fija o ancha. Las tipografías de anchura fija tienden a ser más distinguibles visualmente entre caracteres similares. Es particularmente importante en nombres de archivos, ya que las letras aparecen, a menudo, sin contexto de palabras conocidas que ayuden a hacerlas discernibles entre la prosa normal.
+El elemento
+Enfatizar texto importante.
+Énfasis
+mal_inline_em = element em {
+Use elemento
+El elemento
+El elemento
+El elemento
+El elemento
+Use
+
+Use
+Note que los
+El texto enfatizado generalmente se presenta en una tipografía cursiva u oblicua. Las tipografías cursivas y oblicuas marcan una parte del texto sin resaltarlo. Por el contrario, el texto en negrita suele llamar la atención del ojo, que puede distraer al leer grandes trozos de texto. En «scripts» sin distinción entre tipos de estilo romano y cursivo, aún puede ser posible usar una tipografía oblicua u otra variación de tipografía. Se puede usar texto en negrita si es necesario.
+Se debe evitar completamente el subrayado, ya que afecta a la legibilidad del texto. Este problema es especialmente importante en «scripts» que usan marcas diacríticas debajo del texto. En estos «scripts», el subrayado puede renderizar el texto de forma completamente ilegible.
+El elemento
+Código marcado por programación, marcado especial o cualquier otro formato legible por una máquina.
+Trozos de código
+mal_inline_code = element code {
+Use el elemento
+Puede usar el elemento
+Use el elemento
+El elemento
+El elemento
+El elemento
+El atributo
+El elemento
+El elemento
+Use
+Use
+Use
+Para crear un botón nuevo con una etiqueta, use
+Enlace a una página web directamente con el elemento
+Use
+Los fragmentos de código se muestran en una tipografía de ancho fijo. Esto imita el aspecto de un entorno típico donde se escribe el código. Más importante aún, las tipografías de ancho fijo tienden a distinguir mejor los caracteres visualmente similares. Esto es particularmente importante en el código, ya que las letras aparecen a menudo sin el contexto de una palabra conocida que les ayuda a ser perceptible en la prosa normal.
+Para fragmentos de código particularmente grandes, las herramientas de visualización usan un color de fondo o un borde para resaltar el principio y el final, aunque algunos autores prefieren
+El elemento
+Marque un comando para que sea introducido en una «shell» interactiva.
+Comandos
+mal_inline_cmd = element cmd {
+Use el elemento
+Puede usar el elemento
+Use el elemento
+El elemento
+El elemento
+El elemento
+Valores típicos para el atributo
+application/x-sh
+Comando para ejecutar en la shell Bourne
+application/x-csh
+Comando para ejecutar en la shell C
+El elemento
+Use
+Para iniciar el
+Use
+Para ver un archivo en el
+Use
+La opción
+Los comandos se muestran en una tipografía de ancho fijo. Esto imita el aspecto de un entorno típico donde se ejecutan los comandos. Más importante aún, las tipografías de ancho fijo tienden a distinguir mejor los caracteres visualmente similares. Esto es particularmente importante en los comandos, ya que las letras aparecen a menudo sin el contexto de una palabra conocida que les ayuda a ser perceptible en la prosa normal.
+Los comandos en la documentación se muestran habitualmente con opciones para ilustrar cómo usarlos para una acción concreta. Esto puede dificultar encontrar el final del comando rápidamente. El texto alrededor del contenido, especialmente la puntuación, a veces puede confundirse como parte del comando. Por esta razón, se recomienda que los comandos se muestren con un borde o un color de fondo.
+El elemento
+En DocBook, el elemento
+Para obtener más información consulte la
+Marcar el nombre legible de una aplicación o una ventana.
+Nombres de aplicaciones
+mal_inline_app = element app {
+Use el elemento
+El elemento
+El elemento
+El elemento
+El elemento
+Use
+Use
+Use la ventana
+Los nombres de aplicaciones suelen ser sustantivos, y a menudo son palabras comunes o frases indicativas de su funcionalidad. Frecuentemente, son simplemente el nombre de lo que es la aplicación. En inglés, y en muchos otros idiomas, el uso del nombre de la aplicación en una sentencia puede sonar como que el autor ha omitido un artículo por error, si el nombre de la aplicación no se entiende como un título.
+Por ejemplo, la aplicación de calculadora que incluye GNOME se llama
+Por esta razón, se recomienda que los nombres de aplicaciones marcados con el elemento
+El elemento
+ARREGLAR
+Años del «Copyright»
+mal_info_years = element years {
+ attribute * - (mal:* | local:*) { text } *,
+Use el elemento
+El elemento
+El elemento
+El elemento
+Vea las transformaciones esperadas para el elemento
+El elemento
+Proporcione títulos alternativos para el enlazado automático del texto y la ordenación.
+Títulos de información
+mal_info_title = element title {
+ attribute type { xsd:NMTOKEN },
+ attribute role { xsd:NMTOKEN } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Use el elemento
+El elemento
+El elemento
+El atributo
+"link"
+especifica un enlace de texto alternativo; consulte la
+"sort"
+especifica una clave de ordenación; consulte la
+El atributo
+El elemento
+Títulos primarios
+El
+Títulos de enlace
+Las páginas y las secciones pueden tener varios títulos de enlace. Se usan como contenido alternativo para enlazado automático del texto. Cuando se debe generar el texto automático para un elemento
+Puede usar el atributo
+Títulos de ordenamiento
+Los títulos de ordenamiento le permiten especificar un texto alternativo que usar al ordenar una página o una sección. Algunos enlaces automáticos de secciones ordenarán los nodos a los que enlazan. Cuando sucede esto, proporcionar un título de ordenamiento le permite controlar cómo se coteja el nodo. Esto es útil para excluir artículos principales como «un/una» y «el/la».
+Los títulos de información no se muestran directamente, aunque afectarán a la salida de cualquier material que enlace con la página o la sección dada.
+El modelo de contenido del elemento
+Grabar números de revisión, fechas y estados.
+Información de versión
+mal_info_revision = element revision {
+ attribute version { text } ?,
+ attribute docversion { text } ?,
+ attribute pkgversion { text } ?,
+ attribute date { xsd:date } ?,
+ attribute status {
+ "stub" | "incomplete" | "draft" | "outdated" |
+ "review" | "candidate" | "final" } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Use el elemento de información
+Puede usar los elementos
+El elemento
+El elemento
+El atributo
+El atributo
+El atributo
+El atributo
+El atributo
+"stub"
+contiene el título de un contenido no real
+"incomplete"
+resumen de toda la información, pero que carece de contenido
+"draft"
+todo el contenido disponible, pero sin pulir
+"outdated"
+que una vez estuvo completo o casi completo, pero debe revisarse para reflejar los cambios
+"review"
+listo para que los editores lo revisen
+"candidate"
+revisado y esperando la aprobación final
+"final"
+aprobado y listo para publicarse o distribuirse
+El elemento
+Como elemento de información, el elemento
+Cuando se muestra o se procesa un elemento
+El elemento
+Elementos de información
+mal_info = element info {
+ attribute * - (mal:* | local:*) { text } *,
+
+ (
+Elementos de información adicionales
+Elementos adicionales
+Nombres
+mal_info_name = element name {
+ attribute * - (mal:* | local:*) { text } *,
+Use el elemento
+El elemento
+El elemento
+El elemento
+El elemento
+mal_info_link = element link {
+ attribute type { "guide" | "topic" | "seealso" },
+ attribute xref { text },
+ attribute weight { text } ?
+}
+Proporcione información acerca de los términos de la licencia del material.
+Información de la licencia
+mal_info_license = element license {
+ attribute href { text } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Se puede usar el elemento
+El elemento
+El elemento
+Se puede usar el elemento
+El elemento
+El elemento
+No hay ningún requisito por el que el URI
+DocBook contiene el elemento
+Direcciones de correo-e
+mal_info_email = element email {
+ attribute * - (mal:* | local:*) { text } *,
+Use el elemento
+El elemento
+El elemento
+El elemento
+El elemento
+Proporcione una pequeña descripción de una página o sección.
+Descripciones de páginas
+mal_info_desc = element desc {
+ attribute * - (mal:* | local:*) { text } *,
+El elemento
+El elemento
+El elemento
+El elemento
+El elemento
+El elemento El elemento
+2008
+Proporcione crédito donde sea necesario.
+Créditos
+mal_info_credit = element credit {
+ attribute type { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+
+ (
+Use el elemento
+El elemento
+El elemento
+El atributo opcional
+"author"
+alguien responsable de escribir el contenido
+"editor"
+alguien que ha hecho revisiones o correcciones en la edición
+"copyright"
+una persona o entidad titular de los derechos de autor del trabajo
+"maintainer"
+la persona o entidad responsable del trabajo
+"collaborator"
+alguien que ha proporcionado información en bruto ampliamente
+"translator"
+alguien que ha traducido el trabajo a otro idioma
+"publisher"
+una persona o entidad que distribuye las copias formateadas
+El elemento
+No hay una expectativas de procesado específicas para el elemento
+Al procesar el hijo de un elemento
+El elemento
+En DocBook, algunos elementos «credit» tienen un contenido altamente estructurado, mientras que otros sólo permiten contenido en línea. En Mallard, todos los créditos usan contenido estructurado. Mientras que Mallard no proporciona elementos hijos para todo lo que se puede grabar en DocBook, se pueden usar los elementos de espacios de nombres externos para cualquier información adicional que se necesite.
+El elemento
+Usar elementos y atributos de otros espacios de nombres en documentos de Mallard.
+Espacios de nombres externos
+Añadir contenido
+mal_external = element * - (mal:* | local:*) {
+ attribute * { text } *,
+ mal_anything *
+}
+mal_anything = element * {
+ attribute * { text } *,
+ mal_anything *
+}
+Atributos de espacios de nombres externos
+Todos los elementos en Mallard puede tener atributos de espacios de nombres externos. Esto se puede usar para aclarar el significado de un elemento en un contexto determinado, para proporcionar información adicional a las herramientas de procesado o para empotrar datos semánticos más ricos en un documento.
+Por ejemplo, una herramienta de traducción puede copiar
+Las herramientas de procesado puede ignorar cualquier atributo de espacios de nombres externos que no entiendan.
+Elementos de espacios de nombres externos
+Crear árboles simples para mostrar estructuras jerárquicas.
+Listas en árbol
+mal_block_tree = element tree {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Use el elemento
+El elemento
+El elemento
+Se recomiendan las siguientes sugerencias de estilo:
+líneas
+dibujar líneas para mostrar la jerarquía
+El elemento
+Use un árbol para mostrar una clase jerárquica dentro de un elemento
+GtkBin
+GtkButton
+GtkToggleButton
+GtkColorButton
+GtkFontButton
+GtkLinkButton
+GtkOptionMenu
+GtkScaleButton
+Use la sugerencia de estilo
+Baikal Teal
+Wigeons
+Anas
+Lophonetta
+Speculanas
+Anatinae (patos chapoteadores)
+Aythya
+Netta
+Anthyinae (patos buceadores)
+Dendrocygninae (patos silbadores)
+Las lista en árbol se muestran como elementos de bloque. Cada
+Títulos
+mal_block_title = element title {
+Crear una lista de términos y descripciones asociadas.
+Listas de definiciones
+mal_block_terms = element terms {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+El elemento
+El elemento
+El elemento
+El elemento
+Crear una lista de definiciones sencilla con un título:
+Elementos de bloque básicos seleccionados
+código
+Marcar un bloque de código o de contenido de un archivo.
+ejemplo
+Marcar un grupo de elementos de bloque como parte de un único elemento.
+pantalla
+Marcar una interfaz textual de usuario en una sesión de consola interactiva.
+Crear una lista de definición con varios términos por cada entrada:
+comentario
+comillas
+Elementos formales que admiten un elemento
+figure
+listing
+synopsis
+Elementos formales que admiten un elemento
+note
+Elementos formales que sólo permiten un elemento
+Las listas de definición se muestran como elementos de bloque, donde se muestra cada
+El elemento
+Crear una vista general de conceptos.
+Resumen
+mal_block_synopsis = element synopsis {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+El elemento
+Añadir explicación, ejemplos
+El elemento
+El elemento
+El elemento
+Use
+Funciones de la charla de las judías
+Use estos métodos sobre un objeto
+void add_bean (Bean bean);
+int count_beans ();
+Un elemento
+Cuando estén presentes, se deberían mostrar el título y la descripción de forma que sus respectivos roles estén claros.
+El elemento
+Subtítulos
+mal_block_subtitle = element subtitle {
+Crear una lista de pasos que el lector debe realizar para realizar una tarea.
+Procedimientos
+mal_block_steps = element steps {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Use el elemento
+El elemento
+El elemento
+El elemento
+Crear un procedimiento sencillo con pasos que el lector debe seguir:
+Plantar judías mágicas
+Excavar un agujero de 10cm de profundidad.
+Colocar las judías mágicas en el agujero.
+Rellenar el agujero con fertilizante.
+Regar con frecuencia.
+Crear un procedimiento con una lista anidada y un procedimiento anidado:
+Realizar una de las siguientes:
+Excavar un agujero de 10cm de profundidad.
+Encontrar un agujero de 10cm de profundidad.
+Regar con frecuencia realizando uno de los siguientes pasos:
+Llenar una regadera con agua.
+Verter agua donde se van a plantar las judías.
+Los procedimientos se muestran como elementos de bloque, donde cada elemento
+Los procedimientos deben tener un color de fondo, borde u otro efecto de estilo para clarificar la diferencia entre ellos y listas numeradas básicas. El estilo especial permite al lector leer páginas por encima más fácilmente.
+El elemento
+En lugar de un elemento
+DocBook proporciona un elemento
+Mallard no proporciona un elemento equivalente a
+DocBook permite contenido de nivel precedente en el elemento
+Pantallas
+mal_block_screen = element screen {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute mime { text } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Use el elemento
+El elemento
+Use el elemento
+El elemento
+El elemento
+El atributo
+El elemento
+Use
++==== Charla de las judías ==========================+
+| Pulse la letra del comando que quiere: |
+| O - Pedir judías |
+| P - Plantar judías |
+| T - Seguir el inventario de judías |
++====================================================+
+Use
+xsltproc -o mal_block_screen.html \\
+ --stringparam mal.cache.file `pwd`/mallard.cache \\
+ `pkg-config --variable mal2html gnome-doc-utils` mal_block_screen.html
+Use
+[rupert@gnome]
+Es foo bar
+foo: no se puede acceder al archivo: no existe el archivo o directorio
+bar
+Las pantallas se deben mostrar tal cual, con todos los espacios en blanco y todos los saltos de línea reproducidos en la salida. La única excepción es el salto de una sola línea principal que, si existe, lo deben eliminar las herramientas de procesado. Las herramientas de visualización sólo debería eliminar el salto de línea principal en un nodo de texto inicial. No se espera que eliminen saltos de línea de elementos hijos.
+Las pantallas se deben mostrar en una tipografía de ancho fijo. El marcado en línea puede causar variaciones de estilo pero no deberían causar un cambio a una tipografía de anchura variable.
+El elemento
+El elemento
+Crear un nivel de bloque de cita con un atributo.
+Bloques de citas
+mal_block_quote = element quote {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+El elemento
+El elemento
+El elemento
+epígrafe
+una introducción o cierre de cita que no es parte de la prosa mostrada, generalmente con formato alineado a la derecha
+El elemento
+Incluir una bloque simple de cita en su documento:
+Henry David Thoreau
+Nuestra vida siempre es malgastada por el detalle... simplificar, simplificar.
+Añadir un título a la cita:
+Simplificar
+Añadir una fecha a la atribución:
+Los bloques de citas se muestran como elementos de bloque, donde cada uno de sus elementos hijos se interpretan como elementos de bloque. Cuando existen, el título y la atribución deberían mostrarse de manera que dejan claros sus respectivos roles. Los bloques de citas se adornan frecuentemente con una marca de agua de comillas. Las herramientas de procesado deben asegurar que las comillas usadas para formatear las citas, incluyendo las imágenes de marca de agua, son apropiadas para el idioma del documento.
+El elemento
+Crear un párrafo de texto simple.
+Párrafos
+mal_block_p = element p {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+El elemento más básico de nivel de bloque en Mallard es el elemento
+El elemento
+El elemento
+El elemento
+Crear un párrafo simple:
+Los párrafos se muestran como elementos de bloque, donde los elementos hijos se interpretan como elementos en línea. En la pantalla de los dispositivos, los párrafos tienen generalmente relleno por arriba y por abajo para separarlos del bloque que rodea al contenido. En dispositivos de impresión, la primera línea de cada párrafo aparece generalmente sangrada.
+El elemento
+Párrafos, listas, tablas y otros elementos semánticos para construir páginas simples pero sensacionales.
+Bloques
+mal_block = (
+Los elementos de bloque son los bloques de construcción de las páginas. Mallard proporciona elementos de bloque para las necesidades más comunes al documentar software, desde párrafos sencillos hasta bloques de ejemplo para tablas potentes. En Mallard, las páginas y las secciones se construyen encima de los elementos de bloque, por lo que contienen tanto elementos de bloque como contenido en línea.
+Elementos de bloque básicos
+Elementos básicos
+mal_block_basic = (
+Los elementos de bloque básicos son elementos que no contienen un título y que tienen o bien contenido general o bien
+Elementos formales de bloques
+Elementos formales
+mal_block_formal = (
+Los elementos formales de bloques contienen un
+Listar elementos
+mal_block_lists = (
+Mallard proporciona elementos de lista para la mayoría de las necesidades, incluyendo las definiciones comunes, listas ordenadas y listas sin ordenar. Mallard también proporciona árboles simples, útiles para representar jerarquías tales como herencia de clases o distribuciones de carpetas. Cada uno de los elementos de lista usa el elemento
+Mallard proporciona un sencillo modelo de tabla basado en las tablas de HTML. Aunque permiten un nivel de estilos tan flexible como en HTML y en CSS, las tablas de Mallard proporcionan soluciones sencillas para las necesidades comunes de estilos, así como el sombreado alternativo de las filas.
+Otros elementos de tipo bloque
+Mallard contiene varios elementos de tipo bloque que sólo se usan en contextos específicos, y no están permitidos en bloques de contenido general. Estos elementos permiten modelos de contenidos más ricos para los elementos en los que aparecen.
+Todos los elementos de bloque empiezan en una línea nueva en la salida renderizada. Las páginas se pueden visualizar como una secuencia de elementos de bloque apilados verticalmente. Algunos elementos de bloque contienen otros elementos de bloque. En estos casos, el elemento contenido puede introducir ciertos efectos de estilo, y cada uno de sus elementos hijos se renderiza de manera normal.
+Cada elemento de bloque debe distinguirse claramente de los elementos de bloque que tenga alrededor. Habitualmente, el relleno vertical se sitúa entre elementos de bloque para separarlos. Ciertos elementos de bloque, especialmente aquellos que tienen contenido de bloque, pueden usar un borde, un color de fondo u otros efectos de estilo. Consulte la especificación de cada elemento de bloque para obtener más detalles.
+Incluya notas, sugerencias, advertencias y cualquier otra información acerca de citas.
+mal_block_note = element note {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+El elemento
+El elemento
+El elemento
+avanzado
+información que usuarios avanzados pueden encontrar útil
+error
+una nota acerca de un error conocido en el software
+importante
+información importante resaltada en una nota
+csj
+una sugerencia general que puede ayudar al lector para realizar mejor una operación
+aviso
+un aviso al lector acerca de una operación potencialmente peligrosa
+El elemento
+Insertar una nota básica en su documento:
+La información en esta sección no es normativa.
+Incluya una nota con información adicional para lectores avanzados:
+El esquema Mallard está mantenido en una sintaxis compacta RELAX-NG en bloques empotrados dentro de la especificación.
+Mencione un error conocido que es probable que el lector se encuentre:
+No se pueden guardar los archivos
+Actualmente, debido al
+Resalte cualquier trozo de información importante para asegurarse de que sus lectores lo ven incluso al ojear un documento:
+Proporcione su nombre y su dirección de correo-e
+Antes de realizar cualquier «commit» en un repositorio git, asegúrese de proporcionar su nombre y dirección correo electrónico para que se le atribuyan correctamente sus cambios.
+git config --global user.name
+Proporcione un consejo que ayude pero que no sea esencial:
+Pulse
+Avisar al lector acerca de operaciones peligrosas:
+No existe forma de recuperar los archivos eliminados con el comando
+Las notas se muestran como bloques de elementos, con cada elemento hijo interpretado como bloques elementos. Cuando está presente, el título se muestra de forma que se deja claro que es el título del bloque. Las notas deben tener borde, color de fondo y/o otro efecto de estilo para distinguirlas del contenido del bloque que las rodea. Las notas a menudo usan un icono para identificar el tipo de nota que están mostrando.
+El elemento
+Objetos multimedia
+mal_block_media = element media {
+ attribute type { "image" | "video" | "audio" | "application" } ?,
+ attribute mime { text } ?,
+ attribute src { text },
+ attribute height { text } ?,
+ attribute width { text } ?,
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+El elemento
+El elemento
+El elemento
+Cuando aparece un elemento
+Cuando una herramienta de mostrado no puede mostrar un elemento
+Frecuentemente, el hijo de un elemento
+El elemento
+Crear una lista básica de topos o numerada.
+Listas básicas
+mal_block_list = element list {
+ attribute type { xsd:NMTOKEN } ?,
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Use el elemento
+El elemento
+El elemento
+El atributo
+Si no existe ningún atributo
+El elemento
+Crear una lista básica sin ordenar:
+GTK_MESSAGE_INFO
+GTK_MESSAGE_WARNING
+GTK_MESSAGE_QUESTION
+GTK_MESSAGE_ERROR
+GTK_MESSAGE_OTHER
+Crear una lista sin ordenar con título:
+Tipos de mensajes
+Crear una simple lista numerada:
+Primero
+Segundo
+Tercero
+Crear listas numeradas con numerales romanos:
+Las listas se muestran como elementos de bloque, donde cada elemento
+Los marcadores de elementos se toman del atributo
+El elemento
+Proporcione un nombre y una descripción para un bloque de código u otro contenido.
+Listados
+mal_block_listing = element listing {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Use el elemento
+El elemento
+El elemento
+El elemento
+Use
+<![CDATA[
+Una primera página en Mallard
+Los listados se muestran como bloques de elementos, con cada uno de sus elementos hijos interpretados como bloques de elementos. Cuando están presentes, el título y la descripción se deben mostrar de manera que sus respectivos roles queden claros.
+Proporcione un título o descripción para un objeto multimedia.
+Figuras
+mal_block_figure = element figure {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Use el elemento
+El elemento
+El elemento
+El elemento
+Use
+Drake
+Drake es la mascota de Mallard.
+Las figuras se muestran como bloques de elementos, con cada uno de sus elementos hijos interpretados como bloques de elementos. Cuando están presentes, el título y la descripción se deben mostrar de manera que sus respectivos roles queden claros.
+El elemento
+Marque un grupo de bloques de elementos que forman parte de un solo ejemplo.
+mal_block_example = element example {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Use el elemento
+El elemento
+El elemento
+El elemento
+Use
+<![CDATA[
+xsltproc -o mal_block_screen.html \\
+ --stringparam mal.cache.file `pwd`/mallard.cache \\
+ `pkg-config --variable mal2html gnome-doc-utils` \\
+ mal_block_screen.html
+El contenido de un elemento
+El elemento
+Proporcionar una descripción para un elemento formal de bloque.
+Descripciones de bloques
+mal_block_desc = element desc {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+El elemento
+El elemento
+El elemento
+Use
+Use
+<![CDATA[
+Se pueden encontrar más ejemplos en las páginas
+La visualización exacta de una descripción dependerá de cómo se muestra el elemento formal que la contiene. una descripción es un bloque de texto que se muestra directamente encima o debajo del contenido del elemento que lo encierra.
+Se debería mostrar una descripción de forma que deje el rol claro y que lo distinga del bloque normal de contenido del elemento adjunto.
+Incluya un comentario de redacción oculto para lectores normales.
+Comentarios de redacción
+mal_block_comment = element comment {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+El elemento
+Opcionalmente un elemento
+El elemento
+El elemento
+El elemento
+El elemento
+Proporcione un comentario:
+Los ánades reales son patos anatinos
+La información en esta página es incorrecta. Los ánades reales son patos anatinos no aytinos.
+Use
+Roberto
+Pero el otro día vi ánade real aytino. (N. del T.: el texto original habla de «mallard»; «dabbling duck» y «diving duck».)
+Roberto, lee la
+En el procesado normal no se muestran los elementos
+Cuando se muestra, se renderiza un elemento
+Si existe un elemento
+El elemento
+Bloques de código
+mal_block_code = element code {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute mime { text } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Use el elemento
+El elemento
+El elemento
+El elemento
+Use el elemento
+Use
+class BeanStalk {
+public:
+ void add_bean(Bean bean);
+ int count_beans();
+}
+Los bloques de código se deben mostrar tal cual, reproduciendo todos los espacios y líneas en blanco en la salida renderizada. La única excepción es una línea con un salto de línea al principio, que las herramientas de visualización deben eliminar si existe. Las herramientas de visualización sólo deben eliminar una línea con un salto de línea al principio en un nodo de texto inicial. No se espera que eliminen líneas con un salto de línea al principio en los elementos hijos.
+Los códigos de bloque se deben mostrar en una tipografía de ancho fijo. El marcado en línea puede causar variaciones de estilo pero no deberían causar un cambio a una tipografía de anchura variable.
+El elemento
+El elemento
+Citas
+mal_block_cite = element cite {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+ attribute date { text } ?,
+ attribute href { text } ?,
+Posibilidad de añadir código para las citas de bloques de código.
+El elemento
+Añadir ejemplos, procesar las expectativas.
+El elemento
+El atributo
+Enlazar otras páginas o documentos directamente desde la mayoría de elementos en línea.
+Enlazado ubicuo
+mal_attr_link =
+ ( attribute xref { text } ?
+ | { attribute dref { text } ?, attribute href { text } ? }
+ )
+Quizá el modelo de contenedor no se ha expresado tan claramente como se podría. El atributo
+Enlaces automáticos
+Enlaces de temas
+Enlaces de guía
+Enlaces «Ver también»
+Notas de traducción
+Conformidad con los requerimientos de marcado para localización e internacionalización del W3C.
+Requerimientos del ITS
+Esta página trata cómo sigue Mallard los requerimientos en los
+En el momento de escribir este documento, existen 26 requerimientos, aunque no todos ellos están completos. Esta página discute una selección de los requerimientos. Las futuras versiones pueden discutir más requerimientos.
+R002: elemento «span-like»
+Requerimientos de marcado para localización e internacionalización del W3C
+R002: el elemento «span-like» es obligatorio para permitir a los autores marcar secciones que pueden tener propiedades especiales, desde un punto de vista de localización e internacionalización.
+Mallard proporciona el elemento
+R004: identificador único
+R004: debería ser posible adjuntar un identificador único a cualquier elemento traducible. Este elemento debe ser único en el conjunto de un documento, pero debe ser idéntico a lo largo de todas las traducciones del mismo elemento.
+Aunque el atributo
+R006: identificar el idioma o configuración regional
+[R006]: cualquier documento debe especificar en su comienzo qué idioma/configuración regional se aplica tanto para el contenido principal como para el contenido almacenado de forma separada. Aunque el idioma/configuración regional se deben declarar para el documento completo, cuando un elemento o un fragmento de texto difiere en el idioma/configuración regional respecto al idioma del documento, se debe etiquetar adecuadamente. Por lo tanto, el DTD/Esquema deben permitir que cualquier elemento especifique un atributo de idioma/configuración regional. La declaración de idioma/configuración regional debe usar métodos industriales estándar.
+Mallard permite usar el atributo estándar
+Tenga en cuenta que hay dos métodos diferentes de identificar el idioma y la información de configuración regional que quienes trabajan con Mallard se pueden encontrar. Dado que Mallard es un formato XML, se espera que los identificadores de idioma sean conformes al
+R007: identificar términos
+[R007]: debe ser posible identificar términos dentro de un elemento o un fragmento para proporcionar datos sobre la gestión de la terminología y la generación de índices. Los términos deben estar, o bien asociados a atributos de términos de información relativos o enlazados a datos de terminología externos.
+Actualmente, Mallard no proporciona una manera de marcar términos y definiciones. Cuando sea necesario, por motivos de traducción, se pueden usar los atributos
+R008: intención de la especificación y/o mapeado
+[R008]: no parece ser realista que todos los vocabularios de etiquetas XML localización de información relevante para idénticos (por ejemplo, todos usan el «término» etiqueta de términos). Una manera de hacerse cargo de diversas marcas de localización relevante en entornos de localización es un mecanismo de asignación que los mapas de localización de marcas relevantes en una representación canónica (por ejemplo, el Conjunto de Etiquetas de Internacionalización).
+Cualquier mapeado que se pueda codificar usando el elemento
+R011: soporte para texto bidireccional
+[R011]: debería estar disponible el marcado para soportar las necesidades de «scripts» bidireccionales.
+Mallard permite usar atributos de espacios de nombres externos en todos los elementos. Consecuentemente se puede usar el atributo
+R012: indicador de traducibilidad
+[R012]: deben existir métodos para permitir especificar las partes de un documento que se deben traducir y las que no.
+Mallard permite usar atributos de espacios de nombres externos en todos los elementos. Consecuentemente se puede usar el atributo
+Adicionalmente se puede usar el elemento
+R014: impacto limitado
+[R01]: todas las soluciones propuestas deben diseñarse para tener el menor impacto posible en la estructura en árbol del documento original y en los modelos de contenido del esquema original.
+Mallard permite extensibilidad de herramientas específicas usando atributos y elementos de espacios de nombres externos. Mallard tiene
+Aunque es imposible predecir todos los problemas que uno puede encontrar, Mallard se desarrolló después de años desarrollando herramientas de traducción para otros formatos; Internacionalización y localización fueron los puntos principales en el diseño de Mallard.
+R015: atributos y texto traducible
+[R015] Se deben tomar medidas para asegurarse de que los atributos con valores traducibles no entorpecen el proceso de localización.
+Mallard nunca ubica texto traducible en valores de atributos.
+R017: notas de localización
+[R017]: debe existir un método para que los autores comuniquen información a los traductores acerca del contenido en particular de un elemento.
+Mallard permite atributos de espacios de nombres externos para usarlos en todos los elementos. Consecuentemente, se pueden usar los atributos
+Si se necesitan notas más amplias sobre la configuración regional, se puede usar el elemento
+R020: marcado de anotaciones
+[R020]: debe existir una forma para soportar marcado de anotaciones de texto de tipo «ruby».
+Todo el contenido traducible en Mallard se sitúa en el contenido de un elemento, que permite usar anotaciones. Mallard nunca sitúa contenido traducible en valores de atributos. Sin embargo, tenga en cuenta que, a menudo, los documentos de Mallard se muestran convirtiéndose a un formato como HTML. Si el formato de visualización sitúa contenido en valores de atributos (como el atributo
+Los elementos de espacios de nombres externos se pueden usar en todos los
+R022: elementos anidados
+[R022]: se debe tener mucho cuidado al definir o usar elementos traducibles anidados.
+Mallard, explícitamente, no permite mezclar bloques y contenido en línea, excepto en casos bien definidos en los que se puede detectar y manejar fácilmente. En Mallard, cualquier elemento de bloque que pueda obtener texto directamente se considera como una unidad de traducción. Dado que estos elementos no permiten que el contenido de bloque general se mezcle con el contenido en línea, las unidades de traducción se pueden presentar siempre a los traductores sin la necesidad de marcadores de posición.
+Tenga en cuenta que este puede no ser el caso si una herramienta de traducción elige tratar ciertos contenedores de elementos como unidades de traducción. Por ejemplo, bajo ciertas circunstancias una herramienta de traducción puede elegir presentar
+R025: elementos y segmentación
+[R025]: los métodos de los elementos, independientemente de la semántica, deben existir para proporcionar sugerencias acerca de cómo partir el contenido del documento en partes de texto con sentido completo
+Hacer distinciones significativas es en última instancia, el trabajo de una herramienta de procesamiento, aunque el diseño de un vocabulario XML puede tener un impacto significativo en la dificultad de implementación. Las siguientes notas serán de interés para la mayoría de los implementadores de la herramienta.
+En Mallard, el contenido de cualquier elemento tomado en su contexto es, sin ambigüedades,
+Tenga en cuenta que dado que algunos elementos de nombre se usan tanto en bloques cono en contextos en línea, estos modelos de contenido ambiguos pueden ser especialmente problemáticos para Mallard. Los modelos de contenido ambiguos pueden provocar situaciones en las que no es posible determinar la función de un elemento como
+Generalmente, en Mallard, los elementos contienen bloques de contenido o contenido en línea. Por ello, por ejemplo, no puede ubicar un párrafo dentro de un párrafo. Esto es más simple para los traductores, así como para los implementadores de herramientas de traducción porque reduce la necesidad de usar marcadores de lugares («placeholders») para unidades de traducción separadas.
+Una excepción para tener en cuenta sobre lo anterior es el elemento
+Es importante resaltar que Mallard usa algunos nombres de elementos tanto en el contexto en bloque como en línea. Los elementos
+2007
+Notas de internacionalización
+Explorar más de lo que Mallard ofrece.
+Explorar Mallard
+Referencia de elementos de DocBook
+La siguiente tabla lista todos los elementos de DocBook y proporciona recomendaciones para equivalentes o funcionalidades similares en Mallard, siempre que estén disponibles.
+abbrev
+No existe equivalente en Mallard. En su lugar use texto plano.
+abstract
+No existe equivalente en Mallard. Puede ser apropiado usar el elemento
+accel
+No existe equivalente en Mallard ya que marcar el acelerador en el texto de la ayuda no se considera importante.
+ackno
+No existe equivalente en Mallard. Simplemente ponga los agradecimientos en un
+acronym
+action
+address
+No existe el equivalente en Mallard.
+affiliation
+alt
+No existe equivalente en Mallard ya que actualmente no soporta ecuaciones.
+anchor
+Actualmente no existe equivalente en Mallard. Versiones futuras pueden incluirlo.
+answer
+Actualmente Mallard no tiene un entorno estructurado para sesiones de preguntas y respuestas.
+appendix
+No existe equivalente directo en Mallard. En su lugar use los elementos
+appendixinfo
+application
+Similar al elemento
+area
+Mallard no soporta «callout».
+areaset
+areaspec
+arg
+Mallard no tiene un entorno estructurado para resúmenes de comandos.
+article
+articleinfo
+artpagenums
+No existe equivalente en Mallard.
+attribution
+Similar al elemento
+audiodata
+Consulte el elemento
+audioobject
+author
+Use el elemento común
+authorblurb
+No existe equivalente en Mallard.
+authorgroup
+No existe equivalente en Mallard.
+authorinitials
+beginpage
+bibliocoverage
+Actualmente Mallard no tiene un entorno estructurado para bibliografías.
+bibliodiv
+biblioentry
+bibliography
+bibliographyinfo
+biblioid
+bibliolist
+bibliomisc
+bibliomixed
+bibliomset
+biblioref
+bibliorelation
+biblioset
+bibliosource
+blockinfo
+No existe equivalente en Mallard. Versiones futuras pueden añadir manejadores de metadatos para elementos de bloques para guardar los créditos y la información de la licencia de recursos externos.
+blockquote
+Similar al elemento
+book
+bookinfo
+bridgehead
+callout
+calloutlist
+caption
+No existe equivalente directo en Mallard. Para obtener un resultado similar use el elemento
+caution
+Use el elemento común
+chapter
+chapterinfo
+citation
+citebiblioid
+citerefentry
+Actualmente Mallard no tiene un entorno estructurado para páginas de referencia.
+citetitle
+city
+classname
+No existe el elemento específico en Mallard. En su lugar use el elemento en línea
+classsynopsis
+No existe un equivalente directo en Mallard. En su lugar use el bloque
+classsynopsisinfo
+cmdsynopsis
+co
+Similar al elemento
+col
+Similar al elemento
+colgroup
+Similar al elemento
+collab
+collabname
+Varía con el uso. El elemnto
+colophon
+colspec
+Mallard no usa el modelo te tablas CALS.
+command
+Similar al elemento
+computeroutput
+Similar al elemento
+confdates
+confgroup
+confnum
+confsponsor
+conftitle
+constant
+No existe el elemento específico en Mallard. En su lugar use el elemento en línea
+constraint
+Mallard no tiene un entorno estructurado para producciones EBNF.
+constraintdef
+constructorsynopsis
+No existe el elemento específico en Mallard. En su lugar use el bloque
+contractnum
+contractsponsor
+contrib
+No existe equivalente en Mallard.
+copyright
+Use el elemento
+coref
+corpauthor
+corpcredit
+corpname
+country
+database
+No existe el elemento específico en Mallard. En su lugar use el elemento en línea
+date
+Varía con el uso. Para
+dedication
+destructorsynopsis
+edition
+editor
+email
+Varía con el uso. Use el elemento
+emphasis
+Similar al elemento
+entry
+entrytbl
+envar
+epigrah
+No existe equivalente directo en Mallard. Algunas herramientas de procesado pueden soportar el estilo de sugerencia
+equation
+errorcode
+No existen elementos específicos en Mallard. Use el elemento en línea
+errorname
+errortext
+errortype
+Similar al elemento
+exceptionname
+fax
+fieldsynopsis
+Similar al elemento
+filename
+Similar al elemento
+firstname
+firstterm
+No existe el elemnto específico en Mallard. Use el elemento
+footnote
+Actualmente Mallard no tiene soporte para notas al pie. Futuras versiones pueden añadir anotaciones.
+footnoteref
+foreignphrase
+No existe el elemento específico en Mallard. Si es necesario use el elemento
+formalpara
+funcdef
+funcparams
+funcprototype
+funcsynopsis
+funcsynopsisinfo
+function
+glossary
+No existe equivalente directo en Mallard. En su lugar use los elementos
+glossaryinfo
+glossdef
+Actualmente Mallard no tiene un entorno estructurado para glosarios. En su lugar use el elemento
+glossdiv
+glossentry
+glosslist
+glosssee
+glossseealso
+glossterm
+graphic
+graphicco
+guibutton
+Use el elemento común
+guiicon
+guilabel
+guimenu
+guimenuitem
+guisubmenu
+hardware
+highlights
+Actualmente no existe un equivalente en Mallard. Versiones futuras pueden soportarlo usando el texto introductorio de un tema.
+holder
+Use el elemento
+honorific
+html:form
+Mallard no soporta formularios.
+imagedata
+imageobject
+imageobjectco
+index
+Mallard no tiene un entorno estructurado para índices.
+indexdiv
+indexentry
+indexinfo
+indexterm
+informalequation
+informalexample
+Similar al elemento
+informalfigure
+informaltable
+Similar al elemento
+initializer
+Mallard no tiene un entorno estructurado para resúmenes de campos.
+inlineequation
+inlinegraphic
+Consulte el elemento en línea
+inlinemediaobject
+interface
+interfacename
+invpartnumber
+isbn
+issn
+issuenum
+itemizedlist
+Consulte el elemento
+itermset
+jobtitle
+keycap
+Similar al elemento
+keycode
+keycombo
+Similar al elemento
+keysym
+keyword
+keywordset
+label
+legalnotice
+No existe una nota legal de propósito general en Mallard.
+lhs
+lineage
+lineannotation
+Actualmente no existe un equivalente en Mallard. Puede usar
+link
+Para obtener más detalles consulte el elemento
+listitem
+Para obtener más detalles consulte el elemento
+literal
+literallayout
+Actualmente no existe una distribución literal de propósito general en Mallard. Las versiones futuras pueden incluirlo.
+lot
+lotentry
+manvolnum
+markup
+mathprase
+medialabel
+mediaobject
+mediaobjectco
+member
+No existe un equivalente en Mallard al elemento de DocBook
+menuchoice
+Similar al elemento
+methodname
+methodparam
+Mallard no tiene un entorno estructurado para los resúmenes de métodos.
+methodsynopsis
+mml:math
+modespec
+modifier
+Mallard no tiene un entorno estructurado para resúmenes de código.
+mousebutton
+msg
+Mallard no tiene un entorno estructurado para mensajes.
+msgaud
+msgentry
+msgexplan
+msginfo
+msglevel
+msgmain
+msgorig
+msgrel
+msgset
+msgsub
+msgtext
+nonterminal
+objectinfo
+olink
+ooclass
+ooexception
+oointerface
+option
+No existe el elemento específico en Mallard. En su lugar use el elemento en línea
+optional
+orderedlist
+Para obtener más detalles consulte el elemento
+orgdiv
+orgname
+otheraddr
+othercredit
+othername
+package
+pagenums
+para
+Similar al elemento
+paramdef
+Mallard no tiene un entorno estructurado para prototipos de funciones.
+parameter
+part
+partinfo
+partintro
+No existe un equivalente directo en Mallard. Los elementos
+personblurb
+personname
+phone
+Similar al elemento
+pob
+postcode
+preface
+prefaceinfo
+primary
+primaryie
+printhistory
+procedure
+Consulte el elemento
+production
+productionrecap
+productionset
+productname
+No existe un elemento equivalente en Mallard. Use texto plano en línea. Los
+productnumber
+programlisting
+Similar al elemento de bloque
+programlistingco
+No existe el elemento específico en Mallard. En su lugar use el elemento en línea
+property
+pubdate
+publisher
+publishername
+pubsnumber
+qandadiv
+qandaentry
+qandaset
+question
+refclass
+refdescriptor
+refentry
+refentryinfo
+refentrytitle
+reference
+referenceinfo
+refmeta
+refmiscinfo
+refname
+refnamediv
+refpurpose
+refsect1
+refsect1info
+refsect2
+refsect2info
+refsect3
+refsect3info
+refsection
+refsectioninfo
+refsynopsisdiv
+refsynopsisdivinfo
+releaseinfo
+Esta es una larga lista. Tratar con el editor de esta guía mientras se completa.
+Cómo procesar y trabajar con documentos Mallard.
+Detalles de procesado
+Internacionalización y localización
+Material de referencia adicional
+Daniel Mustieles <daniel\.mustieles\@gmail\.com>, 2011
+Jorge González <jorgegonz\@svn\.gnome\.org>, 2009-2010
+Este trabajo está licenciado bajo una
+Como excepción especial, los poseedores de los derechos de autor le dan permiso para copiar, modificar y distribuir el ejemplo de código contenido en este documento bajo los términos que usted elija, sin restricción.

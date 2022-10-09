@@ -1,0 +1,45 @@
+# language_name_wals:	Turkish
+# language_name_glotto:	Turkish
+# ISO_6393:	tur
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/tr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Kullanım Kılavuzu
+Önceki
+Sonraki
+unserialize
+(PHP 3 = 3.0.5, PHP 4 = 4.0.0)
+Description
+
+
+If an object was serialized, its methods are not preserved in the returned value.
+Not:
+It' s possible to set a callback-function which will be called, if an undefined class should be instanciated during unserializing. (to prevent getting an incomplete object "__PHP_Incomplete_Class".) Use your php.ini, ini_set() or .htaccess-file to define 'unserialize_callback_func '.
+Everytime an undefined class should be instanciated, it 'll be called.
+To disable this feature just empty this global variable.
+Örnek 1. unserialize_callback_func example
+$serialized_object=' O:1 :"a":1 :{s:5 :"value";s:3 :"100" ;}'; ini_set('unserialize_callback_func' ,'mycallback'); / / set your callback_function function mycallback($classname) {/ / just include a file containing your classdefinition / / you get $classname to figure out which classdefinition is required}
+Not:
+
+
+
+Örnek 2. unserialize() example
+/ / Here, we use unserialize() to load session data from a database / / into $session_data.
+This example complements the one described / / with function serialize / function. $conn = odbc_connect ("webdb", "php", "chicken"); $stmt = odbc_prepare ($conn, "SELECT data FROM sessions WHERE id = ?"); $sqldata = array ($PHP_AUTH_USER); if (!odbc_execute ($stmt, $sqldata) | | !odbc_fetch_into ($stmt, $tmp)) {/ / if the execute or fetch fails, initialize to empty array $session_data = array();} else {/ / we should now have the serialized data in $tmp[0]. $session_data = unserialize ($tmp[0]); if (!is_array ($session_data)) {/ / something went wrong, initialize to empty array $session_data = array();}}
+
+Önceki
+Baþlangýç
+Sonraki
+
+Yukarý

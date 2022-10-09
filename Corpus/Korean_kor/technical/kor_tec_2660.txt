@@ -1,0 +1,59 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+This module uses the functions of OpenSSL for generation and verification of signatures and for sealing (encrypting) and opening (decrypting) data. OpenSSL offers many features that this module currently doesn't support. Some of these may be added in the future.
+In order to use the OpenSSL functions you need to install the OpenSSL package. PHP-4.0.4pl1 requires OpenSSL = 0.9.6, but PHP-4.0.5 and greater will also work with OpenSSL = 0.9.5.
+To use PHP's OpenSSL support you must also compile PHP --with-openssl[=DIR].
+Note to Win32 Users: In order to enable this module on a Windows environment, you must copy libeay32.dll from the DLL folder of the PHP/Win32 binary package to the SYSTEM32 folder of your windows machine. (Ex: C:\WINNT\SYSTEM32 or C:\WINDOWS\SYSTEM32)
+Additionally, if you are planning to use the key generation and certificate signing functions, you will need to install a valid openssl.cnf on your system. As of PHP 4.3.0, we include a sample configuration file in the openssl of our win32 binary distribution. If you are using PHP 4.2.0 or later and are missing the file, you can obtain it from the OpenSSL home page or by downloading the PHP 4.3.0 release and using the configuration file from there.
+Note to Win32 Users: PHP will search for the openssl.cnf using the following logic:
+the OPENSSL_CONF environmental variable, if set, will be used as the path (including filename) of the configuration file.
+the SSLEAY_CONF environmental variable, if set, will be used as the path (including filename) of the configuration file.
+The file openssl.cnf will be assumed to be found in the default certificate area, as configured at the time that the openssl DLL was compiled. This is usually means that the default filename is c:\usr\local\ssl\openssl.cnf.
+In your installation, you need to decide whether to install the configuration file at c:\usr\local\ssl\openssl.cnf or whether to install it someplace else and use environmental variables (possibly on a per-virtual-host basis) to locate the configuration file. Note that it is possible to override the default path from the script using the configargs of the functions that require a configuration file.
+This extension has no configuration directives defined in php.ini.
+
+Quite a few of the openssl functions require a key or a certificate parameter. PHP 4.0.5 and earlier have to use a key or certificate resource returned by one of the openssl_get_xxx functions. Later versions may use one of the following methods:
+
+An X.509 resource returned from openssl_x509_read()
+A string having the format file://path/to/cert.pem; the named file must contain a PEM encoded certificate
+A string containing the content of a certificate, PEM encoded
+Public/Private Keys
+A key resource returned from openssl_get_publickey() or openssl_get_privatekey()
+For public keys only: an X.509 resource
+A string having the format file://path/to/file.pem - the named file must contain a PEM encoded certificate/private key (it may contain both)
+A string containing the content of a certificate/key, PEM encoded
+For private keys, you may also use the syntax array($key, $passphrase) where $key represents a key specified using the file:// or textual content notation above, and $passphrase represents a string containing the passphrase for that private key
+When calling a function that will verify a signature/certificate, the cainfo parameter is an array containing file and directory names that specify the locations of trusted CA files. If a directory is specified, then it must be a correctly formed hashed directory as the openssl command would use.
+The constants below are defined by this extension, and will only be available when the extension has either been compiled into PHP or dynamically loaded at runtime.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The S/MIME functions make use of flags which are specified using a bitfield which can include one or more of the following values:
+표 1. PKCS7 CONSTANTS
+참고: These constants were added in 4.0.6.

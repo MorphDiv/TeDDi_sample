@@ -1,0 +1,69 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Kapitel 12.
+Kontroll-Strukturen
+Nach vorne
+Die include() -Anweisung bindet die angegebene Datei ein und wertet sie aus.
+Die untenstehende Dokumentation gilt ebenso für require().
+Diese beiden Konstrukte sind in jeder Hinsicht gleichwertig mit der einen Ausnahme: der Umgang mit Fehlern. include() erzeugt ein Warning während require() in einem Fatal Error Diese beiden Konstrukte sind in jeder Hinsicht gleichwertig mit der einen Ausnahme: der Umgang mit Fehlern. include() erzeugt ein Warning während require() in einem Fatal Error endet.
+Mit anderen Worten, verwenden Sie require(), wenn Sie möchten, dass eine fehlende Datei die Ausführung ihres Skripts beendet. include() verhält sich anders, ihr Skript wird weiterhin ausgeführt.
+Stellen Sie außerdem sicher, dass Sie einen gültigen include_path gesetzt haben.
+Wenn eine Datei eingebunden wird, erbt der enthaltene Code den Geltungsbereich von Variablen der Zeile in der die Anweisung steht.
+Ab dieser Zeile stehen alle verfügbaren Variablen in der aufgerufenen Datei im aufrufenden Skript zur Verfügung.
+Beispiel 12-3.
+Grundlegende include() Beispiel
+vars.php ?php $color = 'green'; $fruit = 'appel';? test.php ?php echo "A $color $fruit"; / / A include 'vars.php'; echo "A $color $fruit"; / / A green apple?
+Steht include im aufrufenden Skript innerhalb einer Funktion, verhält sich der gesamte Code der aufgerufenen Datei genau so, als ob Sie diesen Code innerhalb dieser Funktion definiert hätten.
+Aus diesem Grund hat dieser Code den Geltungsbereich der Variablen dieser Funktion.
+Beispiel 12-4.
+Include innerhalb einer Funktion
+?php function foo() {global $color; include 'vars.php'; echo "A $color $fruit";} / * vars.php ist im Geltungsbereich von foo(), * * d.h. $fruit steht außerhalb dieses Bereichs * * NICHT zur Verfügung. $color schon, da wir * * diese Variable als global definiert haben * / foo(); / / A green apple echo "A $color $fruit"; / / A green?
+Beim Einbinden einer Datei wechselt der Parser vom PHP-Modus zu Beginn der Zieldatei in den HTML-Modus und kehrt am Ende der eingebunden Datei wieder in den PHP-Modus zurück.
+Deshalb muss jeglicher Code innerhalb der eingebundenen Datei, der als PHP-Code ausgeführt werden soll, von gültigen PHP-Start - und Ende-Tags eingefaßt sein.
+Wenn "URL fopen wrappers" in PHP aktiviert sind (in der Standardkonfiguration ist das der Fall) können Sie als Pfad der einzubindenden Datei auch eine URL (via HTTP oder anderen unterstützen Wrappern - eine Liste der unterstützen Protokolle finden Sie unter Anhang I) statt einer lokalen Pfadangabe angeben.
+Falls der Zielserver die Zieldatei als PHP-Code interpretiert, können Sie an die einzubindende Datei Variablen in einem Request-String übergeben, genauso wie bei HTTP GET.
+Streng genommen ist das nicht das Gleiche, wie diese Datei einzubinden und diesem den Geltungsbereich des Vater-Skripts zu vererben; das Skript wird auf dem Remote-Server ausgeführt und danach wird das Ergebnis in das lokale Skript eingebunden.
+Warnung
+Windows PHP Versionen, kleiner als PHP 4.3, erlauben den Zugriff auf Remote-Dateien mit dieser Funktion nicht, selbst wenn allow_url_fopen aktiviert ist.
+Beispiel 12-5. include() über HTTP
+?php / * Dieses Beispiel geht davon aus, dass www.example.com so konfiguriert * * ist, dass .php-Dateien geparst werden und keine .txt Dateien.
+Also meint * * 'Funkt' hier, dass die Variablen $foo und $bar innerhalb der * * angeforderten Datei zur Verfügung stehen * / / / Funkt. nicht; file.txt wird von www.example.com nicht als PHP geparst include 'http: / /www.example.com / file.txt?foo=1 bar=2'; / / Funkt. nicht; schaut nach einer lokalen Datei namens / / 'file.php?foo=1 bar=2 'im lokalen Dateisystem include 'file.php?foo=1 bar=2'; / / Funkt include 'http: / /www.example.com / file.php?foo=1 bar=2'; $foo = 1; $bar = 2; include 'file.txt'; / / Funkt. include 'file.php'; / / Funkt.?
+Da include() und require() spezielle Sprachkonstrukte sind, müssen Sie diese innerhalb einer bedingten Anweisung in einen Anweisungsblock setzen.
+Beispiel 12-6. include() und bedingte Blöcke
+?php / / Das ist FALSCH und führt nicht zum gewünschten Ergebnis. if ($bedingung) include $datei; else include $andere_datei; / / Das ist KORREKT. if ($bedingung) {include $datei;} else {include $andere_datei;}?
+Der Umgang mit Returns:
+Es ist möglich eine return() Es ist möglich eine return() -Anweisung innerhalb einer eingebunden Datei anzugeben, um die Ausführung innerhalb dieser Datei abzubrechen und zum aufrufenden Skript zurück zu kehren.
+Ebenso ist die Rückgabe von Werten aus einer eingebunden Datei möglich.
+Sie können den Wert eines include-Aufrufs auf die gleiche Art und Weise nutzen, wie Sie es bei einer Funktion machen würden.
+Anmerkung:
+In PHP 3 darf eine return-Anweisung nicht innerhalb eines Blocks auftreten, es sei denn, es ist ein Funktions-Block.
+In diesem Fall gilt return() für diese Funktion und nicht für die ganze Datei.
+Beispiel 12-7. include() und die return() Anweisung
+return.php ?php $var = 'PHP'; return $var;? noreturn.php ?php $var = 'PHP';? testreturns.php ?php $foo = include 'return.php'; echo $foo; / / gibt 'PHP' aus $bar = include 'noreturn.php'; echo $bar; / / gibt 1 aus?
+$bar hat den Wert 1, weil include erfolgreich war.
+Beachten Sie die Unterschiede in den obigen Beispielen.
+Das erste nutzt return() innerhalb der eingebundenen Datei im Gensatzt zum zweiten Beispiel.
+Weitere Möglichkeiten Dateien in Variablen "einzubinden" bieten ihnen die Funktionen fopen() und file() oder include() im Zusammenspiel mit den Funktionen zur Ausgabesteuerung.
+Siehe auch require(), require_once(), include_once(), readfile(), virtual() und include_path.
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

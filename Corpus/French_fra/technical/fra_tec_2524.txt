@@ -1,0 +1,63 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PAP et CHAP
+� partir de la version 0.9.1, kppp a supporté directement la forme d'authentification communément utilisée de PAP.
+PAP avec kppp
+Il y a deux manière différentes d'utiliser PAP.
+Authentification côté client
+Cette variante est utilisée par beaucoup d'ISP payants.
+Cela veut simplement dire que vous (ou plutôt votre ordinateur) devez vous authentifier sur le serveur PPP de votre ISP.
+Le serveur PPP n'a pas besoin de s'authentifier sur votre ordinateur.
+Cela n'est pas une solution sécurisée, puisque vous devez savoir vers quel ordinateur vous essayez de composer.
+Si votre ISP vous donne un nom d'utilisateur et un mot de passe, et vous demande d'utiliser l'authentification PAP, c'est une variante que vous pouvez choisir.
+Deux voies d' authentification
+Comme précédemment, mais cette fois -ci votre ordinateur requiert au serveur PPP de l'ISP de s'authentifier.
+Pour établir une connexion, vous devez choisir la méthode d'authentification basée sur Script, et non PAP, et devez éditer manuellement /etc/ppp/pap-secrets.
+Même si kppp ne fournit pas de support pour cette variante, il est néanmoins facile d'établir une connexion.
+Préparer kppp pour PAP
++pap
+-pap
+papcrypt
++chap
++chap
++ua
+remotename
+Lancer kppp
+Cliquez sur Configuration
+Choisissez le compte que vous voulez utiliser avec PAP et cliquez sur Modification
+Choisissez l'onglet Numérotation
+Sélectionnez PAP dans la liste défilant Authentification.
+Si vous ne voulez pas saisir à nouveau votre mot de passe à chaque fois que vous vous connectez, sélectionnez Enregistrer le mot de passe.
+Cela enregistrera le mot de passe dans un fichier, ainsi soyez sur que personne d'autre n'a accès à votre compte.
+Ça y est.
+Fermez les boîtes de dialogue, saisissez votre identifiant et votre mot de passe fournit par votre ISP, et cliquez sur Se connecter.
+Une méthode alternative pour utiliser PAP et CHAP avec kppp
+Cette section est fondée sur un courrier électronique de Keith Brown kbrown@pdq.net et explique comment faire fonctionner kppp avec un compte PAP ou CHAP générique.
+Si votre ISP vous a juste donné un identifiant et un mot de passe pour un connexion, vous pouvez probablement sauter cette section, et les instructions dans le chapitre précédent seront tout ce dont vous aurez besoin.
+Maintenant voici comment faire que cela fonctionne.
+Je suppose qu'il y a pppd version 2.2.x ou plus récent et une installation standard des fichiers de configuration sous /etc/ppp.
+Vous pouvez utiliser le nom de serveur que vous voulez, du moment que vous utilisez le même nom que dans les arguments de pppd, comme vous allez voir rapidement.
+Ici il a été raccourcis à glob, mais ce nom est seulement utilisé pour localiser le mot de passe correct.
+Ensuite vous avez besoin de configurer la connexion dans kppp.
+Les étapes sont les mêmes que pour une autre connexion, nous n'entrerons donc pas dans les détails ici, à part dire que vous voudrez probablement être sûr que /etc/ppp/options est vide, et que vous ne voulez pas non plus créer de script de connexion.
+Vous pouvez mettre n'importe quel argument que vous voulez en premier.
+Ensuite ajoutez les arguments que pppd utilise pour prendre en charge l'authentification PAP.
+Dans cet exemple, nous allons ajouter user, userbaz, remotename et glob dans cet ordre.
+C'est tout ce qu'il y a à faire, et vous devez maintenant être capable de configurer votre propre connexion à un serveur avec l'authentification PAP.
+CHAP n'est pas très différent.
+Vous pouvez lire le guide Administrateurs Réseaux de Linux pour le format du fichier chap-secrets, et les arguments utilisés par pppd, et le reste doit être simple.

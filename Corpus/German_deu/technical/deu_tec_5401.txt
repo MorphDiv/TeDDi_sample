@@ -1,0 +1,64 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+& DCOP; Funktionen
+
+Georg Schuster gschuster@utanet.at Deutsche Übersetzung
+Das & DCOP; kann in & kommander; auf verschiedene Weise aufgerufen werden. Die Erste ist die Konsolenmethode
+dcop kmdr-executor-@pid KommanderIf changeWidgetText myWidget neuer Text
+Dies setzt voraus, dass Sie sich innerhalb einer & kommander;-Datei befinden und Zugriff auf die Anweisung @pid haben, die die Prozess-ID enhält. Da ist es einfacher, kmdr-executor-@pid mit @dcopid zu ersetzen. Diese Syntax (möglicherweise ohne Anweisungen) kann von der Befehlszeile oder jedem externen Skript genutzt werden, um das & kommander;-Fenster zu ändern.
+Weil & kommander; in seiner Alfa-Entwicklungsstufe noch keinen vollständigen Parser hat, ist die Verwendung des viel schnelleren internen & DCOP; aus einem anderen Anwendungsfenster (Konsolen-DCOP; ist langsam) viel schwieriger, weil viele Informationen mitgegeben werden müssen, einschließlich eines Prototyps des Aufrufes. Der Aufruf oben würde so aussehen:
+@dcop(@dcopid, KommanderIf, enableWidget(QString, bool), Bedienelement, true)
+Zur Zeit der Erstellung sollte aufgepasst werden, dass die Schachtelung von & DCOP;-Aufrufen innerhalb von Skriptsprachkonstrukten (wie bash) die Verwendung von Konsolenaufrufen verlangt. Bei der Verwendung von internem & DCOP; werden alle & kommander;-Anweisungen zuerst ausgeführt und dann erst das Skript.
+Es gibt einen neuen vereinfachten Weg, & DCOP; innerhalb von & kommander; zu nutzen, mittels Objektsyntax. Angenommen, der Text in einem Bedienelement namens @Zeileneingabefeld1 soll geändert werden. Dies würde so aussehen.
+@Zeileneingabefeld1.changeWidgetText(Neuer Text)
+Wie Sie sehen, ist die neue Syntax einfach und passt schlüssig zu den Funktionsgruppen. Die gesamte & DCOP;-Referenz benutzt die neue Objektsyntax, wie oben. Bitte beachten Sie, dass beim Referenzieren eines Bedienelementes mit & DCOP; aus einem anderen Fenster oder einer anderen Anwendung der erste Parameter immer der Name des Bedienelementes sein muss. Alle hier aufgelisteten Funktionen beginnen mit dem zweiten Parameter.
+& DCOP; für globale Variablen
+global(QString VariablenName)
+Liefert den Wert der angegebenen globalen Variable zurück. Wenn ein Skript aus dem & kommander;-Fenster gestartet wird, verschwinden alle (nicht-globalen) Variablen, die im Skript belegt wurden, nach Ablauf des Skripts und sind so nicht für andere Skripte oder neue Instanzen des aufrufenden Prozesses verfügbar. Der Gültigkeitsbereich global bedeutet, dass die Variable für jeden Prozess dieses Fensters existiert, bis es geschlossen wird. Diese Variablen können jederzeit mit einem weiteren @setGlobal -Aufruf geändert werden.
+setGlobal(QString VariablenName, QString value)
+Erstellt eine Variable, die global im Hinblick auf den Fensterprozeß ist und weist ihr den Wert zu. Dieser Wert kann mit global(QString VariablenName) gelesen oder geändert werden.
+& DCOP; für alle Bedienelemente
+changeWidgetText(QString Text)
+Dies sollte in setWidgetText umbenannt werden und der Name ist daher veraltet. Es entfernt den angezeigten Text im Bedienelement und ersetzt ihn mit dem Parametertext.
+enableWidget(bool schalter)
+Schaltet ein Bedienelement ein oder aus.
+associatedText
+Liefert den mit dem angegebenen Bedienelement verbundenen Text zurück. Das ist nicht das gleiche, wie der angezeigte Text. Diesen würde man mit @widgetText oder Skriptbefehlen erreichen, um den angezeigten Wert zu erhalten.
+setAssociatedText(QString Text)
+Dies setzt den Standardtext von & kommander;. Das ist typischerweise gleich wie @widgetText um anzuzeigen, was im Bedienelement enthalten ist. Normalerweise hat man keinen Bedarf dafür, aber auf jeden Fall vorhanden. Trifft für alle Bedienelemente zu, die Text enthalten können.
+& DCOP; für Listenfeld- und Kombinationsfeld-Bedienelemente
+addListItem(QString Element, int Index)
+Fügt ein Element zu einem ListBox-Bedienelement am angegebenen Index hinzu. Der Index beginnt mit Null. Zum Hinzufügen am Ende der Liste dient -1.
+addListItems(QStringList Elemente, int Index)
+Dies fügt eine Liste von Zeichenketten auf einmal hinzu. Die Liste sollte mit EOL (\ - Zeilenschaltungen) getrennt sein. Das ist praktisch, weil man über bash leicht zu so einer Liste kommt. So liefert z. B. @exec(ls -l ~/projects | grep kmdr) ein Inhaltsverzeichnis von & kommander;-Dateien im Projektordner als passende Liste. Der Listenindex beginnt bei Null. Mit -1 kann am Ende der bestehenden Liste angehängt werden.
+addUniqueItem(QString Element)
+addUniqueItem fügt ein Element am Ende der Liste nur dann hinzu, wenn es einmalig ist.
+clearList
+Entfernt alle Elemente.
+removeListItem(int Index)
+Entfernt das Element mit angegebenem Index.
+item(int Index)
+Liefert den Text des Elementes mit angegebenem Index zurück.
+setCurrentListItem(int Index)
+Setze das aktuelle (oder ausgewählte) Element auf den angegebenen Index. Verwendbar in Listbox und ComboBox-Bedienelementen.
+& DCOP; für Ankreuzfeld- und Auswahlknopf-Bedienelemente
+setChecked(QString BedienelementName, bool aktiviert)
+Aktiviert/deaktiviert Ankreuzfeld- oder Auswahlknopf-Bedienelemente.
+& DCOP; für Karteireiter-Bedienelemente
+setCurrentTab(QString BedienelementName, int Index)
+Wählt das Unterfenster mittels Index für Karteireiter-Bedienelemente. Der Index beginnt bei Null.

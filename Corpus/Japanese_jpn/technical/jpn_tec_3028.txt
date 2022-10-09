@@ -1,0 +1,33 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 3, PHP 4)
+header() 関数は、 HTML ファイル の送信に先立って、生の HTTP ヘッダ文字列を送信 するために使用します。HTTPヘッダの詳細は、 HTTP 1.1 Specification を参照 して下さい。
+オプションのパラメータ replace は、ヘッダ が前に送信された類似のヘッダを置換するか、または、同じ形式の二番 目のヘッダを追加するかどうかを指定します。デフォルトでは、この関 数は、置換を行ないますが、二番目の引数に FALSE を指定すると、同 じ型の複数のヘッダを強制的に生成します。例えば、
+特殊なheaderコールが2種類あります。最初のは、"Location" ヘッダーです。このヘッダーはブラウザに返されるだけではなく、 ApacheにREDIRECTステータスコードを返します。スクリプトの作者にとっ ては、この点はあまり重要ではありませんが、Apacheの内部動作を知る 人にとっては、理解しておくべき重要なこととなります。
+注意 HTTP/1.1では、スキーム、ホスト名、絶対パスを含む絶対 URI が Location: の引数として必要ですが、いくつかのクライアントでは相対URIも受け つけます。通常、相対URIから絶対URIを作成するために $HTTP_SERVER_VARS['HTTP_HOST'],$HTTP_SERVER_VARS['PHP_SELF'], dirname() を使用することが可能です。
+2番目の特別なヘッダは、文字列" HTTP/ "から始まる全てのヘッダ(大文字・小文字は区別されません)です。この ヘッダは、送信するHTTPステータスコードを示すために使用されます。 例えば、存在しないファイルへのリクエストを処理するためにあるPHPスクリ プトを使用するよう( ErrorDocument ディレクティブ により)Apacheを設定する場合、そのスクリプトが正しいステータスコー ドを返すようにする必要があります。
+注意 PHP 3では、このコードは、PHPがApacheモジュール版としてコンパイ ルされている場合にのみ動作します。 Status ヘッ ダを用いて同じ効果を得ることが可能です。
+PHPスクリプトはしばしば動的に HTML を生成するため、クライアントブ ラウザやサーバーおよびクライアントブラウザの間でプロキシがキャッ シュを行ったりするべきではありません。多くのプロキシとクライアン トでは、以下のコードにより強制的にキャッシュを無効にできます。
+注意 上記のヘッダを全て出力しなかったとしてもページのキャッシュが行 われない場合があることに気付くかもしれません。デフォルトのブラ ウザのキャッシュの動作をユーザが変更できる手段はいくつもありま す。上記のヘッダを送信することにより、スクリプトの出力がキャッ シュされる可能性がある設定を上書きするべきです。
+加えて、 session_cache_limiter() および 設定 session.cache_limiter をセッションが使用 された際にキャッシュ関係のヘッダを正しく自動的に生成するために 使用できます。
+覚えておいて頂きたいのは、 header() 関数は、通 常の HTML タグまたは PHP からの出力にかかわらず、すべての実際の出 力の前にコールする必要があることです。 頻出するエラーとして、 include() または require() 関数、他のファイルをアクセスする関数 に空白または空行があり、 header() の前に出力が 行われてしまうというものがあります。同じ問題は、単一の PHP/HTMLファ イルを使用している場合でも存在します。
+
+注意 PHP 4では、この問題に対処するために出力のバッファリングを使用す ることが可能です。この場合、ブラウザへの出力が送信するまでサー バに全てバッファリングされるオーバーヘッドがあります。出力バッ ファリングは、 ob_start() と ob_end_flush() をスクリプトでコールするか php.ini またはサーバ設定ファイルの設定ディ レクティブ output_buffering を設定することによ り行うことが可能です。
+PDFファイルを生成するといったように送信するデータを保存するかどう かユーザにプロンプトを表示したい場合、推奨されるファイル名を指定 してブラウザに保存ダイアログを表示させる Content-Disposition ヘッダを使用可能で す。
+注意 Microsoft Internet Explorer 4.01にはこれが動作しないというバグ があります。この解決策はありません。Microsoft Internet Explorer 5.5にもこれを妨げるバグがあります。これは、サービスパック2以降 とすることで修整可能です。
+headers_sent(), setcookie() 及び HTTP認証 の節も参照下さ い。

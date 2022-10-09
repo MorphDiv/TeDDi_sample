@@ -1,0 +1,33 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+L'interface & DCOP; de & k3b;
+& k3b; implémente, comme beaucoup d'autres applications & kde;, une interface & DCOP; qui rend possible le contrôle d'une partie de ses fonctionnalités depuis & pex; un script shell.
+Pour utiliser ces fonctions & DCOP; vous pouvez soit utiliser le programme en ligne de commande dcop soit le plus pratique Kdcop. Les deux fournissent les mêmes fonctionnalités c'est donc principalement une affaire de goût et de contexte d'utilisation qui permettront de choisir entre eux.
+Ce chapitre suppose que vous utilisez le programme en ligne de commande dcop. Pour accéder aux fonctions & DCOP; de & k3b; assurez vous que & k3b; est en cours d'exécution et saisissez quelque chose comme cela dans un terminal & #160;:
+# dcop k3b K3bInterface [function]
+En plus des fonctions & DCOP; disponibles pour toutes les applications & kde;, l'interface DCOP de & k3b; est principalement constituée de deux grandes parties comme décrit ci-dessous.
+K3bInterface
+L'interface DCOP par défaut de K3b fournit des fonctionnalités comme copyCD, formatDVD, et des méthodes pour créer de nouveaux projets.
+DCOPRef createDataCDProject() DCOPRef createAudioCDProject() DCOPRef createMixedCDProject() DCOPRef createVideoCDProject() DCOPRef createMovixCDProject() DCOPRef createDataDVDProject() DCOPRef createVideoDVDProject() DCOPRef createMovixDVDProject() DCOPRef openProject(KURL url) QValueListlt; DCOPRefgt; projects() DCOPRef currentProject() void copyCd() void copyDvd() void eraseCdrw() void formatDvd() void burnCdImage(KURL url) void burnDvdImage(KURL url)
+Comme résultat de l'appel d'une des méthode createXXXProject vous obtenez une référence DCOP pointant vers le projet nouvellement créé & #160;: DCOPRef(k3b, K3bProject-0) Alternativement vous pourriez créer un projet en utilisant la ligne de commande & #160;: # k3b --audiocd puis ensuite obtenir une référence à ce projet à l'aide de & #160;: # dcop k3b K3bInterface currentProject En utilisant cette référence il est possible de modifier le projet en utilisant l'interface K3bProjectInterface.
+K3bProjectInterface
+void addUrls(KURL: :List urls) void addUrl(KURL url) void burn()
+K3b propose l'interface K3bProjectInterface comme listé au-dessus ou la plus puissante K3bDataProjectInterface qui s'utilise seulement pour les projets de données (CD et DVD) & #160;:
+void createFolder(QString name) void createFolder(QString name, QString parent) void addUrl(KURL url, QString parent) void addUrls(KURL: :List urls, QString parent) void removeItem(QString path) void renameItem(QString path, QString newName) void setVolumeID(QString id)
+Par son utilisation, il est possible de créer un projet de données contenant des fichiers et des dossiers depuis un script. Par exemple le script suivant créé un nouveau projet de données, ajoute plusieurs dossiers au projet et ajoute des fichiers dans les dossiers nouvellement créés & #160;:
+#! /bin/ bash PROJECT=$(dcop k3b K3bInterface createDataCDProject) dcop $PROJECT createFolder test dcop $PROJECT createFolder foo dcop $PROJECT createFolder bar / foo dcop $PROJECT addUrl / home/ trueg/ somefile. txt / foo/ bar

@@ -1,0 +1,333 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel de & kdm;
+& Oswald. Buddenhagen; & Oswald. Buddenhagen. mail;
+& traducteurGillesThioliere; traducteurClementContet; traducteurGerardDelafond; traducteurGoneriLeBouder; traducteurJeanJacquesFinazzi;
+& Neal. Crook;
+& Oswald. Buddenhagen;
+& Lauri. Watts;
+Ce document décrit le fonctionnement de & kdm;, le kde; Display Manager (gestionnaire d'environnement graphique de & kde;), plus communément appelé Gestionnaire de connexion.
+KDE
+kdm
+xdm
+Gestionnaire d'environnement graphique
+Gestionnaire de bureau
+Gestionnaire de connexion
+Introduction
+& kdm; fournit une interface graphique vous permettant de vous connecter au système. Après avoir invité l'utilisateur à saisir son login (nom d'utilisateur) et mot de passe, & kdm; procède à son authentification et, démarre une session. & kdm; est une alternative à & xdm; (X Display Manager), et lui est supérieur sur de nombreux points.
+Guide de démarrage rapide
+Ceci est un guide de démarrage rapide pour les utilisateurs qui sont dans le cas suivant & #160;:
+X est configuré, et fonctionne quand on saisit startx depuis la ligne de commandes.
+Chaque utilisateur utilise généralement un seul gestionnaire de fenêtres ou environnement de bureau, et ne change de choix que rarement, ou bien il est rompu à en changer en éditant un simple fichier texte.
+Ce scénario conviendra à la plupart des environnements où un unique ou plusieurs utilisateur(s) démarre(nt) l'ordinateur et se connectent en général à leur environnement préféré.
+Configurer une session par défaut
+Créez ou ouvrez le fichier ~/. xinitrc
+Si vous avez déjà un fichier ~/. xinitrc qui fonctionne, passez à l'étape suivante
+Si elle n'est pas déjà présente dans le fichier ~/. xinitrc, ajoutez une ligne pour démarrer votre gestionnaire de fenêtres ou environnement de bureau préféré.
+Pour & kde;, vous devez saisir & #160;:
+startkde
+Pour les autres gestionnaires de fenêtres ou environnements de bureau, reportez -vous à leur documentation pour connaître la commande adéquate.
+Créez un lien comme suit & #160;:
+ln -s ~/. xinitrc & #160; ~/. xsession
+À cette étape, saisir startx en ligne de commande devrait démarrer X, avec une session & kde;. La prochaine tâche est d'essayer & kdm;.
+En tant que root, saisissez kdm à l'invite de commandes.
+Vous devriez voir une fenêtre de connexion, qui est décrite plus en détail dans.
+Si vous saisissez maintenant votre nom d'utilisateur et votre mot de passe dans les zones de saisie réservées, et que vous laissez Par défaut comme type de session, une session & kde; devrait démarrer pour votre utilisateur.
+Si vous avez d'autres comptes d'utilisateurs à configurer, vous devrez répéter la procédure précédente pour chacun d'eux.
+Ceci est un guide succinct qui a pour seul but de faire fonctionner & kdm;. Vous voudrez probablement le personnaliser, par exemple en masquant les utilisateurs système, en autorisant des sessions supplémentaires et bien d'autres choses encore. Vous trouverez tous les détails pour réaliser ces choses dans la suite de ce manuel.
+La Fenêtre de connexion
+L'interface utilisateur de & kdm; présente deux boîtes de dialogue. La boîte de dialogue principale contient & #160;:
+Plasmoïdes vous permettant de vous authentifier. Lorsque la méthode d'authentification « & #160; classique & #160; » est choisie, ce sont & #160;:
+une zone de saisie Utilisateur & #160;: où vous pourrez saisir votre nom d'utilisateur & #160;;
+une zone de saisie Mot de passe & #160;: où vous pourrez saisir votre mot de passe & #160;;
+(en option) une liste d'entrées avec le nom et une image de chaque utilisateur (par exemple, une photo numérisée). Cliquer sur une entrée revient à saisir le nom de l'utilisateur associé dans la zone de saisie Utilisateur & #160;: & #160;;
+(en option) une région à droite ou au-dessus de la zone d'authentification qui peut être utilisée pour afficher soit une image statique, soit une horloge analogique & #160;;
+un bouton Connexion qui valide la combinaison utilisateur & #160; / & #160; mot de passe et tente de démarrer une session du type sélectionné & #160;;
+un bouton Menu qui ouvre un menu avec les options suivantes & #160;:
+(en option) un élément Type de session afin de choisir le type de session (environnement de bureau, gestionnaire de fenêtre) à démarrer. Voyez pour trouver tous les détails pour configurer différents types de session & #160;;
+(en option) un élément Méthode d'authentification pour basculer entre différentes méthodes d'authentification comme celle classique avec nom d'utilisateur & #160; / mot de passe, à carte à puce, biométrique, & etc;. Les réels systèmes d'authentification sont des combinaisons de modules PAM et de modules frontaux correspondants (modules de conversation). Voyez & #160;;
+(en option sur les sessions locales) un élément Changer d'utilisateur... pour basculer entre des sessions locales lancées sur différents terminaux virtuels sur cet ordinateur & #160;;
+(en option sur les sessions locales) un élément Redémarrer le Serveur X, qui termine le & X-Server; actuellement lancé, en démarre un nouveau et affiche à nouveau la fenêtre de connexion. Vous pouvez utiliser ceci si l'affichage semble ne pas fonctionner correctement & #160;;
+(en option sur les sessions distantes) un élément Fermer la connexion qui clôt la connexion au serveur & XDMCP; auquel vous êtes actuellement connecté. Si vous êtes connecté à ce serveur via un sélecteur d'hôte, vous serez ramené au sélecteur, sinon seul le & X-Server; sera redémarré et la boîte de dialogue de connexion apparaîtra à nouveau & #160;;
+(en option sur les sessions locales) un élément Connexion à distance qui affiche une boîte de dialogue de sélection d'hôte ayant des serveurs & XDMCP; sur lesquels on peut se connecter à distance & #160;;
+(en option sur les sessions locales) un élément Passer en mode console qui quitte la connexion graphique et vous amène à une console. Voyez et & #160;;
+(en option) un élément Arrêter... qui affiche la boîte de dialogue Arrêter & #160;;
+La boîte de dialogue Arrêter présente des boutons permettant l'exécution d'une de ces actions & #160;:
+Éteindre l' ordinateur
+Arrête le système en respectant la procédure nécessaire à la mise hors tension de l'ordinateur.
+Redémarrer l' ordinateur
+Arrête le système, puis le redémarre dans le foulée. Pour les systèmes utilisant Lilo ou Grub, une liste déroulante optionnelle vous permet un système d'exploitation particulier à utiliser lors du redémarrage.
+Planifier...
+Si cette option est activée, vous pouvez l'utiliser pour obtenir une boîte de dialogue d'arrêt plus complexe. Voyez pour plus de détails.
+Presser le bouton Annuler vous renvoie à la boîte de dialogue principale de & kdm;.
+Configuration de & kdm;
+Dans ce chapitre, nous supposons que & kdm; fonctionne déjà correctement sur votre système et que vous souhaitez simplement changer son apparence et son comportement.
+Quand & kdm; démarre, il lit sa configuration dans le dossier $KDEDIR / share/ config/ kdm/ (ce peut être / etc/ kde4/ kdm/ ou quelque chose d'autre sur votre système).
+Le fichier de configuration principal est & kdmrc; & #160;; tous les autres fichiers sont référencés à partir de là et peuvent être stockés sous n'importe quel nom n'importe où sur votre système - mais ça n'a habituellement pas beaucoup de sens pour des raisons évidentes (une exception particulière est le référencement de fichiers de configuration d'un & xdm; déjà installé - cependant, quand un nouveau & kdm; est installé, il importera les réglages de ces fichiers s'il trouve un & xdm; installé).
+Comme & kdm; doit fonctionner avant qu'un utilisateur ne soit connecté, il n'est pas associé à un utilisateur particulier. Il n'est donc pas possible d'avoir des fichiers spécifiques à l'utilisateur. Une des conséquences à ceci est que tous les utilisateurs partagent le & kdmrc; commun. Il en résulte que la configuration de & kdm; ne peut être modifiée que par un utilisateur ayant les droits d'accès et d'écriture sur le fichier $KDEDIR / share/ config/ kdmrc (c'est-à-dire l'administrateur système, connecté en tant que root).
+Vous pouvez voir le fichier & kdmrc; actuellement utilisé sur votre système, et vous pouvez configurer & kdm; en modifiant ce fichier. Il est aussi possible d'utiliser l'outil de configuration graphique disponible dans le & kcontrolcenter; (dans Administration du système Gestionnaire de connexion).
+Le reste de ce chapitre décrit la configuration de & kdm; via le module du & centreConfiguration;, et le prochain chapitre décrit les options disponibles dans & kdmrc; lui-même. Le module du & centreConfiguration; devrait suffire à vos besoins si vous ne voulez effectuer la configuration que pour des utilisateurs locaux. Si vous avez besoin de configurer des connexions à distance ou d'avoir plusieurs sessions & kdm; en cours, vous aurez besoin de continuer la lecture.
+& Thomas. Tanghus; & Thomas. Tanghus. mail;
+& Steffen. Hansen; & Steffen. Hansen. mail;
+& Mike. McBride; & Mike. McBride. mail;
+Le module Gestionnaire de connexion du & centreConfiguration;
+En utilisant ce module, vous pouvez configurer le gestionnaire de connexion graphique de & kde;, & kdm;. Vous pouvez changer à quoi ressemble l'écran de connexion, qui a accès en utilisant le gestionnaire de connexion et qui peut éteindre l'ordinateur.
+Tous les réglages seront écrits dans le fichier de configuration & kdmrc;, qui, dans son état original, contient de nombreux commentaires pour vous aider à configurer & kdm;. En utilisant ce module du & centreConfiguration;, ces commentaires seront effacés du fichier. Toutes les options disponibles dans & kdmrc; sont explicitées dans.
+Les options listées dans ce chapitre sont des références croisées avec leurs équivalents dans & kdmrc;. Toutes les options disponibles dans le module du & centreConfiguration; sont aussi disponibles directement dans & kdmrc;, mais l'inverse n'est pas vrai.
+Dans le but d'organiser toutes ces options, ce module est divisé en plusieurs sections & #160;: Apparence, Polices, Fond d'écran, Arrêt, Utilisateurs et Commodités.
+Vous pouvez passer d'une section à l'autre en utilisant les onglets en haut de la fenêtre.
+Si vous n'êtes actuellement pas connecté en tant que superutilisateur, vous devrez cliquer sur le bouton Mode superutilisateur.... On vous demandera alors un mot de passe de superutilisateur. Saisir un mot de passe correct vous permettra de modifier les réglages de ce module.
+Apparence
+À partir de cette page, vous pouvez changer l'apparence visuelle de & kdm;, le gestionnaire de connexion graphique de & kde;.
+La phrase de Bienvenue & #160;: est le titre de l'écran de connexion. Régler ceci est particulièrement utile si vous avez beaucoup de serveurs auxquels les utilisateurs peuvent se connecter. Vous pouvez utiliser plusieurs variables de remplacement, qui sont décrites au même endroit que la clé correspondante (GreetString) dans & kdmrc;.
+Vous pouvez alors choisir d'afficher soit l'heure courante du système, soit un logo, soit rien de spécial dans la boîte de connexion. Faites votre choix avec les boutons radio libellés Zone de logo & #160;:. Ceci correspond à LogoArea dans & kdmrc;
+Si vous choisissez Afficher le logo, vous pouvez maintenant choisir un logo & #160;:
+Déposez un fichier d'image sur le bouton d'image.
+Cliquez sur le bouton d'image et sélectionnez une nouvelle image dans la boîte de dialogue de sélection d'image.
+Si vous ne spécifiez pas de logo, $KDEDIR / share/ apps/ kdm/ pics/ kdelogo. xpm sera affiché par défaut.
+Normalement, la fenêtre de connexion est centrée sur l'écran. Utilisez les options Position & #160;: si vous voulez qu'elle apparaisse ailleurs sur l'écran. Vous pouvez spécifier la position relative (en pourcentage de taille d'écran) pour le centre de la fenêtre de connexion, par rapport au coin en haut à gauche de l'écran, dans les champs libellés X & #160;: et Y & #160;: respectivement. Ils correspondent à la clé GreeterPos dans & kdmrc;.
+Alors que le style de & kde; dépend des réglages de l'utilisateur connecté, le style utilisé par & kdm; peut être configuré en utilisant les options Style des éléments graphiques & #160;: et Modèle de couleur & #160;:. Elles correspondent respectivement aux clés GUIStyle et ColorScheme dans & kdmrc;.
+Au-dessous de ceci, vous avez une liste déroulante pour choisir la langue de votre fenêtre de connexion, ce qui correspond au réglage Language dans & kdmrc;.
+Police
+À partir de cette section du module, vous pouvez changer les polices utilisées dans la fenêtre de connexion. Seules les polices disponibles pour tous les utilisateurs sont présentes ici, pas celles que vous avez installées en tant qu'utilisateur.
+Vous pouvez sélectionner trois styles de polices différents dans la liste déroulante (Général & #160;:, Erreurs & #160;: et Bienvenue & #160;:). Lorsque vous cliquez sur le bouton Choisir..., une boîte de dialogue apparaît, dans laquelle vous pouvez sélectionner les nouvelles caractéristiques pour le style de police.
+La police de Général & #160;: est utilisée dans tous les autres endroits dans la fenêtre de connexion.
+La police de Erreurs & #160;: est utilisée quand une connexion échoue.
+La police de Bienvenue & #160;: est la police utilisée pour le titre (message d'accueil).
+Vous pouvez également cocher la case Lisser les polices de caractères si vous désirez des polices lissées dans la fenêtre d'authentification.
+Fond
+Ici, vous pouvez modifier le fond d'écran qui est affiché avant qu'un utilisateur se connecte. Les options sont identiques à celles décrites dans les paramètres de fond d'écran, sauf certaines qui ne sont pas applicables dans le contexte & kdm;.
+Arrêt
+Autoriser l'arrêt du système
+Utilisez cette liste déroulante pour choisir qui est autorisé à arrêter le système & #160;:
+Personne & #160;: personne ne peut arrêter l'ordinateur en utilisant & kdm;. Vous devez être connecté et exécuter une commande.
+Tout le monde & #160;: chacun peut éteindre l'ordinateur en utilisant & kdm;.
+Uniquement le superutilisateur & #160;: & kdm; nécessite que le mot de passe root soit donné avant d'éteindre l'ordinateur.
+Vous pouvez configurer indépendamment qui est autorisé à effectuer une commande d'extinction pour les utilisateurs locaux (Local & #160;:) et distants (Distant & #160;:).
+Commandes
+Utilisez ces champs de texte pour définir la commande d'extinction exacte.
+La commande Arrêt & #160;: par défaut est / sbin/ halt. La commande Redémarrage & #160;: par défaut est / sbin/ reboot.
+Quand Afficher les options de démarrage est activé, & kdm; vous offrira des options de redémarrage pour le gestionnaire de démarrage LILO. Pour que cette fonctionnalité fonctionne, vous devez donner les emplacements corrects de votre commande lilo et de son fichier de configuration. Notez que cette option n'est pas disponible sur tous les systèmes.
+Utilisateurs
+À partir d'ici, vous pouvez changer la manière dont les utilisateurs sont représentés dans la fenêtre de connexion.
+Vous pouvez entièrement désactiver la liste des utilisateurs dans & kdm; dans la section Utilisateurs. Vous pouvez choisir parmi & #160;:
+Afficher la liste
+Ne montre que les utilisateurs que vous avez spécifiquement activés dans la liste à coté
+Si vous ne cochez pas cette case, aucune liste ne sera affichée. C'est le réglage le plus sûr, car un attaquant doit alors deviner un nom d'utilisateur (login) valable ainsi qu'un mot de passe. C'est aussi l'option préférée si vous avez un certain nombre d'utilisateurs à lister, sinon la liste devient difficile à manier.
+Inverser la sélection
+Vous permet de sélectionner une liste d'utilisateurs qui ne doivent pas être montrés, contrairement aux autres qui seront listés.
+Indépendamment des utilisateurs que vous pouvez spécifier par nom, vous pouvez utiliser les UID du système pour spécifier une plage d 'UID s valables à afficher dans la liste. Par défaut, les identifiants des utilisateurs inférieurs à 1000, qui sont souvent des utilisateurs système ou de démons, et ceux supérieurs à 65 & #160; 000 ne sont pas affichés.
+Vous pouvez aussi cocher la case Trier les utilisateurs pour que la liste des utilisateurs soit triée par ordre alphabétique. Si ceci est désactivé, les utilisateurs apparaîtront dans l'ordre où ils sont listés dans le fichier des mots de passe. De plus, & kdm; effectuera le complètement automatique des noms d'utilisateur si vous activez l'option Complètement automatique.
+Si vous choisissez d'afficher les utilisateurs, la fenêtre de connexion affichera des images (que vous choisissez) d'une liste d'utilisateurs. Quand quelqu'un est prêt à se connecter, il peut sélectionner son nom ou image d'utilisateur, puis saisir son mot de passe pour que l'accès soit accordé.
+Si vous permettez une image d'utilisateur, vous pouvez configurer la source pour ces images.
+Vous pouvez configurer l'image d'administration pour chaque utilisateur du système. En fonction de l'ordre sélectionné plus haut, les utilisateurs peuvent ou non supplanter votre sélection.
+Si vous choisissez de ne pas afficher les utilisateurs, la fenêtre de connexion sera plus traditionnelle. Les utilisateurs devront écrire leur nom d'utilisateur et leur mot de passe pour pouvoir se connecter. C'est la meilleure manière si vous avez beaucoup d'utilisateurs sur ce terminal.
+Commodités
+Dans l'onglet Commodités, vous pouvez configurer certaines options qui rendent la vie plus facile pour les gens paresseux, comme la connexion automatique ou la désactivation des mots de passe.
+Veuillez réfléchir à deux fois avant d'utiliser ces options. Chaque option dans l'onglet Commodités peut sérieusement compromettre la sécurité de votre système. En pratique, ces options ne doivent être utilisées que dans un environnement complètement non critique, & pex; un ordinateur personnel à la maison.
+Connexion automatique
+La connexion automatique donnera à quiconque l'accès à un certain compte sur votre système sans qu'aucune authentification ne soit demandée. Vous pouvez l'activer en utilisant l'option Activer la connexion automatique.
+Vous pouvez choisir le compte à utiliser pour la connexion automatique dans la liste libellée Utilisateur & #160;:.
+La connexion automatique peut être annulée en appuyant sur la touche Maj immédiatement après que le & X-Server; ait basculé en mode graphique et en la relâchant lorsque le curseur en forme de sablier de & kdm; apparaît.
+Connexion sans mot de passe
+En utilisant cette fonction, vous pouvez permettre a certains utilisateurs de se connecter sans avoir à fournir leur mot de passe. Activez cette fonction en utilisant l'option Activer les connexions sans mot de passe.
+Sous cette option, vous verrez une liste d'utilisateurs sur le système. Activez la connexion sans mot de passe pour des utilisateurs spécifiques en cochant la case à côté des noms de connexion. Par défaut, cette fonctionnalité est désactivée pour tous les utilisateurs.
+Une fois de plus, cette option ne devrait être utilisée que dans un environnement sûr. Si vous l'activez sur un système plutôt public, vous devriez prendre garde que seuls les utilisateurs avec de grosses restrictions d'accès puissent se connecter sans mot de passe, & pex; invité.
+Vous pouvez aussi choisir quel utilisateur est présélectionné quand & kdm; démarre. La valeur par défaut est Aucun, mais vous pouvez choisir Le dernier connecté pour que & kdm; utilise par défaut le dernier utilisateur connecté avec succès, ou vous pouvez spécifier Un utilisateur particulier qui sera toujours sélectionné dans la liste. Vous pouvez aussi faire en sorte que & kdm; mette le focus sur le champ de mot de passe, de telle manière que quand vous atteignez l'écran de connexion de & kdm;, vous pouvez saisir le mot de passe immédiatement.
+L'option Rétablir la connexion automatiquement après un plantage du serveur & #160; X vous permet de sauter la procédure d'authentification si votre serveur X s'arrêtait anormalement.
+Configuration de votre système pour l'utilisation de & kdm;
+Dans ce chapitre, nous considérons que & X-Window; s'exécute déjà correctement sur votre système, et que vous devez seulement le reconfigurer pour permettre une connexion en mode graphique.
+Configurer & kdm;
+L'élément fondamental qui oriente le terme de la séquence d'initialisation - soit vers un terminal (mode console), soit vers un gestionnaire de connexion graphique - est le niveau d'exécution (runlevel) par défaut de votre système. Le niveau d'exécution est défini par le programme / sbin/ init qui dépend elle-même du fichier de configuration / etc/ inittab. Il peut être différent d'un système & UNIX; et d'une distribution & Linux; à un autre & #160;; mais si vous jetez unœ il au fichier / etc/ inittab, il devrait invariablement commencer par quelque chose comme & #160;:
+# Niveau d'exécution par défaut. Les niveaux d'exécution utilisés par RHS sont & #160;: # 0 - arrêt (Ne PAS définir initdefault à ceci) # 1 - Mode monoutilisateur # 2 - Multiutilisateur, sans NFS # 3 - Mode multiutilisateur complet # 4 - inutilisé # 5 - X11 # 6 - redémarrage (Ne PAS définir initdefault à ceci) id:3: initdefault:
+L'ensemble des lignes, exceptée la dernière, sont des commentaires (précédés de #). Ces commentaires nous indiquent que le niveau d'exécution (runlevel) 5 est utilisé pour X11 et que le mode multiutilisateurs sans X11 (mode console uniquement) utilise, quant à lui, le niveau 3. La dernière ligne spécifie que le niveau d'exécution par défaut du système est 3 (mode console). Si vous utilisez déjà un gestionnaire de connexion en mode graphique (par exemple & xdm;), le niveau d'exécution par défaut correspondra à celui qui est défini pour X11.
+Sur les distributions & Linux; les plus courantes, le niveau d'exécution correspondant à une connexion en mode graphique (xdm;) est & #160;:
+5 pour les distributions & RedHat; (depuis la version 3. x) et & Mandrake; & #160;;
+4 pour les distributions Slackware & #160;;
+3 pour les distributions & SuSE; en versions 4. x et 5. x.
+Avant toute chose, assurez -vous de pouvoir lancer & kdm; en ligne de commande. Une fois cette certitude acquise, vous pouvez modifier la configuration du système de manière à ce que & kdm; soit lancé automatiquement à chaque démarrage.
+Pour tester le fonctionnement de & kdm;, vous devez d'abord amener votre système à un niveau d'exécution différent de celui utilisé pour & xdm;. Pour ceci, tapez la commande & #160;:
+/ sbin/ init 3
+Bien entendu, le chiffre 3 est à remplacer, le cas échéant, par le niveau d'exécution correspondant au fonctionnement du mode console sur votre système.
+Si votre système utilise les Pluggable Authentication Modules (PAM), ce qui devrait être le cas sur les systèmes & Linux; et Solaris récents, veuillez vérifier que votre configuration de PAM autorise la connexion via le service nommé kde. Si vous utilisiez déjà & xdm; précédemment, vous n'aurez certainement pas besoin de toucher à votre configuration de PAM pour utiliser & kdm; (voir dans / etc/ pam. conf ou / etc/ pam. d/ kde). Donner des informations sur la configuration de PAM sort du cadre de ce manuel, cependant PAM est accompagné d'une documentation complète (essayez d'aller voir / usr/ share/ doc/ *pam*/ html).
+Le moment est venu de tester & kdm;, en saisissant la ligne suivante & #160;:
+kdm -nodaemon
+Si la boîte de connexion de & kdm; s'affiche et que vous pouvez vous connecter, c'est que tout se passe bien. Le principal problème que l'on pourrait rencontrer à ce stade serait que l'exécuteur de liens ne trouve pas les bibliothèques partagées & Qt; ou & kde;. Si vous avez installé une distribution binaire des bibliothèques & kde;, assurez -vous que & kdm; est installé là où les bibliothèques pensent que & kde; est installé et essayez de faire pointer les variables d'environnement concernées vers l'emplacement réel de vos bibliothèques & kde; et & Qt;.
+Par exemple & #160;:
+export KDEDIR= / opt/ kde export QTDIR= / usr/ lib/ qt4 export PATH= $KDEDIR/ bin: $QTDIR/ bin: $PATH export LD_LIBRARY_PATH= $KDEDIR/ lib: $QTDIR/ lib
+Si cela ne fonctionne toujours pas, essayer de lancer & xdm; à la place de & kdm; pour vérifier que la source du dysfonctionnement n'est pas un problème plus grave dans la configuration de X.
+Une fois que aurez réussi à lancer & kdm; sans problème, vous pourrez le mettre à la place de & xdm;. Une fois de plus, la façon de faire est spécifique à la distribution employée.
+Sur une & RedHat;, éditez le fichier / etc/ inittab et cherchez cette ligne & #160;:
+x:5: respawn: / usr/ X11/ bin/ xdm -nodaemon
+et remplacez -la avec & #160;:
+x:5: respawn: / opt/ kde/ bin/ kdm
+Ceci indique à init (8) qu'il faut relancer & kdm; lorsque le système est sur le niveau d'exécution (runlevel) 5. Notez que & kdm; n'a pas besoin de l'option -nodaemon.
+Sur une & Mandrake;, le niveau d'exécution de X11 dans / etc/ inittab appelle le script shell de configuration / etc/ X11/ prefdm, qui est réglé pour choisir un des différents gestionnaires de connexion graphique du système, dont & kdm;. Assurez -vous que tous les emplacements sont corrects pour votre installation.
+Sur une & SuSE;, modifiez le fichier / sbin/ init. d/ xdm et ajoutez, en premières lignes & #160;:
+. / etc/ rc. config DISPLAYMANAGER=kdm export DISPLAYMANAGER
+Pour FreeBSD, éditez le fichier / etc/ ttys et trouvez la ligne suivante & #160;:
+ttyv8 "/ usr/ X11R6/ bin/ xdm -nodaemon" xterm off secure
+et modifiez -la de cette façon & #160;:
+ttyv8 "/ opt/ kde/ bin/ kdm" xterm on secure
+Pour la plupart des autres distributions, la méthode s'apparente à l'une de celles -ci.
+Arrivé à ce stade, vous pouvez à nouveau tester le fonctionnement de & kdm; en amenant le système au niveau d'exécution correspondant. Pour ceci, saisissez la commande & #160;:
+/ sbin/ init 5
+Il vous faudra peut-être remplacer le chiffre 5 par le niveau d'exécution correspondant au fonctionnement de X11 sur votre système.
+La dernière étape consiste à éditer l'entrée initdefault du fichier / etc/ inittab pour y préciser le niveau d'exécution approprié au fonctionnement de X11.
+Avant d'effectuer ce changement et dans l'éventualité d'un problème, assurez -vous que vous disposez d'un moyen alternatif pour démarrer votre système. Ce peut être la disquette de secours (rescue) fournie par votre distribution (créée pendant l'installation, par exemple) ou encore une disquette spécialement conçue telle que tomsrtbt. Ignorez ces consignes à vos risques et périls & #160;!
+En général, cela implique le changement de cette ligne & #160;:
+id:3: initdefault:
+en
+id:5: initdefault:
+Lorsque vous redémarrez votre système, vous devriez terminer par l'affichage de l'interface de connexion graphique de & kdm;.
+Si cette étape se solde par un échec, c'est très certainement que l'environnement système de la séquence d'initialisation est différent de celui de vos tests en lignes de commande. Si vous tentez de faire cohabiter deux versions différentes de & kde; soyez particulièrement attentif à la viabilité de vos variables d'environnement PATH et LD_LIBRARY_PATH et à ce que les scripts de démarrage ne les écrasent pas.
+Prise en charge de plusieurs gestionnaires de fenêtre
+Lorsqu'il est lancé, & kdm; détecte la plupart des gestionnaires de fenêtre et des environnements de bureau disponibles. Si vous en installez un nouveau, il devrait être automatiquement disponible dans le sous-menu Type de Session de la boîte de dialogue principale de & kdm;.
+Si vous avez un gestionnaire de fenêtre très récent, ou que & kdm; ne prend pas en charge, vous devez d'abord vérifier que l'application à exécuter est dans le PATH et qu'elle n'a pas été renommée en quelque chose d'inattendu lors de l'installation.
+Dans le cas où l'application serait trop récente et pas encore prise en charge par & kdm;, vous pouvez assez facilement ajouter une nouvelle session.
+Les sessions sont définies dans les fichiers. desktop se trouvant dans $KDEDIR / share/ apps/ kdm/ sessions. Vous pouvez simplement ajouter un fichier. desktop nommé de manière appropriée dans ce dossier. Les champs sont les suivants & #160;:
+[Desktop Entry] Encoding=UTF-8 Ceci est fixé à UTF-8 et peut être omis Type=XSession Ceci est fixé à XSession et peut être omis Exec= nom de l'exécutable Transmis à eval exec dans un Bourne shell TryExec= nom de l'exécutable Pris en charge mais pas requis Name= Nom à afficher dans la liste des sessions de & kdm;
+Il y a aussi trois types particuliers & #160;:
+par défaut
+La session par défaut de & kdm; est normalement & kde; mais elle peut être configurée par l'administrateur système.
+personnalisée
+La session personnalisée utilisera, s'il existe, le fichier ~/. xsession de l'utilisateur.
+de secours
+Lance une session très simple qui est utile uniquement pour le dépannage.
+Pour modifier un type de session, copiez le fichier. desktop du dossier de données vers le dossier de configuration et modifiez -le à volonté. Pour supprimer les types de session inclus, vous pouvez les cacher avec un fichier. desktop contenant Hidden=true. Pour les sessions particulières, aucun. desktop n'existe mais & kdm; fait comme si, c'est pourquoi vous pouvez les modifier de la même façon que n'importe quelle session. Dorénavant, je suppose que vous savez comment ajouter un nouveau type de session.
+Utilisation de & kdm; pour des connexions distantes (XDMCP;)
+& XDMCP; est un standard de l'Open Group, le X Display Manager Control Protocol. Ceci sert à établir, via le réseau, des connexions entre des systèmes distants.
+& XDMCP; est utile dans les situations multiutilisateurs, où il y a des utilisateurs avec des stations de travail et un serveur plus puissant qui peut fournir les ressources pour faire fonctionner de multiples sessions X. Par exemple, & XDMCP; est un bon moyen pour réutiliser de vieux ordinateurs - un Pentium ou même un 486 avec 16 & #160; Mo de RAM est suffisant pour exécuter X, et, en utilisant XDMCP, un tel ordinateur peut lancer une session & kde; moderne complète à partir d'un serveur. Pour la partie serveur, une fois qu'une seule session & kde; (ou un autre environnement) est exécutée, démarrer une nouvelle session ne réclame que très peu de ressources supplémentaires.
+Cependant, l'autorisation d'une autre méthode de connexion à votre machine a des implication de sécurité évidentes. Vous ne devriez lancer ce service que si vous avez besoin d'autoriser des serveurs X distants à connecter des sessions sur votre système. Les utilisateurs avec un seul ordinateur & UNIX; ne devraient pas avoir besoin de le démarrer.
+Points particuliers
+Sockets de commande
+C'est option, vous permet le contrôle à distance de & kdm;. Elle est principalement prévue pour être utilisée par & ksmserver; et & kdesktop; depuis une session démarrée, mais d'autres utilisations sont aussi possibles.
+Les sockets sont de type & UNIX; et résident dans des sous-dossiers du dossier spécifié par FifoDir =. Le sous-dossier est la clé de l'adressage et de la sécurité & #160;; toutes les sockets portent le nom socket et les permissions de fichiers sont rw-rw-rw- (0666). Ceci est dû au fait que certains systèmes ne tiennent pas compte des permissions de fichiers des fichiers de socket.
+Il existe deux types de socket & #160;: la globale (dmctl) et celles associées à un affichage (dmctl-lt; displaygt;).
+Le sous-dossier pour la socket globale appartient à root. Les sous-dossiers des sockets associées à un affichage appartiennent à l'utilisateur actuellement propriétaire de la session (root ou l'utilisateur connecté). L'appartenance des sous-dossiers à un groupe peut être définie via FifoGroup=, sinon il s'agit de root. Les permissions sur les sous-dossiers sont rwxr-x--- (0750).
+Les champs d'une commande sont séparés par des tabulations (\ ), les champs d'une liste sont séparés par des espaces, les espaces littéraux dans un champ de liste sont représentés par un \\s.
+La commande se termine par la fin d'une ligne (\).
+La même chose s'applique aux réponses. Le retour en cas de succès est ok, qui peut être suivi de l'information demandée. La réponse en cas d'erreur est du style de celle de errno (par exemple, perm, noent, & etc;) suivi par une explication plus longue.
+Commandes globales & #160;:
+login display (now | schedule) user password [session_arguments]
+authentifie un utilisateur sur un affichage particulier (display). Si le paramètre now est spécifié, toute session déjà démarrée sera terminée, dans le cas contraire l'authentification se fera à la fin de la session. Les arguments session_arguments sont formatés à la façon d'un printf pour. dmrc. Les clés non listées gardent les valeurs précédemment enregistrées.
+resume
+Force un retour depuis le mode console, même si des connexions TTY sont encore actives.
+manage display [display_class [auth_name auth_data]]
+Débute la gestion de l'affichage distant désigné.
+display_class, si spécifié et non vide, ladite classe sera utilisée pour la correspondance de configuration & #160;; cf..
+auth_name et auth_data doivent être spécifiés si l'affichage requiert une authentification X. Le format est le même que celui des 2ème et 3ème colonnes de la sortie de la commande xauth list.
+unmanage display
+Arrête la gestion de l'affichage distant désigné.
+Commandes propres à un affichage & #160;:
+lock
+L'affichage est marqué comme verrouillé (locked). Si le & X-Server; plante dans cet état, aucune reconnexion automatique ne sera réalisée même si l'option est activée.
+unlock
+Annule l'effet de la commande lock et réactive la reconnexion automatique.
+suicide
+L'arrêt de la session en cours est forcé. Aucune reconnexion automatique n'est tentée, mais une commande « & #160; login & #160; » planifiée sera exécutée.
+Commande pour toutes les sockets
+caps
+Retourne une liste des capacités de cette socket & #160;:
+kdm
+identifie & kdm; dans le cas où un autre gestionnaire de connexion implémenterait aussi ce protocole
+list, lock, suicide, login, resume, manage
+Les commandes respectives sont disponibles
+bootoptions
+Pour l'arrêt, la commande listbootoptions et le = de shutdown sont gérés
+shutdown & lt; listgt;
+shutdown est disponible et autorisé pour les utilisateurs listés (liste séparée par virgule). * signifie tous les utilisateurs authentifiés.
+nuke & lt; listgt;
+L'arrêt forcé du système peut être effectué par les utilisateurs listés.
+nuke
+L'arrêt forcé du système peut être effectué par tout le monde
+reserve & lt; nombregt;
+Des affichages réservés sont configurés, et nombre sont disponibles en ce moment
+list [all | alllocal]
+Retourne la liste des sessions en cours. Par défaut toutes les sessions actives sont affichées. Si le paramètre all est spécifié, les sessions passives le sont aussi. Si alllocal est spécifié, les sessions passives sont listées, mais pas les sessions distantes entrantes.
+Chaque entrée de session est un n-uplet (tuple) séparé par des virgules & #160;:
+Affichage (display) ou nom du TTY
+Nom du terminal virtuel (VT) pour les sessions locales
+Nom de l'utilisateur connecté, vide pour les sessions passives et les sessions distantes sortantes (mode de sélection local)
+Type de session ou lt; remotegt; pour les sessions sortantes, vide pour les sessions passives.
+Un drapeau & #160;:
+* pour l'affichage appartenant à la socket effectuant la requête.
+! pour les sessions qui ne peuvent pas être terminées par la socket effectuant la requête.
+De nouveaux champs pourraient être ajoutés dans le futur.
+reserve [délai en secondes]
+Démarre un nouvel écran de connexion. Si personne ne se connecte pendant la période de temps indiquée (une minute par défaut), l'affichage est de nouveau enlevé. Lorsque la session sur cet affichage est terminée, l'affichage est également enlevé.
+Permis seulement sur les sockets des affichages locaux et la socket globale.
+activate (vt | affichage)
+Change pour un VT (terminal virtuel) particulier. Le VT peut être spécifié soit directement (pex; vt3) soit par l'affichage qui l'utilise (:2).
+listbootoptions
+Liste les options de démarrage disponibles.
+La valeur retournée contient ces éléments & #160;:
+Une liste d'options de démarrage (telles qu'affichées dans & kdm; lui-même).
+L'option de démarrage par défaut.
+L'option de démarrage actuelle.
+L'option de démarrage par défaut et celle actuelle ont des indices débutant à zéro dans la liste des options de démarrage. Si l'une d'entre elles était indéfinie ou non déterminable, son indice serait -1.
+shutdown (reboot | halt) [= bootchoice] (ask | trynow | forcenow | schedule | start (-1 | end (force | forcemy | cancel))))
+Demande un arrêt électrique ou un redémarrage du système.
+Le choix d'un système d'exploitation pour le prochain démarrage peut être fait à partir de la liste retournée par listbootoptions
+Les demandes d'arrêt effectuées depuis les sockets associées à un affichage sont exécutées lorsque la session actuelle se termine sur cet affichage. Une telle requête peut faire surgir une fenêtre de dialogue demandant une confirmation et/ ou une authentification
+start est l'heure à laquelle l'arrêt est programmé. Si ce paramètre commence par le signe « & #160; + & #160; », l'heure courante est ajoutée. Une valeur nulle revient à demander un arrêt immédiat.
+end est l'heure la plus tardive à laquelle l'arrêt doit être effectué si des sessions sont encore actives. Si ce paramètre commence par le signe « & #160; + & #160; », l'heure de démarrage est ajoutée. -1 signifie d'attendre indéfiniment. Si « & #160; end & #160; » est atteint et qu'il y a encore des sessions actives, & kdm; peut faire l'une des choses suivantes & #160;:
+cancel - abandonne l' arrêt
+force - arrête quoi qu'il arrive
+forcemy - arrête quoi qu'il arrive, si toutes les sessions actives appartiennent à l'utilisateur effectuant la requête. Uniquement pour les sockets associées à un affichage.
+start et end sont spécifiés en secondes depuis l'origine des temps (epoch) d'UNIX;.
+trynow est un synonyme pour 0 0 cancel, forcenow pour 0 0 force et schedule pour 0 -1.
+ask tente un arrêt immédiat et interagit avec l'utilisateur si des sessions sont toujours actives. Uniquement pour les sockets associées à un affichage.
+shutdown cancel [local | global}
+Annule un arrêt programmé. La socket globale annule toujours la procédure d'arrêt en cours, tandis que les sockets associées à un affichage annulent par défaut leur requête mise en file d'attente.
+shutdown status
+Retourne une liste d'information à propos des procédures d'arrêt.
+Les entrées sont des n-uplets (tuples) séparés par des virgules & #160;:
+(global | local) - arrêts en cours v. s. arrêts en file d'attente. Une entrée locale ne peut être retournée que par une socket liée à un affichage.
+(halt | reboot)
+start
+end
+("ask"|"force"|"forcemy"|"cancel")
+Identifiant numérique de l'utilisateur à l'origine de la demande, -1 pour la socket globale.
+Le choix de système d'exploitation pour le prochain démarrage ou « & #160; - & #160; » s'il n'y en a pas.
+De nouveaux champs peuvent être ajoutés plus tard
+Il y a deux méthodes pour utiliser les sockets & #160;:
+Se connecter à elles directement. Leur dossier (FifoDir) est exporté en tant que $DM_CONTROL & #160;; le nom des sockets associées à un affichage peut être dérivé de $DISPLAY.
+En utilisant la commande kdmctl (par exemple depuis un script shell). Essayez kdmctl -h pour en apprendre plus.
+Voici l'exemple d'un script bash redémarrer sous FreeBSD & #160;:
+if kdmctl | grep -q shutdown; then IFS=$'\ 'set -- ` kdmctl listbootoptions ` if ["$1" = ok]; then fbsd=$(echo "$2" | tr' ''\' | sed -ne 's, \\\\s,, g; /freebsd/ I{p; q} ') if [-n "$fbsd"]; then kdmctl shutdown reboot "=$fbsd" ask & gt; / dev/ null else echo "Démarrage de FreeBSD indisponible." fi else echo "Options de démarrage indisponibles." fi else echo "Impossible de redémarrer le système." fi
+Autres sources d' information
+Étant donné que & kdm; dérive de & xdm;, la page de manuel de xdm peut fournir des informations générales utiles. Pour les problèmes relatifs à X, essayez les pages de manuel de X et startx. Si vous avez des questions à propos de & kdm; auxquelles ce manuel ne répond pas, profitez du fait que & kdm; soit distribué selon les termes de la Licence Publique Générale & GNU; & #160;: jetez unœ il au code source.
+Remerciements et licence
+& kdm; dérive et inclut du code de & xdm; & copy; Keith Packard, MIT X Consortium.
+& kdm; 0.1 a été écrit par & Matthias. Ettrich;. Les versions suivantes jusqu'à & kde; 2.0. x ont été écrites par & Steffen. Hansen;. Certaines nouvelles fonctionnalités pour & kde; 2.1. x et une réécriture majeure pour & kde; 2.2. x ont été faites par & Oswald. Buddenhagen;.
+Les droits d'auteurs pour le reste du code de & kdm; appartiennent aux différents auteurs et il est soumis aux termes de la licence GNU; GPL. Chacun est libre d'apporter des modifications à & kdm; et de les redistribuer tant que les noms des auteurs sont mentionnés.
+& kdm; requiert la bibliothèque & Qt;, dont les droits d'auteurs appartiennent à Troll Tech SA.
+Contributeurs à la documentation & #160;:
+Documentation écrite par & Steffen. Hansen; & Steffen. Hansen. mail;
+Documentation complétée par Gregor Zumstein zumstein@ssd. ethz. ch. Dernière mise à jour & #160;: 9 août 1998
+Documentation révisée pour & kde; 2 par & Neal. Crook; & Neal. Crook. mail;. Dernière mise à jour & #160;: 6 août 2000
+Documentation étendue et révisée pour & kde; 2.2 et 4.0 par & Oswald. Buddenhagen; & Oswald. Buddenhagen. mail;. Dernière mise à jour & #160;: 7 décembre 2007
+Droits d'auteur sur la documentation & #160;: & Steffen. Hansen;, Gregor Zumstein, & Neal. Crook; et & Oswald. Buddenhagen;. Ce document inclut aussi de grandes parties de la page de manuel de & xdm; qui est & copy; Keith Packard. La documentation sur le format de thème est grandement fondé sur le manuel de GDM, qui est & copy; Martin K. Petersen, George Lebl, & RedHat;, Inc. et Sun Microsystems, Inc.
+Traduction française par & GillesThioliere;, & ClementContet;, & GerardDelafond;, & GoneriLeBouder; et & JeanJacquesFinazzi;.
+& underFDL;
+Glossaire
+message de bienvenue
+Le message de bienvenue est le dialogue de connexion, & cad; la partie de & kdm; que l'utilisateur voit.
+entropie
+L'entropie d'un système est la mesure de son caractère non prévisible. Ceci est utilisé lors de la génération de nombres aléatoires.

@@ -1,0 +1,69 @@
+# language_name_wals:	Russian
+# language_name_glotto:	Russian
+# ISO_6393:	rus
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Cyrl
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/ru.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Инструкция Get [время выполнения]
+/text/sbasic/shared/03020201.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+инструкция Get
+Инструкция Get [время выполнения]
+Считывает запись из файла с произвольным доступом или последовательность байтов из бинарного файла в переменную.
+PUT
+Синтаксис:
+Get [#] НомерФайла As Integer, [Позиция], Переменная
+Параметры:
+НомерФайла
+.
+Выражение из целых чисел, определяющее номер файла.
+Позиция
+.
+Для файлов, открытых в режиме Random,
+Позиция
+является номером записи, которую необходимо считать.
+Позиция
+задает байт в файле, с которого начинается считывание.
+Позиция
+пропущен, используется текущая позиция или текущая запись файла.
+Переменная.
+Имя переменной, в которую будет произведено чтение.
+За исключением объектных переменных, можно использовать любой тип переменной.
+Пример:
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM Должно быть Variant
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM Позиция в начале
+Put #iNumber,, &quot; Это первая строка текста &quot; REM Заполнение строки текстом
+Put #iNumber,, &quot; Это вторая строка текста &quot;
+Put #iNumber,, &quot; Это третья строка текста &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; Это новый текст &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; Это текст в записи 20 &quot;
+Print Lof(#iNumber)
+Close #iNumber
+еnd sub

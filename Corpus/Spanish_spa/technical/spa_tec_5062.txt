@@ -1,0 +1,125 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+El manual del editor de expresiones regulares
+Jesper K. Pedersen
+& Jesper. Pedersen. mail;
+Eloy Cuadra ecuadra@eloihr. net Traductor
+Jesper K. Pedersen
+Este manual describe la ventana del editor de expresiones regulares
+KDE
+expresión regular
+Introducción
+El editor de expresiones regulares le permite editar expresiones regulares en modo gráfico (en contraste con la sintaxis ASCII). Tradicionalmente, las expresiones regulares han sido escritas con la sintaxis ASCII, algo que, por ejemplo, quedaría como ^. *kde\\b. Los principales inconvenientes de esta forma de edición son:
+Es difícil de entender para los que no son programadores.
+Requiere el uso de secuencias de escape para ciertos símbolos (para representar una estrella, por ejemplo, se necesitaría escribir: \\*).
+Requiere que recuerde reglas de precedencia (¿Qué representaría x|y*? Una única x o cualquier número de y, O cualquier número de x e y mezcladas?).
+Por el contrario, el editor de expresiones regulares le permite dibujar su expresión regular de una forma clara. El editor resuelve expresiones de más de dos o tres elementos. Aún así, no puede hacer que los no programadores entiendan las expresiones regulares, aunque solo las pruebas de los usuarios pueden decidir sobre este punto. Así, si usted no es un programador y ha alcanzado el dominio de las expresiones regulares gracias a este editor, le ruego que me lo haga saber.
+¿Qué es una expresión regular?
+Una expresión regular es una forma de especificar condiciones para representar una situación que tiene en mente. Normalmente, cuando busca en un editor de texto, especifica el texto que va a buscar literalmente; por otra parte, al usar expresiones regulares, puede indicar que se busque un patrón determinado. Ejemplos de estas búsquedas son estoy buscando la palabra & kde;, pero sólo al principio de la línea, o estoy buscando la palabra el, pero debe aparecer sola y no en medio de una palabra, o estoy buscando archivos que empiecen con la palabra prueba, seguida por un número de dígitos, por ejemplo prueba12, prueba107 y prueba007.
+Puede construir expresiones regulares complejas a partir de expresiones regulares más sencillas, tal y como se construyen los juguetes Lego grandes a partir de otros más pequeños. Como en el mundo de Lego, existe un número de bloques de construcción básicos. A continuación se describirá cada uno de estos bloques de construcción básicos usando ejemplos.
+Buscando un texto normal.
+Si solo quiere buscar un texto dado, una expresión regular no es una buena elección, debido a que las expresiones regulares asignan un significado especial a algunos caracteres, como. *|$. Por lo tanto, si desea buscar el texto kde. (es decir, los caracteres kde seguidos por un punto), necesita especificarlo como kde\\. El editor de expresiones regulares soluciona este problema teniendo en cuenta las reglas de escape por usted. La acción de escribir\\. en lugar de. se denomina escapar.
+Coincidencia de & URL; s
+Cuando seleccione algo semejante a un & URL; en & kde;, el programa klipper le ofrecerá la posibilidad de iniciar konqueror con el & URL; seleccionado.
+Klipper hace esto buscando una coincidencia de la selección entre varias expresiones regulares diferentes. Cuando una de las expresiones regulares coincide, se le ofrecerá la posibilidad de ejecutar el comando que se amolde a ella.
+La expresión regular para & URL; s dice (entre otras cosas), que la selección debe comenzar con el texto http: / /. En las expresiones regulares, esto se indica precediendo al texto http: / / con el carácter ^.
+El ejemplo anterior es una muestra de coincidencia con posiciones usando expresiones regulares. Del mismo modo, la posición fin-de-línea se puede expresar usando el carácter $(es decir, un símbolo de dólar).
+Buscar la palabra el, pero no en el la, aqu el ni s el lo.
+Se pueden indicar dos tipos de posición extra en la forma anterior, llamadas la posición en el límite de la palabra y posición no en el límite de la palabra. Estas posiciones se especifican usando \\b (para límite de palabra) y \\B (para no límite de palabra)
+Por tanto, la búsqueda de la palabra el se puede hacer usando la expresión regular \\bel\\b. Esto especifica que se está buscando el sin letras a ambos lados (es decir, con un límite de palabra a cada lado).
+Estas cuatro posiciones de búsqueda se pueden insertar en el editor de expresiones regulares usando cuatro herramientas de posición diferentes.
+Buscar este o ese
+Imagine que quiere recorrer su documento buscando la palabra este o la palabra ese. Con un método de búsqueda normal puede hacerlo en dos pasos: en el primero buscaría este; y en el segundo buscaría ese.
+Si usa expresiones regulares, podrá buscar ambas palabras en un solo paso. Puede hacer esto buscando este|ese. & ie;, separando las dos palabras con una barra vertical.
+Tenga en cuenta que a cada lado de la barra vertical hay una expresión regular. Por tanto, esta característica no sirve solo para buscar dos o más trozos de texto, sino para buscar dos expresiones regulares diferentes.
+En el editor de expresiones regulares no tendrá que escribir la barra vertical: seleccione en su lugar la herramienta alternativa, e inserte las dos expresiones regulares una encima de la otra.
+Coincidir con cualquier cosa
+Las expresiones regulares se suelen comparar con la búsqueda mediante comodines de la shell (la posibilidad de especificar un número de archivos usando el asterisco). Seguramente reconocerá los comodines de búsqueda de los siguientes ejemplos:
+ls *. txt (aquí *. txt es el comodín de la consola para referirse a cualquier nombre de archivo que termine con la extensión. txt)
+cat test??. res se refiere a cualquier archivo que empiece con test seguido de dos caracteres cualesquiera, y que termine con. res
+En la shell, el asterisco se refiere a cualquier carácter repetido cualquier número de veces. En otras palabras, el asterisco coincide con cualquier cosa. Esto se escribe como. * en la sintaxis de las expresiones regulares. El punto coincide con cualquier carácter aislado (ie;, un carácter), y el asterisco le indica a la expresión regular que lo que haya antes de él puede repetirse cualquier número de veces. En conjunto, esto quiere decir cualquier carácter aislado repetido cualquier número de veces.
+Esto puede parecer demasiado complicado, pero cuando tenga una perspectiva más adecuada, notará su potencia. Veamos otra expresión regular básica: a. La letra a, por sí misma, es una expresión regular que coincide con una sola letra, exactamente con la letra a. Si la combinamos con un asterisco (ie;, a*), tendremos una expresión regular que representa a cualquier número de aes.
+Podemos combinar varias expresiones regulares, una tras otra. Por ejemplo, ba(na)*. (na)* solo indica que lo que está dentro del paréntesis se repite cualquier número de veces. Imagine que ha tecleado esta expresión regular en el campo de búsqueda de un editor de texto; en tal caso, encontrará las siguientes palabras (entre otras): ba, bana, banana, bananananananana.
+Teniendo en cuenta la información anterior, no le será difícil escribir el comodín de la shell test??. res como una expresión regular. Respuesta: test..\\. res. El punto por sí solo representa a cualquier carácter. Para representar un único punto debe escribir\\. Esto se llama escapar. En otras palabras, la expresión regular\\. representa a un punto, mientras que el punto por sí mismo representa a cualquier carácter.
+En el editor de expresiones regulares, se pueden crear expresiones regulares repetidas usando la herramienta repetir
+Sustitución de amp; por amp; amp; en un documento & HTML;
+En & HTML;, el carácter especial amp; se debe escribir como amp; amp; (que es similar a escapar en una expresión regular).
+Imagine que ha escrito un documento & HTML; en un editor normal (por ejemplo, & XEmacs; o & kate;), y olvidó completamente esta regla. Lo que hará cuando se dé cuenta de su error será reemplazar cada aparición de amp; por amp; amp;.
+Esto se puede hacer fácilmente usando la herramienta de buscar y reemplazar texto, pero existe un problema. Imagine que recordó esta regla (alguna vez) y lo escribió bien en algunas ocasiones. El reemplazo incondicional haría que amp; amp; se cambiara por amp; amp; amp;.
+Lo que verdaderamente querría hacer es que amp; sólo se cambie si no está seguido por las letras amp;. Puede hacer esto usando expresiones regulares con la herramienta afirmación previa positiva.
+La expresión regular que solo representa a un "ampersand" si no está seguido por las letras amp; sería: amp; (? !amp;). Esto es, por supuesto, más fácil de leer en el editor de expresiones regulares, donde usaría las herramientas de afirmación previa.
+Uso del editor de expresiones regulares
+Este capítulo le mostrará cómo funciona el editor de expresiones regulares.
+Organización de la ventana
+La parte más importante del editor es, por supuesto, el área de edición. Aquí es donde dibujará sus expresiones regulares. Es el área gris más grande del centro.
+Sobre el área de edición tiene dos barras de herramientas. La primera contiene las acciones de edición (similares a las herramientas existentes en un programa de dibujo). La segunda barra de herramientas contiene el botón qué es esto y los botones para deshacer y rehacer.
+Debajo del área de edición encontrará la expresión regular construida actualmente en formato de sintaxis ASCII, que se actualiza automáticamente mientras está editando la expresión regular en el editor gráfico. Si prefiere actualizar a mano la expresión ASCII, puede hacerlo directamente: el editor gráfico se actualizará al vuelo para reflejar sus cambios.
+Finalmente, a la izquierda del área de edición encontrará algunas expresiones regulares previamente construídas. Sirven para dos propósitos: (1) Cuando cargue el editor con una expresión regular, esta expresión regular se hace más fácil o más comprensible al reemplazar las expresiones regulares comunes. En la captura de pantalla de arriba, puede ver cómo la sintaxis ASCII ". *" ha sido reemplazada por un cuadro donde pone "cualquier cosa". (2) Cuando inserta una expresión regular, puede encontrar bloques de construcción para sus propias expresiones regulares en el juego de expresiones regulares previamente construídas. Vea la sección sobre expresiones regulares definidas por el usuario para aprender a guardar sus propias expresiones regulares.
+Herramientas de edición
+El texto de esta sección supone que ha leído el capítulo sobre qué es una expresión regular, o que tiene un conocimiento previo de ese tema.
+Todas las herramientas de edición están localizadas en la barra de herramientas que hay sobre el área de edición. A continuación se describirá cada una de ellas.
+Herramienta selección
+La herramienta de selección se usa para marcar elementos que se podrán copiar-y-pegar, o arrastrar-y-soltar. Es similar a la herramienta de selección de cualquier programa de dibujo.
+Herramienta texto
+Con esta herramienta podrá insertar texto normal. Este texto se hará coincidir literalmente, por lo que no tiene que preocuparse de escapar caracteres especiales. En el ejemplo anterior, se construirá la siguiente expresión regular: abc\\*\\\\\\)
+Herramienta carácter
+Con esta herramienta podrá insertar rangos de caracteres. Los ejemplos incluyen lo que en texto ASCII se expresa [0-9], [^a-zA-Z, _]. Cuando se inserte un elemento con esta herramienta, aparecerá un diálogo en el que puede especificar los rangos de caracteres.
+Vea la descripción de expresiones regulares repetidas.
+Herramienta cualquier carácter
+Esta es la expresión regular "punto" (.). Representa a cualquier carácter.
+Herramienta repetir
+Permite repetir elementos. Esto incluye lo que en sintaxis ASCII se representa usando un asterisco (*), un signo más (+), una interrogación (?), y rangos ({3,5}). Cuando inserte un elemento usando esta herramienta, aparecerá un diálogo pidiéndole el número de veces que se repetirá.
+Especifique qué se repetirá dibujándolo dentro de la caja que inserta esta herramienta.
+Los elementos repetidos se pueden construir tanto fuera como dentro de esta caja. Así, puede dibujar primero lo que quiere repetir, seleccionarlo, y utilizar luego la herramienta para repetirlo. Alternativamente, puede insertar primero el elemento repetir y dibujar dentro de él lo que quiera repetir.
+Vea la descripción de expresiones regulares repetidas.
+Herramienta alternativa
+Esta es la expresión regular alternativa (|). Debe especificar las alternativas dibujando cada una de ellas encima de la otra dentro de la caja que inserta esta herramienta.
+Vea la descripción de expresiones regulares alternativas
+Herramienta componer
+La herramienta componer no representa ninguna expresión regular. Se utiliza para agrupar otras subpartes en el interior de una caja, que se puede contraer fácilmente para mostrar solo su título. Esto se puede ver en la parte derecha de la captura de pantalla anterior.
+Herramientas de inicio/ fin de línea
+Las herramientas de inicio y fin de línea coinciden con el comienzo y el final de la línea, respectivamente. La expresión regular de la captura de pantalla anterior representa a líneas que solo contienen espacios.
+Vea la descripción de expresiones regulares de posición.
+Herramientas de (no) límite de palabra
+Las herramientas de límites coinciden respectivamente o no con un límite de palabra. La expresión regular de la captura de pantalla representa a cualquier palabra que comience con el. Sin embargo, la palabra el aislada, no estaría representada.
+Vea la descripción de expresiones regulares de límites.
+Herramientas de afirmación previa positiva/ negativa
+Las herramientas de afirmación previa especifican una expresión regular positiva o negativa a buscar. La coincidencia, sin embargo, no es parte de la coincidencia total.
+Nota: Sólo se permite colocar afirmaciones previas al final de las expresiones regulares, aunque el editor de expresiones regulares tiene esto en cuenta.
+Vea la descripción de expresiones regulares de afirmación previa.
+Expresiones regulares definidas por el usuario
+A la izquierda del área de edición hay una lista que contiene las expresiones regulares definidas por el usuario. Algunas de estas expresiones regulares se preinstalaron en el momento en que instaló & kde;, mientras que otras las puede guardar usted.
+Estas expresiones regulares sirven para dos propósitos (vea la descripción detallada): (1) para ofrecerle un juego de bloques de construcción, y (2) para hacer las expresiones regulares más sencillas.
+Puede guardar sus propias expresiones regulares haciendo clic con el botón derecho del ratón en el área de edición y seleccionando Guardar la expresión regular.
+Si la expresión regular que está guardando está dentro de un contenedor compuesto, la expresión regular se encargará de hacer las subsiguientes expresiones regulares más sencillas.
+Las expresiones regulares definidas por el usuario se pueden borrar o renombrar pulsando el botón derecho del ratón sobre ellas en la lista.
+Informando de errores y sugiriendo características
+Los errores y las peticiones de nuevas funcionalidades deben hacerse a través del sistema de seguimiento de fallos de & kde;. Antes de informar de un error o sugerir una funcionalidad, compruebe que nadie ha informado o sugerido lo mismo con anterioridad.
+Preguntas frecuentes
+¿Soporta el editor de expresiones regulares referencias hacia atrás?
+No, por el momento no están soportadas. Está planeado para la siguiente versión.
+¿Soporta el editor de expresiones regulares mostrar las coincidencias?
+No, pero con suerte estará disponible en la próxima versión
+Soy el autor de un programa de & kde;. ¿Cómo puedo usar este editor en mi aplicación?
+Vea la documentación para la clase KRegExpEditorInterface.
+No puedo encontrar el botón Editar expresión regular en, por ejemplo, Konqueror en otra instalación de KDE3. ¿Por qué?
+El editor de expresiones regulares se encuentra en el paquete & kde; -utils. Si no ha instalado este paquete, los botones de editar expresiones regulares no aparecerán en los programas.
+Créditos y licencias
+Copyright de la documentación 2001, Jesper K. Pedersen & Jesper. Pedersen. mail;
+Traducido por Eloy Cuadra ecuadra@eloihr. net
+& underFDL; & underGPL;

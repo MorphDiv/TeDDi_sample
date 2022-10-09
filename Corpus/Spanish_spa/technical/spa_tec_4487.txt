@@ -1,0 +1,58 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+LDAP es el protocolo de acceso a directorios ligero (Lightweight Directory Access Protocol), un protocolo usado para acceder a "Servidores de Directorio ".
+El directorio es una clase especial de base de datos que contiene información estructurada en forma de árbol.
+El concepto es similar a la estructura de directorios de los discos duros, pero en este caso, el directorio raiz es "El Mundo" y los subdirectorios de primer nivel son los "países ".
+Niveles inferiores de la estructura de directorio contienen entradas para compañías, organizaciones o lugares, y en niveles aún inferiores se encuentran las entradas para la gente, y quizás de equipos informáticos y documentos.
+Para referirse a un fichero en un subdirectorio del disco duro se usa algo como
+/usr / local / misapps / docs
+Las barras marcan cada división en la referencia al fichero, y la secuencia es leida de izquierda a derecha.
+El equivalente a la referencia a un fichero en LDAP es el "distinguished name" (nombre distinguible), abreviado como "db ".
+Un ejemplo de dn podría ser.
+cn=Pedro Pérez,ou=Contabilidad,o=Mi Compañía,c=ES
+Las comas marcan cada división en la referencia, y la secuencia se lee de derecha a izquierda.
+Este dn se leería como..
+country = ES organization = Mi Compañía organizationalUnit = Contabilidad commonName = Pedro Pérez
+De la misma manera que no hay reglas estrictas sobre como organizar la estructura de directorios de un disco duro, un administrador de un servidor de directorio puede establecer cualquier estructura que sea útil para sus propósitos.
+Sin embargo hay algunos acuerdos tácitos que siempre deben seguirse.
+El mensaje es que no se puede escribir código para acceder un directorio si no se conoce algo de su estructura, igual que no se puede usar una base de datos sin algún conocimiento sobre lo que está disponible en ella.
+Recuperar informacion para todas las entradas donde el apellido empiece por "P" de un servidor de directorio, mostrando un extracto con el nombre y dirección de correo electrónico.
+Ejemplo 1. ejemplo de búsqueda LDAP
+?php / / La secuencia básica para trabajar con LDAP es conectar, autentificarse, / / buscar, interpretar el resultado de la búsqueda y cerrar la conexión. echo "h3 Prueba de consulta LDAP / h3"; echo "Conectando.. ."; $ds=ldap_connect("localhost"); / / Debe ser un servidor LDAP válido! echo "El resultado de la conexión es ".$ds. "p"; if ($ds) {echo "Autentificandose.. ."; $r=ldap_bind($ds); / / Autentificación anónima, típicamente con / / acceso de lectura echo "El resultado de la autentificación es ".$r. "p"; echo "Buscando (sn=P*).. ."; / / Busqueda de entradas por apellidos $sr=ldap_search($ds ,"o=Mi Compañia, c=ES", "sn=P*"); echo "El resultado de la búsqueda es ".$sr. "p"; echo "El número de entradas devueltas es ".ldap_count_entries($ds,$sr). "p"; echo "Recuperando entradas... p "; $info = ldap_get_entries($ds, $sr); echo "Devueltos datos de ".$info["count"]." entradas: p "; for ($i=0; $i $info["count"]; $i++) {echo "dn es:". $info[$i]["dn"]. "br"; echo "La primera entrada cn es: ". $info[$i]["cn"][0]." br "; echo "La primera entrada email es:". $info[$i]["mail"][0]. "p";} echo "Cerrando conexión"; ldap_close($ds);} else {echo "h4 Ha sido imposible conectar al servidor LDAP / h4";}?
+Es necesario conseguir y compilar la librerías cliente de LDAP ya sea del paquete ldap-3.3 de la Universidad de Michigan o del Netscape Directory SDK.
+También es necesario recompilar PHP con soporte LDAP activado para que la funciones LDAP de PHP funcionen.
+Antes de usarse las llamadas LDAP se debe saber..
+El nombre o dirección del servidor de directorio que se va a usar
+El "dn base" del servidor (la parte del directorio global contenida en ese servidor, que puede ser por ejemplo "o=Mi Compañia,c=ES")
+Si es necesaria contraseña para acceder al servidor (muchos servidores ofrecen acceso de lectura para usuarios anónimos pero requieren un password para cualquier otro acceso)
+La secuencia típica de llamadas LDAP suele implementarse en aplicaciones que siguen el siguiente patrón:
+ldap_connect() / / establecer la conexión con el servidor | ldap_bind() / / login anónimo o autentificado | Hacer búsquedas o actualizaciones en el directorio y mostrar los resultados | ldap_close() / / Cerrar la conexión
+Mucha información acerca de LDAP puede ser consultada en
+
+Universidad de Michigan
+Proyecto OpenLDAP
+
+El SDK de Netscape contiene una Guía de Programación muy útil en formato html.
+Anterior
+Inicio
+Siguiente
+
+Subir

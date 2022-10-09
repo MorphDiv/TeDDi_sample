@@ -1,0 +1,45 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+session_set_save_handler() setzt die benutzerdefinierten Session-Speicherfunktionen, die zur Speicherung und Wiederherstellung von zur Session gehörigen Daten verwendet werden.
+Dies ist äußerst nützlich, wenn eine andere als die mit PHP-Sessions zur Verfügung stehende Art der Speicherung, z.B. die Speicherung der Session-Daten in einer lokalen Datenbank, bevorzugt wird.
+Gibt bei Erfolg TRUE zurück, im Fehlerfall FALSE.
+Anmerkung:
+Die "schreiben "-Routine wird nicht ausgeführt, bevor die Ausgabe abgeschlossen ist.
+Deshalb werden auch niemals Fehlermeldungen der "schreiben "-Routine im Browser erscheinen.
+Wenn die Ausgabe von Fehlermeldungen nötig ist, sollte diese stattdessen in eine Datei geschrieben werden.
+Anmerkung:
+Wenn die Session keine Daten enthält, wird die "schreiben"-Routine nicht ausgeführt; das trifft auch dann zu, wenn leere Session-Variablen registriert sind.
+Im Unterschied dazu erzeugt die standardmäßige dateibasierte Session-Speicherfunktion auch leere Session-Dateien.
+Das folgende Beispiel liefert eine dateibasierte Session-Speicherung, die der Standard-Speicherroutine files der PHP-Sessions ähnlich ist.
+Dieses Beispiel kann problemlos erweitert werden, dass es Datenbank-Speicherung mittels ihrer bevorzugten PHP-gestützten Datenbank beinhaltet.
+Damit die Speicherroutine funktioniert wie erwartet, muss die read-Function immer einen String-Wert zurückgeben.
+Wenn es keine Daten zu lesen gibt, geben Sie eine leere Zeichenkette zurück.
+Rückgabewerte anderer Routinen werden in boolesche Ausdrücke umgewandelt.
+TRUE für einen Erfolg, FALSE für einen Fehler.
+Beispiel 1. session_set_save_handler() Beispiel
+?php function open ($save_path, $session_name) {global $sess_save_path, $sess_session_name; $sess_save_path = $save_path; $sess_session_name = $session_name; return(true);} function close() {return(true);} function read ($id) {global $sess_save_path, $sess_session_name; $sess_file = "$sess_save_path / sess_$id"; if ($fp = @fopen($sess_file, "r")) {$sess_data = fread($fp, filesize($sess_file)); return($sess_data);} else {return(""); / / Must return "" here.}} function write ($id, $sess_data) {global $sess_save_path, $sess_session_name; $sess_file = "$sess_save_path / sess_$id"; if ($fp = @fopen($sess_file, "w")) {return(fwrite($fp, $sess_data));} else {return(false);}} function destroy ($id) {global $sess_save_path, $sess_session_name; $sess_file = "$sess_save_path / sess_$id"; return(@unlink($sess_file));} / ************************************************ * WARNUNG - Sie müssen hier irgendeine Art von * * Speicherbereinigungsroutine realisieren. * ************************************************ / function gc ($maxlifetime) {return true;} session_set_save_handler ("open", "close", "read", "write", "destroy", "gc"); session_start(); / / verfahren Sie mit Sessions wie gewohnt?
+Siehe auch die session.save_handler Konfigurationsanweisung.
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

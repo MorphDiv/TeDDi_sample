@@ -1,0 +1,73 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Kapitel 5.
+Sicherheit
+Nach vorne
+PHP als CGI zu nutzen, ist eine Möglichkeit für Installationen, bei denen aus irgendwelchen Gründen kein Modul in die Serversoftware eingebunden werden soll (wie beim Apache) oder für Systeme, bei denen verschiedene CGI-Wrapper genutzt werden sollen, um sichere chroot - und setuid-Umgebungen für Skripte zu schaffen.
+Bei dieser Konfiguration wird das ausführbare PHP-Binary üblicherweise im cgi-bin Verzeichnis des Webservers installiert.
+CERT advisory CA-96.11 spricht sich gegen die Platzierung von Interpretern im cgi-bin Verzeichnis aus.
+Obwohl das PHP-Binary als eigenständiger Interpreter verwendet werden kann, wurde PHP so entwickelt, um den durch diese Konfiguration möglich werdenden Angriffe vorzubeugen:
+Zugriff auf Systemdateien: http: / /my.host / cgi-bin / php? / etc / passwd
+Die auf ein Fragezeichen (?) folgende Abfrageinformation in einer URL wird durch das CGI-Interface als Kommandozeilenargument an den Interpreter weitergereicht.
+In der Kommandozeile wird üblicherweise die im ersten Argument angegebene Datei von Interpretern geöffnet und ausgeführt.
+Beim Aufruf als CGI-Binary verweigert PHP die Interpretation der Kommandozeilenargumente.
+Zugriff auf beliebige Web-Dokumente auf dem Server: http: / /my.host / cgi-bin / php / secret / doc.html
+Der Teil der URL-Pfadinformation nach dem Namen der PHP Binärdatei, / secret / doc.html wird im allgemeinen benutzt, um den Namen der Datei zu übergeben, die durch das CGI -Programm geöffnet und interpretiert werden soll.
+Normalerweise werden einige Einträge in der Konfigurationsdatei des Webservers benutzt (Apache:
+Action), um Aufrufe von Dokumenten wie http: / /my.host / secret / script.php3 an den PHP-Interpreter umzuleiten.
+Bei dieser Konfiguration überprüft der Webserver zuerst die Zugriffsrechte im Verzeichnis / secret und erstellt anschließend den umgeleiteten Aufruf http: / /my.host / cgi-bin / php / secret / script.php.
+Unglücklicherweise wird, wenn der Aufruf bereits in dieser Form geschieht, vom Webserver keine Zugriffsüberprüfung der Datei / secret / script.php, sondern lediglich der Datei / cgi-bin / php vorgenommen.
+So ist jeder Benutzer, der auf / cgi-bin / php zugreifen darf in der Lage, sich zu jedem geschützten Dokument auf dem Webserver Zugriff zu verschaffen.
+Bei PHP können beim Kompilieren die Konfigurationsoption --enable-force-cgi-redirect und zur Laufzeit die Konfigurationsdirektiven doc_root und user_dir Bei PHP können beim Kompilieren die Konfigurationsoption --enable-force-cgi-redirect und zur Laufzeit die Konfigurationsdirektiven doc_root und user_dir benutzt werden, um diesen Angriff zu verhindern, falls der Verzeichnisbaum des Servers Verzeichnisse mit Zugriffsbeschränkungen beinhaltet.
+Ausführliche Informationen über die verschiedenen Kombinationen siehe weiter unten.
+Wenn der Server keine Inhalte hat, die durch Passwort oder IP-basierte Zugriffskontrolle geschützt sind, werden diese Konfigurationsoptionen nicht benötigt.
+Wenn der Webserver keine Redirects erlaubt oder keine Möglichkeit hat, dem PHP-Binary mitzuteilen dass es sich um eine sicher umgeleitete Anfrage handelt, kann die Option --enable-force-cgi-redirect im configure-Script angegeben werden.
+Nichtsdestotrotz müssen Sie sicherstellen, dass Ihre PHP-Skripte nicht auf die eine oder andere Art des Aufrufs angewiesen sind, weder direkt durch http: / /my.host / cgi-bin / php / dir / script.php noch durch einen Redirect http: / /my.host / dir / script.php.
+Beim Apache kann der Redirect durch den Gebrauch von AddHandler und Action konfiguriert werden (siehe unten).
+Diese beim Kompilieren verwendete Option verhindert grundsätzlich den Aufruf von PHP mit einer URL wie http: / /my.host / cgi-bin / php / secretdir / script.php.
+Stattdessen parst PHP in diesem Modus nur dann, wenn der Aufruf durch einen korrekten Redirect des Webservers erfolgte.
+Normalerweise wird der Redirect in der Apache-Konfiguration mit den folgenden Einträgen festgelegt:
+
+Diese Option wurde nur mit dem Apache Webserver getestet und ist abhängig davon, wie Apache die nicht standardmäßige CGI-Umgebungsvariable REDIRECT_STATUS bei Redirect-Anfragen setzt.
+Sollte Ihr Webserver keine Möglichkeit unterstützen, zu übermitteln, ob es sich um einen direkte Aufruf oder einen Redirect handelt, können Sie diese Option nicht verwenden und müssen einen der anderen hier beschriebenen Wege gehen, die CGI-Version zu nutzen.
+Aktiven Inhalt, wie beispielsweise Skripts und ausführbare Dateien, in den Dokumentverzeichnissen des Webservers abzulegen, wird manchmal als unsichere Methode angesehen.
+Wenn, beispielsweise aufgrund von Konfigurationsfehlern, die Skripte nicht ausgeführt, sondern als reguläre HTML-Dokumente angezeigt werden kann dies ein Durchsickern von geistigem Eigentum und sicherheitsrelevanter Informationen (Passwörter!) zur Folge haben.
+Deshalb ziehen es viele Systemadministratoren vor, eine zweite Verzeichnisstruktur für Skripte einzurichten, auf die nur durch das PHP-CGI zugegriffen werden kann.
+Diese werden dann stets interpretiert und nicht angezeigt.
+Auch wenn die Methode zum sichergestellten Verhindern einer Umleitung von Anfragen (wie im vorangegangenen Kapitel beschrieben) nicht verfügbar ist, ist es notwendig, ein doc_root für Skripte zusätzlich zum Web-Dokumentenverzeichnis einzurichten.
+Sie können das PHP-Skriptverzeichnis durch die Direktive doc_root in der Konfigurationsdatei festlegen, oder Sie setzen die Umgebungsvariable PHP_DOCUMENT_ROOT.
+Wenn sie gesetzt ist, wird die CGI-Version von PHP den Namen der zu öffnenden Datei stets aus doc_root und der Pfadinformation der Anfrage zusammensetzen, sodass man sicher sein kann, dass außerhalb dieses Verzeichnisses keine Skripte ausgeführt werden (außer user_dir, siehe unten).
+Eine weitere hier nützliche Option ist user_dir.
+Wenn das user_dir nicht gesetzt ist, hat nur doc_root Wenn das user_dir nicht gesetzt ist, hat nur doc_root Einfluss auf die zu öffnende Datei.
+Der Aufruf einer URL wie http: / /my.host / ~user / doc.php hat nicht zum Ergebnis, dass eine Datei im Home-Verzeichnis des Benutzers geöffnet wird, sondern eine Datei namens ~user / doc.php unterhalb des doc_root (Ja, ein Verzeichnisname, der mit einer Tilde anfängt [~]).
+Ist das user_dir beispielsweise auf public_php gesetzt, wird eine Anfrage wie http: / /my.host / ~user / doc.php eine Datei namens doc.php im Verzeichnis public_php im Heimatverzeichnis des Benutzers öffnen.
+Wenn das Heimatverzeichnis des Benutzers / home / user ist, so ist die ausgeführte Datei / home / user / public_php / doc.php.
+Die user_dir -Expansion erfolgt ohne Berücksichtigung der doc_root Einstellung.
+So können Zugriffe auf die Dokumenten - und Benutzerverzeichnisse separat gesteuert werden.
+Eine sehr sichere Sache ist es, das PHP-Parser-Binary irgendwo außerhalb des Webverzeichnisbaums zu platzieren, beispielsweise in / usr / local / bin.
+Der einzige Nachteil dieses Verfahrens ist, dass eine Zeile ähnlich der folgenden:
+
+Damit PHP bei dieser Konfiguration die PATH_INFO - und PATH_TRANSLATED -Informationen korrekt auswertet, sollte der PHP-Parser mit der Option --enable-discard-path kompiliert werden.
+Zurück
+Zum Anfang
+Nach vorne
+Sicherheit
+Nach oben
+Apache-Modul

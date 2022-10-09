@@ -1,0 +1,100 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Jugando bajo la capa de & kde;
+Nicolas Goutte goutte@kde. org
+Editar manualmente los archivos de configuración
+Introducción
+En & kde;, los archivos de configuración son fáciles de editar con un simple editor como pudiera ser & kate; puesto que los archivos de configuración son archivos de texto.
+Un ejemplo de un archivo de texto:
+[General] AutoSave=1 LastFile=/ var/ tmp/ test. txt
+La configuración específica de cada usuario se guarda en. / kde/ share/ config (cambie. kde con el contenido de su $KDEHOME) y la global en el subdirectorio share/ config de la ruta de instalación de & kde;. (podrá encontrar esta ruta ejecutando la orden kde4-config --prefix). Usualmente los nombres de los archivos terminan en rc (sin punto inicial), por ejemplo kopeterc.
+Editar los archivos de configuración manualmente puede poner en peligro la estabilidad de su instalación & kde;. Las aplicaciones no suelen verificar qué es lo que leen de los archivos de configuración. Esto significa que puede haber problemas cuando cargan su configuración, e incluso pueden colgarse.
+Copias de seguridad
+Por tanto, la primera regla es hacer una copia de seguridad de su archivo antes de modificarlo. Es aconsejable guardar la copia de seguridad fuera de cualquier subdirectorio de. kde (o del correspondiente $KDEHOME). Las copias de seguridad son siempre una buena idea, ya que en el caso de producirse un fallo importante de & kde; se podrían perder archivos de configuración importantes (como sus preferencias de & kmail;, que están en el archivo kmailrc). No se debería producir ningún fallo importante, pero podría suceder.
+Editar
+¿Por qué podría querer modificar los archivos de configuración? Bueno, en primer lugar lo necesitará para poder cumplir las directivas del modo KIOSK. Es posible que un desarrollador le pida que añada una entrada para resolver un problema con la aplicación. Es posible que desee resolver un problema sin tener que eliminar todo el directorio. kde. Es posible que desee aprender más sobre las interioridades de & kde;.
+De cualquier forma, cualquiera que sean sus motivos, puede modificar de forma manual un archivo de configuración.
+Cuando planee editar un archivo, asegúrese que la aplicación a la que se refiere no se esté ejecutando. Si es uno de los archivos con la configuración básica, piense en editar el archivo sin que & kde; se esté ejecutando.
+¿Preparado? Haga una copia de seguridad del archivo (¿Se lo había dicho anteriormente?), inicie su editor favorito (asumiremos que es & kate;), cargue el archivo (asegúrese de cargarlo como UTF-8, & kate; lo mostrará como « utf8 »).
+Ahora tendrá un archivo similar a este:
+[Grupo] Clave1=Valor1 Clave2=Valor2 Clave3=Valor3
+Podrá modificarlo (¡con cuidado!) y guárdarlo (asegúrese nuévamente de que está en UTF-8).
+Ahora puede probar la aplicación y si la aplicación no funciona correctamente, cierre la aplicación y restaure la copia de seguridad del archivo de configuración.
+Información relacionada
+contiene más información sobre la estructura de directorios de & kde;, para ayudarle a encontrar el archivo que necesite editar.
+Hacer scripts del escritorio
+& kde; proporciona un potente sistema de comunicación entre procesos con & DCOP;, el protocolo de comunicación de escritorio. Utilizando & DCOP; podrá controlar un amplio número de funciones en & kde; desde la línea de órdenes o desde un script escrito en su lenguaje de script favorito. También podrá obtener información de las aplicaciones & kde;: por ejemplo, algunos reproductores de & kde; proporcionan métodos para pedir al reproductor información sobre la pista que se está reproduciendo.
+Hablando en términos generales, cada aplicación de & kde; proporciona uno o más interfaces & DCOP;, que proporciona métodos (o, si lo prefiere, funciones) que pueden ser llamados por otra aplicación. Por tanto, el primer paso para utilizar & DCOP; es encontrar el método apropiado para la tarea. La forma más sencilla es hacer uso del interfaz kdcop para obtener los métodos & DCOP; disponibles.
+Ejecute kdcop desde una & konsole; o desde el minicliente (la ventana que aparece la pulsar Alt; F2). La ventana kdcop mostrará las aplicaciones que se estén ejecutando y que proporcionen interfaces & DCOP;, utilizando una vista de ábol. En general, encontrar el método correcto precisa buscar un poco a lo largo del árbol, pero una pista práctica es utilizar el interfaz marcado como « (predeterminado) » que suele contener las funciones de uso más frecuente.
+Para comprobar que la función es la que necesita, pulse en la entrada setColor. Para seleccionar el color c, pulse en el botón selector de color, y seleccione un color. Decida si el color debería ser un color A con la casilla de verificación. Pulse Aceptar y se asignará el color al fondo.
+Para acceder al método & DCOP; desde su lenguaje de script favorito, podrá utilizar asociación de teclas con & DCOP;, si el módulo kdebindings está disponible, o llamar a dcop desde la línea de órdenes. Para un uso simple, llamar a dcop desde la línea de órdenes es suficiente. Para llamar a & DCOP; desde la línea de órdenes, necesitará especificar la aplicación y la interfaz propietaria del método, el método, y los argumentos, de forma adecuada a cada intérprete de órdenes.
+Especificaremos la aplicación, interfaz y método en este orden, seguido por los argumentos en el mismo orden en que se muestran en kdcop. dcop tiene muchas más opciones: Eche un vistazo a la salida de dcop --help.
+Basta de teoría: veamos un ejemplo:
+Un script para cambiar el color del fondo con & DCOP;
+Con la aplicación dcop de la aplicación de la línea de órdenes un poquito de Perl, haremos un sencillo script que cambiará el color del fondo del escritorio a través del espectro en ciclos cortos.
+En primer lugar, buscaremos el método apropiado con kdcop. Para este ejemplo, acortaremos la búsqueda, e iremos directamente a él: el método que necesitamos es kdesktop KBackgroundIface setColor. Los argumentos y el tipo devuelto por la función se mostrarán en el estilo del lenguaje C++. Para setColor, los argumentos son, c, que especifica el nuevo color del fondo, y un valor lógico (verdadero o falso), isColorA, que especifica si el color es el primero o el segundo (es práctico para configurar gradientes).
+Para utilizar nuestro método setColor en la línea de órdenes, utilizaremos lo siguiente:
+% dcop kdesktop KBackgroundIface setColor '#ffffff 'false
+Para especificar el color, utilizaremos el valor RGB hexadecimal, tal y como se utiliza en & HTML;. Tenga en cuenta que ha de estar encerrado entre comillas para proteger la # en el intérprete.
+Para encontrar el valor hexadecimal del color RGB, abra cualquier diálogo selector de color en una aplicación & kde; (por ejemplo, en & kcontrolcenter;, Apariencia y temas Colores), seleccione el color deseado, y utilice el valor obtenido en el cuadro de texto HTML.
+Y esto es todo lo que necesitamos de & DCOP;. Ahora solo es cuestión de escribir un script basado en ello. Veamos una (¡muy!) tosca implementación:
+< ![CDATA[ $min =49; # Valor mínimo de los colores R, G, o B $max=174; # Valor máximo de los colores R, G, o B $step=5; # Incremento en cada paso del color $sleeptime=15; # Intervalo en segundo entre cada paso @start = ($max, $min, $min); @colour = @start; while (1) {foreach (0..5) {my $which = $_% 3; # Color (R, G o B) al qué cambiar my $updown = $_% 2; # Indica si incrementa o decrementa el valor del color do {if ($updown == 0) {$colour[$which]+=$step;} if ($updown == 1) {$colour[$which]-=$step;} my $dcopcall=sprintf "dcop kdesktop KBackgroundIface setColor '#%x%x%x' true\ ", @colour; system($dcopcall); sleep $sleeptime;} while (($colour[$which] > = $min) and ($colour[$which ]< = $max));}}]] >
+Ahora ejecute el script sin argumentos, y comenzará un ciclo de cambios de color del fondo a través del espectro hasta que sea matado. ¡Voilagrave;!
+Por supuesto, Perl no es el único lenguaje que podrá utilizar para escribir scripts con & DCOP; mdash; si prefiere hacer scripts para un intérprete, también lo podrá hacer:
+Asignar un fondo desde Internet
+El siguiente script obtendrá la imagen principal de la tira cómica « User Friendly » y lo coloca como papel de escritorio, utilizando las herramientas normalmente disponibles y un poquito de & DCOP;:
+< ![CDATA[ #!/bin/sh COMICURL=`wget -qO - http://www .userfriendly.org/static/index.html |\\ grep Latest | sed -e "s,. *SRC=\\",, "-e "s,\\" > .*,," ` TMPFILE=`mktemp / tmp/ $0. XXXXXX ` || exit 1 wget -q -O $TMPFILE $COMICURL dcop kdesktop KBackgroundIface setWallpaper $TMPFILE 1]] >
+La primera línea después de #! /bin/ sh utiliza wget y alguna expresión regular para extraer la ubicación de la imagen a partir de los fuentes de la página & HTML;. La segunda y tercera líneas descargan la imagen, y finalmente, dcop coloca la imagen descargada como fondo del escritorio.
+Añadir asignaciones de teclas extra a & kde;
+Algunos teclados modernos tienen teclas extra que de forma predeterminada no tienen asociada ninguna acción.
+Algunas veces las teclas « multimedia » generan una señal, y se pueden asignar en una aplicación como cualquier otra tecla. Algunas teclas sin embargo, no se detectan y pulsarlas en Configurar accesos rápidos no tendrá efecto.
+Algunos portátiles IBM, por ejemplo, tienen teclas extra sobre las flechas izquierda y derecha, que son similares a página izquierda y página derecha.
+Utilice xev para encontrar el código de estas teclas. En este caso, son 233 y 234.
+Seleccione los símbolos de las teclas. Existe un conjunto de éstos que no se utilizan de forma predeterminada, y por tanto, están libres. Puede encontrar la lista en / usr/ X11R6/ include/ X11/ keysymdef. h (o el equivalente en su sistema).
+Cree un archivo en su directorio personal llamado. Xmodmap, y añádale lo siguiente:
+keycode 233 = Next_Virtual_Screen keycode 234 = Prev_Virtual_Screen
+Ejecute la orden xmodmap ~/. Xmodmap
+En este punto, debería ser capaz de ejecutar xev nuevamente y verá cómo las teclas generadas por keysym son las que ha asignado. Ahora podrá asociarlas a una acción de la forma habitual.
+La orden xev en las páginas de manual. Podrá verlas tecleando man: / xev en una ventana de & konqueror; o tecleando man xev en un terminal.
+Asociar nuevas acciones a las teclas
+A la mayor parte de las acciones tanto en el escritorio como en las aplicaciones se les puede asociar teclas fácilmente. También es posible asociar accesos rápidos a una acción escrita por usted, o a alguna no disponible.
+Como paso entre las dos secciones anteriores, quizá desee asignar teclas no utilizadas en su teclado a un script o a una orden dcop. El siguiente ejemplo asignará las dos teclas añadidas en para ir a los escritorios virtuales anterior o siguiente, para lo cual necesitará dos funciones DCOP (tal y como se refleja en).
+Ésto se puede lograr fácilmente utilizando el siguiente método:
+Abra & kcontrol;, y en la sección Regional y accesibilidad, seleccione Acción de entrada.
+Seleccione Nueva acción.
+Ponga nombre a la nueva acción. & eg; Nueva ventana virtual.
+En el tipo de acción seleccione Acceso rápido de teclado - > Comando/ URL (simple) para el Tipo de acción
+En la pestaña Acceso rápido de teclado, pulse el botón al que desea asociar la orden. Por ejemplo, debería presionar la tecla que tiene el dibujo Página siguiente. Aparecerá Next_Virtual_Screen en la imagen de la tecla.
+En la pestaña Preferencias de orden/ URL, introduzca la orden que se habrá de ejecutar en el campo Orden/ URL a ejecutar: dcop kwin default nextDesktop.
+Repita el procedimiento anterior con la tecla Prev_Virtual_Screen y dcop kwin default previousDesktop.
+Ahora pulse Prev_Virtual_Screen o Next_Virtual_Screen para ir al escritorio anterior y siguiente, respectivamente.
+Obviamente, puede asociar cualquier tecla libre a cualquier acción.
+Véa la documentación de KHotKeys utilizando & khelpcenter;, o teclee help: / khotkeys en una ventana de & konqueror;.
+Adriaan de Groot groot@kde. org
+& kdebugdialog; - Controlar la salida de depuración de & kde;
+Uso básico
+& kdebugdialog; no aparece en el & kmenu; de forma predeterminada. Necesitará ejecutarlo desde el intérprete de órdenes o desde el mini-cliente con la orden kdebugdialog. & kdebugdialog; mostrará una ventana con una larga lista de las áreas de depurado. Cada área tiene una casilla de verificación que puede marcar o desmarcar, activando o desactivando el depurado para esta parte de & kde;.
+La lista de las áreas de depurado se ordena numéricamente, no alfabéticamente, por tanto kio (127) aparecerá antes que artskde (400). Los números van hasta el 20000 aproximadamente, pero realmente solo existen 400 áreas. No necesita desplazarse a través de toda la pantalla para encontrar el área que necesite. Existe una cuadro de edición en la parte superior del diálogo en el que podrá introducir una parte del nombre del área que desee. La lista de las entradas se filtrará para mostrar únicamente aquellas áreas de depuración que contengan el texto introducido. & eg; introducir k no filtrará mucho, pero introducir kont sólo mostrará las áreas de depurado de & kontact;. Como forma rápida de activar o desactivar la salida de depuración, podrá utilizar los botones seleccionar todo y deseleccionar todo que harán que & kde; produzca un salida de depuración enorme, o una muy pequeña.
+KDebugDialog en el modo completo
+En el modo completo, que es aquel que se obtiene cuando inicia kdebugdialog con kdebugdialog --fullmode, estará disponible la misma lista de áreas de depuración que en el modo sencillo, pero únicamente podrá seleccionar una cada vez del cuadro desplegable. Podrá seleccionar de forma independiente la salida de varios tipos de mensajes: Información, aviso, error y error fatal. Para cada uno de estos tipos, podrá seleccionar dónde se envían estos mensajes. Las elecciones son:
+Archivo, pudiendo introducir un nombre para el mismo. Este archivo se escribirá en su directorio $HOME.
+Cuadros de mensaje. Cada mensaje de depuración se mostrará en un diálogo de información, sobre el que deberá pulsar Aceptar para continuar con la aplicación.
+Intérprete de órdenes, la entrada predeterminada. Los mensajes se imprimen en la salida estándar, y aparecerán en la ventana del intérprete de órdenes desde el que se inició la aplicación, o en. xsession-errors.
+Registro del sistema. Esto envía cada mensaje de depuración a la utilidad de registro del sistema, que puede utilizar su propio procesado del mensaje.
+Ninguno. Esto suprime la salida de este tipo de mensajes.
+Para los mensajes generados por los errores fatales, suele ser una mala idea seleccionar ninguno o registro del sistema, aunque es posible que en ambos casos no pueda ver el mensaje y la aplicación que haya sufrido el error fatal desaparezca sin dejar pistas de porqué ha desaparecido. El que desaparezca o no la aplicación en los errores fatales puede ser controlado por la casilla de verificación Cancelar al producirse errores fatales, que está marcado de forma predeterminada & mdash; pero es posible esperar que una aplicación se cuelgue (de forma desordenada) si se produce un error.

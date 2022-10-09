@@ -1,0 +1,67 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Chapitre 14.
+Les classes et les objets
+Suivant
+Attention
+En PHP 3 et PHP 4, les constructeurs se comportent différemment.
+La sémantique de PHP 4 est fortement recommandée.
+Le constructeur est la fonction qui est appelée automatiquement par la classe lorsque vous créez une nouvelle instance d'une classe a l'aide de l 'opérateur new.
+La fonction constructeur a le même nom que la classe.
+En PHP 3, une fonction devient le constructeur si elle porte le même nom que la classe.
+En PHP 4, une fonction devient un constructeur si elle porte le même nom que la classe dans laquelle elle est définit.
+La différence est subtile, mais cruciale.
+?php class Auto_Caddie extends Caddie {function Auto_Caddie () {$this - add_item ("10", 1);}} / / Cette syntaxe est valable en PHP 3 et 4?
+L 'exemple ci-dessus définit la classe Auto_Caddie qui hérite de la classe Caddie et définit le construteur de la classe.
+Ce dernier initialise le panier avec 1 article de type numéro 10 dès que l'instruction "new "est appelée.
+La fonction constructeur peut prendre ou non des paramètres optionnels, ce qui la rend beaucoup plus pratique.
+Pour pouvoir utiliser cette classe sans paramètre, tous les paramètres du constructeurs devraient être optionnels, en fournissant une valeur par défaut, comme ci-dessous.
+?php / / Cette syntaxe est valable en PHP 3 et 4 class Constructor_Cart extends Cart {function Constructor_Cart ($item = "10", $num = 1) {$this - add_item ($item, $num);}} / / Création du caddie $default_cart = new Constructor_Cart; / / Création d'un vrai caddie $different_cart = new Constructor_Cart ("20", 17);?
+Attention
+En PHP 3, les classes dérivées et les constructeurs ont un certains nombre de limitations.
+Les exemples suivants doivent être lus avec beaucoup d 'attention pour comprendre ces limitations.
+?php class A {function A() {echo "Je suis le constructeur de A. br \n";}} class B extends A {function C() {"Je suis une fonction standard. br \n";}} / / Aucun constructeur n'est appelé en PHP 3!! $b = new B;?
+En PHP 3, aucun constructeur ne sera appelé dans l 'exemple ci-dessus.
+La règle en PHP 3 est: 'Un constructeur est une fonction qui a le même nom que la classe'.
+Le nom de la classe est B, et il n'y a pas de fonctions qui s'appelle B() dans la classe B.
+Rien ne se passe.
+Ceci est corrigé en PHP 4, avec l'introduction d 'une nouvelle règle:
+Si une classe n'a pas de constructeur, le constructeur de la classe de basse est appelé, s 'il existe.
+L'exemple ci-dessus affichera 'Je suis le constructeur de A. br 'en PHP 4.
+?php class A {function A() {echo "Je suis le constructeur de A. br \n";} function B() {echo "Je suis une fonction standard appelée B dans la classe A. br \n"; echo "Je ne suis pas le constructeur de A. br \n";}} class B extends A {function C() {echo "Je suis une fonction standard. br \n";}} / / Cette syntaxe va appeler B() comme constructeur. $b = new B;?
+En PHP 3, la fonction B() de la classe A va soudaiement devenir le constructeur de la classe B, bien qu'il n 'ai pas été prévu pour.
+La règle de PHP 3 est 'Un constructeur est une fonction qui a le même nom que la classe'.
+PHP 3 ne se soucie guère si la fonction est définie dans la classe B ou si elle a été héritée.
+Ceci est corrigé en PHP 4, avec l'introduction d'une nouvelle règle: 'Un constructeur est une classe de même nom, définit dans la classe elle-même '.
+Donc, en PHP 4, la classe B n'a pas de constructeur par elle-même, et le constructeur de la classe A aura été appelé, affichant: 'Je suis le constructeur de A. br '.
+Attention
+Ni PHP 3 ni PHP 4 n 'appelle automatiquement le constructeur de la classe supérieure depuis le constructeur de la classe dérivée.
+Il est de votre responsabilité de propager l 'appel des constructeurs.
+
+Il n 'y a pas de destructeurs en PHP 3 et PHP 4.
+Vous pouvez utiliser la fonction register_shutdown_function() à la place, pour simuler un destructeur.
+Les destructeurs sont des fonctions qui sont appelées lorsqu'un objet est détruit, soit avec la fonction unset() Les destructeurs sont des fonctions qui sont appelées lorsqu'un objet est détruit, soit avec la fonction unset() soit par simple sortie d'une fonction (cas des variables locales).
+Il n 'y a pas de destructeurs en PHP.
+Précédent
+Sommaire
+Suivant
+extends: héritage
+Niveau supérieur
+Opérateur::

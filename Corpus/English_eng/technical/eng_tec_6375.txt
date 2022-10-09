@@ -1,0 +1,54 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Compiling from source
+First, download and install development packages for & kde;, Qt, and X11. Those should be available in your distribution, for example in Debian the package names are kdelibs4-dev, libqt3-mt-dev and xlibs-dev. You may need other development packages as well.
+Getting sources
+Official release
+Download the latest. tar. bz2 from the Files section of & kplayer; project at SourceForge. Then extract it
+tar xjf kplayer-0.6.2. tar. bz2
+The code will be in the kplayer-0.6.2 subdirectory
+cd kplayer-0.6.2
+Current CVS
+Login to SourceForge CVS
+cvs -d: pserver: anonymous@kplayer. cvs. sourceforge. net: / cvsroot/ kplayer login
+and hit & Enter; if it asks for a password. Then download the code
+cvs -z3 -d: pserver: anonymous@kplayer. cvs. sourceforge. net: / cvsroot/ kplayer co -P kplayer
+The code will be in the kplayer subdirectory
+cd kplayer
+Compile, install, run
+Create the configure script
+make -f Makefile. dist
+and run it
+. / configure --prefix ` kde-config --prefix `
+If at this point you are getting errors about missing libraries, you will probably need to install more development packages from your distribution. The configure script is very verbose, you will be able to tell which package you need from its output. If you need even more information, look in the config. log file. You will need to go to the bottom and then scroll a page or two up to get to the point where it reported the error. If everything fails, ask for help on the kplayer; user forum. Do not forget to include the full output of configure and the config. log file.
+Once configure succeeds, compile the code
+make
+If this step fails, you can again ask for help on the kplayer; user forum providing the full output of make.
+Once make finishes, install the program
+su -c 'make install'
+kplayer
+This last command will also produce quite verbose output on your console. This is the output you need to send in if you ever submit a bug report or ask for help.
+Notes
+Mandrake 10
+At least some Mandrake 10 versions put libGL. la in the wrong place, so if the configure script cannot find it, you will have to create a symbolic link
+ln -s / usr/ lib/ libGL. la / usr/ X11R6/ lib/ libGL. la
+Ales Tosovsky wrote a detailed HOWTO in Czech about compiling & kplayer; on Mandrake 10 and translated it into English.
+Fedora Core 2 on x86_64
+Fred successfully compiled & kplayer; on x86_64 using Fedora Core 2 and 2.6.6-1.435.2.3smp kernel. Here is how he ran configure:
+. / configure --prefix=`kde-config --prefix ` --enable-libsuffix=64 --with-qt-includes=/ usr/ lib64/ qt-3.3/ include --with-qt-libraries=/ usr/ lib64/ qt-3.3/ lib
+all on one line of course.

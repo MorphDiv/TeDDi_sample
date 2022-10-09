@@ -1,0 +1,393 @@
+# language_name_wals:	Turkish
+# language_name_glotto:	Turkish
+# ISO_6393:	tur
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/tr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Kullanım Kılavuzu
+Önceki
+Sonraki
+Pattern Syntax
+(unknown)
+Description
+
+
+Differences From Perl
+
+
+
+
+
+
+
+
+
+
+
+
+
+Though binary zero characters are supported in the sub - ject string, they are not allowed in a pattern string because it is passed as a normal C string, terminated by zero.
+The escape sequence "\0" can be used in the pattern to represent a binary zero.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Regular Expression Details
+Introduction
+
+
+
+
+
+
+
+Meta-caracters
+
+
+
+
+backslash
+
+Firstly, if it is followed by a non-alphameric character, it takes away any special meaning that character may have.
+
+
+This applies whether or not the follow - ing character would otherwise be interpreted as a meta - character, so it is always safe to precede a non-alphameric with "\" to specify that it stands for itself.
+
+
+
+
+There is no restriction on the appearance of non-printing charac - ters, apart from the binary zero that terminates a pattern, but when a pattern is being prepared by text editing, it is usually easier to use one of the following escape sequences than the binary character it represents:
+
+
+
+
+
+
+
+
+
+
+
+
+Inside a character class, or if the decimal number is greater than 9 and there have not been that many capturing subpatterns, PCRE re-reads up to three octal digits follow - ing the backslash, and generates a single byte from the least significant 8 bits of the value.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end of subject (independent of multiline mode)
+
+
+
+
+
+Circumflex and dollar
+
+
+
+
+
+
+The meaning of dollar can be changed so that it matches only at the very end of the string, by setting the PCRE_DOLLAR_ENDONLY option at compile or matching time.
+
+
+
+
+
+
+
+FULL STOP
+
+
+
+
+Square brackets
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+All non-alphameric characters other than\, -, ^ (at the start) and the terminating] are non-special in character classes, but it does no harm if they are escaped.
+Vertical bar
+
+
+Any number of alter - natives may appear, and an empty alternative is permittedAny number of alter - natives may appear, and an empty alternative is permitted (matching the empty string).
+
+
+Internal option setting
+
+
+
+
+
+
+
+In other words, such "top level" set - tings apply to the whole pattern (unless there are otherIn other words, such "top level "set - tings apply to the whole pattern (unless there are other changes inside subpatterns).
+If there is more than one set - ting of the same option at top level, the rightmost setting is used.
+
+
+
+
+
+
+
+There would be some very weird behaviour oth - erwise.
+
+
+
+subpatterns
+
+Marking part of a pattern as a subpat - tern does two things:
+
+
+For example, the pat - tern cat( aract|erpillar|) matches one of the words "cat", "cataract", or "caterpil-For example, the pat - tern cat(aract|erpillar|) matches one of the words "cat", "cataract", or "caterpil - lar ".
+
+
+
+When the whole pattern matches, that por - tion of the subject string that matched the subpattern is passed back to the caller via the ovector argument of pcre_exec().
+Opening parentheses are counted from left to right (starting from 1) to obtain the numbers of the captur - ing subpatterns.
+
+
+There are often times when a grouping sub-There are often times when a grouping sub - pattern is required without a capturing requirement.
+
+
+The maximum number of captured sub - strings is 99, and the maximum number of all subpatterns, both capturing and non-capturing, is 200.
+
+
+
+Repetition
+
+
+
+
+
+
+
+For example, {,6} is not a quantif - ier, but a literal string of four characters.
+
+
+
+By default, the quantifiers are "greedy", that is, they match as much as possible (up to the maximum number of per - mitted times), without causing the rest of the pattern toBy default, the quantifiers are "greedy", that is, they match as much as possible (up to the maximum number of per - mitted times), without causing the rest of the pattern to fail.
+
+
+An attempt to match C com - ments by applying the pattern / \*.*\* / to the string / * first command * / not comment / * second comment * / fails, because it matches the entire string due to the greediness of the .* item.
+
+The meaning of the various quantifiers is not otherwise changed, just the pre-The meaning of the various quantifiers is not otherwise changed, just the pre - ferred number of matches.
+
+
+
+
+When a parenthesized subpattern is quantified with a minimum repeat count that is greater than 1 or with a limited max - imum, more store is required for the compiled pattern, in proportion to the size of the minimum or maximum.
+If a pattern starts with .* or .{ 0,} and the PCRE_DOTALL option (equivalent to Perl's / s) is set, thus allowing the. to match newlines, then the pattern is implicitly anchored, because whatever follows will be tried against every charac - ter position in the subject string, so there is no point in retrying the overall match at any position after the first.
+
+In cases where it is known that the subject string contains no newlines, it is worth setting PCRE_DOTALL when the pat - tern begins with .* in order to obtain this optimization, or alternatively using ^ to indicate anchoring explicitly.
+
+For exam - ple, after (tweedle[dume]{3}\s*) + has matched "tweedledum tweedledee "the value of the cap-For exam - ple, after (tweedle[dume]{3}\s*) + has matched "tweedledum tweedledee" the value of the cap - tured substring is "tweedledee ".
+
+For exam - ple, after / (a|(b))+ / matches "aba "the value of the second captured substring is "b".
+BACK REFERENCES
+
+
+
+See the section entitled "Backslash" above for further details of the han - dling of digits following a backslash.
+A back reference matches whatever actually matched the cap - turing subpattern in the current subject string, rather thanA back reference matches whatever actually matched the cap - turing subpattern in the current subject string, rather than anything matching the subpattern itself.
+So the pattern (sens|respons)e and \1ibility matches "sense and sensibility "and "response and responsi-So the pattern (sens|respons)e and \1ibility matches "sense and sensibility" and "response and responsi - bility", but not "sense and responsibility ".
+
+For example, ((?i)rah)\s+\1 matches "rah rah "and "RAH RAH", but not "RAH rah", even though the original capturing subpattern is matched case - lessly.
+There may be more than one back reference to the same sub-There may be more than one back reference to the same sub - pattern.
+
+
+
+
+
+
+
+
+For example, the pat - tern (a|b\1)+For example, the pat - tern (a|b\1) + matches any number of "a"s and also "aba", "ababaa "etc.
+At each iteration of the subpattern, the back reference matches the character string corresponding to the previous itera-At each iteration of the subpattern, the back reference matches the character string corresponding to the previous itera - tion.
+
+
+Assertions
+
+
+More compli-More compli - cated assertions are coded as subpatterns.
+
+
+
+
+
+
+Lookbehind assertions start with (? = for positive asser-Lookbehind assertions start with (? = for positive asser - tions and (?! for negative assertions.
+
+
+
+
+Branches that match dif - ferent length strings are permitted only at the top level ofBranches that match dif - ferent length strings are permitted only at the top level of a lookbehind assertion.
+
+An assertion such as (? =ab(c|de)) is not permitted, because its single top-level branch can match two different lengths, but it is acceptable if rewrit - ten to use two top-level branches: (? =abc|abde) The implementation of lookbehind assertions is, for each alternative, to temporarily move the current position backAn assertion such as (? =ab(c|de)) is not permitted, because its single top-level branch can match two different lengths, but it is acceptable if rewrit - ten to use two top-level branches: (? =abc|abde) The implementation of lookbehind assertions is, for each alternative, to temporarily move the current position back by the fixed width and then try to match.
+
+Lookbehinds in conjunction with once-only subpatterns can be particularly useful for match - ing at the ends of strings; an example is given at the end of the section on once-only subpatterns.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Once-only subpatterns
+
+
+
+
+
+Back - tracking past it to previous items, however, works as nor - mal.
+An alternative description is that a subpattern of this type matches the string of characters that an identical stan - dalone pattern would match, if anchored at the current point in the subject string.
+
+Simple cases such as the above example can be thought of as a max-Simple cases such as the above example can be thought of as a max - imizing repeat that must swallow everything it can.
+
+This construction can of course contain arbitrarily compli - cated subpatterns, and it can be nested.
+
+
+
+
+
+
+
+
+For long strings, this approach makes a significant difference to the process - ing time.
+When a pattern contains an unlimited repeat inside a subpat - tern that can itself be repeated an unlimited number of times, the use of a once-only subpattern is the only way to avoid some failing matches taking a very long time indeed.
+The pattern (\D+ | \d + )*[!?] matches an unlimited number of substrings that either con - sist of non-digits, or digits enclosed in, followed byThe pattern (\D+ | \d + )*[!?] matches an unlimited number of substrings that either con - sist of non-digits, or digits enclosed in, followed by either! or?.
+
+
+This is because the string can be divided between the two repeats in a large number of ways, and all have to be tried. (The exam - ple used [!?] rather than a single character at the end, because both PCRE and Perl have an optimization that allowsThis is because the string can be divided between the two repeats in a large number of ways, and all have to be tried. (The exam - ple used [!?] rather than a single character at the end, because both PCRE and Perl have an optimization that allows for fast failure when a single character is used.
+They remember the last single character that is required for a match, and fail early if it is not present in the string.) If the pattern is changed to ((? \D+) | \d + )*[!?] sequences of non-digits cannot be broken, and failure hap - pens quickly.
+Conditional subpatterns
+It is possible to cause the matching process to obey a sub - pattern conditionally or to choose between two alternative subpatterns, depending on the result of an assertion, orIt is possible to cause the matching process to obey a sub - pattern conditionally or to choose between two alternative subpatterns, depending on the result of an assertion, or whether a previous capturing subpattern matched or not.
+The two possible forms of conditional subpattern are (?(condition)yes-pattern) (?(condition)yes-pattern|no-pattern) If the condition is satisfied, the yes-pattern is used; oth-The two possible forms of conditional subpattern are (?(condition)yes-pattern) (?(condition)yes-pattern|no-pattern) If the condition is satisfied, the yes-pattern is used; oth - erwise the no-pattern (if present) is used.
+
+
+
+Consider the following pat - tern, which contains non-significant white space to make it more readable (assume the PCRE_EXTENDED option) and to divide it into three parts for ease of discussion: (\ ()? [^()] + (?(1)\)) The first part matches an optional opening parenthesis, and if that character is present, sets it as the first capturedConsider the following pat - tern, which contains non-significant white space to make it more readable (assume the PCRE_EXTENDED option) and to divide it into three parts for ease of discussion: (\ ()? [^()] + (?(1)\)) The first part matches an optional opening parenthesis, and if that character is present, sets it as the first captured substring.
+
+
+
+
+
+
+
+Consider this pattern, again contain - ing non-significant white space, and with the two alterna - tives on the second line: (?(?=[^a-z]*[a-z]) \d{2} -[a-z]{3}-\d{2} | \d{2}-\d{2}-\d{2}) The condition is a positive lookahead assertion that matchesConsider this pattern, again contain - ing non-significant white space, and with the two alterna - tives on the second line: (?(?=[^a-z]*[a-z]) \d{2} -[a-z]{3}-\d{2} | \d{2}-\d{2}-\d{2}) The condition is a positive lookahead assertion that matches an optional sequence of non-letters followed by a letter.
+
+
+
+Comments
+
+
+
+
+Recursive patterns
+
+
+
+
+
+
+
+
+This particular example pattern contains nested unlimited repeats, and so the use of a once-only subpattern for match - ing strings of non-parentheses is important when applyingThis particular example pattern contains nested unlimited repeats, and so the use of a once-only subpattern for match - ing strings of non-parentheses is important when applying the pattern to strings that do not match.
+
+However, if a once-only sub - pattern is not used, the match runs for a very long time indeed because there are so many different ways the + and * repeats can carve up the subject, and all have to be tested before failure can be reported.
+
+
+
+
+
+Performances
+
+
+
+
+
+
+
+
+
+
+
+
+Consider the pattern fragment (a+)* This can match "aaaa "in 33 different ways, and this number increases very rapidly as the string gets longer. (The * repeat can match 0, 1, 2, 3, or 4 times, and for each of those cases other than 0, the + repeats can match different numbers of times.) When the remainder of the pattern is such that the entire match is going to fail, PCRE has in princi - ple to try every possible variation, and this can take an extremely long time.
+
+
+
+
+
+Önceki
+Baþlangýç
+Sonraki
+
+Yukarý
+qtdom functions

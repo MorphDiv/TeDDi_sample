@@ -1,0 +1,157 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Introducción a las bases de datos
+¿Qué es una base de datos?
+Puede definir una base de datos como una colección de datos sobre un tema. Se organiza de forma que se permite navegar fácilmente por la información, realizar cambios o añadir elementos nuevos.
+Puede ver este diagrama si quiere acceder a un o más de los ejemplos anteriores: una libreta de teléfonos sencilla.
+Un diagrama de base de datos de números telefónicos
+Un diagrama de base de datos de números telefónicos
+La imagen de arriba muestra un conjunto con dos contactos, cada uno de los cuales se presenta en una tarjeta individual. Parece que esa tarjeta puede constituir una línea sencilla de una tabla:
+Tabla Contactos
+Nombre
+Nº tel.
+Juan
+799 23 43 12
+Adán
+711 19 77 21
+Términos y definiciones: Un solo dato constituye una parte de una colección mayor que se puede llamar fila o, usando un término más profesional, registro. La colección se suele llamar tabla. Además, el nombre más natural para la tabla es la que describe los datos que se ofrecen o que se almacenan es Contactos. Además, cada línea de la tabla consta de columnas, a menudo llamadas campos. En la tabla Contactos hay dos columnas (campos): Nombre y Nº tel..
+Para usos sencillos, una sola tabla puede constituir una base de datos. Mucha gente considera que ambos son equivalentes. Como podrá ver, las bases de datos reales necesitan más de una tabla.
+En resumen, ya tiene una base de datos sencilla con una tabla Contactos.
+Base de datos y hojas de cálculo
+Es muy probable que haya utilizado alguna aplicación de hoja de cálculo como KSpread, OpenOffice. org Calc o Microsoft Excel. Si es así, quizás se pregunte: si tanto las hojas de cálculo como las bases de datos tienen tablas, ¿por qué debo usar estas últimas?
+Al comparar las hojas de cálculo con las bases de datos se pueden destacar los siguientes puntos, que se analizar posteriormente:
+Integridad de datos referencial
+Redundancia de datos
+Integridad y validación de datos
+Limitar la vista de datos
+Rendimiento y capacidad
+Entrada de datos adecuados
+Informes
+Programación
+Usos varios
+Seguridad
+¿En qué se diferencia una base de datos de una hoja de cálculo?
+Para aumentar gradualmente la capacidad de un teléfono móvil, expanda la tabla Contactos añadiendo una columna (campo) Dirección. Añada más números de teléfono (oficina, casa) para cada persona y añada apellidos a los nombres. Para que sea más sencillo, asumamos lo siguiente:
+la tabla está limitada a dos personas (obviamente, podría haber cientas o miles de ellas en una base de datos real)
+no hay dos personas con el mismo nombre y apellidos
+Tabla de contactos
+Nombre y apellidos
+Tel
+Dirección
+María Ejemplo
+Calle Larga 1, Córdoba
+Adán Prueba
+Mérida, Paseo Marítimo 5
+110 98 98 00
+Calle Larga 1
+Ejemplo María
+312 43 42 22
+Sevilla, Calle Larga 1
+ADÁN Prueba
+231 83 02 04
+Paseo Marítimo 5, Mérida
+Una tabla así puede existir tanto en una hoja de cálculo como en una base de datos. Utilizar una hoja de cálculo es muy fácil, por supuesto. ¿Qué problemas hay en esta fase?
+Integridad referencia de datos
+Supongamos que va a utilizar una hoja de cálculo y que tiene que cambiar la dirección de al menos una persona. Tiene un pequeño problema: probablemente tenga que cambiar la dirección en varias líneas. Por ejemplo, María aparece en tres líneas. Se produciría un problema si olvida cambiar una de las líneas. Las direcciones asignadas a esta persona es ambigua, por tanto sus datos pierden la integridad.
+Además, no hay una forma sencilla de eliminar una única persona de la tabla, porque tiene que borrar todas las filas relativas a esa persona.
+Redundancia de datos
+Está directamente relacionado con el problema anterior. En los campos Nombre y apellidos y Dirección se han introducido varias veces los mismos datos. Esto es algo habitual en las hojas de cálculo, una forma poco eficiente de almacenar los datos, porque la base de datos crecería innecesariamente, por lo que necesitaría más recursos de computación (datos de mayor tamaño y un menor tiempo de acceso).
+¿Cómo puede solucionar estos problemas con una base de datos? Puede dividir la información en unidades de menor tamaño creando la tabla adicional Personas, con sólo dos columnas: Nombre y apellidos y Dirección:
+Tabla Personas
+Cada fila de la tabla Personas se corresponde con una única persona. La tabla Contactos está relacionada desde ahora con la tabla Personas.
+Integridad y validación de datos
+Fíjese en la forma de introducir los datos en los campos Nombre y apellidos y Dirección. La gente que introduce los datos puede cometer errores, a veces incluso neglicencias. En nuestro ejemplo, tenemos una secuencia diferente para introducir el nombre y los apellidos (María Ejemplo y Ejemplo María, Adán y ADÁN) y muchas más formas de introducir la misma dirección. Probablemente pueda pensar en muchas otras formas.
+Los problemas anteriores muestran que, al buscar & eg; el número telefónico de una persona cuya dirección es « Calle Larga 1, Córdoba », no se obtendrá un resultado completo. Sólo se obtendrá una fila, en lugar de tres. Además, no podrá encontrar todos los números de teléfono cuando busque el valor « María García » en el campo Nombre y apellidos, porque « García María » no coincide con « María García ».
+¿Cómo puede solucionar estos problemas usando una base de datos? Puede hacerlo cambiando el diseño de la tabla Personas por:
+Dividir los datos del campo Nombre y apellidos en dos campos distintos: Nombre y Apellidos.
+Dividir los datos del campo Dirección en tres campos distintos: Calle, Número de la casa y Ciudad.
+Garantizar la exactitud de los datos: para asegurarse de que no hay campos vacíos y de que, & eg;, siempre se debe introducir el número de la casa.
+Una tabla modificada tiene un aspecto parecido a:
+Tabla de personas
+Nombre
+Apellidos
+Calle
+Número de la casa
+Ciudad
+Ejemplo
+Calle Larga
+1
+Córdoba
+Prueba
+Paseo Marítimo
+5
+Mérida
+Condiciones
+campo obligatorio
+Mediante la condición campo obligatorio se puede asegurar que los datos introducidos forman un todo completo. En el caso de otras tablas, por supuesto puede permitir la omisión de algunos campos al introducir los datos.
+Limitar la vista de datos
+Una hoja de cálculo muestra todas las líneas y las columnas de la tabla, que a veces puede ser molesto en las hojas enormes de datos. Por supuesto, puede filtrar y ordenar las líneas de la hoja de cálculo, aunque debe extremar los cuidados cuando vaya a hacerlo. Los usuarios de la hoja de cálculo pueden olvidar que la vista de datos se ha filtrado, lo que puede inducir a cometer errores. Por ejemplo, para calcular las sumas puede pensar que tiene 100 filas de datos aunque, de hecho, hay 20 filas ocultas más.
+Si quiere trabajar con un pequeño subconjunto de los datos, & eg;, para enviarlos para que otras personas los puedan editar, puede copiarlos y pegarlos en otra hoja de cálculo y, después de modificarlos, volver a pegar los datos editados en la hoja de cálculo principal. Esta edición « manual » puede provocar la pérdida de datos o cálculos incorrectos.
+Para limitar la vista de datos, las aplicaciones de base de datos ofrecen consultas, formularios e informes.
+Una forma muy práctica de limitarla es extender la versión anteriormente descrita de la tabla Personas:
+Sueldo
+2300
+1900
+Asumamos que la nueva columna Sueldo contiene datos confidenciales. ¿Cómo puede compartir, & eg;, los detalles del contacto de las personas con sus compañeros de trabajo sin mostrar su sueldo? Es posible si comparte sólo una consulta y no la tabla completa. La consulta podría seleccionar todas las columnas, salvo la de Sueldo. En la jerga de las bases de datos, este tipo de consulta se suele denominar vista.
+Rendimiento y capacidad
+Su computador probablemente sea bastante rápido. Sin embargo, puede ralentizarse algo si utiliza hojas de cálculo muy grandes. Su baja eficiencia reside en primer lugar en la carencia de índices que aceleren el proceso de búsqueda de los datos (las bases de datos sí que ofrecen índices). Además, si va a realizar operaciones como copiar al portapapeles del sistema, incluso la copia de datos puede resultar problemática en algunas ocasiones.
+Las hojas de cálculo que contienen conjuntos de datos muy grandes tardan mucho tiempo en abrirse. Una hoja de cálculo carga multitud de datos en la memoria del computador al abrirse. La mayor parte de los datos que se cargan posiblemente sean innecesarios y no se utilicen en ese momento. Las bases de datos, a diferencia de las hojas de cálculo, cargan los datos almacenados en el computador sólo cuando los necesita.
+En la mayor parte de las ocasiones, no tendrá que preocuparse de cómo se almacenan los datos en la base de datos. Esto significa que, a diferencia de las hojas de cálculo, las bases de datos no se preocupan de:
+La secuencia de las filas, porque puede ordenar las líneas según sus necesidades. Además, puede ver los mismos datos en diversas vistas con diferente ordenación.
+Lo mismo se aplica también a las columnas (campos) de la tabla.
+Junto con Limitar la vista de datos que se describió en el párrafo anterior, estas cualidades suponen una ventaja en las bases de datos.
+Entrada de datos
+Las últimas ediciones de las aplicaciones para crear hojas de cálculo le permiten diseñar formularios para introducir datos. Este tipo de formularios son los más utilizados cuando los datos no se pueden visualizar adecuadamente en la vista de tabla, & eg;, si el texto ocupa demasiadas líneas o si todas las columnas no caben en la pantalla.
+En este caso, la forma en la que funciona la hoja de cálculo es problemática. Los campos para la entrada de la base de datos presentan dificultades para ubicarlos en la hoja de cálculo, y suelen ser poco seguros frente a la manipulación (intencionada o accidental) del usuario.
+Informes
+Las bases de datos permiten la agrupación, la limitación y la combinación de los datos de un formulario en un informe. Las hojas de cálculo se suelen imprimir como pequeñas tablas sin control automático detallado de las divisiones de página y de la disposición de los campos.
+Programación
+Las aplicaciones para crear bases de datos suelen ofrecer lenguajes de programación. Las hojas de cálculo más recientes también tienen estas capacidades, pero reducen la capacidad de modificar los campos de la hoja de cálculo y la copia de datos sencilla, sin olvidar la relevancia de las reglas de identidad que se mencionaron en los párrafos anteriores.
+El procesamiento de datos en la hoja de cálculo se suele hacer con una interfaz gráfica de usuario, que puede reducir la velocidad de procesamiento de los datos. Las bases de datos pueden trabajar en segundo plano, sin interfaces de usuario.
+Usos varios
+Es difícil imaginar varios usos para una hoja de cálculo. Aunque es técnicamente posible en las aplicaciones más recientes, necesita mucha disciplina, atención y conocimientos por parte de los usuarios, algo que no se puede garantizar.
+Una forma clásica de compartir los datos almacenados en una hoja de cálculo con otras personas es enviar un archivo completo (normalmente, por correo electrónico) o proporcionar un archivo de hoja de cálculo en una red de computadores. Esta forma de trabajar en poco eficaz para grupos de muchas personas: los datos que pueden ser necesarios en un momento los puede tener bloqueados otra persona.
+Por otro lado, las bases de datos se han diseñado pensando que puede haber varios usuarios accediendo a los datos. Incluso en la versión más simple, es posible bloquear una fila de un tabla en concreto, lo que hace posible compartir los datos de la tabla.
+Seguridad
+Asegurar una hoja de cálculo o alguna de sus secciones con una contraseña es una mera actividad simbólica. Después de distribuir un archivo de hoja de cálculo por una red de computadores, la gente puede copiar el archivo e intentar averiguar la contraseña. A veces no es tan difícil, porque la contraseña está almacenada en el mismo archivo que la hoja de cálculo.
+Las características para editar los bloqueos o para bloquear la copia de una hoja de cálculo (o parte de ella) es igual de fácil de eludir.
+Las bases de datos (salvo que estén almacenadas en un archivo en lugar de en un servidor) no suelen estar disponibles en un único archivo. Se suele acceder a ellas usando una red de computadores, normalmente proporcionando un nombre de usuario y una contraseña. Obtiene acceso sólo a esas áreas (tablas, formularios o incluso filas y columnas seleccionadas) que le han sido asignadas para definir los adecuados derechos de acceso.
+Los derechos de acceso pueden afectar a la capacidad para editar datos o para acceder a los datos. Si hay datos a los que no puede acceder, y no se los han enviado al computador, no tiene la posibilidad de hacer una copia de los datos de una forma tan fácil como en los archivos de hoja de cálculo.
+Diseño de la base de datos
+El diseño de bases de datos necesita una planificación adecuada. Por ejemplo, el rediseño de la tabla Contactos propuesto en la sección 1.2 puede generar problemas cuando la tabla está rellena de datos. Por ejemplo, cambiar el nombre de un campo es una tarea sencilla, pero dividir el campo Dirección en dos campos distintos requiere un trabajo minucioso y tedioso.
+Para evitar este tipo de situaciones, piense bien el proyecto de base de datos antes de crearlo en el computador, y antes de que otras personas empiecen a usarlo. Por tanto, invertir algo de tiempo al principio probablemente le ahorre mucho tiempo en el futuro.
+¿Quién necesita una base de datos?
+Las hojas de cálculo son adecuadas si:
+Tiene unas necesidades limitadas y nunca va a tener que gestionar grandes volúmenes de datos (¿puede pronosticarlo ahora?)
+No puede adquirir la metodología de construcción de bases de datos. Sin embargo, puede subcontratar esta tarea o usar herramientas más sencillas.
+Usa hojas de cálculo complejas y no dispone del tiempo o del dinero necesario para pasar a bases de datos. Piense entonces (o consulte con algún experto) si esta situación no le conduce a un callejón sin salida. No cuenta con herramientas mágicas que hagan la transición de sus hojas de cálculo (no importa lo bien que estén hechas) en una base de datos.
+Puede considerar el uso de bases de datos si:
+Su colección de datos se expande cada semana.
+A menudo crea hojas de cálculo nuevas, copia los datos de las antiguas y siente que su trabajo se vuelve cada vez más tedioso. En ese caso, el esfuerzo de pasar a las bases de datos está sobradamente pagado.
+Suele crear informes y estadillos para los que no encajan la vista de tabla de una hoja de cálculo. Entonces, puede considerar pasar a una base de datos con vistas y formularios.
+Programas para crear bases de datos
+Acaba de aprender las características generales de las bases de datos sin entrar en mucho detalle de las aplicaciones específicas para diseñarlas.
+Las primeras bases de datos se construyeron para computadores mainframe enormes en los años 60, & eg;, IBM System/ 360. En ese tiempo, no había PCs, y esas bases de datos necesitaban personal altamente cualificado. Aunque el hardware de los computadores antiguos era poco fiable, era mucho más lento y tenía menos capacidad de almacenamiento, una característica de las bases de datos antiguas sigue resultando muy atractiva: muchos usuarios podían acceder a los datos mediante una red.
+En los años 70, los científicos formularon la teoría de las bases de datos relacionales (con términos como: tabla, registro, columna (campo) y cardinalidad, entre muchos otros). Basándose en esta teoría, se crearon las bases de datos IBM DB2 y Oracle, que se han seguido desarrollando hasta nuestros días. A finales de los 70 se construyeron los primeros PCs. Sus usuarios podían (gradualmente) utilizar muchos tipos de aplicaciones, entre las que se incluyen las de construcción de bases de datos.
+En lo referente a bases de datos enormes para empresas, la situación no ha cambiado: necesitan computadores potentes o complejos llamados clusters. Sin embargo, este tema supera los objetivos de este manual.
+El el área de bases de datos « accesibles » con interfaz gráfica de usuario para PCs, puede elegir entre las siguientes:
+DBase: una herramienta para operar con bases de datos para DOS, muy popular en los años 80. Los archivos en formato DBase aún se emplean en algunos casos específicos, debido a su simpleza.
+FoxPro: una aplicación similar a DBase (primeros años de los 90). Microsoft la adquirió y la dotó de un interfaz gráfico de usuario y se utilizó para crear bases de datos en PCs. Este producto aún sigue en el mercado, aunque parece un poco obsoleto.
+Microsoft Access: Una aplicación para bases de datos (diseño y manipulación de datos mediante una interfaz gráfica) con muchas simplificaciones, que las hacían adecuadas para los principiantes, diseñada a finales de los años 80, basada en una arquitectura de 16 bits. En la actualidad, se sigue ofreciendo este producto y su uso está muy extendido, especialmente en empresas pequeñas, en las que no son requisitos ni la eficiencia ni un sistema multiusuario.
+FileMaker: Aplicación popular y muy similar a MS Access por su simplicidad, que funciona en plataformas Windows y Macintosh, publicada en 1985.
+kexi;: Una aplicación multiplataforma (Unix/ Linux, Windows, Mac OS X) diseñada en 2003, desarrollada según los principios del software libre, parte del proyecto global K Desktop Environment, & ie; un entorno gráfico para sistemas Unix/ Linux. Uno de los participantes más destacados en el desarrollo de & kexi; es la empresa OpenOffice Polonia.

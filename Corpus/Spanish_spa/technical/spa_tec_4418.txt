@@ -1,0 +1,64 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Capítulo 7.
+
+Siguiente
+PHP no requiere (o soporta) la declaración explícita del tipo en la declaración de variables; el tipo de una variable se determina por el contexto en el que se usa esa variable.
+Esto quiere decir que si se asigna un valor de cadena a la variable var, var se convierte en una cadena.
+Si después se asigna un valor entero a la variable var, se convierte en una variable entera.
+Un ejemplo de conversión de tipo automática en PHP3 es el operador suma '+'.
+Si cualquiera de los operandos es un doble, entonces todos los operandos se evalúan como dobles, y el resultado será un doble.
+En caso contrario, los operandos se interpretarán como enteros, y el resultado será también un entero.
+Nótese que esto NO cambia los tipos de los operandos propiamente dichos; el único cambio está en cómo se evalúan los operandos.
+$foo = "0"; / / $foo es una cadena (ASCII 48) $foo++; / / $foo es la cadena "1" (ASCII 49) $foo += 1; / / $foo ahora es un entero (2) $foo = $foo + 1.3; / / $foo ahora es un doble (3.3) $foo = 5 + "10 Cerditos Pequeñitos"; / / $foo es entero (15) $foo = 5 + "10 Cerditos"; / / $foo es entero (15)
+Si los últimos dos ejemplos anteriores parecen confusos, vea Conversión de cadenas.
+Si se desea obligar a que una variable sea evaluada con un tipo concreto, mire la sección Forzado de tipos.
+Si se desea cambiar el tipo de una variable, vea la función settype().
+Si quisiese probar cualquiera de los ejemplos de esta sección, puede cortar y pegar los ejemplos e insertar la siguiente línea para ver por sí mismo lo que va ocurriendo:
+echo "\$foo==$foo; el tipo es". gettype ($foo). "br \n";
+Nota:
+La posibilidad de una conversión automática a array no está definida actualmente.
+$a = 1; / / $a es un entero $a[0] = "f"; / / $a se convierte en un array, en el que $a[0] vale "f "
+Aunque el ejemplo anterior puede parecer que claramente debería resultar en que $a se convierta en un array, el primer elemento del cual es 'f', consideremos esto:
+$a = "1"; / / $a es una cadena $a[0] = "f"; / / ¿Qué pasa con los índices de las cadenas? ¿Qué ocurre?
+Dado que PHP soporta indexación en las cadenas vía offsets usando la misma sintaxis que la indexación de arrays, el ejemplo anterior nos conduce a un problema: ¿debería convertirse $a en un array cuyo primer elemento sea "f", o debería convertirse "f" en el primer carácter de la cadena $a?
+Por esta razón, tanto en PHP 3.0.12 como en PHP 4.0b3-RC4, el resultado de esta conversión automática se considera que no está definido.
+Los parches se están discutiendo, de todas formas.
+El forzado de tipos en PHP funciona como en C: el nombre del tipo deseado se escribe entre paréntesis antes de la variable a la que se pretende forzar.
+$foo = 10; / / $foo es un entero $bar = (double) $foo; / / $bar es un doble
+Los forzados de tipo permitidos son:
+(int), (integer) - fuerza a entero (integer)
+(real), (double), (float) - fuerza a doble (double)
+(string) - fuerza a cadena (string)
+(array) - fuerza a array (array)
+(object) - fuerza a objeto (object)
+Nótese que las tabulaciones y espacios se permiten dentro de los paréntesis, así que los siguientes ejemplos son funcionalmente equivalentes:
+$foo = (int) $bar; $foo = (int) $bar;
+Puede no ser obvio que ocurrirá cuando se fuerce entre ciertos tipos.
+Por ejemplo, lo siguiente debería ser tenido en cuenta.
+Cuando se fuerza el cambio de un escalar o una variable de cadena a un array, la variable se convertirá en el primer elemento del array:
+$var = 'ciao'; $arr = (array) $var; echo $arr[0]; / / produce la salida 'ciao'
+Cuando se fuerza el tipo de una variable escalar o de una cadena a un objeto, la variable se convertirá en un atributo del objeto; el nombre del atributo será 'scalar ':
+$var = 'ciao'; $obj = (object) $var; echo $obj - scalar; / / produce la salida 'ciao'
+Anterior
+Inicio
+Siguiente
+Objetos
+Subir

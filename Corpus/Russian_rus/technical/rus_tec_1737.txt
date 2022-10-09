@@ -1,0 +1,90 @@
+# language_name_wals:	Russian
+# language_name_glotto:	Russian
+# ISO_6393:	rus
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Cyrl
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/ru.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Функция CreateUnoListener [время выполнения]
+/text/sbasic/shared/03132000.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe dedr: fixed #i31078#
+Функция CreateUnoListener
+Функция CreateUnoListener [время выполнения]
+Создает экземпляр прослушивающего процесса.
+Во многих интерфейсах Uno можно регистрировать слушателей с помощью особого интерфейса.
+Это позволяет прослушивать определенные события и вызывать нужный метод прослушивания.
+Функция CreateUnoListener ожидает вызванный интерфейс слушателя, а затем передает в этот интерфейс поддерживаемый им объект.
+Затем этот объект передается методу для регистрации слушателя.
+Синтаксис:
+oListener = CreateUnoListener( Префикс, Имя_интерфейса_слушателя )
+Пример:
+В следующем примере используется объект библиотеки Basic.
+Dim oListener
+oListener = CreateUnoListener( &quot; ContListener_ &quot; , &quot; com.sun.star.container.XContainerListener &quot; )
+Методу CreateUnoListener требуется два параметра.
+Первый параметр — префикс, подробное описание которого дается ниже.
+Второй параметр — полное имя интерфейса слушателя, который необходимо использовать.
+Слушателя необходимо добавить к объекту Broadcaster.
+Для этого необходимо вызвать нужный метод.
+В этих методах всегда используется структура &quot; addFooListener &quot; , где &quot; Foo &quot; — тип интерфейса слушателя без &quot; X &quot; .
+В следующем примере метод addContainerListener вызывается для регистрации XContainerListener:
+Dim oLib
+oLib = BasicLibraries.Library1 ' Библиотека Library1 должна существовать
+oLib.addContainerListener( oListener ) ' Регистрация слушателя
+Слушатель зарегистрирован.
+При возникновении события соответствующий слушатель вызывает нужный метод через интерфейс com.sun.star.container.XContainerListener.
+Префикс вызывает зарегистрированных слушателей из подпрограмм Basic.
+Система поддержки исполнения программ Basic выполняет поиск подпрограмм Basic или функций с именем &quot; PrefixListenerMethode &quot; и вызывает их.
+В противном случае происходит ошибка времени выполнения.
+В следующем примере интерфейс слушателя использует следующие методы:
+disposing:
+Основной интерфейс слушателя (com.sun.star.lang.XEventListener): основной интерфейс для всех интерфейсов слушателя
+elementInserted:
+Метод интерфейса com.sun.star.container.XContainerListener
+elementRemoved:
+Метод интерфейса com.sun.star.container.XContainerListener
+elementReplaced:
+Метод интерфейса com.sun.star.container.XContainerListener
+В следующем примере используется префикс ContListener_.
+Таким образом, должны быть выполнены следующие подпрограммы Basic:
+ContListener_disposing
+ContListener_elementInserted
+ContListener_elementRemoved
+ContListener_elementReplaced
+Для каждого типа слушателя существует тип структуры события, содержащий сведений о событии.
+При вызове метода слушателя экземпляр события передается методу в качестве параметра.
+Методы слушателя на Basic могут также вызывать эти события, если в объявлении Sub передается нужный параметр.
+Например:
+Sub ContListener_disposing( oEvent )
+MsgBox &quot; disposing &quot;
+MsgBox oEvent.Dbg_Properties
+End Sub
+Sub ContListener_elementInserted( oEvent )
+MsgBox &quot; elementInserted &quot;
+MsgBox oEvent.Dbg_Properties
+End Sub
+Sub ContListener_elementRemoved( oEvent )
+MsgBox &quot; elementRemoved &quot;
+MsgBox oEvent.Dbg_Properties
+End Sub
+Sub ContListener_elementReplaced( oEvent )
+MsgBox &quot; elementReplaced &quot;
+MsgBox oEvent.Dbg_Properties
+End Sub
+Включать параметр события не требуется, если объект не используется:
+' Минимальное выполнение Sub disposing
+Sub ContListener_disposing
+End Sub
+всегда
+, чтобы предотвращать возникновение ошибок времени выполнения Basic.

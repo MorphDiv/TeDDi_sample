@@ -1,0 +1,62 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+PHP 4 features an automatic build system that 's very flexible.
+All modules reside in a subdirectory of the ext directory.
+In addition to its own sources, each module consists of a config.m4 file, for extension configuration. (for example, see http: / /www.gnu.org / manual / m4 / html_mono / m4.html)
+All these stub files are generated automatically, along with .cvsignore, by a little shell script named ext_skel that resides in the ext directory.
+As argument it takes the name of the module that you want to create.
+The shell script then creates a directory of the same name, along with the appropriate stub files.
+Step by step, the process looks like this:
+:~ / cvs / php4 / ext:. / ext_skel --extname=my_module Creating directory my_module Creating basic files: config.m4 .cvsignore my_module.c php_my_module.h CREDITS EXPERIMENTAL tests / 001.phpt my_module.php [done].
+To use your new extension, you will have to execute the following steps:
+1. $cd..
+2. $vi ext / my_module / config.m4 3. $. / buildconf 4. $. / configure - -[ with|enable ]-my_module 5. $make 6. $. / php -f ext / my_module / my_module.php 7. $vi ext / my_module / my_module.c 8. $make Repeat steps 3-6 until you are satisfied with ext / my_module / config.m4 and step 6 confirms that your module is compiled into PHP.
+Then, start writing code and repeat the last two steps as often as necessary.
+The default config.m4 shown in Example 27-1 is a bit more complex:
+Example 27-1.
+The default config.m4.
+dnl $Id:
+Extending_Zend_Build.xml,v 1.8 2002 / 10 / 10 18:13:11 imajes Exp $dnl config.m4 for extension my_module dnl Comments in this file start with the string 'dnl'. dnl Remove where necessary.
+This file will not work dnl without editing. dnl If your extension references something external, use with: dnl PHP_ARG_WITH( my_module, for my_module support, dnl Make sure that the comment is aligned: dnl [--with-my_module Include my_module support]) dnl Otherwise use enable: dnl PHP_ARG_ENABLE(my_module, whether to enable my_module support, dnl Make sure that the comment is aligned: dnl [--enable-my_module Enable my_module support]) if test "$PHP_MY_MODULE "!= "no"; then dnl Write more examples of tests here... dnl # --with-my_module - check with-path dnl SEARCH_PATH=" / usr / local / usr" # you might want to change this dnl SEARCH_FOR=" / include / my_module.h "# you most likely want to change this dnl if test -r $PHP_MY_MODULE /; then # path given as parameter dnl MY_MODULE_DIR=$PHP_MY_MODULE dnl else # search default path list dnl AC_MSG_CHECKING([for my_module files in default path]) dnl for i in $SEARCH_PATH; do dnl if test -r $i / $SEARCH_FOR; then dnl MY_MODULE_DIR=$i dnl AC_MSG_RESULT(found in $i) dnl fi dnl done dnl fi dnl dnl if test -z "$MY_MODULE_DIR"; then dnl AC_MSG_RESULT([not found]) dnl AC_MSG_ERROR([Please reinstall the my_module distribution]) dnl fi dnl # --with-my_module - add include path dnl PHP_ADD_INCLUDE($MY_MODULE_DIR / include) dnl # --with-my_module - chech for lib and symbol presence dnl LIBNAME=my_module # you may want to change this dnl LIBSYMBOL=my_module # you most likely want to change this dnl PHP_CHECK_LIBRARY($LIBNAME,$LIBSYMBOL, dnl [dnl PHP_ADD_LIBRARY_WITH_PATH($LIBNAME, $MY_MODULE_DIR / lib, MY_MODULE_SHARED_LIBADD) dnl AC_DEFINE(HAVE_MY_MODULELIB,1, []) dnl], [dnl AC_MSG_ERROR([wrong my_module lib version or lib not found]) dnl], [dnl -L$MY_MODULE_DIR / lib -lm -ldl dnl]) dnl dnl PHP_SUBST(MY_MODULE_SHARED_LIBADD) PHP_NEW_EXTENSION(my_module, my_module.c, $ext_shared) fi
+If you' re unfamiliar with M4 files (now is certainly a good time to get familiar), this might be a bit confusing at first; but it's actually quite easy.
+Note:
+Everything prefixed with dnl is treated as a comment and is not parsed.
+The config.m4 file is responsible for parsing the command-line options passed to configure at configuration time.
+This means that it has to check for required external files and do similar configuration and setup tasks.
+The default file creates two configuration directives in the configure script: --with-my_module and --enable-my_module.
+Use the first option when referring external files (such as the --with-apache directive that refers to the Apache directory).
+Use the second option when the user simply has to decide whether to enable your extension.
+Regardless of which option you use, you should uncomment the other, unnecessary one; that is, if you're using --enable-my_module, you should remove support for --with-my_module, and vice versa.
+By default, the config.m4 file created by ext_skel accepts both directives and automatically enables your extension.
+Enabling the extension is done by using the PHP_EXTENSION macro.
+To change the default behavior to include your module into the PHP binary when desired by the user (by explicitly specifying --enable-my_module or --with-my_module), change the test for $PHP_MY_MODULE to == "yes ":
+if test "$PHP_MY_MODULE" == "yes"; then dnl Action..
+PHP_EXTENSION( my_module, $ext_shared) fi
+Note:
+Be sure to run buildconf every time you change config.m4!
+We 'll go into more details on the M4 macros available to your configuration scripts later in this chapter.
+For now, we 'll simply use the default files.
+Prev
+Home
+Next
+Complex Types
+Up
+Creating Extensions

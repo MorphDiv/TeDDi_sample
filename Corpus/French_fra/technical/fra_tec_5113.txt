@@ -1,0 +1,51 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Chapitre 5.
+Sécurité
+Suivant
+PHP est soumis aux règles de sécurité intrinsèques de la plupart des systèmes serveurs: il respecte notamment les droits des fichiers et des dossiers.
+Une attention particulière doit être portée aux fichiers ou dossiers qui sont accessibles à tout le monde, afin de s'assurer qu'ils ne divulguent pas d 'informations critiques.
+Puisque PHP a été fait pour permettre aux utilisateurs d 'accéder aux fichiers, il est possible de créer un script qui vous permet de lire des fichiers tels que / etc / password, de modifier les connexions ethernet, lancer des impressions de documents, etc...
+Cela implique notamment que vous devez-vous assurer que les fichiers accédés par les scripts sont bien ceux qu 'il faut.
+Considérez le script suivant, où l'utilisateur indique qu 'il souhaite effacer un fichier dans son dossier racine.
+Nous supposons que PHP est utilisé comme interface web pour gérer les fichiers, et que l 'utilisateur Apache est autorisé à effacer les fichiers dans le dossier racine des utilisateurs.
+Exemple 5-1.
+Une erreur de vérification de variable conduit à...
+?php / / efface un fichier dans un dossier racine $username = $HTTP_POST_VARS[ 'user_submitted_name']; $homedir = "/ home / $username"; $file_to_delete = "$userfile"; unlink ($homedir / $userfile); echo "$file_to_delete a été effacé !";?
+Exemple 5-2.
+Une attaque du système de fichiers!
+?php / / efface un fichier n'importe où sur le disque dur, / / où l 'utilisateur PHP a accès.
+Si PHP a un accès root: $username = ".. / etc /"; $homedir = "/ home /.. / etc /"; $file_to_delete = "passwd"; unlink (" / home /.. / etc / passwd"); echo "/ home /.. / etc / passwd a été effacé !";?
+Limiter les permissions du l 'utilisateur web PHP.
+Vérifier toutes les variables liées aux chemins et aux fichiers qui sont fournie.
+Exemple 5-3.
+Une vérification renforcée
+?php / / Efface un fichier sur le disque où l'utilisateur à le droit d'aller $username = $HTTP_SERVER_VARS['REMOTE_USER']; / / utilise un mécanisme d'authentification $homedir = "/ home / $username"; $file_to_delete = basename("$userfile"); / / supprime le chemin excédentaire unlink ($homedir / $file_to_delete); $fp = fopen(" / home / logging / filedelete.log" ,"+a"); / /note l'effacement $logstring = "$username $homedir $file_to_delete"; fputs ($fp, $logstring); fclose($fp); echo "$file_to_delete a été éffacé !";?
+Exemple 5-4.
+Vérification de noms de fichier sécurisée
+?php $username = $HTTP_SERVER_VARS[ 'REMOTE_USER'];; $homedir = "/ home / $username"; if (!ereg('^[^. / ][^ / ]*$', $username)) die('Erreur de nom de fichier'); / /meurt, ne SURTOUT pas traiter! / /etc...?
+Suivant votre système d'exploitation, vous devrez protéger un grand nombre de fichiers, notamment les entrées de périphériques, (/ dev / ou COM1), les fichiers de configuration (fichiers / etc / et .ini), les lieux de stockages d'informations (/ home /, My Documents), etc.
+Pour cette raison, il est généralement plus sûr d 'établir une politique qui interdit TOUT sauf ce que vous autorisez.
+Précédent
+Sommaire
+Suivant
+Module Apache
+Niveau supérieur
+Rapport d 'erreur

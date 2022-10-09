@@ -1,0 +1,100 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel utilisateur de & kde;
+2005-09-08 K Desktop Environment
+kabcclient
+1
+kabcclient
+client en ligne de commande pour le carnet d'adresses de & kde;
+kabcclient -A -R -M -S -L --match-case --nosave -ic codec -if format -if-opts format-options -oc codec -of format -of-opts format-options input-data
+Description
+kabcclient permet un accès en ligne de commande au carnet d'adresses de & kde;, par exemple dans les scripts shell. Ce programme travaille sur des éléments en entrée fournis via l'entrée standard ou via des arguments en ligne de commande supplémentaires. Sa sortie est toujours écrite sur la sortie standard.
+Options
+Modes de fonctionnement
+-A, --add
+Ajoute un nouveau contact au carnet d' adresses
+-R, --remove
+Supprime un contact existant du carnet d' adresses
+-M, --merge
+Fusionne les données en entrée avec un contact existant dans le carnet d'adresses. Ceci ajoute toute nouvelle information à celles existant déjà
+-S, --search
+Recherche les contacts correspondants dans le carnet d' adresses
+-L, --list
+Liste tous les contacts du carnet d' adresses
+Options pour l' entrée
+-ic, --input-codec
+Ré-encode le texte en entrée avec l'encodage spécifié. Voyez -ic help pour des informations supplémentaires à propos des codecs en entrée. La valeur par défaut est local qui utilisera le codec pour la configuration actuelle de locale 5
+-if, --input-format
+Interprète le texte en entrée selon des règles établies de formatage. Voyez -if help pour les formats disponibles. La valeur par défaut est search
+Au lieu de lire du texte en entrée, kabcclient peut afficher une boîte de dialogue permettant de sélectionner des contacts. Pour ce faire, utilisez le format d'entrée nommé
+dialog
+-if-opts, --input-format-options
+Options supplémentaires pour le format d'entrée choisi. Paramètre pouvant être optionnel ou obligatoire en fonction du format. Voyez -if-opts help pour les options de formatage disponibles
+Options pour la sortie
+-oc, --output-codec
+Ré-encode le texte en sortie avec l'encodage spécifié. Voyez -oc help pour des informations supplémentaires à propos des codecs en sortie. La valeur par défaut est local qui utilisera le codec pour la configuration actuelle de locale 5.
+-of, --output-format
+Formate le texte en sortie selon des règles établies de formatage. Voyez -of help pour les formats disponibles. La valeur par défaut est vcard
+-of-opts, --output-format-options
+Options supplémentaires pour le format de sortie choisi. Paramètre pouvant être optionnel ou obligatoire en fonction du format. Voyez -of-opts help pour les options de formatage disponibles
+Options supplémentaires
+--match-case
+Effectue une recherche sans tenir compte de la casse lors de la comparaison du texte en entrée avec les contacts
+--nosave
+Pour les opérations de modification d'informations telles -A, -R ou -M, ne les effectuer qu'en mémoire sans répercuter les modifications dans le carnet d' adresses
+Diagnostiques
+Comme d'habitude, un code de retour valant zéro indique un succès. En fonction du mode de fonctionnement choisi, un code de retour non nul indique un certain problème rencontré par l' application
+AJOUT
+1
+La lecture du texte en entrée a échoué
+2
+La création d'un contact à partir du texte en entrée a échoué, par exemple à cause d'une absence de données ou d'un mauvais format des données pour le format de données choisi
+3
+L'enregistrement des modifications dans le carnet d'adresses a échoué. Ceci peut par exemple être dû à d'autres applications qui verrouillent actuellement le carnet d'adresses.
+SUPPRESSION
+Le programme n'a pu supprimer aucun contact du carnet d'adresses. Ceci peut être dû à un échec d'analyse du texte en entrée, à l'absence de contact correspondant dans le carnet d'adresses ou du fait d'avoir trouvé plus d'un contact correspondant dans le carnet d'adresses. Pour le dernier cas, un message d'erreur est écrit sur la sortie standard
+FUSION
+Le programme n'a pu fusionner les données fournies avec aucun des contacts du carnet d'adresses. Ceci peut être dû à un échec d'analyse du texte en entrée, à l'absence de contact correspondant dans le carnet d'adresses ou du fait d'avoir trouvé plus d'un contact correspondant dans le carnet d'adresses. Pour le dernier cas, un message d'erreur est écrit sur la sortie standard
+RECHERCHE
+Le programme n'a pu trouver aucun contact correspondant dans le carnet d'adresses. Ceci peut être dû à un échec d'analyse du texte en entrée ou à l'absence de contact correspondant dans le carnet d' adresses
+Exemples
+Rechercher les contacts avec « & #160; Joe & #160; » dans le nom ou l'adresse de courrier électronique
+kabcclient -S Joe
+Effectuer la même opération mais en tenant compte de la casse
+kabcclient --match-case -S Joe
+Effectuer la même opération mais en lisant le texte à chercher depuis l'entrée standard
+echo "Joe" | kabcclient --match-case -S
+Essayer d'ajouter un nouveau contact en utilisant les données d'une adresse formatée de courrier électronique
+kabcclient --nosave --add -if email "Marilyn Monroe & lt; mmonroe@moviestars. comgt;"
+Effectuer la même opération mais cette fois en enregistrant le carnet d'adresses modifié
+kabcclient --add -if email "Marilyn Monroe & lt; mmonroe@moviestars. comgt;"
+Lister les formats d'entrée disponibles
+kabcclient -if help
+Lister les formats de sortie disponibles
+kabcclient -of help
+Lister les options disponibles pour le format de sortie « & #160; email & #160; »
+kabcclient -of email -of-opts help
+Lister toutes les adresses de courrier électronique de tous les contacts contenant « & #160; Marilyn & #160; »
+kabcclient -of email -of-opts allemails -S Marilyn
+Supprimer tous les contacts que l'utilisateur a sélectionné dans la boîte de dialogue de sélection de contacts
+kabcclient --remove -if dialog
+Exporter les contacts sélectionnés dans un fichier au format vCard (format de sortie par défaut)
+kabcclient -S -if dialog & gt; contacts. vcf
+Auteur
+Cette page de manuel a été écrite par Kevin Krammer & lt; kevin. krammer@gmx. atgt;. Il est permis de copier, distribuer et/ ou modifier ce document sous les termes de la Licence Publique Générale GNU, version 2 et toute version ultérieure publiée par la Free Software Foundation.
+Sur les systèmes Debian, le texte intégral de la Licence Publique Générale GNU est disponible dans / usr/ share/ common-licenses/ GPL.

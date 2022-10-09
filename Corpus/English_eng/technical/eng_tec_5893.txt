@@ -1,0 +1,184 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+& Anders. Lund; & Anders. Lund. mail;
+ROLES_OF_TRANSLATORS
+Regular Expressions
+This Appendix contains a brief but hopefully sufficient and covering introduction to the world of regular expressions. It documents regular expressions in the form available within & kate;, which is not compatible with the regular expressions of perl, nor with those of for example grep.
+Introduction
+Regular Expressions provides us with a way to describe some possible contents of a text string in a way understood by a small piece of software, so that it can investigate if a text matches, and also in the case of advanced applications with the means of saving pieces or the matching text.
+An example: Say you want to search a text for paragraphs that starts with either of the names Henrik or Pernille followed by some form of the verb say.
+With a normal search, you would start out searching for the first name, Henrik maybe followed by sa like this: Henrik sa, and while looking for matches, you would have to discard those not being the beginning of a paragraph, as well as those in which the word starting with the letters sa was not either says, said or so. And then of course repeat all of that with the next name...
+With Regular Expressions, that task could be accomplished with a single search, and with a larger degree of preciseness.
+To achieve this, Regular Expressions defines rules for expressing in details a generalization of a string to match. Our example, which we might literally express like this: A line starting with either Henrik or Pernille (possibly following up to 4 blanks or tab characters) followed by a whitespace followed by sa and then either ys or id could be expressed with the following regular expression:
+^[ \ ]{0,4}(Henrik|Pernille) sa(ys|id)
+The above example demonstrates all four major concepts of modern Regular Expressions, namely:
+Patterns
+Assertions
+Quantifiers
+Back references
+The caret (^) starting the expression is an assertion, being true only if the following matching string is at the start of a line.
+The stings [\ ] and (Henrik|Pernille) sa(ys|id) are patterns. The first one is a character class that matches either a blank or a (horizontal) tab character; the other pattern contains first a subpattern matching either Henrik or Pernille, then a piece matching the exact string sa and finally a subpattern matching either ys or id
+The string {0,4} is a quantifier saying anywhere from 0 up to 4 of the previous.
+Because regular expression software supporting the concept of back references saves the entire matching part of the string as well as sub-patterns enclosed in parentheses, given some means of access to those references, we could get our hands on either the whole match (when searching a text document in an editor with a regular expression, that is often marked as selected) or either the name found, or the last part of the verb.
+All together, the expression will match where we wanted it to, and only there.
+The following sections will describe in details how to construct and use patterns, character classes, assertions, quantifiers and back references, and the final section will give a few useful examples.
+Patterns
+Patterns consists of literal strings and character classes. Patterns may contain sub-patterns, which are patterns enclosed in parentheses.
+Escaping characters
+In patterns as well as in character classes, some characters have a special meaning. To literally match any of those characters, they must be marked or escaped to let the regular expression software know that it should interpret such characters in their literal meaning.
+This is done by prepending the character with a backslash (\\).
+The regular expression software will silently ignore escaping a character that does not have any special meaning in the context, so escaping for example a j (\\j) is safe. If you are in doubt whether a character could have a special meaning, you can therefore escape it safely.
+Escaping of course includes the backslash character itself, to literally match a such, you would write\\\\.
+Character Classes and abbreviations
+A character class is an expression that matches one of a defined set of characters. In Regular Expressions, character classes are defined by putting the legal characters for the class in square brackets, [], or by using one of the abbreviated classes described below.
+Simple character classes just contains one or more literal characters, for example [abc] (matching either of the letters a, b or c) or [0123456789] (matching any digit).
+Because letters and digits have a logical order, you can abbreviate those by specifying ranges of them: [a-c] is equal to [abc] and [0-9] is equal to [0123456789]. Combining these constructs, for example [a-fynot1-38] is completely legal (the last one would match, of course, either of a, b, c, d, e, f, y, n, o, t, 1, 2, 3 or 8).
+As capital letters are different characters from their non-capital equivalents, to create a caseless character class matching a or b, in any case, you need to write it [aAbB].
+It is of course possible to create a negative class matching as anything but To do so put a caret (^) at the beginning of the class:
+[^abc] will match any character but a, b or c.
+In addition to literal characters, some abbreviations are defined, making life still a bit easier:
+\\a
+This matches the ASCII bell character (BEL, 0x07).
+\\f
+This matches the ASCII form feed character (FF, 0x0C).
+\
+This matches the ASCII line feed character (LF, 0x0A, Unix newline).
+\\r
+This matches the ASCII carriage return character (CR, 0x0D).
+\ 
+This matches the ASCII horizontal tab character (HT, 0x09).
+\\v
+This matches the ASCII vertical tab character (VT, 0x0B).
+\\xhhhh
+This matches the Unicode character corresponding to the hexadecimal number hhhh (between 0x0000 and 0xFFFF). \\0ooo (ie;, \\zero ooo) matches the ASCII / Latin-1 character corresponding to the octal number ooo (between 0 and 0377).
+. (dot)
+This matches any character (including newline).
+\\d
+This matches a digit. Equal to [0-9]
+\\D
+This matches a non-digit. Equal to [^0-9] or [^\\d]
+\\s
+This matches a whitespace character. Practically equal to [\ \ \\r]
+\\S
+This matches a non-whitespace. Practically equal to [^ \ \\r\], and equal to [^\\s]
+\\w
+Matches any word character - in this case any letter or digit. Note that underscore (_) is not matched, as is the case with perl regular expressions. Equal to [a-zA-Z0-9]
+\\W
+Matches any non-word character - anything but letters or numbers. Equal to [^a-zA-Z0-9] or [^\\w]
+The abbreviated classes can be put inside a custom class, for example to match a word character, a blank or a dot, you could write [\\w\\.]
+The POSIX notation of classes, [: lt; class namegt;:] is currently not supported.
+Characters with special meanings inside character classes
+The following characters has a special meaning inside the [] character class construct, and must be escaped to be literally included in a class:
+]
+Ends the character class. Must be escaped unless it is the very first character in the class (may follow an unescaped caret)
+^ (caret)
+Denotes a negative class, if it is the first character. Must be escaped to match literally if it is the first character in the class.
+- (dash)
+Denotes a logical range. Must always be escaped within a character class.
+\\ (backslash)
+The escape character. Must always be escaped.
+Alternatives: matching one of
+If you want to match one of a set of alternative patterns, you can separate those with | (vertical bar character).
+For example to find either John or Harry you would use an expression John|Harry.
+Sub Patterns
+Sub patterns are patterns enclosed in parentheses, and they have several uses in the world of regular expressions.
+Specifying alternatives
+You may use a sub pattern to group a set of alternatives within a larger pattern. The alternatives are separated by the character | (vertical bar).
+For example to match either of the words int, float or double, you could use the pattern int|float|double. If you only want to find one if it is followed by some whitespace and then some letters, put the alternatives inside a subpattern: (int|float|double)\\s+\\w+.
+Capturing matching text (back references)
+If you want to use a back reference, use a sub pattern to have the desired part of the pattern remembered.
+For example, if you want to find two occurrences of the same word separated by a comma and possibly some whitespace, you could write (\\w+), \\s*\\1. The sub pattern \\w+ would find a chunk of word characters, and the entire expression would match if those were followed by a comma, 0 or more whitespace and then an equal chunk of word characters. (The string \\1 references the first sub pattern enclosed in parentheses)
+Lookahead Assertions
+A lookahead assertion is a sub pattern, starting with either? = or?!.
+For example to match the literal string Bill but only if not followed by Gates, you could use this expression: Bill(?! Gates). (This would find Bill Clinton as well as Billy the kid, but silently ignore the other matches.)
+Sub patterns used for assertions are not captured.
+See also Assertions
+Characters with a special meaning inside patterns
+The following characters have meaning inside a pattern, and must be escaped if you want to literally match them:
+The escape character.
+Asserts the beginning of the string.
+$
+Asserts the end of string.
+() (left and right parentheses)
+Denotes sub patterns.
+{} (left and right curly braces)
+Denotes numeric quantifiers.
+[] (left and right square brackets)
+Denotes character classes.
+| (vertical bar)
+logical OR. Separates alternatives.
++ (plus sign)
+Quantifier, 1 or more.
+* (asterisk)
+Quantifier, 0 or more.
+? (question mark)
+An optional character. Can be interpreted as a quantifier, 0 or 1.
+Quantifiers
+Quantifiers allows a regular expression to match a specified number or range of numbers of either a character, character class or sub pattern.
+Quantifiers are enclosed in curly brackets ({and}) and have the general form {[minimum-occurrences][, [maximum-occurrences]]}
+The usage is best explained by example:
+{1}
+Exactly 1 occurrence
+{0,1}
+Zero or 1 occurrences
+{,1}
+The same, with less work;)
+{5,10}
+At least 5 but maximum 10 occurrences.
+{5,}
+At least 5 occurrences, no maximum.
+Additionally, there are some abbreviations:
+similar to {0,}, find any number of occurrences.
+similar to {1,}, at least 1 occurrence.
+similar to {0,1}, zero or 1 occurrence.
+Greed
+When using quantifiers with no maximum, regular expressions defaults to match as much of the searched string as possible, commonly known as greedy behavior.
+Modern regular expression software provides the means of turning off greediness, though in a graphical environment it is up to the interface to provide you with access to this feature. For example a search dialog providing a regular expression search could have a check box labeled Minimal matching as well as it ought to indicate if greediness is the default behavior.
+In context examples
+Here are a few examples of using quantifiers
+^\\d{4,5}\\s
+Matches the digits in 1234 go and 12345 now, but neither in 567 eleven nor in 223459 somewhere
+\\s+
+Matches one or more whitespace characters
+(bla){1,}
+Matches all of blablabla and the bla in blackbird or tabla
+/ ?gt;
+Matches / gt; in lt; closeditem/ gt; as well as gt; in lt; openitemgt;.
+Assertions
+Assertions allows a regular expression to match only under certain controlled conditions.
+An assertion does not need a character to match, it rather investigates the surroundings of a possible match before acknowledging it. For example the word boundary assertion does not try to find a non word character opposite a word one at its position, instead it makes sure that there is not a word character. This means that the assertion can match where there is no character, & ie; at the ends of a searched string.
+Some assertions actually do have a pattern to match, but the part of the string matching that will not be a part of the result of the match of the full expression.
+Regular Expressions as documented here supports the following assertions:
+^ (caret: beginning of string)
+Matches the beginning of the searched string.
+The expression ^Peter will match at Peter in the string Peter, hey! but not in Hey, Peter!
+$(end of string)
+Matches the end of the searched string.
+The expression you\\? $will match at the last you in the string You did n't do that, did you? but nowhere in You did n't do that, right?
+\\b (word boundary)
+Matches if there is a word character at one side and not a word character at the other.
+This is useful to find word ends, for example both ends to find a whole word. The expression \\bin\\b will match at the separate in in the string He came in through the window, but not at the in in window.
+\\B (non word boundary)
+Matches wherever \\b does not.
+That means that it will match for example within words: The expression \\Bin\\B will match at in window but not in integer or I'm in love.
+(? =PATTERN) (Positive lookahead)
+A lookahead assertion looks at the part of the string following a possible match. The positive lookahead will prevent the string from matching if the text following the possible match does not match the PATTERN of the assertion, but the text matched by that will not be included in the result.
+The expression handy(? =\\w) will match at handy in handyman but not in That came in handy!
+(? !PATTERN) (Negative lookahead)
+The negative lookahead prevents a possible match to be acknowledged if the following part of the searched string does match its PATTERN.
+The expression const \\w+\\b(? !\\s*amp;) will match at const char in the string const char* foo while it can not match const QString in const QStringamp; bar because the amp; matches the negative lookahead assertion pattern.

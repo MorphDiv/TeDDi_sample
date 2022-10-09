@@ -1,0 +1,98 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Configuración de kppp para retrollamada
+Servidor de retrollamada para UNIX o Linux
+Esta sección presenta la retrollamada en UNIX (Linux), y cómo se puede configurar kppp para conectarse con un servidor de retrollamas UNIX, en concreto a un servidor de retrollamada que funciona en Linux y basa su funcionamiento en guiones.
+Una introducción a la retrollamada
+Existen varias razones para considerar utilizar la retrollamada.
+Algunas de ellas son:
+Aumentar la seguridad de su red local
+Reducir gastos de los colaboradores externos
+Controlar los costes telefónicos allí donde las llamadas se consideran gastos empresariales
+Piense en alguien que hace una llamada a su servidor de conexiones entrantes, y que piratea una contraseña. ¿Por qué tanta preocupación en mantener un cortafuegos en su conexión a Internet, si el acceso a su red es tan sencillo?
+Los programas de retrollamada normalmente le pedirán un nombre, y después colgarán la línea.
+A continuación le devolverán la llamada, normalmente a un número que está almacenado en una base de datos del servidor.
+El cliente descuelga el teléfono y continúa con la conexión como si nada hubiera pasado.
+El servidor pide en ese momento el nombre de usuario y la contraseña, para comprobar que usted es quien dijo ser en la primera llamada, o al menos si está donde dijo que estaba.
+La conexión se establece a partir de ese momento con normalidad, y se inicia el servicio pppd.
+Ahora llega la gran pregunta, cómo hacer que el cliente descuelgue el teléfono cuando llame el servidor. ¿Es necesario un programa especial como mgetty?
+La respuesta, no, no hace falta ningún programa especial.
+En general se puede utilizar cualquier cliente para las conexiones de retrollamada, incluso un programa de terminal normal y corriente como minicom.
+Lo único que hay que hacer es enviarle al módem el comando AutoAnswer para que conteste automáticamente cuando detecte que en la línea se ha producido una llamada entrante (RING).
+Esto se hace con el siguiente comando del módem:
+Esto le dice al módem que descuelgue el teléfono al recibir el primer RING.
+Como muchos otros programas cliente, kppp comprueba si la conexión ha sido cerrada por el servidor, y entonces detiene la sesión actual si se detecta un NO CARRIER.
+Esto es, por lo tanto, el problema más grave de la configuración de la retrollamada.
+Es obvio que se detectará un NO CARRIER en el momento en que el servidor de retrollamada cuelgue la línea.
+Algunos servidores utilizan un programa de acceso especial. ¿Cómo resolver este problema?
+Hay que decirle al módem que muestre siempre CARRIER UP (lo que no provoca ningún problema si se le dice al cliente que cuelgue la línea).
+Puede hacer esto con el siguiente comando del módem:
+Si desea problarlo, puede utilizar primero un programa de terminal ordinario como minicom, y llamar al servidor de retrollamada para ver lo que ocurre.
+La configuración de kppp
+Ahora que ya ha visto la teoría, ¿cómo se configura kppp para hacerse cargo de la conexión?
+El proceso es bastante sencillo, como se puede ver.
+Lo primero que hay que hacer es decirle al módem que acepte conexiones, y que no detenga la negociación cuando el servidor de retrollamada corte la comunicación por primera vez.
+Puede añadir estas dos opciones en el apartado Módem de la configuración de kppp, añadiendo a la opción Cadena de marcado la cadena AT&C0S0=1DT
+No hay más cambios que hacer en la configuración de kppp.
+Si tiene problemas con la inicialización y el reinicio del módem, consulte la sección Solución de problemas para más información.
+Piense un momento en el servidor.
+Recuerde que los sistemas operativos UNIX, Windows y Macintosh tienen diferentes opiniones sobre cómo debe terminar una línea en un archivo de texto, y por lo tanto, también en los procesos de acceso al sistema.
+Si está conectando a un servidor Windows, utilice CR / LF, si está conectando a un servidor UNIX, utilice use CR, y si el servidor es un Macintosh, utilice LF
+Asumimos que estas intrucciones son válidas para las llamadas a un sistema de retrollamada de Linux que utiliza el acceso ordinario al sistema (no PAP o similar).
+Establezca a Basada en script la opción de Autenticación en el apartado Marcar de la configuración de cuentas.
+Ahora debe construir el guión de acceso.
+La edición de guiones de acceso es una de las mejores características de kppp.
+Puede encontrarlo en el apartado Script de autenticación en el diálogo Editar conexión.
+En este ejemplo, el usuario userxyz necesita que se llame al siguiente guión.
+El servidor de retrollamada ya conoce la tabla de nombres y sus números de teléfono correspondientes, así que, por motivos de seguridad, se elige con un álias el número de teléfono que será utilizado.
+En cada línea, elija los criterios de la lista desplegable que se encuentra a la izquierda del diálogo, y teclee la acción en la casilla de texto de la derecha.
+Pinche en el botón Añadir para añadir cada línea al guión.
+Puede utilizar el botón Insertar para añadir una línea en el medio del guión, y Eliminar para eliminar una línea en caso de que se haya cometido un error.
+El guión completo debería tener este aspecto (sin los comentarios, que comienzan por #)
+Después de esperar la petición de autenticación, el usuario envía su identificador y espera una lista de los teléfonos disponibles para ese nombre de usuario.
+Entonces le dice al servidor a cuál de los números ofrecidos debe llamar. kppp puede abrir un diálogo para hacer esto, si su localización cambia muy a menudo, e.g. usted es un representante de ventas y se mueve de hotel en hotel.
+Ahora el servidor está a la espera de un nombre de usuario y una contraseña para la autenticación, pero mientrastanto, el servidor cuelga y devuelve la llamada al usuario.
+Se envía la información de autenticación, y kppp espera un símbolo de comandos, y después inicia un pequeño guión (llamado aquí start_ppp) que lanza pppd en el servidor.
+El guión start_ppp podría tener el siguiente aspecto:
+Es obvio que la configuración de un servidor PPP no está dentro de los objetivos de este documento.
+Para tener información detallada, consulte las páginas del manual de pppd.
+Se puede encontrar una excelente descripción de un servidor de retrollamada en http: / /ap-dec717c.physik.uni-karlsruhe.de / ~mh / callback
+El resto de los elementos de la configuración, como la configuración de pppd, o los parámetros de la dirección IP se comportan de manera normal, y no se requiere ningún software especial para su funcionamiento.
+Se puede ejecutar la retrollamada de kppp junto con otros programas como mgetty o cualquier otro servidor de fax en el mismo puerto serie.
+No hay ningún problema con las llamadas entrantes, ya que kppp crea un archivo de bloqueo que informa al programa de fax que hay otra aplicación (en este caso, kppp) utilizando la línea en ese momento.
+Solución de problemas
+Hay algunos problemas comunes relacionados con la retrollamada de kppp:
+Como el módem se inicia en modo auto respuesta, será necesario reiniciarlo una vez cerrada la conexión.
+De otra forma, el módem seguirá descolgando la línea por usted, lo cual no es una buena idea si esa es su línea telefónica principal.
+kppp tiene algunos problemas con la compartición de una línea con otro programa, como mgetty.
+Si mgetty está funcionando en la misma línea de módem, kppp no podrá iniciar el módem correctamente.
+kppp no es capaz de solicitar determinadas entradas del usuario durante el acceso basado en guiones.
+Por desgracia, al utilizar el guión de ejemplo mostrado anteriormente, kppp pide el nombre de usuario la segunda vez que lo pide el servidor de retrollamada.
+Puede evitar esto introduciendo el nombre de usuario manualmente en el guión de acceso (lo cual no queda elegante, pero funciona).
+Recursos en Internet de software servidor
+Hay disponibles conjuntos de software servidor de retrollamada para Linux es diversos lugares.
+El conocido mgetty es un potente programa, y es capaz de manejar conexiones de retrollamada.
+Se puede encontrar una descripción de cómo configurar mgetty para este propósito en http: / /www.dyer.demon.co.uk / slug / tipscrip.htm, la cual está escrita por Colin McKinnon, colin@wew.co.uk.
+También hay un paquete para Linux que se encuentra listo para usar en http: / /www.icce.rug.nl / docs / programs / callback / callback.html.
+Este paquete está mantenido por Frank B.
+Brokken, frank@icce.rug.nl.
+Como la configuración no es especialmente sencilla, he escrito una breve introducción que se encuentra en http: / /ap-dec717c.physik.uni-karlsruhe.de / ~mh / callback /, que además contiene una introducción más general a la retrollamada.
+Retrollamada con RAS de Windows NT
+Windows NT utiliza un método muy diferente al descrito anteriormente.
+NT requiere una extensión del protocolo PPP, llamada CBCP (protocolo de control de retrollamada). pppd soporta este protocolo, pero deberá recompilarlo.
+Si alguien ha conseguido conectarse por medio de retrollamada con un servidor NT, por favor háganoslo saber.

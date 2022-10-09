@@ -1,0 +1,254 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+& traducteurJoelleCornavin;
+Travailler avec la coloration syntaxique
+Vue d' ensemble
+La coloration syntaxique est une fonction qui fait afficher automatiquement du texte à l'éditeur dans différents styles & #160; / & #160; couleurs selon la fonction de la chaîne en rapport avec le but du fichier. Dans le code source d'un programme par exemple, des instructions de contrôle peuvent être rendues en gras, alors que des types de données et des commentaires prennent des couleurs différentes du reste du texte. Ce comportement améliore considérablement la lisibilité du texte et aide ainsi l'auteur à être plus efficace et plus productif.
+Une fonction Perl, rendue avec la coloration syntaxique.
+Une fonction Perl rendue avec la coloration syntaxique.
+La même fonction Perl, sans coloration syntaxique.
+La même fonction Perl, sans coloration syntaxique.
+De ces deux exemples, lequel est le plus facile à lire & #160;?
+& kate; offre un système souple, configurable et performant pour prendre en charge la coloration syntaxique. De plus, la distribution standard fournit des définitions pour un large éventail de langages de programmation, de scriptage et de balisage, ainsi que d'autre formats de fichiers texte. En outre, vous pouvez proposer vos propres définitions dans de de simples fichiers & XML;.
+& kate; détecte automatiquement les règles de coloration syntaxique lorsque vous ouvrez un fichier, en fonction du type & MIME;, déterminé par son extension ou, s'il n'y en a aucune, du contenu. Si vous vous faites un mauvais choix, vous pouvez définir manuellement la syntaxe à utiliser dans le menu Documents Mode de coloration syntaxique.
+Les styles et couleurs utilisés par chaque définition de coloration syntaxique peuvent être configurés à l'aide de la page Apparence de la boîte de dialogue Configuration, alors que les types & #160; MIME; à employer sont pris en charge par la page Coloration syntaxique.
+La coloration syntaxique est là pour améliorer la lisibilité du texte correct, mais vous ne pouvez pas vous y fier pour valider votre texte. La complexité du marquage syntaxique du texte dépend du format que vous utilisez et, dans certains cas, les auteurs des règles de syntaxe seront fiers si 98 & #160;% du texte est correctement rendu, même si la plupart du temps, il vous faut un style rare pour voir les 2 & #160;% incorrects.
+Vous pouvez télécharger des définitions de coloration syntaxique actualisées ou additionnelles sur le site web de & kate; en cliquant sur le bouton « & #160; Télécharger & #160; » dans la page Coloration syntaxique de la boîte de dialogue Configuration.
+Le système de coloration syntaxique de & kate;
+Cette section aborde le mécanisme de coloration syntaxique de & kate; plus en détail. Elle vous est destinée si vous voulez en faire l'apprentissage, changer ou créer des définitions de syntaxe.
+Fonctionnement
+Chaque fois que vous ouvrez un fichier, une des premières tâches de l'éditeur & kate; est de détecter la définition syntaxique à utiliser pour ce fichier. Lors de la lecture du fichier, et lors de sa saisie, le système de coloration syntaxique analyse le texte à l'aide des règles fixées par la définition syntaxique et y marque les endroits où différents contextes et styles commencent et finissent.
+Lorsque vous saisissez le document, le nouveau texte est analysé et marqué à la volée, de sorte que si vous supprimez un caractère qui est marqué comme étant le commencement ou la fin d'un contexte, le style du texte environnant change en conséquence.
+Les définitions syntaxiques que le système de coloration syntaxique de & kate; utilise sont des fichiers & XML; contenant
+Des règles pour détecter le rôle du texte, organisé en blocs de contexte
+Des listes de mots-clés
+Des définitions d'éléments de style
+Lors de l'analyse du texte, les règles de détection sont évaluées dans l'ordre dans lequel elles sont définies et, si le début de la chaîne actuelle correspond à une règle, le contexte apparenté est utilisé. Le point de départ dans le texte est déplacé vers le point final auquel cette règle correspondait et une nouvelle itération des règles commence, en partant du contexte établi par la règle correspondante.
+Règles
+Les règles de détection sont le fondement du système de détection de la coloration syntaxique. Une règle est une chaîne, un caractère ou une expression rationnelle par rapport à quoi faire correspondre le texte en cours d'analyse. Elle contient des informations sur le style à utiliser pour la partie correspondante du texte. Elle peut faire basculer le contexte opérationnel du système soit vers un contexte explicitement mentionné, soit vers le précédent contexte utilisé par le texte.
+Les règles sont organisées en groupes de contexte. Un groupe de contexte est utilisé pour la majorité des concepts textuels au sein du format, par exemple des chaînes de texte entre guillemets ou des blocs de commentaires dans le code source d'un programme. Cela garantit que le système de coloration n'a pas besoin d'itérer sur toutes les règles lorsque ce n'est pas nécessaire et que certaines séquences de caractères dans le texte peuvent être traitées différemment en fonction du contexte actuel.
+Les contextes peuvent être générés dynamiquement pour permettre l'utilisation de données spécifiques à des instances dans les règles.
+Styles de contexte et mots-clés
+Dans certains langages de programmation, les nombres entiers sont traités différemment des nombres à virgule flottante par le compilateur (le programme qui convertit le code source en exécutable binaire) et on peut trouver des caractères ayant une signification spéciale au sein d'une chaîne entre guillemets. Dans de tels cas, il est judicieux de les rendre différemment de ceux qui sont voisins, pour qu'ils soient faciles à identifier lors de la lecture du texte. Donc, même s'ils ne représentent pas des contextes spéciaux, ils peuvent être considérés comme tels par le système de coloration syntaxique, de façon à pouvoir être marqués pour un rendu différent.
+Une définition syntaxique peut contenir autant de styles que nécessaire pour couvrir les concepts du format pour lequel elle est utilisée.
+Dans de nombreux formats, il existe des listes de mots qui représentent un concept spécifique. Par exemple, dans les langages de programmation, les instructions de contrôle sont un concept, les noms de types de données un autre et les fonctions intégrées du langage un troisième. Le système de coloration syntaxique de & kate; peut faire appel à de telles listes pour détecter et marquer des mots dans le texte afin de mettre en exergue les concepts des formats de texte.
+Styles par défaut
+Si vous ouvrez un fichier source C++, un fichier source & Java; et un document HTML dans & kate;, vous constatez que, même si les formats sont différents et, donc, que des mots différents sont choisis pour un traitement spécial, les couleurs utilisées sont les mêmes. C'est parce que & kate; comporte une liste prédéfinie de styles par défaut qui sont employés par les définitions syntaxiques individuelles.
+Ce comportement facilite la reconnaissance de concepts similaires dansdifférents formats de texte. Par exemple, les commentaires sont présents dans presque tout langage de programmation, de scriptage ou de balisage et, lorsqu'ils sont rendus à l'aide du même style dans tous les langages, vous n'avez pas à vous arrêter et à penser à les identifier au sein du texte.
+Dans une définition syntaxique, tous les styles utilisent un des styles par défaut. Comme quelques définitions syntaxiques utilisent davantage de styles qu'il n'y en a par défaut, si vous utilisez fréquemment un format, il peut valoir la peine d'ouvrir la boîte de dialogue de configuration pour voir si certains concepts utilisent le même style. Par exemple, il n'y a qu'un style par défaut pour les chaînes, mais comme le langage de programmation Perl fait appel à deux types de chaînes, vous pouvez améliorer la coloration syntaxique en les configurant de manière à les rendre légèrement différentes. Tous les styles par défaut disponibles seront décrits plus tard.
+Le format & XML; de définition de la coloration syntaxique
+Cette section est une vue d'ensemble du format & XML; de définition de la coloration syntaxique. S'inspirant d'un court exemple, elle décrira les principaux composants, leur signification et leur utilisation. La suivante détaillera les règles de détection de la coloration syntaxique.
+La définition formelle, autrement dit la DTD est mémorisée dans le fichier language. dtd qui, dans votre système, devrait être installé dans le dossier $KDEDIR / share/ apps/ kate/ syntax.
+Principales sections des fichiers de définition de coloration syntaxique de & kate;
+Un fichier de coloration syntaxique contient un en-tête qui définit la version de XML et type de document & #160;:
+& lt; ?xml version=quot; 1.0quot; encoding=quot; UTF-8quot; ?gt; & lt; !DOCTYPE language SYSTEM & quot; language. dtdquot; gt;
+La racine du fichier de définition est l'élément language. Voici les attributs disponibles & #160;:
+Attributs requis & #160;:
+name définit le nom de la langue. Il apparaît dans les menus et les les boîtes de dialogue ensuite.
+section spécifie la catégorie.
+extensions définit les extensions, comme & quot; *. cpp; *. hquot;
+Attributs optionnels & #160;:
+mimetype associe les fichiers en fonction du type & MIME;.
+version spécifie la version actuelle du fichier de définition.
+kateversion spécifie la dernière version prise en charge de & kate;.
+casesensitive définit si les mots-clés sont sensibles à la casse ou non.
+priority est nécessaire si une autre définition de coloration syntaxique utilise les mêmes extensions. La priorité la plus élevée l'emporte.
+author contient le nom de l'auteur et son adresse électronique.
+license contient la licence, habituellement, LGPL, Artistic, GPL et autres.
+hidden définit su le nom devra apparaître ou non dans les menus de & kate;.
+Ainsi, voici à quoi la ligne suivante peut ressembler & #160;:
+& lt; language name=quot; C++quot; version=quot; 1.00quot; kateversion=quot; 2.4quot; section=quot; Sourcesquot; extensions=quot; *. cpp; *. hquot; / gt;
+Next comes the highlighting element, which contains the optional element list and the required elements contexts and itemDatas.
+Les éléments list contiennent une liste de mots-clés. Dans ce cas, les mots-clés sont class et const. Vous pouvez ajouter autant de listes que nécessaire.
+L'élément contexts contient tous les contextes. Le premier contexte est par défaut le début de la coloration syntaxique. Il existe deux règles dans le contexte Normal Text, qui font correspondre la liste de mots-clés avec le nom somename et une règle qui détecte un guillemet et change de contexte dans string. Pour en savoir plus sur les règles, lisez le chapitre suivant.
+La troisième partie est l'élément itemDatas. Il contient tous les styles de couleurs et de polices que nécessitent les contextes et les règles. Dans cet exemple, itemData Normal Text, String et Keyword sont utilisés.
+& lt; highlightinggt; & lt; list name=quot; somenamequot; gt; & lt; itemgt; class & lt; /itemgt; & lt; itemgt; const & lt; /itemgt; & lt; /listgt; & lt; contextsgt; & lt; context attribute=quot; Normal Textquot; lineEndContext=quot; #popquot; name=quot; Normal Textquot; & gt; & lt; keyword attribute=quot; Keywordquot; context=quot; #stayquot; String=quot; somenamequot; / gt; & lt; DetectChar attribute=quot; Stringquot; context=quot; stringquot; char=quot; amp; quot; quot; / gt; & lt; /contextgt; & lt; context attribute=quot; Stringquot; lineEndContext=quot; #stayquot; name=quot; stringquot; & gt; & lt; DetectChar attribute=quot; Stringquot; context=quot; #popquot; char=quot; amp; quot; quot; / gt; & lt; /contextgt; & lt; /contextsgt; & lt; itemDatasgt; & lt; itemData name=quot; Normal Textquot; defStyleNum=quot; dsNormalquot; / gt; & lt; itemData name=quot; Keywordquot; defStyleNum=quot; dsKeywordquot; / gt; & lt; itemData name=quot; Stringquot; defStyleNum=quot; dsStringquot; / gt; & lt; /itemDatasgt; & lt; /highlightinggt;
+La dernière partie d'une définition de coloration syntaxique est la section optionnelle general. Elle peut contenir des informations sur les mots-clés, le pliage du code, les commentaires et l'indentation.
+La section comment définit avec quelle chaîne une ligne de commentaire unique est introduite. On peut également définir un commentaire multiligne à l'aide de multiLine avec l'attribut additionnel end. Ce dernier est employé si l'utilisateur fait appel au raccourci clavier correspondant pour comment/ uncomment.
+La section keywords définit si les listes de mots-clés sont ou non sensibles à la casse. D'autres attributs seront décrits ultérieurement.
+& lt; generalgt; & lt; commentsgt; & lt; comment name="singleLine "start="#"/ gt; & lt; /commentsgt; & lt; keywords casesensitive="1"/ gt; & lt; /generalgt; & lt; /languagegt;
+Les sections en détail
+Cette partie décrit tous les attributs disponibles pour les contextes, éléments itemDatas, mots-clés, commentaires, le pliage du code et l'indentation.
+L'élement context appartient au groupe contexts. Un contexte lui-même définit des règles qui lui sont spécifiques comme ce qui devrait se produire si le système de coloration syntaxique atteint la fin d'une ligne. Les attributs disponibles sont les suivants & #160;:
+name & #160;: le nom du contexte. Les règles utiliseront ce nom pour spécifier le contexte dans lequel basculer si la règle correspond.
+lineEndContext & #160;: définit le contexte dans lequel le système de coloration syntaxique bascule s'il atteint la fin d'une ligne. Ce peut être soit le nom d'un autre contexte, #stay pour ne pas changer de contexte (par exemple, ne rien faire) ou #pop, qui amènera à quitter ce contexte. Il est possible d'employer par exemple #pop#pop#pop pour obtenir trois pop.
+lineBeginContext & #160;: définit le contexte s'il rencontre le début d'une ligne. Par défaut & #160;: #stay.
+fallthrough & #160;: définit si le système de coloration sy, taxique bascule dans le contexte spécifié dans fallthroughContext si aucune règle ne correspond. Par défaut & #160;: false.
+fallthroughContext & #160;: spécifie le contexte suivant si aucune règle ne correspond.
+dynamic & #160;: si true, le contexte mémorise les chaînes & #160; / & #160; caractères de remplacement enregistrés par les règles dynamiques. Ceci est nécessaire pour les documents HERE par exemple. Par défaut & #160;: false.
+L'élément itemData est dans le groupe itemDatas. Il définit le style des polices et les couleurs. Ainsi, il est possible de définir vos propres styles et couleurs, cependant nous recommandons de coller aux styles par défaut si possible pour que l'utilisateur voie toujours les mêmes couleurs utilisées dans différents langages. Néanmoins, il n'y a parfois aucun moyen et il est nécessaire de changer les attributs de couleur et de police. Les attributs name et defStyleNum sont requis, l'autre optionnel. Les attributs disponibles sont les suivants & #160;:
+name & #160;: définit le nom de l'élément itemData. Les contextes et les règles utiliseront ce nom dans leur attribut attribute pour référencer un élément itemData.
+defStyleNum & #160;: définit quel sera le style par défaut à employer. Les styles par défaut disponibles seront décrits en détail ultérieurement.
+color & #160;: définit une couleur. Les formats valides sont '#rrggbb 'ou '#rgb'.
+selColor & #160;: définit la couleur de la sélection.
+italic si true & #160;: le texte sera en italique.
+bold si true & #160;: le texte sera en gras.
+underline si true & #160;: le texte sera souligné.
+strikeout si true & #160;: le texte sera biffé.
+L'élément keywords dans le groupe general définit les propriétés des mots-clés. Les attributs disponibles sont les suivants & #160;:
+casesensitive & #160;: peut être true ou false. Si true, tous les mots-clés sont mis en correspondance sensibles à la casse.
+weakDeliminator & #160;: est une liste de caractères qui n'agissent pas en tant que délimiteurs de mot. Par exemple, le point '.' est un délimiteur de mot. Supposez qu'un mot-clé dans un élément list contienne un point, il ne correspondra que si vous spécifiez le point comme un délimiteur faible.
+additionalDeliminator & #160;: définit des délimiteurs additionnels.
+wordWrapDeliminator & #160;: définit les caractères après lesquels un retour à la ligne peut se produire.
+Les délimiteurs par défaut et les délimiteurs de saut de ligne sont les caractères. ():! +, -lt; =gt; %amp; */;? []^{|}~\\, l'espace ('') et la tabulation ('\ ').
+L'élément comment dans le groupe comments définit les propriétés des commentaires qui sont utilisées pour Outils Commenter et Outils Décommenter. Voici les attributs disponibles & #160;:
+name & #160;: est soit singleLine soit multiLine. Si vous choisissez multiLine, les attributs end et region sont requis.
+start & #160;: définit la chaîne utilisée pour démarrer un commentaire. En C++, ce serait & quot; /*quot;.
+end & #160;: définit la chaîne utilisée pour fermer un commentaire. En C++, ce serait & quot; */ quot;.
+region & #160;: devrait être le nom du commentaire multiligne repliable. Supposez que vous ayez beginRegion= « & #160; Comment & #160; »... endRegion= « & #160; Comment & #160; » dans vos règles, vous devrez employer region= « & #160; Comment & #160; ». De cette manière, la suppression des commentaires fonctionne même si vous ne sélectionnez pas tout le texte du commentaire multiligne. Il suffit que le curseur soit dans le commentaire multiligne.
+L'élément folding dans le groupe general définit les propriétés de pliage du code. Les attributs disponibles sont les suivants & #160;:
+indentationsensitive & #160;: si true, les indicateurs de pliage du code seront ajoutés en fonction de l'indentation, comme dans le langage de scriptage Python. Habituellement, vous n'avez pas besoin de le définir, du fait qu'il est réglé par défaut false.
+L'élément indentation dans le groupe general définit quel est l'indenteur à utiliser, cependant nous recommandons vivement d'omettre cet élément, car l'indenteur sera habituellement ajusté soit en définissant un type de fichiers, soit en ajoutant une ligne de mode au fichier texte. Si vous spécifiez un indenteur malgré tout, vous forcerez une indentation spécifique pour l'utilisateur, ce qu'il risque de ne pas apprécier du tout. Les attributs disponibles sont les suivants & #160;:
+mode & #160;: est le nom de l'indenteur. Les indenteurs actuels sont les suivants & #160;: normal, cstyle, csands, xml, python et varindent.
+Styles par défaut disponibles
+Les styles par défaut ont déjà été décrits sous la forme d'un court résumé & #160;: les styles par défaut sont les polices et les styles de couleurs prédéfinis.
+Voici donc la liste des styles par défaut disponibles & #160;:
+dsNormal & #160;: utilisé pour le texte normal.
+dsKeyword & #160;: utilisé pour les mots-clés.
+dsDataType & #160;: utilisé pour les types de données.
+dsDecVal & #160;: utilisé pour les valeurs décimales.
+dsBaseN & #160;: utilisé pour les valeurs ayant une base autre que 10.
+dsFloat & #160;: utilisé pour les valeurs flottantes.
+dsChar & #160;: utilisé pour un caractère.
+dsString & #160;: utilisé pour les chaînes.
+dsComment & #160;: utilisé pour les commentaires.
+dsOthers & #160;: utilisé pour les éléments 'autres '.
+dsAlert & #160;: utilisé pour les messages d'alerte.
+dsFunction & #160;: utilisé pour les appels de fonction.
+dsRegionMarker & #160;: utilisé pour les marqueurs de régions.
+dsError & #160;: utilisé pour la mise en surbrillance des erreurs et la syntaxe erronée.
+Règles de détection de la coloration syntaxique
+Cette section décrit les règles de détection syntaxique.
+Chaque règle peut correspondre à zéro ou plusieurs caractères au début de la chaîne par rapport à laquelle ils sont testés. Si la règle correspond, les caractères concordants sont affectés au style ou à l 'attribut défini par la règle et une règle peut demander que le contexte actuel soit commuté.
+Voici à quoi une règle ressemble & #160;:
+& lt; RuleName attribute=quot; (identifier)quot; context=quot; (identifier)quot; [attributs propres à la règle] / gt;
+L 'attribut identifie le style à utiliser pour les caractères correspondants par nom, et le contexte identifie le contexte à utiliser à partir de cet endroit.
+Le contexte peut être identifié par & #160;:
+Un identifiant, qui est le nom de l'autre contexte.
+Un ordre demandant au moteur de rester dans le contexte actuel (#stay) ou de revenir à un contexte précédemment utilisé dans la chaîne (#pop).
+Pour reculer de plusieurs étapes, le mot-clé #pop peut être répété & #160;: #pop#pop#pop.
+Certaines règles peuvent avoir des sous-règles qui ne sont ensuite évaluées que si la règle parent correspondait. La chaîne entière concordante se verra affecter l'attribut défini par la règle parent. Voici à quoi ressemble une règle ayant des sous-règles & #160;:
+& lt; RuleName (attributes)gt; & lt; ChildRuleName (attributes) / gt;... & lt; /RuleNamegt;
+Les attributs spécifiques à une règle varient et sont décrits dans les sections suivantes.
+Attributs communs
+Toutes les règles ont les attributs suivants en commun et sont disponibles chaque fois que (common attributes) apparaît. attribute et context sont des attributs requis, tous les autres sont optionnels.
+attribute & #160;: un attribut établit une correspondance vers un itemData défini.
+context & #160;: spécifie le contexte vers lequel le système de coloration syntaxique bascule si la règle correspond.
+beginRegion & #160;: démarre un bloc de pliage de code. Par défaut & #160;: unset.
+endRegion & #160;: ferme un bloc de pliage de code. Par défaut & #160;: unset.
+lookAhead & #160;: si true, le système de coloration syntaxique ne traitera pas la longueur des correspondances. Par défaut & #160;: false.
+firstNonSpace & #160;: s'applique uniquement si la chaîne est le premier espace autre qu'un blanc dans la ligne. Par défaut & #160;: false.
+column & #160;: concorde uniquement si la colonne correspond. Par défaut & #160;: unset.
+Règles dynamiques
+Certaines règles autorisent l'attribut optionnel dynamic de type booléen, qui prend par défaut la valeur false. Si l'attribut dynamic est true, une règle peut utiliser des caractères de remplacement représentant le texte mis en concordance par une règle d'une expression rationnelle qui a commuté vers le contexte actuel dans ses attributs string ou char. Dans un attribut string, le caractère générique %N (où N est un nombre) sera remplacé par la capture correspondante N à partir de l'expression rationnelle appelante. Dans un char, le caractère générique doit être un nombre N et être remplacé par le premier caractère de la capture correspondante N à partir de l'expression rationnelle appelante. Chaque fois qu'une règle autorise cet attribut, elle contient un (dynamic).
+dynamic & #160;: peut être (true|false).
+Les règles en détail
+DetectChar
+Détecte un seul caractère spécifique. Cette règle est communément utilisée par exemple pour trouver les extrémités de chaînes entre guillemets.
+& lt; DetectChar char=quot; (character)quot; (attributs communs) (dynamic) / gt;
+L'attribut char définit le caractère à faire correspondre.
+Detect2Chars
+Détecte deux caractères spécifiques dans un ordre défini.
+& lt; Detect2Chars char=quot; (character)quot; char1=quot; (character)quot; (attributs communs) (dynamic) / gt;
+L'attribut char définit le premier caractère à faire correspondre, char1 le second.
+AnyChar
+Détecte un caractère d'un jeu de caractères spécifié.
+& lt; AnyChar String=quot; (chaîne)quot; (attributs communs) / gt;
+L'attribut string définit le jeu de caractères.
+StringDetect
+Détecte une chaîne exacte.
+& lt; StringDetect String=quot; (string)quot; [insensitive=quot; true|falsequot;] (attributs communs) (dynamic) / gt;
+L'attribut string définit la chaîne à faire correspondre. L'attribut insensitive prend la valeur par défaut FALSE et est passé à la fonction de comparaison de la chaîne. Si la valeur est TRUE, une comparaison insensible est utilisée.
+RegExpr
+Concorde par rapport à une expression rationnelle.
+& lt; RegExpr String=quot; (string)quot; [insensitive=quot; true|falsequot;] [minimal=quot; true|falsequot;] (attributs communs) (dynamic) / gt;
+L'attribut string définit l'expression rationnelle.
+insensitive prend par défaut la valeur false et est passé au moteur d'expressions rationnelles.
+minimal prend par défaut la valeur false et est passé au moteur d'expressions rationnelles.
+Du fait que les règles sont toujours concordantes par rapport au début de la chaîne actuelle, une expression rationnelle commençant par un caret (^) indique que la règle ne devrait être concordante que par rapport au début d'une ligne.
+Reportez -vous à la section Expressions rationnelles pour plus d'informations à ce propos.
+keyword
+Détecte un mot-clé dans une liste donnée.
+& lt; keyword String=quot; (nom de liste)quot; (attributs communs) / gt;
+L'attribut string identifie la liste de mots-clés par nom. Une liste contenant ce nom doit exister.
+Int
+Détecte un nombre entier.
+& lt; Int (attributs communs) (dynamic) / gt;
+Cette règle n'a aucun attribut spécifique. Des sous-règles sont généralement utilisées pour détecter des combinaisons de L et de U après le nombre, indiquant le type d'entier dans le code du programme. En fait, toutes les règles sont autorisées en tant que sous-règles, cependant, la DTD n'autorise que la sous-règle StringDetect.
+L'exemple suivant fait correspondre les nombres entiers, suivis du caractère & #160; 'L '.
+& lt; Int attribute="Decimal "context="#stay" & gt; & lt; StringDetect attribute="Decimal "context="#stay" String="L "insensitive="true"/ gt; & lt; /Intgt;
+Float
+Détecte un nombre à virgule flottante.
+& lt; Float (attributs communs) / gt;
+Cette règle n'a aucun attribut spécifique. AnyChar est autorisé en tant que sous-règle et généralement utilisé pour détecter des combinaisons. Reportez -vous à la règle Int pour référence.
+HlCOct
+Détecte une représentation d'un nombre octal.
+& lt; HlCOct (attributs communs) / gt;
+Cette règle n'a aucun attribut spécifique.
+HlCHex
+Détecte une représentation d'un nombre hexadécimal.
+& lt; HlCHex (attributs communs) / gt;
+HlCStringChar
+Détecte un caractère échappé.
+& lt; HlCStringChar (attributs communs) / gt;
+Elle fait correspondre les représentations littérales de caractères communément utilisés dans du code de programme, par exemple\ (saut de ligne) ou \ (tabulation).
+Les caractères suivants correspondront s'ils suivent une barre oblique inverse (\\) & #160;: abefnrtvquot; '?. En outre, les nombres hexadécimaux échappés comme par exemple \\xff et les nombres octaux échappés, par exemple \\033 correspondront.
+HlCChar
+Détecte un caractère & #160; C.
+& lt; HlCChar (attributs communs) / gt;
+Cette règle fait correspondre les caractères C entourés d'une coche (par exemple & #160;: 'c '). Ainsi, dans les coches, ce peut être un simple caractère ou un caractère échappé. Voir HlCStringChar pour les séquences de caractères échappés.
+RangeDetect
+Détecte une chaîne dont les caractères de début et de fin sont définis.
+& lt; RangeDetect char=quot; (caractère)quot; char1=quot; (caractère)quot; (attributs communs) / gt;
+car définit le caractère commençant l'intervalle, car2 le caractère terminant l'intervalle.
+Utile pour détecter par exemple de petites chaînes entre guillemets et similaires. Notez cependant que, puisque le moteur de coloration syntaxique opère sur une ligne à la fois, il ne trouvera pas de chaînes s'étendant au-delà d'un saut de ligne.
+LineContinue
+Correspond à la fin de la ligne.
+& lt; LineContinue (attributs communs) / gt;
+Cette règle est utile pour changer de contexte à la fin de la ligne, si le dernier caractère est une barre oblique inverse ('\\ '). Nécessaire par exemple en C/ C++ pour continuer les macros ou les chaînes.
+IncludeRules
+Inclut des règles provenant d'un autre contexte ou langage/ fichier.
+& lt; IncludeRules context=quot; contextlinkquot; [includeAttrib=quot; true|falsequot;] / gt;
+L'attribut context définit quel est le contexte à inclure.
+S'il s'agit d'une chaîne simple, il inclut toutes les règles définies dans le contexte actuel, par exemple & #160;:
+& lt; IncludeRules context=quot; anotherContextquot; / gt;
+Si la chaîne commence par ##, le système de coloration syntaxique cherchera une autre définition de langage avec le nom donné, par exemple & #160;:
+& lt; IncludeRules context=quot; ##C++quot; / gt;
+Si l'attribut includeAttrib prend la valeur true, changez l'attribut de destination pour celui de la source. Nécessaire pour pouvoir par exemple introduire des commentaires, si le texte mis en correspondance par le contexte inclus est une coloration syntaxique différente du contexte de l'hôte.
+DetectSpaces
+Détecte les blancs.
+& lt; DetectSpaces (attributs communs) / gt;
+Utilisez cette règle si vous savez qu'il existe plusieurs blancs à la suite, par exemple au début des lignes indentées. Cette règle ignorera tous les blancs à la fois, au lieu de tester des règles multiples et d'en ignorer une à la fois du fait qu'il n'y a pas de concordance.
+DetectIdentifier
+Détecte les chaînes d'identificateurs (sous la forme d'une expression rationnelle & #160;: [a-zA-Z_][a-zA-Z0-9_]*).
+& lt; DetectIdentifier (attributs communs) / gt;
+Utilisez cette règle pour ignorer une chaîne de caractères de mots à la fois, plutôt que de faire des tests avec des règles multiples et d'en ignorer une à la fois du fait qu'il n'y a pas de concordance.
+Trucs & astuces
+Une fois que vous avez compris comment fonctionne le changement de contexte, il est facile d'écrire des définitions de coloration syntaxique. Cependant, vous devrez vérifier avec soin la règle à choisir dans telle ou telle situation. Les expressions rationnelles sont très efficaces mais elles sont lentes en comparaison des autres règles. Ainsi, vous pouvez prendre en considération les astuces suivantes.
+Si vous n'avez que deux caractères concordants, utilisez Detect2Chars au lieu de StringDetect. Il en va de même pour DetectChar.
+Les expressions rationnelles sont faciles à utiliser, mais souvent il existe un autre moyen beaucoup plus rapide d'obtenir le même résultat. Imaginez que vous vouliez simplement établir une correspondance avec le caractère '# 'si c'est le premier caractère dans la ligne. Voici à quoi ressemblerait une solution basée sur une expression rationnelle & #160;: lt; RegExpr attribute=quot; Macroquot; context=quot; macroquot; String=quot; ^\\s*#quot; / gt; Vous pouvez arriver au même résultat beaucoup plus rapidement en utilisant & #160;: lt; DetectChar attribute=quot; Macroquot; context=quot; macroquot; char=quot; #quot; firstNonSpace=quot; truequot; / gt; Si vous voulez faire correspondre l'expression rationnelle '^#', utilisez toujours l'attribut DetectChar avec l'attribut column=quot; 0quot;. Comme l'attribut column compte en fonction des caractères, une tabulation représente représente encore un caractère.
+Vous pouvez changer de contexte sans traiter les caractères. Supposez que vous souhaitiez changer de contexte lorsque vous rencontrez la chaîne */, mais que vous deviez traiter cette chaîne dans le contexte suivant. La règle ci-dessous correspondra et l'attribut lookAhead veillera à ce que le système de coloration syntaxique conserve la chaîne concordante pour le prochain contexte.
+& lt; Detect2Chars attribute=quot; Commentquot; context=quot; #popquot; char=quot; *quot; char1=quot; /quot; lookAhead=quot; truequot; / gt;
+Utilisez DetectSpaces si vous savez qu'il y a de nombreux blancs.
+Utilisez DetectIdentifier au lieu de l'expression rationnelle '[a-zA-Z_]\\w* '.
+Utilisez les styles par défaut chaque fois que vous le pouvez. De cette manière, l'utilisateur trouvera un environnement familier.
+Regardez dans d'autres fichiers XML pour voir comment d'autres utilisateurs mettent enœ uvre les règles complexes.
+Vous pouvez valider chaque fichier XML à l'aide de la commande xmllint --dtdvalid language. dtd mySyntax. xml.
+Si vous répétez une expression rationnelle très souvent, vous pouvez employer des entités (ENTITIES). Exemple & #160;:
+& lt; ?xml version="1.0 "encoding="UTF-8"? gt; & lt; !DOCTYPE language SYSTEM "language. dtd" [& lt; !ENTITY myref "[A-Za-z_: ][\\w. :_-]*"gt; ]gt;
+Maintenant, vous pouvez faire appel à amp; myref; au lieu de l'expression rationnelle.

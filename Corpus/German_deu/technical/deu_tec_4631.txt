@@ -1,0 +1,52 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Kapitel 5.
+Sicherheit
+Nach vorne
+PHP ist von den in den meisten Serversystemen implementierten Sicherheitseinstellungen hinsichtlich der Berechtigungen auf Datei - und Verzeichnisebene abhängig.
+Dies verleiht Ihnen Kontrolle darüber, welche Dateien in dem Dateisystem gelesen werden dürfen.
+Vorsicht ist bei weltweit lesbaren Dateien geboten um sicherzustellen, dass diese sicher von allen Usern mit Zugriff auf dieses Dateisystem (nur) gelesen werden können.
+Da PHP entwickelt wurde um Zugriffe auf das Dateisystem auf Benutzebene zu erlauben, ist es natürlich auch möglich ein PHP Skript zu schreiben das Ihnen erlaubt Systemdateien wie / etc / passwd zu lesen, Ethernetverbindungen zu modifizieren, enorme Druckaufträge zu senden, etc.
+Dies hat offensichtliche Implikationen, indem Sie sicherstellen müssen, dass alle von Ihnen zu lesenden bzw. zu schreibenden Dateien auch die richtigen sind.
+Stellen Sie sich folgendes Skript vor, in dem ein User zum Ausdruck bringt, dass gerne eine Datei in seinem Heimatverzeichnis löschen möchte.
+Dies geht von einer Situation aus, in der ein PHP Web-Interface regelmäßig zum Dateimanagement verwendet wird, und der Apache User ist auch berechtigt, in seinem Heimatverzeichnis Dateien zu löschen.
+Beispiel 5-1.
+Schlechte Variablenprüfung führt zu....
+?php / / Löschen einer Datei aus dem Heimatverzeichnis des Users $username = $_POST[ 'user_submitted_name']; $homedir = "/ home / $username"; $file_to_delete = "$userfile"; unlink ("$homedir / $userfile"); echo "$file_to_delete wurde gelöscht !";?
+Beispiel 5-2....
+Ein Angriff auf das Dateisystem
+?php / / löscht eine Datei irgendwo auf der Festplatte, wo der / / Benutzer die nötigen Rechte besitzt.
+Wenn PHP root hat: $username = ".. / etc /"; $homedir = "/ home /.. / etc /"; $file_to_delete = "passwd"; unlink (" / home /.. / etc / passwd"); echo "/ home /.. / etc / passwd wurde gelöscht !";?
+Erteilen Sie dem PHP Web-user (Binärdatei) nur eingeschränkte Rechte.
+Prüfen Sie alle übertragenen Variablen.
+Beispiel 5-3.
+Etwas sicherere Prüfung des Dateinamens
+?php / / löscht eine Datei von der Festplatte, auf die / / der PHP user Zugriff hat. $username = $_SERVER[ 'REMOTE_USER']; / / verwendet eine / / Authentifizierungsmethode $homedir = "/ home / $username"; $file_to_delete = basename("$userfile"); / / den Pfad entfernen unlink ($homedir / $file_to_delete); $fp = fopen(" / home / logging / filedelete.log" ,"+a"); / /logge die Löschung $logstring = "$username $homedir $file_to_delete"; fputs ($fp, $logstring); fclose($fp); echo "$file_to_delete wurde gelöscht !";?
+Beispiel 5-4.
+Sicherere Dateinamensprüfung
+?php $username = $HTTP_SERVER_VARS[ 'REMOTE_USER']; / / verwendet eine / / Authentifizierungsmethode $homedir = "/ home / $username"; if (!ereg('^[^. / ][^ / ]*$', $userfile)) die('bad filename'); / / "DIE", gehen Sie nicht weiter if (!ereg('^[^. / ][^ / ]*$', $username)) die('bad username'); / / "DIE", gehen Sie nicht weiter / /etc...?
+Abhängig vom Betriebssystem gibt es eine große Anzahl Dateien mit der Sie sich befassen sollten, inklusive Einträge für Geräte (/ dev / oder com1), Konfigurationsdateien (/ etc / Dateien und die .ini Dateien), gut bekannte Verzeichnisse (/ home /, My Documents), etc.
+Aus diesem Grund ist es gewöhnlich einfacher eine Vorgangsweise einzuführen, bei der außer den von Ihnen explizit erlaubten Dingen alles verboten ist.
+Zurück
+Zum Anfang
+Nach vorne
+Apache-Modul
+Nach oben
+Datenbank - Sicherheit

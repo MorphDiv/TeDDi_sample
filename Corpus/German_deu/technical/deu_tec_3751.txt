@@ -1,0 +1,36 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+OCIBindByName() bindet die PHP Variable variable an den Oracle Platzhalter ph_name.
+Es wird genutzt um den benötigten Speicherplatz fuer die Ein / Ausgabe zu Laufzeit festzulegen. length gibt dabei die maximale Grösse des Speicherplatzes an.
+Wenn length auf -1 gesetzt wird, nimmt OCIBindByName() die Grösse des Inhalts von variable als maximale Grösse.
+Wenn ein abstrakter Datentyp wie (LOB / ROWID / BFILE) gebunden werden soll, muss zuerst OCINewDescriptor() verwendet werden. length gilt nicht für abstrakte Datentypen und sollte denn auf -1 gesetzt sein. type zeigt Oracle, welchen Typ wir binden wollen.
+Mögliche Typen sind:
+OCI_B_FILE (Binärdatei), OCI_B_CFILE (Textdatei), OCI_B_CLOB (Text-LOB), OCI_B_BLOB (Binär-LOB) and OCI_B_ROWID (ROWID).
+Beispiel 1.
+
+?php / * OCIBindByPos example thies@thieso.net (980221) trägt 3 Datensätze in emp ein und benutzt ROWID für das UPDATE nach dem INSERT * / $conn = OCILogon("scott" ,"tiger"); $stmt = OCIParse($conn ,"insert into emp (empno, ename) ". "values (:empno,:ename)". "returning ROWID into :rid"); $data = array(1111 = "Larry", 2222 = "Bill", 3333 = "Jim"); $rowid = OCINewDescriptor($conn,OCI_D_ROWID); OCIBindByName($stmt ,":empno", $empno,32); OCIBindByName($stmt ,":ename", $ename,32); OCIBindByName($stmt ,":rid", $rowid,-1,OCI_B_ROWID); $update = OCIParse($conn ,"update emp set sal = :sal where ROWID = :rid"); OCIBindByName($update ,":rid", $rowid,-1,OCI_B_ROWID); OCIBindByName($update ,":sal", $sal,32); $sal = 10000; while (list($empno,$ename) = each($data)) {OCIExecute($stmt); OCIExecute($update);} $rowid - free(); OCIFreeStatement($update); OCIFreeStatement($stmt); $stmt = OCIParse($conn ,"select * from emp where empno in (1111,2222,3333)"); OCIExecute($stmt); while (OCIFetchInto($stmt, $arr,OCI_ASSOC)) {var_dump($arr);} OCIFreeStatement($stmt); / * delete our "junk "from the emp table.... * / $stmt = OCIParse($conn ,"delete from emp where empno in (1111,2222,3333)"); OCIExecute($stmt); OCIFreeStatement($stmt); OCILogoff($conn);?
+Zurück
+Zum Anfang
+Nach vorne
+Oracle 8 Funktionen
+Nach oben
+ocicancel

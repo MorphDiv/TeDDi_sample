@@ -1,0 +1,65 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+Diese Funktionen bilden die Basis für den Zugriff auf Datenbanken vom Typ "Berkeley DB".
+"dba" implementiert eine generelle Abstraktionsschicht für verschiedene dateibasierte Datenbanken.
+Der Funktionsumfang ist daher beschränkt auf eine gemeinsame Teilmenge des Funktionsumfangs aktueller Datenbanken (zum Beispiel Sleepycat Software's DB2, nicht zu verwechseln mit IBM's DB2 Software, die über die ODBC Funktionen unterstützt wird).
+Das Verhalten der dba-Funktionen ist teilweise abhängig von der Implementation des zugrundeliegenden Datenbanksystems.
+Funktionen wie zum Beispiel dba_optimize() und dba_sync() funktionieren vielleicht bei einer Datenbank, und tun gar nichts bei einer Anderen.
+Beim Aufruf von dba_open() oder dba_popen() muss einer der verfügbaren Handler-Namen aus der nachfolgenden Handler-Tabelle angegeben werden.
+Die tatsächlich verfügbaren Handler in Ihrer PHP-Installation können Sie mit der Funktion phpinfo() anzeigen lassen. (Um zum Zeitpunkt der PHP-Generierung die Unterstützung für einen der folgenden Handler verfügbar zu machen, fügen Sie bitte den jeweils angegebenen --with-XXXX Compilerschalter in ihren PHP-Konfigurations-Aufruf ein.)
+Tabelle 1.
+Liste der DBA-Handler
+
+Hinweise
+
+Dbm ist der ursprüngliche und älteste Typ der "Berkeley DB" Datenbanken.
+Sie sollten diesen Typ wenn möglich vermeiden.
+Die in DB2 und gdbm enthaltenen dbm-Kompatibilitätsfunktionen werden ebenfalls nicht unterstützt, da sie nur auf Quellcode-Basis kompatibel sind, aber Dateien im originalen dbm-Format nicht bearbeiten können. (--with-dbm)
+
+Ndbm ist neuer und flexibler als Dbm.
+Es hat jedoch die meisten Einschränkungen von Dbm übernommen und ist daher ebenfalls nicht empfehlenswert. (--with-ndbm)
+
+Gdbm ist der GNU Datenbank Manager. (--with-gdbm)
+
+DB2 ist Sleepycat Software 's DB2.
+Es wird beschrieben als "Werkzeugsatz für eingebaute Unterstützung von Hochleistungs-Datenbanken für Standalone - und Client / Server - Applikationen". (--with-db2)
+
+DB3 ist Sleepycat Software' s DB3. (--with-db3)
+
+Cdb ist "ein schnelles, zuverlässiges und kompaktes Paket zum Erstellen und Auslesen konstanter Datenbanken." Es stammt vom Autor von qmail und kann hier heruntergeladen werden.
+Da es für konstante Daten ausgelegt ist, werden nur Lese-Operationen unterstützt. (--with-cdb)
+Beispiel 1.
+DBA Beispiel
+?php $id = dba_open ("/ tmp / test.db", "n", "db2"); if (!$id) {echo "dba_open schlug fehl\n"; exit;} dba_replace ("key", "Dies ist ein Beispiel !", $id); if (dba_exists ("key", $id)) {echo dba_fetch ("key", $id); dba_delete ("key", $id);} dba_close ($id);?
+DBA arbeitet binärsicher und besitzt keine willkürlichen Limits.
+Es erbt allerdings alle Einschränkungen von der zugrundeliegenden Datenbank-Implementation.
+Alle dateibasierten Datenbanken müssen einen Weg zur Verfügung stellen, um den Dateimodus einer neu erstellten Datenbank zu bestimmen, soweit dies überhaupt möglich ist.
+Der Dateimodus wird gewöhnlich als viertes Argument an die Funktionen dba_open() oder dba_popen() übergeben.
+Sie können auf alle Einträge in einer Datenbank sequentiell durch die Verwendung von dba_firstkey() und dba_nextkey() zugreifen.
+Während die Datenbank so durchlaufen wird, darf sie nicht verändert werden.
+Beispiel 2.
+Durchlaufen einer Datenbank
+?php # ...Oeffnen der Datenbank... $key = dba_firstkey ($id); while ($key != false) {if (...) {# den Schluessel fuer spaetere Aktionen merken $handle_later[] = $key;} $key = dba_nextkey ($id);} for ($i = 0; $i count($handle_later); $i++) dba_delete ($handle_later[$i], $id);?
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

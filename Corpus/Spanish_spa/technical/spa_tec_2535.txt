@@ -1,0 +1,159 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Trabajo con resaltado de sintaxis
+Introducción
+El resaltado de sintaxis es lo que hace que el editor muestre automáticamente texto en diferentes estilos y colores, dependiendo de la función de la cadena en relación al propósito del archivo.
+En el código fuente de un programa, por ejemplo, las sentencias de control se pueden presentar en negrita, mientras que los tipos de datos y los comentarios pueden tener diferentes colores que el resto del texto.
+Esto mejora notablemente la legibilidad del texto, y ayuda al autor a ser más eficiente y productivo.
+Un función de perl, presentada con resaltado de sintaxis.
+La misma función de perl, sin el resaltado.
+De los dos ejemplos, ¿cuál resulta más sencillo de leer?
+Kate cuenta con un sistema de resaltado de sintaxis flexible, configurable y capaz, y la distribución estándar proporciona definiciones para un gran conjunto de lenguajes de programación, descripción y realización de guiones, a parte de otros formatos.
+Además usted puede incluir sus propias definiciones en simples archivos XML.
+Kate detectará automáticamente las reglas de sintaxis correctas cuando abra un archivo, basándose en el tipo MIME de dicho archivo, determinado por su extensión, o, si no tiene, por su contenido.
+Los estilos y colores utilizados por cada definición de resaltado de sintaxis, así como los tipos MIME para los que se debe utilizar, se pueden configurar utilizando la página Resaltado del Diálogo de configuración.
+El resaltado de sintaxis tiene su uso en la mejora de la legibilidad del texto, pero no puede confiar en ello como prueba de que el texto es correcto.
+Marcar es texto en función de su sintaxis puede ser difícil, dependiendo del formato que esté utilizando, y en algunos casos los autores de las reglas de sintaxis pueden estar orgullosos si el 98% del texto se procesa correctamente, ya que hará falta un estilo muy raro para poder ver el 2% incorrecto.
+Puede descargar o actualizar definiciones de resaltado de sintaxis de la página web de Kate pinchando en el botón Descargar en la Página de resaltado del Diálogo de configuración.
+El sistema de resaltado de sintaxis de Kate
+Esta sección tratará sobre el mecanismo de resaltado de sintaxis de Kate con más detalle.
+Le recomendamos su lectura si desea aprender sobre ello, o si desea crear o modificar las definiciones de sintaxis.
+Cómo funciona
+Siempre que abre un archivo, uno de las primeras cosas que hace el editor de Kate es detectar qué definición de sintaxis se utilizará en dicho archivo.
+Mientras va leyendo el texto del archivo, y mientras va escribiendo en él, el sistema de resaltado de sintaxis analiza el texto utilizando las reglas establecidas por la definición de sintaxis y marcando dónde comienzan y terminan los diferentes contextos y estilos.
+Cuando usted escribe en el documento, el nuevo texto es analizado y marcado al vuelo, así que si borra un carácter que marca el principio o el final de un contexto, el estilo del texto adyacente cambia consecuentemente.
+Reglas para decidir la relevancia del texto, organizadas en bloques de contexto
+Listas de palabras clave
+Definiciones de estilos de elementos
+Al analizar el texto, las reglas de detección se evalúan en el orden en el que están definidas, y si el principio de la cadena actual coincide con la regla, se utiliza el contexto relacionado.
+El punto de inicio del texto se mueve al punto final en el que la regla coincide y comienza un nuevo ciclo de reglas, comenzando en el contexto establecido por la regla coincidente.
+Reglas
+Las reglas de detección son el núcleo del sistema de detección del resaltado.
+Una regla es una cadena, un carácter o una expresión regular contra la que se debe hacer coincidir el texto que está siendo analizado.
+Contiene información sobre el estilo a utilizar para la parte coincidente del texto.
+Puede cambiar el contexto de trabajo del sistema, ya sea hacia un contexto mencionado explícitamente o hacia el anterior contexto utilizado por el texto.
+Las reglas se organizan en grupos de contextos.
+Un grupo de contexto se utiliza para los conceptos principales del texto dentro del formato, por ejemplo, las cadenas de texto entrecomilladas o los bloques de comentarios en el código fuente de un programa.
+Esto garantiza que el sistema de resaltado no necesita realizar un ciclo por todas las reglas cuando no es necesario, y que algunas secuencias de caracteres del texto se pueden tratar de forma diferente dependiendo del contexto actual.
+Estilos y palabras clave del contexto
+En algunos lenguajes de programación, los número enteros son tratados por el compilador (el programa que convierte el código fuente en un ejecutable binario) de una forma diferente a los de coma flotante, y puede que haya caracteres que tengan un significado especial dentro de una cadena entrecomillada.
+En esos casos, tiene sentido procesarlos de diferente manera que el texto adyacente, para que resulten fáciles de identificar.
+Así que incluso si no representan contextos especiales, pueden ser vistos como tales por el sistema de resaltado de sintaxis, así que son marcados para un procesado diferente.
+Una definición de sintaxis puede contener tantos estilos como se requiera para cubrir todos los conceptos del forma para el que se utiliza.
+En muchos formatos hay listas de palabras que representan un concepto específico.
+Por ejemplo en los lenguajes de programación, las sentencias de control son un concepto, los nombres de los tipos de datos otro, y la funciones integradas en el lenguaje son un tercero.
+El sistema de resaltado de sintaxis de Kate puede utilizar tales listas para detectar y marcar palabras del texto para enfatizar conceptos de los formatos de texto.
+Estilos predeterminados
+Si abre un archivo de código fuente de C++, un archivo fuente de Java y un archivo HTML en Kate podrá comprobar que aunque los formatos son diferentes, y por lo tanto las palabras que reciben un tratamiento especial también son diferentes, los colores utilizados son los mismos.
+Esto es debido a que Kate tiene una lista predefinida de estilos predeterminados, que se emplean en las definiciones de sintaxis individuales.
+Esto facilita el reconocer conceptos similares en diferentes formatos de texto.
+Por ejemplo los comentarios están presentes en prácticamente cualquier lenguaje de programación, guiones o descripción, y si se presentan utilizando el mismo estilo en todos los lenguajes, usted no tendrá que pararse a pensar e identificar su posición en el texto.
+Todos los estilos de una definición de sintaxis utilizan uno de los estilos predeterminados.
+Hay pocas definiciones de sintaxis que utilicen más estilos de los que hay por defecto, así que, si utiliza un formato muy a menudo, puede que le merezca la pena abrir el diálogo de configuración para ver si algunos conceptos están utilizando el mismo estilo.
+Por ejemplo, sólo hay un estilo predeterminado para las cadenas, pero como el lenguaje de programación perl utiliza dos tipos de cadena, puede mejorar el resaltado configurando ambas de formas ligeramente diferentes.
+El formato XML de definición de resaltados
+Introducción
+Esta sección es una introducción al formato XML de definición de resaltado.
+Describe los componentes principales y su significado y utilización, y entra en detalles con las reglas de detección.
+Los componentes principales de las definiciones de resaltado de Kate
+La sección general (General)
+La sección general contiene información sobre el formato de los comentarios del lenguaje descrito, y define si las palabras clave son sensibles a las mayúsculas.
+Resaltado (Highlighting)
+La sección de resaltado contiene toda la información requerida para analizar y procesar el texto.
+Esto incluye:
+ItemDatas
+Contiene elementos ItemData, cada uno definiendo un estilo.
+Listas de palabras clave
+Cada lista tiene un nombre, y puede contener cualquier número de elementos.
+Contextos (Contexts)
+Contiene contextos, que a su vez contienen las reglas de detección de sintaxis.
+Reglas de detección del resaltado
+Esta sección describe las reglas de detección del resaltado.
+Cada regla puede coincidir en cero o más caracteres con el principio de la cadena con la que se comparan.
+Si la regla coincide, a los caracteres coincidentes se les asigna el estilo o atributo definido por la regla, y una regla puede pedir que se cambie el contexto actual.
+El atributo y los atributos de contexto son comunes a todas las reglas.
+Una regla tiene este aspecto:
+El atributo identifica el estilo que utilizaran los caracteres coincidentes por nombre o índice, y el contexto identifica el contexto a utilizar desde aquí.
+El atributo se puede identificar por un nombre o por su índice basado en cero en el grupo de los ItemDatas.
+El contexto se puede identificar por:
+Un identificador, en la actualidad sólo su índice basado en cero en el grupo de contextos.
+Una orden que le indica al motor que permanezca en el contexto actual (#stay), o que salte al contexto anterior (#pop).
+Para retroceder más pasos, se puede repetir la palabra clave #pop: #pop#pop#pop
+Algunas reglas pueden tener reglas hijas que se ejecutan únicamente si la regla padre resulta aplicable.
+A toda la cadena coincidente se le dará el atributo definido por la regla padre.
+Una regla con reglas hijas tiene este aspecto:
+Los atributos específicos de la regla varían, y se describen en la siguiente lista.
+Las reglas al detalle
+DetectChar
+Detecta un único carácter especificado.
+Normalmente se utiliza, por ejemplo, para hallar el final de las cadenas entrecomilladas.
+El atributo char define el carácter a localizar.
+Detect2Chars
+Detecta dos caracteres especificados en el orden definido.
+El atributo char define el primer carácter a localizar, char1 el segundo.
+AnyChar
+Detecta un carácter de un conjunto de caracteres especificados.
+El atributo String define el conjunto de caracteres.
+StringDetect
+Detecta una cadena exacta.
+El atributo String define la cadena a localizar.
+El atributo insensitive, cuyo valor predeterminado es FALSE, hacer referencia a la distinción entre mayúsculas y minúscula.
+Si el valor es TRUE, se realiza tal distinción.
+RegExpr
+Busca la coincidencia con una expresión regular.
+El atributo String define la expresión regular.
+insensitive tiene FALSE como valor predeterminado y se envía al motor de expresiones regulares.
+minimal tiene FALSE como valor predeterminado y se envía al motor de expresiones regulares.
+Como siempre se trata de que las reglas coincidan con el principio de la cadena actual, una expresión regular que comience con el símbolo del circunflejo (^) indica que la regla se debe comparar únicamente con el principio de una línea.
+Vea la sección sobre expresiones regulares para obtener más información.
+Keyword
+Detecta una palabra clave de una lista especificada.
+El atributo String identifica la lista de palabras claves por su nombre.
+Debe existir una lista con ese nombre.
+Int
+Detecta un número entero.
+<Int (atributos comunes) / >
+Esta regla no tiene atributos específicos.
+Las reglas hijas normalmente se utilizan para detectar combinaciones de L y U después del número, indicando el tipo de entero en el código del programa.
+Float
+Detecta un número de coma flotante.
+<Float (atributos comunes) / >
+Esta regla no tiene atributos específicos.
+HlCOct
+Detecta una representación numérica de un número octal.
+<HlCOct (atributos comunes) / >
+Esta regla no tiene atributos específicos.
+HlCHex
+Detecta una representación numérica de un número hexadecimal.
+<Int (atributos comunes) / >
+Esta regla no tiene atributos específicos.
+HlCStringChar
+Detecta un carácter escapado.
+<HlCStringChar (atributos comunes) / >
+Esta regla no tiene atributos específicos.
+Localiza representaciones tipográficas de caracteres invisibles que se utilizan habitualmente en el código de programación, por ejemplo \n (nueva línea) o (TAB).
+Los siguientes caracteres cumplirán con la regla si siguen a una barra invertida (\): abefnrtv" '?.
+Además serán válidos los números hexadecimales escapados como por ejemplo \xff, y los números octales escapados como \033.
+RangeDetect
+Detecta una cadena con caracteres de inicio y fin definidos.
+char define el carácter que inicia el rango, char2 el carácter que finaliza el rango.
+Es muy útil para detectar por ejemplo pequeña cadenas entrecomilladas y similares, pero tenga en cuenta que el motor de resaltado puede trabajar sólo con una cada vez, así que no detectarán cadenas que estén divididas en dos líneas o más.
+LineContinue
+Localiza el final de la línea.
+Esta regla no tiene atributos específicos.
+Esta regla es útil para cambiar el contexto al finalizar la línea.

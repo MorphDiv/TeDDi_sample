@@ -1,0 +1,29 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 3, PHP 4)
+Internetドメイン(AF_INET)または Unixドメイン(AF_UNIX、TCPまたは UDPを使用)にてストリーム接続を初期化します。Internetドメインの場合、 hostname のポート port へのTCPソケット接続がオープンされます。 UDP接続を行う際には、 udp://hostname のよう に明示的にプロトコルを指定する必要があります。Unixドメインの場合、 hostname はソケットへのパスとして使用され、 port はこの場合0とする必要があります。 オプションの timeout により接続システムコール がタイムアウトするまでの秒数を指定することが可能です。
+注意 ソケット経由でデータを読み書きする際のタイムアウトを設定する必要がある場合、 fsockopen() の timeout パラメータは、 ソケットに接続する間のみ適用されるため、 socket_set_timeout() を使用してください。
+PHP 4.3.0以降、OpenSSLサポートを有効にしてコンパイルした場合、 hostname の前に' ssl:// 'または' tls:// 'を付加することにより、TCP/IP経由でリモートホストに 接続する際にSSLまたはTLSクライアント接続を使用することができます。
+fsockopen() は、ファイルポインタを返します。 このファイルポインタは、 (fgets(), fgetss(), fputs(), fclose(), feof() のような) 他のファイル関数で使用可能です。
+コールに失敗した場合には FALSE が返され、オプションの引数 errno および errstr が指定されている場合、システムコール connect() で生じた実際のシステムレベルエラーを示すように設定されます。 errno は 0 なのに関数が FALSE を返す場合、 connect() をコールする前にエラーを発生したことを示します。 この場合、おそらくはソケットの初期化に原因があります。引数 errno および errstr は常に参照渡しであることに注意してください。
+環境によってはUNIXドメインまたはオプションの接続タイムアウトは利用 できません。
+ソケットはデフォルトでブロックモードで開かれます。 socket_set_blocking() を使用して、 非ブロックモードに切換えることができます。
+例 1 fsockopen() の例
+例 2UDP接続の使用法
+UDPソケットは、リモートホストとの接続が確立されていない場合でも、 エラーを発生せずにオープンされたように見えることが時々あります。 このエラーは、そのソケットでデータを読み書きした際にのみ明らかに なります。この原因は、UDPが"コネクションレス"のプロトコルであり、 実際にデータを送受信する必要が生じるまで、オペレーションシステムが ソケット用のリンクを確立しようとしないためです。
+注意 timeout は PHP 3.0.9 でサポートされまし た。また、UDP のサポートは PHP 4で追加されました。

@@ -1,0 +1,225 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Das LISa Handbuch
+LISa stellt eine Art von Netzwerkumgebung auf der Grundlage von TCP/IP bereit.
+Es wird weder SMB noch sonst etwas ben\xF6tigt.
+Dieses Handbuch behandelt sowohl den LAN Informationsserver (LISa) als auch den eingeschr\xE4nkten (restricted) LAN Informationsserver (resLISa)
+Einleitung
+LISa stellt eine Art von Netzwerkumgebung auf der Grundlage von TCP/IP bereit.
+Es wird weder SMB noch sonst etwas ben\xF6tigt.
+Es ist vollst\xE4ndig unabh\xE4ngig von KDE / Qt.
+Die Liste der aktiven Rechner wird \xFCber TCP -Port 7741 bereitgestellt.
+LISa kann Rechner auf zwei Arten finden:
+Wenn man LISa einen Bereich von IP -Adressen gibt, sendet LISa eine Anforderung f\xFCr ein ICMP -Echo an alle angegebenen IP -Adressen und erwartet die Antworten.
+Gibt man die Befehlszeilenoption "*" an, so f\xFChrt LISa den Befehl nmblookup aus.
+Der Befehl nmblookup geh\xF6rt zum Samba-Paket, muss also aus diesem installiert werden. nmblookup "*" sendet ein Broadcast-Paket an alle erreichbaren Netzwerke und alle Rechner mit dem SMB -Protokoll antworten auf diese Anfrage.
+Wie LISa arbeitet
+In der Konfigurationsdatei muss man einen Bereich von IP-Acressen angeben, der von LISa \xFCberpr\xFCft werden soll.
+In den meisten F\xE4llen handelt es sich dabei um die Netzwerkadresse/Teilnetz-Angabe.
+Damit \xFCberpr\xFCft LISa jeden Rechner des eigenen Teilnetzes, daraufhin, ob er l\xE4uft.
+Die Rechner werden durch Anfrage eines ICMP -Echos \xFCberpr\xFCft.
+Damit ICMP -Echos versendet oder empfangen werden k\xF6nnen, muss das Programm in der Lage sein, so genannte raw sockets zu \xF6ffnen.
+Dazu sind root -Rechte erforderlich.
+Diese socket wird direkt nach dem Programmstart ge\xF6ffnet.
+Danach werden die root-Rechte automatisch zur\xFCckgegeben (siehe auch main.cpp und strictmain.cpp).
+Wenn LISa so konfiguriert ist, dass es nmblookup verwendet, f\xFChrt es den Befehl popen("nmblookup\"*\ "") aus und wertet dessen Ergebnis aus.
+Da ICMP -Anfragen und Broadcasts einigen Netzwerkverkehr verursachen, versuchen mehrere Server in einem Netzwerk zu koopierieren.
+Vor einem Ping (oder nmblookup) senden sie einen Broadcast auf Port 7741.
+Wenn ein Rechner auf dieses Broadcast antwortet, wird die Liste der laufenden Rechner \xFCber TCP -Port 7741 von diesem Rechner bezogen und kein Ping (oder nmblookup) durchgef\xFChrt.
+Falls keine Rechner antwortet, beginnt der urspr\xFCngliche Rechner, die anderen Rechner anzupingen (oder nmblookup zu senden) und \xF6ffnet eine Socket, die auf die oben genannten Broadcasts reagiert.
+Wenn der Rechner eine Antwort auf das Broadcast erh\xE4lt, \xF6ffnet er keine Socket, um auf Broadcasts zu reagieren.
+Daher sollte idealerweise immer genau ein Rechner diese Socket offen haben.
+Dieser Rechner ist der einzige, der die Ping-Anfragen (oder nmblookup) durchf\xFChrt.
+Mit anderen Worten: die Server sind faul und arbeiten nach dem Prinzip Ich tue nur dann etwas, wenn sich wirklich niemand anderer findet, der diese Arbeit f\xFCr mich erledigt.
+Eine weitere Funktion soll die Netzwerkbelastung reduzieren.
+Angenommen LISa wurde f\xFCr ein zehnmin\xFCtiges Aktualisierungsintervall konfiguriert.
+Wenn man nicht sehr h\xE4ufig auf diesen Server zugreift, ver\xE4ndert er sein Aktualisierungsintervall selbstst\xE4ndig.
+Angenommen, w\xE4hrend des gesamten Intervalls greift niemand auf den Server zu (weder vom eigenen Rechner noch von anderen Rechnern des Netzwerks).
+In diesem Fall wird die Aktualisierung durchgef\xFChrt und danach das Intervall verdoppelt, d.h. die n\xE4chste Aktualisierung findet nach 20 Minuten statt.
+Das passiert insgesamt 4 mal, wenn also niemand den Server mit Aktualisierungsintervall 10 Minuten w\xE4hrend eines langen Zeitraumes verwendet, steigt das Intervall auf maximal 160 Minuten, beinahe 3 Stunden.
+Falls dann jemand auf den Server zugreift, erh\xE4lt er eine bis zu 160 Minuten alte Liste.
+Dieser Zugriff setzt das Aktualisierungsintervall wieder zur\xFCck auf 10 Minuten und startet sofort mit der Aktualisierung, wenn die Letzte mehr als 10 Minuten her ist.
+Wenn man also eine veraltete Liste erh\xE4lt, kann man einige Sekunden sp\xE4ter eine aktuelle Liste abrufen.
+Das hat eine gro\xDFe Wirkung auf die Server, die nicht selbst Ping-Anfragen (oder nmblookup) senden, da sie nur von einem Benutzer verwendet werden, und kaum eine Wirkung auf den Server, der die Ping-Anfragen (oder nmblookup) durchf\xFChrt, da dieser Server von allen anderen Servern des Netzwerkes abgefragt wird.
+Auf diese Weise ist es m\xF6glich, das viele Rechner des Netzwerkes den Serverproze\xDF starten und die Netzbelastung dennoch gering bleibt.
+F\xFCr den Benutzer ist es unerheblich zu wissen, ob es einen anderen Server (z.B. einen Name-Server oder File-Server oder \xC4hnliches) gibt, auf dem LISa l\xE4uft.
+Er kann LISa lokal starten und LISa findet selbstst\xE4ndig und unsichtbar f\xFCr den Benutzer heraus, ob es einen aktiven Server gibt.
+Das erste Client-Programm f\xFCr LISa ist ein IOSlave f\xFCr KDE 2.
+Der Benutzer kann lan://localhost / oder lan: / eingeben, um Kontakt zu LISa auf dem lokalen System herzustellen.
+Falls es einen Rechner gibt, der immer l\xE4uft und von dem der Benutzer wei\xDF, dass er LISa gestartet hat, kann er seinen LISa -Client dirket mit diesem Server verbinden (mit dem genannten IO-Slave durch lan://Der_Servername /).
+Wenn man nicht m\xF6chte, dass LISa an Broadcasts teilnimmt sondern stattdessen immer selbst Ping-Anfragen durchf\xFChrt, kann man die Befehlszeilenoption --port oder -p verwenden.
+Das ist aber nicht empfehlenswert!
+Falls man ein SIGHUP an LISa sendet, liest das Programm die Konfigurationsdatei neu ein.
+Wenn man ein SIGUSR1 an LISa sendet, werden einige Statusinformationen auf stdout ausgegeben.
+Die Daten werden in einem einfachen Format \xFCber die Socket gesendet: <Dezimale IP-Adresse in der Byteordnung des Netzwerkes><Ein Leerzeichen 0x20> <Name des Rechners><Ein abschlie\xDFendes '\0'><Neue Zeile' \n'< und die letzte Zeile 0 succeeded <'\n'>
+Zum Beispiel:
+Das sollte leicht zu parsen sein.
+Falls man sich in einem Netzwerk mit sehr strikten Sicherheitseinstellungen befindet, k\xF6nnten einige Leute die Ping-Anfragen als einen m\xF6glichen Angriff auf den Rechner auffassen.
+Wenn man damit Probleme hat, sollte man die eingeschr\xE4nkte Version resLISa verwenden.
+resLISa
+Wenn im Netzwerk sehr strenge Sicherheitsvorschriften herrschen oder man keinen zus\xE4tzlichen Port ge\xF6ffnet haben will, kann man resLISa verwenden.
+Mit resLISa kann man keine ganzen Netzwerke oder Adressbereiche anpingen, man kann resLISa nur bis zu 64 Rechnernamen in der Konfigurationsdatei \xFCbergeben.
+Diese Rechner werden angepingt.
+Au\xDFerdem kann immer nmblookup verwendet werden.
+resLISa stellt seine Informationen auch nur \xFCber eine lokale Socket bereit, also nicht \xFCber das Netzwerk.
+Der Name dieser Socket ist /tmp/resLisa-Benutzername, sodass mehrere Benutzer auf dem gleichen Rechner resLISa gleichzeitig verwenden k\xF6nnen.
+Da also kein Sicherheitsrisiko von resLISa ausgeht, kann das Programm setuid root installiert werden. root -Rechte werden direkt nach dem Programmstart wieder zur\xFCckgegeben (siehe auch strictmain.cpp).
+Sie werden nur ben\xF6tigte, um eine Socket zum Senden der ICMP -Anfragen zu \xF6ffnen.
+Das Programm sendet und empf\xE4ngt keine Broadcasts.
+Der erste Client ist ebenfalls ein IO-Slave f\xFCr KDE 2 (zum Beispiel rlan: / in Konqueror).
+Die Konfigurationsdatei
+Eine Beispiel-Konfigurationsdatei:
+PingAddresses
+Dies ist wohl der wichtigste Eintrag.
+Hiermit werden die Adressen festgelegt, die angepingt werden sollen.
+Man kann mehrere durch Semikolon getrennte Bereiche angeben.
+Es gibt vier Wege, Adressen festzulegen:
+Netzwerkadresse/Netzwerkmaske
+192.168.100.0/255.255.255.0, d.h. eine IP -Adresse und die zugeh\xF6rige Netzwerkmaske.
+Dabei muss es sich nicht um die Netzwerkadresse und Netzmaske des eigenen Netzwerkes handeln.
+Wenn mann zum Beispiel 10.0.0.0/255.0.0.0 als eigene Adresse hat, kann man 10.1.2.0/255.255.255.0 angeben, falls man nur an den Rechnern dieses Netzwerkes interessiert ist.
+Die Kombination aus IP -Adresse-Netzwerkmaske muss durch einen Schr\xE4gstrich / getrennt sein.
+Die Adresse muss auch keine Rechneradresse des gew\xFCnschten Netzwerkes sein, z.B.
+10.12.34.67/255.0.0.0 bewirkt das Gleiche wie 10.0.0.0/255.0.0.0.
+ein Bereich von IP -Adressen
+Zum Beispiel:
+192.168.100.10-192.168.199.19
+Eine IP -Adresse als Start des Bereiches und eine IP -Adresse als Ende des Bereiches, der angepingt wird.
+Die Adressen werden durch ein - voneinander getrennt.
+Der Bereich in diesem Beispiel enth\xE4lt 199-100+1=100, 100*256=25.600, 25.600+(19-10+1)=25.590 Adressen
+Ein IP -Adresse, die aus Bereichen der vier dezimalen Zahlen besteht
+Eine IP -Adresse wird als vier dezimale Zahlen dargestellt.
+F\xFCr jede dieser vier Zahlen kann getrennt ein Bereich angegeben werden:
+192-192.169-171.100-199.0-9
+Bei diesem Beispiel beginnen alle IP -Adressen mit 192, die zweite Zahl liegt zwischen 169 und 171 einschlie\xDFlich, die Dritte zwischen 100 und 199 und die letzte Zahl liegt zwischen 0 und 9 einschlie\xDFlich.
+Das sind 1*3*100*10=3.000 Adressen.
+Diese M\xF6glichkeit ist vermutlich nur in seltenen F\xE4llen n\xFCtzlich.
+Man muss immer Bereiche f\xFCr alle vier Nummern angeben, jeweils getrennt durch -.
+Einzelne IP -Adressen oder Rechnernamen
+Die IP -Adresse oder der Rechnernamen des Rechners, an dem man interessiert ist.
+Dieser Eintrag kann auch leer gelassen werden.
+PingNames
+Hier k\xF6nnen zus\xE4tzlich Rechnernamen angegeben werden, die angepingt werden sollen.
+Die Namen m\xFCssen durch Semikolons getrennt werden.
+Dieser Eintrag kann auch leer gelassen werden.
+AllowedAddresses
+Diese Einstellung ist ebenfalls wichtig.
+LISa pingt nur Rechner an, akzeptiert Anfragen und antwortet auf Broadcasts, wenn der sendende Rechner im Bereich der erlaubten Adressen ist.
+Man kann bis zu 32 Netzwerkadressen/Netzwerkmasken oder einzelne Adressen angeben.
+Sie werden durch; getrennt.
+Leerzeichen zwischen den Adressen sind nicht erlaubt!
+Zum Beispiel:
+192.168.0.0/255.255.0.0;192.169.0.0
+Ein komplettes Netzwerk und eine einzelne Adresse sind m\xF6glich.
+Diese Einstellung sollte so restriktiv wie m\xF6glich sein.
+Die eigene Netzwerkadresse/Netzwerkmaske ist eine gute Einstellung.
+BroadcastNetwork
+Hier kann genau eine Netzwerkadresse/Netzwerkmaske eingetragen werden.
+An dieses Netzwerk werden Broadcasts gesendet.
+Hier sollte die eigene Netzwerkadresse/Subnetzmaske eingetragen sein, also zum Beispiel:
+192.168.0.0/255.255.0.0
+SearchUsingNmblookup
+Hier kann man 0 oder 1 eintragen.
+1 bedeutet, dass LISa den Befehl nmblookup "*" ausf\xFChrt und die Ausgabe dieses Befehls auswertet.
+Das erzeugt weniger Netzwerkverkehr wie das Anpingen, aber nur Rechner, auf denen das SMB -Protokoll installiert ist (Windows -Rechner oder Rechner mit samba), antworten auf diesen Befehl.
+Wenn man diese Option ausw\xE4hlt und au\xDFerdem IP -Adressen zum Anpingen angibt, wird zuerst nmblookup ausgef\xFChrt, bevor das Pingen beginnt.
+Es werden nur die Adressen angepingt, die sich nicht schon auf den Befehl nmblookup gemeldet haben.
+Das verringert die Netzwerklast ein wenig.
+FirstWait
+Wenn LISa pingt, also ICMP -Echo-Anfragen sendet, sendet LISa eine Anzahl Pings auf einmal und wartet dann die in Hundertstel Sekunden angegebene Zeit auf Antwort.
+Werte zwischen 5 und 50 sind geeignet.
+Die h\xF6chste Einstellung ist 99 (das entspricht 0,99 Sekunden, eine sehr lange Zeit).
+Dieser Wert sollte so klein wie m\xF6glich sein, sodass gerade noch alle Rechner rechtzeitig antworten k\xF6nnen.
+SecondWait
+Es kann sein, das nicht alle laufenden Rechner sich auf die erste Anfrage von LISa melden.
+Um das Resultat zu verbessern, kann LISa eine zweite Anfrage starten.
+Dieses Mal werden nur Rechner angepingt, die auf die erste Anfrage nicht geantwortet haben.
+Wenn man mit der ersten Anfrage bereits gute Resultate erzielt, kann man die zweite Anfrage deaktivieren, indem man SecondWait auf -1 setzt.
+Auf der anderen Seite kann es eine gute Idee sein, diesen Wert ein klein wenig h\xF6her zu w\xE4hlen als den f\xFCr FirstWait, da die im ersten Versuch nicht gefundenen Rechner vielleicht langsamer oder weiter entfernt sind und daher einige Millisekunden l\xE4nger zur Antwort ben\xF6tigen.
+\xDCbliche Werte liegen zwischen 5 und 50.
+Durch -1 wird diese Option deaktiviert.
+Der Maximalwert ist 99 (0,99 Sekunden sind eine sehr lange Zeit).
+UpdatePeriod
+Das Intervall, nach dem LISa seine Rechnerliste aktualisiert.
+Nach dieser Zeit startet LISa wieder ein Ping oder nmblookup oder l\xE4dt die Liste von dem LISa -Server, der das Anpingen durchf\xFChrt.
+M\xF6gliche Werte liegen zwischen 30 Sekunden und 1800 Sekunden (eine halbe Stunde).
+Wenn man ein gro\xDFes Netzwerk hat, sollte man das Intervall nicht zu klein machen (um die Netzwerkbelastung zu reduzieren).
+Werte zwischen 300 und 900 Sekunden (5 bis 15 Minuten) sind geeignet.
+Man sollte daran denken, das sich das Aktualisierungsintervall bis zu viermal verdoppelt, wenn auf den Server nicht zugegriffen wird.
+Das Intervall kann also 19 Mal so gro\xDF werden wie der eingestellte Wert.
+Dieser Wert wird zur\xFCckgesetzt, sobald wieder jemand auf den Server zugreift.
+DeliverUnnamedHosts
+Falls eine Echo-Anfrage von einer IP-Adresse empfangen wird, von der LISa den Rechnernamen nicht bestimmen kann, wird diese Adresse nur dann am Port ausgegeben, wenn diese Option auf 1 gesetzt ist.
+Die N\xFCtzlichkeit dieser Funktion ist etwas umstritten.
+Sie wurde eingerichtet f\xFCr z.B.
+Switches oder andere Ger\xE4te des Netzwerkes, denen keine Namen zugeordnet wurde und die nicht ver\xF6ffentlicht werden m\xFCssen.
+Falls man diese Ger\xE4te geheim halten will ;-), sollte man die Option auf 0 setzen.
+Im Zweifelsfall sollte man die Option auf 0 setzen.
+MaxPingsAtOnce
+LISa sendet eine Anzahl Pings gleichzeitig und wartet dann auf die Antworten.
+Standardm\xE4\xDFig werden 256 Pings auf einmal gesendet.
+Dieser Wert muss in der Regel nicht ge\xE4ndert werden.
+Falls man diesen Wert zu gro\xDF w\xE4hlt, k\xF6nnen die internen Empfangspuffer f\xFCr die Echo-Anfragen zu klein werden, ein sehr kleiner Wert verlangsamt die Aktualisierung erheblich.
+Drei weitere Beispielkonfigurationsdateien
+FIXME
+Wenn man sich in einem kleinen Netzwerk mit 24-Bit-Netzmaske, also bis zu 26 Rechnern, befindet:
+Konfigurationsdatei f\xFCr Rechner, die lediglich SMB verwenden
+Wenn man nur an Rechnern interessiert ist, die das SMB -Protokoll verwenden, und sich keine Router im Netzwerk befinden:
+Konfigurationsdatei f\xFCr sowohl nmblookup als auch Pingen
+Das gleiche Netzwerk, aber sowohl nmblookup als auch Pingen wird verwendet.
+Konfigurationsdatei f\xFCr resLISa
+Eine Konfiguration f\xFCr resLISa.
+PingAdresses und BroadcasNetwork wird ovn resLISa nicht verwendet.
+Befehlszeilenoptionen und allgemeine Benutzung
+Die folgenden Befehlszeilenoptionen werden unterst\xFCtzt:
+-v, --version
+Gibt kurze Versionsinformationen aus.
+-h, --help
+Gibt einen \xDCberblick \xFCber die Befehlszeilenoptionen
+-u, --unix
+Das ist die Standardeinstellung.
+-k, --kde1
+-K, --kde2
+-c, --config= DATEI
+Die Datei DATEI einlesen und nicht nach anderen Konfigurationsdateien suchen.
+-p, --port PORTNR
+Der Server wird auf diesem Port gestartet.
+Wenn man diese Option bei LISa verwendet, kann LISa nicht mit anderen Servern im Netzwerk kooperieren.
+Diese Option ist f\xFCr resLISa nicht verf\xFCgbar.
+Ist die Konsole, von der LISa / resLISa gestartet wurde, schon beendet, ist die Ausgabe nicht sichtbar.
+Mitwirkende und Lizenz
+LISa und resLISa Copyright 2000, 2001, Alexander Neundorf
+Frank Sch\xFCtte F.Schuette@t-online.de
+Viel Spa\xDF, Alexander Neundorf neundorf@kde.org
+Installation
+LISa und resLISa ben\xF6tigen die Bibliothek libstdc++ (nur die String-Klasse wird verwendet).
+Weder Qt noch KDE werden ben\xF6tigt.
+Um LISa auf Ihrem System zu kompilieren und zu installieren, schreiben Sie das Folgende in das Hauptverzeichnis in der LISa -Distribution:
+Da LISa autoconf und automake benutzt, sollte es dabei keine Schwierigkeiten geben.
+Sollten dennoch Probleme auftauchen, wenden Sie sich bitte an die KDE -Mailinglisten.
+Andere Anforderungen
+Sowohl resLISa als auch LISa \xF6ffnen eine so genannte raw socket f\xFCr das Senden und Empfangen von ICMP -Echo-Anfragen (Pings).
+Dazu werden root -Rechte ben\xF6tigt.
+LISa bietet einen Service auf TCP -Port 7741 an und sollte von root installiert und beim Hochfahren des Systems gestartet werden.
+Wie das zu erreichen ist, h\xE4ngt sehr vom jeweiligen Betriebssystem ab.
+resLISa ist f\xFCr den Start durch einen Benutzer programmiert, es bietet dem Netzwerk keinerlei Serverdienste an.
+Es muss mit setuid root installiert werden.
+resLISa kann bei der Verwendung des IO-Slave rlan von KDE 2 automatisch gestartet werden.
+LISa liest die Konfigurationsdatei lisarc, resLISa dagegen reslisa.
+Wenn man beide Programme von KControl konfigurieren will, muss man sie mit der Option -K starten.
+Weitere Informationen zu den Konfigurationsdateien sind im Kapitel zu finden.

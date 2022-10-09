@@ -1,0 +1,88 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+Warnung
+Diese Erweiterung ist EXPERIMENTELL.
+Das Verhalten dieser Erweiterung, einschließlich der Funktionsnamen, und alles Andere was hier dokumentiert ist, kann sich in zukünftigen PHP-Versionen ohne Ankündigung ändern.
+Seien Sie gewarnt und verwenden Sie diese Erweiterung auf eigenes Risiko.
+Dieses Modul nutzt die Funktionen von OpenSSL zur Erzeugung und Überprüfung von Signaturen und zum versiegeln (verschlüsseln) und öffnen (entschlüsseln) von Daten.
+OpenSSL bietet viele Möglichkeiten die dieses Modul zum jetzigen Zeitpunkt nicht unterstützt.
+Einige dieser Möglichkeiten werden vielleicht in zukünftigen Versionen zur Verfügung stehen.
+Bevor Sie die Openssl-Funktionen nutzen können, müssen Sie das OpenSSL Paket installieren.
+PHP-4.0.4pl1 setzt OpenSSL = 0.9.6 voraus, PHP-4.0.5 und folgende funktionieren auch mit OpenSSL = 0.9.5.
+Um Openssl mit PHP nutzen zu können, müssen Sie PHP mit der Option --with-openssl[ =DIR] übersetzen.
+Diese Erweiterung definiert keine Konfigurationseinstellungen in der php.ini.
+Ziemlich viele der OpenSSL Funktionen benötigen einen Schlüssel - oder einen Zertifikatparameter.
+PHP 4.0.5 und frühere Versionen müssen eine Schlüssel - oder Zertifikatsresource nutzen, die von einer der openssl_get_xxx Funktionen zurückgegeben wird.
+Spätere Versionen können eine der folgenden Methoden benutzen:
+Zertifikate
+Eine X.509 Resource die von openssl_x509_read zurückgegeben wird.
+Eine Zeichenkette mit dem Format file: / /pfad / zu / cert.pem; die angegebene Datei muss ein PEM verschlüsseltes Zertifikat enthalten.
+Eine Zeichenkette die den Inhalt eines Zertifikats enthält, PEM verschlüsselt.
+Öffentliche / Private Schlüssel
+Eine Schlüsselresource die von openssl_get_publickey() oder openssl_get_privatekey() zurückgegeben wird.
+Nur für öffentliche Schlüssel: eine X.509 Resource.
+Eine Zeichenkette mit dem Format file: / /pfad / zu / datei.pem - die angegebene Datei muss ein PEM verschlüsseltes Zertifikat / privaten Schlüssel enthalten (kann auch beides enthalten).
+Eine Zeichenkette die den Inhalt eines Zertifikats / Schlüssels enthält, PEM verschlüsselt.
+Für private Schlüssel können Sie auch die Syntax verwenden array( $key, $passphrase). $key repräsentiert einen Schlüssel, den Sie entweder mit der Notation file: / / oder dem textlichen Inhalt wie oben angeben. $passphrase ist eine Zeichenfolge, die die Passphrase für den privaten Schlüssel enthält.
+Wenn Sie eine Funktion aufrufen, die eine Signatur / Zertifikat überprüft, ist der Parameter cainfo Wenn Sie eine Funktion aufrufen, die eine Signatur / Zertifikat überprüft, ist der Parameter cainfo ein Array, das Datei - und Verzeichnisnamen enthält, die auf vertrauenswürdige CA Dateien verweisen.
+Falls Sie ein Verzeichnis angeben, muss dies ein korrekt geformtes gehashdes Verzeichnis sein, in der Art, wie es der Befehl openssl verwenden würde.
+Folgende Konstanten werden von dieser Erweiterung definiert und stehen nur zur Verfügung, wenn die Erweiterung entweder statisch in PHP kompiliert oder dynamisch zur Laufzeit geladen wurde.
+Die S / MIME Funktionen nutzen Kennzeichen die sich dadurch auszeichnen, dass sie ein Bitfeld benutzen, das einen oder mehrere der folgenden Werte enthalten kann:
+Tabelle 1.
+PKCS7 KONSTANTEN
+Konstante
+Beschreibung
+
+Fügt den text / plain Inhaltstyp Header einer verschlüsselten / signierten Nachricht hinzu.
+Wenn Sie entschlüsseln oder überprüfen, werden diese Header von der Ausgabe entfernt - wenn die entschlüsselte oder geprüfte Nachricht nicht dem MIME Typ text / plain entspricht, tritt ein Fehler auf.
+
+Normalerweise wird die Nachricht in ein "kanonisches" Format konvertiert, das effektiv CR und LF als Zeilende benutzt: wie von der S / MIME Spezifikation gefordert.
+Wird diese Option angegeben, findet keine Konvertierung statt.
+Das kann sich als nützlich erweisen, wenn Sie mit binären Daten umgehen, die nicht dem MIME Format entprechen.
+
+Wenn Sie eine Nachricht überprüfen, werden in der Nachricht enthaltene Zertifikate (falls es welche gibt) nach dem unterzeichnenden Zertifikat durchsucht.
+Mit dieser Option werden nur Zertifikate benutzt, die mit dem Parameter extracerts in der Funktion openssl_pkcs7_verify() angegeben wurden.
+Die mitgelieferten Zertifikate können aber dennoch als nicht vertrauenswürdige CAs benutzt werden.
+
+Keine Überprüfung des signierenden Zertifikats einer signierten Nachricht.
+
+Keine Verknüpfung der Überprüfung des Zertifikats mit den Zertifikaten des Unterzeichners: das bedeutet, die Zertifikate in der signierten Nachricht werden nicht als unvertrauenswürdige CAs benutzt.
+
+Beim Signieren einer Nachricht wird normalerweise das Zertifikat des Unterzeichnenden mit in die Nachricht aufgenommen - mit dieser Option wird das Zertifikat nicht mit aufgenommen.
+Diese Option verringert die Größe der signierten Nachricht, aber der Überprüfende muss eine lokale Kopie des Zertifikats vom Unterzeichnenden besitzen (zum Beispiel durch Angabe des Parameters extracerts in der Funktion openssl_pkcs7_verify()).
+
+Beim Signieren einer Nachricht wird normalerweise eine Reihe von Attributen mit angehängt.
+Diese enthalten die Zeit der Signierung und die unterstützen symmetrischen Algorithmen.
+Mit dieser Option werden diese Attribute nicht mit aufgenommen.
+
+Beim Signieren einer Nachricht wird Klartext-Signierung verwendet mit MIME Typ multipart / signed.
+Das ist der Standard, wenn Sie keinen optionalen Parameter flags an die Funktion openssl_pkcs7_sign() Das ist der Standard, wenn Sie keinen optionalen Parameter flags an die Funktion openssl_pkcs7_sign() übergeben.
+Wenn Sie diese Option ausschalten wird die Nachricht mit einer undurchsichtigen Signatur unterzeichnet.
+Dieses Verhalten ist robuster gegenüber der Übersetzung durch Mail-Relays, kann aber nicht mit Mailprogrammen gelesen werden, die nicht den S / Mime Standard unterstützen.
+
+Kein Versuch und keine Überprüfung der Signaturen einer Nachricht.
+Anmerkung:
+Diese Konstanten wurden in 4.0.6 hinzugefügt.
+Zurück
+Zum Anfang
+Nach vorne
+ociwritelobtofile
+Nach oben

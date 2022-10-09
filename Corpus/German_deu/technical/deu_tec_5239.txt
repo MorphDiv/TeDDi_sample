@@ -1,0 +1,48 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Editor zur geographischen Lokalisierung
+Gerhard Kulzer
+gerhard at kulzer dot net
+Das KIPI-Modul zur geographischen Lokalisierung erlaubt es GPS-Koordinaten in den Metadaten eines Bildes hinzuzufügen und zu bearbeiten. Die geographischen Daten werden in den EXIF-Stichworten des Bildes gespeichert und die Lokalisierung kann in einer Karte in einem externen Browser angezeigt werden.
+KDE
+KIPI
+Einführung
+Das KIPI-Modul zur geographischen Lokalisierung stellt Werkzeuge zur Verfügung um Bilder geographisch im sphärischen Koordinatensystem, das von GPS und Galileo benutzt wird, zu lokalisieren. Höhe, Länge- und Breitengrade werden dabei benutzt.
+Das Modul kann nur mit Bildern benutzt werden, die eine EXIF-Unterstützung durch libkexiv2 verfügen.
+Geographische Lokalisierung
+Dieses Modul verfügt über zwei Methoden um Bilder mit Koordinaten zu versehen:
+Korrelation von GPS Daten mit einer Reihe von Bildern in der Stapelverarbeitung.
+Halbautomatisches Setzen der Koordinaten zu einem einzelnen Bild.
+Die Korrelation
+Um Ihre Bilder mit geographischen Daten zu korrelieren benötigen Sie eine GPS Spur als XML-Datei im gpx-Format. gpsbabel und gpsman können die Daten für Sie von Ihrem GPS-Gerät herunterladen und konvertieren.
+Bild Geographische Lokalisierung Korrelator. Diese Schnittstelle kann eine Anzahl von vorher ausgewählten Bildern mit einer GPS-Spur zusammenführen.
+Der Dialog zur geographischen Korrelation basiert auf EXIF-Datum/Zeit und den Spurdaten im gpx-Format.
+Wählen Sie die Bilder die Sie korrelieren wollen im Hauptfenster und rufen Sie das Menü auf. Der oben zu sehende Dialog erscheint dann. Um eine mögliche Korrelation über Zeit und Lokalisierung durch zu führen, müssen Sie eine Spurdatei mit GPX-Datei laden laden. Diese Datei enthält natürlich Daten die zurselben Zeit an denselben Orten aufgenommen wurden, wie die Bilder Ihrer Kamera.
+Wenn die Datei geladen wird eine automatische Korrelation durchgeführt die die Koordinaten in rot anzeigt. GPS Spurdaten werden in GMT-Zeit aufgezeichnet und daher muss die Kamerazeit mit der GMT umgerechnet werden. Dies kann mit der Zeitzone durchgeführt werden. Setzen Sie hier Ihre Kamerazeitzone.
+Die Einstellung für die maximale Zeitabweichung gibt eine obere Abweichung für die GPS-Zeit und Kamerazeit an. Liegt die Abweichung darunter werden die Daten zusammengeführt. Der maximale Wert hierfür ist 2000 Sekunden.
+Wenn Sie keine Spurdaten von einem Ort haben für Bilder können Sie die gpx-Datei manuell bearbeiten und zu den Bildern hinzufügen. Die Zeitdifferenz von 2000 Sekunden wird dann alle Bilder in diesem Bereich korrelieren.
+Die Optionen Interpolieren und Differenz in Min. können benutzt werden, wenn Sie keine passenden Daten haben. Wenn Sie wissen, dass in der Realität eine Lokation in einer großen Zeitdifferenz zwischen Kamera und GPS liegt, können Sie diese Grenzen hier setzen und dann den Knopf Korrelieren zum interpolieren drücken.
+Korrelation
+240 Minuten ist die maximale Zeitspanne die hier eingeführt werden kann.
+Koordinaten bearbeiten
+Halbautomatisches Setzen der Koordinaten mittels einer Karte
+Die Koordinaten können mit diesem Dialog manuell gesetzt werden. Dies ist nützlich, wenn Sie eine Reihe von Fotos am selben Ort gemacht haben. Da der Dialog sich die Koordinaten von einem Aufruf zum nächsten merkt müssen Sie nur den Knopf OK benutzen, um die Daten bei dem aktuellen Foto zu setzen.
+Die Lokation kann auch mit der angezeigten Karte nach und nach gefunden und gesetzt werden. Wählen Sie dazu die betreffende Region und vergrößern Sie sie.Führen Sie dies immer wieder durch, bis Sie eine hinreichende Genauigkeit erreicht haben. Die Höhe muss immer manuell ausgewählt werden. Die Karte kann zwischen Kartenmodus, Satellitenbild und einem gemischten Modus gewechselt werden.
+Benutzung der Befehlszeile
+Komplett außerhalb des KIPI-Moduls gibt es Möglichkeiten die GPS-Daten an die Bilder zu hängen. Hier ist ein kleines Skript dass das exiftool benutzt, um einen Stapel von Bildern mit GPS-Daten zu versehen.
+#!/bin/sh # Skript für die einfache Benutzung des exiftool mit der Befehlszeile. Es benutzt durch einen regulären Ausdruck angegebene Dateien oder ganze Ordner. # # FMT Output # "%d deg %d '%.2f"\\" 54 deg 59' 22.80 "#" %d deg %.4f min "54 deg 59.3800 min #" %.6f degrees "54.989667 degrees if [-z $1]; then echo" Benutzung: exiftool-gps-wrapper lat long [alt] Datei || Ordner (benutzen Sie vorzeichenbehaftete Fließkomakoordinaten) "else if [-z" $4 "]; then foo="$3"; alt=0 else foo="$4 "; alt=$3 fi echo $foo if [-e" $foo "]; then latR=$(echo" $1 "| awk '{if ($1 & lt; 0) print" S "; else print" N "}') lonR=$(echo" $2 "| awk '{if ($1 & lt; 0) print" W "; else print" E "}') lat=$(echo" $1 "| awk '{val = $1; if ($1 & lt; 0) sub(/- /," ", val); print val}') # absoluter Wert lon=$(echo" $2 "| awk '{val = $1; if ($1 & lt; 0) sub(/- /," ", val); print val}') # absoluter Wert # benutzen Sie die folgende Syntax für eine einfaches Google'sches einfügenll=-1.23456,53.345345 #lonR=$(echo" $2 "| awk '{if ($2 & lt; 0) print" W "; else print" E "}') echo $lat, $latR, $lon, $lonR, $3, $4, $foo function setgpsinfo () {exiftool -c" %.6f "-GPSMapDatum="WGS-84" -GPSAltitude=$5\\ -GPSLongitudeRef=$4 -GPSLongitude=$3 -GPSLatitudeRef=$2 -GPSLatitude=$1 "$6" exiftool -GPS:ALL "$6"} if [-d "$foo"]; then for i in "$foo"; do # die Auswahl der behandelten Dateien hängt von dem übergebendem regulären Ausdruck ab echo "i=" $i setgpsinfo $lat $latR $lon $lonR $alt "$i" done else setgpsinfo $lat $latR $lon $lonR $alt "$foo" fi else echo "Datei oder Ordner ist falsch" fi fi

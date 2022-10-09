@@ -1,0 +1,76 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+LDAP is the Lightweight Directory Access Protocol, and is a protocol used to access "Directory Servers".
+The Directory is a special kind of database that holds information in a tree structure.
+The concept is similar to your hard disk directory structure, except that in this context, the root directory is "The world" and the first level subdirectories are "countries ".
+Lower levels of the directory structure contain entries for companies, organisations or places, while yet lower still we find directory entries for people, and perhaps equipment or documents.
+To refer to a file in a subdirectory on your hard disk, you might use something like:
+/usr / local / myapp / docs
+The forwards slash marks each division in the reference, and the sequence is read from left to right.
+The equivalent to the fully qualified file reference in LDAP is the "distinguished name", referred to simply as "dn".
+An example dn might be:
+cn=John Smith,ou=Accounts,o=My Company,c=US
+The comma marks each division in the reference, and the sequence is read from right to left.
+You would read this dn as:
+country = US organization = My Company organizationalUnit = Accounts commonName = John Smith
+In the same way as there are no hard rules about how you organise the directory structure of a hard disk, a directory server manager can set up any structure that is meaningful for the purpose.
+However, there are some conventions that are used.
+The message is that you can not write code to access a directory server unless you know something about its structure, any more than you can use a database without some knowledge of what is available.
+Lots of information about LDAP can be found at
+Netscape
+University of Michigan
+OpenLDAP Project
+LDAP World
+The Netscape SDK contains a helpful Programmer 's Guide in HTML format.
+You will need to get and compile LDAP client libraries from either the University of Michigan ldap-3.3 package or the Netscape Directory SDK 3.0 to compile PHP with LDAP support.
+LDAP support in PHP is not enabled by default.
+You will need to use the --with-ldap[ =DIR] configuration option when compiling PHP to enable LDAP support.
+DIR is the LDAP base install directory.
+Note to Win32 Users:
+In order to enable this module on a Windows environment, you must copy libsasl.dll from the DLL folder of the PHP / Win32 binary package to the SYSTEM32 folder of your windows machine. (Ex:
+C:\WINNT\SYSTEM32 or C:\WINDOWS\SYSTEM32)
+The behaviour of these functions is affected by settings in php.ini.
+Table 1.
+LDAP configuration options
+Name
+Default
+Changeable
+ldap.max_links
+"-1"
+PHP_INI_SYSTEM
+This extension has no resource types defined.
+The constants below are defined by this extension, and will only be available when the extension has either been compiled into PHP or dynamically loaded at runtime.
+Retrieve information for all entries where the surname starts with "S" from a directory server, displaying an extract with name and email address.
+Example 1.
+LDAP search example
+?php / / basic sequence with LDAP is connect, bind, search, interpret search / / result, close connection echo "h3 LDAP query test / h3"; echo "Connecting.. ."; $ds=ldap_connect("localhost"); / / must be a valid LDAP server! echo "connect result is ".$ds. "p"; if ($ds) {echo "Binding.. ."; $r=ldap_bind($ds); / / this is an "anonymous "bind, typically / / read-only access echo "Bind result is ".$r." p "; echo "Searching for (sn=S*).. ."; / / Search surname entry $sr=ldap_search($ds ,"o=My Company, c=US", "sn=S*"); echo "Search result is ".$sr." p "; echo "Number of entires returned is ".ldap_count_entries($ds,$sr)." p "; echo "Getting entries... p"; $info = ldap_get_entries($ds, $sr); echo "Data for ".$info["count"]. "items returned: p"; for ($i=0; $i $info["count"]; $i++) {echo "dn is: ". $info[$i]["dn"]." br "; echo "first cn entry is:". $info[$i]["cn"][0]. "br"; echo "first email entry is: ". $info[$i]["mail"][0]." p ";} echo "Closing connection"; ldap_close($ds);} else {echo" h4 Unable to connect to LDAP server / h4 ";}?
+Before you can use the LDAP calls you will need to know..
+The name or address of the directory server you will use
+The "base dn" of the server (the part of the world directory that is held on this server, which could be "o=My Company,c=US")
+Whether you need a password to access the server (many servers will provide read access for an "anonymous bind "but require a password for anything else)
+The typical sequence of LDAP calls you will make in an application will follow this pattern:
+ldap_connect() / / establish connection to server | ldap_bind() / / anonymous or authenticated "login "| do something like search or update the directory and display the results | ldap_close() / / "logout"
+Prev
+Home
+Next
+java_last_exception_get
+Up
+ldap_8859_to_t61

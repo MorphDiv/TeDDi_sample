@@ -1,0 +1,69 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Instrucción Put [Ejecución]
+/text/sbasic/shared/03020204.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+Put;función
+Instrucción Put [Runtime]
+Escribe un registro en un archivo relativo o una secuencia de bytes en un archivo binario.
+Get
+Sintaxis
+:
+Put [#] NúmeroArchivo As Integer, [posición], Variable
+Parámetros:
+NúmeroArchivo:
+Cualquier expresión entera que defina el archivo en el que se desee escribir.
+Posición:
+En archivos relativos (archivos de acceso aleatorio), el número del registro que se desee escribir.
+En archivos binarios (acceso binario), la posición del byte del archivo en que se desee empezar a escribir.
+Variable:
+Nombre de la variable que se desee escribir en el archivo.
+Len
+de la instrucción
+Open
+, el espacio entre el final del registro escrito recientemente y el siguiente se rellena con los datos existentes del archivo al que está escribiendo.
+Nota para archivos binarios:
+El contenido de las variables se escribe en la posición especificada y el puntero del archivo se inserta directamente después del último byte.
+No se deja espacio entre los registros.
+Ejemplo:
+Sub EjemploAccesoAleatorio
+Dim iNumero As Integer
+Dim sTexto As Variant REM Debe ser de tipo variante
+Dim aArchivo As String
+aArchivo = &quot; c:\data.txt &quot;
+iNumero = Freefile
+Open aArchivo For Random As #iNumero Len=32
+Seek #iNumero,1 REM Posición en la que empezar a escribir
+Put #iNumero,, &quot; Esta es la primera línea de texto &quot; REM Rellenar línea con texto
+Print #iNumero, &quot; Esta es la segunda línea de texto &quot;
+Print #iNumero, &quot; Esta es la tercera línea de texto &quot;
+Seek #iNumero,2
+Get #iNumero,,sTexto
+Print sTexto
+Close #iNumero
+iNumero = Freefile
+Open aArchivo For Random As #iNumero Len=32
+Get #iNumero,2,sTexto
+Put #iNumero,, &quot; Esto es un texto nuevo &quot;
+Get #iNumero,1,sTexto
+Get #iNumero,2,sTexto
+Put #iNumero,20, &quot; Este es el texto del registro 20 &quot;
+Print Lof(#iNumero)
+Close #iNumero
+end sub

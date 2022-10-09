@@ -1,0 +1,109 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Questions et réponses
+& reporting. bugs;
+Questions à propos de la numérotation
+Je n'arrive pas à faire marcher & kppp;. & kppp; il me dit que pppd est mort ou que le délai a expiré. Qu'est ce qui ce passe & #160;?
+Avez -vous lu le manuel correctement & #160;? Voici une fois de plus la plupart des pièges communs & #160;:
+Cliquez sur le bouton Détails. & kppp; vous donnera un résumé des messages de log PPP (ne fonctionne peut être pas sur des systèmes non-Linux;, ou même sur certaines distributions & Linux;). Les logs vous aideront à traquer le bogue.
+Soyez sûr que pppd est le binaire pppd et non un script
+Soyez sûr que pppd a le flag setuid root. Vous devez mettre ce mode en utilisant chmod u+s pppd en tant que root.
+Vérifiez que votre fichier / etc/ ppp/ options existe et qu'il ne contient pas d'entrées conflictuelles. En cas de doute & #160;: laisser ce fichier vide.
+Vérifiez que vous n'utilisez pas l'option lock comme argument pour pppd (kppp; fait déjà attention au verrouillage de périphérique).
+Enlevez l'option lock des deux fichiers / etc/ ppp/ options et tilde; /. ppprc!
+Utiliser le lien symbolique / dev/ modem peut causer des conflits. Éliminez cette source de trouble en utilisant le vrai périphérique, & cad; / dev/ cuaX ou / dev/ ttySX.
+COM1 équivaut à ttyS0, COM2 est ttyS1 et ainsi de suite.
+Soyez sûr d'avoir réglé les bonnes permissions. En cas de troubles vous pourrez vouloir le lancer en tant que root en premier et plus tard, lorsque tout fonctionne bien lui donner moins de permissions dangereuses si vous ne pouvez pas lancer & kppp; setuid root. La bonne manière de procéder serait probablement de créer un modem groupe.
+Vous lancez peut être pppd trop tôt, & cad; avant que le serveur distant ne soit prêt à négocier une connexion PPP. Si vous utilisez un script de connexion, vous devez utiliser un terminal pour vérifier votre procédure de connexion. Certains fournisseurs requièrent que vous envoyez un simple Send ou Send ppp pour lancer PPP. Certains utilisateurs ont même rapportés qu'ils devaient faire Pause 1 ou Pause 2 dans leur script pour résoudre des problèmes de temporisation.
+Si rien n'y fait, vous obtiendrez peut être des informations de débogue à partir de vos logs systèmes en utilisant & #160;:
+# tail / var/ log/ messages
+pppd est mort - Le système distant doit s'authentifier...
+Message d'erreur typique dans un log système & #160;:
+pppd[699]: Le système distant doit s'authentifier pppd[699]: mais je ne peux pas trouver de mot de passe (password) correct à utiliser pour le faire. pppd[699]: (Aucun des mots de passe disponibles laisse utiliser une adresse IP).
+Autant que je puisse dire, il y a deux causes à ce problème & #160;:
+/ etc/ ppp/ options contient l'option auth. Mettez simplement un # commentaire au début et essayez encore une fois.
+Votre système a déjà une route par défaut. Avez -vous mis en place un réseau local & #160;? Dans ce cas les récentes versions de pppd se comportera comme si auth avait été spécifié. Pour outrepasser cela vous devez ajouter noauth aux arguments de pppd dans la boîte de réglage de kppp. Autrement vous pouvez arrêter votre réseau local avant de numéroter. Je serais reconnaissant si quelqu'un pouvait me fournir les instructions pour combiner en harmonie 2 connexions réseau.
+pppd meurt avec le kernel Linux 2.4. x
+Messages d'erreur typique dans votre log système & #160;:
+pppd[1182]: pppd 2.3.11 démarré par l'utilisateur, uid 500 pppd[1182]: ioctl(PPPIOCGFLAGS): Argument invalide pppd[1182]: tcsetattr: Argument invalide pppd[1182]: Sortie.
+Installez pppd 2.4.0b1 ou mieux. Voir Documentation/ Changes dans les sources du kernel pour plus d'informations.
+Pourquoi & kppp; me dit Impossible d'ouvrir le modem?
+Cela veut dire que & kppp; n'a pas les permissions pour ouvrir le périphérique modem ou que vous avez sélectionnez un modem dans l'onglet de dialogue Modem qui n'est pas valable. Premièrement vérifiez que avez sélectionné le bon modem. Une fois que vous avez sélectionné le bon modem, vous devez donner à & kppp; la bonne permission pour accéder au modem et pour qu'il soit capable de modifier / etc/ resolv. conf dans le cas ou vous voulez que & kppp; configure le DNS correctement pour vous. Si vous pouvez lancer & kppp; setuid root cela résolvera tous les problèmes d'accès, sinon vous devrez trouver quelles permissions sont nécessaires. Pour donner à & kppp; les permissions setuid root faites ce qui suit & #160;:
+% su root # chown root: root & dollar; KDEDIR/ bin/ kppp # chmod +s & dollar; KDEDIR/ bin/ kppp # exit
+Pourquoi & kppp; me dit qu'il ne peut créer un fichier de verrouillage modem & #160;?
+Dans la plupart des cas cela veut dire que vous avez installé & kppp; sans le bit setuid alors que vous, la personne exécutant & kppp;, n'avez pas les droits d'accès au dossier du fichier de verrouillage qui est par défaut / var/ lock. C'est par exemple le cas pour les systèmes & RedHat;. Vérifiez la configuration du modem pour le lieu précis que vous avez choisi. La solution est facile -- soit vous lancez & kppp; setuid si vous le pouvez, ou donnez aux utilisateurs normaux le droit d'accès à / var/ lock ou créer un groupe modem qui aura accès au fichier / var/ lock.
+Pourquoi & kppp; est installé avec le bit setuid & #160;?
+Il n'y a pas besoin du bit setuid, si vous connaissez un peu l'administration système & UNIX;. Créez simplement un groupe modem, ajoutez tous les utilisateurs qui veulent accéder au modem à ce groupe et rendre le modem accessible en lecture écriture pour ce groupe. De Même si vous voulez que la configuration du DNS fonctionne avec & kppp;, alors / etc/ resolv. conf doit être accessible en lecture & #160; / & #160; écriture pour les membres du groupe. La même chose pour / etc/ ppp/ pap-secrets et / etc/ ppp/ chap-secrets si vous voulez pour utiliser le support PAP ou CHAP respectivement.
+Le groupe & kppp; a fait récemment beaucoup de travail pour rendre & kppp; setuid-sûr. Mais c'est à vous de décider si vous l'installez et comment vous l'installez.
+Vous pouvez aussi lire la section Security.
+Que fais -je lorsque & kppp; s'arrête et attend avec le message & #160;: Expecting OK
+Avez vous joué avec les réglages CR/ LF & #160;? Essayez CR, LF ou CR/ LF.
+Alternativement, votre modem peut avoir besoin de temps pour répondre à son initialisation. Ouvrez la fenêtre de dialogue Commandes Modem dans l'onglet Modem et ajustez les délais Pre-Init et Post-Init. Regardez si vous avez plus de chance lorsque vous augmentez fortement ces valeurs, et faites un réglage plus fin ensuite.
+La connexion fonctionne bien, mais je ne peux lancer aucune applications & #160;!
+Vous avez sans doute sélectionné l'option Auto Configure Host Name, et le serveur X a des problèmes pour se connecter à votre système renommé. Si vous avez réellement besoin de cette option (et il y a beaucoup de chances que vous n'en ayez pas besoin), vous devez régler vous même les bonnes autorisations. Lancer xhost + avant de lancer la connexion fera le travail, mais soyez prévenu des risques de sécurité encourus, car cela donne accès à tous à votre serveur X.
+& kppp; rapporte une bonne connexion, mais & konqueror; me dit Unknown host hostname, et & Netscape; rapporte The server does not have a DNS entry.
+Essayer de faire un ping sur un autre serveur par son IP, & pex; ping 195.0.254.76. Si cela fonctionne bien, vous pouvez essayer ceci & #160;:
+Vérifiez que vous avez fourni à & kppp; au moins une adresse DNS.
+Vérifiez le contenu de / etc/ host. conf. Il devrait y avoir une ligne disant quelque chose comme order hosts, bind. Le mot clé bind avertit la librairie de résolution d'inclure une interrogation de serveur de nom quand vous recherchez une adresse. Si une telle ligne n'existe pas, essayez de l'ajouter.
+Comment faire que & kppp; envoie un\ ou un \\r
+Envoyez simplement une chaîne vide comme dans le script suivant & #160;:
+Send # envoie une chaîne vide Expect ID: Send cestmoi Expect word: Send perdu Expect granted Send ppp
+Comment faire que & kppp; arrête de se plaindre & #160;: Can't create lock file & #160;?
+Cela arrive parce que vous n'avez pas les permissions pour créer un fichier de verrouillage. Si vous choisissez d'utiliser un fichier de verrouillage, vous devez avoir les droits d'écriture dans le dossier typiquement / var/ lock). Cela n'est bien sur pas un problème si vous avez donné à & kppp; la permission setuid. Lisez la section sur les fichiers de verrouillage.
+Pourquoi mon modem fait autant de bruit lorsqu'il numérote & #160;?
+Cliquez sur Configuration, et Modem. Vous pouvez contrôler le volume de votre modem ici en trois étapes & #160;: Éteint, moyen et fort. Pour la plupart des modems, moyen ou fort donne le même volume. Si changer ce réglage ne fait rien, vérifiez que les paramètres correctes pour votre modem sont spécifiez dans Setup, Modem, Commandes modem.
+J'ai mis le volume du modem sur éteint et vérifié les commandes modem, mais je continue à entendre ce bruit horrible pendant la numérotation. Pourquoi & #160;?
+La chaîne d'initialisation du volume peut se perdre si votre modem ne peut suivre la vitesse à laquelle il la reçoit de & kppp;. Augmentez la valeur du délais post-initialisation dans Configuration, Modem, Commandes modem.
+& kppp; continue de rapporter des vitesses de connexions inhabituelles comme 115200 ou 57600
+Beaucoup de modems ne rapportent que la vitesse de la ligne série et non la vitesse de la ligne téléphone par défaut. Vous devez configurer ces modems pour qu'ils rapportent la vraie vitesse de la ligne en ajoutant quelques commandes dans les chaînes d'initialisation ou de numérotation. Pour beaucoup de modems cette commande est ATW2. Si vous voulez l'ajouter à la chaîne de numérotation (qui commence normalement avec ATD), la nouvelle chaîne de numérotation devra être ATW2D.
+Pourquoi & kppp; rapporte Vitesse inconnue
+Les nouveaux modems ont souvent des messages de connexions très complexes comme CONNECT LAP. M/ V42. bis/ 115000: RX/ 31200: TX, et & kppp; ne peut pas passer ce message correctement. Choisissez Montrer le log et vous verrez la vitesse de connexion réelle.
+J'ai une connexion lente
+Si vous n'êtes pas satisfait par la vitesse de votre modem, vérifiez que vous avez configuré la vitesse de connexion (vous pouvez la trouver en cliquant sur Configuration, Périphérique, Vitesse de connexion) à 57600 ou plus. Vérifiez que vos ports série supportent des vitesses rapides. Beaucoup de vieux systèmes basés sur des i486 ne fonctionnent pas correctement si vous réglez une vitesse à plus de 115200. Si vous avez une vielle puce 8250 UART, cela ne fonctionnera pas. Si vous avez un 16550 ou 16550A cela fonctionnera plus ou moins.
+De plus, vous devez consulter le manuel de votre modem pour chercher les chaînes d'initialisation qui activent le mode haute vitesse.
+J'ai une connexion VRAIMENT très lente & #160;!
+Si le taux de transfert descend à quelques octets par secondes, vous devriez vérifier la configuration matériel. Si bouger la souris augmente la vitesse de connexion, il s'agit bien d'un problème matériel & #160;!
+Vous pouvez obtenir quelques informations à propos de votre port série avec setserial -a / dev/ ttySx et vérifiez qu'il n'y a pas de conflit d'interruption avec d'autres composants de votre système. Le module du & centreConfiguration; Information peut aussi être une aide ici.
+Ma ligne de téléphone a besoin d'une numérotation par impulsion plutôt que par tonalité (ou vice-versa). Comment change -je cela & #160;?
+Vous pouvez modifier la chaîne de numérotation de votre modem. Pratiquemet tous les modems supportent les commandes AT suivantes & #160;:
+ATDT
+Sélectionne la numérotation par tonalité
+ATDP
+Sélectionne la numérotation par impulsion
+Questions à propos des règles de coût du téléphone
+Comment je créé un fichier de règles de coût de téléphone & #160;?
+Suivez simplement le fichier TEMPLATE de règles fournit avec & kppp;. Vous devriez être capable de trouver une copie dans $KDEDIR/ doc/ HTML/ fr / kppp/. Utilisez la l'option de ligne de commande -r de & kppp; pour vérifier la syntaxe pour votre fichier de règles.
+J'ai écrit des règles de coût de téléphone pour ma région. Où puis -je les soumettre pour que d'autres puissent l'utiliser & #160;?
+Est -ce que mon fichier de règles de coût peut contenir des unités de temps fractionnées comme "(0.17, 45.5)" & #160;?
+Oui c'est possible. Mais vous ne devriez pas utiliser des unités de temps inhabituellement petites en dessous du dixième de seconde, car celui occasionnera une charge processeur plus grande, que vous ne noterez probablement pas sur un processeur moderne.
+Mon pays observe d'autres jours fériés variables que Pâques.
+Dans ce cas, vous aurez besoin d'écrire un nouveau code qui autorise le calcul de ces vacances. Regardez dans ruleset. cpp et copiez l'exemple easter. Et ensuite envoyez les patches & #160;!
+Questions à propos des historiques système
+Je vois un message indiquant Serial line is looped back. Qu'est ce que cela veut dire & #160;?
+Courte réponse & #160;: pourquoi ne pas démarrer PPP sur le système.
+L'historique indique Signal 15
+Si vous voyez de telles lignes, vous avez probablement reçu une erreur de délais de la part de & kppp;. & kppp; a attendu que l'interface PPP arrive et rende la main après un certain temps. Il a été demandé à pppd de terminer, avec le signal 15, & cad; SIGTERM.
+pppd[26921]: pppd 2.3.5 started by me, uid 500 pppd[26921]: Using interface ppp0 pppd[26921]: Connect: ppp0 & lt; --gt; / dev/ ttyS0 pppd[26921]: Terminating on signal 15. pppd[26921]: Connection terminated. pppd[26921]: Exit.
+Et à propos de Receive serial link is not 8-bit clean
+Le démon PPP est alarmé par le fait que toutes les données qu'il a reçu ont le bit 8 à zéro. Dans la plupart des cas cela indique simplement que le serveur PPP distant ne tourne pas encore. Vous continuerez peut être à être confronté à un prompt de connexion qui renvoie toutes les données que votre pppd envoie.
+et can't locate module ppp-compress & #160;? Qu'est ce que c'est que ça & #160;?
+Voyez vous les messages suivants & #160;?
+modprobe: can't locate module ppp-compress-21 modprobe: can't locate module ppp-compress-26 modprobe: can't locate module ppp-compress-24
+Ajoutez simplement les lignes suivantes & #160;:
+alias ppp-compress-21 bsd_comp alias ppp-compress-24 ppp_deflate alias ppp-compress-26 ppp_deflate
+à votre fichier / etc/ conf. modules.

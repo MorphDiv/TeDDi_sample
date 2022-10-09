@@ -1,0 +1,273 @@
+# language_name_wals:	Hebrew (Modern)
+# language_name_glotto:	Modern Hebrew
+# ISO_6393:	heb
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hebr
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/he.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+מדריך PHP
+קודם
+הבא
+תוכן העניינים:
+The configuration file
+
+
+For the CGI version, it happens on every invocation.
+דוגמה 3-1. php.ini example
+
+When using PHP as an Apache module, you can also change the configuration settings using directives in Apache configuration files and .htaccess files (You will need "AllowOverride Options "or "AllowOverride All" privileges)
+With PHP 3.0, there are Apache directives that correspond to each configuration setting in the php3.ini name, except the name is prefixed by "php3_".
+With PHP 4.0, there are several Apache directives that allow you to change the PHP configuration from within the Apache configuration file itself.
+This sets the value of the specified variable.
+This is used to set a Boolean configuration option.
+This sets the value of the specified variable. "Admin" configuration settings can only be set from within the main Apache configuration files, and not from .htaccess files.
+This is used to set a Boolean configuration option.
+דוגמה 3-2.
+Apache configuration example
+IfModule mod_php4.c php_value include_path ".: / usr / local / lib / php" php_flag safe_mode on / IfModule IfModule mod_php3.c php3_include_path ".: / usr / local / lib / php "php3_safe_mode on / IfModule
+You can view the settings of the configuration values in the output of phpinfo().
+You can also access the values of individual configuration settings using get_cfg_var().
+This option enables the URL-aware fopen wrappers that enable accessing URL object like files.
+Default wrappers are provided for the access of remote files using the ftp or http protocol, some extensions like zlib may register additional wrappers.
+הערה:
+This option was introduced immediately after the release of version 4.0.3.
+For versions up to and including 4.0.3 you can only disable this feature at compile time by using the configuration switch --d isable-url-fopen-wrapper.
+Enables the use of ASP-like%% tags in addition to the usual ?php? tags.
+This includes the variable-value printing shorthand of %= $value%.
+For more information, see Escaping from HTML.
+הערה:
+Support for ASP-style tags was added in 3.0.4.
+Specifies the name of a file that is automatically parsed after the main file.
+The file is included as if it was called with the include() function, so include_path is used.
+The special value none disables auto-appending.
+הערה:
+If the script is terminated with exit(), auto-append will not occur.
+Specifies the name of a file that is automatically parsed before the main file.
+The file is included as if it was called with the include() function, so include_path is used.
+The special value none disables auto-prepending.
+This determines whether errors should be printed to the screen as part of the HTML output or not.
+PHP' s "root directory "on the server.
+Only used if non-empty.
+If PHP is configured with safe mode, no files outside this directory are served.
+This directive is really only useful in the Apache module version of PHP.
+It is used by sites that would like to turn PHP parsing on and off on a per-directory or per-virtual server basis.
+By putting engine off in the appropriate places in the httpd.conf file, PHP can be enabled or disabled.
+Name of file where script errors should be logged.
+If the special value syslog is used, the errors are sent to the system logger instead.
+On UNIX, this means syslog( 3) and on Windows NT it means the event log.
+The system logger is not supported on Windows 95.
+Set the error reporting level.
+The parameter is an integer representing a bit field.
+Add the values of the error reporting levels you want.
+טבלה 3-1.
+Error Reporting Levels
+bit value
+enabled reporting
+1
+normal errors
+2
+normal warnings
+4
+parser errors
+8
+non-critical style-related warnings
+Turn off HTML tags in error messages.
+Limit the files that can be opened by PHP to the specified directory-tree.
+When a script tries to open a file with, for example, fopen or gzopen, the location of the file is checked.
+When the file is outside the specified directory-tree, PHP will refuse to open it.
+All symbolic links are resolved, so it 's not possible to avoid this restriction with a symlink.
+The special value. indicates that the directory in which the script is stored will be used as base-directory.
+Under Windows, separate the directories with a semicolon.
+On all other systems, separate the directories with a colon.
+As an Apache module, open_basedir paths from parent directories are now automatically inherited.
+The restriction specified with open_basedir is actually a prefix, not a directory name.
+This means that "open_basedir = / dir / incl" also allows access to "/ dir / include" and "/ dir / incls" if they exist.
+When you want to restrict access to only the specified directory, end with a slash.
+For example: "open_basedir = / dir / incl /"
+הערה:
+Support for multiple directories was added in 3.0.7.
+The default is to allow all files to be opened.
+Set the order of GET / POST / COOKIE variable parsing.
+The default setting of this directive is "GPC".
+Setting this to "GP", for example, will cause PHP to completely ignore cookies and to overwrite any GET method variables with POST-method variables of the same name.
+Note, that this option is not available in PHP 4.
+Use variables_order instead.
+Set the order of the EGPCS (Environment, GET, POST, Cookie, Server) variable parsing.
+The default setting of this directive is "EGPCS".
+Setting this to "GP", for example, will cause PHP to completely ignore environment variables, cookies and server variables, and to overwrite any GET method variables with POST-method variables of the same name.
+See also register_globals.
+TRUE by default.
+If changed to FALSE scripts will be terminated as soon as they try to output something after a client has aborted their connection.
+See also ignore_user_abort().
+FALSE by default.
+Changing this to TRUE tells PHP to tell the output layer to flush itself automatically after every output block.
+This is equivalent to calling the PHP function flush() after each and every call to print() or echo() and each and every HTML block.
+When using PHP within an web environment, turning this option on has serious performance implications and is generally recommended for debugging purposes only.
+This value defaults to TRUE when operating under the CLI SAPI.
+Specifies a list of directories where the require(), include() and fopen_with_path() functions look for files.
+The format is like the system 's PATH environment variable: a list of directories separated with a colon in UNIX or semicolon in Windows.
+דוגמה 3-3.
+UNIX include_path
+include_path=.: / home / httpd / php-lib
+דוגמה 3-4.
+Windows include_path
+include_path=" .;c:\www\phplib "
+Tells whether script error messages should be logged to the server 's error log.
+This option is thus server-specific.
+Sets the magic_quotes state for GPC (Get / Post / Cookie) operations.
+When magic_quotes are on, all '(single-quote), "(double quote),\ (backslash) and NUL 's are escaped with a backslash automatically.
+If magic_quotes_sybase is also on, a single-quote is escaped with a single-quote instead of a backslash.
+If magic_quotes_runtime is enabled, most functions that return data from any sort of external source including databases and text files will have quotes escaped with a backslash.
+If magic_quotes_sybase is also on, a single-quote is escaped with a single-quote instead of a backslash.
+If magic_quotes_sybase is also on, a single-quote is escaped with a single-quote instead of a backslash if magic_quotes_gpc or magic_quotes_runtime is enabled.
+This sets the maximum time in seconds a script is allowed to run before it is terminated by the parser.
+This helps prevent poorly written scripts from tying up the server.
+The default setting is 30.
+The maximum execution time is not affected by system calls, the sleep() function, etc.
+Please see the set_time_limit() function for more details.
+This sets the maximum amount of memory in bytes that a script is allowed to allocate.
+This helps prevent poorly written scripts for eating up all available memory on a server.
+The number of significant digits displayed in floating point numbers.
+Tells PHP whether to declare the argv argc variables (that would contain the GET information).
+See also command line.
+Also, this directive became available in PHP 4.0.0 and was always "on" before that.
+Sets max size of post data allowed.
+This setting also affects file upload.
+To upload large files, this value must be larger than upload_max_filesize.
+If memory limit is enabled by configure script, memory_limit also affects file uploading.
+Generally speaking, memory_limit should be larger than post_max_size.
+Tells whether or not to register the EGPCS (Environment, GET, POST, Cookie, Server) variables as global variables.
+You may want to turn this off if you don' t want to clutter your scripts 'global scope with user data.
+This makes the most sense when coupled with track_vars - in which case you can access all of the EGPCS variables through the $_ENV, $_GET, $_POST, $_COOKIE, and $_SERVER arrays in the global scope.
+Please note that you need to set AllowOveride All in your Directory block in the apache config file for this to work.
+Tells whether the short form (??) of PHP 's open tag should be allowed.
+If you want to use PHP in combination with XML, you have to disable this option.
+If disabled, you must use the long form of the open tag (?php?).
+If enabled, the last error message will always be present in the global variable $php_errormsg.
+If enabled, then Environment, GET, POST, Cookie, and Server variables can be found in the global associative arrays $_ENV, $_GET, $_POST, $_COOKIE, and $_SERVER.
+Note that as of PHP 4.0.3, track_vars is always turned on.
+The temporary directory used for storing files when doing file upload.
+Must be writable by whatever user PHP is running as.
+The maximum size of an uploaded file.
+The value is in bytes.
+The base name of the directory used on a user 's home directory for PHP files, for example public_html.
+If enabled, this option makes PHP output a warning when the plus (+) operator is used on strings.
+This is to make it easier to find scripts that need to be rewritten to using the string concatenator instead (.).
+Whether to enable PHP 's safe mode.
+Read the Security and Safe Mode chapters for more information.
+Whether to use UID (FALSE) or GID (TRUE) checking upon file access.
+See Safe Mode for more information.
+If PHP is used in safe mode, system() and the other functions executing system programs refuse to start programs that are not in this directory.
+UID / GID checks are bypassed when including files from this directory and its subdirectories (directory must also be in include_path or full path must including).
+DNS name or IP address of host used by the debugger.
+Port number used by the debugger.
+Whether the debugger is enabled.
+This directive is really only useful in the Apache module version of PHP.
+You can turn dynamic loading of PHP extensions with dl() on and off per virtual server or per directory.
+The main reason for turning dynamic loading off is security.
+With dynamic loading, it 's possible to ignore all the safe_mode and open_basedir restrictions.
+The default is to allow dynamic loading, except when using safe-mode.
+In safe-mode, it' s always imposible to use dl().
+In what directory PHP should look for dynamically loadable extensions.
+Which dynamically loadable extensions to load when PHP starts up.
+Whether to allow persistent mSQL connections.
+The maximum number of persistent mSQL connections per process.
+The maximum number of mSQL connections per process, including persistent connections.
+Whether to allow persistent Postgres connections.
+The maximum number of persistent Postgres connections per process.
+The maximum number of Postgres connections per process, including persistent connections.
+Name of BS2000 PLAM library containing the loadable SESAM driver modules.
+Required for using SESAM functions.
+The BS2000 PLAM library must be set ACCESS=READ,SHARE=YES because it must be readable by the apache server 's user id.
+Name of SESAM application configuration file.
+Required for using SESAM functions.
+The BS2000 file must be readable by the apache server 's user id.
+The application configuration file will usually contain a configuration like (see SESAM reference manual):
+CNF=B NAM=K NOTYPE
+Name of SESAM message catalog file.
+In most cases, this directive is not neccessary.
+Only if the SESAM message file is not installed in the system 's BS2000 message file table, it can be set with this directive.
+The message catalog must be set ACCESS=READ,SHARE=YES because it must be readable by the apache server 's user id.
+Whether to allow persistent Sybase connections.
+The maximum number of persistent Sybase connections per process.
+The maximum number of Sybase connections per process, including persistent connections.
+Whether to allow persistent Sybase-CT connections.
+The default is on.
+The maximum number of persistent Sybase-CT connections per process.
+The default is -1 meaning unlimited.
+The maximum number of Sybase-CT connections per process, including persistent connections.
+The default is -1 meaning unlimited.
+Server messages with severity greater than or equal to sybct.min_server_severity will be reported as warnings.
+This value can also be set from a script by calling sybase_min_server_severity().
+The default is 10 which reports errors of information severity or greater.
+Client library messages with severity greater than or equal to sybct.min_client_severity will be reported as warnings.
+This value can also be set from a script by calling sybase_min_client_severity().
+The default is 10 which effectively disables reporting.
+The maximum time in seconds to wait for a connection attempt to succeed before returning failure.
+Note that if max_execution_time has been exceeded when a connection attempt times out, your script will be terminated before it can take action on failure.
+The default is one minute.
+The maximum time in seconds to wait for a select_db or query operation to succeed before returning failure.
+Note that if max_execution_time has been exceeded when am operation times out, your script will be terminated before it can take action on failure.
+The default is no limit.
+The name of the host you claim to be connecting from, for display by sp_who.
+The default is none.
+Whether to allow persistent Informix connections.
+The maximum number of persistent Informix connections per process.
+The maximum number of Informix connections per process, including persistent connections.
+The default host to connect to when no host is specified in ifx_connect() or ifx_pconnect().
+The default user id to use when none is specified in ifx_connect() or ifx_pconnect().
+The default password to use when none is specified in ifx_connect() or ifx_pconnect().
+Set to TRUE if you want to return blob columns in a file, FALSE if you want them in memory.
+You can override the setting at runtime with ifx_blobinfile_mode().
+Set to TRUE if you want to return TEXT columns as normal strings in select statements, FALSE if you want to use blob id parameters.
+You can override the setting at runtime with ifx_textasvarchar().
+Set to TRUE if you want to return BYTE columns as normal strings in select queries, FALSE if you want to use blob id parameters.
+You can override the setting at runtime with ifx_textasvarchar().
+Set to TRUE if you want to trim trailing spaces from CHAR columns when fetching them.
+Set to TRUE if you want to return NULL columns as the literal string "NULL", FALSE if you want them returned as the empty string "".
+You can override this setting at runtime with ifx_nullformat().
+Number of decimal digits for all bcmath functions.
+Name of browser capabilities file.
+See also get_browser().
+mbstring.internal_encoding defines default internal character encoding.
+mbstring.http_input defines default HTTP input character encoding.
+mbstring.http_output defines default HTTP output character encoding.
+mbstring.detect_order defines default character encoding detection order.
+mbstring.substitute_character defines character to substitute for invalid character codes.
+Exif supports automatically conversion for Unicode and JIS character encodings of user comments when module mbstring is available.
+This is done by first decoding the comment using the specified characterset.
+The result is then encoded with another characterset which should match your HTTP output.
+exif.encode_unicode exif.encode_unicode defines the characterset UNICODE user comments are handled.
+This defaults to ISO-8859-15 which should work for most non asian countries.
+The setting can be empty or must be an encoding supported by mbstring.
+If it is empty the current internal encoding of mbstring is used.
+exif.decode_unicode_motorola defines the image internal characterset for Unicode encoded user comments if image is in motorola byte order (big-endian).
+This setting cannot be empty but you can specify a list of encodings supported by mbstring.
+The default is UCS-2BE.
+exif.decode_unicode_intel defines the image internal characterset for Unicode encoded user comments if image is in intel byte order (little-endian).
+This setting cannot be empty but you can specify a list of encodings supported by mbstring.
+The default is UCS-2LE.
+exif.encode_jis exif.encode_jis defines the characterset JIS user comments are handled.
+This defaults to an empty value which forces the functions to use the current internal encoding of mbstring.
+exif.decode_jis_motorola defines the image internal characterset for JIS encoded user comments if image is in motorola byte order (big-endian).
+This setting cannot be empty but you can specify a list of encodings supported by mbstring.
+The default is JIS.
+exif.decode_jis_intel exif.decode_jis_intel defines the image internal characterset for JIS encoded user comments if image is in intel byte order (little-endian).
+This setting cannot be empty but you can specify a list of encodings supported by mbstring.
+The default is JIS.
+קודם
+ראשי
+הבא
+
+למעלה
+Security

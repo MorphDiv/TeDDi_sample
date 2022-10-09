@@ -1,0 +1,136 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+XML (eXtensible Markup Language) es un formato de información para el intercambio de documentos estructurado en la "Web "Es un estándar definido por el consorcio de la "World Wide Web" (W3C).
+Se puede encontrar información sobre XML y tecnologís relacionadas en http: / /www.w3.org / XML /.
+Esta extensión usa expat, que se puede encontrar en http: / /www.jclark.com / xml /.
+El Makefile que viene con expat no crea una biblioteca por defecto, se puede usar esta regla de make para eso:
+
+Nota que si se usa Apache-1.3.7 o posterior, ya tienes la biblioteca requerida expat.
+Simplemente, configura PHP usando --with-xml (sin ninguna ruta adicional) y usará automáticamente la biblioteca expat incluida en Apache.
+En UNIX, ejecuta configure con la opción --with-xml.
+La biblioteca expat debería ser instalada en algún lugar donde el compilador pueda encontrarlo.
+Si se compila PHP como un módulo para Apache 1.3.9 o posterior, PHP automáticamente usará la biblioteca integrada expat de Apache.
+Puede necesitar establecer CPPFLAGS y LDFLAGS en su entorno antes de ejecutar "configure" si se ha instalado expat en algún lugar exótico.
+Compila PHP. ¡Ta-tam!
+Ya debería estar.
+Esta extensión de PHP implementa soporte para expat de James Clarkin en PHP.
+Este conjunto de herramientas permite interpretar, pero no validar, documentos XML.
+Soporta tres codificaciones de caracteres fuente, también proporcionados por PHP:
+US-ASCII, ISO-8859-1 y UTF-8.
+UTF-16 no está soportado.
+Esta extensión permite crear intérpretes de XML y definir entonces gestores para diferentes eventos XML.
+Cada intérprete XML tiene también unos cuantos parámetros que se pueden ajustar.
+Los gestores de eventos XML definidos son:
+Tabla 1.
+Gestores de XML soportados
+Función PHP para establecer gestor
+Descripción del evento
+
+Los eventos de elemento ("element") se producen cuando el intérprete XML encuentra etiquetas de comienzo o fin.
+Hay gestores separados para etiquetas de comienzo y etiquetas de fin.
+
+La información de caracteres es, por definición, todo el contenido no "marcado" de los documentos XML, incluidos los espacios en blanco entre etiquetas.
+Nota que el intérprete XML no añade o elimina ningún espacio en blanco, depende de la aplicación (de ti) decidir si el espacio en blanco es significativo.
+
+Los programadores de PHP deberían estar ya familiarizados con las instrucciones de procesado (PI). ?php? es una instrucción de procesado, donde php se denomina el "objetivo de procesado ".
+El manejo de éstos es específico a cada aplicación, salvo que todos los objetivos PI que comienzan con "XML" están reservados.
+
+Todo lo que no va a otro gestor, va al gestor por defecto.
+Se tendrán en el gestor por defecto cosas como las declaraciones de tipos de documento y XML.
+
+Este gestor se llamará para la declaración de una entidad no analizada (NDATA).
+
+Este gestor se llama para la declaración de una anotación.
+
+Este gestor se llama cuando el intérprete XML encuentra una referencia a una entidad general interpretada externa.
+Puede ser una referencia a un archivo o URL, por ejemplo.
+Ver el ejemplo de entidad externa para demostración.
+Las funciones manejadoras de elementos pueden tomar sus nombres de elementos "case-folded".
+Case-folding se define en el estándar XML como "un proceso aplicado a una secuencia de caracteres, en el cual aquellos identificados como sin-mayúsculas son reemplazados por sus equivalentes en mayúsculas".
+En otras palabras, cuando se trata de XML, case-folding simplemente significa poner en mayúsculas.
+Por defecto, todos los nombres de elementos que se pasan a las funciones gestoras estan "pasados a mayúsculas".
+Esta conducta puede ser observada y controlada por el analizador XML con las funciones xml_parser_get_option() y xml_parser_set_option(), respectivamente.
+Las siguientes constantes se definen para códigos de error XML (como los devuelve xml_parse()):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+La extension XML de PHP soporta el conjunto de caracteres Unicode a través de diferentes codificaciones de caracteres.
+Hay dos tipos de codificaciones de caracteres, coficación de fuente y codificación de destino.
+La representación interna de PHP del documento está siempre codificada con UTF-8.
+La codificación de fuente se hace cuando un documento XML es interpretado.
+Al crear un intérprete XML, se puede especificar una codificación de fuente (esta codificación no se puede cambiar má tarde durante el tiempo de vida del intérprete XML).
+Las codificaciones de fuente soportadas son ISO-8859-1, US-ASCII y UTF-8.
+Las dos primeras son codificaciones de byte-único, lo que significa que cada carácter se representa por un solo byte.
+UTF-8 puede codificar caracteres compuestos por un número variable de bits (hasta 21) en de uno a cuatro bytes.
+La codificación fuente por defecto usada por PHP es ISO-8859-1.
+La codificación de destino se hace cuando PHP pasa datos a las funciones gestoras XML.
+Cuando se crea un intérprete XML, la codificación de destino se crea igual a la codificación de fuente, pero se puede cambiar en cualquier momento.
+La codificación de destino afectará a la información de los caracteres así como a los nombres de las etiquetas y a los objetivos de instrucciones de procesado.
+Si el intérprete XML encuentra caracteres fuera del rango que su codificación de fuente es capaz de representar, devolverá un error.
+Si PHP encuentra caracteres en el documento XML interpretado que no pueden ser representados en la codificación de destino elegida, los caracteres problema serán "degradados".
+Actualmente, esto significa que tales caracteres se reemplazan por un signo de interrogación.
+Aquí hay algunos ejemplos de archivos de comandos PHP que interpretan documentos XML.
+Este primer ejemplo muestra la estructura del elemento inicio en un documento con indentación.
+Ejemplo 1.
+Muestra la Estructura del Elemento XML
+
+Ejemplo 2.
+Traduciendo XML a HTML
+Este ejemplo transforma etiquetas de un documento XML directamente a etiquetas HTML.
+Los elementos no encontrados en el "array de traducción ("map array") son ignorados.
+Por supuesto, este ejemplo solamente funcionará con un tipo de documentos XML específico.
+$file = "data.xml"; $map_array = array ("BOLD" = "B", "EMPHASIS "= "I", "LITERAL" = "TT "); function startElement($parser, $name, $attrs) {global $map_array; if ($htmltag = $map_array[$name]) {print" $htmltag ";}} function endElement($parser, $name) {global $map_array; if ($htmltag = $map_array[$name]) {print" / $htmltag ";}} function characterData($parser, $data) {print $data;} $xml_parser = xml_parser_create(); / / usa case-folding para que estemos seguros de encontrar la etiqueta / / en $map_array xml_parser_set_option($xml_parser, XML_OPTION_CASE_FOLDING, true); xml_set_element_handler($xml_parser, "startElement", "endElement"); xml_set_character_data_handler($xml_parser, "characterData"); if (!($fp = fopen($file, "r"))) {die("could not open XML input");} while ($data = fread($fp, 4096)) {if (!xml_parse($xml_parser, $data, feof($fp))) {die(sprintf("XML error: %s at line %d", xml_error_string(xml_get_error_code($xml_parser)), xml_get_current_line_number($xml_parser)));}} xml_parser_free($xml_parser);
+Este ejemplo resalta el código XML.
+Ilustra cómo usar un gestor de referencia de entidades extenas para incluir y analizar otros documentos, así como cuúntos PIs pueden ser procesados, y un modo de determinar "confianza" para PIs que contienen código.
+Los documentos XML que se pueden usar en este ejemplo se encuentran bajo el ejemplo (xmltest.xml y xmltest2.xml.)
+Ejemplo 3.
+Ejemplo de Entidades Externas
+$file = "xmltest.xml"; function trustedFile($file) {/ / solamente confía en archivos locales que nos pertenezcan if (!eregi("^([a-z]+): / /", $file) fileowner($file) == getmyuid()) {return true;} return false;} function startElement($parser, $name, $attribs) {print" lt; font color=\"#0000cc\ "$name / font"; if (sizeof($attribs)) {while (list($k, $v) = each($attribs)) {print "font color=\"#009900\" $k / font =\ "font color=\"#990000\" $v / font \"";}} print "gt ;";} function endElement($parser, $name) {print" lt; / font color=\"#0000cc\ "$name / font gt ;";} function characterData($parser, $data) {print" b $data / b ";} function PIHandler($parser, $target, $data) {switch (strtolower($target)) {case "php": global $parser_file; / / Si el documento analizado es "de confianza", diremos / / que es seguro ejecutar código PHP en su interior. / / Si no, en vez de ello mostrará el código. if (trustedFile($parser_file[$parser])) {eval($data);} else {printf("Untrusted PHP code: i %s / i", htmlspecialchars($data));} break;}} function defaultHandler($parser, $data) {if (substr($data, 0, 1) == "" substr($data, -1, 1) == ";") {printf( 'font color="#aa00aa" %s / font', htmlspecialchars($data));} else {printf( 'font size="-1 "%s / font', htmlspecialchars($data));}} function externalEntityRefHandler($parser, $openEntityNames, $base, $systemId, $publicId) {if ($systemId) {if (!list($parser, $fp) = new_xml_parser($systemId)) {printf("Could not open entity %s at %s\n", $openEntityNames, $systemId); return false;} while ($data = fread($fp, 4096)) {if (!xml_parse($parser, $data, feof($fp))) {printf("XML error: %s at line %d while parsing entity %s\n", xml_error_string(xml_get_error_code($parser)), xml_get_current_line_number($parser), $openEntityNames); xml_parser_free($parser); return false;}} xml_parser_free($parser); return true;} return false;} function new_xml_parser($file) {global $parser_file; $xml_parser = xml_parser_create(); xml_parser_set_option($xml_parser, XML_OPTION_CASE_FOLDING, 1); xml_set_element_handler($xml_parser, "startElement", "endElement"); xml_set_character_data_handler($xml_parser, "characterData"); xml_set_processing_instruction_handler($xml_parser, "PIHandler"); xml_set_default_handler($xml_parser, "defaultHandler"); xml_set_external_entity_ref_handler($xml_parser, "externalEntityRefHandler"); if (!($fp = @fopen($file, "r"))) {return false;} if (!is_array($parser_file)) {settype($parser_file, "array");} $parser_file[$xml_parser] = $file; return array($xml_parser, $fp);} if (!(list($xml_parser, $fp) = new_xml_parser($file))) {die("could not open XML input");} print" pre "; while ($data = fread($fp, 4096)) {if (!xml_parse($xml_parser, $data, feof($fp))) {die(sprintf("XML error: %s at line %d\n", xml_error_string(xml_get_error_code($xml_parser)), xml_get_current_line_number($xml_parser)));}} print" / pre "; print "parse complete\n"; xml_parser_free($xml_parser);?
+Ejemplo 4. xmltest.xml
+?xml version=' 1.0'? !DOCTYPE chapter SYSTEM "/ just / a/test.dtd" [!ENTITY plainEntity "FOO entity "!ENTITY systemEntity SYSTEM "xmltest2.xml"] chapter TITLE Title plainEntity; / TITLE para informaltable tgroup cols="3 "tbody row entry a1 / entry entry morerows="1" b1 / entry entry c1 / entry / row row entry a2 / entry entry c2 / entry / row row entry a3 / entry entry b3 / entry entry c3 / entry / row / tbody / tgroup / informaltable / para systemEntity; sect1 id="about "title About this Document / title para !- - this is a comment - - ?php print 'Hi!
+This is PHP version '.phpversion();? / para / sect1 / chapter
+Este archivo se incluye desde xmltest.xml:
+Ejemplo 5. xmltest2.xml
+
+Anterior
+Inicio
+Siguiente
+
+Subir

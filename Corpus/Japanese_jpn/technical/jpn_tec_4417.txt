@@ -1,0 +1,33 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 4 = 4.3.0)
+The stream_select() function accepts arrays of streams and waits for them to change status. Its opperation is equivalent to that of the socket_select() function except in that it acts on streams.
+The streams listed in the read array will be watched to see if characters become available for reading (more precisely, to see if a read will not block - in particular, a stream resource is also ready on end-of-file, in which case an fread() will return a zero length string).
+The streams listed in the write array will be watched to see if a write will not block.
+The streams listed in the except array will be watched for exceptions.
+On exit, the arrays are modified to indicate which stream resource actually changed status.
+You do not need to pass every array to stream_select(). You can leave it out and use an empty array or NULL instead. Also do not forget that those arrays are passed by reference and will be modified after stream_select() returns.
+Example:
+注意 Due a limitation in the current Zend Engine it is not possible to pass a constant modifier like NULL directly as a parameter to a function which expects this parameter to be passed by reference. Instead use a temporary variable or an expression with the leftmost member being a temporary variable:
+The tv_sec and tv_usec together form the timeout parameter. The timeout is an upper bound on the amount of time elapsed before stream_select() returns. tv_sec may be zero, causing stream_select() to return immediately. This is useful for polling. If tv_sec is NULL (no timeout), stream_select() can block indefinitely.
+On success stream_select() returns the number of stream resorces contained in the modified arrays, which may be zero if the timeout expires before anything interesting happens. On error FALSE is returned.
+注意 Be sure to use the === operator when checking for an error. Since the stream_select() may return 0 the comparison with == would evaluate to TRUE:
+注意 Be aware that some stream implementations need to be handled very carefully. A few basic rules:
+You should always try to use stream_select() without timeout. Your program should have nothing to do if there is no data available. Code that depends on timeouts is not usually portable and difficult to debug.
+If you read/write to a stream returned in the arrays be aware that they do not necessarily read/write the full amount of data you have requested. Be prepared to even only be able to read/write a single byte.
+See also stream_set_blocking()

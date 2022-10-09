@@ -1,0 +1,52 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3 = 3.0.3, PHP 4)
+Returns:
+A positive Informix result identifier on success, or FALSE on error.
+A "result_id" resource used by other functions to retrieve the query results.
+Sets "affected_rows" for retrieval by the ifx_affected_rows() function.
+ifx_query() sends a query to the currently active database on the server that's associated with the specified link identifier.
+Executes query on connection conn_id.
+For "select-type" queries a cursor is declared and opened.
+The optional cursor_type The optional cursor_type parameter allows you to make this a "scroll" and / or "hold "cursor.
+It' s a bitmask and can be either IFX_SCROLL, IFX_HOLD, or both or'ed together.
+Non-select queries are "execute immediate".
+IFX_SCROLL and IFX_HOLD are symbolic constants and as such shouldn 't be between quotes.
+I you omit this parameter the cursor is a normal sequential cursor.
+For either query type the number of (estimated or real) affected rows is saved for retrieval by ifx_affected_rows().
+If you have BLOB (BYTE or TEXT) columns in an update query, you can add a blobidarray parameter containing the corresponding "blob ids", and you should replace those columns with a "?" in the query text.
+If the contents of the TEXT (or BYTE) column allow it, you can also use "ifx_textasvarchar(1) "and "ifx_byteasvarchar(1)".
+This allows you to treat TEXT (or BYTE) columns just as if they were ordinary (but long) VARCHAR columns for select queries, and you don't need to bother with blob id's.
+With ifx_textasvarchar( 0) or ifx_byteasvarchar(0) (the default situation), select queries will return BLOB columns as blob id's (integer value).
+You can get the value of the blob as a string or file with the blob functions (see below).
+See also: ifx_connect().
+Example 1.
+Show all rows of the "orders" table as a html table
+ifx_textasvarchar( 1); / / use "text mode "for blobs $res_id = ifx_query("select * from orders", $conn_id); if (! $res_id) {printf("Can't select orders: %s\n br %s br \n", ifx_error()); ifx_errormsg(); die;} ifx_htmltbl_result($res_id, "border=\"1\""); ifx_free_result($res_id);
+Example 2.
+Insert some values into the "catalog" table
+/ / create blob id' s for a byte and text column $textid = ifx_create_blob(0, 0, "Text column in memory"); $byteid = ifx_create_blob(1, 0, "Byte column in memory"); / / store blob id's in a blobid array $blobidarray[] = $textid; $blobidarray[] = $byteid; / / launch query $query = "insert into catalog (stock_num, manu_code, ". "cat_descr,cat_picture) values(1 ,'HRO',?, ?)"; $res_id = ifx_query($query, $conn_id, $blobidarray); if (! $res_id) {... error...} / / free result id ifx_free_result($res_id);
+Prev
+Home
+Next
+ifx_prepare
+Up
+ifx_textasvarchar

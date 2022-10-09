@@ -1,0 +1,53 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHPはWin32プラットフォーム上でCOMとDCOMオブジェクトにアクセスすることがで きます。
+1. とある計算を行うDLLを作成しました。これをPHPで実行させる方法はあ りますか？
+もしそれが普通のDLLなら、現在のところPHPからそれを実行する手段は ありません。DLLがCOMサーバを含んでいてIDispatchインターフェース が実装されている場合、PHPからアクセスすることができます。
+2. 'Unsupported variant type: xxxx (0xxxxx)'とはどういう意味ですか?
+多くのVARIANTタイプとその組み合わせがあり、そのほとんどはサポー トされていますが、残りのいくつかは未だ実装されていません。また配 列も完全にサポートされているわけではなく、PHPとCOMの間で受け渡し が可能なのは1次元の添字付配列のみです。もしこの他にサポートされ ていないタイプを見つけた場合は(既知でなければ)、できる限りの情報 を添えてバグとして報告して下さい。
+3. PHPでビジュアルオブジェクトを操作できますか？
+基本的には可能です。しかしPHPはほとんどの場合ウェブスクリプティ ングの言語として使用されウェブサーバ上で実行されるため、ビジュア ルオブジェクトがサーバのデスクトップに現れることはありません。も しPHPをアプリケーション作成に使用する、すなわちPHP-GTKと合わせて 使用する場合にはアクセスに制限はありません。COMを通じてビジュア ルオブジェクトを操作することができます。
+4. COMオブジェクトをセッション情報として保存できますか？
+できません。COMインスタンスはリソースとして扱われるため、1つのス クリプトを実行している間のみ使用可能です。
+5. COMの出力するエラーをトラップできますか？
+現在の所、PHPが提供する方法(@, track_errors, ...)を使用してCOMの エラーをトラップすることはできません。しかし、私たちはこれを実装 する方法を検討中です。
+6. PHPスクリプトからDLLを作成することはできますか？Perlではできるの ですが。
+いいえ、残念ながらPHPにはそのようなツールはありません。
+7. 'Unable to obtain IDispatch interface for CLSID {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}'とはどういう意味ですか？
+このエラーが発生する理由はいくつかあります：
+CLSIDが正しくない
+要求されたDLLが無い
+要求されたコンポーネントがIDispatchインターフェースを実装していない
+8. COMオブジェクトをリモートサーバから実行するにはどうすればよいで すか？
+ローカルオブジェクトを実行するのと全く同様です。ただ、COMコンス トラクタの2番目のパラメータにリモートマシンのIPアドレスを渡すだ けです。
+php.ini に com.allow_dcom=true をセットするのを忘れないで ください。
+9. 'DCOM is disabled in C:\path...\scriptname.php on line 6'という エラーが発生しました。どうすればよいですか？
+php.ini を編集して com.allow_dcom=true として下さい。
+10. PHPを使用したページでActiveXオブジェクトをロード/操作することは できますか？
+これははPHPとは関係ありません。ActiveXオブジェクトは、HTMLドキュ メントから要求があった場合にクライアント側でロードされます。PHP スクリプトとは関係が無く、従ってサーバ側と直接やりとりすることも できません。
+11. 実行中のコンポーネントのインスタンスを取得することはできますか？
+モニカーを使用すれば可能です。同じWordインスタンスに対して複数の 参照を取得したい場合は、以下のようにしてインスタンスを生成します：
+こうすれば、実行中のインスタンスが無い、もしくはインスタンスの取 得が不可能だった場合には新規に生成され、インスタンスが取得できた 場合はにはそのハンドルを返します。
+12. COMオブジェクトから送られてくるイベントを扱う方法はありますか？
+現在のところ、ありません。
+13. 2つ以上のインターフェースを公開しているCOMオブジェクトのメソッド を呼び出そうとして困っています。どうすればよいですか？
+この問題に対する答えは、簡単ですが残念なものです。正確にはわかり ませんが、おそらく打つ手はありません。もしこの問題に関する具体的 な情報があったら 私 に教えて下さい。
+14. PHPはCOMを扱えるということは分かりました。ではCOM+についてはどう ですか？
+COM+とはMTS(Microsoft Transaction Server)とMSMQ(Microsfot Message Queue Service)を通じてコンポーネントを操作するフレームワー クによってCOMを拡張したものです。が、PHPがそういったコンポーネン トをサポートするにあたって特別に必要なことは特にありません。
+15. PHPがCOMオブジェクトを操作することができるということは、MTSを使っ てコンポーネントリソースを扱えると考えてもよいということですか？
+PHPそれ自体はまだトランザクションをサポートしていません。従って エラーが発生してもロールバック処理は行われません。もしトランザク ションをサポートするコンポーネントを使用する場合は、自分でトラン ザクション処理を実装する必要があります。

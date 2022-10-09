@@ -1,0 +1,75 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 4 = 4.3.0)
+stream_register_wrapper() allows you to implement your own protocol handlers and streams for use with all the other filesystem functions (such as fopen(), fread() etc.).
+To implement a wrapper, you need to define a class with a number of member functions, as defined below.
+When someone fopens your stream, PHP will create an instance of classname and then call methods on that instance.
+You must implement the methods exactly as described below - doing otherwise will lead to undefined behaviour.
+stream_register_wrapper() will return FALSE if the protocol already has a handler.
+This method is called immediately after your stream object is created. path specifies the URL that was passed to fopen() and that this object is expected to retrieve.
+You can use parse_url() to break it apart.
+mode is the mode used to open the file, as detailed for fopen().
+You are responsible for checking that mode is valid for the path requested.
+options holds additional flags set by the streams API.
+It can hold one or more of the following values OR 'd together.
+Flag
+Description
+STREAM_USE_PATH
+If path is relative, search for the resource using the include_path.
+STREAM_REPORT_ERRORS
+If this flag is set, you are responsible for raising errors using trigger_error() during opening of the stream.
+If this flag is not set, you should not raise any errors.
+If the path is opened successfully, and STREAM_USE_PATH is set in options, you should set opened_path to the full path of the file / resource that was actually opened.
+If the requested resource was opened successfully, you should return TRUE, otherwise you should return FALSE
+This method is called when the stream is closed, using fclose().
+You must release any resources that were locked or allocated by the stream.
+This method is called in response to fread() and fgets() calls on the stream.
+You must return up-to count bytes of data from the current read / write position as a string.
+If there are less than count bytes available, return as many as are available.
+If no more data is available, return either FALSE or an empty string.
+You must also update the read / write position of the stream by the number of bytes that were successfully read.
+This method is called in response to fwrite() This method is called in response to fwrite() calls on the stream.
+You should store data into the underlying storage used by your stream.
+If there is not enough room, try to store as many bytes as possible.
+You should return the number of bytes that were successfully stored in the stream, or 0 if none could be stored.
+You must also update the read / write position of the stream by the number of bytes that were successfully written.
+This method is called in response to feof() calls on the stream.
+You should return TRUE if the read / write position is at the end of the stream and if no more data is available to be read, or FALSE otherwise.
+This method is called in response to ftell() This method is called in response to ftell() calls on the stream.
+You should return the current read / write position of the stream.
+This method is called in response to fseek() This method is called in response to fseek() calls on the stream.
+You should update the read / write position of the stream according to offset and whence.
+See fseek() for more information about these parameters.
+Return TRUE if the position was updated, FALSE otherwise.
+This method is called in response to fflush() This method is called in response to fflush() calls on the stream.
+If you have cached data in your stream but not yet stored it into the underlying storage, you should do so now.
+Return TRUE if the cached data was successfully stored (or if there was no data to store), or FALSE if the data could not be stored.
+The example below implements a var: / / protocol handler that allows read / write access to a named global variable using standard filesystem stream functions such as fread().
+The var: / / protocol implemented below, given the url "var: / /foo" will read / write data to / from $GLOBALS["foo"].
+Example 1.
+A Stream for reading / writing global variables
+class VariableStream {var $position; var $varname; function stream_open($path, $mode, $options, $opened_path) {$url = parse_url($path); $this - varname = $url["host"]; $this - position = 0; return true;} function stream_read($count) {$ret = substr($GLOBALS[$this - varname], $this - position, $count); $this - position += strlen($ret); return $ret;} function stream_write($data) {$left = substr($GLOBALS[$this - varname], 0, $this - position); $right = substr($GLOBALS[$this - varname], $this - position + strlen($data)); $GLOBALS[$this - varname] = $left. $data. $right; $this - position += strlen($data); return strlen($data);} function stream_tell() {return $this - position;} function stream_eof() {return $this - position = strlen($GLOBALS[$this - varname]);} function stream_seek($offset, $whence) {switch($whence) {case SEEK_SET: if ($offset strlen($GLOBALS[$this - varname]) $offset = 0) {$this - position = $offset; return true;} else {return false;} break; case SEEK_CUR: if ($offset = 0) {$this - position += $offset; return true;} else {return false;} break; case SEEK_END: if (strlen($GLOBALS[$this - varname]) + $offset = 0) {$this - position = strlen($GLOBALS[$this - varname]) + $offset; return true;} else {return false;} break; default: return false;}}} stream_register_wrapper("var", "VariableStream") or die("Failed to register protocol"); $myvar = ""; $fp = fopen("var: / /myvar", "r+"); fwrite($fp, "line1\n"); fwrite($fp, "line2\n"); fwrite($fp, "line3\n"); rewind($fp); while(!feof($fp)) {echo fgets($fp);} fclose($fp); var_dump($myvar);
+Prev
+Home
+Next
+stream_register_filter
+Up
+stream_select

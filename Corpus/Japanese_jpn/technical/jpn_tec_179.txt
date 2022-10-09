@@ -1,0 +1,290 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+$[officename] Calc のプログラミング用アドイン
+/text/scalc/01/04060112.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe dedr: fixed #i30855#
+プログラミング; アドイン
+共有ライブラリ; プログラミング
+外部 DLL 関数
+関数; $[officename] Calc アドイン DLL
+アドイン; プログラミング用
+mw made &quot; external... &quot; a one level entry and deleted one &quot; functions;... &quot; entry
+$[officename] Calc のプログラミング用アドイン
+API 関数
+を使用する必要があります。
+関数ウィザード
+の分類項目
+アドイン
+に表示されます。自分でアドインを作成する場合、アドインを正常に組み込むためには、どの関数を
+共有ライブラリ
+外部 DLL
+からエクスポートする必要があるかを学ぶ必要があります。
+shared library
+DLL
+の設定で定義されている Add-in フォルダを検索します。$[officename] で認識されるように、
+shared library
+DLL
+は、次に説明されているとおり、一定のプロパティーを含む必要があります。この情報によって、$[officename] Calc の
+関数ウィザード
+向けに独自のアドインをプログラムできます。
+アドインのコンセプト
+各アドインライブラリには、複数の関数が用意されています。いくつかの関数は管理用です。自分で作成した関数には、規則に従った上で、任意の名前を付けることができます。しかし、パラメータの引き渡しに関する一定の規則には従う必要があります。名前の付け方やパラメータの引き渡しに関する正確な規則はプラットフォームごとに異なります。
+共有ライブラリ
+アドイン DLL
+の関数
+GetFunctionCount
+と
+GetFunctionData
+が存在する必要があります。これらの関数を使用すると、関数、パラメータの種類、および戻り値を判断できます。戻り値には、Double と String を使用できます。パラメータには、Double と String 以外にも、
+Double 配列
+、
+String 配列
+、および
+セル配列
+を使用できます。
+パラメータは参照として入力されます。そのため、基本的には値の変更が可能です。しかし、表計算プログラムにおいては適当でないため、$[officename] Calc では値を変更することはできません。
+ライブラリは実行時に読み込むことができます。このとき、管理用の関数を使用すると、ライブラリの内容を解析できます。どの関数でも、パラメータの数と種類、内部関数名と外部関数名、および管理番号についての情報が使用できます。
+関数が同時に呼び出されすぐに結果を返します。リアルタイム関数も可能ですが、複雑なためここでは詳しく説明しません。
+インタフェース全般
+$[officename] Calc に組み込むことができるアドイン関数のパラメータは最大で 16 個です。そのうちの 1 個は戻り値用で、残りの 15 個は入力用です。
+データの種類は次のように定義されています。
+データの種類
+定義
+CALLTYPE
+Windows の場合:
+FARPASCAL(_far_pascal)
+それ以外の場合: default (各オペレーティングシステムの標準)
+USHORT
+2 Byte unsigned Integer
+double
+プラットフォームに応じた８バイトフォーマット
+Paramtype
+int と同様、プラットフォーム特有
+double を指すポインタ PTR_DOUBLE =0
+ゼロ制限した文字列を指定するポインタ PTR_STRING =1
+Double 配列を指すポインタ PTR_DOUBLE_ARR =2
+String 配列を指すポインタ PTR_STRING_ARR =3
+Cell 配列を指すポインタ PTR_CELL_ARR =4
+NONE =5
+共有ライブラリ
+DLL
+関数
+共有ライブラリ
+外部 DLL
+で呼び出せる関数について説明します。
+共有ライブラリ
+DLL
+関数には、次の規則が適用されます。
+void CALLTYPE fn(out, in1, in2,...)
+アウトプット: 結果値
+セル範囲
+とは、倍精度、文字列、またはセルの配列のことです。
+GetFunctionCount()
+GetFunctionData
+関数と
+GetParameterDescription
+関数に必要です。
+構文
+void CALLTYPE GetFunctionCount(USHORT & nCount)
+パラメータ
+USHORT & nCount
+アウトプット: アドイン関数の数が含まれている変数の参照。アドインが $[officename] Calc に５つの関数を用意している場合は、nCount=5 になります。
+GetFunctionData()
+アドイン関数に関するすべての重要な情報を定義します。
+構文
+void CALLTYPE GetFunctionData(USHORT & nNo, char* pFuncName, USHORT & nParamCount, Paramtype* peType, char* pInternalName)
+パラメータ
+USHORT & nNo:
+インプット:
+0 から nCount-1 までの関数番号。
+char* pFuncName:
+共有ライブラリ
+DLL
+に指定されている関数名。この名前は必ずしも、
+関数ウィザード
+で表示される名前ではありません。
+USHORT & nParamCount
+アウトプット: アドイン関数のパラメータ数。結果値は常に最低１つあり、最高16まで可能なため、0 より大きい必要があります。
+Paramtype* peType:
+アウトプット:
+Paramtype の変数が16個ある配列を指すポインタ。最初の nParamCount 項目は、該当するパラメータのタイプで埋められます。
+char* pInternalName:
+関数ウィザード
+で表示される関数名。ウムラウトも使用できます。
+パラメータ pFuncName と pInternalName は、$[officename] Calc でサイズ 256 を実装した char Array です。
+GetParameterDescription()
+関数ウィザード
+で関数とパラメータの説明を表示するのにも使用できます。
+構文
+void CALLTYPE GetParameterDescription(USHORT & nNo, USHORT & nParam, char* pName, char* pDesc)
+パラメータ
+USHORT & nNo:
+インプット: ライブラリ内の関数番号 (0 から nCount-1 まで)
+USHORT & nParam
+インプット: 説明を付けるパラメータを表示します。パラメータは 1 で始まります。nParam が 0 の場合、関数自体の説明が pDesc に必要で、この場合 pName は使用しません。
+char* pName:
+アウトプット: たとえば、｢数字｣、｢文字列｣、｢日付」といった名前やパラメータの種類を取り入れます。$[officename] Calc は char[256] として実装します。
+char* pDesc:
+アウトプット: たとえば、｢宇宙を計算する値」のような、パラメータの説明を取り入れます。$[officename] Calc は char[256] として実装します。
+関数ウィザード
+で使用できる空間は限られており、256 文字すべてを使用できるわけではないので注意が必要です。
+セル範囲
+次の表は、セル参照を入力するために、データ構造が必要とする外部プログラムモジュールを表しています。$[officename] Calc は、データの型によってセル範囲を３種に分類します。
+Double 配列
+パラメータに、数値/Double 型の値を含むセル範囲が指定できます。$[officename] Calc では、Double 配列は次のように定義されています:
+オフセット
+名前
+説明
+0
+Col1
+セル範囲の左上端の列番号。0 から数え始めます。
+2
+Row1
+セル範囲の左上端の行番号。0 から数え始めます。
+4
+Tab1
+セル範囲の左上端の表番号。0 から数え始めます。
+6
+Col2
+セル範囲の右下端の列番号。0 から数え始めます。
+8
+Row2
+セル範囲の右下端の行番号。0 から数え始めます。
+10
+Tab2
+セル範囲の右下端の表番号。0 から数え始めます。
+12
+Count
+次の要素の個数。空白のセルは数えられず、引き渡されません。
+14
+Col
+要素の列番号。0 から数え始めます。
+16
+Row
+要素の行番号。0 から数え始めます。
+18
+Tab
+要素の表番号。0 から数え始めます。
+20
+Error
+エラー番号。値 0 は「エラーなし」のために設定されています。該当要素が数式セルにある場合、エラー値は数式によって決まります。
+22
+Value
+種類がダブル/浮動小数点の８バイト IEEE 変数
+30
+...
+次の要素
+String 配列
+データの型が文字列であるセル範囲は、String 配列として指定されます。$[officename] Calc では、String 配列を次のように定義しています。
+オフセット
+名前
+説明
+0
+Col1
+セル範囲の左上端の列番号。0 から数え始めます。
+2
+Row1
+セル範囲の左上端の行番号。0 から数え始めます。
+4
+Tab1
+セル範囲の左上端の表番号。0 から数え始めます。
+6
+Col2
+セル範囲の右下端の列番号。0 から数え始めます。
+8
+Row2
+セル範囲の右下端の行番号。0 から数え始めます。
+10
+Tab2
+セル範囲の右下端の表番号。0 から数え始めます。
+12
+Count
+次の要素の個数。空白のセルは数えられず、引き渡されません。
+14
+Col
+要素の列番号。0 から数え始めます。
+16
+Row
+要素の行番号。0 から数え始めます。
+18
+Tab
+要素の表番号。0 から数え始めます。
+20
+Error
+エラー番号。値 0 は「エラーなし」のために設定されています。該当要素が数式セルにある場合、エラー値は数式によって決まります。
+22
+Len
+次の文字列の長さ (最後の０バイトを含む) 。文字列の最後の０バイトを含めた長さが奇数値になった場合は、偶数値になるように０バイトがもう１つ追加されます。そのため、Len は ((StrLen+2) & ～1) で計算されます。
+24
+String
+最後に０バイトが付いた文字列
+24+Len
+...
+次の要素
+セル配列
+セル配列を使用すると、テキストと数値を含むセル範囲を呼び出すことができます。$[officename] Calc のセル配列は次のように定義されています。
+オフセット
+名前
+説明
+0
+Col1
+セル範囲の左上端の列番号。0 から数え始めます。
+2
+Row1
+セル範囲の左上端の行番号。0 から数え始めます。
+4
+Tab1
+セル範囲の左上端の表番号。0 から数え始めます。
+6
+Col2
+セル範囲の右下端の列番号。0 から数え始めます。
+8
+Row2
+セル範囲の右下端の行番号。0 から数え始めます。
+10
+Tab2
+セル範囲の右下端の表番号。0 から数え始めます。
+12
+Count
+次の要素の個数。空白のセルは数えられず、引き渡されません。
+14
+Col
+要素の列番号。0 から数え始めます。
+16
+Row
+要素の行番号。0 から数え始めます。
+18
+Tab
+要素の表番号。0 から数え始めます。
+20
+Error
+エラー番号。値 0 は「エラーなし」のために設定されています。該当要素が数式セルにある場合、エラー値は数式によって決まります。
+22
+Type
+セル内容の型、0 ==Double, 1 ==String
+24
+Value or Len
+Type ==0 の場合: ダブル/浮動小数点型の８バイト IEEE 変数
+Type ==1 の場合: 次の文字列の長さ (最後の０バイトを含む) 。文字列の最後の０バイトを含めた長さが奇数値になった場合は、偶数値になるように０バイトがもう１つ追加されます。そのため、Len は ((StrLen+2) & ～1) で計算されます。
+26 if Type==1
+String
+Type ==1 の場合: 最後に０バイトが付いた文字列
+32 or 26+Len
+...
+次の要素

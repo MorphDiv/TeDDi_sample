@@ -1,0 +1,41 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Kapitel 5.
+Sicherheit
+Nach vorne
+Ein Feature von PHP zur Erhöhung der Sicherheit ist die Konfiguration von PHP mit register_globals = off.
+Mit Deaktivierung der Möglichkeit, irgendeine vom Benutzer übertragenen Variable in den PHP Code zu injizieren, können Sie die Anzahl "vergifteter" Variablen reduzieren, welche ein potentieller Angreifer zufügen könnte.
+Dieser benötigt mehr Zeit, um sich Übermittlungen auszudenken, und Ihre internen Variablen sind effektiv von den übergebenen Benutzervariablen isoliert.
+Während dies den benötigten Aufwand mit PHP zu arbeiten leicht erhöht ist dargelegt, dass die Vorteile gegenüber dem Aufwand klar überwiegen.
+Beispiel 5-14.
+Mit register_globals=on arbeiten
+?php if ($username) {/ / kann vom User mit get / post / cookies übermittelt werden $good_login = 1;} if ($good_login == 1) {/ / kann vom User mit get / post / cookies übermittelt werden fpassthru (" / highly / sensitive / data / index.html");}?
+Beispiel 5-15.
+Mit register_globals = off arbeiten
+?php if( $_COOKIE['username']) {/ / kann nur von einem Cookie kommen $good_login = 1; fpassthru (" / highly / sensitive / data / index.html");}?
+Beispiel 5-16.
+Entdecken einfacher Manipulationen von Variablen
+?php if ($_COOKIE['username'] !$_POST['username'] !$_GET['username']) {/ / Durchführen anderer Checks, ob der Benutzername gültig ist... $good_login = 1; fpassthru (" / highly / sensitive / data / index.html");} else {mail("admin@example.com", "Possible breakin attempt", $_SERVER['REMOTE_ADDR']); echo "Security violation, admin has been alerted ."; exit;}?
+Zurück
+Zum Anfang
+Nach vorne
+Fehlerbehandlung
+Nach oben
+Vom Nutzer übermittelte Daten

@@ -1,0 +1,139 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel de & kabcclient;
+Kevin Krammer
+kevin. krammer@gmx. at
+& traducteurJeanJacquesFinazzi;
+Kevin Krammer
+& kabcclient; est une interface en ligne de commande pour les carnets d'adresses de & kde;.
+KDE
+& package;
+& kappname;
+KAddressBook
+Introduction
+& kabcclient; est une interface en ligne de commande pour les carnets d'adresses de & kde;. Il vous permet de lister, rechercher, ajouter, supprimer ou fusionner des contacts via la ligne de commande ou à partir d'un langage de script. & kabcclient; prend en charge tout une variété de formats à la fois en entrée et en sortie, ce qui permet de l'utiliser pour l'importation et l'exportation de carnets d'adresses & kde; entiers.
+Lorsqu'il est invoqué sans arguments, & kabcclient; sera en mode de recherche et essaiera de faire correspondre toute saisie sur l'entrée standard aux contacts dans le carnet d'adresses de & kde;
+Fonctionnalités principales de & kabcclient; & #160;:
+Lister tous les contacts du carnet d'adresses de & kde;
+Recherche de contacts par critères
+Ajout de contacts
+Suppression de contacts
+Fusion de contacts (avec les données les plus récentes)
+& kabcclient; n'est pas une autre interface graphique pour le carnet d'adresses de & kde; (cad; & kaddressbook;). & kabcclient; est exclusivement dédié aux situations où une interface graphique n'est pas pratique ou possible.
+& kabcclient; ne fournit pas de langage complet pour effectuer des requêtes sur le carnet d'adresses de l'utilisateur, et l'intention de ses auteurs n'est pas et ne sera jamais de développer une telle capacité. Tout traitement de ce type peut être réalisé à travers d'autres outils en ligne de commande ou les capacités propres du langage dans lequel le script est écrit.
+Afin de faciliter la découverte de ses capacités, toute option requérant un argument peut être appelée avec la valeur help. Ceci listera toutes les valeurs valables qui peuvent être transmises à cette option.
+Fonctionnalités
+Dans ce chapitre, vous apprendrez les fonctionnalités principales de & kabcclient; et comment les contrôler en utilisant les paramètres en ligne de commande (souvenez -vous que & kabcclient; n'est pas une interface graphique & #160;; il s'agit uniquement d'un programme en ligne de commande).
+Vous apprendrez comment ajouter, supprimer et rechercher des données de contacts, et comment utiliser les différents formats en entrée et en sortie.
+Lister le carnet d' adresses
+Ceci est le mode de fonctionnement le plus basique, obtenu en utilisant l'option --list ou -L. & kabcclient; listera tous les contacts du carnet d'adresses de & kde;, et écrira les données sur la sortie standard du programme. La quantité et le format des données en sortie dépendront du format de sortie choisi.
+Afin de lister tous les contacts au format vCard, lancez & #160;:
+% kabcclient -L
+Afin d'obtenir juste une ligne par contact (par exemple pour les compter), lancez & #160;:
+% kabcclient -L -of uid
+Dans l'exemple suivant, nous listons toutes les adresses de courrier électronique & #160;:
+% kabcclient --list -of email
+Recherche de contacts par critères
+& kabcclient; peut recevoir des données depuis la ligne de commande ou depuis l'entrée standard du programme, et vérifier leurs similitudes avec tout contact dans le carnet d'adresses de & kde;. Le mode de recherche est le mode par défaut, mais il peut explicitement être sélectionné en utilisant l'argument en ligne de commande --search ou -S.
+Dans l'exemple suivant, tous les contacts ayant jane dans tout champ de nom ou d'adresse de courrier électronique seront écrits sur la sortie standard du programme, au format vCard (étant donné qu'il s'agit de l'option par défaut pour l'option --output-format) & #160;:
+% kabcclient --search jane
+La même requête, mais cette fois en lisant la chaîne de recherche depuis l'entrée standard du programme & #160;:
+% echo jane | kabcclient --search
+La prise en compte de la casse lors des recherches peut être définie avec l'option --match-case.
+Ajout de contacts
+& kabcclient; prend en charge l'ajout de nouveaux contacts dans le carnet d'adresses de & kde; en utilisant l'argument en ligne de commande --add ou -A. Les données en entrée peuvent être transmises soit en tant qu'arguments supplémentaires en ligne de commande ou lues à partir de l'entrée standard. En cas de succès, les contacts résultants seront écrits sur la sortie standard du programme. Étant donné qu'il s'agit d'une opération qui effectue des changements dans le carnet d'adresses, elle peut être lancée en mode « & #160; essai à blanc & #160; » en utilisant l'option --nosave.
+Ajout d'un contact avec un nom et une adresse de courrier électronique, en interprétant un argument supplémentaire en ligne de commande comme donnée en entrée & #160;:
+% kabcclient --add --input-format email "John Doe & lt; j. doe@example. comgt;"
+Ajout de tous les contacts d'un fichier au format vCard transmis à l'entrée standard du programme & #160;:
+% cat example-file. vcf | kabcclient --add --input-format vcard
+Suppression de contacts
+& kabcclient; prend en charge la suppression de contacts dans le carnet d'adresses de & kde; en utilisant l'argument en ligne de commande --remove ou -R. La donnée en entrée est basiquement une requête identique à celles utilisées lors d'une recherche dans le carnet d'adresses. En cas de succès, les contacts supprimés seront écrits sur la sortie standard du programme. Étant donné qu'il s'agit d'une opération qui effectue des changements dans le carnet d'adresses, elle peut être lancée en mode « & #160; essai à blanc & #160; » en utilisant l'option --nosave.
+Lorsque vous supprimez quelque chose dans le carnet d'adresses, vous ne pouvez pas l'annuler & #160;! En d'autres termes, vous ne pouvez pas annuler la suppression lorsque vous supprimez un contact. Il est supprimé pour de bon.
+Test de la suppression de tous les contacts ayant jane dans tout champ de nom ou toute adresse électronique & #160;:
+% kabcclient --remove --nosave jane
+Formats de données en entrée et en sortie
+& kabcclient; peut interpréter les données en entrée et formater celles en sortie selon différentes règles de formatage. En fonction du scénario d'utilisation réel, certaines combinaisons offriront le résultat le plus utile. Certains des formats nécessitent des paramètres additionnels afin de mieux personnaliser leur comportement.
+Étant donné que les données au format texte peuvent être encodées, à la fois l'entrée et la sortie peuvent respectivement être sujettes à un décodage et un encodage supplémentaires.
+Toutes ces options en ligne de commande réagiront à la valeur spéciale help en listant les valeurs permises.
+Format vCard
+vCard (RFC 2426) est le format standard pour les données de contacts et, en tant que tel, peut présenter toutes les informations auxquelles les autres applications de gestion de carnet d'adresses peuvent accéder, telle que & kaddressbook;. De ce fait, c'est le format par défaut pour le formatage de la sortie.
+Format de valeurs séparées par des virgules (format CSV)
+Le format de valeurs séparées par des virgules peut être utilisé comme format d'entrée pour remplir des champs spécifiques de contacts, et comme format de sortie pour réduire ou réordonner des données pour un traitement avancé. Afin de permettre suffisamment de flexibilité, il est possible de spécifier des correspondances entre des champs de contacts et des colonnes du fichier CSV en utilisant des fichiers de description de modèles CSV utilisés aussi par & kaddressbook; dans le même but.
+Arguments en ligne de commande
+& kabcclient; prend en charge les options suivantes & #160;:
+Option
+Description
+--help, --help-all
+Affiche l'aide sur les options du programme.
+--author
+Affiche les informations sur les auteurs du programme.
+-v, --version
+Affiche les informations sur la version du programme.
+--license
+Affiche les informations sur la licence du programme.
+--verbose
+Affiche d'utiles messages sur l'exécution du programme.
+--nosave
+Affiche ce qui aurait été fait, mais n'exécute rien. N'effectue aucune modification au carnet d'adresses de & kde; & #160;; n'ajoute pas, ne supprime pas, ne modifie aucun contact.
+--match-case
+Effectue une recherche sans tenir compte de la casse lors de la comparaison des données en entrée avec les données de contacts présentes dans le carnet d'adresses.
+Modes de fonctionnement principaux & #160;:
+-L, --list
+Affiche tous les contacts dans le format d'export spécifié.
+-A, --add
+Ajoute des contacts dans le carnet d'adresses.
+-R, --remove
+Supprime des contacts dans le carnet d'adresses.
+-M, --merge
+Fusionne les données en entrée avec les contacts correspondants présents dans le carnet d'adresses.
+Formatage et encodage & #160;:
+-if, --input-format format
+Façon d'interpréter les données en entrée. Utilisez help afin d'obtenir une liste des valeurs disponibles.
+-of, --output-format format
+Façon de formater les données en sortie. Utilisez help afin d'obtenir une liste des valeurs disponibles.
+-if-opts, --input-format-options options
+Options de personnalisation spécifiques au format d'entrée. Utilisez help afin d'obtenir une liste des valeurs disponibles.
+-of-opts, --output-format-options options
+Options de personnalisation spécifiques au format de sortie. Utilisez help afin d'obtenir une liste des valeurs disponibles.
+-ic, --input-codec encodage
+Encodage de texte utilisé pour présenter les données en entrée. Utilisez help afin d'obtenir une liste de valeurs disponibles.
+-oc, --output-codec encodage
+Encodage de texte qui devrait être utilisé pour présenter les données en sortie. Utilisez help afin d'obtenir une liste de valeurs disponibles.
+Questions et réponses
+& reporting. bugs; & updating. documentation;
+Quels fichiers de configuration sont utilisés par & kabcclient; & #160;?
+Aucun.
+Quels sont les noms d'application de & kabcclient; & #160;?
+Le nom d'application de & kabcclient; est kabcclient.
+Comment ajouter une question à cette FAQ & #160;?
+Envoyez vos questions à kevin. krammer@gmx. at.
+Remerciements et licence
+Copyright 2005-2008 pour le programme & kabcclient; & #160;:
+Kevin Krammer kevin. krammer@gmx. at
+Copyright 2008 pour la documentation & #160;:
+Traduction française par & JeanJacquesFinazzi;.
+& underFDL; & underGPL;
+Installation
+Comment obtenir & kabcclient;
+& install. intro. documentation;
+& kabcclient; est inclus dans & kde; 4 et n'est pas disponible séparément.
+Prérequis
+& kabcclient; requiert que les bibliothèques standard de & kde; soient installées (les paquetages kdelibs et kdepimlibs). Pour compiler le programme à partir des sources, vous aurez aussi besoin de & Qt; et des paquetages de développement de kdelibs et kdepimlibs.
+Vous trouverez le journal des modifications dans le fichier ChangeLog.
+Configuration
+Aucune configuration spéciale n'est requise pour configurer & kabcclient; afin qu'il fonctionne dans l'environnement & kde;.

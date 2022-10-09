@@ -1,0 +1,73 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Chapitre 5.
+Sécurité
+Suivant
+Utiliser le PHP comme un CGI exécutable vient la majorité du temps du fait que l'on ne veut pas l'utiliser comme un module du serveur web, (comme Apache), ou bien que l'on souhaite l'utiliser en combinaison d'un CGI complémentaire, afin de créer un environnement de script sécurisé (en utilisant des techniques de chroot ou setuid).
+Une telle décision signifie habituellement que vous installez votre exécutable dans le répertoire cgi-bin de votre serveur web.
+CERT CA-96.11 recommande effectivement de placer l'interpréteur à l 'intérieur du répertoire cgi-bin.
+Même si le binaire PHP peut être utilisé comme interpréteur indépendant, PHP a été pensé afin de rendre impossible les attaques que ce type d 'installation induit.
+Accès au système de fichier: http: / /ma.machine / cgi-bin / php? / etc / passwd
+Lorsque la requête est passée dans une url, après le point d'interrogation (?), elle est envoyée à l'interpréteur comme une ligne de commande par l 'interface CGI.
+Habituellement, l'interpréteur ouvre le fichier spécifié et l 'exécute.
+Lorsqu'il est invoqué comme exécutable CGI, le PHP refuse d 'interpréter les arguments de la ligne de commande.
+Accès d 'un document web sur le serveur: http: / /my.host / cgi-bin / php / secret / doc.html
+Le "path information" dans l 'url, situé juste après le nom du binaire PHP, / secret / doc.html est utilisé par convention pour spécifier le nom du fichier qui doit être ouvert et interprété par le programe CGI.
+Habituellement, des directives de configuration du serveur web (pour le serveur Apache:
+Action) sont utilisées pour rediriger les requêtes afin d'obtenir un document http: / /my.host / secret / script.php par l 'interpréteur PHP.
+Dans une telle configuration, le serveur web vérifie d'abord s 'il a accès au répertoire / secret, et après cette vérification redirige la requête vers http: / /my.host / cgi-bin / php / secret / script.php.
+Malheureusement, si la requête est faite directement sous cette forme, aucune vérification d'accès n 'est faite par le serveur web pour le fichier / secret / script.php, mais uniquement pour le fichier / cgi-bin / php.
+De cette manière, n 'importe quel utilisateur qui peut accéder au fichier / cgi-bin / php peut aussi accéder aux documents protégés sur le serveur web.
+Avec le PHP, l'option de compilation --enable-force-cgi-redirect et les options d'exécution doc_root et user_dir peuvent être utilisées pour prévenir ce genre d'attaques, si des restrictions d 'accès sont appliquées sur les documents du serveur.
+Voir ci-dessous pour des explications plus complètes sur les différentes combinaisons.
+Si votre serveur n'a aucun document dont l'accès est restreint par un mot de passe ou un système de vérification de l'adresse IP, vous n 'avez aucun besoin de ce type de configuration.
+Si votre serveur web ne permet pas les redirections, ou si votre serveur web n'a aucun besoin de communiquer avec le binaire PHP de manière sécurisée, vous pouvez utiliser l 'option de compilation --disable-force-cgi-redirect.
+Vous devez quand même vérifier qu 'aucun script ne fait appel au PHP, de manière directe, http: / /my.host / cgi-bin / php / dir / script.php ou bien de manière indirecte, par redirection, http: / /my.host / dir / script.php.
+Les redirections peuvent être configurées dans les fichiers de configuration d'Apache en utilisant les directives "AddHandler "et "Action" (voir ci-dessous).
+Cette option de compilation prévient quiconque d'appeler directement un script avec l 'url http: / /my.host / cgi-bin / php / secretdir / script.php.
+Dans ce cas là, PHP parsera le fichier uniquement s 'il y a eu redirection.
+Habituellement, le serveur web Apache réalise une redirection grâce aux directives suivantes:
+Action.php-script / cgi-bin / php AddHandler.php-script .php
+Cette option a uniquement été testée avec Apache et compte sur Apache pour affecter la variable d 'environnement non-standart REDIRECT_STATUS pour les requêtes redirigées.
+Dans le cas où votre serveur web ne supporte pas le renseignement du PHP, pour savoir si la requête a été redirigée ou non, vous ne pouvez pas utiliser cette option de compilation.
+Vous devez alors utiliser une des autres méthodes d 'exploitation de la version binaire CGI du PHP, comme exposé ci-dessous.
+Ajouter un contenu interactif dans votre serveur web, comme des scripts ou des exécutables, est souvent considéré comme une pratique non-sécurisée.
+Si, par erreur, le script n 'est pas exécuté mais affiché comme une page HTML classique, il peut en résulter un vol de propriété intellectuelle ou des problèmes de sécurité à propos des mots de passe notamment.
+Donc, la majorité des administrateurs préfèrent mettre en place un répertoire spécial pour les scripts qui soit uniquement accessible par le biais du binaire CGI du PHP, et donc, tous les fichiers de ce répertoire seront interprétés et non affichés tels quels.
+Aussi, si vous ne pouvez pas utiliser la méthode présentée ci-dessus, il est nécessaire de mettre en place un répertoire "doc_root" différent de votre répertoire "document root "de votre serveur web.
+Vous pouvez utiliser la directive doc_root dans le fichier de configuration, ou vous pouvez affecter la variable d 'environnement PHP_DOCUMENT_ROOT.
+Si cette variable d'environnement est affectée, le binaire CGI du PHP construira toujours le nom de fichier à ouvrir avec doc_root et le "path information "de la requête, et donc vous serez sûr qu'aucun script n'est exécuté en dehors du répertoire prédéfini (à l'exception du répertoire désigné par la directive user_dir Voir ci-dessous).
+Une autre option possible ici est la directive user_dir.
+Lorsque la directive n 'est pas activée, seuls les fichiers contenus dans le répertoire doc_root peuvent être ouverts.
+Ouvrir un fichier possédant l'url http: / /my.host / ~user / doc.php ne correspond pas à l'ouverture d'un fichier sous le répertoire racine de l'utilisateur mais à l'ouverture du fichier ~user / doc.php sous le repertoire "doc_root "(oui, un répertoire commence par un tilde [~]).
+Si la directive "user_dir" est activée à la valeur public_php par exemple, une requête du type http: / /my.host / ~user / doc.php ouvrira un fichier appelé doc.php sous le répertoire appelé public_php sous le répertoire racine de l 'utilisateur.
+Si le répertoire racine des utilisateurs est / home / user, le fichier exécuté sera / home / user / public_php / doc.php.
+user_dir et doc_root sont deux directives totalement indépendantes et donc vous pouvez contrôler l'accès au répertoire "document root "séparément des répertoires "user directory".
+Une solution extrêmement sécurisée consiste à mettre l'exécutable PHP à l'extérieur de l 'arborescence du serveur web.
+Dans le répertoire / usr / local / bin, par exemple.
+Le problème de cette méthode est que vous aurez à rajouter la ligne suivante:
+
+Pour que l'exécutable PHP prenne en compte les variables d'environnement PATH_INFO et PATH_TRANSLATED correctement avec cette configuration, vous devez utiliser l 'option de compilation --enable-discard-path.
+Précédent
+Sommaire
+Suivant
+Sécurité
+Niveau supérieur
+Module Apache

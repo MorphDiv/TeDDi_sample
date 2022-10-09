@@ -1,0 +1,48 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+session_set_save_handler() session_set_save_handler() configure les fonctions de stockage de session, et permet de choisir des fonctions utilisateurs pour sauver et relire toutes les sessions.
+Cette fonction est très pratique lorsqu 'il faut sauver les données de sessions en utilisant une autre technique que le système par fichier fourni par défaut: notamment, stockage en base de données, ou dans des démons tels que le SRM.
+Cette fonction retourne TRUE en cas de succès, FALSE en cas d 'échec.
+
+Vous devez configurer l'option session.save_handler à user dans votre fichier php.ini pour que session_set_save_handler() soit actif.
+
+Le gestionnaire d'écriture n 'est pas exécuté tant que le flot de sortie est ouvert.
+Par conséquent, l'affichage de messages de debogage durant le gestionnaire d 'écriture ne sera donc jamais visible depuis le navigateur.
+Si vous avez besoin de débogage, nous vous suggérons d 'écrire vos messages dans un fichier.
+
+Le gestionnaire d'écriture n'est pas appelé s'il n 'y a pas de données dans la session.
+Cela s 'applique aussi si des variables de sessions vides sont enregistrées.
+Cela diffère du comportement du système de gestion des sessions par fichier, qui crée un fichier vide dans ce cas.
+L 'exemple suivant fournit un exemple de stockage des sessions semblable au système par défaut: par fichier.
+Cet exemple peut facilement être adapté pour réaliser des sauvegardes en bases de données, avec votre serveur préféré.
+La fonction de lecture doit toujours retourner une chaîne, pour que le gestionnaire fonctionne comme prévu.
+Vous devez retourner une chaîne vide s'il n 'y a pas de données à lire.
+Les valeurs retournées par les autres gestionnaires sont converties en booléen avant d 'être retournées au script.
+TRUE pour la réussite, FALSE pour l 'échec.
+Exemple 1.
+Exemple avec session_set_save_handler()
+?php function open ($save_path, $session_name) {global $sess_save_path, $sess_session_name; $sess_save_path = $save_path; $sess_session_name = $session_name; return(true);} function close() {return(true);} function read ($id) {global $sess_save_path, $sess_session_name; $sess_file = "$sess_save_path / sess_$id"; if ($fp = @fopen($sess_file, "r")) {$sess_data = fread($fp, filesize($sess_file)); return($sess_data);} else {return(""); / / Doit retourner "" ici.}} function write ($id, $sess_data) {global $sess_save_path, $sess_session_name; $sess_file = "$sess_save_path / sess_$id"; if ($fp = @fopen($sess_file, "w")) {return(fwrite($fp, $sess_data));} else {return(false);}} function destroy ($id) {global $sess_save_path, $sess_session_name; $sess_file = "$sess_save_path / sess_$id"; return(@unlink($sess_file));} / ********************************************* * ATTENTION - Vous devrez impl eacute;menter un * * collecteur de donn eacute;es obosol egrave;tes ici. * ********************************************* / function gc ($maxlifetime) {return true;} session_set_save_handler ("open", "close", "read", "write", "destroy", "gc"); session_start(); / / Utilisez vos sessions comme d 'habitude?
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

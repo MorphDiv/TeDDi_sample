@@ -1,0 +1,38 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHPのPDF関数は、 Thomas Merz により作成されたPDFlibライブラリを使用してPDFファイル を作成することが可能です。
+本節のドキュメントは、PDFlibライブラリで利用可能な関数の概要のみ を説明することを意図しています。ここで扱う各関すの完全で詳細な説 明については、PDFlibのソース配布ファイルと共に配布されているドキュ メントを参照下さい。このドキュメントは、PDFlib の機能に関 する概要を非常に良くまとめており、全ての関数に関する最新のドキュ メントが含まれています。
+PDFlibのほとんどの関数とPHPモジュール内の関数の名前とパラメータは 共通になっています。このモジュールを効率的に使用するには、PDFまた はPostScriptに関する基本的な考え方も理解しておく必要があります。 全ての長さと座標は、Postscriptのポイント数で計られます。通常、1イ ンチ当たり72 Postscript ポイントですが、これは、出力解像度に依存 します。使用する座表系に関するより詳細な説明については、PDFlibの ソース配布に含まれるPDFlibドキュメントを参照下さい。
+ほとんど全てのPDF関数は、最初の引数パラメータとして pdf object を必要とすることに注意して下さ い。より詳細な情報については以下の例を参照下さい。
+PDFlibは、 http://www.pdflib.com/pdflib/index.html でダウンロード 可能ですが、商用で使用する場合はライセンスを購入する必要がありま す。この拡張モジュールをコンパイルするには、 JPEG および TIFF が必要です。
+2000年3月9日以降のバージョンのPHPでは、3.0より古いバージョンの PDFlibをサポートしていません。
+PDFlib 3.0以降が、PHP 3.0.19以降でサポートされています。
+以下の関数が動作するようにするには、 --with-pdflib[=DIR] を指定してPHPを コンパイルする必要があります。DIRはPDFlibのベースインストールディレ クトリで、デフォルトは /usr/local です。 さらに、PDFlibでjpeg, tiff, pngライブラリを使用することを指定できま す。これは、PDFlib 4.xではオプションです。 これを行うには、configureにオプション --with-jpeg-dir[=DIR] --with-png-dir[=DIR] --with-tiff-dir[=DIR] を追加します。
+バージョン3.xのPDFlibを使用する場合、PDFlibのconfigureのオプションに --enable-shared-pdflib を指定する必要があります。
+この拡張モジュールは設定ディレクティブを全く 定義しません。
+PHP v4.0.5以降、PHPlib用のPHP拡張モジュールは、PDFlib GmbH から正 式にサポートされています。これにより、PDFlibマニュアル(バージョン 3.00以降)に記述された全ての関数がPHP4で全く同じ意味、同じパラメー タでサポートされています。返り値のみは、エラーの場合に FALSE を返すというPHPの流儀に合わせるために PDFlibマニュアルと異なっていることがあります。互換性を保つために PDFlibサポート関数ではまだ古い関数もサポートしていますが、上記の ように新しいバージョンに置換される予定です。PDFlib GmbH は、これら の古い関数を使用した場合に生じた際に生じた問題に関してはサポートを 行いません。
+
+表 1古い関数と代替関数
+多くの関数の使用法は簡単です。最も困難なのは、非常に簡単なpdfドキュ メントを作成する場合でしょう。次の例は、入門の際の助けとなるはず です。この例では、1ページを有するファイル test.pdf が作成されます。このページには、30ポ イントのアウトラインフォントでテキスト"Times-Roman outlined"が描 かれます。このテキストには、下線も引かれます。
+
+例 1PDFlibでPDFドキュメントを作成する
+以下のスクリプト getpdf.php は、PDFドキュメ ントを返すだけのものです。
+PDFlibの配布ファイルには、アナログクロックで本格的なページを作成す るより複雑な例が含まれています。ここでは、PDFlibのメモリ内作成機 能を使用しており、このため、テンポラリファイルは不要です。この例 をPHPからPDFlibを使用するように変換すると以下のようになります。 (CLibPDFモジュール) のドキュメント にも同じ例があります。)
+
+例 2PDFlib配布ファイル中の pdfclockの例
+注意 PDFドキュメントを作成するための別のPHPモジュールとして FastIO's ClibPDFが利用可能です。 詳細については、 ClibPDF の節を参 照下さい。 ClibPDF はPDFlibとはや や異なるAPIを使用していることに注意して下さい。

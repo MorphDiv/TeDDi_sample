@@ -1,0 +1,52 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Appendix B.
+Migrating from PHP 3 to PHP 4
+Next
+The global configuration file, php3.ini, has changed its name to php.ini.
+For the Apache configuration file, there are slightly more changes.
+The MIME types recognized by the PHP module have changed.
+application / x-httpd-php3 - - application / x-httpd-php application / x-httpd-php3-source - - application / x-httpd-php-source
+You can make your configuration files work with both versions of PHP (depending on which one is currently compiled into the server), using the following syntax:
+AddType application / x-httpd-php3 .php3 AddType application / x-httpd-php3-source .php3s AddType application / x-httpd-php .php AddType application / x-httpd-php-source .phps
+In addition, the PHP directive names for Apache have changed.
+Starting with PHP 4.0, there are only four Apache directives that relate to PHP:
+php_value [PHP directive name] [value] php_flag [PHP directive name] [On|Off] php_admin_value [PHP directive name] [value] php_admin_flag [PHP directive name] [On|Off]
+There are two differences between the Admin values and the non admin values:
+Admin values (or flags) can only appear in the server-wide apache configuration files (e.g., httpd.conf).
+Standard values (or flags) cannot control certain PHP directives, for example - safe mode (if you could override safe mode settings in .htaccess files, it would defeat safe-mode's purpose).
+In contrast, Admin values can modify the value of any PHP directive.
+To make the transition process easier, PHP 4 is bundled with scripts that automatically convert your Apache configuration and .htaccess files to work with both PHP 3 and PHP 4.
+These scripts do NOT convert the mime type lines!
+You have to convert these yourself.
+To convert your Apache configuration files, run the apconf-conv.sh script (available in the scripts / apache / directory).
+For example:
+~ / php4 / scripts / apache:#. / apconf-conv.sh / usr / local / apache / conf / httpd.conf
+Your original configuration file will be saved in httpd.conf.orig.
+To convert your .htaccess files, run the aphtaccess-conv.sh script (available in the scripts / apache / directory as well):
+~ / php4 / scripts / apache:# find / -name .htaccess -exec. / aphtaccess-conv.sh {}\;
+Likewise, your old .htaccess files will be saved with an .orig prefix.
+The conversion scripts require awk to be installed.
+Prev
+Home
+Next
+Running PHP 3 and PHP 4 concurrently
+Up
+Parser behavior

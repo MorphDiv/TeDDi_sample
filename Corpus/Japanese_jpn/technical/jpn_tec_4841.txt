@@ -1,0 +1,41 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+フォームが PHP スクリプトに投稿された時、フォームから渡された全て の変数は PHP により自動的にスクリプトから使用可能となります。 この情報にアクセスする手段は複数あります。例を以下に示します。
+
+例 8-1簡単なHTMLフォーム
+特定の設定や個別の設定に依存し、HTMLフォームからのデータにアクセス する手段は多くあります。いくつかの例を以下に示します。
+
+例 8-2簡単なPOST HTMLフォームからのデータにアクセスする
+GETフォームを使用した場合も同じですが、かわりに適当な定義済みの GET変数を使用するところが異なります。 GETは、QUERY_STRING (URLの'?'の後の情報)にも代入されます。 例えば、 http://www.example.com/test.php?id=3 には、 $_GET['id'] によりアクセス可能なGETデータ が含まれます。 $_REQUEST および import_request_variables() も参照下さい。
+注意 $_POST および $_GET のような スーパーグローバル 配列 がPHP 4.1.0で利用可能となっています。
+前記のようにPHP 4.2.0より前のバージョンでは、 register_globals のデフォルト値は on でした。 PHP 3では、常にonとなっています。 PHPコミュニティは、このディレクティブに依存しないことを推奨し、 このオプションが off でのコードの動作を仮定 することを推奨しています。
+注意 magic_quotes_gpc の設定 はGET、POSTそしてCookieの値に影響します。onになっていると (It's "PHP!") という値は自動的に (It\'s \"PHP!\") となり、DBへの挿入時の エスケープが不要になります。 addslashes() 、 stripslashes() そして magic_quotes_sybase も 参照してください。
+PHPではフォーム変数のコンテキスト内で配列が使用可能です( FAQの関連箇所 も参照してください)。 例えば、関連する変数をグループ化したり、select inputで複数の値を 取得するといったことが可能です。フォームを同じスクリプトに投稿し、 投稿したデータを表示する例を示します。
+
+例 8-3より複雑なフォーム変数
+PHP 3では、配列変数は1次元配列に限定されていました。PHP 4ではこの ような制約はありません。
+フォームを投稿する際、次のタグのように標準の投稿ボタンの代わりに 画像を使用することができます。
+画像のどこかがクリックされた場合、二つの変数 sub_x および sub_y が付け加えられてこのフォームはサーバーに転送されます。これらの変 数は、ユーザーがこの画像をクリックした座標を示しています。経験の ある人は、ブラウザにより送られた変数の名前においてアンダースコア がピリオドになってしまっていることを心配するかもしれません。 しかし、PHP はピリオドをアンダースコアに自動的に変換します。
+PHP は、 Netscapeの規約 に定 義されたHTTP Cookieを完全にサポートします。Cookieは、リモート ブラウザにデータを保持し、再訪するユーザーを追跡し、特定する機構 です。 setcookie() 関数によりCookieをセットす ることができます。Cookieは、HTTP ヘッダの一部なので、SetCookie 関数をブラウザに何かを出力する前にコールする必要があります。 この制約は、 header() 関数のものと同じです。 Cookieのデータは、 $_COOKIE, $HTTP_COOKIE_VARS のような適当なCookieデータ 配列で参照可能です。また、 $_REQUEST でも 参照可能です。詳細および例については、 setcookie() のマニュアルページを参照して下さい。
+単一のCookieに複数の値を代入したい場合は、配列として 代入することが可能です。以下に例を示します。
+上記スクリプトにおいては、2つの異なるCookieを生成されますが、 この場合、スクリプトではMyCookieという単一の配列になります。 一つのCookieに複数の値を設定したい場合、最初の値に serialize() または explode() を用いることを考えてください。
+Cookieは、パスまたはドメインが異ならない限り、 以前のクッキーをブラウザ上の同じ名前の変数に置き換えることに 注意してください。 さて、買い物かご(Shopping Cart) プログラムの場合、カウンタを保持し、 受け渡したいと思うかもしれません。 これは、次のようになります。
+例 8-4 setcookie() の例
+通常、PHP はスクリプトに渡された変数の名前を変更しません。しかし、 ドット(ピリオド、終止符)はPHPの変数名で有効な文字ではないというこ とに注意する必要があります。次の例を見てみましょう。
+重要なことを記述しておくと、このため、外部変数に含まれるドットを PHP は自動的にアンダースコアに変換します。
+PHPは、変数の型を定義し、必要に応じて変換します。このため、ある変 数の型がある時点で常に明らかであるわけではありません。PHPは、変数 の型を調べる複数の関数をサポートしています。それらは、 gettype(), is_array(), is_float(), is_int(), is_object(), is_string() です。 型 の章も参照下さい。

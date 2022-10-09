@@ -1,0 +1,124 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Daniel Naber
+daniel. naber@t-online. de
+David Rugge
+davidrugge@mediaone. net
+Juan Manuel García Molina juanma@superiodico. net Traductor Miguel Revilla Rodríguez yo@miguelrevilla. com Traductor Javier Viñal fjvinal@gmail. com Traductor
+2004-07-14 1.7
+Preguntas más comunes (FAQ;)
+¿Por qué mis filtros no se aplican a los mensajes de entrada de mis cuentas & imap;?
+El modo & imap; normal no admite filtrado, pero el nuevo tipo de cuenta & imap; desconectado sí. Puede probarlo para usar filtrado del lado del servidor (pregunte a su administrador cómo instalar filtros en el servidor y en qué formato), ya que & imap; gestionará su correo en el servidor. Desafortunadamente, aunque existe un lenguaje de filtrado de correo (Sieve, definido en RFC3028), no hay ningún protocolo de acceso estandarizado para instalar o editar guiones de Sieve en el servidor. Si tal protocolo estuviera disponible en el futuro, lo más seguro es que & kmail; lo implemente.
+El uso de PGP o GnuPG es muy lento o bloquea & kmail;.
+& kmail; accede síncronamente a PGP / GnuPG, & ie; se bloquea mientras PGP / GnuPG están trabajando. Esto significa que debe querer desactivar la recuperación automática de claves desconocidas de un servidor de claves para hacer que & kmail; responda (o al menos lo parezca) más rápido. Si está usando GnuPG 1.0.7 (o superior) o se ha actualizado desde una versión anterior, asegúrese de ejecutar gpg --rebuild-keydb-caches una vez y gpg --check-trustdb tras cada importación o refresco. Ambos incrementarán enormemente la velocidad de GnuPG.
+¿Qué debo saber si quiero usar PGP / GnuPG con & kmail;?
+& kmail; proporciona un interfaz simple y fácil de usar para las funciones básicas de estos programas. Debe conocer cómo funcionan estos programas y qué puede provocar su uso inseguro. Algunas cosas importantes:
+Ciertamente debería probar si el cifrado funciona antes de usarlo. & kmail; se basa parcialmente sobre cadenas de error de PGP / GnuPG, que suelen cambiar entre versiones diferentes.
+& kmail; no cifrará los mensajes con una clave pública que no sea de confianza (sin firmar). Si quiere cifrar tal clave debería comprobar la identidad del propietario de la clave y firmarla sólo entonces con su clave secreta. Si no quiere o no puede verificar la identidad del propietario de la clave pero aún así quiere cifrar el mensaje, firme la clave localmente con gpg --lsign IDclave.
+Fiarse de una clave pública externa sin verificarla no es una buena idea.
+& kmail; no puede cifrar ni firmar adjuntos si está usando el módulo OpenPGP. Para adjuntos cifrados y firmados tiene que tener instalada y configurada una herramienta de cifrado.
+Para comenzar con GnuPG 1.0.7, tiene que configurar su propia clave como de confianza absoluta. Esto es algo que no se hace implícitamente.
+¿Dónde almacena & kmail; mis preferencias y mis correos?
+La mayor parte de las preferencias de & kmail; se guardan en $KDEHOME / share/ config/ kmailrc, donde $KDEHOME suele ser ~/. kde. Las identidades se almacenan en $KDEHOME / share/ config/ emailidentities y el correo se guarda en $KDEHOME / share/ apps/ kmail (o ~/ Mail si está actualizando desde una versión anterior de & kmail; de la que se usa en este punto). Tenga en cuenta que algunos de los archivos están ocultos: recuerde que también debe copiarlos si quiere hacer una copia de seguridad o archivar sus correos.
+¿Por qué regeneró & kmail; el índice de una carpeta?
+& kmail; regenera el índice de una carpeta cuando el índice parece estar desfasado, & ie; si los contenidos de una carpeta son más recientes que el índice. & kmail; regenera el índice en este caso para evitar la pérdida o corrupción de los mensajes. Desafortunadamente, los mensajes que se borren en esos momentos pueden reaparecer y las banderas de los mensajes (como importante, etc.) pueden perderse al regenerar el índice.
+Un índice puede estar desfasado por varios motivos. Los dos más importantes son:
+Otros programas modificaron los contenidos de la carpeta. Si quiere usar & kmail; junto con procmail, lea este & FAQ;. Si quiere usar & kmail; junto con otro cliente de correo, entonces lea este & FAQ;.
+Si su carpeta de correo (normalmente $KDEHOME / share/ apps/ kmail/ o ~/ Mail) está en un volumen que se monte vía NFS y si el reloj del servidor NFS no está sincronizado con el reloj de su equipo, el servidor NFS a veces informa de una fecha errónea del archivo index (índice). En este caso, & kmail; asume que el índice es obsoleto aunque en realidad no lo esté. Para corregir este problema, usted (o su administrador de sistemas) tendrá que asegurarse de que el reloj de su equipo y el de su servidor NFS están siempre sincronizados. Una manera de lograr esto es usar el demonio ntp.
+No puedo añadir direcciones a mi libreta de direcciones tras actualizarme a KDE 3. x.
+Probablemente copió su viejo archivo kmailrc manualmente. Esto no es necesario, ya que hay un guión que hará este tipo de cosas cuando ejecute KDE 3. x por primera vez. Para corregir el problema, borre el grupo [AddressBook] y la opción de la libreta de direcciones (addressbook) del grupo [General] de su archivo kmailrc. Sin embargo, posiblemente encuentre otros problemas que se solventarían con el script de actualización.
+¿Puedo usar & kmail; junto con un cliente de correo diferente, & eg; mutt?
+Si está usando el formato mbox para sus carpetas, no es posible usar un cliente de correo diferente mientras & kmail; esté corriendo. Con mutt también puede haber problemas aunque ambos programas no funcionen al mismo tiempo. En este caso, le recomendamos que use el formato maildir, porque debería solucionar todos los problemas.
+¿Cómo puedo convertir mis buzones de correo de mbox a maildir?
+No hay una forma automática de hacer esto. Tendrá que crear una carpeta nueva en formato maildir y copiar los mensajes de la carpeta mbox a una carpeta nueva. Recuerde adaptar las reglas de filtrado referentes a la carpeta antigua antes de borrarla.
+¿Cómo puedo usar un navegador que no sea & konqueror; para abrir los enlaces de los mensajes?
+Cambie las Asociaciones de archivos para los archivos HTML usando & kcontrol;.
+¿Cómo puedo borrar los adjuntos de los mensajes sin borrar los propios mensajes?
+Actualmente, no se puede hacer. Como solución provisional, puede mover el mensaje a la carpeta borrador, abrirlo en el editor haciendo doble clic, borrar los adjuntos, guardar el mensaje de nuevo en la carpeta borrador y moverlo de nuevo a su carpeta original. La desventaja de esta solución es que la fecha pasará a ser la fecha actual. También pueden modificarse otras cabeceras.
+¿Cómo puedo hacer que & kmail; compruebe si hay mensajes nuevos al comenzar?
+Si & kmail; debería comprobar si hay mensajes nuevos al inicio, active Comprobar correo al inicio en la página de configuración de « Cuentas ». También puede iniciar & kmail; con kmail --check.
+¿Por qué & kmail; se ralentiza o deja de funcionar cuando intento enviar adjuntos muy grandes?
+Se sabe que & kmail; tiene problemas con los adjuntos largos. Estamos trabajando para tener una solución a este problema en & kde; 3.2, pero actualmente consume la memoria virtual de aproximadamente 10-15 veces el tamaño de los adjuntos. Eso significa que si adjunta un archivo de 2 MB, & kmail; puede necesitar temporalmente sobre 20-30 MB de memoria virtual (= RAM + espacio de intercambio). Si no tiene suficiente memoria virtual, esta acción conllevará problemas.
+¿Dónde puedo obtener una lista de cambios entre las distintas versiones de & kmail;?
+La pantalla de bienvenida muestra todos los cambios importantes para su versión. Se muestra cuando selecciona Ayuda Introducción a & kmail;.
+¿Puedo configurar la ubicación de mi carpeta de correo?
+Salga de & kmail;, haga una copia de seguridad de ~/. kde/ share/ config/ kmailrc, luego ábralo con un editor y añada & eg; folders=/ home/ nombreusu/. mail en la sección [General]. Luego, mueva todas sus carpetas (incluyendo los archivos index ocultos) a la nueva ubicación. La próxima vez que inicie & kmail;, usará / home/ nombreusu/. mail en lugar de / home/ nombreusu/. kde/ share/ apps/ kmail. Tenga en cuenta que & kmail; perderá sus filtros si cambia la ubicación de la carpeta de correo y olvida mover sus carpetas a esa nueva ubicación.
+¿Cómo puedo usar las carpetas de correo que no están en la ubicación habitual de las carpetas de mensajes de & kmail;?
+Para añadir una carpeta completa mbox, use ln -s / algunsitio/ Mail/. carpetaremota. directory / home/ nombreusuario/ share/ apps/ kmail/. mibuzondecorreo. directory. Tenga en cuenta que no es posible usar enlaces a archivo. Sólo funcionarán los enlaces que apunten a carpetas.
+Soy uno de esos cuyos correos constan de 100 líneas citadas y una línea escrita por mí. Por algún motivo, esto molesta a los demás. ¿Puede & kmail; ayudarme y hacer mejor la vida de los demás?
+Claro que sí. Simplemente, seleccione la parte relevante del correo original con el ratón antes de responder. En su respuesta, sólo se citará esta parte.
+Para algunos mensajes, el valor del campo Fecha es desconocido o no es correcto.
+Probablemente la cabecera Date: (Fecha) de estos mensajes esté rota y & kmail; no pueda interpretarla. No es un error de & kmail;, sino del software que envió el correo.
+Hay dos guiones sobre mi firma. ¿Qué pasa?
+Para separar la firma del cuerpo del mensaje con dos guiones y un espacio con una sola línea es el uso común. Estos símbolos permiten que el cliente de correo reconozca la firma y pueda recortarla de la respuesta. Si la firma no tiene ya el separador, & kmail; lo añadirá automáticamente.
+& kmail; recupera los mismos mensajes una y otra vez.
+Esto ocurre si tiene marcado Dejar los mensajes del servidor y el servidor POP3 no admite la orden UIDL. Por ahora no hay ninguna solución salvo desactivar Dejar los mensajes en el servidor. Se puede encontrar una explicación más detallada en este envío a la lista de correo.
+¿Hay errores conocidos en & kmail;?
+Hay un enlace a la lista de errores enviados en la página web de & kmail;. Tenga en cuenta que no todos estos errores son válidos. De todos modos, pensamos que & kmail; es un software muy robusto.
+Sin embargo, no debería ejecutar & kmail; mientras otro cliente de correo esté accediendo ya a los archivos de ~/ Mail. Si intentar hacer esto, podría perder mensajes. Tenga presente que, en cualquier caso, debería hacer copias de seguridad de sus mensajes.
+& kmail; no muestra correctamente el correo HTML.
+Las referencias a contenido externo como imágenes están desactivadas de forma predefinida, porque se pueden usara para determinar si y cuándo se lee un mensaje. La carga de referencias externas se puede activar en la pestaña Seguridad del diálogo de configuración de & kmail;. Tenga en cuenta que los accesorios (como Macromedia Flash), & Java; y JavaScript no se mostrarán en & kmail; por razones de seguridad y que no hay ninguna forma de activarlos.
+¿Puedo usar dos versiones diferentes de & kmail; a la vez? ¿Puedo pasar de una versión actual de & kmail; a una anterior?
+Sólo puede tener activa una instancia de & kmail;. También le recomendamos que una vez que se quede con una cierta versión no retroceda a versiones anteriores. Desactualizar a una versión anterior probablemente le cause problemas, & eg; porque el archivo de índice (index) puede cambiar. La actualización nunca debería suponer un problema.
+¿Soporta & kmail; archivos con formato uuencode?
+Se admiten los archivos adjuntos con codificación uuencode, pero no así los archivos con codificación uuencode en la línea.
+& kmail; cayó mientras estaba escribiendo un correo... ¿se ha perdido el correo?
+& kmail; intenta guardar su correo en ~/ dead. letter en caso de una caída. La siguiente vez que inicie & kmail;, el editor de correo debería aparecer con su correo de nuevo. Si no ocurre esto, intente abrir ~/ dead. letter con un editor. Si no existe es porque la caída fue tan mala que & kmail; no ha podido guardar su correo.
+Cuando intento hacer que una carpeta se ocupe de una lista de correo, de tal forma que al recibir un correo de la lista vaya a esa carpeta.
+Asociar una carpeta con una lista de correo no tiene nada que ver con el filtrado de los mensajes de la lista de correo. Tiene que añadir manualmente una nueva regla de filtrado. Sin embargo, una vez que haya asociado una carpeta con una lista de correo puede usar Mensaje Responder alista de correo... o Mensaje Nuevo mensaje a lista de correo... y la dirección de correo de la lista se pondrá en el campo To: (Para:).
+Mi servidor SMTP necesita autenticación... ¿lo admite & kmail;?
+Hay dos técnicas comunes usadas para la autenticación SMTP: SMTP tras POP3 y Aut. SMTP. Aut. SMTP se puede configurar en la pestaña General del diálogo de configuración SMTP. Para usar SMTP tras POP3, tiene que recoger todos sus mensajes del buzón de salida y los envía tras haber recogido el correo nuevo. Puede hacer que & kmail; envíe automáticamente los mensajes que hay en la cola con la opción Enviar los mensajes de la carpeta de salida de la página de configuración de « Cuentas ».
+¿Puedo usar & kmail; y procmail?
+Sí, pero es importante hacerlo de la forma correcta o podría perder correo. Para usar procmail y & kmail;, tendrá que configurar & kmail; para que recoja el correo nuevo de los archivos de « spool » en los que procmail suelta su correo. No configure procmail para que entregue el correo en una carpeta de & kmail;, esto no funcionará.
+Para cada archivo de « spool » de procmail, tiene que crearse una cuenta de la que & kmail; obtendrá el correo nuevo. También necesitará asegurarse de que especifica correctamente el nombre del archivo de bloqueo para esta cuenta. Al configurar una cuenta, & kmail; realizará un análisis mínimo de su archivo. procmail, e intentará listar cada archivo de « spool » que haya encontrado, y también los archivos de bloqueo que están junto al elemento archivo de bloque de procmail. procmail permite al usuario especificar archivos de bloqueo de tres formas diferentes, así que no hay una forma de establecer una correspondencia entre los archivos de « spool » y los archivos de bloqueo. Así que queda de su cuenta asegurarse de que especifica el archivo de bloque correcto para cada archivo de « spool ».
+La verificación ortográfica no reconoce los caracteres no ingleses.
+Antes de que pueda usar la verificación ortográfica por primera vez, tiene que configurarla. Puede hacerlo en la ventana del editor con la opción del menú Preferencias Corrector ortográfico.... Puede configurar allí el diccionario y la codificación.
+¿Cómo uso mis carpetas de correo de Eudora / Netscape; / Outlook /... en & kmail;?
+Vea la sección Usar otros buzones de correo con & kmail;.
+¿Puedo usar cifrado con mi cuenta POP3 normal (no- SSL)?
+Si su servidor POP3 tiene un demonio ssh, use ssh como túnel para su conexión POP3 usando la siguiente orden:
+ssh -L 110:127.0.0.1:110 usuario@servidor
+Modifique la configuración de & kmail; para recuperar el correo vía POP3 desde localhost y ssh servirá de túnel para su conexión.
+Si ya ha enviado mensajes sin cifrar vía Internet, la única ventaja de usar ssh es que su contraseña se mandará cifrada al servidor POP3.
+¿Bloquea & kmail; las carpetas que utiliza?
+& kmail; no bloquea los archivos de ~/ Mail.
+Para evitar el riesgo de perder correo si está usando una cuenta local, es necesario asegurarse de que & kmail; usa el mismo tipo de bloqueo que su agente de reparto de correo.
+Hay cinco opciones de bloqueo diferentes a su disposición:
+Cerrojo de procmail
+Cerrojo de Mutt
+Cerrojo privilegiado de Mutt
+FCNTL (predeterminado)
+ninguna (usar con cuidado)
+Archivo de bloque de procmail usará una pequeña utilidad que viene con procmail llamada lockfile. Puede usar esto si su carpeta de correo está en una carpeta en la que tenga permisos de escritura. Normalmente, esto no funcionará con su archivo / var/ spool/ mail/ usuario. Creará archivos. lock en su cuenta cuando & kmail; esté comprobando si hay correo nuevo. Tenga en cuenta que esto sólo funcionará si tiene instalado procmail en su sistema.
+Cerrojo de Mutt y Cerrojo privilegiado de Mutt usan una pequeña utilidad llamada mutt_dotlock que viene con mutt. Cerrojo de Mutt se puede usar de la misma forma que la opción Archivo de bloqueo de procmail, con las mismas limitaciones en lo que respecta a las carpetas / var/ spool/ mail/. Sin embargo, la opción Cerrojo privilegiado de Mutt permite crear archivos de bloqueo en la carpeta / var/ spool/ mail. mutt_dotlock es un programa con segid y esta opción sólo funcionará en modo setgid. Tenga en cuenta que estas opciones sólo funcionarán si la aplicación mutt está instalada en su sistema.
+FCNTL usa la llamada al sistema fcntl().
+El uso del bloqueo FCNTL puede causar bloqueos del sistema cuando el archivo de almacenamiento del correo se encuentre en un dispositivo montado por NFS.
+Si no quiere usar ningún bloqueo, su opción es ninguno. Sin embargo, hay riesgo de pérdida de correo cuando no se usa bloqueo.
+¿Cómo dejo los mensajes en el servidor?
+Vea el capítulo Filtros de descarga. Si quiere dejar todos los mensajes en el servidor: abra la ventana Preferencias Configurar & kmail;.... Pulse sobre la página Red. Seleccione su cuenta de la lista y pulse sobre el botón Modificar.... Este diálogo contiene la opción que debe activar, Dejar los mensajes en el servidor.
+¿Cómo inserto automáticamente un pie de texto en mis mensajes?
+El pie de texto también se llama firma (no confundir con la firma de cifrado). Elija Preferencias Configurar & kmail;.... Busque en la página Identidad la pestaña Firma y añada allí su firma. Luego vaya a la pestaña General de la página Editor y actívela.
+¿Cómo configuro & Sendmail; para que funcione con & kmail; si tengo una conexión por módem?
+Primero debería comprobar si su distribución permite hacer esto. Probablemente ya se haya configurado durante la instalación.
+Si no fuera el caso, puede querer echar un vistazo al Cómo de las colas de correo.
+He visto algunas demostraciones del control remoto con & kmail;. ¿Hay documentación sobre los interfaces disponibles?
+Puede obtener una lista de tales funciones usando esta orden en una shell: dcop kmail KMailIface. También hay documentación disponible en kdenetwork/ kmail/ kmailIface. h y kdenetwork/ kmail/ mailcomposerIface. h.
+Cuando respondo a un mensaje, sólo se cita una parte del mensaje. ¿Por qué?
+Puede ocurrir que el mensaje tenga dos guiones y un espacio en una sola línea. Se entiende que este código es el comienzo de la firma. La parte restante del mensaje no se cita, porque cuando se responde a un mensaje se quita la firma.
+Sólo voy a usar & imap;. ¿Puedo ocultar de la lista de carpetas locales o siempre tengo que mantenerla contraída?
+No, no puede ocultarlas. Las carpetas locales funcionan como punto de retorno cuando no puede llegar al servidor & imap; Aunque sólo use & imap;, & kmail; usa la bandeja de salida para enviar los mensajes. Si ocultara todas las carpetas locales, no podría poner en la bandeja de salida los mensajes que no se pudieran enviar. Pero es posible mantener contraída las carpetas locales. Lo que tiene que hacer es ir a Preferencias Configurar & kmail;... y vaya a la sección « Misc ». Allí puede configurar la carpeta de inicio. Si pasa a una carpeta en la cuenta & imap;, las carpetas locales permanecerán contraídas cuando se inicie & kmail;.

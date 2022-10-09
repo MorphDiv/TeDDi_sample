@@ -1,0 +1,157 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Introduction aux bases de données
+Une base de données, qu'est -ce que c'est & #160;?
+On peut définir une base de données comme un ensemble de données sur un sujet. Cet ensemble est organisé de façon à permettre facilement de parcourir les informations, les modifier ou ajouter de nouveaux éléments.
+Regardez ce diagramme représentant un des exemples ci-dessus & #160;: un simple annuaire téléphonique.
+Un diagramme d'une base de données d'annuaire téléphonique
+Un diagramme d'une base de données d'un annuaire téléphonique
+L'image ci-dessus montre un ensemble de deux contacts présentés chacun sur une carte. Une telle carte peut constituer une rangée d'une table & #160;:
+La table Contacts
+Nom
+No. Tel
+Joan
+699 23 43 12
+Adam
+711 19 77 21
+Termes et définitions & #160;: Une donnée qui constitue une partie d'un ensemble plus grand peut être appelée une ligne ou de manière plus professionnelle un enregistrement. L'ensemble est normalement appelé une table. Le nom le plus naturel d'une table est un nom décrivant les données qu'elle contient, Contacts dans cet exemple. De plus, chaque ligne de la table est constituée de colonnes, souvent appelées aussi champs. Dans la table Contacts, il y a deux colonnes (champs) & #160;: Nom et No. Tel.
+Pour les cas simples, une table peut constituer à elle toute seule une base de données. Beaucoup de personnes considèrent les deux comme équivalents. Comme vous le verrez, pour des bases de données réelles, on a besoin le plus souvent de plusieurs tables.
+Pour résumer, vous avez déjà une base de données simple, constituée d'une table Contacts.
+Bases de données et tableurs
+Vous avez très probablement déjà utilisé des tableurs comme KSpread, OpenOffice. org Calc ou Microsoft Excel. Dans ce cas, vous vous demandez sûrement pourquoi utiliser une base de données, puisque les feuilles des tableurs et les bases de données sont toutes les deux constituées de tables.
+En comparant les base de données et les feuilles des tableurs, vous allez aborder les problèmes suivants, que nous étudierons ensuite plus précisément & #160;:
+Intégrité référentielle des données
+Redondance des données
+Intégrité et validité des données
+Limiter la vue des données
+Performances et capacités
+Saisie pratique de données
+Rapports
+Programmation
+Utilisation simultanée
+Sécurité
+En quoi une base de données est -elle différente d'une feuille de calcul & #160;?
+En dépassant progressivement la capacité d'un téléphone portable, étendez votre table Contacts en ajoutant une colonne (champ) Adresse. Ajoutez plusieurs numéros de téléphone par personne (bureau, maison) et ajoutez les prénoms aux noms. Pour simplifier la situation, nous allons supposer & #160;:
+que la table est limitée à deux personnes (bien sûr, il peut y en avoir des milliers dans une base de données en pratique)
+Il n'y a pas deux personnes avec les même noms et prénoms.
+La table Contacts
+Nom et prénom
+Téléphone
+Adresse
+Joan Smith
+Western Gate 1, Warsaw
+Adam Willson
+London, Frogs Drive 5
+110 98 98 00
+Western Gate 1
+Smith Joan
+312 43 42 22
+Warsaw, Western Gate 1
+ADAM Willson
+231 83 02 04
+Frogs Drive 5, London
+Une telle table peut être faite dans un tableur ou une application de base de données. Utiliser un tableur est très facile, bien sûr. Mais quels sont les problèmes que l'on peut rencontrer à ce stade & #160;?
+Intégrité des données référencées
+Supposons que vous utilisez un tableur et que vous avez besoin de changer l'adresse d'au moins une personne. Vous avez alors un petit problème & #160;: vous devez alors changer l'adresse dans de nombreuse lignes. Par exemple, Joan prend trois lignes. Un vrai problème apparaît si vous oubliez de changer une des lignes– l'adresse assignée à cette personne sera ambigüe, donc vos données perdent leur intégrité.
+De plus, il n'y a aucun moyen simple de supprimer une personne donnée de la table, puisque vous devez vous retrouver toutes les lignes liées à cette personne pour les supprimer.
+Redondance des données
+C'est directement lié au problème précédent. Dans les colonnes Nom et prénom et Adresse, la même donnée est entrée à de nombreuses reprises. Ce manque d'efficacité est typique de la méthode de stockage des données dans un tableur. La base de données grossit inutilement, demandant donc plus de ressources informatiques (à cause d'une masse de données plus importante et d'un accès plus lent).
+Comment pouvez -vous résoudre ces problèmes avec une base de données & #160;? Vous pouvez diviser l'information en plus petits morceaux, en créant une table additionnelle Personnes, avec seulement deux colonnes & #160;: Prénom et nom et Adresse & #160;:
+la table Personnes
+Chaque ligne de la table Personnes correspond à une seule personne. La table Contacts est à partir de maintenant en relation avec la table Personnes.
+Intégrité et validité des données
+Notez la façon dont sont entrées les données dans les champs Nom et prénom et Adresse. Les gens entrant des données peuvent se tromper, ou même parfois être négligents. Dans nos exemples de données, nous avons deux différentes manières pour saisir des noms et des prénoms (Joan Smith et Smith Joan, Adam et ADAM) et encore plus de manières de saisir la même adresse. Vous pouvez sûrement en imaginer bien d'autres.
+Le problème ci-dessus montre que & pex; lorsqu'on recherche le numéro de téléphone d'une personne dont l'adresse est "Western Gate 1, Warsaw", on n'obtient pas tous les résultats. On n'obtient qu'une seule ligne au lieu de trois. De plus, on ne trouve pas non plus tous les numéros de téléphone en cherchant pour la valeur "Joan Smith" dans le champ Nom et prénom, car "Smith Joan" ne correspond pas à "Joan Smith".
+Comment pouvez -vous résoudre ces problèmes en utilisant une base de données & #160;? Vous pouvez les résoudre en modifiant la structure de la table Personnes & #160; comme ceci & #160;:
+En divisant les données dans le champ Nom et prénom en deux champs séparés & #160;: Nom et Prénom.
+En divisant les données dans le champ Adresse en trois champs séparés & #160;: Rue, Numéro et Ville.
+En garantissant la validité des données & #160;: en s'assurant que les champs ne restent pas vides, & pex; vous devez toujours saisir le numéro de maison.
+La nouvelle version de la table ressemble à cela & #160;:
+Tables des personnes
+Prénom
+Nom
+Rue
+Numéro
+Ville
+Smith
+Western Gate
+1
+Warsaw
+Willson
+Frogs Drive
+5
+London
+Conditions
+Champs requis
+Grâce à l'introduction de la condition champ requis, on peut être sûr que les données saisies sont complètes. Dans le cas des autres tables, vous pouvez bien sûr permettre de ne pas remplir certains champs en entrant des données.
+Limiter la vue des données
+Un tableur affiche toutes les lignes et toutes les colonnes de la table, ce qui est encombrant pour de très grandes tables. Vous pouvez bien sûr filtrer et trier les lignes dans les feuilles, mais vous devrez être très soigneux. Les utilisateurs de tableurs risquent d'oublier que leur données ont été filtrées, ce qui conduire à des erreurs. Par exemple, en calculant des sommes, vous pouvez croire que vous avez 100 lignes de données alors qu'en fait il y en a 20 de plus, cachées.
+Si vous voulez travailler sur un petit échantillon de données, & pex; pour l'envoyer à quelqu'un d'autre, vous pouvez le copier et le coller dans une autre feuille et après qu'il l'ait édité, recoller les données éditées dans la base principale. De telles manipulations "manuelles" peuvent amener des pertes de données et causer des erreurs de calcul.
+Pour limiter la vue des données, les applications de base de données proposent les requêtes, les formulaires et les rapports.
+Une façon très pratique de limiter la vue est illustrée par la table suivante, version étendue de la table Personnes & #160;:
+Revenus
+2300
+1900
+Supposons que la colonne Revenus que l'on vient d'introduire contient des données confidentielles. Comment peut -on partager & pex; les informations pour contacter les personnes avec vos collègues mais sans révéler leurs revenus & #160;? C'est possible si vous partagez uniquement une requête et non la table complète. La requête peut sélectionner toutes les colonnes à part la colonne Revenus. Dans une base de données, une telle requête est souvent appelée une vue.
+Performances et capacités
+Votre ordinateur est probablement assez rapide, mais vous verrez facilement que cela ne suffit pas pour des feuilles de calcul grandes et lentes. Leur faible efficacité est tout d'abord due au manque d'index accélérant le processus de recherche de données (les databases les proposent). De plus, si vous vous servez de systèmes comme le presse-papier de votre système d'exploitation, même la copie de données peut causer des problèmes au bout d'un moment.
+les feuilles de calcul contenant de grands ensembles de données peuvent prendre énormément de temps à s'ouvrir. Un tableur charge beaucoup de données dans la mémoire de l'ordinateur au cours de l'ouverture. La plus grande partie de ces données chargées en mémoire est probablement inutile pour vous à cet instant. Au contraire, les bases de données ne vont chercher les données sur le lieu de stockage de l'ordinateur que si cela est nécessaire.
+Dans la plupart des cas, vous n'avez pas à vous soucier de la manière dont la base de données stocke ses données. Cela signifie que contrairement aux tableurs, les bases de données ne se préoccupent pas de & #160;:
+L'ordre des lignes, puisque vous pouvez les ordonner selon vos besoins. De plus, vous pouvez visualiser les mêmes données dans différents ordres avec différentes vues.
+Cela vaut aussi pour les colonnes (champs) de la table.
+Combinées avec la limitation de la vue des données décrite dans le paragraphe précédent, ces qualités constituent les avantages des bases de données
+Entrée des données
+les plus récentes des applications pour créer des feuilles de calculs vous permettent de concevoir des formulaires d'entrée de données. De tels formulaires sont très utiles si vos données ne peuvent pas être affichées de manière convenable en mode tableau, & pex; si le texte occupe de trop nombreuses lignes ou s'il y a trop de colonnes pour les afficher toutes à l'écran.
+Dans ces situations, la façon même dont les tableurs fonctionnent est problématiques. Les champs pour l'entrée des données sont placés de manière imprécise dans la feuille de calcul et très souvent ne sont pas protégés contre les interventions de l'utilisateur (intentionelles ou accidentelles).
+Rapports
+Les bases de données permettent de choisir, grouper et sommer les données sous la forme de rapports. Les feuilles de calcul sont le plus souvent éditées sous la forme de petites tables sans contrôle sur les divisions en pages et la mise en page des champs.
+Programmation
+Les applications permettant de créer des bases de données comportent souvent des langages de programmation complets. Les tableurs les plus récents ont aussi cette capacité mais les actions se résument à la modification des champs de la feuille de calcul et à copier des données, sans se soucier des règles de pertinence et d'intégrité mentionnées dans les paragraphes précédents.
+Dans un tableur, on manipule le plus souvent les données grâce à une interface graphique, qui peut causer des ralentissements dans ce traitement. Les bases de données sont capables de travailler un arrière-plan, sans nécessiter d'interface graphique.
+Utilisation simultanée
+La manipulation par plusieurs utilisateurs en même temps d'une même feuille de données paraît difficile à imaginer. Même si c'est techniquement possible dans les tableurs les plus récents, cela exige énormément de discipline et de connaissances de la part des utilisateurs, ce qu'on ne peut jamais garantir.
+Un méthode classique de partage de données enregistrées dans un tableur est d'envoyer tout le fichier (habituellement par courrier électronique) ou distribuer le fichier sur un réseau. Cette façon de travailler n'est pas efficace pour de grands groupes d'utilisateurs– les données dont on a besoin à un instant donnée sont peut être verouillées par une autre personne.
+Au contraire, les concepteurs des bases de données pensaient principalement à un accès distribué entre plusieurs utilisateurs. Même les versions les plus simples peuvent verouiller les données
+Sécurité
+Sécuriser une feuille de calcul ou une de ses parties par un mot de passe n'a qu'une valeur symbolique. Après avoir fourni le fichier sur un réseau, toutes les personnes capables de copier le fichier peuvent essayer de casser la protection. Dans certains cas, c'est même relativement facile car le mot de passe est stocké dans le même fichier que la feuille de calcul.
+Les fonctionnalités permettant de restreindre l'édition ou la copie d'une feuille de calcul ou d'une partie d'une feuille sont aussi faciles à contourner.
+Les bases de données (à part celles enregistrées sur un fichier au lieu d'un serveur) n'ont pas besoin d'être disponibles dans un seul fichier. On y accède par un réseau informatique, le plus souvent en fournissant un nom d'utilisateur et un mot de passe. On n'a donc accès qu'aux zones (tables, formulaires, ou même seulement certaines lignes et colonnes) qui ont été assignées en choisissant des droits d'accès appropriés.
+Les droits d'accès peuvent affecter la capacité d'éditer les données ou de les lire. Si une donnée n'est pas accessible, elle ne sera même pas envoyée à l'ordinateur donc ce ne sera pas possible d'en faire une copie aussi facilement qu'avec une feuille de calcul.
+Conception d'une base de données
+la conception d'une base de donnée nécessite une étude approfondie. La modification de l'organisation de la table Contacts proposée dans la section 1.2 peut provoquer des problèmes lorsque la table est pleine de données. Il est facile de renommer un champ mais diviser le champ Adresse en plusieurs champs distincts demande un travail long et pénible.
+Pour éviter une telle situation, planifiez soigneusement votre projet de base de données avant de la créer sur votre ordinateur. Ainsi, en y consacrant un peu de temps au début, vous allez probablement gagner du temps lors de l'utilisation quotidienne.
+Qui a besoin des bases de données & #160;?
+Continuez à utiliser un tableur si & #160;:
+Vos besoins sont limités et vos données ne vont jamais augmenter de manière importante (pouvez -vous réellement prédire cela maintenant & #160;?)
+Vous êtes incapable de maîtriser les méthodes de construction de bases de données. Vous pouvez cependant demander à quelqu'un d'autre ou envisager d'utiliser un outil plus simple.
+Vous utilisez des feuilles de calcul compliquées et vous n'avez pas le temps et l'argent pour passer à des bases de données. Réfléchissez ou demandez à quelqu'un pour savoir si cela ne vous conduit pas dans une impasse. Ne comptez pas sur des outils miracles qui serait capables de transformer votre feuille de calcul (si bien faite soit elle) en une base de données.
+Envisagez d'utiliser des bases de données si & #160;:
+Votre ensemble de données grossit chaque semaine.
+Vous créez souvent de nouvelles feuilles de calcul et copiez des données dedans, et vous trouvez ce travail de plus en plus fastidieux. Dans ce cas, l'effort de passer aux bases de données peut rapidement être rentabilisé.
+Vous créez des rapports et des comptes-rendus pour lesquels les tables d'une feuille ne sont pas adaptées. Vous pouvez alors considérer l'utilisation d'une base de données avec des formulaires.
+Logiciels de création de base de données
+Pour l'instant, vous avez appris les caractéristiques générales des bases de données sans rentrer dans le détail concernant les applications pour les concevoir.
+Les premières bases de données ont été construites en même temps que les énormes ordinateurs "mainframes" IBM System/ 360, dans les années 1960. Ce n'était pas encore l'époque des PC, donc ces bases de données demandaient un personnel hautement spécialisé. Bien que le matériel de ces anciens ordinateurs soit peu fiable, qu'ils étaient bien plus lent et avaient moins de capacité de stockage, une possibilité offerte par les bases de données est encore maintenant très intéressante & #160;: l'accès aux données par de nombreux utilisateurs en passant par un réseau.
+Dans les années 1970, les chercheurs ont créé la théorie des bases de données relationnelles (des termes comme table, enregistrement, colonne (champ), relation et de nombreux autres). En se basant sur cette théorie, les bases de données d'IBM DB2 et Oracle ont été créées. Ces bases de données sont développées et utilisées encore maintenant. Vers la fin des années 1970, les premiers PC ont été fabriqués. Leurs utilisateurs ont pu (progressivement) utiliser de nombreux types d'applications, y compris celles destinées à la construction de bases de données.
+Quand on en arrive à de grandes bases de données d'entreprises, la situation n'a pas changée. Elles nécessitent encore des ordinateurs puissants ou des assemblements d'ordinateurs appelée grappes. Ce sujet est cependant hors de portée de ce manuel.
+Dans le secteur des bases de données « & #160; accessibles & #160; » pour PC, avec une interface graphique, vous pouvez choisir parmi les suivantes & #160;:
+DBase – un outil pour des opérations sur des bases de données pour DOS, populaire dans les années 1980. On utilise encore des fichiers au format DBase dans certains cas spécifiques, pour leur simplicité.
+FoxPro – une application similaire à DBase (début des année 1990). Après que Microsoft ait pris le contrôle, les interfaces utilisateurs graphiques ont été introduites et il est par conséquent utilisé pour créer des bases de données sur PC. Ce produit est toujours disponibles, bien qu'il semble maintenant un peu dépassé.
+Microsoft Access – une application de bases de données (organisation des données et conception de l'interface utilisateur) avec de nombreuses simplifications, donc adaptée aux débutants, conçue à la fin des années 1980, basée sur une architecture 16 bit. Ce produit est encore offert et très utilisé, particulièrement par de petites sociétés, pour qui l'efficacité et les exigeances de gestion multiutilisateur ne sont pas très importantes.
+FileMaker – une application populaire, similaire à MS Access en simplicité, fonctionnant sous Windows et Macintosh, proposée depuis 1985.
+kexi; – une application multi plate-forme (Unix/ Linux, Windows, Mac OS X) développée depuis 2003 selon les principes du logiciel libre, faisant partie du projet K Desktop Environment, & cad; un environnement graphique pour les systèmes Unix/ Linux. L'entreprise OpenOffice Pologne est un contributeur important au développement de & kexi;.

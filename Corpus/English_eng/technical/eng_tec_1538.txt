@@ -1,0 +1,74 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/en_GB.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+MkDir Statement [Run-time]
+/text/sbasic/shared/03020411.xhp
+MkDir statement
+MkDir Statement [Run-time]
+Creates a new directory on a data medium.
+Syntax:
+MkDir Text As String
+Parameters:
+Text:
+Any string expression that specifies the name and path of the directory to be created.
+You can also use
+URL notation
+.
+If the path is not determined, the directory is created in the current directory.
+Example:
+Sub ExampleFileIO
+' Example for functions of the file organisation
+Const sFile1 as String = &quot; file://c|/autoexec.bat &quot;
+Const sDir1 as String = &quot; file://c|/Temp &quot;
+Const sSubDir1 as String = &quot; Test &quot;
+Const sFile2 as String = &quot; Copied.tmp &quot;
+Const sFile3 as String = &quot; Renamed.tmp &quot;
+Dim sFile as String
+sFile = sDir1 + &quot; / &quot; + sSubDir1
+ChDir( sDir1 )
+If Dir(sSubDir1,16)= &quot; &quot; then ' Does the directory exist ?
+MkDir sSubDir1
+MsgBox sFile,0, &quot; Create directory &quot;
+End If
+sFile = sFile + &quot; / &quot; + sFile2
+FileCopy sFile1, sFile
+MsgBox fSysURL(CurDir()), 0, &quot; Current directory &quot;
+MsgBox sFile & Chr(13) & FileDateTime( sFile ),0, &quot; Creation time &quot;
+MsgBox sFile & Chr(13) & FileLen(sFile), 0, &quot; File length &quot;
+MsgBox sFile & Chr(13) & GetAttr(sFile), 0, &quot; File attributes &quot;
+Name sFile as sDir1 + &quot; / &quot; + sSubDir1 + &quot; / &quot; + sFile3
+' Rename in the same directory
+sFile = sDir1 + &quot; / &quot; + sSubDir1 + &quot; / &quot; + sFile3
+SetAttr( sFile, 0 ) 'Delete all attributes
+MsgBox sFile & Chr(13) & GetAttr( sFile ),0, &quot; New file attributes &quot;
+Kill sFile
+RmDir sDir1 + &quot; / &quot; + sSubDir1
+end sub
+' Converts a system path in URL
+Function fSysURL( fSysFp as String ) as String
+Dim iPos As String
+iPos = 1
+iPos = Instr(iPos,fSysFp, getPathSeparator())
+do while iPos > 0
+mid(fSysFp, iPos, 1, &quot; / &quot; )
+iPos = Instr(iPos+1, fSysFp, getPathSeparator())
+loop
+' the colon with DOS
+iPos = Instr(1, fSysFp, &quot; : &quot; )
+if iPos > 0 then mid(fSysFp, iPos, 1, &quot; | &quot; )
+fSysURL = &quot; file:// &quot; & fSysFp
+End Function

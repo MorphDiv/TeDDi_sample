@@ -1,0 +1,229 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	2014
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Eitan Isaacson
+eitan@ascender.com
+Peter Parente
+pparent@us.ibm.com
+Aline Bessa
+alibezz@gmail.com
+Creative Commons Share Alike 3.0
+5. Schnellauswahl-Plugin
+Das gewünschte Objekt lokalisieren
+Schnellauswahl-Plugin
+4. Einstellungennext" xref="event_monitor_plugin
+Anpassen der Einstellungen von
+
+
+
+Einrichten von Plugins
+Einstellungen für Plugins
+
+Sie können den Einstellungsdialog umgehen, indem Sie ein Plugin von einem an einen anderen Ort ziehen.
+Einrichten globaler Tastenkürzel
+Einstellungen für globale Tastenkürzel
+Einstellungen für Widget-Hervorhebungen
+Einstellungen für Hervorhebungen
+
+2. IPython-Plugin
+Falls alles andere scheitert
+IPython-Konsole-Plugin
+Das IPython-Konsole-Plugin ausführen
+1. Was ist Accerciser?
+Was ist
+
+Stellen Sie sicher, dass die Unterstützung für Hilfstechnologien in Ihrer Arbeitsumgebung aktiviert ist. Falls nicht, wird
+Accerciser
+Die Standard-Benutzeroberfläche von
+Beabsichtigte Nutzer von
+Die Plugin-Architektur von
+Informationen über Barrierefreiheit
+2. Schnittstellenanzeige-Plugin
+Schnittstellenanzeige-Plugin
+Das Schnittstellenanzeige-Plugin ausführen
+translated
+Einführung in
+
+Bevor Sie beginnen
+Erste Schritte
+Themen für Fortgeschrittene
+3. Neue Plugins schreiben
+
+Plugins für
+
+Erstellen eines Basis-Plugins
+Zunächst verwenden wir folgende Import-Zeilen:
+from accerciser.plugin import Plugin
+ import gtk
+ import pyatspi
+Anschließend leiten wir eine neue Klasse aus der Basis-Plugin-Klasse ab und ordnen einige obligatorische Klassenattribute zu:
+class FocusSelect(Plugin):
+ plugin_name = 'Focus Select'
+ plugin_description = 'Allows selecting last focused accessible.'
+def init(self):
+ pyatspi.Registry.registerEventListener(self.accEventFocusChanged, 'focus')
+ self.global_hotkeys = [('Inspect last focused accessible',
+ self.inspectLastFocused,
+ gtk.keysyms.e,
+ gtk.gdk.CONTROL_MASK | gtk.gdk.MOD1_MASK)]
+ self.last_focused = None
+def accEventFocusChanged(self, event):
+ if not self.isMyApp(event.source):
+ self.last_focused = event.source
+def inspectLastFocused(self):
+ if self.last_focused:
+ self.node.update(self.last_focused)
+Erstellen eines Konsolen-Plugins
+Folgende Import-Zeilen werden benötigt:
+from accerciser.plugin import ConsolePlugin
+ import pyatspi
+class PushButtonFocus(ConsolePlugin):
+ plugin_name = 'Push Button Focus'
+ plugin_description = 'Print event when pushbutton get\\'s focus.'
+def init(self):
+ pyatspi.Registry.registerEventListener(self.accEventFocusChanged, 'focus')
+def accEventFocusChanged(self, event):
+ if event.source.getRole() == pyatspi.ROLE_PUSH_BUTTON:
+ self.appendText(str(event)+'\
+')
+import gtk
+ from accerciser.plugin import ViewportPlugin
+Danach folgt eine Klassendefinition mit Name und Beschreibung:
+class Clicker(ViewportPlugin):
+ plugin_name = 'Clicker'
+ plugin_description = 'Test the "click" action in relevant accessibles.'
+def init(self):
+ alignment = gtk.Alignment(0.5,0.5,0,0)
+ self.click_button = gtk.Button('Click me!')
+ alignment.add(self.click_button)
+ self.plugin_area.add(alignment)
+
+ self.click_button.connect('clicked', self.onClick)
+
+ self.show_all()
+def accSupportedActions(self):
+ try:
+ ai = self.node.acc.queryAction()
+ except NotImplementedError:
+ action_names = []
+ else:
+ action_names = [ai.getName(i) for i in xrange(ai.nActions)]
+ return action_names
+def onAccChanged(self, acc):
+ has_click = 'click' in self.accSupportedActions()
+ self.click_button.set_sensitive(has_click)
+def onClick(self, button):
+ ai = self.node.acc.queryAction()
+ action_names = [ai.getName(i) for i in xrange(ai.nActions)]
+ ai.doAction(action_names.index('click'))
+2.
+
+
+
+Nachdem Sie
+cd accerciser
+./autogen.sh # oder ./configure für die Erstinstallation
+make
+sudo make install # oder make install als Root
+
+Um
+4. Ereignisüberwachung-Plugin
+Ereignisüberwachung-Plugin
+Das Ereignisüberwachung-Plugin ausführen
+document
+focus
+mouse
+object
+terminal
+window
+1. Anwendungs-Baumansicht
+Erkunden der Accessible-Hierarchie der Arbeitsumgebung
+Anwendungs-Baumansicht
+Lesezeichen für Objekte in der Anwendungs-Baumansicht anlegen
+
+Lesezeichen für Accessibles in
+1. API-Browser-Plugin
+API-Browser-Plugin
+Das Schnittstellenbrowser-Plugin ausführen
+Mario Blättermann <mariobl\@freenet\.de>, 2009, 2011
+
+2006
+2007
+2008
+IBM Corporation
+GNOME-Dokumentationsprojekt
+Eitan
+Accerciser-Team
+Peter
+Accerciser-Handbuch v0.2.0
+29. Juni 2007
+Eitan Isaacson
+Dieses Handbuch beschreibt Version 0.1.5 von Accerciser.
+Dieses Handbuch beschreibt die Benutzung von
+Rückmeldungen
+Um Fehler zu melden oder einen Vorschlag zur Anwendung
+Einführung
+Im Wesentlichen ist
+Sie können
+Menü
+Wählen Sie
+Befehlszeile
+Geben Sie den folgenden Befehl in einem Konsolenfenster ein und drücken Sie die
+Wenn Sie
+Zeigt das
+Menüleiste
+Die Menüleiste enthält Befehle zum Verwalten von Plugins, zum Verwalten und Benutzen von Lesezeichen, zum Aktualisieren der Barrierefreiheits-Baumansicht und für den Zugriff auf vorliegendes Hilfesystem.
+Barrierefreiheits-Baumansicht
+Die Barrierefreiheits-Baumansicht ermöglicht Ihnen die Ansicht aller Accesibles, beginnend auf Desktop-Ebene. Die Auswahl eines Accessibles aktiviert es für die weitere Inspektion unter Verwendung der geladenen Plugins.
+Rechte Plugin-Ansicht
+Dies ist eine der beiden vorgegebenen Plugin-Ansichten. Wenn
+Untere Plugin-Ansicht
+Sie können Plugins aus diesem oder in diesen Bereich ziehen, wie beispielsweise in die rechte Plugin-Ansicht.
+Verwaltung der Plugin-Ansicht
+
+Benutzung
+Sie können
+Wählen Sie ein Accessible in der Baumansicht aus.
+Verwenden Sie die Baumansicht, um sich durch die Hierarchie der Accessible-Objekte zu bewegen, beginnend auf Desktop-Ebene. Ausklappen eines Knotens macht die direkten Kind-Objekte sichtbar, während Einklappen diese wieder verbirgt. Jeder Knoten zeigt ein Symbol für die zugehörige Anwendung oder die zugehörige Widget-Funktion sowie den Accessible-Namen, falls verfügbar. Die zweite Spalte zeigt an, wie viele Knoten angezeigt werden, wenn das Objekt ausgeklappt wird.
+Verwendung von Lesezeichen
+Lesezeichen können im Lesezeichendialog bearbeitet werden, den Sie über
+
+Dieses Plugin zeigt Informationen über die verfügbaren Schnittstellen für das in der Baumansicht ausgewählte Accessible an. Nicht unterstützte Schnittstellen werden ausgegraut dargestellt. Verschiedene Werkzeuge für die Ansicht und Steuerung einer Schnittstelle sind durch Ausklappen des jeweiligen Expanders verfügbar.
+Schnittstellen, die von dem ausgewählten Accessible unterstütz werden, sind anklickbar dargestellt.
+Dieses Plugin überwacht die ausgewählten Ereignistypen aus dem in der Baumansicht gewählten Accessible, der in der Baumansicht gewählten Anwendung oder dem gesamten Desktop.
+Der untere Teil der Ereignisüberwachung ermöglicht Ihnen die Auswahl des Typs und der Quelle von Ereignissen.
+Durch Drücken von
+Dieses Plugin ist eine ausgewachsene
+Der API-Browser.
+Skript-Aufzeichner
+Der Skript-Aufzeichner von
+Skript-Aufzeichner
+Der Skript-Aufzeichner.
+Dieses Plugin stellt globale Tastenkürzel bereit, über die Sie Accessibles einfach über die Benutzeroberfläche der Zielanwendung auswählen können. Durch Drücken von
+Validierung
+Dieses Plugin überprüft Anwendungen auf Barrierefreiheits-Probleme und erzeugt einen Report, der die Wichtigkeit und die Beschreibung der Probleme enthält. Der Report verknüpft Fehler, um zu dokumentieren, wie häufige Probleme behoben werden können. Dieses Plugin ist mit Test-Schemata erweiterbar, welche Regeln für die Überprüfung definieren.
+Um die Validierung zu starten, wählen Sie zunächst ein Objekt im Barrierefreiheits-Baum aus. Das Plugin überprüft das ausgewählte Accessible sowie alle seine Abkömmlinge. Klicken Sie dann auf den Knopf
+Wenn der Test abgeschlossen ist, zeigt die Report-Tabelle die Wichtigkeit und Beschreibung aller Fehler an. Doppelklicken Sie auf eine Zeile in der Tabelle, um das zugehörige Accessible in der Baumansicht anzuzeigen. Wenn das Objekt ausgewählt ist, dann klicken Sie auf
+Einige Elemente in
+Plugin-Layout
+Es gibt zwei Methoden zur Konfiguration des Plugin-Layouts in
+Sie können den Dialog
+Globale Konfiguration der Tastenkürzel
+Einige Elemente in
+
+Um Fehler zu melden oder einen Vorschlag zur Anwendung
+Weiterverbreitung und Benutzung im Binär- oder Quellcodeformat, mit oder ohne Änderungen, sind unter den Bedingungen der BSD-Lizenzt erlaubt.

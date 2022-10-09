@@ -1,0 +1,74 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Dir-Funktion [Laufzeit]
+/text/sbasic/shared/03020404.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe; bug fix: i29276
+Dir-Funktion
+Dir-Funktion [Laufzeit]
+Gibt den Namen einer Datei, den Namen eines Verzeichnisses oder die Namen aller Dateien und Verzeichnisse auf einem Laufwerk oder in einem Verzeichnis zurück, auf die der angegebene Suchpfad zutrifft.
+Syntax:
+Dir [(Text As String) [, Attrib As Integer]]
+Rückgabewert:
+String
+Parameter:
+Text:
+Ein beliebiger Zeichenkettenausdruck, der den Suchpfad, das Verzeichnis oder die Datei angibt.
+Dieses Argument kann nur beim ersten Aufruf der Dir-Funktion angegeben werden.
+Falls gewünscht, können Sie den Pfad in
+URL-Notation
+eingeben.
+Attrib:
+Ein beliebiger Integer-Ausdruck, der die Dateiattribute als Bitmuster angibt.
+Die Dir-Funktion gibt nur Dateien oder Verzeichnisse zurück, auf die die angegebenen Attribute zutreffen.
+Durch Addieren der Attributwerte können Sie mehrere Attribute kombinieren:
+0 :
+Normale Dateien.
+16 :
+Nur Verzeichnisnamen werden zurückgeliefert.
+Verwenden Sie dieses Attribut, um die Existenz einer Datei oder eines Verzeichnisses zu überprüfen oder um alle Dateien und Ordner in einem bestimmten Verzeichnis zu bestimmen.
+Um das Vorhandensein einer Datei zu überprüfen, geben Sie den vollständigen Pfad und Namen der Datei ein.
+Existiert der Datei- bzw.
+Verzeichnisname nicht, so gibt die Dir-Funktion eine leere Zeichenkette ( &quot; &quot; ) zurück.
+Um eine Liste aller Dateien in einem bestimmten Verzeichnis zu erstellen, gehen Sie wie folgt vor:
+Beim ersten Aufruf der Dir-Funktion geben Sie den vollständigen Suchpfad für die Dateien an, so z.
+B. &quot; D:\Dateien\*.sxw &quot; .
+Wenn der Pfad korrekt ist und mindestens eine Datei gefunden wird, gibt die Dir-Funktion den Namen der ersten Datei zurück, auf die der Suchpfad zutrifft.
+Um weitere Dateinamen für diesen Suchpfad zurückzugeben, rufen Sie Dir erneut auf, ohne jedoch irgendwelche Argumente anzugeben.
+Wenn Sie nur Verzeichnisse ermitteln möchten, nehmen Sie den Attributparameter zu Hilfe.
+Das gleiche gilt, wenn Sie den Namen eines Volumes (z.
+B. eine Festplattenpartition) ermitteln möchten.
+Beispiel:
+Sub ExampleDir
+REM zeigt alle Dateien und die Verzeichnisse
+Dim sPath As String
+Dim sDir as String, sValue as String
+sDir= &quot; Verzeichnisse: &quot;
+sPath = CurDir
+sValue = Dir$(sPath + getPathSeparator + &quot; * &quot; ,16)
+Do
+If sValue < > &quot; . &quot; and sValue < > &quot; .. &quot; Then
+if (GetAttr( sPath + getPathSeparator + sValue) AND 16) > 0 then
+REM hier die Verzeichnisse holen
+sDir = sDir & chr(13) & sValue
+End If
+End If
+sValue = Dir$
+Loop Until sValue = &quot; &quot;
+MsgBox sDir,0,sPath
+End sub

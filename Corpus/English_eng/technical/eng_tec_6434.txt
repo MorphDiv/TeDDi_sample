@@ -1,0 +1,131 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+The & ksnapshot; Handbook
+Richard J. Moore
+& Richard. J. Moore. mail;
+Robert L. McCormick
+& Robert. L. McCormick. mail;
+Brad Hards
+& Brad. Hards. mail;
+Lauri Watts
+& Lauri. Watts. mail;
+Reviewer
+Richard J Moore
+Developer
+Matthias Ettrich
+& Matthias. Ettrich. mail;
+ROLES_OF_TRANSLATORS
+& Richard. J. Moore;
+& Matthias. Ettrich;
+& ksnapshot; is a simple applet for taking screenshots. It is capable of capturing images of the whole desktop, a single window, a section of a window or a selected region. The images can then be saved in a variety of formats.
+KDE
+KSnapshot
+kdegraphics
+screen capture
+screen grab
+Introduction
+Please report any problems or feature requests to the kde; Bug Tracking System
+Using & ksnapshot;
+This chapter describes the use of & ksnapshot; for capturing screen images.
+Starting & ksnapshot;
+& ksnapshot; may be started by one of several ways as described below.
+You may start & ksnapshot; by selecting it from the K-Menu Applications Graphics Screen Capture Program & ksnapshot;.
+You may start & ksnapshot; by entering the following at the command prompt:
+% ksnapshot &
+The mini command line & krunner; (invoked with Alt; F2) may also be used to start & ksnapshot;
+Once & ksnapshot; starts, you will see a window like the following:
+& ksnapshot; Preview Window
+Taking A Snapshot
+& ksnapshot; grabs an image of your entire desktop immediately after it is started, but before it displays itself on screen. This allows you to quickly create full-desktop screenshot images.
+The snapshot taken by & ksnapshot; is displayed in the preview window, which is located in the upper left of the & ksnapshot; application window. Below is an example of the preview window from & ksnapshot;. Your preview will differ depending on what you have displayed on the desktop.
+The snapshot can be saved by clicking on the Save As... button. This opens the standard & kde; save dialog, where you can choose the filename, the folder location, and the format that your snapshot will be saved in. If multiple snapshots are taken, the filename is automatically incremented to prevent you from overwriting previous snapshots. You may however edit the filename to anything you wish, including the name of a previously saved snapshot.
+To take a snapshot of a single window, select the Window Under Cursor combo box entry (next to the Capture mode label), and then click on the New Snapshot button.
+Depending on your Snapshot delay settings you get either a cross as the mouse pointer (for No delay), or a standard mouse cursor which you can use to work with a program until the delay is over and a snapshot is taken.
+With No delay, the snapshot is taken immediately when you click into a window.
+& ksnapshot; will display the new snapshot in the preview area, at which time you can choose to save the new image (by pressing Save As...) or to grab a new one, by pressing the New Snapshot button.
+To take a new snapshot of the entire desktop, select the Full Screen combo box entry and then click on the New Snapshot button. & ksnapshot; will now capture the entire desktop if you press New Snapshot.
+Similarly, to take a snapshot of a region, select the Region combo box entry and set the Snapshot delay to No delay, and then click on the New Snapshot button. The mouse cursor will then change into a cross, and you can then use the mouse to select the region you want to capture.
+To take a new snapshot of a section of a window, select the Section of Window combo box entry and then click on the New Snapshot button. With No delay you get a cross as the mouse pointer and you have to click once with the & LMB; into the window. The section of the window under the mouse cursor is now highlighted with a red border. Move the mouse to the wanted section and click the & LMB; to capture the screenshot.
+Additional Features
+Snapshot Delay
+The Snapshot Delay box allows you to enter an arbitrary time delay, in seconds, between the time that you press the New Snapshot button and the time that the snapshot is taken.
+When a delay time has been set, you do not have to click the mouse button to capture a screenshot. This enables you to open a drop down menu, and take a picture of it.
+Exclude Window decorations
+Include window decorations is enabled by default in Window Under Cursor mode.
+When you only want to capture the application itself without the surrounding window decoration, disable this option and take a new snapshot.
+Copy to Clipboard
+When you want to edit your snapshot in a graphics application without saving the snapshot, just click Copy to Clipboard and insert the image into a viewer or graphics application.
+Buttons
+There are two further buttons located at the bottom of the & ksnapshot; window. Their function is described below.
+Help
+Gives you a menu where you can open the ksnapshot; Handbook, report a bug, switch the language for & ksnapshot; or get some more information About & ksnapshot; and About & kde;.
+Quit
+Quits the & ksnapshot; application.
+& DBus; Interface
+& ksnapshot; can be scripted using its & DBus; interface. This chapter explains the various & DBus; calls that you can use, and provides some examples of how you can use them.
+As with all & DBus; calls, you need to specify the application you want to interface with, and the particular interface. With & ksnapshot; you need to identify which particular application, which is ksnapshot- followed by the process number.
+To start & ksnapshot; and obtain the right argument, use dcopstart ksnapshot, which returns the argument (such as ksnapshot-20594) on standard output.
+You can get a list of the available & DCOP; interfaces, use the right arguments, as shown in this example:
+$dcop ` dcopstart ksnapshot ` interface QCStringList interfaces() QCStringList functions() QString url() void slotGrab() void slotPrint() void slotSave() bool save(QString filename) void slotSaveAs() void slotCopy() void setTime(int newTime) int timeout() void setURL(QString newURL) void setGrabMode(int grab) int grabMode() void slotMovePointer(int x, int y) void exit()
+In the examples following, the process is always ksnapshot-23151.
+& DCOP; Access to Settings
+For each of the settings that you can control with the & GUI;, you can both obtain the current status of that setting, and modify the setting, using & DCOP;.
+You can obtain the current capture mode using grabMode, as shown below: $dcop ksnapshot-23151 interface grabMode This will return 0 for full-screen capture, 1 for window capture, and 2 for region capture.
+You can set the capture mode using setGrabMode, which requires an argument to identify the mode required (as for grabMode). So you can set window capture mode (1), using:
+$dcop ksnapshot-23151 interface setGrabMode 1
+You can obtain the current timeout setting (the Snapshot delay: & GUI; item) using timeout, as shown below: $dcop ksnapshot-23151 interface timeout This will return the timeout setting in seconds, or zero if there is no delay (capture on click).
+You can set the timeout using setTime, which requires an argument to identify the timeout duration. So you can set a delay of 4 seconds using:
+$dcop ksnapshot-23151 interface setTime 4
+You can obtain the path that the snapshot will be saved to using url, as shown below: $dcop ksnapshot-23151 interface url This will return the filename, as a & URL; (eg as file: / // home/ bradh/ test2. png).
+You can set the path using setURL, which requires a string argument to identify the new path. So you can set the path to file: / // home/ bradh/ snapshot. jpg using:
+$dcop ksnapshot-23151 interface setURL file: / // home/ bradh/ snapshot. jpg
+Taking Screenshots with & DCOP;
+The key to taking screenshots with & DCOP; is use of slotGrab, as shown below:
+$dcop ksnapshot-23151 interface slotGrab
+This will take a snapshot using the current snapshot mode and timeout settings (as described above). If you want to save the snapshot image, there are a number of calls you can use. If you just want to save the image to the current path (as returned by url or changed by setURL), you can use slotSave, as shown below:
+$dcop ksnapshot-23151 interface slotSave
+If you want the user to be able to specify a filename (and path), you can use slotSaveAs, which will bring up a standard & kde; file save dialog.
+If you want to save the image to a different name (or path) without changing the path with setURL, you can use save, providing the & URL; to save to as an argument. So if you want to save the snapshot to file: / // tmp/ tempshot. png, you can do the following: $dcop ksnapshot-23151 interface save file: / // tmp/ tempshot. png Note that this will return true if the snapshot was successfully saved, and false otherwise. Also, you should be aware that if the file already exists, the user will get a standard & kde; dialog that requires the user to decide whether to overwrite or not.
+In addition to saving the snapshot, you can also copy it to the clipboard, using slotCopy, as shown below:
+$dcop ksnapshot-23151 interface slotCopy
+If you need to select a window that may not be under the mouse cursor, you can use slotMovePointer, passing the x position (in screen pixels) and the y position (also in screen pixels) as arguments. So to move the mouse to the top left hand corner of the screen (0,0), you can do the following:
+$dcop ksnapshot-23151 interface slotMoveMouse 0 0
+Printing Screenshots with & DCOP;
+You can print the current screenshot (which may or may not have been saved) using printSlot, as shown below:
+$dcop ksnapshot-23151 interface slotPrint
+Note that this will bring up the normal & kde; print dialog, which may require user interaction.
+& DCOP; Application control
+You can cause & ksnapshot; to exit by using exit, as shown below.
+$dcop ksnapshot-23151 interface exit
+Credits and License
+Program copyright
+1997-2000 & Richard. J. Moore; & Richard. J. Moore. mail;
+2000 & Matthias. Ettrich; & Matthias. Ettrich. mail;
+Documentation based on the original, copyright 1997-2000 & Richard. J. Moore; & Richard. J. Moore. mail;
+CREDIT_FOR_TRANSLATORS
+& underFDL; & underGPL;
+Print
+When you want to print your snapshot from the preview, just click Print... and you get the standard & kde; Print dialog, from where you can directly print your snapshot.
+& ksnapshot; is a simple applet for taking screenshots. It is capable of capturing images of the whole desktop, a single window a section of a window or a selected region. The images can then be saved in a variety of formats.
+rich@kde. org
+c0029131@airmail. net
+bradh@frogmouth. net
+lauri@kde. org
+ettrich@kde. org
+Richard J. Moore
+& ksnapshot; is a simple applet for taking screenshots. It is capable of capturing images of the whole desktop, a single window or a selected region. The images can then be saved in a variety of formats.

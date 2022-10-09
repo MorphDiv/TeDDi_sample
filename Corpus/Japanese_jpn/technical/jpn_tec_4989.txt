@@ -1,0 +1,37 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP を CGI バイナリとして使用するのは、PHP を モジュールとして(Apache のような)サーバーソフトウエアに組み込み たくない何らかの理由がある場合や安全な chroot と setuid 環境をス クリプトに提供する他の CGI ラッパーと組み合わせて PHP を使用する 場合の設定オプションです。セットアップ時には、通常、PHP 実行バイ ナリを Web サーバーの cgi-bin ディレクトリにインストールします。 CERT 勧告 CA-96.11 は、いかなるイ ンタプリタを cgi-bin に置くことにも反対しています。 PHP バイナリをスタンドアロンのインタプリタとして使用することが できる場合でも、PHP は、セットアップにより生じる可能性がある 次のような攻撃を防ぐように設計されています。
+システムファイルへのアクセス: http://my.host/cgi-bin/php?/etc/passwd
+URL において疑問符 (?) の後のクエリー情報は、CGI インターフェー スにより、インタプリタにコマンドライン引数として渡されます。通 常、インタプリタは、コマンドライン上の最初の引数に指定されたファ イルを開き、実行します。
+CGI バイナリとして実行された場合、PHP は、コマンドライン引数の 解釈を拒否します。
+サーバー上の Web ドキュメントへのアクセス: http://my.host/cgi-bin/php/secret/doc.html
+URL の PHP バイナリ名の後のパス情報の部分、つまり /secret/doc.html は、 CGI プログラムによりオープンされて実行される ファイルの名前を指定するために従来より使用されています。 http://my.host/secret/script.php のようなドキュメントへの要求を PHP インタプリタにリダイレクト するために、通常、何らかの Web サーバー設定用命令(Apache では Action) が使用されます。この設定により、Web サーバーは、まずディレクトリ /secret へのアクセス権をチェックし、 リダイレクト要求 http://my.host/cgi-bin/php/secret/script.php を生成します。残念なことに、リクエストが最初からこの形式で与え られた場合、Web サーバーによるアクセスチェックは、 /secret/script.php ファイル ではなく、 /cgi-bin/php ファイル に対して行われます。この手法により、 /cgi-bin/php にアクセス可能なユーザーは、 Web サーバー上の全ての保護されたドキュメントにアクセスできてし まいます。
+PHP では、サーバードキュメントツリーにアクセス制限付きのディレ クトリがある場合、コンパイル時の設定オプション --enable-force-cgi-redirect および実行時の設定命令 doc_root と user_dir をこの攻撃を防止す るために使用することができます。 これらを組み合わせたいくつか の手法について以下に詳細な説明を示します。
+サーバー上にパスワードまたは IP アドレスを元にしたアクセス制限に よる制約を受けるコンテンツがない場合、この設定オプションを使用す る必要はありません。使用する Web サーバーがリダイレクトを許可しな い場合やサーバーがリダイレクト要求を安全に処理しつつPHP バイナリ と通信できる手段を有していない場合、オプション --enable-force-cgi-redirect を configure スクリプトに指定することができます。この場合でも、直接 的な方法 http://my.host/cgi-bin/php/dir/script.php でもなくリダイレクション http://my.host/dir/script.php でもない他の やり方で PHP スクリプトを呼び出せるようになっていないかどうか確認 する必要があります。
+リダイレクションは、例えば Apache では命令 AddHandler および Action で設定することができます。(以下を参照してください。)
+このコンパイル時のオプションは、 http://my.host/cgi-bin/php/secretdir/script.php のように URL から直接 PHP を呼び出すことを禁止します。 代わりに、 Web サーバーのリダイレクションにより処理された場合は、 PHP はこのモードでのみ処理を行います。
+通常、Apache 用設定でのリダイレクションは、 次の命令を使用して行います。
+このオプションは、Apache Web サーバーでのみテストされており、リク エストのリダイレクト時に Apache が標準ではないCGI 環境変数 REDIRECT_STATUS をセットすることを前提にしています。 リクエストが直接のものであるか間接のものであるかを示す手段をWeb サーバーが全くサポートしていない場合は、このオプションを使用する ことはできません。この場合、ここで記した CGI 版を実行する他の方法 の内の一つを使用する必要があります。
+Web サーバー上のドキュメントディレクトリに スクリプトや実行ファイルのようなアクティブな内容を読み込むのは、 往々にして危険な行為であるとみなされることがあります。 何らかの設定ミスによりスクリプトが実行されず、通常の HTML ドキュメント として表示されてしまう場合には、知的著作物またはパスワードのような セキュリティ情報が漏洩する可能性があります。 このため、多くのシステム管理者は、スクリプトを PHP CGI を通じてのみ アクセス可能な他のディレクトリ構造にセットアップしたいと思うこと でしょう。 この場合、常にインタープリタに処理されるため、上記のように表示されること はありません。
+前節で記したようなリクエストがリダイレクトされたものでないことを 確かめる方法が利用可能でない場合、 スクリプト用の doc_root を Web ドキュメント用ルートとは別に セットアップする必要があります。
+設定用命令 doc_root により 設定ファイル ファイル中で PHP スクリプト用ドキュメントルートを設定することができます。 または、環境変数 PHP_DOCUMENT_ROOT でも設定する ことができます。 これを設定した場合、CGI 版の PHP は、 常に開くファイルの名前をこの doc_root リクエストのパス情報を用いて作成し、 (以下の user_dir を除き、)確実に このディレクトリの外側でスクリプトが実行されないようにします。
+ここで利用可能な別のオプションは、 user_dir です。user_dir が設定されていない場合、 開かれるファイル名を制御するのは、 doc_root のみです。 http://my.host/~user/doc.php のような URL は、ユーザーホームディレクトリ以下のファイルを開かず、 doc_root 以下の ~user/doc.php というファイルを開くことになります。 (ディレクトリ名がチルダ [~] で始まっている ということになります)
+user_dir が例えば、 public_php に 設定されていた場合、 http://my.host/~user/doc.php の ようなリクエストは、そのユーザー user のホームディレクトリにある public_php 以下の doc.php という名前のファイルをオープンしま す。ユーザーのホームディレクトリが、 /home/user である場合、 実行されるファイルは、 /home/user/public_php/doc.php となります。
+user_dir の展開は、 doc_root の設定によらず行われます。 このため、ドキュメントルートおよびユーザーディレクトリへの アクセスを別々に制御することができます。
+非常に安全性の高いオプションとしてPHP パーサのバイナリをファイル 用 Web ツリーの外側、例えば /usr/local/bin に置くことが考えられます。こ のオプションの唯一の欠点は、PHP タグを有する全てのファイルの先頭 行に次のような一行を加える必要があることです。
+この設定で PATH_INFO および PATH_TRANSLATED 情報を正しく処理するためには、 PHP パーサを設定オプション --enable-discard-path を付けてコンパイルする必要があります。

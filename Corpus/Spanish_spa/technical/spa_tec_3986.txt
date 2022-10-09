@@ -1,0 +1,41 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+
+Devuelve:
+Un objeto cuyas propiedades se corresponden con los campos de la fila obtenida, o FALSE si no hay más filas.
+pg_fetch_object() es parecida a pg_fetch_array(), con una diferencia - se devuelve un objeto, en vez de un array.
+Indirectamente, eso significa que solo puedes acceder a los datos por medio de su nombre de campo, y no a través de sus posiciones (los números son nombres de propiedad invalidos).
+El tercer parámetro opcional result_type en pg_fetch_object() es una constante y puede tomar cualquiera de los siguientes valores:
+PGSQL_ASSOC, PGSQL_NUM, y PGSQL_BOTH.
+Nota:
+Result_type se añadio en PHP 4.0.
+Referente a la velocidad, la función es identica a pg_fetch_array(), y practicamente tan rápida como pg_fetch_row() (la diferencia es insignificante).
+Ver también: pg_fetch_array() y pg_fetch_row().
+Ejemplo 1.
+
+?php $database = "verlag"; $db_conn = pg_connect ("localhost", "5432", "","", $database); if (!$db_conn):?
+H1 Failed connecting to postgres database? echo $database? / H1? exit; endif; $qu = pg_exec ($db_conn, "SELECT * FROM verlag ORDER BY autor"); $row = 0; / / postgres needs a row counter other dbs might not while ($data = pg_fetch_object ($qu, $row)): echo $data - autor. "("; echo $data - jahr ."):"; echo $data - titel. "BR"; $row++; endwhile;?
+PRE ?php $fields[] = Array ("autor", "Author"); $fields[] = Array ("jahr", "Year"); $fields[] = Array ("titel"," Title"); $row= 0; / / postgres needs a row counter other dbs might not while ($data = pg_fetch_object ($qu, $row)): echo "----------\n"; reset ($fields); while (list (,$item) = each ($fields)): echo $item[1] .": ".$data - $item[0] ."\n"; endwhile; $row++; endwhile; echo "----------\n";? / PRE ?php pg_freeResult ($qu); pg_close ($db_conn);?
+Anterior
+Inicio
+Siguiente
+
+Subir

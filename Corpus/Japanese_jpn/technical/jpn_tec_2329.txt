@@ -1,0 +1,43 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHPのセーフモードは共有サーバでのセキュリティの問題を解決するための 試みです。この問題をPHPのレベルで解決しようとするのはアーキテクチャ上 正しくありません。しかし、WebサーバやOSレベルでの代替策はあまり現実 てきではないため、多くのユーザ、特にISPではセーフモードが現在使用され ています。
+
+表 22-1セキュリティとセーフモード設定ディレクティブ
+セーフモードの設定ディレクティブの簡単な説明を以下に示します。
+Whether to enable PHP's safe mode. Read the Security and chapter for more information.
+By default, Safe Mode does a UID compare check when opening files. If you want to relax this to a GID compare, then turn on safe_mode_gid. Whether to use UID (FALSE) or GID (TRUE) checking upon file access.
+UID / GID checks are bypassed when including files from this directory and its subdirectories (directory must also be in include_path or full path must including).
+As of PHP 4.2.0, this directive can take a semi-colon separated path in a similar fashion to the include_path directive, rather than just a single directory.
+If PHP is used in safe mode, system() and the other functions executing system programs refuse to start programs that are not in this directory.
+Setting certain environment variables may be a potential security breach. This directive contains a comma-delimited list of prefixes. In Safe Mode, the user may only alter environment variables whose names begin with the prefixes supplied here. By default, users will only be able to set environment variables that begin with PHP_ (e.g. PHP_FOO=BAR).
+注意 If this directive is empty, PHP will let the user modify ANY environment variable!
+This directive contains a comma-delimited list of environment variables that the end user won't be able to change using putenv(). These variables will be protected even if safe_mode_allowed_env_vars is set to allow to change them.
+Limit the files that can be opened by PHP to the specified directory-tree. This directive is NOT affected by whether Safe Mode is turned On or Off.
+When a script tries to open a file with, for example, fopen or gzopen, the location of the file is checked. When the file is outside the specified directory-tree, PHP will refuse to open it. All symbolic links are resolved, so it's not possible to avoid this restriction with a symlink.
+The special value. indicates that the directory in which the script is stored will be used as base-directory.
+Under Windows, separate the directories with a semicolon. On all other systems, separate the directories with a colon. As an Apache module, open_basedir paths from parent directories are now automatically inherited.
+The restriction specified with open_basedir is actually a prefix, not a directory name. This means that "open_basedir = /dir/incl" also allows access to "/dir/include" and "/dir/incls" if they exist. When you want to restrict access to only the specified directory, end with a slash. For example: "open_basedir = /dir/incl/"
+注意 Support for multiple directories was added in 3.0.7.
+The default is to allow all files to be opened.
+This directive allows you to disable certain functions for security reasons. It takes on a comma-dilimited list of function names. disable_functions is not affected by Safe Mode.
+This directive must be set in php.ini For example, you cannot set this in httpd.conf.
+See also: register_globals, display_errors, and log_errors
+セーフモード がonの場合、PHPは、 現在のスクリプトの所有者がファイル関数により処理されているファイル の所有者に一致するかどうかを調べます。例えば、
+However, there may be environments where a strict UID check is not appropriate and a relaxed GID check is sufficient. This is supported by means of the safe_mode_gid switch. Setting it to On performs the relaxed GID checking, setting it to Off (the default) performs UID checking.
+If instead of safe_mode, you set an open_basedir directory then all file operations will be limited to files under the specified directory For example (Apache httpd.conf example):
+You can also disable individual functions. Note that the disable_functions directive can not be used outside of the php.ini file which means that you cannot disable functions on a per-virtualhost or per-directory basis in your httpd.conf file. If we add this to our php.ini file:

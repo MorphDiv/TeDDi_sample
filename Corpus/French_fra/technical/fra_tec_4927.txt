@@ -1,0 +1,337 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Chapitre 3.
+
+Suivant
+Cette section s'applique aux systèmes Windows 95 / 98 / Me et Windows NT / 2000 / XP. (La configuration n'est actuellement pas confirmée sous XP).
+Ne vous attendez pas à ce que PHP fonctionne sur les plateformes 16 bits, comme Windows 3.1.
+Parfois, on décrira les plateformes supportées sous le nom de Win32.
+Il y a deux méthodes principales pour installer PHP sous Windows: soit manuellement, soit avec InstallShield.
+Si vous avez Microsoft Visual Studio, vous pouvez aussi compiler PHP à partir des sources.
+Une fois que PHP est installé sur votre Windows, vous pouvez aussi ajouter diverses extensions.
+L 'installeur Windows de PHP disponible depuis les pages de téléchargement, installe la version CGI de PHP, et configure les serveurs web IIS, PWS, et Xitami.
+Notez bien que bien que InstallShield soit une méthode simple pour installer PHP, il est limité dans son fonctionnement, puisque l'installation automatique des extensions n 'est pas prise en compte.
+Installez votre serveur HTTP favori sur votre système et assurez-vous qu 'il fonctionne.
+Exécutez l 'installeur et suivez les instructions fournies par le wizard.
+Deux types d 'installation sont fournis: standard, qui utilise toutes les configurations par défaut les plus pratiques, et avancée, qui pose un maximum de questions pour paramétrer le plus finement.
+Le wizard d'installation rassemble suffisamment d 'informations pour configurer php.ini et le serveur web qui utilisera PHP.
+Pour IIS, mais aussi PWS sous NT Workstation, une liste de l 'arboresence web est affichée, et vous pouvez sélectionner les dossiers qui utiliseront PHP.
+Une fois l'installation terminée, l 'installeur vous informera que vous devez redémarrer.
+Suivez ce conseil, ou commencez à utiliser PHP immédiatement.
+Avertissement
+Gardez bien à l'esprit que cette installation de PHP n 'est pas sécurisée.
+Si vous voulez avoir une installation sécurisée de PHP, vous devriez commencer par lire la documentation, et choisir toutes vos options avec soin.
+Cet installeur automatique vous permet de réaliser l'installation en un tour de main, mais n'est pas destinée à l 'utilisation sur des serveurs de production.
+Ce guide vous permet d 'installer et de configurer manuellement PHP sur vos stations Windows 9x / Me / NT / 2000.
+La première version de ce guide a été compilée par Bob Silva.
+La version originale est disponible (en anglais) à http: / /www.umesd.k12.or.us / php / win32install.html.
+Ce guide fournit une aide d 'installation pour:
+Personal Web Server (Version la plus récente recommandée)
+Internet Information Server 3 ou 4
+
+Omni HTTPd 2.0b1 et plus récent
+
+
+
+PHP 4 pour Windows est décliné en deux versions: un exécutable CGI (php.exe), et plusieurs modules SAPI (par exemple php4isapi.dll).
+Cette dernière forme est nouvelle pour PHP 4 et founit des performances améliorées ainsi que des fonctionnalités supplémentaires.
+Notez cependant que les modules SAPI ne sont pas Notez cependant que les modules SAPI ne sont pas considéré comme ayant atteint une qualité de production.
+La raison à cela est que les modules SAPI utilisent le système de thread sécurisé de PHP, ce qui est nouveau en PHP 4, et qui n 'a pas été testé et torturé suffisamment pour être considérés comme stable.
+Il y a encore quelques bugs qui trainent.
+D'un autre côté, certains d 'entre vous ont rapporté des résultats significativement meilleurs avec les modules SAPI, même si nous ne connaissons actuellement personne qui le fasse fonctionner en production.
+En clair, faites votre choix: soit vous avez absolument besoin de stabilité, et il vaut mieux laisser les performances SAPI de côté; soit vous avez besoin de performances, et alors c'est l 'occasion de tester en production et de nous rapporter vos résultats.
+Si vous choisissez l 'un des modules SAPI et utilisez Windows 95, pensez à télécharger la mise à jour DCOM à Microsoft DCOM pages.
+Pour le module ISAPI, comme un serveur web compatible est nécessaire (testé avec IIS 4.0, PWS 4.0 et IIS 5.0).
+IIS 3.0 n'est pas supporté; vous devez télécharger et installer le Windows NT 4.0 Option Pack avec IIS 4.0 si vous voulez le support natif de PHP.
+Voici les différentes étapes d 'installation avant les étapes spécifiques au serveur.
+Extrayez la distribution dans le dossier de votre choix. "C:\php\" est une bonne idée.
+Vous devez vous assurer que les DLL que PHP utilise sont disponibles.
+La liste précise des DLL dépend du serveur web que vous utiliser, et de la méthode que vous utiliser pour faire exécuter vos script (CGI ou module). php4ts.dll est toujours nécessaire.
+Si vous utiliser PHP en module, (e.g.
+ISAPI or Apache), vous aurez besoin de la DLL ad hoc, dans le dossier sapi.
+Si vous utilisez des extensions PHP, vous aurez besoin des DLL associées.
+Pour être certains que les DLL sont accessibles, vous pouvez les copier dans le dossier système (i.e. winnt / system32 ou windows / system) ou vous pouvez vous assurer qu'elles sont dans le même dossier que l'exécutable PHP ou les autres DLL de votre serveur web (i.e. php.exe, ou php4apache.dll).
+L 'exécutable binaire PHP, les modules SAPI, et certaines extensions utilisent des DLL externes.
+Assurez vous que ces DLL sont dans votre distribution, et dans un dossier qui est cité dans le PATH Windows.
+Le mieux à faire est de copier les fichiers ci-dessous dans votre dossier système, qui est généralement:
+c:\windows\system pour Windows 9x / Me
+c:\winnt\system32 pour Windows NT / 2000
+'php4ts.dll', s 'il existe, écrasez le
+Les fichiers 'dlls' de votre distribution.
+Si vous les avez déjà installé, ne les remplacez pas, sauf si quelquechose ne fonctionne pas correctement (avant de les écraser, il est recommandé de les sauver de toutes manières, au cas où quelque chose irait de travers).
+Téléchargez la dernière version de Microsoft Data Access Components (MDAC) pour votre plateforme, spécialement si vous utilisez Microsoft Windows 9x / NT4.
+MDAC est disponible à http: / /www.microsoft.com / data /.
+Copiez le fichier 'php.ini-dist' dans votre dossier '%WINDOWS% 'sous Windows 95 / 98, ou vers votre dossier '%SYSTEMROOT%' sous Windows NT ou Windows 2000 et renommez le en 'php.ini'.
+Votre dossier '%WINDOWS%' ou '%SYSTEMROOT% 'est généralement:
+c:\windows pour Windows 9x / Me
+c:\winnt ou c:\winnt40 pour les serveurs NT / 2000
+Il y a deux fichiers ini, distribués dans le fichier zip, php.ini-dist et php.ini-optimized.
+Nous vous recommandons d'utiliser php.ini-optimized, car nous l'avons optimisé d'un point de vue sécurité et vitesse d 'exécution.
+Le mieux est tout de même de lire le fichier de configuration php.ini et de choisir vos options manuellement.
+Si vous voulez atteindre un meilleur niveau de sécurité, c 'est par ce moyen que vous pourez le faire, même si PHP focntionne parfaitement avec les configurations par défaut.
+Editez votre fichier php.ini:
+Vous devez changer votre option 'extension_dir' pour qu'il pointe sur votre dossier d'installation PHP, ou vers l'endroit où vous avez installé vos 'php_*.dll '. ex: c:\php\extensions
+Si vous utilisez Omni Httpd, sautez l 'étape suivante.
+Modifiez 'doc_root' pour qu 'il pointe sur votre racine de serveur web. ex: c:\apache\htdocs ou c:\webroot.
+Choisissez les modules que vous voulez charger lorsque PHP démarre.
+Vous pouvez décommenter les lignes 'extension=php_*.dll' pour charger ces modules.
+Certains modules requièrent que des librairies supplémentaires soient installées sur votre système.
+La FAQ La FAQ PHP a plus d 'informations sur ces librairies.
+Vous pouvez aussi charger dynamiquement ces librairies avec dl( "php_*.dll");.
+Voyez la section sur les extensions Windows.
+Sous PWS et IIS, vous pouvez modifier le fichier browscap.ini pour qu 'il pointe sur: c:\windows\system\inetsrv\browscap.ini sous Windows 9x / Me et c:\winnt\system32\inetsrv\browscap.ini sous NT / 2000.
+Notez que le dossier mibs fourni avec la distribution Windows, contient des fichiers de support du protocole SNMP.
+Ce dpssier doit être déplacé dans le dossier DRIVE:\usr\mibs (DRIVE est le périphérique où PHP est installé.)
+Avant de commencer, il est bon de se poser la question suivante: "Pourquoi la compilation de PHP sous Windows est si difficile?".
+Deux raisons viennent immédiatement à l 'esprit:
+Windows ne dispose pas (encore) d 'une grande communauté de développeurs qui partagent librement leurs sources.
+La conséquence directe est que les investissements nécessaires en infrastructure pour supporter ce type de développement n 'ont pas été faits.
+Ce qui fait que le portage des utilitaires Unix a été la solution pour pallier ce manque.
+Ne soyez donc pas surpris de rencontrer cette parenté de temps en temps.
+La majorité des instructions que vous allez rencontrer sont du type: "faire et oublier".
+Alors, asseyez-vous confortablement et suivez aussi scrupuleusement que possible les instructions.
+Avant de commencer, il faut télécharger un maximum de fichiers!
+Pour commencer, téléchargez le Cygwin depuis le miroir cygwin le plus proche.
+Cela vous donnera les utilitaires GNU les plus populaires, utilisés durant le processus de compilation.
+Téléchargez le reste des utilitaires de compilation dont vous aurez besoin depuis le site PHP à http: / /www.php.net / extra / win32build.zip.
+Téléchargez le code source du DNS utilisé par PHP à http: / /www.php.net / extra / bindlib_w32.zip.
+Il remplacera le fichier resolv.lib inclut dans win32build.zip.
+Si vous n'avez pas d 'utilitaire de dézippage, vous devez en télécharger un.
+Une version libre est disponible à InfoZip.
+Finalement, vous aurez besoin des sources PHP 4 elles-mêmes!!
+Les dernières versions sont accessibles sur le serveur CVS anonyme.
+Si vous téléchargez une version intermédiaire ou la source, vous devez non seulement extraire les fichiers, mais aussi convertir les nouvelles lignes en leur équivalent windows (crlf) dans les fichiers *.dsp et *.dsw avant que Microsoft Visual C+ + ne soit capable de les comprendre.
+
+Placez les dossiers Zend et TSRM dans le dossier php4 pour que les projets puissent les trouver durant la compilation.
+Suivez les instructions pour installer l'utilitaire d 'unzip de votre choix.
+Exécutez setup.exe et suivez les instructions d 'installation.
+Si vous décidez d'installer dans un autre dossier que c:\cygnus, indiquez le au processus de compilation en modifiant la variable d 'environnement Cygwin.
+Sous Windows 9x / Me, modifier une variable d 'environnement se fait en ajoutant une ligne dans le fichier autoexec.bat.
+Sous Windows NT, allez dans le menu "Démarrer = Paramètres = Panneau de contrôle = Système" ("My Computer = Control Panel = System ") et sélectionnez l'onglet "environnement" ("environment").
+Avertissement
+Créez un dossier temporaire pour Cygwin, sinon de nombreuses commandes (comme bison) échoueront.
+Sous Windows 9x / Me, mkdir C:\TMP.
+Sous Windows NT, mkdir %SystemDrive% mp.
+Créez un dossier et dézippez win32build.zip dedans.
+Lancez Microsoft Visual C++, et allez dans le menu "select Tools = Options".
+Dans le dialogue, sélectionnez l'onglet "directories ".
+Assurez-vous que cygwin\bin, win32build\include, et win32build\lib sont bien dans les menus déroulants "Executables", "Include", et "Library". (Pour ajouter une entrée, sélectionnez une ligne blanche, et tapez).
+Une entrée typique ressemble à ceci:
+c:\cygnus\bin
+c:\php-win32build\include
+c:\php-win32build\lib
+Pressez "OK", et sortez de Visual C++.
+Créez un autre dossier et dézippez bindlib_w32.zip dedans.
+Décidez si vous avez besoin des symboles de débuggage (bindlib - Win32 Debug) ou non (bindlib - Win32 Release).
+Compilez la configuration adéquate:
+Pour les utilisateurs de GUI, lancez VC++, puis sélectionnez le menu "File = Open Workspace" et "bindlib ".
+Puis sélectionnez "Build= Set Active Configuration" et sélectionnez la configuration voulue.
+Enfin, sélectionnez "Build= Rebuild All".
+Pour les utilisateurs en ligne de commande, assurez-vous que vous avez enregistré les variables d 'environnement C++, ou que vous avez exécuté vcvars.bat.
+Exécutez maintenant l 'une des commandes suivantes:
+
+
+A ce stade, vous avez une librairie resolv.lib utilisable, soit dans votre dossier Debug, soit sans le dossier Release.
+Copiez ce fichier dans votre dossier win32build\lib, en remplaçant le fichier du même nom.
+La meilleure façon de compiler est de commander par la version CGI / exécutable.
+Pour les utilisateurs GUI, lancez VC++, puis sélectionnez le menu "File = Open Workspace" et sélectionnez "php4ts ".
+Ensuite, sélectionnez le menu "Build= Set Active Configuration", et sélectionnez la configuration voulue.
+Finalement, sélectionnez le menu "Build= Rebuild All".
+Pour les utilisateurs en ligne de commande, assurez-vous que vous avez enregistré les variables d 'environnement C++, ou que vous avez exécuté vcvars.bat.
+Exécutez maintenant l 'une des commandes suivantes:
+
+
+A ce stade, vous avez une librairie php.exe utilisable, soit dans votre dossier Debug_TS soit sans le dossier Release_TS.
+Répétez les instructions ci-dessus avec php4isapi.dsp (qui est dans sapi\isapi) pour compiler le code nécessaire pour intégrer PHP avec Microsoft IIS.
+Après avoir installé PHP et votre serveur web sous Windows, vous voudrez sûrement ajouter quelques extensions bien pratiques.
+La table suivante liste une partie des extensions disponibles.
+Comme indiqué dans le manuel, vous pouvez choisir quelles extensions vous voulez charger en décommentant la ligne 'extension=php_*.dll' dans le fichier php.ini.
+Vous pouvez aussi charger dynamiquement un module avec la fonction dl().
+Les fichiers DLLs des extensions PHP sont préfixés par 'php_' en PHP 4, et 'php3_ 'en PHP 3.
+Cela évite la confusion des extensions PHP et de leurs librairies.
+
+En PHP 4.0.4pl1, les extensions BCMath, BCMath,Calendar, COM, FTP, MySQL, ODBC, PCRE, Sessions, WDDX et XML sont activées par défaut.
+Vous n'avez rien à faire pour qu 'elles soient inclues.
+Lisez le fichier README.txt ou install.txt dans votre distribution pour connaître la liste des modules par défaut.
+
+Certaines de ces extensions requièrent des librairies DLL supplémentaires pour fonctionner correctement.
+Certaines d'entre elles sont disponibles dans la distribution. dans le dossier dlls mais certaines (comme Oracle (php_oci8.dll)), demandent des dlls qui ne sont pas dans la distribution.
+Copiez les dlls fournies depuis le dossier dlls dans votre PATH Windows.
+Les bons emplacements sont typiquement
+c:\windows\system pour Windows 9x / Me
+c:\winnt\system32 pour Windows NT / 2000
+Tableau 3-1.
+Extensions PHP
+
+
+
+
+Fonctions de compression Bzip2
+Aucune
+
+Fonctions de conversions calendaires (Depuis PHP 4.03, elles sont activées par défaut)
+Activée automatiquement depuis PHP 4.0.3
+
+Fonctions ClibPDF
+php_crypt.dll
+Fonctions de cryptage
+Aucune
+
+Fonctions ctype
+Aucune
+
+Fonctions CURL
+Requiert: libeay32.dll, ssleay32.dll (fournies)
+
+Fonctions de paiement Cybercash
+Aucune
+
+Fonctions DBM
+Obsolète.
+Utilisez DBA à la place (php_dba.dll)
+
+Fonctions dbm-style
+Aucune
+
+Fonctions DBase
+Aucune
+
+Librairie d 'émulation GDBM via Berkely DB2
+Aucune
+
+Fonctions DOM XML
+Requiert: libxml2.dll (fournie)
+
+Fonctions .NET
+Aucune
+
+Entêtes EXIF des images JPEG
+Aucune
+
+Fonctions FrontBase
+Aucune
+
+Fonction FDF (Forms Data Format)
+Requiert: fdftk.dll (fournie)
+
+Lecture des bases filepro
+Accès en lecture seule
+
+Fonctions FTP
+Activée par défaut depuis PHP 4.0.3
+
+Bibliothèque GD (pour les manipulations d'images)
+Aucune
+
+Fonctions GNU Gettext
+Requiert: gnu_gettext.dll (fournie)
+
+Fonctions HyperWave
+Aucune
+
+Fonctions de conversions ICONV
+Requiert: iconv-1.3.dll (fournie)
+
+Fonctions Informix
+Requiert: librairies Informix
+
+Fonctions IIS
+Aucune
+
+Fonctions IMAP 4( en PHP 3: php3_imap4r1.dll)
+
+
+Fonctions Ingres II
+Requiert: librairies Ingres II
+
+Fonctions InterBase
+Requiert: gds32.dll (fournie)
+
+Extension Java
+Requiert: jvm.dll (fournie)
+
+Fonctions LDAP
+Requiert: libsasl.dll (fournie)
+
+Fonctions Mhash
+Aucune
+
+Fonctions Ming pour Flash
+Aucune
+
+Fonctions mSQL
+Requiert: msql.dll (fournie)
+
+Fonctions mSQL 1
+Aucune
+
+Fonctions mSQL 2
+Aucune
+
+Fonctions MSSQL (anciennement php_mssql70.dll, requiert MSSQL DB-Libraries)
+Requiert: ntwdblib.dll (fournie)
+
+Fonctions MySQL (Activées par défaut en PHP 4)
+Aucune
+php_nsmail.dll
+Fonctions Netscape mail
+Aucune
+
+Fonctions Oracle
+Aucune
+
+Fonctions Oracle 8
+Requiert: librairies clientes Oracle 8
+
+Fonctions OpenSSL
+Requiert: libeay32.dll (fournie)
+
+Fonctions Oracle
+Requiert: librairies clientes Oracle 7
+
+Fonctions PDF
+Aucune
+
+Fonctions PostgreSQL
+Aucune
+
+Fonctions d 'impression
+Aucune
+php_sablot.dll
+Focntions XSLT
+Requiert: sablot.dll (fournie)
+
+Fonctions SNMP get et walk
+NT uniquement!
+
+Fonctions Sybase
+Requiert: librairies clientes Sybase
+
+Fonctions YAZ
+Aucune
+
+Fonctions ZLib
+Aucune
+Précédent
+Sommaire
+Suivant
+Liste complète des options de configuration
+Niveau supérieur
+Installation du serveur Apache

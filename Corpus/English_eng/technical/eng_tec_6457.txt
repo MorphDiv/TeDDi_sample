@@ -1,0 +1,47 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Advanced Usage
+Command Line Options
+When running & appname; from the command line, there are several options for opening data files. They may be seen by running tellico --help.
+Usage: tellico [Qt-options] [KDE-options] [options] [filename] Tellico - a collection manager for KDE Options: --nofile Do not reopen the last open file --bibtex Import & lt; filenamegt; as a bibtex file --mods Import & lt; filenamegt; as a MODS file --ris Import & lt; filenamegt; as a RIS file Arguments: filename File to open
+& DBus; Interface
+& appname; has a minimal & DBus; interface, which can be useful for scripting or interacting with a running application from the command-line. As with all & DBus; calls, you need to specify the service you want to interface with, and the particular interface. The name of the & DBus; service is org. kde. tellico.
+& DBus; Commands
+Two & DBus; primary objects are available in the tellico interface: Tellico and Collections.
+The Tellico Object
+The full list of & DBus; commands in the tellico object is shown below:
+bool importTellico(QString file, QString action) bool importBibtex(QString file, QString action) bool importMODS(QString file, QString action) bool importRIS(QString file, QString action) bool exportXML(QString file) bool exportZip(QString file) bool exportBibtex(QString file) bool exportHTML(QString file) bool exportCSV(QString file) bool exportPilotDB(QString file) QListlt; intgt; selectedEntries() QListlt; intgt; filteredEntries() void openFile(QString file) void setFilter(QString text) bool showEntry(int id)
+For the four import commands, the first argument is the file to import, and the second is the import action. Three actions are available: replace, append, and merge. Four file formats are supported for importing: Tellico & XML; files, Bibtex files, MODS files, and RIS files.
+The current open collection in & appname; may be exported to a file, in either Tellico & XML; format, Tellico ZIP format, Bibtex, & HTML;, comma-separated values (CSV), or the PilotDB format.
+A list of the entry IDs currently selected or being filtered is able to facilitate showing or updating entries in the view.
+A new data file may be opened by using the openFile() command. The full path must be specified.
+A new filter may be set using the setFilter() command, which is the equivalent of typing in the filter box in the main window.
+Given an entry ID, showEntry() will select that entry and show the entry details in the main window.
+The Collections Object
+The full list of & DBus; commands in the Collections object is shown below:
+int addEntry() bool removeEntry(int entryID) QStringList allValues(QString fieldName) QStringList entryValues(int entryID, QString fieldName) QStringList selectedBibtexKeys() QString entryBibtexKey(int entryID) bool setEntryValue(int entryID, QString fieldName, QString value) bool addEntryValue(int entryID, QString fieldName, QString value)
+A new empty entry may be created in the current collection using the addEntry() command. The return value is the entry ID, which can then be used to set the field values in the entry. An entry can be deleted from the collection by calling removeEntry().
+Calling allValues() using just a field name will return all the values for that field for the currently selected entries. If no entries are selected, the return list is empty. If an entry ID is included in the command, the field values for that specific entry are returned.
+If the current collection is a bibliography, calling selectedBibtexKeys() will return the Bibtex citation key for all selected entries. The bibtexKey for a specific entry may be found by using the entryBibtexKey() command.
+Entries can be edited directly with the & DBus; interface. Given an entry ID, setEntryValue() will set the field value directly. To add a value, without affecting the existing values, use addEntryValue(). The new value gets appended to the end of the existing list.
+& DBus; Examples
+Here are some examples for scripting & appname; using the & DBus; interface. Since the pid must be known, the easiest way to include that in the shell command is like so: dbus $(dbus | grep tellico) tellico.
+Open a Bibtex file% qdbus org. kde. tellico / Tellico org. kde. tellico. importBibtex "/ home/ robby/ reference. bib" "replace" true
+Export a Bibtex file% qdbus org. kde. tellico / Tellico org. kde. tellico. exportBibtex ~/ documents/ reference. bib true
+Echo the citation key of the current selection% qdbus org. kde. tellico / Collections org. kde. tellico. selectedBibtexKeys stephenson2004
+Add a new entry and set the title% myid=`qdbus org. kde. tellico / Collections org. kde. tellico. addEntry `% qdbus org. kde. tellico / Collections org. kde. tellico. setEntryValue $myid title "My New Book" true

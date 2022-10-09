@@ -1,0 +1,80 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+header() wird zum Senden von HTTP Anfangsinformationen (Headern) benutzt.
+Weitere Informationen über HTTP Header finden Sie unter HTTP / 1.1 specification.
+Der optionale Parameter replace gibt an, ob der Header einen vorhergehenden Header ersetzten soll, oder ob ein zweiter Header des selben Typs hinzugefügt werden soll.
+Standardmäßig wird ersetzt.
+Sie können jedoch als das zweite Argument FALSE übergeben, und so mehrere Header desselben Typs erzwingen.
+Zum Beispiel:
+
+
+
+Der zweite optionale Parameter http_response_code spezifiziert den HTTP Response Code. (Dieser Parameter ist in PHP 4.3.0 und höher verfügbar.)
+Es gibt zwei Spezialfälle von Header-Aufrufen.
+Der erste ist ein Header, der mit "HTTP /" beginnt (ob groß - oder Kleinschreibung ist nicht relevant) und zum Herausfinden des zu sendenden HTTP Statuscodes verwendet wird.
+Wenn Sie zum Beispiel Apache konfiguriert haben, um ein PHP Skript zum Bearbeiten von Anforderungen fehlender Dateien (mittels der ErrorDocument Direktive) zu verwenden, möchten Sie bestimmt sicherstellen, dass Ihr Skript den passenden Statuscode generiert.
+
+Anmerkung:
+Die HTTP Status Header Zeile wird immer die erste zum Client gesendete sein, egal ob der aktuelle header() - Aufruf der erste ist oder nicht.
+Der Status kann mittels header() jederzeit mit einer neuen Statuszeile überschrieben werden, es sei denn, dass die HTTP Header bereits gesendet wurden.
+Anmerkung:
+In PHP 3 funktioniert dies nur, wenn PHP als Apache Modul kompiliert wurde.
+Sie können den gleichen Effekt erzielen, wenn Sie den Status Header verwenden.
+
+
+Der zweite Spezialfall ist der "Location:" Header.
+Es wird nicht nur der Header an den Browser geschickt, sondern auch ein REDIRECT (302) Statuscode, wenn nicht bereits ein 3xx Statuscode gesendet wurde.
+?php header( "Location: http: / /www.example.com / "); / / Umleitung des Browsers exit; / / Sicherstellen, dass nicht trotz Umleitung / / der nachfolgende Code ausgeführt wird.?
+Anmerkung:
+HTTP / 1.1 verlangt einen absoluten URI inkl. dem Schema, Hostnamen und absoluten Pfad als Argument von Location:, aber manche Clients akzeptieren auch relative URIs.
+Gewöhnlich können Sie mittels $_SERVER[ 'HTTP_HOST'], $_SERVER['PHP_SELF'] und dirname() aus einem relativen Link einen absoluten URI selbst erstellen:
+
+PHP-Skripte erzeugen oft dynamische Inhalte, die weder vom Browser noch von irgendeinem Proxy zwischen Web-Server und Client-Browser gepuffert ("gecached") werden sollen bzw. dürfen.
+Bei vielen Proxies und Browsern kann das Cachen wie folgt unterbunden werden:
+
+Mon, 26 Jul 1997 05:00:00 GMT"); / / Datum aus Vergangenheit header("Last-Modified: ". gmdate("D, d M Y H:i:s")." GMT"); / / immer geändert header("Cache-Control: no-store, no-cache, must-revalidate"); / / HTTP / 1.1 header("Cache-Control: post-check=0, pre-check=0", false); header("Pragma: no-cache"); / / HTTP / 1.0?
+Anmerkung:
+Es könnte auch sein, dass Ihre Seiten nicht zwischengespeichert werden, auch wenn Sie obigen Header nicht ausgeben.
+Es gibt eine Anzahl Optionen, welche die Benutzer in deren Browser einstellen können, um das standardmäßige Verhalten bezüglich des Caching zu verändern.
+Durch das Senden obiger Header sollten Sie irgendwelche Einstellungen, welche die Ausgabe Ihres Skriptes zwischenspeichern würden, außer Kraft setzen.
+Weiters können Sie session_cache_limiter() und die Konfigurationsoption session.cache_limiter verwenden, um die korrekten Header bezüglich Caching automatisch generieren zu lassen, sollten Sie Sessions benutzen.
+Beachten Sie, dass header() Beachten Sie, dass header() aufgerufen werden muss, bevor eine Ausgabe gesendet wurde, egal ob normale HTML Tags, leere Zeilen in einer Datei oder von PHP.
+Ein weit verbreiteter Fehler ist mittels include(), require(), oder anderen Dateizugriffsmethoden Code zu lesen, und so unbewusst Leerzeichen oder Leerzeilen auszugeben, bevor header() aufgerufen wird.
+Das gleiche Problem besteht auch bei Verwendung einer einzigen PHP / HTML Datei.
+html ?php / / Dies funktioniert nicht.
+Beachten Sie die / / obige Ausgabe noch vor dem header( )-Aufruf header('Location: http: / /www.example.com / ');?
+Anmerkung:
+In PHP 4 können Sie dieses Problem umgehen, indem Sie Output Buffering benutzen (mit dem Overhead, dass alle Ihre Ausgaben an den Browser gepuffert werden, bis Sie diese Senden).
+Um dies zu tun, verwenden Sie in Ihrem Skript ob_start() und ob_end_flush(), oder setzten die Konfigurationsdirektive output_buffering in der php.ini bzw. in den Server Konfigurationsdateien.
+Wollen Sie den Benutzer auffordern, die von Ihnen gesendeten Daten wie z.B. eine generierte PDF Datei zu speichern, können Sie den Header Content-Disposition verwenden, um einen empfohlenen Dateinamen anzubieten und den Browser zu zwingen, den Dialog zum Speichern anzuzeigen.
+?php / / Wir werden eine PDF Datei ausgeben header( "Content-type: application / pdf"); / / Es wird downloaded.pdf benannt header("Content-Disposition: attachment; filename=downloaded.pdf"); / / Die originale PDF Datei heißt original.pdf readfile('original.pdf');?
+Anmerkung:
+Der Microsoft Internet Explorer 4.01 hat einen Bug, der diese Funktionalität verhindert, und es gibt keinen Workaround.
+Auch in Microsoft Internet Explorer 5.5 existiert ein Bug, der dies behindert, dieser kann jedoch mittels einem Upgrade auf Service Pack 2 oder neuer behoben werden.
+Anmerkung:
+Ist safe mode aktiviert, wird die UID des Skriptes dem realm Teil des Headers WWW-Authenticate (für HTTP Authentifizierung verwendet) hinzugefügt, sollten Sie diesen Header setzen.
+Siehe auch headers_sent(), setcookie() und den Teil HTTP Authentifizierung.
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

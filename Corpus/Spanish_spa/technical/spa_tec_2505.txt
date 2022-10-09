@@ -1,0 +1,309 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+IO-Slaves
+audiocd
+Le permite tratar CD s de audio como un sistema de archivos real, donde las pistas están representadas como archivos, y cuando se copian desde el directorio son extraidas digitalmente desde el CD.
+Así se asegura una copia perfecta de los datos audio.
+Para ver como funciona este slave, inserte un CD de audio en su CD-ROM e introduzca audiocd: / en Konqueror.
+Al cabo de unos segundos verá una lista de pistas y algunos directorios.
+Los CD s de audio realmente no tienen directorios, pero el slave audiocd los porporciona como algo conveniente.
+Si mira dentro de estos directorios verá que todos ellos contienen el mismo número de pistas.
+Si está conectado a Internet, algunos directorios tendrán los títulos de las pistas actuales mostradas como nombres de archivos.
+La razón de la existencia de estos directorios separados es para asegurar que usted pueda elegir el formato en el que desea escuchar (o copiar) las pistas en el CD.
+Si arrastra una pista desde el directorio Ogg Vorbis y lo suelta en otra ventana de Konqueror abierta en su directorio personal, debería ver un cuadro de progresión que muestra que la pista está siendo extraida desde el CD y guardada en un archivo.
+Advierta que Ogg Vorbis es un formato comprimido, de modo que el archivo en su directorio principal aparecerá bastante más pequeño que si hubiera copiado los datos brutos.
+El mecanismo trás esta operación es bastante simple.
+Cuando se solicita al slave audiocd que descargue una pista desde el directorio Ogg Vorbis, comienza a extraer datos digitales de audio desde el CD.
+A medida que envia los datos a su directorio personal, estos se codifican en formato Ogg Vorbis (los datos audio de un CD audio no son un formato particular, simplemente son datos binarios en bruto.)
+También podría intenter arrastrar un archivo con extensión .wav y soltarlo en el reproductor de medios de KDE, Noatun.
+En este caso, el proceso bajo el escenario es similar, excepto que en lugar de codificar los datos en formato Ogg Vorbis, se guarda, tras una conversión muy sencilla desde datos binarios brutos (que es lo que representan los archivos .cda en el directorio superior), en formato RIFF WAV, que es un formato no comprimido reconocido por la mayor parte de los reproductores multimedia.
+Noatun debería reproducir sin problemas los archivos .wav, pero si observa algún problema, debería intentar utilizar la opción paranoia_level, que se explica más abajo.
+Opciones
+device
+Normalmente, el slave tratará de encontrar un dispositivo CD con un CD audio en su interior, pero si fallara o dispone de más de un dispositivo CD, intente esta opción.
+Advierta que el diálogo de configuración le permite fijar una valor predeterminado para esta opción.
+paranoia_level
+Fija la cantidad de errores detectados y corregidos usados al extraer los datos.
+Nivel 0
+Sin detección o corrección.
+Sólo útil si dispone de un dispositivo de CD s perfecto (lo que es improbable).
+Nivel 1
+Activar la comprobación y correción básica de errores
+Nivel 2
+Predeterminado.
+Especifica que sólo se aceptará una extracción perfecta.
+El nivel 2 tiene una desventaja.
+La extracción puede ser muy lenta, de modo que la reproducción digital en tiempo real puede no funcionar correctamente.
+Si usted dispone de un dispositivo de CD s de buena calidad (más caro no es equivalente a mejor) probablemente no experimentará una extracción muy lenta, pero un dispositivo malo puede tardar días (!) en la extracción de datos audio desde un CD.
+use_cddb
+Especifica que los nombres de las pistas de los CD s insertados se buscarán en la base de datos de los CD s en Internet.
+Los CD s audio no tienen nombres de pistas, pero la base de datos de CD s en Internet es un sistema inteligente que utiliza un identificador especial único generado por el número y longitud de las pistas en cada CD para hacer una referencia cruzada con la lista de pistas.
+Las listas de las pistas son un esfuerzo de la comunidad de Internet y están disponibles para todos.
+Puede enviar sus propias listas de pistas usando Kscd, el reproductor KDE de CD s.
+Esta opción está activada por omisión.
+Si su conexión a Internet no está bien configurada, puede que las pistas de su CD no aparezcan.
+cddb_server
+Configure la conexión del servidor de la base de datos de CD s de Internet.
+Por omisión, esta es freedb.freedb.org:888, que signifca el servidor freedb.freedb.org escuchando en el puerto 888.
+Ejemplos
+audiocd: / ?device= / dev / scd0?paranoia_level=0&use_cddb=0
+Ofrece una lista de las pistas en el CD audio insertado en / dev / scd0, que en Linux especifica el primer dispositivo CD-ROM SCSI.
+Si copia las pistas desde el CD, la extracción digital se realizará sin correción o detección de errores.
+No se contactará con ninguna base de datos de CD s en Internet.
+Preguntas frecuentes
+Obtengo El archivo o directorio / no existe. ¿Cómo arreglo esto?
+Tengo un CD dentro de mi unidad
+Si no la ve, asegurese de que tiene permiso para acceder al dispositivo de CD s.
+Si está utilizando emulación SCSI (lo que es posible si dispone de un escritor IDE de CD s) asegurese de que dispone de permisos en el dispositivo genérico SCSI, que probablemente es / dev / sg0, / dev / sg1, etc..
+Si esto no funciona, intente introducir audiocd: / ?device= / dev / sg0 (o similar) para indicar a kio_audiocd cual es su dispositivo de CD-ROM.
+bzip
+bzip es un programa de compresión.
+Hoy se usa raramente, porque ha sido reemplazado por bzip2, que ofrece mayor compresión.
+El kioslave bzip no se puede utilizar directamente, y se utiliza como filtro.
+Por ejemplo, el kioslave tar puede filtrar una archivo a través del kioslave de bzip, para poder mostrar los contenidos de un archivo tar.bz directamente en una ventana de Konqueror.
+Si pulsa en un archivo comprimido con extensión bz en Konqueror, este kioslave se utilizará para descomprimirlo y mostrarlo como archivo normal (sin comprimir).
+Si usted es un desarrollador, y desea utilizar el filtro bzip filter, puede encontrar documentación en el uso de kioslaves en http: / /developer.kde.org
+bzip2
+Bzip2 es un programa de compresión
+El kioslave bzip2 no se puede utilizar directamente, y se utiliza como filtro.
+Por ejemplo, el kioslave tar puede filtrar un archivo a través del kioslave de bzip2, para poder mostrar los contenidos de un archivo tar.bz2 directamente en una ventana de Konqueror.
+Si pulsa en un archivo comprimido con extensión bz2 en Konqueror, este kioslave se utilizará para descomprimirlo y mostrarlo como archivo normal (sin comprimir).
+Si usted es un desarrollador, y desea utilizar el filtro bzip2 filter, puede encontrar documentación en el uso de kioslaves en http: / /developer.kde.org
+Vea el manual: bzip2.
+cgi
+El módulo CGI proporciona un método para ejecutar programas CGI sin la necesidad de ejecutar un servidor web.
+Se puede utilizar, por ejemplo, para probar programas CGI o para utilizar motores de búsqueda que únicamente ofrecen interfaces CGI, como el de Doxygen.
+El módulo implementa el protocolo cgi:.
+Utiliza el nombre del archivo incluido en la URL y busca una lista de directorios configurables.
+Si encuentra un ejecutable con el nombre dado, lo ejecuta, le pasa los argumentos de la URL y establece las variables de entorno necesarias para los programas CGI.
+archivo
+El protocolo de archivo se utiliza por todas las aplicaciones de KDE para mostrar archivos disponibles localmente.
+Introduciendo file: / nombrededirectorio en Konqueror se muestran los archivos de este directorio.
+finger
+Finger es un programa para mostrar información acerca de usuarios.
+Si finger está activado en la máquina remota, usted puede recibir información del nombre real del usuario, si está en el sistema en ese momento o no, si tiene dirección de correo; y si dispone de un archivo .plan en su directorio principal se le puede mostrar dicha información.
+Finger se asocia normalmente a la dirección usuario@nombreDeMaquina que puede o no corresponder a la dirección de correo del usuario.
+La mayor parte de los proveedores de servicios de internet no permiten el acceso mediante finger, de modo que es probable que no encuentre información útil en la mayoría de los casos.
+Algunas personas usan sus archivos locales .plan para guardar información como claves PGP, informar de que están de vacaciones, y otro tipo de información.
+Consulte el manual: finger.
+fish
+Le permite acceder a otro ordenador utilizando una cuenta de línea de comandos SSH simple y utilidades estándar de UNIX en el lado remoto.
+De esta forma no es necesario software remoto para obtener acceso a los archivos de ese ordenador como si fueran archivos locales (o sobre NFS, que es más lento que el acceso local).
+Utiliza el mismo protocolo que el manejador de MidnightCommander #sh VFS.
+Si Perl está disponible en la máquina remota, será utilizado en su lugar.
+Entonces sólo serán necesarios env y / bin / sh.
+El uso de Perl tiene la ventaja adicional de ser más rápido.
+Disquete
+El ioslave del disquete le permite acceder fácilmente a los dispositivos de disquetes instalados en su sistema.
+La letra del dispositivo se convierte en el primer subdirectorio de la URL del disquete.
+Si desea acceder al dispositivo B lo podrá hacer introduciendo: floppy: / b. floppy: / es una contracción rápida de floppy: / a.
+Advierta que floppy: / logo.png significa que dispone de un dispositivo de disquetes llamado logo.png.
+Para usarlo necesita que el paquete mtools esté instalado, y que el ioslave de disquetes soporte todo lo que los diferentes comandos de mtools soportan.
+No necesita montar sus disquetes, simplemente introduzca floppy: / en cualquier aplicación KDE 3.x y será capaz de leer y escribir desde su dispositivo de disquetes.
+De acuerdo con la documentación de mtools los dispositivos ZIP y JAZ también están soportados.
+Para acceder a ellos puede intentar floppy: / z y floppy: / j.
+Esto no ha sido comprobado por falta de hardware.
+El ioslave proporciona acceso de lectura y escritura al disquete pero no simultáneamente.
+Aunque usted puede leer y escribir del disquete, la lectura y escritura ocurren una después de la otra, y no simultáneamente.
+Autor:
+Alexander Neundorf neundorf@kde.org
+FTP
+Al igual que con otras aplicaciones de Internet, el FTP utiliza la aproximación cliente-servidor un usuario invoca un programa FTP en el ordenador, le indica que contacte con una máquina remota, y después solicita la transferencia de uno o más archivos.
+El programa local de FTP se convierte en un cliente que utiliza TCP para contactar un servidor FTP en el ordenador remoto.
+Cada vez que un usuario solicita una transferencia de archivos, los programas cliente y servidor cooperan para enviar una copia de datos a través de Internet.
+El FTP se utiliza habitualmente para recuperar información y obtener software almacenado en servidores FTP por todo el mundo.
+Consulte el manual: ftp.
+gopher
+gopher comenzó como un servicio de información distribuida para el campus de la universidad de Minnesota.
+Gopher permite al usuario acceder a información en servidores Gopher ejecutandose en máquinas de Internet.
+Gopher es un servicio de información de navegación por Internet que utiliza un interfaz tipo menú.
+Los usuarios seleccionan información de los menús, que pueden resultar ser otros menús, o mostrar un archivo de texto.
+Un elemento puede residir en el servidor Gopher al que usted se dirigió o puede estar en otro servidor Gopher (u otra máquina).
+Gopher puede establecer un tunel desde un Gopher a otro sin que el usuario sepa que ha cambiado de servidor y / o de máquina.
+Gopher mantiene oculta la localización exacta de las máquinas, manteniendo la ilusión de un sólo conjunto de menús interconectados.
+Gopher permite al usuario registrar la ubicación de un elemento en un marcador, de modo que los usuarios siguiendo ese marcador acceden directamente hasta un elemento particular sin buscar por el menú del sistema.
+Los menús de Gopher no son estándar en el sentido de que cada servidor los configura individualmente.
+Fuente: http: / /tlc.nlm.nih.gov / resources / tutorials / internetdistlrn / gophrdef.htm
+gzip
+El kioslave gzip no se puede utilizar directamente, y se utiliza como filtro.
+Por ejemplo, el kioslave tar puede filtrar una archivo a través del kioslave de gzip, para poder mostrar los contenidos de un archivo tar.gz directamente en una ventana de Konqueror.
+Si usted es un desarrollador, y desea utilizar el filtro gzip filter, puede encontrar documentación en el uso de kioslaves en http: / /developer.kde.org
+help
+El sistema de ayuda de KDE
+http
+El kioslave http se usa por todas las aplicaciones KDE para manejar conexiones a servidores http, es decir, a servidores web.
+El uso más común es visualizar páginas web en el navegador Konqueror.
+Consulte el manual: http.
+https
+HTTPS es HTTP encapsulado en un flujo SSL / TLS.
+SSL es el protocolo de Capa de Sockets Seguros, un protocolo de seguridad que proporciona privacidad en las comunicaciones por Internet.
+El protocolo permite que las aplicaciones cliente / servidor se comuniquen de un modo diseñado para impedir las escuchas, alteración o falsificación de mensajes.
+TLS significa Transport Layer Security (Seguridad de Capa de Transporte)
+imap
+El protocolo IMAP4rev1 (Internet Message Access Protocol) permite el acceso a mensajes en carpetas de correo en un servidor.
+Al contrario que POP3, que está diseñado para descargar los mensajes y borrarlos del servidor, el propósito de IMAP es almacenar todos los mensajes en el servidor para ser capaz de acceder a ellos desde cualquier lugar.
+Los mensajes se pueden almacenar, descargar desde el servidor o se pueden mover entre carpetas.
+Por ejemplo en Konqueror simplemente introduzca imap: / /username@your.mail.server / para obtener una lista de sus carpetas.
+Entonces podrá trabajar con sus carpetas y mensajes como si se tratasen de carpetas y archivos en su sistema local de archivos.
+Las URLs de IMAP están definidas en RFC 2192.
+imaps
+IMAPS es el protocolo IMAP cifrado a través de SSL.
+Info
+El ioslave Info le permite leer las páginas de info instaladas en su sistema, desde dentro de Konqueror.
+Lo puede utilizar fácilmente:
+Esto debería mostrarle el nivel superior de la documentación Info sobre el compilador gcc.
+Usted puede explorar fácilmente la documentación info que ha instalado desde la aplicacion KHelpcenter o puede utilizar el ioslave info directamente desde Konqueror y desde el mini-cli.
+lan
+Este protocolo sirve para proporcionar un tipo de vecindad en red pero que sólo depende de la pila de protocolo TCP / IP y con la posibilidad de utilizar otros protocolos en vez de únicamente SMB.
+El módulo lan puede utilizar FTP, HTTP, SMB, NFS, y FISH
+ldap
+Puede utilizar el ioslave ldap del siguiente modo:
+o ldap: / /maquina:puerto / cn=MM,ou=People,o=where,c=de??base para obtener una rama completa.
+mailto
+El kioslave mailto se utiliza cuando usted pulsa sobre un enlace a una dirección de correo en una página HTML.
+Konqueror le abrirá una ventana de composición de mensajes en el cliente de correo que usted haya configurado como preferido.
+Cualquier información suministrada en la URL se rellenará automáticamente.
+Consulte el manual: mailto.
+mac
+Introduciendo mac: / en Konqueror debería aparecer el contenido de la partición MacOS.
+Si nunca ha utilizado antes kio-mac, es probable que se produzca un mensaje de error indicando que no ha especificado la partición correcta.
+Introduzca algo como mac: / ?dev= / dev / hda2 para especificar la partición (si no sabe en qué partición está MacOs, puede probar a cambiar hda2 por hda3 u otras particiones, o utilizar el comando para imprimir en mac-fdisk).
+Esta partición se utilizará la próxima vez, así que no tendrá que especificarla cada vez.
+HFS* en realidad guarda dos archivos por cada uno que se ve (llamados bifurcaciones), una bifurcación de recursos y otra de datos.
+El modo de copia predeterminado cuando se copian archivo a través de la unidad nativa es de datos en brutos, lo que significa que únicamente se copia la bifurcación de datos.
+Los archivos de texto se copian en modo texto (igual que el formato en bruto pero con cambios en los finales de línea para ser compatibles con UNIX y para eliminar algunos caracteres adicionales, lo cual es muy recomendable), salvo que se especifique otra cosa.
+También puede copiar archivos a través del formato Mac Binary II o especificar los formatos de texto o en bruto con otra consulta: mac: / myfile?mode=b o mac: / myfile?mode=t.
+Para más información consulte man hpcopy.
+Por alguna razón algunos directorios en MacOS acaban con un caracter f 'alto.Esto puede confundir a hfstools.
+Man
+Utilizando el ioslave de man usted puede leer las páginas de man instaladas en su sistema.
+Es fácil de usar.
+man: /
+Vea las secciones del manual, pulse para buscar el resto.
+man: fopen
+Vea la página de manual de fopen.
+También hay una acceso rápido: #fopen, que produce el mismo efecto que más arriba.
+Si no encuentra todas sus páginas de man, ajuste las variables de entorno MANPATH and MANSECT.
+Como con cualquier otro ioslave de KDE es posible introducir una URL, como man:socket en cualquier aplicación de KDE.
+Intentelo en KWrite y verá la página de man en formato HTML.
+Contacte con el foro de discusión: kde-devel@kde.org
+news
+Puede borrarse desde KNode si decide que no desea leer las noticias del grupo, pulsando el botón derecho del ratón y seleccionando Borrarse del grupo.
+nfs
+El protocolo NFS de Sun proporciona acceso remoto transparente a sistemas de archivos compartidos a través de la red.
+El protocolo está diseñado para que sea independiente de la máquina, del sistema operativo, de la arquitectura de red y del protocolo de transporte.
+Esta independencia se consigue a través del uso de llamadas de procedimientos remotos, Remote Procedure Call (RPC) creadas encima de una eXternal Data Representation (XDR).
+El protocolo soportado MOUNT realiza funciones específicas del sistema operativo que permiten a los clientes asociar árboles de directorios remotos a un punto del sistema local.
+El proceso de montaje también permite al servidor gestionar los privilegios de acceso remoto a un conjunto restringido de clientes a través un control de exportación.
+El administrador de bloqueo proporciona soporte para bloqueo de archivos cuando se utiliza en el entorno NFS.
+El protocolo de administración de red local, Network Lock Manager (NLM), aisla los aspectos inherentes al bloqueo de archivos en un protocolo separado.
+Fuente: http: / /www.networksorcery.com / enp / protocol / nfs.htm
+Consulte el manual: nfs.
+nntp
+Este kioslave no se puede utilizar con servidores que no implementen el comando GROUP, incluyendo algunas versiones del popular servicio de noticias INN que es utilizado frecuentemente por ISP s.
+Funciona con leafnode, que mucha gente utiliza para mantener un caché de árticulos de noticias en su propio disco o dentro de su LAN.
+Si introduce un nombre de grupo, como arriba, y el grupo está disponible, verá los mensajes almacenados para ese grupo en Konqueror como iconos.
+Si no introduce un nombre de grupo, y sólo el nombre de servidor, verá una lista de los grupos disponibles.
+pop3
+El Post Office Protocol (POP3) permite que un usuario en una estación de trabajo acceda al correo desde un servidor de correo.
+pop3s
+print
+El KIOSlave print proporciona acceso rápido para explorar diferentes secciones de KDEPrint a través de carpetas virtuales.
+Estas carpetas proporcionan algo de información y acceso rápido a su subsistema de impresión.
+print: / representa uno de los KIOSlaves más útiles de los implementados por KDE.
+Para acceder a él, simplemente introduzca print: / en el campo de entrada de direcciones de Konqueror. print: / no sólo proporciona acceso sólo de lectura a su subsistema de impresión, sino que le permite cambiar las opciones de sus impresoras, de su sistema de impresión y le permite crear nuevas impresoras y clases.
+Se le solicitará la contraseña del administrador o de root, si no está autorizado a ver o ejecutar una operación como usuario normal.
+Puede marcar accesos rápidos usados frecuentemente como print: / manager
+La sintáxis válida es o print: / [ruta-a-carpeta-virtual] o print :[ ruta-a-carpeta-virtual]
+Advierta que algunas de las vistas y acciones ofrecidas dependen fuertemente del subsistema de impresión instalado en su máquina y que estén activadas para KDE Las páginas mostrando información de la impresora sólo muestran aquellas partes que son válidas para el subsistema de impresión seleccionado para KDE. (De modo que si usted normalmente ejecuta CUPS, pero cambió temporalmente a Impresión general de UNIX LPD, lo que es posible, verá menos información sobe la impresora, porque LPD no es capaz de usar la misma cantidad de opciones que son posibles con CUPS).
+Sintáxis válida para acceder a diferentes carpetas virtuales y una corta explicación de lo que representan:
+Algunos ejemplos
+print: / (es decir, la raíz del kioslave de print)
+Raíz virtual para navegar por su sistema de impresión.
+Muestra subcarpetas clases, impresoras, administrador, y especiales
+print: / classes o print:classes
+Ver sus clases de impresora (soportado y sólo útil para CUPS)
+print: / classes / nombre_de_clase o print:classes / nombre_de_clase
+ver todos los miembros de la clase de impresoras con ese nombre (soportado y sólo útil para CUPS)
+print: / printers o print:printers
+lista todas sus impresoras.
+Pulsando sobre el nombre se le mostrará más información sobre dicha impresora
+print: / printers / nombre_de_impresora o print:printers / nombre_de_impresora
+muestra información útil sobre la impresora en cuestión
+print: / manager o print:manager
+abre una página muy similar a la del módulo del administrador de impresora de KDE (KDEPrint) dentro del centro de control de KDE.
+Cambie aquí a otro sistema diferente de impresión o ejecute cualquier otra tarea administrativa.
+Este es el más importante de los puntos de acceso a sus sistema de impresión.
+print: / specials o print:specials
+lista todas las impresoras especiales disponibles.
+Verá algo así como:
+Las dos que le permiten guardar un archivo de impresión al disco en formatos PostScript o PDF.
+La que lo envia como adjunto PDF a través de KMail.
+Y por último, la que lo envia por fax, si tiene activado alguno de los programas soportados de fax, Hylafax o efax.
+rdate
+Solicitará una URL de un servidor de tiempos RFC 868.
+Las operaciones de red requieren información sincronizada temporalmente para asegurar la máxima operatividad de la red.
+Consulte el manual: fecha y hora de red.
+rlan
+Sin documentar todavía
+rlogin
+Para usar esta propiedad de kioslave, introduzca en la barra URL de Konqueror rlogin: / maquina_a_la_que_conectarse
+El kioslave rlogin utiliza el nombre de usuario de la cuenta que usted está actualmente utilizando en KDE
+Consulte el manual: rlogin.
+sftp
+SFTP es un protocolo de transferencia segura de archivos. sftp es un programa interactivo de transferencia de archivos, similar a ftp, pero que realiza todas las operaciones a través de un transporte cifrado ssh.
+Puede utilizar muchas propiedades de ssh, incluyendo autentificación de clave pública y compresión.
+Consulte el manual de: sftp.
+SMB
+Para ver los grupos de trabajo, introduzca smb: /.
+El ioslave de smb es un interfaz de la herramienta smbclient, que es parte del paquete de Samba.
+Esto significa que necesita tener instalado Samba para utilizar este ioslave.
+Esto es especialmente útil si forma parte de un dominio de Windows NT.
+Allí también puede fijar el nombre de su grupo de trabajo, pero en la mayor parte de los casos no es necesario.
+Autor:
+Alexander Neundorf neundorf@kde.org
+smtp
+Un protocolo para enviar correo desde la estación de trabajo del cliente al servidor de correo.
+Consulte:
+Simple Mail Transfer Protocol.
+tar
+Consulte el manual: tar.
+telnet
+El protocolo de terminal de red (TELNET) permite a un usuario acceder a cualquier ordenador en la red que soporte TELNET.
+Consulte el manual: telnet.
+thumbnail
+El kioslave thumbnail utiliza plugins para generar las miniaturas actuales.
+Consulte la documentación en las fuentes para más información.
+webdav
+WebDAV es un protocolo de Versiones y Autoría distribuido (D istributed A uthoring y V ersioning) para la Web.
+Le permite la administración sencilla de documentos y procedimientos (scripts) en un servidor http, y tiene propiedades diseñadas para simplificar la administración de versiones entre varios autores.
+El uso de este protocolo es sencillo.
+Introduzca la dirección que desea visualizar, similar a una URL http excepto por el prefijo del nombre del protocolo webdav: / /.
+Si especifica un nombre de directorio, se le mostrará una lista de archivos y directorios, y podrá manipular dichos directorios y archivos como podría hacerlo con cualquier otro sistema de archivos.
+Prestaciones de WebDAV
+Bloqueo
+El bloqueo de archivos permite a los usuarios bloquear un archivo, informando al resto de que usted está trabajando en dicho archivo.
+De este modo, la edición se puede hacer sin miedo a que los cambios puedan ser sobreescritos por otra persona que también edita el mismo documento.
+Acceso a la fuente del archivo
+WebDAV le permite acceso al procedimiento que se invoca para producir la página específica, de modo que se pueden realizar cambios al propio procedimiento.
+Soporte de propiedades por documento
+Se pueden configurar propiedades arbitrarias para facilitar la identificación de un documento, como por ejemplo el autor.
+Para hacer uso de estas capacidades adicionales, necesitará una aplicación que las soporte.
+Ninguna aplicación las soporta actualmente a través de este kioslave.
+webdavs
+WebDAVS es el protocolo WebDAV cifrado con SSL.

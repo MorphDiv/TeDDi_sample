@@ -1,0 +1,60 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+Nota:
+Todo lo siguiente se aplica a partir de la versión 3.0.7 y posterior.
+Internamente en PHP se mantiene el estado de la conexión.
+Hay 3 posibles estados:
+
+1 - ABORTED (Abortado)
+2 - TIMEOUT (Fuera de tiempo)
+Cuando un script PHP se está ejecutando se activa el estado NORMAL.
+Si el cliente remoto se desconecta, se pasa al estado ABORTED.
+Esto suele ocurrir cuando el usuario pulsa en el botón STOP del navegador.
+Si se alcanza el límite de tiempo impuesto por PHP (ver set_time_limit()), se pasa al estado TIMEOUT.
+Puedes decidir si quieres que la desconexión de un cliente cause que tu script sea abortado.
+Algunas veces es cómodo que tus scripts se ejecuten por completo, incluso si no existe ya un navegador remoto que reciba la salida.
+El comportamiento por defecto es sin embargo, que tu script se aborte cuando el cliente remoto se desconecta.
+Este comportamiento puede ser configurado vía la directiva ignore_user_abort en el fichero php3.ini, o también con la función ignore_user_abort().
+Si no le espeficicas al PHP que cuando un usuario aborte lo ignore, tu script terminará su ejecución.
+La única excepción es si tienes registrada un función de desconexión usando la función register_shutdown_function().
+Con una función de desconexión, cuando un usuario remoto pulsa en el botón STOP, la próxima vez que tu script intenta mostrar algo, PHP detecta que la conexión ha sido abortada y se llama a la función de desconexión.
+Esta función de desconexión también se llama al final de la ejecución de tu script cuando se ha ejecutado normalmente, de manera que si quieres hacer algo diferente en caso de que un cliente se haya desconectado, puedes usar la función connection_aborted().
+Esta función devuelve TRUE si la conexión fue abortada.
+Vuestro script también se puede terminar por un temporizador interno.
+El timeout por defecto es de 30 segundos.
+Se puede cambiar usando la directiva max_execution_time en el fichero php.ini o la correspondiente directiva php_max_execution_time en la configuración del servidor de páginas Apache, como también con la función set_time_limit().
+Cuando el temporizador expira, el script se aborta como en el caso de la desconexión del cliente, de manera que si se ha definido una función de desconexión, esta se llamará.
+Dentro de esta función de desconexión, puedes comprobar si fue el timeout el que causó que se llamara a la función de desconexión, llamando a la función connection_timeout().
+Esta función devolverá verdadero si el timeout causa que se llame a la función de desconexión.
+Hay que destacar que ambos, el estado ABORTED y el TIMEOUT, se pueden activar al mismo tiempo.
+Esto es posible si le dices a PHP que ignore las desconexiones intencionadas de los usuarios.
+PHP aún notará el hecho de que el usuario puede haberse desconectado, pero el script continuará ejecutándose.
+Si se alcanza el tiempo límite de ejecución será abortado y, si se ha definido una función de desconexión, esta será llamada.
+En este punto, encontrarás que las funciones connection_timeout() y connection_aborted() devuelven verdadero.
+Puedes comprobar ambos estados de una manera simple usando la función connection_status().
+Esta función devuelve un campo de bit de los estados activos.
+De este modo, si ambos estados están activos devolvería por ejemplo un valor 3.
+Anterior
+Inicio
+Siguiente
+Usando archivos remotos
+Subir
+Conexiones persistentes a bases de datos

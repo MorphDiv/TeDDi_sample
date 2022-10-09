@@ -1,0 +1,188 @@
+# language_name_wals:	Turkish
+# language_name_glotto:	Turkish
+# ISO_6393:	tur
+# year_composed:	NA
+# year_published:	2013
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	Ubuntu
+# source:	https://object.pouta.csc.fi/OPUS-Ubuntu/v14.10/raw/tr.zip
+# copyright_short:	http://opus.nlpl.eu/Ubuntu.php
+# copyright_long:	http://opus.nlpl.eu/Ubuntu.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+%s: `%s' seçeneği belirsiz
+%s: `--%s' seçeneği bağımsız değişkene izin vermiyor
+%s: `%c%s' seçeneği bağımsız değişkene izin vermiyor
+%s: `%s' seçeneği bir bağımsız değişken gerektiriyor
+%s: tanımlanamayan seçenek`--%s'
+%s: tanımlanamayan seçenek `%c%s'
+%s: yasak seçenek -- %c
+%s: geçersiz seçenek -- %c
+%s: seçenek bir bağımsız değişken gerektiriyor -- %c
+%s: `-W %s' seçeneği belirsiz
+%s: `-W %s' seçeneği bağımsız değişkene izin vermiyor
+Geçerli komutlar: create, update, updatev, graph, graphv, dump, restore,
+ last, lastupdate, first, info, fetch, tune,
+ resize, xport, flushcached
+Geçerli uzaktan kontrol komutları: quit, ls, cd, mkdir, pwd
+* create - yeni RRD oluştur
+
+ rrdtool create dosyaismi [--start|-b start time]
+ [--step|-s step]
+ [--no-overwrite|-O]
+ [DS:ds-name:DST:dst arguments]
+ [RRA:CF:cf arguments]
+* dump - bir RRD için XML dökümü yap
+
+ rrdtool dump dosyaismi.rrd >dosyaismi.xml
+* info - RRD yapılandırması ve durumu hakkında bilgi döner
+
+ rrdtool info dosyaismi.rrd
+* restore - XML dökümünden RRD dosyasını geri yükle
+
+ rrdtool restore [--range-check|-r] [--force-overwrite|-f] dosyaismi.xml dosyaismi.rrd
+* last - RRD için son güncelleme zamanını göster
+
+ rrdtool last dosyaismi.rrd
+* lastupdate - bir RRD içindeki her DS için kaydedilen en güncel
+ verileri döner.
+ rrdtool lastupdate dosyaismi.rrd
+* first - bir RRD içinde RRA için ilk güncelleme zamanını göster
+
+ rrdtool first dosyaismi.rrd [--rraindex sayı]
+* update - RRD güncelle
+
+ rrdtool update dosyaismi
+ [--template|-t ds-name:ds-name:...]
+ [--daemon <adres>]
+ time|N:value[:value...]
+
+ at-time@value[:value...]
+
+ [ time:value[:value...] ..]
+* updatev - güncellemenin ayrıntılı bir sürümü
+ güncellenen değerler, RRAlar ve veri kaynakları hakkında bilgi döner
+
+ rrdtool updatev dosyaismi
+ [--template|-t ds-name:ds-name:...]
+ time|N:value[:value...]
+
+ at-time@value[:value...]
+
+ [ time:value[:value...] ..]
+* fetch - bir RRDden veri çıkar
+
+ rrdtool fetch dosyaismi.rrd CF
+ [-r|--resolution çözünürlük]
+ [-s|--start başlangıç] [-e|--end bitiş]
+ [--daemon <adres>]
+* flushcached - önbelleklenen veriyi RRD dosyasına boşalt
+
+ rrdtool flushcached dosyaismi.rrd
+ [--daemon <adres>]
+* graph - bir veya birkaç RRDden grafik üret
+
+ rrdtool graph dosyaismi [-s|--start saniyeler] [-e|--end saniyeler]
+* graphv - bir veya birkaç RRDden grafik üret
+ grafikten önce meta veriyi bastırarak
+
+ rrdtool graphv dosyaismi [-s|--start saniyeler] [-e|--end saniyeler]
+ [-x|--x-grid x-axis grid and label]
+ [-Y|--alt-y-grid] [--full-size-mode]
+ [-y|--y-grid y-axis grid and label]
+ [-v|--vertical-label string] [-w|--width pixels]
+ [--right-axis scale:shift] [--right-axis-label label]
+ [--right-axis-format format]
+ [-h|--height pixels] [-o|--logarithmic]
+ [-u|--upper-limit value] [-z|--lazy]
+ [-l|--lower-limit value] [-r|--rigid]
+ [-g|--no-legend] [--daemon <address>]
+ [-F|--force-rules-legend]
+ [-j|--only-graph]
+ [-n|--font FONTTAG:size:font]
+ [-m|--zoom factor]
+ [-A|--alt-autoscale]
+ [-M|--alt-autoscale-max]
+ [-G|--graph-render-mode {normal,mono}]
+ [-R|--font-render-mode {normal,light,mono}]
+ [-B|--font-smoothing-threshold size]
+ [-T|--tabwidth width]
+ [-E|--slope-mode]
+ [-P|--pango-markup]
+ [-N|--no-gridfit]
+ [-X|--units-exponent value]
+ [-L|--units-length value]
+ [-S|--step seconds]
+ [-f|--imginfo printfstr]
+ [-a|--imgformat PNG]
+ [-c|--color COLORTAG#rrggbb[aa]]
+ [--border width
+ [-t|--title string]
+ [-W|--watermark string]
+ [DEF:vname=rrd:ds-name:CF]
+ [CDEF:vname=rpn-expression]
+ [VDEF:vdefname=rpn-expression]
+ [PRINT:vdefname:format]
+ [GPRINT:vdefname:format]
+ [COMMENT:text]
+ [SHIFT:vname:offset]
+ [TEXTALIGN:{left|right|justified|center}]
+ [TICK:vname#rrggbb[aa][:[fraction][:legend]]]
+ [HRULE:value#rrggbb[aa][:legend]]
+ [VRULE:value#rrggbb[aa][:legend]]
+ [LINE[width]:vname[#rrggbb[aa][:[legend][:STACK]]]]
+ [AREA:vname[#rrggbb[aa][:[legend][:STACK]]]]
+ [PRINT:vname:CF:format] (deprecated)
+ [GPRINT:vname:CF:format] (deprecated)
+ [STACK:vname[#rrggbb[aa][:legend]]] (deprecated)
+* tune - Modify some basic properties of an RRD
+
+ rrdtool tune filename
+ [--heartbeat|-h ds-name:heartbeat]
+ [--data-source-type|-d ds-name:DST]
+ [--data-source-rename|-r old-name:new-name]
+ [--minimum|-i ds-name:min] [--maximum|-a ds-name:max]
+ [--deltapos scale-value] [--deltaneg scale-value]
+ [--failure-threshold integer]
+ [--window-length integer]
+ [--alpha adaptation-parameter]
+ [--beta adaptation-parameter]
+ [--gamma adaptation-parameter]
+ [--gamma-deviation adaptation-parameter]
+ [--aberrant-reset ds-name]
+* resize - bir RRDdeki RRAlardan birinin uzunluğunu değiştir
+
+ rrdtool resize dosyaismi rranumarası GROW|SHRINK satır
+* xport - bir veya birden fazla RRD'den XML yığını oluştur
+
+ rrdtool xport [-s|--start saniye] [-e|--end saniye]
+ [-m|--maxrows satır]
+ [--step saniye]
+ [--enumds] [--json]
+ [DEF:vname=rrd:ds-name:CF]
+ [CDEF:vname=rpn-expression]
+ [XPORT:vname:legend]
+* quit - uzaktan kontrol kipindeki bir oturumu kapatma
+
+ rrdtool quit
+* ls - bulunulan dizindeki tüm *.rrd dosyalarını listeler
+
+ rrdtool ls
+* cd - bulunulan dizini değiştirir
+
+ rrdtool cd yeni dizin
+* mkdir - yeni bir dizin oluşturur
+
+ rrdtool mkdir yenidizinismi
+* pwd - bulunulan etkin dizini döner
+
+ rrdtool pwd
+RRDtool GNU Genel Kamu Lisansı Sürüm 2 Hükümleri
+altında dağıtılmaktadır. (www.gnu.org/copyleft/gpl.html)
+
+Daha fazla bilgi için RRD yardım sayfalarını okuyun.

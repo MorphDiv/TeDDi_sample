@@ -1,0 +1,29 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Arrays are stored using Zend's internal hash tables, which can be accessed using the zend_hash_*() API. For every array that you want to create, you need a new hash table handle, which will be stored in the ht member of the zval.value container.
+There's a whole API solely for the creation of arrays, which is extremely handy. To start a new array, you call array_init().
+To add new elements to the array, you can use numerous functions, depending on what you want to do. 표 33-1, 표 33-2 and 표 33-3 describe these functions. All functions return FAILURE on failure and SUCCESS on success.
+표 33-1. Zend's API for Associative Arrays
+표 33-2. Zend's API for Indexed Arrays, Part 1
+표 33-3. Zend's API for Indexed Arrays, Part 2
+All these functions provide a handy abstraction to Zend's internal hash API. Of course, you can also use the hash functions directly - for example, if you already have a zval container allocated that you want to insert into an array. This is done using zend_hash_update()() for associative arrays (see 예 33-3) and zend_hash_index_update() for indexed arrays (see 예 33-4):
+예 33-3. Adding an element to an associative array.
+예 33-4. Adding an element to an indexed array.
+To emulate the functionality of add_next_index_*(), you can use this:
+Note: To return arrays from a function, use array_init() and all following actions on the predefined variable return_value (given as argument to your exported function; see the earlier discussion of the call interface). You do not have to use MAKE_STD_ZVAL on this.
+Tip: To avoid having to write new_array- value.ht every time, you can use HASH_OF(new_array), which is also recommended for compatibility and style reasons.

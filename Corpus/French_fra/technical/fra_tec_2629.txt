@@ -1,0 +1,57 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Les fonctions d'authentification HTTP de PHP ne sont disponibles que si PHP est exécuté comme module Apache, et non pas sous la forme d 'un CGI.
+Sous cette forme, il est possible d'utiliser la fonction header() Sous cette forme, il est possible d'utiliser la fonction header() pour demander une authentification ("Authentication Required ") au client, générant ainsi l'apparition d'une fenêtre de demande d 'utilisateur et de mot de passe.
+Une fois que les champs ont été remplis, l'URL sera de nouveau appelée, avec les variables $PHP_AUTH_USER, $PHP_AUTH_PW et $PHP_AUTH_TYPE contenant respectivement le nom d'utilisateur, le mot de passe et le type d 'authentification.
+Actuellement, seule l'authentification simple ("Basic") est supportée.
+Reportez-vous à la fonction header() pour plus d 'informations.
+Voici un exemple de script qui force l 'authentification du client pour accéder à une page:
+Exemple 16-1.
+Exemple d 'authentification HTTP
+?php if( !isset($PHP_AUTH_USER)) {Header( "WWW-Authenticate:
+Basic realm=\" My Realm\""); Header("HTTP / 1.0 401 Unauthorized"); echo "Texte à envoyer si le client appuie sur le bouton d'annulation\n"; exit;} else {echo "Bonjour $PHP_AUTH_USER.
+P "echo "Vous avez entré le mot de passe $PHP_AUTH_PW.
+P "}?
+Au lieu d'afficher simplement les variables globales $PHP_AUTH_USER et $PHP_AUTH_PW, vous préférerez sûrement vérifier la validité du nom d 'utilisateur et du mot de passe.
+Par exemple, en envoyant ces informations à une base de données, ou en recherchant dans un fichier dbm.
+Méfiez-vous des navigateurs buggés, tels que Internet Explorer.
+Ils semblent très susceptibles concernant l 'ordre des en-têtes.
+Envoyer l'en-tête d'authentification (WWW-Authenticate) avant le code de HTTP / 1.0 401 semble lui convenir jusqu 'à présent.
+Pour éviter que quelqu'un écrive un script qui révèle les mots de passe d'une page, à la quelle on a accédé par une authentification traditionnelle, les variables globales PHP_AUTH ne seront pas assignées si l 'authentification externe a été activée pour cette page.
+Dans ce cas, la variable $REMOTE_USER peut être utilisée pour identifier l'utilisateur à l 'extérieur.
+Notez cependant que les manipulations ci-dessus n 'empêchent pas quiconque possède une page non authentifiée de voler les mots de passe des pages protégées, sur le même serveur.
+Netscape et Internet Explorer effaceront le cache d'authentification client s 'ils recoivent une réponse 401.
+Cela permet de déconnecter un utilisateur, pour le forcer à ré-entrer son nom de compte et son mot de passe.
+Certains programmeurs l'utilisent pour donner un délai d 'expiration, ou alors, fournissent un bouton de déconnexion.
+Exemple 16-2.
+Authentification HTTP avec nom d 'utilisateur / mot de passe forcé
+?php function authenticate() {Header ("WWW-Authenticate:
+Basic realm=\" Test Authentication System\""); Header ("HTTP / 1.0 401 Unauthorized"); echo "Vous devez entrer un nom d'utilisateur valide et un mot de passe correct pour accéder à cette ressource\n"; exit;} if(!isset($PHP_AUTH_USER) | | ($SeenBefore == 1 !strcmp($OldAuth, $PHP_AUTH_USER))) {authenticate();} else {echo "Bienvenue $PHP_AUTH_USER BR "; echo "Old: $OldAuth"; echo" form action=\"$PHP_SELF\ "method=post \n"; echo" input type=hidden NAME=\"SeenBefore\ "VALUE=\"1\" \n"; echo "input type=hidden NAME=\"OldAuth\" VALUE=\"$PHP_AUTH_USER\ "\n"; echo" input type=submit value=\"Re Authenticate\ "\n" echo "/ FORM \n";}?
+Ce comportement n'est pas nécessaire par le standard d 'authentification HTTP Basic.
+Les tests avec Lynx ont montré qu'il n'affectait pas les informations de session lors de la réception d 'un message de type 401.
+Ce qui fait que presser la touche "retour" (back) à un client lynx précédemment authentifié donnera l 'accès direct à la ressource.
+Cependant, l'utilisateur peut utiliser la touche '_ 'pour détruire les anciennes authentifications.
+Notez aussi que tout ceci ne fonctionne pas sous Microsoft IIS et que les limitations de PHP en version CGI sont dues aux limitations de IIS.
+Précédent
+Sommaire
+Suivant
+Caractéristiques
+Niveau supérieur

@@ -1,0 +1,72 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 5.
+Security
+Next
+Using PHP as a CGI binary is an option for setups that for some reason do not wish to integrate PHP as a module into server software (like Apache), or will use PHP with different kinds of CGI wrappers to create safe chroot and setuid environments for scripts.
+This setup usually involves installing executable PHP binary to the web server cgi-bin directory.
+CERT advisory CA-96.11 recommends against placing any interpreters into cgi-bin.
+Even if the PHP binary can be used as a standalone interpreter, PHP is designed to prevent the attacks this setup makes possible:
+Accessing system files: http: / /my.host / cgi-bin / php? / etc / passwd
+The query information in a url after the question mark (?) is passed as command line arguments to the interpreter by the CGI interface.
+Usually interpreters open and execute the file specified as the first argument on the command line.
+When invoked as a CGI binary, PHP refuses to interpret the command line arguments.
+Accessing any web document on server: http: / /my.host / cgi-bin / php / secret / doc.html
+The path information part of the url after the PHP binary name, / secret / doc.html is conventionally used to specify the name of the file to be opened and interpreted by the CGI program.
+Usually some web server configuration directives (Apache:
+Action) are used to redirect requests to documents like http: / /my.host / secret / script.php to the PHP interpreter.
+With this setup, the web server first checks the access permissions to the directory / secret, and after that creates the redirected request http: / /my.host / cgi-bin / php / secret / script.php.
+Unfortunately, if the request is originally given in this form, no access checks are made by web server for file / secret / script.php, but only for the / cgi-bin / php Unfortunately, if the request is originally given in this form, no access checks are made by web server for file / secret / script.php, but only for the / cgi-bin / php file.
+This way any user able to access / cgi-bin / php is able to access any protected document on the web server.
+In PHP, compile-time configuration option --enable-force-cgi-redirect and runtime configuration directives doc_root and user_dir can be used to prevent this attack, if the server document tree has any directories with access restrictions.
+See below for full the explanation of the different combinations.
+If your server does not have any content that is not restricted by password or ip based access control, there is no need for these configuration options.
+If your web server does not allow you to do redirects, or the server does not have a way to communicate to the PHP binary that the request is a safely redirected request, you can specify the option --enable-force-cgi-redirect to the configure script.
+You still have to make sure your PHP scripts do not rely on one or another way of calling the script, neither by directly http: / /my.host / cgi-bin / php / dir / script.php nor by redirection http: / /my.host / dir / script.php.
+Redirection can be configured in Apache by using AddHandler and Action directives (see below).
+This compile-time option prevents anyone from calling PHP directly with a url like http: / /my.host / cgi-bin / php / secretdir / script.php.
+Instead, PHP will only parse in this mode if it has gone through a web server redirect rule.
+Usually the redirection in the Apache configuration is done with the following directives:
+Action php-script / cgi-bin / php AddHandler php-script .php
+This option has only been tested with the Apache web server, and relies on Apache to set the non-standard CGI environment variable REDIRECT_STATUS This option has only been tested with the Apache web server, and relies on Apache to set the non-standard CGI environment variable REDIRECT_STATUS on redirected requests.
+If your web server does not support any way of telling if the request is direct or redirected, you cannot use this option and you must use one of the other ways of running the CGI version documented here.
+To include active content, like scripts and executables, in the web server document directories is sometimes consider an insecure practice.
+If, because of some configuration mistake, the scripts are not executed but displayed as regular HTML documents, this may result in leakage of intellectual property or security information like passwords.
+Therefore many sysadmins will prefer setting up another directory structure for scripts that are accessible only through the PHP CGI, and therefore always interpreted and not displayed as such.
+Also if the method for making sure the requests are not redirected, as described in the previous section, is not available, it is necessary to set up a script doc_root that is different from web document root.
+You can set the PHP script document root by the configuration directive doc_root in the configuration file, or you can set the environment variable PHP_DOCUMENT_ROOT.
+If it is set, the CGI version of PHP will always construct the file name to open with this doc_root and the path information in the request, so you can be sure no script is executed outside this directory (except for user_dir below).
+Another option usable here is user_dir.
+When user_dir is unset, only thing controlling the opened file name is doc_root.
+Opening an url like http: / /my.host / ~user / doc.php does not result in opening a file under users home directory, but a file called ~user / doc.php under doc_root (yes, a directory name starting with a tilde [~]).
+If user_dir is set to for example public_php, a request like http: / /my.host / ~user / doc.php will open a file called doc.php under the directory named public_php under the home directory of the user.
+If the home of the user is / home / user, the file executed is / home / user / public_php / doc.php.
+user_dir expansion happens regardless of the doc_root setting, so you can control the document root and user directory access separately.
+A very secure option is to put the PHP parser binary somewhere outside of the web tree of files.
+In / usr / local / bin, for example.
+The only real downside to this option is that you will now have to put a line similar to:
+#! / usr / local / bin / php
+To get PHP to handle PATH_INFO and PATH_TRANSLATED information correctly with this setup, the php parser should be compiled with the --enable-discard-path configure option.
+Prev
+Home
+Next
+Security
+Up
+Installed as an Apache module

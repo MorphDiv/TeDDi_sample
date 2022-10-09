@@ -1,0 +1,123 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 33.
+Creating Variables
+Next
+Arrays are stored using Zend' s internal hash tables, which can be accessed using the zend_hash_*() API.
+For every array that you want to create, you need a new hash table handle, which will be stored in the ht member of the zval.value container.
+There 's a whole API solely for the creation of arrays, which is extremely handy.
+To start a new array, you call array_init().
+zval *new_array; MAKE_STD_ZVAL(new_array); array_init(new_array);
+To add new elements to the array, you can use numerous functions, depending on what you want to do.
+Table 33-1, Table 33-2 and Table 33-3 describe these functions.
+All functions return FAILURE on failure and SUCCESS on success.
+Table 33-1.
+Zend 's API for Associative Arrays
+Function
+Description
+add_assoc_long( zval *array, char *key, long n) ;()
+Adds an element of type long.
+add_assoc_unset( zval *array, char *key) ;()
+Adds an unset element.
+add_assoc_bool( zval *array, char *key, int b) ;()
+Adds a Boolean element.
+add_assoc_resource( zval *array, char *key, int r) ;()
+Adds a resource to the array.
+add_assoc_double( zval *array, char *key, double d) ;()
+Adds a floating-point value.
+add_assoc_string( zval *array, char *key, char *str, int duplicate) ;()
+Adds a string to the array.
+The flag duplicate specifies whether the string contents have to be copied to Zend internal memory.
+add_assoc_stringl( zval *array, char *key, char *str, uint length, int duplicate); ()
+Adds a string with the desired length length to the array.
+Otherwise, behaves like add_assoc_string().
+add_assoc_zval( zval *array, char *key, zval *value) ;()
+Adds a zval to the array.
+Useful for adding other arrays, objects, streams, etc...
+Table 33-2.
+Zend 's API for Indexed Arrays, Part 1
+Function
+Description
+add_index_long( zval *array, uint idx, long n) ;()
+Adds an element of type long.
+add_index_unset( zval *array, uint idx) ;()
+Adds an unset element.
+add_index_bool( zval *array, uint idx, int b) ;()
+Adds a Boolean element.
+add_index_resource( zval *array, uint idx, int r) ;()
+Adds a resource to the array.
+add_index_double( zval *array, uint idx, double d) ;()
+Adds a floating-point value.
+add_index_string( zval *array, uint idx, char *str, int duplicate) ;()
+Adds a string to the array.
+The flag duplicate specifies whether the string contents have to be copied to Zend internal memory.
+add_index_stringl( zval *array, uint idx, char *str, uint length, int duplicate) ;()
+Adds a string with the desired length length to the array.
+This function is faster and binary-safe.
+Otherwise, behaves like add_index_string( )().
+add_index_zval( zval *array, uint idx, zval *value) ;()
+Adds a zval to the array.
+Useful for adding other arrays, objects, streams, etc...
+Table 33-3.
+Zend 's API for Indexed Arrays, Part 2
+Function
+Description
+add_next_index_long( zval *array, long n) ;()
+Adds an element of type long.
+add_next_index_unset( zval *array) ;()
+Adds an unset element.
+add_next_index_bool( zval *array, int b) ;()
+Adds a Boolean element.
+add_next_index_resource( zval *array, int r) ;()
+Adds a resource to the array.
+add_next_index_double( zval *array, double d) ;()
+Adds a floating-point value.
+add_next_index_string( zval *array, char *str, int duplicate) ;()
+Adds a string to the array.
+The flag duplicate specifies whether the string contents have to be copied to Zend internal memory.
+add_next_index_stringl( zval *array, char *str, uint length, int duplicate) ;()
+Adds a string with the desired length length to the array.
+This function is faster and binary-safe.
+Otherwise, behaves like add_index_string( )().
+add_next_index_zval( zval *array, zval *value) ;()
+Adds a zval to the array.
+Useful for adding other arrays, objects, streams, etc...
+All these functions provide a handy abstraction to Zend 's internal hash API.
+Of course, you can also use the hash functions directly - for example, if you already have a zval container allocated that you want to insert into an array.
+This is done using zend_hash_update( )() for associative arrays (see Example 33-3) and zend_hash_index_update() for indexed arrays (see Example 33-4):
+Example 33-3.
+Adding an element to an associative array.
+zval *new_array, *new_element; char *key = "element_key"; MAKE_STD_ZVAL(new_array); MAKE_STD_ZVAL(new_element); array_init(new_array); ZVAL_LONG(new_element, 10); if(zend_hash_update(new_array - value.ht, key, strlen(key) + 1, (void *) new_element, sizeof(zval *), NULL) == FAILURE) {/ / do error handling here}
+Example 33-4.
+Adding an element to an indexed array.
+zval *new_array, *new_element; int key = 2; MAKE_STD_ZVAL(new_array); MAKE_STD_ZVAL(new_element); array_init(new_array); ZVAL_LONG(new_element, 10); if(zend_hash_index_update(new_array - value.ht, key, (void *) new_element, sizeof(zval *), NULL) == FAILURE) {/ / do error handling here}
+To emulate the functionality of add_next_index_*(), you can use this:
+zend_hash_next_index_insert( ht, zval **new_element, sizeof(zval *), NULL)
+Note:
+To return arrays from a function, use array_init() and all following actions on the predefined variable return_value (given as argument to your exported function; see the earlier discussion of the call interface).
+You do not have to use MAKE_STD_ZVAL on this.
+Tip:
+To avoid having to write new_array - value.ht every time, you can use HASH_OF( new_array), which is also recommended for compatibility and style reasons.
+Prev
+Home
+Next
+Booleans
+Up
+Objects

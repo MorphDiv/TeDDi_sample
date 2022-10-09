@@ -1,0 +1,67 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Instruction Put [Exécution]
+/text/sbasic/shared/03020204.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+Put, instruction
+Instruction Put [Exécution]
+Écrit un enregistrement dans un fichier relatif ou une séquence d'octets dans un fichier binaire.
+Get
+Syntaxe :
+Put [#] FileNumber As Integer, [position], Variable
+Paramètres :
+FileNumber :
+expression au format nombre entier définissant le fichier de destination de l'écriture.
+Position :
+pour les fichiers relatifs (ouverts par accès Random), numéro de l'enregistrement à écrire.
+Pour les fichiers binaires (accès Binary), position de l'octet auquel l'écriture doit commencer, dans le fichier.
+Variable :
+nom de la variable à écrire dans le fichier.
+Len
+de l'instruction
+Open
+, l'espace entre la fin de l'enregistrement récemment écrit et le prochain enregistrement est complété par des données existantes provenant du fichier en cours d'écriture.
+Remarque concernant les fichiers binaires : le contenu des variables est écrit à la position spécifiée et le pointeur de fichier est inséré immédiatement après le dernier octet.
+Aucun espace n'est laissé entre les enregistrements.
+Exemple :
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM Doit être un type de variant
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM Position du début de l'écriture
+Put #iNumber,, &quot; Ceci est la première ligne de texte &quot; REM Remplir la ligne avec du texte
+Put #iNumber,, &quot; Ceci est la seconde ligne de texte. &quot;
+Put #iNumber,, &quot; Ceci est la troisième ligne de texte. &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; Ceci est un nouveau texte. &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; Ceci est le texte de l'enregistrement 20. &quot;
+Print Lof(#iNumber)
+Close #iNumber
+end sub

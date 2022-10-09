@@ -1,0 +1,71 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+We 'll start with the creation of a very simple extension at first, which basically does nothing more than implement a function that returns the integer it receives as parameter.
+Example 28-1 shows the source.
+Example 28-1.
+A simple extension.
+/* include standard header * / #include "php.h" / * declaration of functions to be exported * / ZEND_FUNCTION(first_module); / * compiled function list so Zend knows what's in this module * / zend_function_entry firstmod_functions[] = {ZEND_FE(first_module, NULL) {NULL, NULL, NULL}}; / * compiled module information * / zend_module_entry firstmod_module_entry = {STANDARD_MODULE_HEADER, "First Module", firstmod_functions, NULL, NULL, NULL, NULL, NULL, NO_VERSION_YET, STANDARD_MODULE_PROPERTIES}; / * implement standard "stub "routine to introduce ourselves to Zend * / #if COMPILE_DL_FIRST_MODULE ZEND_GET_MODULE(firstmod) #endif / * implement function that is meant to be made available to PHP * / ZEND_FUNCTION(first_module) {long parameter; if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", parameter) == FAILURE) {return;} RETURN_LONG(parameter);}
+This code contains a complete PHP module.
+We' ll explain the source code in detail shortly, but first we'd like to discuss the build process. (This will allow the impatient to experiment before we dive into API discussions.)
+Note:
+The example source makes use of some features introduced with the Zend version used in PHP 4.1.0 and above, it won 't compile with older PHP 4.0.x versions.
+There are basically two ways to compile modules:
+Use the provided "make" mechanism in the ext directory, which also allows building of dynamic loadable modules.
+Compile the sources manually.
+The second method is good for those who (for some reason) don't have the full PHP source tree available, don't have access to all files, or just like to juggle with their keyboard.
+These cases should be extremely rare, but for the sake of completeness we 'll also describe this method.
+Compiling Using Make.
+To compile the sample sources using the standard mechanism, copy all their subdirectories to the ext To compile the sample sources using the standard mechanism, copy all their subdirectories to the ext directory of your PHP source tree.
+Then run buildconf, which will create an updated configure script containing appropriate options for the new extension.
+By default, all the sample sources are disabled, so you don 't have to fear breaking your build process.
+After you run buildconf, configure --help shows the following additional modules:
+--enable-array_experiments BOOK:
+Enables array experiments --enable-call_userland BOOK:
+Enables userland module --enable-cross_conversion BOOK:
+Enables cross-conversion module --enable-first_module BOOK:
+Enables first module --enable-infoprint BOOK:
+Enables infoprint module --enable-reference_test BOOK:
+Enables reference test module --enable-resource_test BOOK:
+Enables resource test module --enable-variable_creation BOOK:
+Enables variable-creation module
+The module shown earlier in Example 28-1 can be enabled with --enable-first_module or --enable-first_module=yes.
+Compiling Manually.
+To compile your modules manually, you need the following commands:
+Action
+Command
+Compiling
+cc -fpic -DCOMPILE_DL=1 -I / usr / local / include -I. -I.. -I.. / Zend -c -o your_object_file your_c_file
+Linking
+cc -shared -L / usr / local / lib -rdynamic -o your_module_file your_object_file( s)
+Note:
+All include paths in the example are relative to the directory ext.
+If you 're compiling from another directory, change the pathnames accordingly.
+Required items are the PHP directory, the Zend directory, and (if necessary), the directory in which your module resides.
+The link command is also a plain vanilla command instructing linkage as a dynamic module.
+You can include optimization options in the compilation command, although these have been omitted in this example (but some are included in the makefile template described in an earlier section).
+Note:
+Compiling and linking manually as a static module into the PHP binary involves very long instructions and thus is not discussed here. (It's not very efficient to type all those commands.)
+Prev
+Home
+Next
+PHP 's Automatic Build System
+Up
+Using Extensions

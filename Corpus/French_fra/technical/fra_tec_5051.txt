@@ -1,0 +1,73 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+LDAP siginifie:
+Lightweight Directory Access Protocol (Protocole léger d'accès aux annuaires).
+C'est un protocole utilisé pour accéder aux "serveurs de dossiers ".
+Ces serveurs sont des bases de données particulières, qui stockent les informations sous forme d 'arborescence.
+Le concept d'arborescence est similaire à celui de la structure de votre système de fichier, hormis le fait que dans ce contexte, la racine s'appelle "le monde", et que le premier niveau de sous-dossier s'appelle "pays ".
+Les niveaux encore en dessous sont des "compagnies" "organisation "ou "places", et encore plus bas, vous trouverez des "personnes" et même, des "équipements "et "documents".
+Pour identifier un fichier dans votre disque, vous utilisez un chemin tel que
+/usr / local / mon_application / documents
+Le slash indique une division dans la référence, et la séquence est lue de gauche à droite.
+l'équivalent d'une référence globale en LDAP s'appelle un "nom distingué "("distinguished name"), aussi appelé "dn".
+Un exemple de dn serait:
+cn=Jean Dupond,ou=Comptabilité,o=Ma Compagnie,c=FR
+La virgule marque la séparation de chaque division comme référence, et la séquence est lue de droite à gauche.
+Il faut donc lire:
+country = FR organization = Ma Compagnie organizationalUnit = Comptabilité commonName = Jean Dupond
+De la même façon qu'il n 'y a pas de règle obligatoire sur comment organiser les fichiers sur un disque dur, un responsable de serveur de dossiers peut organiser le serveur comme cela lui semble le plus pratique.
+Cependant, il y a des conventions à utiliser.
+Le principe est que vous ne pouvez pas écrire accéder à un serveur de dossier à moins que vous ne connaissiez sa structure, de même que vous ne pouvez une base de données sans en connaître les tables et les bases.
+Bien plus d'informations sont disponibles aux URL suivantes (en anglais):
+
+
+
+
+Le SDK Netscape contient un guide du programmeur très utile, au format HTML (et en anglais).
+Vous devez télécharger et compiler les librairies clients LDAP, soit celles de University of Michigan ldap-3.3, soit le Netscape Directory SDK 3.0.
+Le support LDAP de PHP n 'est pas activé par défaut.
+Vous devez utiliser l 'option de configuration --with-ldap lorsque vous compilez PHP.
+Le comportement de ces fonctions est affecté par la configuration dans le fichier php.ini.
+Tableau 1.
+
+
+
+
+
+
+
+Cette extension ne définit aucune ressource.
+Ces constantes sont définies par cette extension, et ne sont disponibles que si cette extension a été compilée avec PHP, ou bien chargée au moment de l 'exécution.
+Lit les informations sur toutes les entrées dont le nom commence par "S" sur le serveur de dossier, puis affiche le nom et l 'adresse email.
+Exemple 1.
+Recherche avec LDAP
+?php / / La s eacute; quence de base avec LDAP est / / connexion, liaison, recherche, interpr eacute;tation du r eacute;sultat / / d eacute;connexion echo "h3 requ ecirc;te de test de LDAP / h3"; echo "Connexion.. ."; $ds=ldap_connect("localhost"); / / doit ecirc;tre un serveur LDAP valide! echo "Le r eacute;sultat de connexion est ".$ds. "p"; if ($ds) {echo "Liaison.. ."; $r=ldap_bind($ds); / / this is an "anonymous "bind, typically / / read-only access echo "Le r eacute;sultat de connexion est ".$r." p "; echo "Recherchons (sn=S*).. ."; / / Recherche par nom $sr=ldap_search($ds ,"o=My Company, c=US", "sn=S*"); echo "Le r eacute;sultat de la recherche est ".$sr." p "; echo "Le nombre d'entr eacute;es retourn eacute;es est ".ldap_count_entries($ds,$sr)." p "; echo "Lecture des entr eacute;es... p"; $info = ldap_get_entries($ds, $sr); echo "Donn eacute;es pour ".$info["count"]. "entr eacute;es: p"; for ($i=0; $i $info["count"]; $i++) {echo "dn est: ". $info[$i]["dn"]." br "; echo "premiere entree cn:". $info[$i]["cn"][0]. "br"; echo "premier email: ". $info[$i]["mail"][0]." p ";} echo "Fermeture de la connexion"; ldap_close($ds);} else {echo" h4 Impossible de se connecter au serveur LDAP. / h4 ";}?
+Avant d 'utiliser les fonctions LDAP, vous devez connaître
+Le nom ou l 'adresse du serveur de dossiers que vous voudrez utiliser
+Le "base dn" du serveur (la partie du dossier monde qui est disponible sur ce serveur, ce qui peut être "o=Ma Compagnie,c=FR")
+Le mot de passe éventuel d'accès au serveur (de nombreux serveurs fournissent un accès anonyme en lecture, mais requièrent des mots de passe pour tout le reste.
+La séquence LDAP typique que vous exécuterez sera la suivante:
+ldap_connect() / / établit une connexion au serveur | ldap_bind() / / connexion anonyme ou identifiée | réalisation de commadnes comme des recherches ou des modifications, puis affichage du résultat. | ldap_close() / / déconnexion
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

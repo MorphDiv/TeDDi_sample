@@ -1,0 +1,62 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Il y a deux moyens de connecter PHP et Java: soit en intégrant Java directement dans PHP, ce qui est la solution la plus stable et la plus efficace, ou en intégrant PHP dans un environnement de Servlet Java.
+La première solution est fournie par cette extension Java, et la dernière par le module SAPI qui s 'interface avec un serveur de Servlet.
+PHP 4 ext / java fournit un moyen simple mais efficace pour invoquer et créer des objets Java, depuis PHP.
+Une machine virtuelle est créée via JNI, et le tout fonctionne avec des processus fils.
+Les instructions d 'installation pour cette extension sont sont disponibles dans le fichier: php4 / ext / java / README.
+Exemple 1.
+Exemple avec Java
+?php / / crée une instance de Java class java.lang.System en PHP $system = new Java( "java.lang.System"); / / accède aux propriétés print "Java version=".$system - getProperty("java.version"). "br"; print "Java vendor= ".$system - getProperty("java.vendor")." br "; print "OS=".$system - getProperty("os.name")." ". $system - getProperty("os.version")." on ". $system - getProperty("os.arch")." br "; / / Exemple avec java.util.Date $formatter = new Java("java.text.SimpleDateFormat", "EEEE, MMMM dd, yyyy 'at 'h:mm:ss a zzzz"); print $formatter - format(new Java("java.util.Date"));?
+Exemple 2.
+Exemple AWT
+?php / / Cet exemple ne fonctionne qu'en mode CGI. $frame = new Java("java.awt.Frame", "Zend"); $button = new Java("java.awt.Button", "Bonjour au monde Java !"); $frame - add("Nord", $button); $frame - validate(); $frame - pack(); $frame - visible = true; $thread = new Java("java.lang.Thread"); $thread - sleep(10000); $frame - dispose();?
+new Java() crée une nouvelle instance d 'une classe, si un constructeur valable est disponible.
+Si aucun paramètre n'est passé, et le constructeur par défaut est utile pour accéder à ces classes telles que "java.lang.System ", qui fournissent leur fonctionnalités via des méthodes statiques.
+Lors de l'accès aux membres d 'une instance, PHP commencera par rechercher les membres Bean, puis les champs publics.
+En d'autres termes, "print $date.time" sera d'abord résolu par "$date.getTime()", puis par "$date.time";
+Les membres statiques et d 'instance sont accessibles avec la même syntaxe.
+De plus, si un objet est de type "java.lang.Class", les membres statiques de la classe (champs et méthodes) sont accessibles.
+Les exceptions sont transformées en alertes PHP, et résultat NULL.
+Les alertes peuvent être supprimées en préfixant l'appel par l 'opérateur.
+Les fonctions suivantes peuvent être utilisées pour lire et effacer la dernière erreur remontée:
+
+
+Les surchargements de fonctions sont des problèmes épineux, étant donné les différences de type de valeurs entre les deux langages.
+L 'extension Java de PHP utilise une métrique simple mais efficace pour déterminer la meilleur fonction à utiliser.
+De plus, les noms de méthodes ne sont pas sensibles à la casse en PHP, ce qui augmente le nombre de conflits potentiels.
+Une fois qu'une méthode est sélectionnée, les paramètres sont transtypés, avec une perte d'information potentielle non négligeable (par exemple, les nombres à virgules flottante en double précisions seront convertis en booléen).
+Traditionnellement en PHP, les tableaux et les tables de hashage peuvent être interchangées, et fonctionnent de la même façon.
+Notez que les tables de hashage de PHP ne peuvent être indexées qu 'avec des entiers ou des chaînes, et que le type primitif de tableau de Java ne peut comporter de trous dans les index.
+Notez aussi que les valeurs sont passées par valeur, ce qui peut être coûteux en mémoire et en temps.
+L'interface PHP4 sapi / servlet est construite sur un mécanisme défini par l'extension Java, qui permet à PHP d 'être exécuté comme une servlet.
+L'avantage immédiat d 'un point de vue PHP est que les serveurs web qui supportent les servlets gèrent rigoureusement les machines virtuelles.
+Les instructions d 'installation du module Servlet SAPI sont disponibles dans le fichier php4 / sapi / README.
+
+Bien que ce code soit prévu pour fonctionner sur n'importe quel serveur à Servlet, il n'a été testé qu'avec le module Apache Jakarta / tomcat (jusqu'à aujourd'hui).
+Les remontées de bugs, les réussites et les patches nécessaires pour faire fonctionner ce code sur d 'autres serveurs sont fortement encouragés!
+PHP a l 'habitude de changer le dossier de travail.
+Le serveur SAPI / Servlet le changera à nouveau, mais tant que PHP fonctionnera, le moteur de servlet ne pourra pas charger de classes dans le CLASSPATH, si le dossier est spécifié avec un chemin relatif, ou ne pourra pas trouver le dossier d 'administration et de compilation des tâches JSP.
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

@@ -1,0 +1,51 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+
+Esta función se utiliza para importar variables desde una matriz a la tabla de símbolos actual.
+Toma la matriz asoiativa matriz_vars y trata las claves como nombres de variable y los valores como los valores de éstas.
+Para cada par clave / valor creará una variable en la tabla de símbolos actual, sujeto a los parámetros tipo_extraccion y prefijo.
+extract() controla las colisiones con las variables que ya existen.
+La forma de tratar éstas se determina por el tipo_extraccion.
+Puede tener únicamente uno de los siguientes valores:
+Si hay colisión, sobreescribe la variable existente.
+Si hay colisión, no sobreescribas la variable existente.
+Si hay una colisión, añade el prefijo a la nueva variable.
+Añade el prefijo a todas las variables.
+Si no se especifica tipo_extraccion, se asume que vale EXTR_OVERWRITE.
+Nótese que el prefijo sólo se necisita si tipo_extraccion vale EXTR_PREFIX_SAME o EXTR_PREFIX_ALL.
+extract() comprueba si cada clave es un nombre válido de variable, y sólo lo importa si lo es.
+Nota:
+N.T.:
+En el caso español, no valdría "año" como nombre variable (pero sí como clave en una matriz cualquiera).
+Un uso posible para extract sería importar en la tabla de símbolos las variables contenidas en la matriz asociativa que devuelve wddx_deserialize().
+Ejemplo 1.
+Ejemplo de extract()
+php? / * Suponemos que $matriz_var es una matriz devuelta por wddx_deserialize * / $tamano = "grande"; $matriz_var = array ("color" = "azul", "tamano "= "media", "forma" = "esfera"); extract ($matriz_var, EXTR_PREFIX_SAME, "wddx"); print "$color, $tamano, $forma, $wddx_tamano\n";?
+El programa anterior producirá:
+azul, grande, esfera, media
+La variable $tamano no fue sobreescrita porque especificamos EXTR_PREFIX_SAME, que provocó la creación de $wddx_tamano.
+Si se hubiera especificado EXTR_SKIP, $wddx_tamano ni siquiera habría sido creada.
+EXTR_OVERWRITE habría provocado que $tamano tuviera el valor "media", y EXTR_PREFIX_ALL habría provocado que aparecieran nuevas variables llamadas $wddx_color, $wddx_tamano, y $wddx_forma.
+Anterior
+Inicio
+Siguiente
+
+Subir

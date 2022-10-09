@@ -1,0 +1,63 @@
+# language_name_wals:	Turkish
+# language_name_glotto:	Turkish
+# ISO_6393:	tur
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/tr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Kullanım Kılavuzu
+Önceki
+Sonraki
+Bölüm 17.
+HTTP authentication with PHP
+
+
+Once the user has filled in a username and a password, the URL containing the PHP script will be called again with the variables, $PHP_AUTH_USER, $PHP_AUTH_PW and $PHP_AUTH_TYPE set to the user name, password and authentication type respectively.
+Only "Basic" authentication is supported at this point.
+
+An example script fragment which would force client authentication on a page would be the following:
+Örnek 17-1.
+
+?php if (!isset($PHP_AUTH_USER)) {header( "WWW-Authenticate:
+Basic realm=\" My Realm\""); header("HTTP / 1.0 401 Unauthorized"); echo "Text to send if user hits Cancel button\n"; exit;} else {echo "p Hello $PHP_AUTH_USER. / p"; echo "p You entered $PHP_AUTH_PW as your password. / p";}?
+
+
+In order to guarantee maximum compatibility with all clients, the keyword "Basic" should be written with an uppercase "B", the realm string must be enclosed in double (not single) quotes, and exactly one space should precede the "401 "code in the "HTTP / 1.0 401" header line.
+Instead of simply printing out the $PHP_AUTH_USER and $PHP_AUTH_PW, you would probably want to check the username and password for validity.
+
+
+
+
+In order to prevent someone from writing a script which reveals the password for a page that was authenticated through a traditional external mechanism, the PHP_AUTH variables will not be set if external authentication is enabled for that particular page.
+In this case, the $REMOTE_USER variable can be used to identify the externally-authenticated user.
+
+
+Remember to avoid this directive for the context where you want to use PHP authentication (otherwise each authentication attempt will fail).
+
+
+
+
+Örnek 17-2.
+
+?php function authenticate() {header ("WWW-Authenticate:
+Basic realm=\" Test Authentication System\""); header ("HTTP / 1.0 401 Unauthorized"); echo "You must enter a valid login ID and password to access this resource\n"; exit;} if (!isset($PHP_AUTH_USER) | | ($SeenBefore == 1 !strcmp($OldAuth, $PHP_AUTH_USER))) {authenticate();} else {echo "p Welcome: $PHP_AUTH_USER br"; echo "Old: $OldAuth"; echo "form action='$PHP_SELF 'METHOD='POST' \n"; echo" input type='hidden 'name='SeenBefore' value='1 '\n"; echo "input type='hidden' name='OldAuth 'value='$PHP_AUTH_USER' \n"; echo" input type='submit 'value='Re Authenticate' \n"; echo "/ form / p \n";}?
+
+
+
+
+Önceki
+Baþlangýç
+Sonraki
+Resimlerin yaratılması ve üzerinde oynanması
+Yukarý
+Çerezler

@@ -1,0 +1,22 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP が Apache モジュールとして使用された場合、PHP は、Apache ユー ザーの許可属性(通常はユーザー "nobody" の許可属性)を継承します。 これは、セキュリティと認証に数々の影響を与えます。例えば、データベー スと接続するためにPHPを使用している場合、データベースが組込みのア クセス制御機能を有していない限り、そのデータベースを "nobody"ユー ザからアクセス可能とする必要が生じます。これは、悪意のあるスクリプ トが、ユーザ名とパスワードなしにデータベースにアクセスし、修正する ことができることを意味します。Webスパイダがデータベース管理用Webペー ジを回って、データベースを全て削除することも可能です。Apache認証に よりこの攻撃に対して防衛することが可能であり、また、LDAPや .htaccessファイル等を使用して固有のアクセスモデルを設計し、PHPスク リプトの一部としてそのコードを読み込むことも可能です。
+しばしば、PHPユーザ(この場合はApacheユーザ)が非常に小さなリスクを 有する場所に一度セキュリティが確立されると、PHPはユーザディレクト リにウイルスファイルを書き込んだりすることができなくなります。もし くは、データベースにアクセスしたり変更したりといったことが出来なく なります。この場合、良いファイルおよび悪いファイルの書き込み、また は、良いデータベーストランザクションと悪いデータベーストランザクシ ョンに関して等しく安全性が確保されていると言えます。
+この観点からしばしば行われるセキュリティ上の失敗としてApacheにルー ト権限を与えたり、他の何らかの手段でApacheの権限を昇格させるという ものがあります。
+Apacheユーザの権限をルートに昇格させることは非常に危険であり、シ ステム全体を危険にさらす可能性があります。よって、sudoやchrootの実 行、ルート権限で実行を行う他の手段は、セキュリティに精通した人以外 は、考慮するべきではありません。
+いくつかのより簡単な解決策があります。 open_basedir を使用することによ り、PHPに使用を許可するディレクトリを制御したり制限したりすること が可能です。また、全てのWebベースの作業をユーザファイル、システム ファイル以外のファイルに制限するために、Apache専用エリアを設定する ことも可能です。

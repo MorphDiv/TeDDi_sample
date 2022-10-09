@@ -1,0 +1,105 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Chapitre 7.
+Les types
+Suivant
+Un tableau PHP est en fait une association ordonnée (map).
+Une association est un type qui fait correspondre des valeurs à des clés.
+Ce type est optimisé de diverses façons, qui font que vous pouvez le manipuler comme un tableau à indices réels, une liste (vecteur), ou un table de hachage (qui est une implémentation d'association), dictionnaire, collection, pile, queue et encore d 'autres.
+Comme une valeur peut elle-même être un tableau, vous pouvez simuler facilement un arbre.
+Les détails d 'implémentation de ces structures sont hors du champs de ce manuel, mais vous trouverez ici un exemple de toutes ces structures.
+Un tableau array peut être créé avec la fonction array().
+Cette fonction prend en argument des structures key = value, séparées par des virgules.
+Une clé key est soit un entier positif ou bien une chaîne.
+Si une clé est la représentation standard d'un entier positif, elle sera interprété comme tel. (i.e. '8 'sera interprété comme 8, tandis que '08' sera interprété comme '08 ').
+Une valeur peut être n 'importe quoi.
+Si vous omettez une clé lors de la spécification d'un tableau, l 'indice maximum + 1 sera utilisé comme clé par défaut.
+Si aucun indice numérique n 'a été généré, ce sera 0.
+Si vous spécifiez une qui a déjà été assigné, la nouvelle valeur écrasera la précédente.
+array( [key =] value,...) / / key is either string ou entier integer positif / / value peut être n 'importe quoi
+Vous pouvez aussi modifier un tableau existant en lui assignant simplement des valeurs.
+L 'assignement de valeurs de tableau se fait en spécifiant la clé entre crochets.
+Si vous omettez la clé ("$tableau[]"), la valeur sera ajoutée à la fin du tableau.
+$arr[ key] = value; $arr[] = value; / / key est soit une chaîne, soit un entier / / value peut être n 'importe quoi
+Il y a toute une panoplie de fonctions pratiques pour travailler avec les tableau: array-functions.
+L'élément de langage foreach est spécifiquement dédiée aux tableau: elle permet de passer en revue simplement les valeurs d 'un tableau.
+Le type tableau de PHP est très souple.
+Voici quelques exemples d 'utilisation:
+?php / / ceci $a = array( 'couleur '= 'rouge', 'gout '= 'sucre', 'forme '= 'rond', 'nom '= 'pomme', 4 / / cette clé sera 0); / / est complétement équivalent à $a['couleur'] = 'rouge'; $a['gout'] = 'sucre'; $a['forme'] = 'rond'; $a['nom'] = 'pomme'; $a[] = 4; / / cette clé sera 0 $b[] = 'a'; $b[] = 'b'; $b[] = 'c'; / / va créer le tableau array (0 = 'a ', 1 = 'b', 2 = 'c ') / / ou plus simplement array('a', 'b ', 'c')?
+Exemple 7-3.
+Utilisation de array()
+?php / / Array comme correspondance $map = array( 'version '= 4, 'OS' = 'Linux ', 'langue' = 'français ', 'short_tags' = TRUE); / / valeur strictement numériques $array = array (7, 8, 0, 156, -10); / / ceci est la même chose que array (0 = 7, 1 = 8,...) $switching = array (10 / / clé = 0, 5 = 6, 3 = 7, 'a '= 4, 11 / / clé = 6 (index maximum:
+5), '8 '= 2 / / clé = 8 (entier!), '02' = 77 / / clé = '02 ', 0 = 12 / / la valeur de la clé 10 sera remplacée par 12); / / empty array $empty = array();?
+Exemple 7-4.
+
+?php $couleurs = array( 'rouge' ,'bleu' ,'vert' ,'jaune'); foreach ($couleurs as $couleur) {echo "Aimez-vous la couleur $couleur?\n";} / * Affiche:
+Aimez-vous la couleur rouge?
+Aimez-vous la couleur bleu?
+Aimez-vous la couleur vert?
+Aimez-vous la couleur jaune? * /?
+Notez qu'il n'est pas possible actuellement de modifier les valeurs d 'un tableau avec une telle boucle.
+Une solution pour cela est:
+Exemple 7-5.
+
+?php foreach( $couleurs as $cle = $couleur) {/ / ne marche pas / /$couleur = strtoupper($couleur); / /marche: $couleurs[$cle] = strtoupper($couleur);} print_r($couleur); / * Affiche:
+Array ([0] = ROUGE [1] = BLEU [2] = VERT [3] = JAUNE) * /?
+Cet exemple crée un tableau d 'index minimal 1.
+Exemple 7-6.
+Tableau en 1
+?php $firstquarter = array( 1 = 'Janvier', 'Février', 'Mars'); print_r($firstquarter); / * Affiche:
+Array ([1] = 'Janvier '[2] = 'Février' [3] = 'Mars ') * /?
+Exemple 7-7.
+Remplissage d 'un tableau
+?php / / remplis un tableau avec les noms de fichiers d'un dossier $handle = opendir(' .'); while ($file = readdir($handle)) {$files[] = $file;} closedir($handle);?
+Les tableaux sont ordonnés.
+Vous pouvez modifier l 'ordre des valeurs avec de nombreuses fonctions de classement.
+Voyez les fonctions de tableaux.
+Exemple 7-8.
+Tri de tableaux
+
+Comme une valeur de tableau peut être n 'importe quoi, elle peut aussi être un autre tableau.
+Comme cela, vous pouvez avoir des tableaux multi-dimensionnels, ou récursifs.
+Exemple 7-9.
+Tableaux multi-dimensionnels, et récursifs
+?php $fruits = array ("fruits "= array ("a" = "orange ", "b" = "banane ", "c" = "pomme "), "nombres" = array (1, 2, 3, 4, 5, 6), "trous "= array ("premier", 5 = "second ", "troisième"));?
+Dans vos vieux scripts, vous pouvez avoir utilisé la syntaxe suivante:
+?php $foo[ bar] = 'ennemi'; echo $foo[bar];?
+?php echo $arr[ foo(true)];?
+?php $error_descriptions[ E_ERROR] = "Une erreur fatale est survenue"; $error_descriptions[E_WARNING] = "PHP a généré une alerte"; $error_descriptions[E_NOTICE] = "Ceci est juste une note grâcieuse";?
+?php $error_descriptions[ 1] = "Une erreur fatale est survenue"; $error_descriptions[2] = "PHP a généré une alerte"; $error_descriptions[8] = "Ceci est juste une note grâcieuse";?
+Alors, comment se fait-tile que $foo[ bar] fonctionne?
+C 'est parce que bar est attendu comme une constante.
+Cependant, dans ce cas, aucune constante n 'a pour nom bar.
+PHP suppose alors que vous voulez dire bar littéralement, c'est-à-dire la chaîne "bar ", mais que vous avez oublié les guillements.
+Dans le futur, l 'équipe de développement peut vouloir ajouter une nouvelle constante et vous vous retrouverez dans la panade.
+Par exemple, vous ne pouvez déjà pas utiliser les constantes empty et default, car ce sont des mots reservés.
+Et, pour en mettre une autre couche, cette syntaxe est tout simplement obsolète, et risque de ne plus fonctionner du tout un jour ou l 'autre.
+
+Lorsque vous activez le rapport d'erreur avec error_reporting() avec E_ALL, PHP générera des notes à chaque fois que cette syntaxe est utilisée.
+Essayez donc error_reporting( E_ALL); dans vos scripts, pour voir).
+
+Dans une chaîne à guillements doubles, une autre syntaxe est valide.
+Voyez la section sur Traitement des variables dans les chaînes pour plus de détails.
+Précédent
+Sommaire
+Suivant
+Les chaînes de caractères
+Niveau supérieur
+Les objets

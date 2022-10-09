@@ -1,0 +1,214 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de & kcachegrind;
+Josef Weidendorfer
+Josef. Weidendorfer@gmx. de
+Autor original de la documentación
+Federico Zenith
+federico. zenith@member. fsf. org
+Actualizaciones y correcciones
+Marcos Fouces Lago mfouces@yahoo. es Traductor
+& Josef. Weidendorfer;
+Federico Zenith
+& kcachegrind; es una herramienta para visualizar análisis de rendimiento, escrita usando el entorno & kde;.
+KDE
+kdesdk
+Cachegrind
+Callgrind
+Valgrind
+Análisis de rendimiento
+Introducción
+& kappname; es una herramienta para visualizar cómodamente la salida de herramientas de análisis de rendimiento de software. En este capítulo se explica para qué sirve este análisis, cómo se hace y algunos ejemplos de las herramientas disponibles.
+Análisis de rendimiento
+Cuando se desarrolla un programa, una de las etapas finales consiste en optimizar su rendimiento. Dado que no es muy productivo dedicar mucho tiempo a optimizar funciones escasamente usadas, necesitaremos saber en qué partes del programa se concentra la mayoría del tiempo de ejecución.
+Para el código secuencial, suele ser suficiente recabar datos estadísticos sobre características de ejecución de las aplicaciones, cosas como el tiempo que el programa pasa ejecutando una misma función o línea de código. Esto es lo que recibe el nombre de « profiling » (análisis de rendimiento). El programa se ejecuta bajo el control de una herramienta que será la que aporte información sobre la ejecución de un programa cuando esté se cierre. En contraste con esto, en el código paralelo los problemas de rendimiento suelen ser causa de que un procesador está esperando información de otro. Dado que no es sencillo reconocer esto, en este caso sería preferible generar un trazado de tiempos en que ocurren los eventos pero & kcachegrind; no puede visualizar estos datos.
+Después de analizar los datos de rendimiento obtenidos, será sencillo ver los puntos fuertes y débiles del código: podremos, por ejemplo, comprobar el número de llamadas e identificar las partes del código que pueden ser optimizadas. Una vez optimizado el código, puede comprobarse si se ha hecho bien realizando otro análisis.
+Métodos de análisis de rendimiento
+Para medir exactamente el tiempo transcurrido o registrar lo que sucede durante la ejecución de una determinada parte del programa (eg; una función) será necesario añadir algún código antes y después de estas partes que nos permita realizar estas medidas. Este código cuenta el tiempo transcurrido o contabiliza algún evento y calcula diferencias. Esto hace que sea necesario cambiar el código original antes de ejecutarlo. esto recibe el nombre de instrumentación y puede realizarse por el propio programa, el compilador o el propio sistema en ejecución. Dados que las partes de interés suelen estar anidadas, la sobrecarga producida por las propias medidas a menudo influye en las propias medidas. La instrumentación debe hacerse selectivamente y sus resultados deben interpretarse con cuidado. Esto hace que el análisis de rendimiento mediante medidas exactas sea un proceso muy complejo.
+Es posible realizar medidas exactas gracias a los contadores hardware (incluyendo aquellos que se incrementan con cada ciclo de procesador) incluidos en los modernos procesadores que se incrementan cada vez que ocurre un determinado evento. Dado que queremos relacionar eventos con determinadas regiones de código, necesitaremos gestionar cualquier evento incrementando un contador para dicha región de código. Obviamente, esto es imposible de llevar a cabo mediante software, pero asumiendo que, estadísticamente, la distribución de eventos en el código fuente es similar al considerar sólo algunas medidas en lugar de considerarlas podemos usar un método llamado sampling (muestreo) para realizar las medidas. El muestreo temporal (Time Based Sampling o TBS) hace uso de un temporizador para monitorizar cada cierto tiempo el contador de un programa y crear un histograma sobre el código del programa. El muestreo de eventos (Event Based Sampling o EBS) hace uso de los contadores por hardware de los procesadores modernos.
+Otro método de medida consiste en simular lo que ocurre en el sistema cuando se ejecuta un determinado código, & ie; ejecución de una simulación conducida. La simulación se realiza siempre partiendo de un modelo más o menos exacto del sistema, sin embargo es posible obtener modelos muy precisos que funcionen casi igual que en la realidad en los cuales el tiempo empleado en la simulación sea inaceptablemente alto. La ventaja de la simulación es que podemos insertar código más o menos complejo en el código a estudiar sin alterar los resultados. Es muy cómodo realizar esto directamente antes de la ejecución debido a que usamos el binario original sin necesidad de recompilarlo. La simulación es útil cuando se simulan sólo partes de una máquina con un modelo sencillo, así además se obtienen resultados de más fácil interpretación. A menudo el problema de trabajar con hardware real es que varios efectos de diferentes partes de la máquina se solapan en un mismo resultado.
+Herramientas de análisis de rendimiento
+La más conocida es la herramienta de análisis de GCC gprof; para usarla, debe compilar los programas a analizar con la opción pg, y al ejecutarlos se crea un archivo llamado gmon. out que puede convertirse a un formato legible mediante gprof. Una desventaja es que se necesita recompilar el programa y enlazarlo estáticamente. Este método se llama « instrumentación generada mediante el compilador », que mide los arcos de las llamadas entre funciones y el correspondiente número de llamadas -junto con el & TBS; - que aporta un histograma de distribución temporal en el código. Usando ambas fuentes de información, es posible calcular heurísticamente el tiempo dedicado a la ejecución de una función y el de todas las que han sido llamadas por ella.
+Para medir con exactitud los eventos que están ocurriendo en un momento dado, están disponibles algunas librerías con funciones capaces de leer los contadores de rendimiento del hardware. Las más conocidas son el parche PerfCtr para & Linux; y las librerías PAPI y PCL independientes de la arquitectura del sistema. Aún así, es necesario instrumentalizar el código como en el caso anterior. Puede optar por usar las propias librerías o por sistemas de instrumentación automática como ADAPTOR (para la instrumentación de código en FORTRAN) o DynaProf (inyección de código a través de DynInst).
+& oprofile; es un herramienta de análisis para & Linux; basada en el muestreo.
+Una manera cómoda para realizar análisis consiste en el uso de & cachegrind; o & callgrind;, dos simuladores que usan la estructura de instrumentación de & valgrind;. Debido a que no es necesario recurrir a contadores por hardware (a menudo difíciles de acceder en las actuales distribuciones de & Linux;) y a que es posibles analizar los binarios sin modificarlos, es una buena alternativa a otras herramientas. Puede minimizar el problema de la ralentización causado por la simulación realizándola sólo en las partes del programa que le interesen e incluso en unos pocos ciclos de algún bucle. Sin medir/ simular la instrumentación, el uso de & valgrind; sólo tiene un factor de ralentización en un rango de 3 a 5. También es posible desactivar la simulación de caché si sólo nos interesan el gráfico y el número de llamadas.
+La simulación del caché es el primer paso para aproximarnos a los tiempos de ejecución reales ya que los sistemas modernos hacen un fuerte uso de la caché, buffers pequeños y rápidos que aceleran accesos repetidos a las mismas celdas de memoria. & cachegrind; realiza la simulación de caché capturando dichos accesos. La información obtenida incluye el número de la instrucción o acceso a memoria y los fallos de caché de primer y segundo nivel, y las relaciona con las áreas del código correspondiente. Combinando los datos de dichos fallos mediante las latencias en fallo de los procesadores más comunes, es posible obtener una estimación del tiempo empleado.
+& callgrind; es una extensión de & cachegrind; que crea el gráfico de llamadas de un programa al vuelo, & ie; como las funciones se llaman entre sí y cuantos eventos ocurren mientras se ejecuta una función. También es posible separar la información a recabar por hilos o por contextos de llamadas. Puede aportar datos de rendimiento a nivel de instrucción para permitir anotar código desensamblado.
+Visualización
+Las herramientas de análisis de rendimiento suelen producir gran cantidad de información. El deseo de navegar fácilmente por el gráfico de llamadas, poder alternar fácilmente el orden de listado de las funciones y ver los distintos tipos de eventos hicieron que se escribiera una interfaz gráfica para ello.
+& kappname; es una herramienta para visualizar información de rendimiento que cumple estas características. Aunque fue pensada para visualizar la información generada por & cachegrind; y & calltree;, existen conversores para mostrar datos de otras herramientas. En el apéndice puede ver una descripción del formato usado en los archivos de & cachegrind; /callgrind;.
+Aparte de permitir la visualización de una lista de funciones ordenadas según sus costes inclusivos o exclusivos y, opcionalmente, agrupadas según el archivo fuente, librería compartida o clase C++, & kappname; también ofrece varios métodos de visualización para un función determinada, como
+un gráfico de llamadas que muestra la sección del gráfico de llamadas que rodea a la función seleccionada,
+un mapa en forma de árbol que permite ver las relaciones entre funciones anidadas conjuntamente con datos sobre el coste computacional que acarrean para que puede detectar enseguida funciones problemáticas,
+vistas del código fuente y anotaciones del desensamblador para que pueda disponer de información del coste computacional de dichas líneas de código e instrucciones de ensamblador.
+Uso de & kcachegrind;
+Generar datos para visualizar
+En primer lugar, es necesario obtener información del rendimiento midiendo varios aspectos sobre una aplicación en ejecución mediante el uso de una herramienta de análisis de rendimiento. & kcachegrind; no incluye ninguna herramienta para ello, pero trabaja muy bien en conjunción con & callgrind; y, si usa un conversor, también con & oprofile;. Aunque no es el objetivo de este manual dar una explicación detallada acerca de estas herramientas, en la siguiente sección se dan algunas ideas básicas para que pueda empezar a trabajar.
+& callgrind;
+& callgrind; es parte de & valgrind;, http: / /valgrind. org. Observe que antes se denominaba & calltree;, pero el nombre podía inducir a error.
+Su uso más común consiste en ejecutar la orden que inicia la aplicación precedida de valgrind --tool=callgrind, así: valgrind --tool=callgrind programa argumentos. Cuando cierre el programa se creará un archivo llamado callgrind. out. pid que es el que debe cargar en & kcachegrind;.
+Un uso más avanzado sería realizar un volcado de información de rendimiento cada vez que se invoca una determinada función. Si solo desear medir el renderizado de páginas web en konqueror, podría querer volcar los datos cada vez que seleccione Ver/ Recargar. La llamada que le interesaría en este caso sería KonqMainWindow: :slotReload. Utilice valgrind --tool=callgrind --dump- before=KonqMainWindow: :slotReload konqueror para obtener varios archivos de análisis con un número de secuencia al final de sus nombres. También verá un archivo sin ese número (terminado solo en el PID del proceso). Al cargarlo en & kcachegrind; los demás se cargarán automáticamente, y podrán ser vistos en la Vista General de Partes y la lista de Partes.
+& oprofile;
+& oprofile; está disponible en su página web. Para instalarlo, siga las instrucciones ahí proporcionadas, pero antes, compruebe si está disponible como paquete para su distribución (como & SuSE;).
+El análisis de rendimiento a nivel del sistema sólo puede hacerse con privilegios de root porque se precisa observar todas las acciones que lleva a cabo. Primero configure el proceso mediante la & GUI; oprof_start o la orden opcontrol. La configuración estándar debería estar en modo TBS (consulte la introducción). Para comenzar la medida ejecute opconrtol -s. Luego ejecute la aplicación de interés y posteriormente opcontrol -d. Esto escribirá los resultados en archivos bajo el directorio var/ lib/ oprofile/ samples/. Para permitirle visualizar los datos en & kcachegrind;, deberá ejecutar opreport -gdf | op2callgrind en un directorio vacío. Esto creará un gran número de archivos, uno por cada programa que se está ejecutando en el sistema, cada uno de los cuales podrá cargarse separadamente en & kcachegrind;.
+Fundamentos de la interfaz de usuario
+Cuando abre & kcachegrind; con un archivo de información de rendimiento como argumento o después de cargar uno a través de Archivo Abrir..., verá una barra lateral a la izquierda que contiene la lista de funciones y a la derecha, un área con la información de la función seleccionada. Este área se puede configurar para mostrar varias vistas al mismo tiempo.
+El tipo de evento activo es importante para la visualización: para & callgrind; puede ser p. ej. fallos de caché o estimación de ciclos mientras que para & oprofile; es el temporizador en el caso más sencillo. Puede cambiar este tipo de eventos desde un selector desplegable de la barra de herramientas o desde la vista de tipos de evento. Si selecciona la función main debería ver un pequeño resumen de las características de ejecución en la lista d la izquierda. Si mira al gráfico de llamadas debería ver las llamadas que tienen lugar en su programa. Observe que el gráfico de llamadas sólo muestra las funciones que más veces se emplean. Haciendo doble clic en una función del gráfico, verá que cambia para mostrarle las funciones invocadas alrededor de la seleccionada.
+Para conocer mejor la & GUI; de este programa, además de leer este manual debería consultar la documentación disponible en la página web. También puede consultar la ayuda ¿Qué es esto? de cada widget de & kcachegrind;.
+Conceptos básicos
+En este capítulo se tratan algunos conceptos de & kcachegrind; y se introducen algunos de los términos usado en la interfaz.
+El modelo de datos para la información de rendimiento
+Entidades de costes
+La contabilización de los costes computacionales de los tipo de eventos (tales como las pérdidas L2) s atribuyen a las entidades de costes, relacionadas con el código fuente o las estructuras de datos de un programa dado. Éstas no sólo pueden representar simples posiciones en el código o en los datos sino también registros complejos de una posición. P. ej. una llamada tiene una fuente y un objetivo o una dirección de datos puede tener un tipo de datos y una posición en el código donde se originó.
+Las entidades de coste reconocidas por & kcachegrind; vienen dadas en las siguientes posiciones: Instrucción. Una instrucción en ensamblador en una dirección especificada. Línea de código de una función. Todas las instrucciones que el compilador (a través de la información de depuración) mapea para una línea de código, identificada por el nombre del archivo y por el número de línea y que son ejecutadas en el contexto de una función. Una línea de código de una función incorporada (« inline ») podrá aparecer en el contexto de varias funciones. Las instrucciones que sin ninguna referencia a una línea de código aparecen referenciadas a la línea 0 del archivo «??? ». Función. Todas las líneas de código de que está constituida una función componen la función en si. Está identificada por su nombre y por su localización si estuviese disponible. esta última es necesaria porque los binarios de un programa podrán contener funciones con el mismo nombre. Si un analizador de rendimiento no es capaz de detectar el nombre del símbolo de una función, p. ej. porque no está disponible la información de depurado, suele usarse la dirección de la primera instrucción ejecutada o «??? ». Objeto binario. Todas las funciones cuyo código está dentro del rango de un determinado objeto binario ya sea el ejecutable principal o una librería dinámica. Archivo de código fuente. Todas las funciones cuya primera instrucción está referenciada en una línea de dicho archivo. Clase. en general, los nombre de las funciones suelen estar ordenados de forma jerárquica en espacios de nombres, & eg; los « namespaces » de C++ o las clases de los lenguajes de programación orientados a objetos. Como tal, una clase puede contener funciones de dicha clase o otras clases incluídas en ella. Parte del análisis. Alguna sección de la ejecución de un análisis con un determinado ID de hilo, proceso y línea de órdenes ejecutada.. Tal como se ve en la lista, un conjunto de entidades de coste suele definir otra entidad de coste, por tanto existe una jerarquía de inclusión que debería ser obvia con la explicación anterior.
+Tuplas de posiciones. Una llamada de una instrucción a la función objetivo. Llamada desde una línea de código a otra destino. Llamada desde una función origen a otra destino. Salto (in)condicional desde una instrucción de origen a otra Salto (in)condicional desde una línea de código a otra No se permiten saltos entre funciones dado que no tendrían sentido en un gráfico de llamadas. Las secuencias como el tratamiento de excepciones y los 'long jumps 'de C tendrán que ser traducidos en saltos en la pila de llamadas de acuerdo con las necesidades.
+Tipos de eventos
+Es posible especificar tipos arbitrarios de eventos en la información de rendimiento simplemente asignándole un nombre. Su coste computacional en relación a una entidad de coste es un número de 64 bits.
+Los tipos de eventos cuyos costes se especifican en un informe de rendimiento se denominan eventos reales. También es posible especificar fórmulas para eventos calculados a partir de los reales, los denominados eventos heredados.
+Estado de visualización
+El estado de visualización de la ventana de & kcachegrind; incluye: Los tipos primario y secundario de los eventos seleccionados para mostrarse, El agrupamiento de funciones (usado en la lista de análisis de rendimiento de la función y en el resaltado de la entidad), las partes del análisis cuyos costes serán incluidosen la visualización una entidad de coste activa (eg; una función seleccionada en la barra de análisis de rendimiento de la función) una entidad de coste seleccionada.. Este estado influye en las visualizaciones.
+Las vistas se muestran siempre para la entidad de coste activa. Cuando una vista determinada no es adecuada para ella, se desactiva: por ejemplo, si selecciona un objeto & ELF; de la lista de grupo, la anotación de la fuente no tiene sentido.
+Por ejemplo, para una función activa la lista de llamantes muestra todas las funciones llamadas desde la activa: es posible seleccionar una de ellas sin activarla; si el gráfico de llamadas está visible, también seleccionará la misma función.
+Partes de la & GUI;
+Barras laterales
+Las barras laterales (empotrables) son pequeñas ventanas que pueden situarse en los laterales de una ventana de & kcachegrind;. Siempre contienen una lista de entidades de coste listadas según cierto criterio.
+El Análisis de función es una lista de funciones con sus costes inclusivos y exclusivos, número de llamadas y el nombre y posición de las funciones.
+Vista de las partes
+Pila de llamadas
+El área de visualización, generalmente la parte derecha de la ventana principal de & kcachegrind; está formada por una (predeterminada) o más pestañas alineadas vertical u horizontalmente. Cada pestaña permite visualizar información diferente de una sola entidad de coste al mismo tiempo. El nombre de dicha entidad aparece en la parte superior de la pestaña. Si hay varias pestañas, sólo una de ellas estará activa. El nombre de la entidad en la pestaña activa aparece en negrita y determina la entidad de coste activa en la ventana de & kcachegrind;.
+Áreas de una pestaña
+Cada página puede contener hasta cuatro áreas de visualización llamadas: superior, inferior, izquierda y derecha. Cada área puede contener varias vistas apiladas. El área visible se selecciona mediante unas pestañas. A través del menú contextual de las páginas podrá escoger el tipo de visualización que desee.
+Vista sincronizada con una entidad seleccionada en una pestaña
+Aparte de una entidad activa, cada página tiene un entidad seleccionada. Dado que la mayoría de los tipos de visualización muestran varias entidades con la activa en el centro, podrá cambiar la seleccionada navegando dentro de la visualización (pinchando con el ratón o a través de teclado). Típicamente, los objetos seleccionados se muestran resaltados. Cambiando la entidad seleccionada en una de las visualizaciones, verá como también aparece resaltada la nueva entidad en las demás.
+Sincronización entre pestañas
+Si existen varias páginas, al cambiar la selección en una de ellas también se cambiará la selección en la siguiente (a la derecha/ al fondo). Este tipo de asociaciones debería, por ejemplo, facilitarle la navegación entre los gráficos de llamadas.
+Disposiciones
+La disposición de todas las páginas en una ventana puede ser guardada (consulte Ver/ Disposición). Después de duplicar la disposición actual (CTRL++ o a través del menú) y cambiar de tamaño o posición un área de visualización, también podrá cambiar rápidamente entre la disposición anterior y la actual mediante el atajo CTRL+izquierda/ derecha. El conjunto de las disposiciones se guarda entre las sesiones de análisis de rendimiento de una misma orden. Podrá establecer esta disposición como predefinida para las siguientes sesiones de & kcachegrind; o volver a la predeterminada.
+Análisis sencillos
+Los análisis sencillos contienen una lista de grupos y otra lista de funciones. La lista de grupos contiene todos los grupos entre los cuales está repartido el coste, según el tipo de grupo escogido. La lista de grupos permanece oculta cuando está desactivada la agrupación.
+La lista de funciones contiene las funciones de los grupos seleccionados (o todas las funciones si está desactivada la opción de agrupamiento) ordenadas según una de las columnas, & eg; incluso el coste propio. Puede configurar el número máximo de funciones que se muestra desde la pestaña Preferencias/ Configurar & kcachegrind;.
+Vista de las partes
+Durante la ejecución de un análisis pueden crearse varios archivos con la información obtenida, éstos podrán cargarse conjuntamente en & kcachegrind;. La barra móvil de partes se los mostrará ordenados horizontalmente según la hora de su creación, el tamaño de los rectángulos es proporcional a los costes de cada una de las partes. Podrá seleccionar una o varias partes para que se muestren sólo los costes asociados a ésta.
+Cada parte puede subdividirse de dos maneras:
+Particionado: El usuario ve la repartición en grupos para una parte de los datos del análisis según el grupo seleccionado. Por ejemplo, si se seleccionan los grupos de objetos & ELF;, se verán rectángulos coloreados para cada objeto & ELF; usado (ejecutable o biblioteca dinámica) con un tamaño acorde a su coste.
+Repartición del coste inclusivo: se muestra un rectángulo con el coste inclusivo de la función activa en esa parte. Éste a su vez se dividirá para mostrar los costes inclusivos de las funciones que llama.
+Pila de llamadas
+Es una pila de las llamadas más probables, totalmente ficticia. Se crea a partir de la función activa en ese momento, y se le añaden los llamantes/ llamadas con los mayores costes al principio y al final.
+La columna de costes y llamadas muestra el coste usado para todas las llamadas desde la función en la línea de arriba.
+Vistas
+Tipos de eventos
+Esta lista muestra todos los tipos de costes disponibles así como los costes propios e inclusivos de la función activada para ese tipo de evento.
+Escogiendo un tipo de evento de la lista, cambiará el tipo de costes mostrados por todo & kcachegrind; al seleccionado.
+Listas de llamadas
+Muestran todas las llamadas desde y hacia la función activa. Por « todas » nos referimos a todas las accesibles en ambas direcciones, incluso cuando existen funciones intermedias.
+La lista de llamadas incluye:
+Llamantes directos
+Llamadas directas
+Todos los llamantes
+Todos los llamados
+Mapas
+Una visualización en árbol del tipo de evento primario a través de la jerarquía de llamadas. Cada uno de los rectángulos coloreados representa una función, su tamaño intenta ser proporcional al coste (piense que las representaciones gráficas tienen sus limitaciones) durante la ejecución de la función.
+Para el mapa de llamantes el gráfico muestra la jerarquía encadenada de todas las llamantes de la función activada; parar el mapa de llamadas, se mostrará la jerarquía anidada de todas las llamadas de la función activa.
+Puede modificar el aspecto desde el menú contextual. Si desea ver una proporcionalidad exacta seleccione 'Ocultar bordes incorrectos '. Dado que esta opción puede necesitar mucho tiempo, es posible que desee limitar el nivel máximo de anidamiento. 'Mejor' determina la dirección de reparto de los descendientes a partir de las proporciones de los ascendientes. 'Siempre el mejor 'decide sobre el espacio restante de cada elemento del mismo nivel. 'Ignorar proporciones' ocupa el espacio para el nombre de la función antes de diseñar sus descendientes. Observe que las proporciones pueden resultar bastante erróneas.
+Es posible navegar mediante los cursores izquierda/ derecha para los elementos del mismo nivel y arriba/ abajo para subir o bajar por los niveles de anidamiento. 'Intro 'activa el item actual.
+Gráfico de llamadas
+Aquí se muestra el gráfico de llamadas alrededor de la función activada. El coste que se muestra es únicamente el correspondiente a la ejecución de la función activa, & ie; que los de la función main() - si es visible - deberían coincidir con los de la actual función activa dado que forma parte del coste inclusivo de main() mientras la función está en ejecución.
+En el caso de ciclos, las flechas de llamadas en azul indican que es una llamada inexistente añadida para corregir el gráfico.
+Si el gráfico resulta ser mayor que el área de diseño, se mostrará una vista general en uno de los lados. Existen otras opciones de visualización al igual que el el árbol de llamadas, la función seleccionada aparece resaltada.
+Anotaciones
+La lista anotada muestra las instrucciones del código desensambladas de la función activa en ese momento junto con el coste asociado a la ejecución de una línea de código o instrucción. Si hay una llamada, se insertan algunas líneas en el código con detalles acerca de la misma: el coste inclusivo dentro de la llamada, el número de llamadas que ocurren y el destino de la llamada.
+Si selecciona una de esas líneas de información sobre la llamada se activará el destino de la llamada.
+Referencia de comandos
+Ventana principal de & kcachegrind;
+El menú Archivo
+Ctrl; N Archivo Nuevo
+Abre una nueva ventana donde cargar el informe de rendimiento. Esto no es realmente necesario dado que seleccionando Archivo Abrir... también abrirá una nueva ventana si la actual está mostrando otros datos.
+Ctrl; O Archivo Abrir
+Abre el diálogo de apertura de archivo para que pueda cargar un archivo de informe de rendimiento.. Si ya tiene información cargada en la ventana principal, se abrirá otra. Si desea cargar más datos de rendimiento utilice Archivo Añadir....
+El nombre de los archivos de análisis suele terminar en « pid. parte-IDhilo », donde « parte » e « IDhilo » son opcionales, « pid » y « parte » se usan cuando varios archivos pertenecen a un mismo análisis. Cuando se cargue un archivo terminado en «. pid », también se cargarán otros archivos, si los hay, que pertenezcan a ese mismo análisis de rendimiento.
+Por ejemplo: si existen los archivos cachegrind. out.123 y cachegrind. out.123.1, al cargar el primero también lo hará el segundo.
+Archivo Añadir
+Añade información de rendimiento en la ventana actual. Con esta opción puede cargar varios archivos en una misma ventana aunque no correspondan al mismo análisis. Esto puede ser útil, por ejemplo, para comparar dos casos similares.
+F5 Archivo Recargar
+Recarga la información de rendimiento. Es útil después de haber generado otro archivo de datos de análisis para una ejecución ya cargada de una aplicación.
+Ctrl; Q Archivo Salir
+Cierra & kappname;
+Preguntas y respuestas
+& reporting. bugs; & updating. documentation;
+¿Qué es & kcachegrind;? No consigo hacerme una idea.
+& kcachegrind; es una herramienta útil en una de las últimas fases del desarrollo de un programa llamada análisis de rendimiento. Si no desarrolla aplicaciones, no necesita & kcachegrind;.
+¿Cuál es la diferencia entre 'coste inclusivo y propio?
+Ambas son atributos de los costes para funciones de unos determinados tipos de eventos. Dado que las funciones se llaman entre si, tiene sentido distinguir el coste de la propia función (coste propio) y el coste de la misma más todas las funciones invocadas (coste inclusivo). 'Self 'también se puede llamar coste exclusivo.
+P. ej. para la función main(), siempre verá un coste inclusivo cercano al 100%, mientras el coste propio.
+La barra de herramientas y la del menú de mi & kcachegrind; son muy sobrias. ¿Es normal?
+Probablemente, & kcachegrind; se ha instalado de forma incorrecta en su sistema. Se recomienda compilarlo e instalarlo en el mismo lugar que el resto de & kde;, p. ej. configure --prefix=/ opt/ kde4; make install. Si decide instalarlo en otra carpeta como $HOME/ kde debe asignar ese directorio a la variable de entorno KDEDIR antes de ejecutar & kcachegrind;.
+Si hace doble click sobre una función del gráfico de llamadas, verá para la función main el mismo coste que para la función seleccionada. ¿No se supone que debe ser constante al 100%?
+Ha activado un función descendiente de main() con un coste menor que ésta. En cualquier caso sólo se muestra esa parte del coste total de una función mientras está activa. Esto es que el coste que se muestra para cualquier función nunca puede ser mayor que el de la función activada.
+Entidades de costes
+Entidad de coste: es un concepto bastante abstracto, está relacionado con el código fuente del programa para el cual puede contabilizarse determinados eventos. Los parametros de las entidades de coste son la localización en el código (eg; línea de código, función), la localización de los datos (eg; el tipo de datos a los que se accede, objeto de los datos), la localización de la ejecución (eg; la tarea o proceso) y los tuplas de posiciones indicadas anteriormente (eg; llamadas o acceso a los objetos mediante la instrucción, datos obtenidos a partir del caché).
+Costes de los eventos
+Suma de eventos de algún tipo de evento que ocurre mientras la ejecución se relacione con alguna entidad de coste. El coste se atribuye a la entidad.
+Tipo de evento
+Tipo de evento: La clase de evento cuyos costes se le pueden atribuir a una entidad de coste. Existen tipos de eventos reales y heredados.
+Tipo de evento heredado
+Un tipo de evento virtual, solo visible en la vista y definido por una fórmula resoluble a partir de tipos de eventos reales.
+Archivo de datos de rendimiento: contiene la información obtenida durante el análisis (o parte de ella) o producida al procesar de un trazado. Su tamaño suele ser similar al del código del programa.
+Datos de un archivo de datos de análisis.
+Experimento de análisis de rendimiento: Un programa ejecutado bajo el control de una herramienta de análisis y que está generando uno o más archivos con información de rendimiento de sus partes o hilos.
+Proyecto de análisis de rendimiento: Configuración del experimento de análisis usado para el programa a analizar. En general, las comparaciones entre análisis sólo tienen sentido con datos de un solo proyecto.
+Análisis de rendimiento
+Proceso mediante el cual se recoge información estadística sobre la ejecución de un programa.
+Tipo de evento real
+Un tipo de evento que se puede medir con una herramienta, siempre que se tenga el sensor adecuado.
+Traza
+Traza: secuencia temporal de los eventos ocurridos mientras se analizaba la ejecución de un programa. Su tamaño suele ser directamente proporcional al tiempo de ejecución.
+Trazado
+El proceso mediante el cual se supervisa la ejecución de un programa y se registran sus eventos, ordenados por fecha, en un archivo de salida llamado traza.
+Créditos y licencia
+Gracias a Julian Seward por su excelente herramienta & valgrind; y a Nicholas Nethercote por añadirle & cachegrind;. Sin estos programas, & kcachegrind; no existiría. También han contribuido con algunas ideas para esta & GUI;.
+Gracias a todos los usuarios que enviaron informes de fallos y sugerencias.
+Traducido por Marcos Fouces Lago mfouces@yahoo. es Traducido por Cristina Yenyxe González García the. blue. valkyrie@gmail. com
+& underFDL;
+Instalación
+Cómo obtener & kcachegrind;
+& kcachegrind; forma parte del paquete & package; de & kde;. Si desea más información visite http: / /kcachegrind. sf. net.
+Requisitos
+Para poder utilizar & kcachegrind; necesita & kde; 4. x. Para generar la información de rendimiento se recomienda & cachegrind; o & calltree; /callgrind;.
+Compilación e instalación
+& install. compile. documentation;
+Configuración
+Todas las opciones de configuración están, o bien en el propio diálogo de configuración, o en los menús contextuales de las vistas.
+En el primer arranque, este área aparece dividida en una parte superior y otra inferior, cada una con diferentes opciones de visualización accesibles mediante pestañas. Para mover las vistas de visualización, utilice el menú contextual de las pestañas y ajuste la barra de división adecuadamente. Para cambiar rápidamente entre distintas distribuciones de visualización utilice Ver/ Disposición/ Duplicar y, para cambiar entre disposiciones, Ver/ Disposición/ Siguiente (o, mejor aún, emplee los accesos rápidos de teclado).
+Vistazo general de las partes
+Pila de llamadas
+Área de visualización
+Visualizaciones
+Llamantes directos
+Llamados directos
+File Recargar
+El menú Ver
+Ver Tipo de evento primario
+(Por hacer)
+Ver Tipo de evento secundario
+Ver Agrupación
+Ver Disposición
+Ver Dividir
+Glosario
+A continuación se exponen una lista de diversos términos.
+Parte del informe de rendimiento (también llamado incorrectamente: parte del trazado): Información de un archivo de análisis de rendimiento.
+& kappname;

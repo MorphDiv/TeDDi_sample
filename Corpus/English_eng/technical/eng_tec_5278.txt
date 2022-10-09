@@ -1,0 +1,71 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 7.
+Types
+Next
+PHP does not require (or support) explicit type definition in variable declaration; a variable's type is determined by the context in which that variable is used.
+That is to say, if you assign a string value to variable $var, $var becomes a string.
+If you then assign an integer value to $var, it becomes an integer.
+An example of PHP' s automatic type conversion is the addition operator '+ '.
+If any of the operands is a float, then all operands are evaluated as floats, and the result will be a float.
+Otherwise, the operands will be interpreted as integers, and the result will also be an integer.
+Note that this does NOT change the types of the operands themselves; the only change is in how the operands are evaluated.
+?php $foo = "0"; / / $foo is string (ASCII 48) !- - bad example, no real operator (must be used with variable, modifies it too) $foo++; / / $foo is the string "1" (ASCII 49) - - $foo += 2; / / $foo is now an integer (2) $foo = $foo + 1.3; / / $foo is now a float (3.3) $foo = 5 + "10 Little Piggies"; / / $foo is integer (15) $foo = 5 + "10 Small Pigs"; / / $foo is integer (15) !- - TODO: explain ++ / - - behaviour with strings examples: ++'001 '= '002' ++'abc '= 'abd' ++'xyz '= 'xza' ++'9.9 '= '9.0' ++'-3 '= '-4' - -'9 '= 8 (integer!) - -'5.5' = '5.5 '- -'-9' = -10 (integer) - -'09 '= 8 (integer) - -'abc' = 'abc '- -?
+If the last two examples above seem odd, see String conversion to numbers.
+If you wish to force a variable to be evaluated as a certain type, see the section on Type casting.
+If you wish to change the type of a variable, see settype().
+If you would like to test any of the examples in this section, you can use the var_dump() function.
+Note:
+The behaviour of an automatic conversion to array is currently undefined.
+?php $a = "1"; / / $a is a string $a[0] = "f"; / / What about string offsets?
+What happens??
+Since PHP (for historical reasons) supports indexing into strings via offsets using the same syntax as array indexing, the example above leads to a problem: should $a become an array with its first element being "f", or should "f "become the first character of the string $a?
+The current versions of PHP interpret the second assignment as a string offset identification, so $a becomes "f", the result of this automatic conversion however should be considered undefined.
+PHP 4 introduced the new curly bracket syntax to access characters in string, use this syntax instead of the one presented above:
+?php $a = "abc"; / / $a is a string $a{1} = "f"; / / $a is now "afc"?
+Type casting in PHP works much as it does in C: the name of the desired type is written in parentheses before the variable which is to be cast.
+?php $foo = 10; / / $foo is an integer $bar = (boolean) $foo; / / $bar is a boolean?
+The casts allowed are:
+(int), (integer) - cast to integer
+(bool), (boolean) - cast to boolean
+(float), (double), (real) - cast to float
+(string) - cast to string
+(array) - cast to array
+(object) - cast to object
+Note that tabs and spaces are allowed inside the parentheses, so the following are functionally equivalent:
+?php $foo = (int) $bar; $foo = (int) $bar;?
+Note:
+Instead of casting a variable to string, you can also enclose the variable in double quotes.
+?php $foo = 10; / / $foo is an integer $str = "$foo"; / / $str is a string $fst = (string) $foo; / / $fst is also a string / / This prints out that "they are the same "if ($fst === $str) {echo "they are the same";}?
+It may not be obvious exactly what will happen when casting between certain types.
+For more info, see these sections:
+Converting to boolean
+Converting to integer
+Converting to float
+Converting to string
+Converting to array
+Converting to object
+Converting to resource
+Prev
+Home
+Next
+Pseudo-types used in this documentation
+Up
+Variables

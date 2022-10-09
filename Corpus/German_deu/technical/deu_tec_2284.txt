@@ -1,0 +1,131 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Das Handbuch zu KDE su
+KDE su ist eine graphische Oberfl\xE4che f\xFCr den UNIX -Befehl su.
+Einleitung
+Willkommen bei KDE su!
+KDE su ist eine graphische Oberfl\xE4che f\xFCr den UNIX -Befehl su in KDE.
+Dies erm\xF6glicht Ihnen, ein Programm mit einer anderen Benutzerkennung auszuf\xFChren, indem Sie das Passwort dieses Benutzers angeben.
+KDE su hat keine speziellen Systemrechte; es benutzt den Befehl su.
+KDE su hat eine zus\xE4tzliche Funktion:
+Es kann Passw\xF6rter speichern.
+Wenn Sie diese Funktion benutzen, m\xFCssen Sie das Passwort f\xFCr jeden Befehl nur einmal eingeben.
+Weitere Informationen und eine Sicherheitsanalyse finden Sie unter.
+Dieses Programm sollte von der Befehlszeile oder durch .desktop -Dateien gestartet werden.
+Obwohl es nach dem Passwort des Systemverwalters (root) mit Hilfe eines GUI -Dialoges fragt, ist es trotzdem eher ein Befehlszeilen- als ein reines GUI -Programm.
+KDE su benutzen
+Die Befehlszeilen-Parameter sind unterhalb erkl\xE4rt.
+-c PROGRAMM
+Dieser Parameter gibt an, dass das Programm mit den Rechten des Systemverwalters ausgef\xFChrt wird.
+Der Parameter muss einzeln angegeben werden.
+-f FILE
+Dieser Parameter erlaubt den leistungsf\xE4higen Einsatz von KDE su bei .desktop Dateien.
+Er weist KDE su an, die Datei, die mit FILE angegeben wurde, zu untersuchen.
+Wenn der aktuelle Benutzer Schreibrechte auf die Datei hat, wird die Datei unter seinem Namen ausgef\xFChrt.
+Wenn er keine Schreibrechte hat, wird die Datei unter dem Benutzernamen USER (Voreinstellung:
+Systemverwalter) ausgef\xFChrt.
+-t
+Terminal-Ausgabe einschalten.
+Dieser Parameter schaltet das Speichern von Passw\xF6rtern aus.
+Dies ist haupts\xE4chlich f\xFCr Debugging-Zwecke interessant.
+Wenn Sie eine Anwendung benutzen wollen, die im Konsolen-Modus l\xE4uft, sollten Sie stattdessen den Standardbefehl su verwenden.
+-n
+Das Passwort nicht speichern.
+Dieser Parameter schaltet das Ankreuzfeld Passwort beibehalten im Passwort-Dialog aus.
+-q
+-d
+-v
+Versionsinformationen anzeigen und Programm beenden.
+--help
+Hilfe anzeigen.
+-s
+Den kdesu-D\xE4mon anhalten.
+Weitere Details finden Sie unter.
+Einrichtung
+KDE su wird mit dem Kontrollmodul passwords ausgeliefert.
+Anzeigemodus
+Hier l\xE4sst sich festlegen, wie Ihre eingegebenen Zeichen auf dem Bildschirm erscheinen.
+M\xF6gliche Einstellungen sind: ein Stern pro Zeichen, drei Sterne pro Zeichen oder keine R\xFCckmeldung auf dem Bildschirm.
+Die Voreinstellung ist "ein Stern pro Zeichen".
+Passw\xF6rter speichern
+Sie k\xF6nnen Passw\xF6rter in KDE su speichern, indem Sie das Einstellungsfeld Passw\xF6rter speichern ankreuzen.
+In dem Textfeld darunter k\xF6nnen Sie angeben, wieviele Minuten lang das Passwort gespeichert werden soll.
+Standardm\xE4\xDFig werden keine Passw\xF6rter gespeichert.
+Interne Funktionsweise
+X-Authentifizierung
+Wenn Sie keine X-Cookies benutzen, sind Sie auf sich alleine gestellt.
+KDE su wird dies erkennen und kein Cookie hinzuf\xFCgen.
+Sie m\xFCssen sich vergewissern, dass der Systemverwalter berechtigt ist, auf die Anzeige zuzugreifen.
+Schnittstelle zu su
+KDE su benutzt das Systemkommando su, um Rechte zu erhalten.
+In diesem Abschnitt wird erkl\xE4rt, wie KDE su dabei vorgeht.
+Weil manche su -Implementierungen (z.B. die von Red Hat) keine Passw\xF6rter von StdIn lesen, erstellt KDE su ein pty/tty-Paar und f\xFChrt su mit den Standard-Dateibeschreibungen aus, die durch das tty \xFCbergeben werden.
+Um anstelle einer interaktiven Shell einen Befehl auszuf\xFChren, den der Benutzer ausw\xE4hlt, benutzt KDE su den Parameter -c mit dem Befehl su.
+Dieser Parameter wird von jeder bekannten Shell verstanden, sodass er portabel einsetzbar sein sollte. su \xFCbergibt den Parameter -c an die Shell desjenigen Benutzers, unter dessen ID der Befehl ausgef\xFChrt werden soll.
+Diese Shell f\xFChrt dann das Programm aus.
+Statt den Befehl des Benutzers direkt mit su auszuf\xFChren, f\xFChrt KDE su das kleine Unterprogramm kdesu_stub aus.
+Dieses Unterprogramm, das unter der ID des Zielbenutzers l\xE4uft, fordert einige Informationen von KDE su \xFCber \xFCber den pty/tty Kanal an (stdin und stdout des Unterprogramms).
+Danach wird das Programm des Benutzers ausgef\xFChrt.
+Folgende Informationen werden \xFCbergeben: die X-Anzeige, ein X-Authentifizierungs-Cookie (wenn verf\xFCgbar), die Variable PATH und der auszuf\xFChrende Befehl.
+Der Grund f\xFCr die Benutzung eines Unterprogramms ist der X-Cookie.
+Dieser beinhaltet sensible Informationen und kann deshalb nicht \xFCber die Befehlszeile \xFCbergeben werden.
+Passwort-\xDCberpr\xFCfung
+Passw\xF6rter speichern
+Um es Ihnen so einfach wie m\xF6glich zu machen, enth\xE4lt KDE su eine Funktion Passwort beibehalten.
+Falls Sie sich f\xFCr die Sicherheit dieser Funktion interessieren, sollten Sie diesen Absatz lesen.
+Indem Sie KDE su erlauben, die Passw\xF6rter zu speichern, entsteht eine (kleine) Sicherheitsl\xFCcke in Ihrem System.
+KDE su erlaubt niemandem au\xDFer Ihnen mit Ihrer Benutzer-ID, diese Passw\xF6rter zu benutzen.
+Wenn Sie allerdings nicht aufpassen, kann das Sicherheitslevel des Systemverwalters (root) auf das eines normalen Benutzers (Ihre Benutzer-ID) herabgesetzt werden.
+Ein Hacker, der versucht, in Ihren Zugang einzubrechen, w\xFCrde dann Zugang zu den Funktionen von root erhalten.
+KDE su versucht dies zu verhindern.
+Das Sicherheitskonzept, das benutzt wird, ist angemessen sicher, zumindest nach bestem Wissen des Autors.
+Das Konzept wird hier weiter erkl\xE4rt.
+KDE su benutzt den D\xE4mon kdesud.
+Der D\xE4mon nimmt auf einem UNIX -Socket in /tmp Befehle entgegen.
+Die Zugriffsrechte des Sockets sind auf 0600 eingestellt, sodass nur Ihre Benutzer-ID Verbindungen zu dem Socket aufbauen kann.
+Wenn Passwort beibehalten aktiviert wurde, f\xFChrt KDE su Befehle durch diesen D\xE4mon aus.
+KDE su schreibt dann den Befehl und das Passwort des Systemverwalters auf den Socket.
+Der D\xE4mon f\xFChrt dann mit Hilfe von su den Befehl, wie oben beschrieben, aus.
+Danach werden Befehl und Passwort nicht gel\xF6scht, sondern f\xFCr eine bestimmte Zeit zwischengespeichert.
+Diese Zeit wird dem Kontrollmodul entnommen.
+Wenn jetzt eine andere Anfrage f\xFCr den Befehl in der angegebenen Zeit kommt, muss der Benutzer das Passwort nicht nochmals eingeben.
+Um zu verhindern, dass Hacker, die in Ihren Zugang eingedrungen sind, Passw\xF6rter stehlen, wird der D\xE4mon mit den Parametern set-group-id nogroup eingerichtet.
+Dies sollte alle normalen Benutzer (Sie eingeschlossen) daran hindern, Passw\xF6rter von dem Prozess kdesud zu bekommen.
+Der D\xE4mon setzt au\xDFerdem die Umgebungsvariable DISPLAY auf den Wert, den der D\xE4mon hatte, als er gestartet wurde.
+Das Einzige, was ein Hacker demnach tun k\xF6nnte, w\xE4re Anwendungen auf Ihrer Anzeige auszuf\xFChren.
+Ein Schwachpunkt in diesem Sicherheitskonzept ist die Tatsache, dass die auszuf\xFChrenden Programme wahrscheinlich nicht nach Sicherheitsgesichtpunkten geschrieben wurden (z.B. setuid root Programme).
+Dies bedeutet, dass diese Programme Puffer-\xDCberl\xE4ufe oder andere Probleme enthalten k\xF6nnten, die ein Hacker ausn\xFCtzen k\xF6nnte.
+Die Benutzung der Funktion zum Speichern der Passw\xF6rter ist ein Kompromiss zwischen Sicherheitsanspr\xFCchen und Komfort.
+\xDCberdenken Sie dies bitte und entscheiden Sie selbst ob Sie diese Funktion benutzen wollen oder nicht.
+Autor
+KDE su
+Copyright 2000 Geert Jansen
+KDE su wurde von Geert Jansen geschrieben.
+Es basiert ein wenig auf Pietro Iglios KDE su, Version 0.3.
+Pietro und Geert Jansen sind \xFCbereingekommen, dass Geert Jansen das Programm in Zukunft pflegen wird.
+Der Autor ist unter folgender Adresse zu erreichen: g.t.jansen@stud.tue.nl.
+Bitte schicken Sie ihm alle Fehler die Sie finden, sodass er Sie entfernen kann.
+Wenn Sie Vorschl\xE4ge zu diesem Programm haben k\xF6nnen Sie Geert Jansen gerne anschreiben.
+Installation
+Herunterladen
+KDE su ist Teil des KDE -Projekts http://www.kde.org /.
+KDE su k\xF6nnen Sie im kdebase-Paket finden auf ftp://ftp.kde.org/pub/kde /, der Haupt- FTP -Site des KDE -Projekts.
+Kompilieren
+Um KDE su auf Ihrem System zu kompilieren und zu installieren, schreiben Sie das Folgende in das Hauptverzeichnis in der KDE su -Distribution:
+Da KDE su autoconf und automake benutzt, sollte es dabei keine Schwierigkeiten geben.
+Sollten dennoch Probleme auftauchen, wenden Sie sich bitte an die KDE -Mailinglisten.

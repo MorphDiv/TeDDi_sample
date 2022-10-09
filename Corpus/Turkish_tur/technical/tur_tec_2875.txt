@@ -1,0 +1,64 @@
+# language_name_wals:	Turkish
+# language_name_glotto:	Turkish
+# ISO_6393:	tur
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/tr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Kullanım Kılavuzu
+Önceki
+Bölüm 4.
+Güvenlik
+Sonraki
+Hata Raporlama
+PHP güvenliğinde, hataların raporlandığı iki taraf vardır.
+Birincisi güvenliği arttırmaya yöneliktir, ikincisi ise azaltmaya yönelik.
+Standart bir saldırı taktiği, sisteme uygunsuz veri girişi yaparak, geri dönen hata mesajlarını incelemektir.
+Bu, sistemi kırmak isteyen kişiye sunucu hakkında bilgi toplama ve olası zayıflıklar hakkında fikir sahibi olma şansı verir.
+Örneğin, bir saldırgan form verilerinin işlendiği dosya hakkında yeterli bilgiye sahip olursa, değişkenleri ezmeye ya da onları değiştirmeye çalışabilir:
+Örnek 4-5.
+Değişkenlere özelleştirilmiş bir HTML sayfası ile saldırmak
+
+Normal olarak döndürülen PHP hataları, uygulamasındaki hataları ayıklayan bir geliştirici için yardımcıdır.
+Bu şekilde hatanın yer aldığı dosyayı, sorun yaratan fonksiyonu, hangi satırın problem çıkarttığını tespit edebilir. İşte bütün bu bilgiler aynı zamanda kötü amaçlara alet edilebilir.
+Bir php geliştiricisinin hata ayıklama sürecinde show_source(), highlight_string() ya da highlight_file() fonksiyonlarını kullanmaları az raslanan bir durum değildir.
+Ama yayındaki bir sitede, bu durum gizli değişkenleri açığa çıkarabilir, kontrol edilmemiş söz dizimini ele verebilir ve bu listeye daha birçok tehlikeli bilgi dahil edilebilir.
+Özellikle önyüklü hata ayıklama yöntemlerini ya da bilinen hata ayıklama tekniklerini kullanıyorsanız tehlike altındasınız demektir.
+Saldırgan hangi genel tekniği kullandığınızı belirlerse, sayfaya çeşitli ayıklama değerleri gönderebilir:
+Örnek 4-6.
+Ortak hata ayıklama değişkenleri üzerinden saldırmak
+
+Hata takibi için kullanılan yöntemden bağımsız olarak, sistem hatalarına sızabilmek, saldırgan için sistem hakkında daha fazla bilgi toplamak anlamına gelir.
+Örneğin, en çok bilinen PHP hatası, sistemde PHP 'nin kullanıldığını ortaya çıkartır.
+Saldırgan bir .html sayfası arıyorsa, ve geri planda çalışan sistemi analiz etmek istiyorsa (sistemin bilinen zayıflıklarına saldırmak için), hatalı veri göndererek sistemin PHP ile yapıldığını ortaya çıkartabilir.
+Bir fonksiyon hatası, sistemde hangi veritabanının çalıştığını ortaya çıkartabilir, ya da web sayfasının nasıl programlandığı ya da tasarlandığı hakkında ipucu verebilir.
+Bu, açık veritabanı portlarına yönelik daha derin araştırmaya yöneltebilir, ya da web sayfasında olabilecek hata veya zayıflıkları incelettirebilir.
+Farklı hatalı veri parçaları göndererek, bir saldırgan örneğin uygulama içindeki doğrulama sıralamasını bulabilir (hata satırlarından), ya da uygulamanın farklı bölümleri için geçerli olabilecek açıkları tespit edebilir.
+Bir dosya sistemi ya da genel PHP hatası, web sunucusunun hangi izinlere sahip olduğunu gösterebilir, aynı zamanda web sunucusunun yapısı ve organizasyonu hakkında bilgi verir.
+Geliştirici tarafından belirlenmiş hata kodu bu sorunu derinleştirebilir, bu şekilde "gizli" bilgiler kolayca açığa çıkartılabilir.
+Bu duruma ait üç önemli çözüm bulunmaktadır.
+Birincisi bütün kodun fonksiyonların içine gömülerek, hata mesajlarının yansıtılmamasına çalışmaktır. İkincisi, çalışmakta olan kod içersinden bütün hata raporlama işlemini kapatmaktır.
+Üçüncüsü, PHP 'nin özelleştirilmiş hata kontrol fonksiyonlarını kullanarak kendi hata takip sisteminizi kurmaktır.
+Güvenlik politikanıza uygun olarak, her üç durumu da kendi sisteminize uygulayabilirsiniz.
+Bu durumdan korunmanın yollarından birisi, PHP' nin kendi error_reporting() fonksiyonunu size kodunuzdaki güvenliği arttırmak ve kullanımı tehlikeli olabilecek değişkenleri bulmakta yardımcı olması amacıyla kullanmaktır.
+Kodunuzu üretim aşamasına geçmeden önce E_ALL ile test ederek, neredeki değişkenlerin farklı yollarla saldırıya uğrayabileceğini kestirebilirsiniz.
+Bir defa üretim aşamasına geçmeye hazır olduğunuzda, E_NONE kullanarak, kodunuzu incelemelere kapatmış olursunuz.
+Örnek 4-7.
+E_ALL ile tehlikeli değişkenlerin bulunması
+?php if ($username) {/ / Kullanimdan önce kontrol edilmiyor $good_login = 1;} if ($good_login == 1) {/ / Yukardaki test basarisiz olursa, yaratilmayacak ve denetlenmeyecektir fpassthru (" / highly / sensitive / data / index.html");}?
+Önceki
+Baþlangýç
+Sonraki
+Dosya Sistemi Güvenliği
+Yukarý
+Register Globals Kullanımı

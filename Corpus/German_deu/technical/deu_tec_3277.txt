@@ -1,0 +1,44 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+Gibt ein assoziatives Array zurück, das die gelesene Zeile enthält oder FALSE, falls es keine Zeilen mehr zu lesen gibt.
+Für Blob Spalten werden Integerwerte als blob ids zurückgegeben, die von der Funktion ifx_get_blob() verwendet werden, es sei denn, Sie haben ifx_textasvarchar(1) oder ifx_byteasvarchar(1) benutzt.
+Dann werden Blobs als Zeichenketten zurückgegeben.
+Bei einem Fehler wird FALSE zurückgegeben.
+result_id ist eine gültige Ergebniskennung, die von ifx_query() oder ifx_prepare() (nur bei SELECT Abfragen!) zurückgegeben wurde.
+position ist ein optionaler Parameter für eine "fetch" Operation eines "scroll "Cursors.
+Der Wert dieses Parameters kann "NEXT", "PREVIOUS", "CURRENT", "FIRST", "LAST" oder eine Zahl sein.
+Falls Sie eine Zahl angeben, werden die zu holenden Zeilen "absolut" angegeben.
+Dieser Parameter ist optional und gilt nur für SCROLL Cursors.
+ifx_fetch_row() holt eine Zeile aus der Ergebnismenge, die mit der angegebenen Ergebniskennung verknüpft ist.
+Die Zeile wird als Array zurückgegeben.
+Jede Spalte der Ergebnismenge wird in einer Arraykomponente gespeichert, beginnend bei Offset 0, mit dem Spaltennamen als Index.
+Aufeinanderfolgende Aufrufe von ifx_fetch_row() geben die jeweils nächste Zeile der Ergebnismenge zurück oder FALSE, falls es keine Zeile mehr gibt.
+Beispiel 1.
+
+$rid = ifx_prepare ("select * from emp where name like ". $name, $connid, IFX_SCROLL); if (! $rid) {...
+Fehler...} $rowcount = ifx_affected_rows($rid); if ($rowcount 1000) {printf ("Zu viele Zeilen in der Ergebnismenge (%d)\n br ", $rowcount); die ("Bitte begrenzen Sie Ihre Abfrage br \n");} if (! ifx_do ($rid)) {...
+Fehler...} $row = ifx_fetch_row ($rid, "NEXT"); while (is_array($row)) {for(reset($row); $fieldname=key($row); next($row)) {$fieldvalue = $row[$fieldname]; printf ("%s = %s ,", $fieldname, $fieldvalue);} printf("\n br "); $row = ifx_fetch_row ($rid, "NEXT");} ifx_free_result ($rid);
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

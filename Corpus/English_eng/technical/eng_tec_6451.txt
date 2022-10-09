@@ -1,0 +1,209 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+The & ksysv; Handbook
+Peter Putzer
+putzer@kde. org
+ROLES_OF_TRANSLATORS
+Peter Putzer
+& ksysv; is a graphical editor for the SysV style init configuration.
+KDE
+KSysV
+Runlevel
+Runlevel editor
+System V init
+Introduction
+Welcome to the & kde; System V Init Editor, commonly known (and hereafter referenced) as & ksysv;. This section introduces a few concepts and explains what you can do with & ksysv;.
+A Brief Description of System V Init
+The following explanation is borrowed from tksysv (an inspiration for & ksysv;):
+System V init is fast becoming the standard in the & Linux; world to control the startup of software at boot time. This is because it is arguably easier to use and more powerful and flexible than the traditional BSD init.
+I wo n't go into the history here (mainly because I do n't know it: -).
+The init binary is located in / sbin and not / etc. This is important as one might try and upgrade a machine to System V init without re-installing and reformatting. The & Linux; kernel looks in / etc for its init first, so you must make sure and delete your old init from there if any.
+SysV init also differs from BSD init in that the config files are in a subfolder of / etc instead of residing directly in / etc. This folder is called rc. d. In there you will find rc. sysinit and the following folders:
+init. d/
+rc0. d/
+rc1. d/
+rc2. d/
+rc3. d/
+rc4. d/
+rc5. d/
+rc6. d
+init. d contains a bunch of scripts. Basically, you need one script for each service you may need to start at boot time or when entering another runlevel. Services include things like networking, NFS, & Sendmail;, httpd, & etc;. Services do not include things like setserial that must only be run once and then exited. Things like that should go in the file rc. local.
+rc. local should be in / etc/ rc. d if you want one. Most systems include one even though it does n't do much. You can also include an rc. serial in / etc/ rc. d if you need to do serial port specific things at boot time.
+The chain of events is as follows:
+The kernel looks in several places for init and runs the first one it finds.
+init runs / etc/ rc. d/ rc. sysinit.
+rc. sysinit does a bunch of necessary things and then runs rc. serial (if it exists)
+init runs rc. local
+init runs all the scripts for the default runlevel
+The default runlevel is decided in / etc/ inittab. You should have a line close to the top like:
+id:3: initdefault:
+From this, you'd look in the second column and see that the default runlevel is 3, as should be the case for most systems. If you want to change it, you can edit / etc/ inittab by hand and change the 3. Be very careful when you are messing with the inittab. If you do mess up, you can get in to fix it by rebooting and doing:
+LILO boot: linux single
+This should allow you to boot into single user mode so you can fix it.
+Now, how does it run all the right scripts? If you do an ls -l on rc3. d, you might see something like:
+lrwxrwxrwx 1 root root 13 13:11 S10network -gt;.. / init. d/ network lrwxrwxrwx 1 root root 16 13:11 S30syslog -gt;.. / init. d/ syslog lrwxrwxrwx 1 root root 14 13:32 S40cron -gt;.. / init. d/ cron lrwxrwxrwx 1 root root 14 13:11 S50inet -gt;.. / init. d/ inet lrwxrwxrwx 1 root root 13 13:11 S60nfs -gt;.. / init. d/ nfs lrwxrwxrwx 1 root root 15 13:11 S70nfsfs -gt;.. / init. d/ nfsfs lrwxrwxrwx 1 root root 18 13:11 S75keytable -gt;.. / init. d/ keytable lrwxrwxrwx 1 root root 23 13:11 S80sendmail -gt;.. / init. d/ sendmail. init lrwxrwxrwx 1 root root 18 13:11 S90lpd -gt;.. / init. d/ lpd. init lrwxrwxrwx 1 root root 11 13:11 S99local -gt;.. / rc. local
+What you'll notice is that there are no real files in the folder. Everything there is a link to one of the scripts in the init. d folder.
+The links also have an S and a number at the beginning. The S means to start this particular script and a K would mean to stop it. The number is just there for ordering purposes. Init will start all the services based on the order they appear. You can duplicate numbers, but it will only confuse you somewhat. You just need to use a two digit number only, along with an uppercase S or K to start or stop the services you need to.
+How does it start and stop services? Simple. Each of the scripts is written to accept an argument which can be start and stop. You can execute those scripts by hand in fact with a command like:
+/ etc/ rc. d/ init. d/ httpd. init stop
+To stop the httpd server. Init just reads the name and if it has a K, it calls the script with the stop argument. If it has an S it calls the script with a start argument.
+Why All These Runlevels?
+Some people want an easy way to setup machines to be multi-purpose. I could have a server runlevel that just runs httpd, & Sendmail;, networking, & etc; Then I could have a user runlevel that runs & kdm;, networking, & etc;
+Onscreen Fundamentals
+Here you learn how to use & ksysv;, which should n't be hard since it was designed to be as user-friendly as possible.
+Mouse
+Using & ksysv; with a mouse or other pointing device is easy: just drag an entry from the Available Services area onto one of the six runlevels to start (or resp. stop) it in that runlevel.
+You can also move scripts between runlevels, or change the position in a given runlevel, by dragging it around. Doing so removes the entry from its original runlevel (or position). This does n't happen when you drag an entry from the Available Services area.
+Entries are moved when you drag them to a new area. To copy a service to a different runlevel, you have to select Copy from the Edit or context menu and Paste it in the target runlevel.
+The sorting number of an entry sometimes cannot be calculated. In such a case you have to edit the sorting numbers of surrounding entries before re-trying to insert the service.
+Sorting numbers can range from 00 to 99, but no higher.
+You can delete entries by dragging them onto the Trash Can area (symbolized by an icon depicting a garbage bin).
+Currently there is no way to recover items dragged onto the Trash Can, so be careful!
+Keyboard
+You can use the Tab key to switch focus between different panels (Available Services, Runlevel 1 Start, Runlevel 1 Stop, & etc;) and the cursor keys to move the selection up and down.
+To move an entry to a different runlevel, Cut it to the clipboard (using Ctrl; X and Paste it in the target runlevel (with Ctrl; V).
+To manually change an entries sorting number or name, press Enter to open the properties dialog. Use the Tab key to switch between different fields. Close the dialog by pressing Enter to accept the modifications, or press Esc to cancel any changes.
+The Menu Entries
+A one by one description of & ksysv; 's menu.
+The File menu
+Because of the danger of data loss, all menu entries under File ask for confirmation before doing their work.
+File Revert Configuration...
+Forget any changes you have made, and revert to the last saved configuration.
+Ctrl; O File Open...
+Open a previously saved configuration.
+Ctrl; S File
+Make your changes permanent. Saving does not generate any backup files, so use with care.
+File Save As...
+Save a copy of your new configuration.
+Ctrl; L File...
+Save a log
+Ctrl; P File...
+Print a copy of the log.
+Ctrl; Q File Quit
+Quit & ksysv;.
+The Edit menu
+Ctrl; Z Edit Undo
+Undo the last unsaved change made.
+Ctrl; & Shift; Z Edit Redo
+Redo the last item undone.
+Ctrl; X Edit Cut
+Cut the currently selected service to the clipboard.
+Ctrl; C Edit Copy
+Copy the selected entry to the clipboard, without removing it from its original position.
+Ctrl; V Edit Paste
+Paste the content of the clipboard at the current cursor position.
+Edit Properties
+Open the properties dialog for the selected item.
+The Tools menu
+Tools Start Service...
+Start the selected service
+Tools Stop Service...
+Stop the selected service
+Tools Restart Service...
+Restart the selected service.
+Tools Edit Service...
+Edit the selected service
+The Settings menu
+Settings Show Toolbar
+Toggle on and off display of the toolbar.
+Settings Show Statusbar
+Toggle on and off display of the statusbar.
+Settings Show Log
+Toggle on and off the display of the log window
+Settings Save Settings
+Save your current settings.
+Settings Configure Key bindings...
+Customize the default keybindings.
+Settings Configure Toolbars...
+Customize the toolbar.
+Settings Configure SysV-Init Editor...
+Customize the behavior of & ksysv;
+The Help menu
+& help. menu. documentation;
+Configuration
+All options are saved in $KDEHOME / share/ config/ ksysvrc. Defaults are taken from the global file ($KDEDIR / share/ config/ ksysvrc), if available, or else generated within & ksysv;. Changes to the defaults are stored in your local ksysvrc.
+Recognized Sections
+Recognized sections and keys plus their default values.
+& lsqb; Path Settingsrsqb;
+Keyword
+Default
+Description
+ScriptPath
+/ etc/ rc. d/ init. d
+Path to the scripts used for starting and stopping services.
+RunlevelPath
+/ etc/ rc. d
+Path to the runlevel subfolders.
+& lsqb; Colorsrsqb;
+Changed
+red
+Color used for changed entries
+New
+blue
+Color used for new entries
+& lsqb; Geometryrsqb;
+Width
+Width of & ksysv; 's window
+Height
+Height of & ksysv; 's
+& lsqb; Other Settingsrsqb;
+ToolBar
+true
+If the toolbar is enabled or not
+StatusBar
+If the status bar is enabled or not
+ShowLog
+If the log window is shown or not
+PanningFactor
+80
+100 - PanningFactor = percentage of window reserved for the logfile display
+Questions and Answers
+I played around with the default runlevel, and now my machine reboots all the time. What can I do?
+Enter linux single at the LILO prompt, and press Enter to boot into single user mode. Edit the file / etc/ inittab and change to the default runlevel to something sane. 3 should normally be safe.
+My Machine halts just after booting
+See Question 1, above.
+I scheduled some services to be run in runlevel X using & ksysv;, so why are n't they working?
+If you're using & SuSE; or Delix (DLD) distributions, you also have to edit a distribution specific file in / etc. Please have a look at the manual of your distribution for details.
+The approach to starting services used by the above mentioned distributions makes configuration of services easy for the proprietary configuration tools these distributions provide, but it is unfortunately non-standard. The & ksysv; authors plan to write a generic extension for this approach some time in the future, but do n't hold your breath.
+If you're using a different distribution, please check you have all the config files needed by the service, and whether they are in the correct locations. Some daemons for example Apache, (aka httpd) just die silently if their configuration files are missing or misconfigured.
+Standard semantics of Runlevels
+These vary by distribution, so this is an incomplete list of the most common & Linux; distributions. If you have additional distributions, please email the author and have the information added to this manual.
+& RedHat;
+Runlevel 0:
+halt (shuts down the machine)
+Runlevel 1:
+Single user mode.
+Runlevel 2:
+Multi user text only, without NFS.
+Runlevel 3:
+Multi user text-only, with full networking.
+Runlevel 4:
+Not used.
+Runlevel 5:
+Multi user X11 with full networking.
+Runlevel 6:
+Reboot
+License and Credits
+& ksysv; Copyright & copy; 1997-1998 Peter Putzer
+Peter Putzer, putzer@kde. org - Developer
+Documentation:
+Peter Putzer, putzer@kde. org - Original content
+Eric Bischoff, & Eric. Bischoff. mail; - Editor
+CREDIT_FOR_TRANSLATORS
+& underFDL; & underGPL;
+Installation

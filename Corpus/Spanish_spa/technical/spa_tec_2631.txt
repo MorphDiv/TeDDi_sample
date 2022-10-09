@@ -1,0 +1,124 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Trabajo futuro
+Esta sección describe algunos de los trabajos que están en progreso dentro de aRts.
+El desarrollo avanza rápidamente, así que esta información podría estar obsoleta.
+Debería comprobar la lista del archivo TODO y los archivos de la lista de correo para ver qué nueva funcionalidad se está planeando.
+Considérese libre para involucrarse en el nuevo diseño e implementación.
+Este documento es un borrador que intenta dar una idea sobre cómo se integrarán las nuevas tecnologías en aRts.
+En concreto, se ocupa de lo siguiente:
+Cómo funcionan los interfaces.
+Los códecs - la decodificación de flujos mp3 o wav de forma que puedan ser utilizados como datos.
+Vídeo.
+Hebras.
+Sincronización.
+Expansión / enmascaramiento dinámico.
+Composición dinámica.
+GUI
+MIDI
+Este trabajo está en progreso.
+Sin embargo, debería ser la base si lo que usted desea es encontrar nuevas tecnologías en aRts.
+Además debería de dar una idea de cómo se van a afrontar esas cuestiones.
+Pero, por supuesto, corrija cualquier cosa que considere que se puede mejorar.
+Elementos que utilizarán la tecnología de aRts (así que, por favor, coordine sus esfuerzos):
+KPhone (voz sobre IP)
+Noatun (reproductor de vídeo y audio)
+artscontrol (programa de control del servidor de sonido)
+Brahms (secuenciador musical)
+Kaiman (reproductor de medios de KDE 2 - compatible con kmedia2)
+mpglib / kmpg (tecnología de reproducción de audio y vídeo mpg)
+SDL (capa de medios directa para los juegos, aún no comenzado pero estará bien)
+electric ears (el autor se puso en contacto conmigo - estado desconocido)
+Cómo funcionan los interfaces
+Los interfaces &MCOP; están basados en el concepto de aRts.
+Son transparentes a la red de forma equivalente a las clases de C++.
+Siempre que sea posible, debería orientar sus diseño hacia los interfaces.
+Estos constan de cuatro partes:
+Flujos síncronos
+Flujos asíncronos
+Métodos
+Atributos
+Estos pueden mezclarse como usted prefiera.
+Las nuevas tecnologías deberían definirse en términos de interfaces.
+Lea las secciones sobre los flujos síncronos y asícronos, así como los interfaces KMedia2, ya que son buenos ejemplos sobre cómo funcionan las cosas.
+Los interfaces se especifican en código .idl y se ejecutan a través del compilador mcopidl.
+Códecs - decodificación de datos
+Los interfaces de kmedia2 permiten ignorar que los archivos wav, mp3 y otros se construyen a base de flujos de datos.
+En vez de eso, se implementan métodos para reproducirlos.
+Por lo tanto, usted puede escribir una rutina de carga de ondas de forma que se puedan reproducir los archivos de ondas (como PlayObject), pero nadie más puede utilizar su código.
+Los flujos asíncronos pueden ser una alternativa.
+Se define un interfaz que permite introducir y sacar bloques de datos.
+Se parece a lo de &MCOP;:
+Por supuesto los códecs también proporcionan atributos para emitir datos adicionales, como información sobre el formato.
+Este ByteAudioCodec, por ejemplo, puede conectarse a un objeto ByteStreamToAudio, para hacer audio flotante real.
+Por supuesto, otros tipos de códecs podrían incorporar la emisión directa de información de vídeo, como
+En la mayoría de los casos, se debería emplear el concepto de un códec más que el método tu sabes hacerlo funcionar y yo no que ahora utiliza, por ejemplo, WavPlayObject.
+Sin embargo, alguien debería ponerse a experimentar un poco antes de que se pueda dar por finalizada la API.
+Vídeo
+Mi idea es proporcionar el vídeo como flujos asíncronos de algún tipos de datos nativo de &MCOP; que contenga imágenes.
+Este tipo de datos aún no está creado.
+Al hacerlo así, los conectores que tratan con las imágenes de vídeo pueden establecer enlaces de la misma manera que lo hacen los conectores de audio.
+Estas son algunas de las cosas que no se deben olvidar:
+Hay espacios de color RGB y YUV.
+El formato debería estar de algún modo unido al flujo.
+La sincronización es importante.
+Mi idea es permitir la posibilidad de volver a implementar la clase VideoFrame de forma que pueda almacenar información en un segmento de memoria compartida.
+De esa manera, serían posibles incluso los flujos de vídeo entre distintos procesos sin mucha dificultad.
+Sin embargo, la situación normal del vídeo es que las cosas estén en el mismo proceso, desde la decodificación hasta el dibujado.
+He hecho un prototipo de una implementación de flujos de vídeo, que se puede descargar aquí.
+Esto se deberá integrar en &MCOP; después de algunos experimentos.
+Se debería proporcionar un componente del procesado que soporte XMITSHM (con RGB y YUV), Martin Vogt me ha dicho que está trabajando en algo de ese tipo.
+Hebras
+En la actualidad, &MCOP; funciona en una sola hebra.
+Seguramente esto no se podrá seguir manteniendo para el vídeo.
+De acuerdo.
+Estas son algunas de las cosas que hay que abordar con cuidado:
+SmartWrappers - no son seguros para multihebra debido al contador de referencias no seguro y otras cosas similares.
+Dispensador / E / S - tampoco es seguro.
+Sin embargo, lo que imagino es que habrá que hacer algunos módulos seguros en multihebra, tanto en flujos síncronos como asíncronos.
+De esa manera, con un sistema de flujo multihebra, se puede planificar el flujo de señal sobre dos o más procesadores.
+Esto también ayudaría mucho al audio en los entornos multiprocesador.
+Cómo funcionaría:
+El sistema de flujo decide qué módulos deberían calcular qué, así:
+fotogramas de vídeo (con process_indata method)
+flujos de audio síncronos (calculateBlock)
+otros flujos asíncronos, mayormente flujos de bytes
+Los módulos pueden calcular estas cosas en sus propias hebras.
+Para el audio, tiene sentido reutilizar las hebras (e.g. crear cuatro hebras para cuatro procesadores, independientemente de si están funcionando 100 módulos).
+Para el vídeo y la descompresión de bytes, puede ser más cómodo tener una implementación con bloqueos en una hebra propia, lo que se sincroniza con el resto de &MCOP; a través del sistema de flujo.
+Los módulos pueden no utilizar funcionalidad de &MCOP; (como las invocaciones remotas) durante las operaciones multihebra.
+Sincronización
+El vídeo y el MIDI (y el audio) requieren sincronización.
+Basícamente esto viene determinado por unos códigos de tiempo.
+La idea que tengo es conectar los códigos de tiempo con flujos asíncronos, añadiendo un código de tiempo en cada paquete.
+Si usted envía dos fotogramas de vídeo, hágalo en dos paquetes (serán grandes de todas formas), para que pueda tener dos códigos de tiempo diferentes.
+El audio tienen códigos de tiempo implícitos, ya que es síncrono.
+Composición dinámica
+Debería ser posible decir: un efecto especial se componen de estos módulos más sencillo.
+Los efectos especiales deberían tener el aspecto de un módulo &MCOP; normal (véase el enmascaramiento), pero de hecho constar de otros módulos.
+Esto es lo que hace falta en aRts-builder.
+GUI
+Todos los componentes del GUI serán módulos &MCOP;.
+Deberían de tener atributos como el tamaño, la etiqueta, el color, etc.
+Un constructor RAD (aRts-builder) debería ser capaz de componerlos visualmente.
+El GUI debería ser almacenable, mediante el almacenamiento de los atributos.
+MIDI
+El MIDI se implementará como flujos asíncronos.
+Hay dos opciones, una es utilizar las estructuras normales de &MCOP; para definir los tipos y la otra es introducir más tipos propios.
+Creo que las estructuras normales deberían bastar, algo como:
+Los flujos asíncronos deberían soportar tipos de flujo propios.

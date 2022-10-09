@@ -1,0 +1,75 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+Las conexiones persistentes son enlaces SQL que no se cierran cuando termina la ejecución del archivo de comandos.
+Cuando se pide una conexión persistente, PHP comprueba si hay ya una conexión persistente idéntica (que permanecía abierta desde antes) - y si existe, la usa.
+Si no existe, crea un enlace.
+Una conexión 'idéntica' es una conexión que se abrió hacia el mismo "host", con el mismo nombre de usuario y la misma contraseña (donde sea aplicable).
+Nota:
+Existen otras extensiones que proporcionan conexiones persistentes, tal como la extensión IMAP
+La gente que no está familiarizada con el modo como trabajan y distribuyen la carga los servidores "web" puede confundir que significa conexiones persistentes.
+En particular, no te dan la habilidad de abrir 'sesiones de usuario' en el mismo enlace SQL, no dan la habilidad de construir una transacción de forma eficiente, y no hacen un montón de otras cosas.
+De hecho, para ser extremadamente claros sobre el tema las conexiones persistentes no te dan ninguna functionalidad que no fuera posible con sus hermanas no-persistentes.
+¿Por qué?
+Esto tiene que ver con el modo como funcionan los servidores "web".
+Hay tres modos en que un servidor "web" puede utilizar PHP para generar páginas web.
+El primer método es usar PHP como una capa CGI.
+Cuando corre de este modo, se crea y destruye una instancia del intérprete PHP por cada página solicitada (para una página PHP) a tu servidor.
+Debido a que se destruye después de cada petición, cualquier recurso que adquiera (como un enlace a un servidor de base de datos SQL) se cierra cuando es destruido.
+En este caso, no se gana nada si se intentan usar conexiones persistentes, ya que simplemente no persisten.
+El segundo, y más popular, método es correr PHP como un módulo en un servidor web multiproceso, lo cual actualmente sólo incluye Apache.
+Un servidor multiproceso tiene típicamente un proceso (el padre) que coordina un conjunto de procesos (sus hijos) que realmente hacen el trabajo se servir las páginas web.
+Cuando entra cada petición de un cliente, es entregada a uno de los hijos que no esté ya sirviendo a otro cliente.
+Esto significa que cuando el mismo cliente hace una segunda petción al servidor, puede ser atendido por un proceso hijo distinto del de la primera vez.
+Lo que una conexión persistente hace por ti en este caso es hacerlo de tal modo que cada proceso hijo sólo necesita conectar a tu SQL server la primera vez que sirve una página que hace uso de una conexión así.
+Cuando otra página solicita una conexión a SQL server, puede reutilizar la conexión que el hijo estableció previamente.
+El último método es usar PHP como un "plug-in" para un servidor web multihilo.
+En la actualidad es solamente teórico - - PHP no funciona aún como "plug-in" para ningún servidor web multihilo.
+Actualmente PHP 4 soporta ISAPI, WSAPI y NSAPI (en Windows), lo cual permite a PHP ser utilizado como "plug-in "para servidores web multihilo como Netscape FastTrack, Internet Information Server (IIS) de Microsoft, y O'Reilly 's WebSite Pro.
+El comportamiento es exactamente el mismo que para el modelo de multiprocesador descrito anteriormente.
+Tener en cuanta que el soporte para SAPI no está disponible en PHP 3.
+Si las conexiones persistentes no aportan ninguna funcionalidad añadida, ¿para qué son buenas?
+La respuesta aqui es extremadamente simple - - eficiencia.
+Las conexiones persistentes son buenas si las cabeceras de control para crear un enlace a tu servidor SQL es alta.
+Que estas cabeceras sean o no realmente altas depende de muchos factores.
+Como, qué clase de base de datos es, si esta o no situada en el mismo ordenador que el servidor web, cómo está de cargada la máquina donde se encuentre el servidor SQL, y otras así.
+El hecho fundamental es que si la cabecera de conexión es alta, las conexiones persistentes te ayudan considerablemente.
+Ellas hacen que el proceso hijo simplemente conecte solamente una vez durante todo su intervalo de vida, en vez de cada vez que procesa una pagina que requiere conectar al servidor SQL.
+Esto significa que por cada hijo que abrió una conexión persistente tendrá su propia conexión persistente al servidor.
+Por ejemplo, si tienes 20 procesos hijos distintos que corran un archivo de comandos que cree una conexión persistente a tu servidor SQL, tendrías 20 conexiones diferentes a ti servidor SQL, una por cada hijo.
+No obstante, hay que tener en cuenta que esto puede tener desventajas si estais utilizando una base de datos con límites de conexión, por debajo del numero de procesos hijo con conexiones persistentes.
+Si tu base de datos tiene un límite de 16 conexiones simultaneas y en el curso de una sesión de servidor, 17 procesos hijo intentan conectarse, uno de ellos no podrá hacerlo.
+Si existen errores en los scripts, que no permitan terminar la conexion (p.ej.bucles infinitos), una base de datos con solo 32 conexiones puede ser rápidamente hundida.
+Comprobar la documentacion de vuestra base de datos para obtener información sobre que hacer con conexiones abandonadas ó libres.
+Aviso
+Un par de advertencias más a tener en cuenta cuando utiliceis conexiones persistentes.
+La primera, si utilizais bloqueos en una tabla desde una conexión persistente y por cualquier causa el script no puede desbloquear la tabla, todos los scripts posteriores que usen esta conexión, quedarán bloqueados indefinídamente y se requerirá que, ó bien el servidor httpd ó la base de datos sean arrancados de nuevo.
+La segunda, cuando utiliceis transacciones, un bloqueo por transacción será heredado por el próximo script usando la conexión, si la ejecución del primer script termina antes que el bloqueo. en ambos caso podeis utilizar register_shutdown_function() para registrar una funcion simple de limpieza que desbloquee las tablas ó deshaga la transacción.
+Lo mejor para evitar problemas es no usar conexiones persistentes en scripts que usen bloqueos de tablas ó transacciones (para todolo demás pueden ser usadas sin problemas)
+Un resumen importante.
+Las conexiones persistentes fueron diseñadas para tener una equivalencia uno-a-uno con las conexiones normales.
+Eso significa que deberíais siempre ser capaz de reemplazar las conexiones persistentes por conexiones no persistentes y no cambiará, el modo como se comporta el archivo de comandos.
+Puede cambiar la eficiencia del archivo de comandos (y probablemete lo hará), ¡pero no su comportamiento!
+Anterior
+Inicio
+Siguiente
+Manejando conexiones
+Subir
+Modo Seguro (Safe Mode)

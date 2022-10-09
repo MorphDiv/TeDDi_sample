@@ -1,0 +1,43 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+set_error_handler() choisit la fonction utilisateur error_handler pour gérer les erreurs dans un script.
+Retourne un pointeur sur l'ancienne fonction de gestion des erreurs (si il y en avait une), ou FALSE, en cas d'erreur. set_error_handler() sert à définir votre propre gestionnaire d'erreurs, qui prendra en charge leur traitement durant l'exécution d 'un script.
+Cela peut être utile lorsque vous devez repérer des erreurs critiques lors d'un nettoyage de bases, ou bien si vous souhaitez générer une erreur dans certaines conditions (avec trigger_error()).
+La fonction utilisateur doit accepter deux arguments: le code de l'erreur, et une chaîne décrivant l 'erreur.
+L'exemple ci dessous montre le traitement d 'exceptions en déclenchant des erreurs, et en les gérant avec une fonction utilisateur:
+Exemple 1.
+Traitement des erreurs avec set_error_handler() et trigger_error()
+?php / / redéfinit les constantes utilisateurs - PHP 4 seulement define (FATAL,E_USER_ERROR); define (ERROR,E_USER_WARNING); define (WARNING,E_USER_NOTICE); / / Fixe le niveau de rapport d'erreur pour ce script error_reporting (FATAL + ERROR + WARNING); / / Fonction de traitement des erreurs function myErrorHandler ($errno, $errstr) {switch ($errno) {case FATAL: echo "B FATAL / B [$errno] $errstr br \n"; echo" Erreur fatale à la ligne ".__LINE__. "du fichier ".__FILE__; echo", PHP ".PHP_VERSION. "(".PHP_OS .") br \n"; echo "Aborting... br \n"; exit -1; break; case ERROR: echo" B ERREUR / B [$errno] $errstr br \n"; break; case WARNING: echo "B ALERTE / B [$errno] $errstr br \n"; break; default: echo "Erreur inconnue de type: [$errno] $errstr br \n"; break;}} / / fonction qui teste la gestion d'erreur function scale_by_log ($vect, $scale) {if (!is_numeric($scale) | | $scale = 0) trigger_error("log(x) pour x = 0 est indéfini, vous avez passé: scale = $scale", FATAL); if (!is_array($vect)) {trigger_error("Vecteur d'entrée incorrect: un tableau de valeurs est attendu:", ERROR); return null;} for ($i=0; $i count($vect); $i++) {if (!is_numeric($vect[$i])) trigger_error("La valeur à la position $i n 'est pas un nombre.
+On utilise 0 (zéro) à la place", WARNING); $temp[$i] = log($scale) * $vect[$i];} return $temp;} / / Ancienne fonction de traitement des erreurs $old_error_handler = set_error_handler("myErrorHandler"); / / Génération de quelques erreurs: définition d'un tableau avec des éléments non numériques echo "vector a\n"; $a = array(2,3 ,"foo",5.5,43.3,21.11); print_r($a); / / définition d'un deuxième table à problème echo "----\nvector b - a alerte (b = log(PI) * a)\n"; $b = scale_by_log($a, M_PI); print_r($b); / / Ceci est un problème, on passe une chaîne à la place d'un tableau echo "----\nvector c - une erreur\n"; $c = scale_by_log("not array",2.3); var_dump($c); / / Ceci est critique: le tableau contient des valeurs négatives echo "----\nvector d - fatal error\n"; $d = scale_by_log($a, -2.5);?
+vector a Array ([0] = 2 [1] = 3 [2] = foo [3] = 5.5 [4] = 43.3 [5] = 21.11) --- - vector b - une alerte (b = log(PI) * a) B WARNING / B [1024] La valeur à la position 2 n 'est pas un nombre.
+On utilise 0 (zéro) à la place br Array ([0] = 2.2894597716988 [1] = 3.4341896575482 [2] = 0 [3] = 6.2960143721717 [4] = 49.566804057279 [5] = 24.165247890281) --- - vector c - an error B ERROR / B [512] Vecteur d'entrée incorrect: un tableau de valeur est attendu br NULL --- - vector d - fatal error B FATAL / B [256] log(x) de x = 0 est indéfini: scale = -2.5 br Erreur fatale à la ligne 16 du fichier trigger_error.php, PHP 4.0.1pl2 (Linux) br Annulation du script.... br
+Il faut se rappeler que la fonction standard de traitement des erreurs de PHP est alors complètement ignorée. error_reporting() n'aura plus d 'effet, et votre fonction de gestion des erreurs sera toujours appelée.
+Vous pourrez toujours lire la valeur de l'erreur courante de error_reporting() et faire réagir la fonction de gestion des erreurs en fonction.
+Cette remarque est notamment valable si la commande a été préfixée par @ (0 sera retourné).
+Notez aussi qu'il est alors confié à cette fonction de terminer le script (die()) si nécessaire.
+Si la fonction de gestion des erreurs se termine normalement, l'exécution du script se poursuivra avec l 'exécution de la prochaine commande.
+Voir aussi error_reporting(), restore_error_handler(), trigger_error() et user_error()
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

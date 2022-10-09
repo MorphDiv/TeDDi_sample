@@ -1,0 +1,228 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Handbuch zu & konsolekalendar;
+Tuukka Pasanen
+illuusio@mailcity.com
+Allen Winter
+winterz@kde.org
+Malcolm Hunter
+malcolm.hunter@gmx.co.uk
+Korrektur
+Noch Niemand Deutsche Übersetzung
+Tuukka Pasanen
+Allen Winter
+& konsolekalendar; ist eine & #160; Befehlszeilenschnittstelle & #160; für & #160; kde;-Kalender.
+KDE
+& package;
+& kappname;
+KOrganizer
+Einleitung
+& konsolekalendar; ist eine Befehlszeilenschnittstelle für & kde;-Kalender. Mit seiner Hilfe kann man Termine über die Befehlszeile oder eine Skriptsprache ansehen, einfügen, löschen oder verändern. Weiterhin kann & konsolekalendar; einen neuen & kde;-Kalender erstellen, ihn in einer ganzen Anzahl Formate exportieren und andere & kde;-Kalender importieren.
+Standardmäßig zeigt & konsolekalendar; die Terminliste des Standardkalenders für den heutigen Tag (von 7:00 bis 17:00 Uhr) an.
+Die Hauptfunktionen von & konsolekalendar;:
+Anzeigen von Kalendereinträgen mit Startzeitpunkt und Endzeitpunkt
+Einfügen (add) von Kalendereinträgen
+Entfernen (delete) von Kalendereinträgen
+Ändern (modify) von Kalendereinträgen
+Erstellen eines neuen Kalenders
+Exportieren eines Kalender in fremde Dateiformate
+Importieren eines & kde;-Kalenders
+Bei & konsolekalendar; handelte es sich nicht um eine weitere grafische Benutzeroberfläche eines & kde;-Kalenders (also & korganizer;). Stattdessen kommt & konsolekalendar; genau dann zum Einsatz, wenn eine grafische Oberfläche nicht gewünscht oder nicht nutzbar ist.
+& konsolekalendar; bietet weder eine vollständige Programmiersprache zur Abfrage von Kalendern noch ist es die Absicht der Autoren, solch eine Programmiersprache jemals zu erstellen. Mit einfachen Befehlszeilenparametern kann eine Liste von Terminen bearbeitet werden.
+Merkmale
+Dieses Kapitel erläutert die Funktionen von & konsolekalendar; und deren Kontrolle über Befehlszeilenparameter (wiederum: & konsolekalendar; ist keine grafische Benutzeroberfläche, sondern lediglich ein Befehlszeilenprogramm).
+Das Einfügen, Entfernen und Verändern von Terminen und der Export in andere Dateiformate wird erläutert. Weiterhin wird die Erzeugung und der Import eines & kde;-Kalenders erklärt.
+Termine anzeigen lassen
+Der Standardmodus entspricht dem Parameter --view und zeigt alle Termine in einem angegebenen Zeitrahmen an.
+Alle heutigen Termine zwischen 7:00 Uhr und 17:00 Uhr:
+% konsolekalendar
+Das folgende Beispiel zeigt alle Termine der Woche vom 18. - 22. August an:
+% konsolekalendar --view --date 2003-08-18 --end-date 2003-08-22
+Zeigt das nächste Ereignis oder die nächsten Ereignisse ab der aktuellen Uhrzeit an:
+% konsolekalendar --next
+Um alle Ereignisse der nächsten 5 Tage zu sehen, geben Sie ein:
+% konsolekalendar --show-next 5
+Termine einfügen
+& konsolekalendar; kann Ereignisse in einen & kde;-Kalender oder eine Kalender-Ressource mit dem Befehlszeilenparameter --add eintragen. Erfolgreich eingetragene Ereignisse werden von den & kde;-Kalenderapplikationen (wie & korganizer;) unmittelbar angezeigt.
+Das folgende Beispiel fügt einen Termin für den 4. Juni 2003 um 10:00 Uhr ein, der um 12:00 Uhr ende. Der Termin mit dem Titel Arztbesuch wird im Standardkalender des Benutzers eingefügt:
+% konsolekalendar --add --date 2003-06-04 --time 10:00\\ --end-time 12:00 --summary "Arztbesuch"
+Das folgende Beispiel fügt den eigenen Geburtstag in den Standardkalender ein:
+% konsolekalendar --add --date 2003-06-06 --summary "Mein Geburtstag"\\ --description "Feier"
+Eine Woche Urlaub wird in einen gemeinsam genutzten Kalender eingefügt:
+% konsolekalendar --add --file vacation.ics --date 2003-08-01\\ --end-date 2003-08-07 --summary "Urlaub" --description "Ich löse mich in Luft auf!"
+Einträge entfernen
+Einträge werden durch den Parameter --delete von & konsolekalendar; aus der Kalenderdatei oder anderen Ressourcen entfernt. Dazu muss die eindeutige Kennung (UID) über den Parameter --uid angegeben werden. Diese UID findet man, indem man den Termin zunächst über den Parameter --view anzeigen lässt.
+Erfolgreich gelöschte Ereignisse werden unmittelbar aus den & kde;-Kalender-Applikationen (wie & korganizer;) gelöscht.
+Das Entfernen eines Eintrages kann nicht rückgängig gemacht werden. Ein entfernter Eintrag ist und bleibt entfernt.
+Im folgenden Beispiel wird der Termin mit der UID konsolekalendar;-1887551750.196 entfernt:
+% konsolekalendar --delete --uid konsolekalendar;-1887551750.196
+Einträge ändern
+Der Parameter zum Ändern von Einträgen in & konsolekalendar; lautet --change. Auch hier muss der Termin über die eindeutige Kennung (UID) mit dem Parameter --uid identifiziert werden. Die UID kann man ermitteln, indem man sich den Termin mit --view anzeigen lässt.
+Änderungen verhalten sich genauso wie neu eingefügte Termine: Sie können Startzeitpunkt, Endzeitpunkt, Beschreibung, Ort und Zusammenfassung angeben. Erfolgreich geänderte Termine werden unmittelbar in den & kde;-Kalenderapplikationen (wie & korganizer;) geändert.
+Beispiel: Die Zusammenfassung (summary) und Beschreibung (description) eines Termins mit der UID konsolekalendar;-1887551750.196 wird verändert.
+% konsolekalendar --change --uid konsolekalendar;-1887551750.196 --summary "Untersuchung" --description "Termin beim Nervenarzt."
+Einen neuen Kalender erzeugen
+Mit & konsolekalendar; kann man auch eine neue & kde;-Kalenderdatei erzeugen. Bevor man Einträge in den neuen Kalender einfügen kann, muss er zunächst mit Hilfe von --create und --file erzeugt werden.
+Die Kalenderdatei /data/share/calendars/vacation.ics wird erzeugt:
+% konsolekalendar --create --file /data/share/calendars/vacation.ics
+Kalender in andere Formate exportieren
+Mit & konsolekalendar; können & kde;-Kalender in einige gängige Formate exportiert werden. Dabei handelt es sich um eine besondere Form der Anzeige. Standardmäßig werden Termine im Format konsolekalendar;-Text angezeigt. Ein davon abweichendes Format stellt man über den Parameter --export-type ein.
+Eine vollständige Liste aller unterstützten Exportformate erhält man durch den Parameter --export-list:
+% konsolekalendar --export-list
+Exportformate
+Einige der wichtigsten Exportformate werden im folgenden Abschnitt beschrieben.
+& konsolekalendar;-Textformat
+Das & konsolekalendar;-Textformat ist das Standardformat von & konsolekalendar; und dazu gedacht, einfach lesbar und für nachfolgende Skripte verarbeitbar zu sein.
+Das & konsolekalendar;-Textformat lautet:
+Datum:\ lt;Ereignisdatumgt;(dddd jjjj-MM-tt) [\ lt;Ereignisstartzeitgt;(hh:mm) - & lt;Ereignisendzeitgt;(hh:mm)] Zusammenfassung: \ lt;Ereigniszusammenfassung | "(keine Zusammenfassung verfügbar)"gt; Ort: \ lt;Ereignisort |" (kein Ort verfügbar)"gt; Beschreibung: \ lt;Ereignisbeschreibung | "(keine Beschreibung verfügbar)"gt; UID: \ lt;Ereignis-UIDgt; --------------------------------------------------
+Beispiel:
+Date: 01.11.2003 8:00 - 9:00 Summary: Besprechung Ort: Konferenzraum Description: Die gesamte Abteilung trifft sich im großen Konferenzraum. UID: & konsolekalendar;-1128954167.1013
+& konsolekalendar;-Kurztextformat
+Das Kurztextformat ist eine kompaktere, weniger wortreiche Variante des nativen Formats von & konsolekalendar;.
+Das & konsolekalendar;-Kurztextformat lautet:
+[--------------------------------------------------] {lt;Ereignisdatumgt;(dddd jjjj-MM-tt)] [lt;Ereignisstartzeitgt;(hh:mm) - & lt;Ereignisendzeitgt;(hh:mm) | "\ "] \ lt;Ereigniszusammenfassung | \ gt;[, & lt;Ereignisortgt;] \ \ lt;Ereignisbeschreibung | "\ "gt;
+-------------------------------------------------- Tuesday 2003-11-01 08:00 - 09:00 Mitarbeiterbesprechung, Konferenzraum Das gesamte Team trifft sich zu einer Projektbesprechung.
+durch Kommas getrennte Werte (CSV -Format)
+Die Informationen des Termins werden in der gleichen Reihenfolge wie im & konsolekalendar;-Textformat angezeigt. Der einzige Unterschied ist, alle Informationen befinden sich in einer Zeile in einer durch Kommas getrennten Liste. Dieses Format kann z.B. von Tabellenkalkulationsprogrammen wie & kspread;, OpenOffice.org und Microsoft; Excel gelesen werden. Das CSV -Format eignet sich auch gut zur Weiterverarbeitung durch Skripte.
+Das CSV -Format lautet:
+YYYY-MM-DD,HH:MM,YYYY-MM-DD,HH:MM,Zusammenfassung,Ort,Beschreibung,Kennung
+2003-11-01,08:00,2003-11-01,09:00,Besprechung,Konferenzraum,Die gesamte Abteilung trifft sich\\ im großen Konferenzraum.,konsolekalendar;-1128954167.1013
+& HTML;-Format
+Der & HTML;-Export erzeugt eine gültige & HTML; -Datei zur Veröffentlichung im WWW. Das Format ist nicht geeignet zur Verarbeitung durch Skripte aber zur einfachen Veröffentlichung.
+TODO: Bildschirmfoto einfügen
+HTMLmonth -Format
+Dieses Format produziert eine & HTML;-Datei, die alle Termine im angegebenen Zeitraum enthält. Das Format ist nicht geeignet zur Verarbeitung durch Skripte aber zur einfachen Veröffentlichung.
+Kalender importieren
+& konsolekalendar; kann iCal- oder vCal-Kalenderdateien in das & kde;-Kalenderformat importieren. Alle Termine, auch identische Termine, werden eingefügt. Dieser letzte Punkt soll in der nächsten Version von & konsolekalendar; bereinigt werden.
+Folgendermaßen wird die Kalenderdatei irgendein_Name.ics in den Kalender current.ics übernommen:
+% konsolekalendar --import irgendein_Name.ics --file current.ics
+Befehlszeilenparameter
+Folgende Optionen versteht & konsolekalendar;:
+Option
+Beschreibung
+--help, --help-all
+Zeigt Hilfetexte zu den Optionen an.
+--author
+Zeigt Informationen über die Programmautoren.
+-v, --version
+Zeigt die Versionsnummer des Programms an.
+--license
+Zeigt Informationen zu den Lizenzbestimmungen.
+--verbose
+Gibt nützliche Laufzeitmeldungen aus.
+--dry-run
+Es wird ausgegeben, was getan würde, die Aktionen werden aber nicht wirklich durchgeführt (eignet sich gut für Testzwecke).
+--allow-gui
+Ressourcen zulassen, die möglicherweise ein Benutzerschnittstelle erfordern. Bei den meistem Funktionen werden nur Ressourcen (wie Datei-basierte Kalender) benutzt, die keine Benutzerschnittstelle erfordern.
+--file nbsp;Kalenderdatei
+Legt die zu benutzende Kalenderdatei fest.
+Ansonsten wird die Standardeinstellung von & korganizer; verwendet.
+Hauptarbeitsmodi:
+--view
+Gibt Termine im angegebenen Ausgabeformat aus.
+--add
+Fügt einen Termin in den Kalender ein.
+--change
+Ändert die Daten eines bestehenden Termins.
+--delete
+Entfernt einen bestehenden Termin.
+--create
+Erstellt eine neue Kalenderdatei, falls noch keine existiert.
+--import nbsp;Dateiname
+Importiert diesen Kalender in den Hauptkalender.
+Parameter für die Operationen:
+--all
+Zeigt alle Kalendereinträge an.
+--next
+Nächste Aktivität im Kalender anzeigen.
+--show-next nbsp;Tage
+Ab dem angegebenen Datum die Aktivitäten der nächsten n Tage anzeigen.
+--uid nbsp;Kennung
+Der Termin mit dieser Kennung wird angezeigt, entfernt oder geändert.
+--date nbsp;Datum
+Beginnt mit dem angegebenen Tag [JJJJ-MM-DD]. Der Standardwert ist heute.
+--time nbsp;Zeitpunkt
+Beginnt mit der angegebenen Zeit [HH:MM]. Der Standardwert ist 07:00.
+Um einen beweglichen Termin einzutragen oder zu ändern, verwenden Sie eine der Optionen --time float oder --end-time float.
+--end-date nbsp;Datum
+Endet am angegebenen Tag [JJJJ-MM-DD]. Der Standardwert ist der unter --date angegebene Tag.
+--end-time nbsp;Zeitpunkt
+Endet zu dieser Zeit [HH:MM]. Der Standardwert für die Ansicht ist 17:00.
+--epoch-start nbsp;Zeit
+Beginnt zu dieser Zeit [Sekunden seit epoch].
+--epoch-end nbsp;Zeit
+Endet zu dieser Zeit [Sekunden seit epoch].
+--summary nbsp;Zusammenfassung
+Fügt eine Zusammenfassung zum Termin hinzu (bei add und change).
+--description nbsp;Beschreibung
+Fügt eine Beschreibung zum Termin hinzu (bei add und change).
+--location nbsp;Ort
+Fügt einen Ort zum Termin hinzu (bei add und change).
+Exportparameter:
+--export-type nbsp;Typ
+Export zum angegebenen Typ. Der Standardtyp ist Text.
+--export-file nbsp;Dateiname
+Export in die angegebene Datei. Standardmäßig wird der Export zur Standardausgabe durchgeführt.
+--export-list
+Zeigt eine Liste der unterstützten Exportformate an.
+Fragen und Antworten
+& reporting.bugs; & updating.documentation;
+Welche Konfigurationsdateien verwendet & konsolekalendar;?
+Keine.
+Wie lauten die Namen von & konsolekalendar;?
+Der Name von & konsolekalendar; ist konsolekalendar.
+In welchem Format müssen Datumsangaben gemacht werden?
+& konsolekalendar; erfordert die Eingabe von Datumsangaben nach dem ISO-8601-Standard, also: JJJJ-MM-DD. Dabei bedeutet JJJJ die Jahresangabe mit vier Ziffern (z.B. 2003), MM die Monatsangabe mit zwei Ziffern (01,02,...,12) und DD die Tagesangabe mit zwei Ziffern (01,02,...,31).
+& konsolekalendar; exportiert Datumsangaben immer nach dem ISO-8601-Format.
+In welchem Format müssen Zeitangaben gemacht werden?
+Zeitangaben für & konsolekalendar; müssen unbedingt in Übereinstimmung mit dem ISO-8601-Standard eingegeben werden, also HH:MM:SS. Dabei bedeutet HH die Stunde zweiziffrig (01,02,...,24), MM die Minuten zweiziffrig (01,02,...,60), und SS die Sekunden ebenfalls zweiziffrig (01,02,...,60).
+& konsolekalendar; exportiert Zeitangaben immer entsprechend dem ISO-8601-Standard.
+Fügt & konsolekalendar; bei übereinstimmenden Zeiten einen neuen Termin ein, der identisch zu einem bereits vorhandenen ist?
+Nein. Siehe nächste Frage.
+Wie stellt & konsolekalendar; fest, ob ein Termin identisch zu einem bereits im Kalender vorhandenen ist?
+& konsolekalendar; vergleicht Startzeitpunkt, Endzeitpunkt und Zusammenfassung mit allen im Kalender vorhandenen Terminen. Falls alle drei Angaben übereinstimmen, sind die Termine identisch.
+Kann ein nicht-beweglicher Termin in einen beweglichen Termin umgewandelt werden?
+Ja. Benutzen Sie die Option --time float mit --change.
+Warum werden in den meisten Exportformaten die Kennungen (UIDs) ausgegeben?
+Weil Sie die Kennungen (UIDs) zum Löschen oder Ändern von Ereignissen benötigen. Wenn Sie die UIDs von Terminen nicht sehen möchten, dann verwenden Sie den kurzen Exporttyp (--export-type short).
+Wie kann ich eine Frage zu den FAQ hinzufügen?
+Senden Sie Ihre Fragen an winter@kde.org.
+Danksagungen und Lizenz
+& konsolekalendar; Programm Copyright 2002-2007:
+Tuukka Pasanen illuusio@mailcity.com
+Allen Winter winter@kde.org
+Dokumentation Copyright 2003:
+Tuukka Pasanen illuusio@mailcity.com
+Noch niemand
+& underFDL; & underGPL;
+Installation
+Wie bekomme ich & konsolekalendar;?
+& install.intro.documentation;
+& konsolekalendar; ist Bestandteil von & kde;4 und nicht separat erhältlich.
+Voraussetzungen
+Für & konsolekalendar; müssen die & kde;-Standardbibliotheken (also das kdelibs und das kdepimlibs -Paket) installiert sein. Zur Kompilierung wird außerdem & Qt; und die Entwicklerpakete zu kdelibs und kdepimlibs benötigt.
+Ein Liste von Änderungen finden Sie in der Datei ChangeLog.
+Einrichtung
+Zur Verwendung von & konsolekalendar; mit der & kde;-Arbeitsoberfläche sind keine weiteren Konfigurationen notwendig.
+awinterz@users.sourceforge.net
+Kompilierung und Installation
+Dieser Abschnitt gibt dazu einen kurzen Überblick. Weitere Hinweise sind unter kde; 3.2.x kompilieren zu finden.
+Falls Sie kein geeignetes Binärpaket finden können, müssen Sie & konsolekalendar; aus den Quelltexten selbst kompilieren. Dazu müssen Sie die Datei kdepim-x.x.tar.bz2 herunterladen. Durch den Befehl tar xvfj kdepim-x.x.tar.bz2 wird das Paket in einen Ordner ausgepackt. Wechseln Sie in diesen Ordner.
+& install.compile.documentation;
+Falls Sie mehr als eine Version von & kde; installiert haben (also z.B. & kde;2 und & kde;3), besteht die Gefahr, dass & konsolekalendar; in den falschen Ordner installiert wird. Sie können gegebenenfalls den & kde;-Ordner als Parameter beim Befehl ./configure mit angeben. Falls sich die gewünschte & kde;-Version in /opt/kde3 befindet:
+./configure --prefix= /opt/kde3

@@ -1,0 +1,32 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHPによるHTTP認証のフックは、Apacheモジュールとして実行した時のみ 有効で、CGI版では利用できません。Apache モジュールPHPスクリプトにお いて、 header() 関数を使用して "Authentication Required" メッセージをクライアントブラウザに送ることが可能です。 これにより、クライアントブラウザにユーザー名とパスワードを入力する ウインドウがポップアップ表示されます。一度、ユーザーがユーザー名と パスワードを入力すると、PHP スクリプトを含むその URL は、次回以降、 定義済みの変数 PHP_AUTH_USER, PHP_AUTH_PW, and PHP_AUTH_TYPE にそれぞれユーザー名、 パスワード、認証型を入力してコールされます。 定義済みの変数は、配列 $_SERVER および $HTTP_SERVER_VARS でアクセス可能です。 "Basic" 認証のみがサポートされています。詳細は、 header() を参照下さい。
+PHP バージョンに関する注意 $_SERVER のような オートグローバル は、 PHPバージョン 4.1.0 で利用可能です。 $HTTP_SERVER_VARS は、PHP 3以降で利用可能です。
+ページ上でクライアント認証を強制するスクリプトの例を以下に示します。
+例 16-1HTTP 認証の例
+互換製に関する注意 HTTPヘッダ行をコーディングする際には注意を要します。全てのクライア ントへの互換性を最大限に保証するために、キーワード "Basic" には、 大文字の"B"を使用して書くべきです。realm文字列は(一重引用符ではな く)二重引用符で括る必要があります。また、"HTTP/1.0 401"ヘッダ行の コード"401"の前には、1つだけ空白を置く必要があります。
+単に PHP_AUTH_USER および PHP_AUTH_PW を出力するのではなく、ユーザー名とパスワードの有効性をチェックしたいと 思うかもしれません。 その場合、クエリーをデータベースに送るか、ある dbm ファイル中の ユーザーを調べるといったことをすることになるでしょう。
+バグのある Internet Explorer ブラウザには注意してください。このブラ ウザは、ヘッダの順序に関してとてもうるさいようです。今のところ、 HTTP/1.0 401 ヘッダの前に WWW-Authenticate ヘッダを送るのが効果があるよ うです。
+誰かが従来の外部機構による認証を行ってきたページのパスワードを暴く ようなスクリプトを書くことを防ぐために、特定のページに関して外部認 証が可能である場合、PHP_AUTH 変数はセットされません。この場合、外部 認証されたユーザーかどうかを確認するために REMOTE_USER 変数、すなわち、 $_SERVER['REMOTE_USER'] を使用することができます。
+設定上の注意 PHP は、外部認証が動作しているかどうかの判定を AuthType ディレクティブの有無で行います。 PHP認証を使用するコンテキストについてこのディレクティブを避けるよ うにして下さい。(さもないと、各認証は失敗します。)
+しかし、上記の機能も、認証を要求されないURLを管理する人が同じサーバー にある認証を要するURLからパスワードを盗むことを防ぐわけではありませ ん。
+サーバーからリターンコード401を受けた際に、Netscape Navigatorおよび Internet Explorerは共にローカルブラウザのウインドウ上の認証キャッシュ を消去します。この機能により、簡単にユーザーを"ログアウト"させ、強 制的にユーザー名とパスワードを再入力させることができます。この機能 は、"タイムアウト"付きのログインや、"ログアウト"ボタンに適用されて います。
+例 16-2新規に名前/パスワードを入力させるHTTP 認証の例
+この動作は、HTTP Basic認証の標準に基づいていません。よって、この機 能に依存しないように注意する必要があります。Lynx によるテストの結果、 Lynx は、認証証明書を 401 サーバー応答によりクリアしないことが明ら かになっています。このため、back を押してから foward を再度押すこと により証明書の要件が変更されない限りリソースをオープンすることがで きます。しかし、ユーザは'_'キーを押すことにより認証情報をクリアする ことが可能です。
+MicrosoftのIISサーバーとCGI版のPHPの組み合わせでは、この機能は、IIS の制約により使用することができないということにも注意して下さい。
+注意 セーフモード が有効の場合、 WWW-Authenticate ヘッダの realm 部にスクリプトのuidが追加されます。

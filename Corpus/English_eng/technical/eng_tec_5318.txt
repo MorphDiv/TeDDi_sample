@@ -1,0 +1,50 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+These functions allow you to obtain information about classes and instance objects.
+You can obtain the name of the class to which a object belongs, as well as its member properties and methods.
+Using these functions, you can find out not only the class membership of an object, but also its parentage (i.e. what class is the object class extending).
+No external libraries are needed to build this extension.
+There is no installation needed to use these functions; they are part of the PHP core.
+This extension has no configuration directives defined in php.ini.
+This extension has no resource types defined.
+This extension has no constants defined.
+In this example, we first define a base class and an extension of the class.
+The base class describes a general vegetable, whether it is edible or not and what is its color.
+The subclass Spinach adds a method to cook it and another to find out if it is cooked.
+Example 1. classes.inc
+?php / / base class with member properties and methods class Vegetable {var $edible; var $color; function Vegetable ($edible, $color="green ") {$this - edible = $edible; $this - color = $color;} function is_edible() {return $this - edible;} function what_color() {return $this - color;}} / / end of class Vegetable / / extends the base class class Spinach extends Vegetable {var $cooked = false; function Spinach() {$this - Vegetable (true, "green");} function cook_it() {$this - cooked = true;} function is_cooked() {return $this - cooked;}} / / end of class Spinach?
+We then instantiate 2 objects from these classes and print out information about them, including their class parentage.
+We also define some utility functions, mainly to have a nice printout of the variables.
+Example 2. test_script.php
+pre ?php include "classes.inc"; / / utility functions function print_vars($obj) {$arr = get_object_vars($obj); while (list($prop, $val) = each($arr)) echo " $prop = $val\n";} function print_methods($obj) {$arr = get_class_methods(get_class($obj)); foreach ($arr as $method) echo " function $method()\n";} function class_parentage($obj, $class) {global $$obj; if (is_subclass_of($$obj, $class)) {echo "Object $obj belongs to class ".get_class($$obj); echo" a subclass of $class\n";} else {echo "Object $obj does not belong to a subclass of $class\n";}} / / instantiate 2 objects $veggie = new Vegetable(true ,"blue"); $leafy = new Spinach(); / / print out information about objects echo "veggie:
+CLASS ".get_class($veggie) ."\n"; echo "leafy:
+CLASS ".get_class($leafy); echo", PARENT ".get_parent_class($leafy) ."\n"; / / show veggie properties echo "\nveggie:
+Properties\n"; print_vars($veggie); / / and leafy methods echo "\nleafy:
+Methods\n"; print_methods($leafy); echo "\nParentage:\n"; class_parentage("leafy", "Spinach"); class_parentage("leafy", "Vegetable");? / pre
+One important thing to note in the example above is that the object $leafy is an instance of the class Spinach which is a subclass of Vegetable, therefore the last part of the script above will output:
+[...] Parentage:
+Object leafy does not belong to a subclass of Spinach Object leafy belongs to class spinach a subclass of Vegetable
+Prev
+Home
+Next
+com_set
+Up
+call_user_method_array

@@ -1,0 +1,67 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 7.
+Types
+Next
+An integer is a number of the set Z = {..., -2, -1, 0, 1, 2,...}.
+See also:
+Arbitrary length integers and Floating point numbers
+Integers can be specified in decimal (10-based), hexadecimal (16-based) or octal (8-based) notation, optionally preceded by a sign (- or +).
+If you use the octal notation, you must precede the number with a 0 (zero), to use hexadecimal notation precede the number with 0x.
+Example 7-1.
+Integer literals
+?php $a = 1234; # decimal number $a = -123; # a negative number $a = 0123; # octal number (equivalent to 83 decimal) $a = 0x1A; # hexadecimal number (equivalent to 26 decimal)?
+?php decimal: [1-9][0-9]* | 0 hexadecimal:
+0[ xX][0-9a-fA-F] + octal:
+0[ 0-7] + integer: [+ -]?decimal | [+ -]?hexadecimal | [+ - ]?octal?
+If you specify a number beyond the bounds of the integer type, it will be interpreted as a float If you specify a number beyond the bounds of the integer type, it will be interpreted as a float instead.
+Also, if you perform an operation that results in a number beyond the bounds of the integer type, a float will be returned instead.
+?php $large_number = 2147483647; var_dump($large_number); / / output: int(2147483647) $large_number = 2147483648; var_dump($large_number); / / output: float(2147483648) / / this goes also for hexadecimal specified integers: var_dump (0x80000000); / / output: float(2147483648) $million = 1000000; $large_number = 50000 * $million; var_dump($large_number); / / output: float(50000000000)?
+Warning
+Unfortunately, there was a bug in PHP so that this does not always work correctly when there are negative numbers involved.
+For example: when you do -50000 * $million, the result will be -429496728.
+However, when both operands are positive there is no problem.
+This is solved in PHP 4.1.0.
+There is no integer division operator in PHP.
+1 / 2 yields the float 0.5.
+You can cast the value to an integer to always round it downwards, or you can use the round() function.
+?php var_dump( 25 / 7); / / float(3.5714285714286) var_dump((int) (25 / 7)); / / int(3) var_dump(round(25 / 7)); / / float(4)?
+To explicitly convert a value to integer, use either the (int) or the (integer) cast.
+However, in most cases you do not need to use the cast, since a value will be automatically converted if an operator, function or control structure requires an integer argument.
+You can also convert a value to integer with the function intval().
+See also type-juggling.
+FALSE will yield 0 (zero), and TRUE will yield 1 (one).
+When converting from float to integer, the number will be rounded towards zero.
+If the float is beyond the boundaries of integer (usually + / - 2.15e+9 = 2^31), the result is undefined, since the float hasn't got enough precision to give an exact integer result.
+No warning, not even a notice will be issued in this case!
+Warning
+Never cast an unknown fraction to integer, as this can sometimes lead to unexpected results.
+?php echo (int) ((0.1+0.7) * 10); / / echoes 7!?
+See String conversion to numbers
+Caution
+Behaviour of converting to integer is undefined for other types.
+Currently, the behaviour is the same as if the value was first converted to boolean.
+However, do not rely on this behaviour, as it can change without notice.
+Prev
+Home
+Next
+Booleans
+Up
+Floating point numbers

@@ -1,0 +1,176 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	2014
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Schnelleinführung in die Optimierung von GNOME-Programmen
+Dies ist eine kurze Einführung in die Optimierung und behandelt sowohl das Wie als auch das Warum. Details zu individuellen Werkzeugen verschieben wir auf spätere Artikel, eine Sammlung aus Hinweisen und Tricks ist jedoch enthalten.
+Was optimieren wir?
+Sie sollten bei der Optimierung für GNOME zunächst eines bedenken: Wir versuchen nicht, das Programm zu verbessern, sondern wir versuchen, die Benutzer glücklicher zu machen.
+Bessere Programme machen die Benutzer glücklicher, aber es gibt Verbesserungsmöglichkeiten, die sie viel glücklicher machen werden als Andere: Ansprechzeit, Startzeit, leichter Zugriff auf Befehle. Der Rechner sollte auch nicht sofort den Auslagerungsspeicher benutzen müssen, wenn mehr als eine Anwendung geöffnet ist.
+Die traditionelle Optimierung umfasst Konzepte wie Prozessorlast, Umfang des Codes, die Anzahl der Mausklicks sowie die Speichernutzung des Programms. Die folgende Auflistung sollte die erste Liste ergänzen, wobei ein grundlegender Unterschied besteht: Ein GNOME-Benutzer schenkt der zweiten Liste keine Beachtung, während der ersten Liste sehr wohl Aufmerksamkeit gewidmet wird. Beim Optimieren von GNOME-Programmen sollen die Prozessorlast, der Speicherverbrauch und all diese Dinge optimiert werden, aber das sind die Bedeutungen, nicht das Endziel. Wir optimieren für Benutzer.
+Ausführung der Optimierung
+Aus dem vorigen Abschnitt wurde deutlich: Um etwas optimieren zu können, muss es messbar sein. Sie können Zufriedenheit nicht messen, aber Sie können sehr wohl Startzeiten messen, um sagen zu können, dass Sie sie verbessert haben. Die Zufriedenheit wird dann - hoffentlich - folgen.
+Optimierung ist ein Prozess des Messens, der Verfeinerung und erneuten Messens. Daher müssen Sie zunächst einen Weg finden, das zu messen, was Sie optimieren wollen. Idealerweise ist dieser Messwert eine einzige Zahl, beispielsweise die Zeit, die für die Ausführung einer Aufgabe benötigt wird. Dies ist Ihr Maßstab, es ist der einzige Weg festzustellen, ob Sie auf der Gewinner- oder der Verliererseite sind. Es ist ein sehr wesentlicher Unterschied, ob ein Programm schnell sein
+Sobald Sie einen Ausgangsmaßstab gefunden haben, müssen Sie nun herausfinden, warum Ihr Code seine Aufgabe nicht so gut erledigt, wie er es eigentlich sollte. Es ist verlockend, dies durch eine einfache Sichtung zu tun: Sich den Code anzuschauen und etwas zu finden, dass verbesserungswürdig scheint. Doch Sie werden immer falsch liegen. Der einzig sichere Weg ist es, einen Profiler für eine detaillierte Aufschlüsselung der Programmaktivitäten zu verwenden.
+Gewöhnlich ist das Problem auf kleine Code-Abschnitte beschränkt. Wählen Sie den schlimmsten Teil und konzentrieren Sie sich zuerst darauf. Führen Sie den Profiler erneut aus und wiederholen Sie den Arbeitsschritt, sobald dies erledigt ist. Wenn Sie so arbeiten, werden die Gewinne mit jedem Schritt geringer. Ab einem bestimmten Punkt müssen Sie entscheiden, dass die Ergebnisse gut genug sind. Wenn Ihre Bemühungen nur 10% Verbesserung ergeben, dann sind Sie bereits weit über den Punkt hinaus, wo Sie hätten stoppen sollen.
+Vergessen Sie nicht das Gesamtbild. Zum Beispiel sollten Sie sich fragen, ob der Code überhaupt unbedingt ausgeführt werden muss, statt seine Geschwindigkeit zu verbessern. Kann er mit anderem Code kombiniert werden? Können bereits ausgeführte Berechnungen gespeichert und später wieder verwertet werden? Eine Optimierung kann man sich auch sparen, wenn der Code dort ausgeführt wird, wo ihn der Benutzer niemals bemerken wird. Noch schlimmer, der Code ist eventuell bereits optimiert und führt kostspielige Berechnungen jetzt aus, um dies später zu vermeiden. Code läuft nicht isoliert und ebenso wenig der Optimierungsprozess.
+Hinweise
+Die Grundlagen
+Bilden Sie einen Maßstab nach jeder Code-Änderung aus und führen Sie Buch über alle Änderungen, und wie sie den Maßstab beeinflussen. So können Sie Fehler rückgängig machen und in Zukunft erst gar nicht wiederholen.
+Stellen Sie sicher, dass Ihr Code korrekt und fehlerfrei ist, bevor Sie mit der Optimierung beginnen. Überprüfen Sie nach der Optimierung, ob dies dann auch noch zutrifft.
+Optimieren Sie zunächst auf hoher Ebene, bevor es an die Details geht.
+Verwenden Sie den passenden Algorithmus. Das klassische Beispiel ist, Quick-Sort statt Bubble-Sort zu verwenden. Es gibt viele andere. Einige belegen wenig Arbeitsspeicher, andere brauchen wenig Rechenleistung. Schauen Sie auch, ob Sie Kompromisse eingehen können: Es geht auch schneller als Quick-Sort.
+Optimierungen sind ein Abwägen. Ergebnisse zwischenzuspeichern beschleunigt Berechnungen, aber erhöht den Speicherverbrauch. Daten auf einen Datenträger zu speichern spart Arbeitsspeicher, aber kostet Zeit beim Laden vom Datenträger.
+Wählen Sie unbedingt eine große Vielfalt an Eingangsgrößen, die Sie optimieren. Wenn Sie dies nicht tun, können Sie schnell mit einem sorgfältig für nur eine einzige Datei optimierten Code enden.
+Vermeiden Sie aufwändige Vorgänge: Mehrere kleine Plattenlesevorgänge, Belegung von sehr viel Arbeitsspeicher, bis das Auslagern beginnt. Vermeiden Sie unnötige Schreib- und Lesevorgänge auf Datenträger. Das Netzwerk ist auch langsam. Vermeiden Sie auch grafische Operationen, die eine Antwort vom X-Server erfordern.
+Fallen für die Unvorsichtigen
+Nehmen Sie sich vor Nebeneffekten in Acht. Es kann oft seltsame Interaktionen zwischen verschiedenen Code-Bereichen geben. Eine Geschwindigkeitsverbesserung in einem Teil kann einen anderen Teil ausbremsen.
+Beim zeitlichen Abstimmen von Code - auch auf unbelasteten Systemen - sorgen externe Ereignisse für Unregelmäßigkeiten bei der Zeitplanung. Bilden Sie Durchschnittswerte von mehreren Durchläufen. Wenn der Code sehr kurz ist, so kann die Zählergenauigkeit zu einem Problem werden. In diesem Fall messen Sie die Zeit 100 oder 1000 Mal, die der Rechner zur Abarbeitung braucht. Wenn Sie Zeitspannen von einigen Sekunden messen, dann sind Sie im grünen Bereich.
+Es ist sehr leicht, vom Profiler in die Irre geführt zu werden. Es gibt Geschichten über Leute, die die Untätigkeitsphase perfekt optimiert haben, weil das Programm ja die meiste Zeit in Untätigkeit verbringt! Optimieren Sie keinen Code, von dessen Wirkung der Benutzer ohnehin keine Notiz nimmt.
+Vergessen Sie nicht den Ressourcenverbrauch des X-Servers. Der Speicherverbrauch Ihres Programms enthält nicht die Pixmaps, die vom X-Server verarbeitet werden, aber sie verbrauchen dennoch Speicher. Verwenden Sie
+Tipps mit niedrigem Niveau
+Seien Sie bei der Optimierung des Speicherverbrauchs umsichtig bezüglich des Unterschieds zwischen Spitzen- und durchschnittlicher Speicherbelegung. Einiger Speicher wird quasi immer belegt, das ist nicht gut. Einiger wird nur kurzzeitig belegt, dies ist in Ordnung. Werkzeuge wie »massif« verwenden das Raum-Zeit-Konzept, d.h. das Produkt von belegtem Arbeitsspeicher und der Belegungsdauer.
+Stoppen Sie die Zeit vereinfachter Code-Teile, die nur Entscheidendes erledigen. Dies legt eine absolute untere Grenze für die Laufzeit Ihres Codes fest. Zum Beispiel sollten Sie beim Optimieren einer Schleife die leere Schleife stoppen. Wenn dies immer noch zu lang ist, dann wird keine Mikro-Optimierung Abhilfe schaffen und Sie müssen das grundlegende Design ändern. Stellen Sie sicher, dass der Compiler dabei nicht ihre leeren Schleifen rationalisiert.
+Gliedern Sie Code aus Schleifen aus. Ein etwas umfangreicheres Stück Code, das nur einmal ausgeführt wird, ist um Einiges schneller als ein simples Stück Code, was dafür tausend Schleifen durchläuft. Vermeiden Sie es, langsamen Code allzu oft aufzurufen.
+Geben Sie dem Compiler so viele Hinweise wie möglich. Verwenden Sie das const-Schlüsselwort. Verwenden Sie
+Verwenden Sie keine Assemblersprachen. Sie sind nicht portierbar. Während sie auf dem einen Prozessor unglaublich schnell sind, ist nicht unbedingt garantiert, dass dies auf jedem von der Architektur unterstützten Prozessor genauso ist (beispielsweise Athlon vs Pentium 4).
+Schreiben Sie eine vorhandene Bibliotheksroutine nicht neu, es sei denn, Sie sind sich sicher, dass sie unakzeptabel langsam ist. Viele prozessorintensive Bibliotheksroutinen wurden bereits optimiert. Andererseits sind einige Routinen tatsächlich langsam, insbesondere diejenigen, die Systemaufrufe an das Betriebssystem absetzen.
+Halten Sie die Zahl der verlinkten Bibliotheken gering. Je weniger Bibliotheken gelinkt werden müssen, umso schneller startet das Programm. Dies ist in GNOME allerdings schwierig.
+Tricks auf hohem Niveau
+Nutzen Sie Nebenläufigkeit aus. Das bedeutet nicht nur mehrere Prozessoren zu verwenden, es bedeutet auch die Zeit auszunutzen, in welcher der Anwender über seine weiteren Aktivitäten nachdenkt, und in Vorausschau einige Berechnungen auszuführen. Führen Sie Berechnungen aus, während Daten vom Datenträger geladen werden. Nutzen Sie verschiedene Ressourcen, wenn vorhanden, gleichzeitig.
+Bluffen Sie. Der Benutzer sollte denken, dass sein Rechner schnell ist, aber es ist gleich, ob er es wirklich ist oder nicht. Die Zeit zwischen dem Befehl und der darauf folgenden Antwort ist maßgebend. Es ist gleichgültig, ob die Antwort vorausberechnet wird, zwischengespeichert oder in irgendeiner anderen Weise später zu einem günstigeren Zeitpunkt ausgewertet wird, solange der Benutzer genau das bekommt, was er erwartet.
+Erledigen Sie Dinge in der Idle-Schleife. Dies ist einfacher zu programmieren als Multi-Threading, aber die Dinge geschehen vom Benutzer unbemerkt. Seien Sie jedoch vorsichtig. Wenn Ihr Programm sehr viel Zeit in der Idle-Schleife verbringt, dann wird es träge. Stellen Sie sicher, dass die Kontrolle regelmäßig an die Hauptschleife übergeben wird.
+Falls alles Andere scheitern sollte, informieren Sie den Benutzer mit einem Fortschrittsbalken drüber, dass es derzeit nur langsam voran geht. Das dürfte ihm lieber sein, als wenn Sie nur die Ergebnisse präsentieren würden. Er möchte zumindest wissen, dass das Programm nicht abgestürzt ist und er dann erst einmal eine Tasse Kaffee trinken gehen kann.
+ok
+ok
+Verwendung von
+Dieser Artikel beschreibt, wie Sie den Heap-Profiler
+Einführung
+
+Der Heap ist der Speicherbereich, der von Funktionen wie malloc belegt wird. Er wächst bei Bedarf und ist gewöhnlich der größte Speicherbereich eines Programms. Der Stapelspeicher (Stack) dient zur Speicherung der lokalen Daten von Funktionen. Dies schließt »automatische« Variablen in C und die Rückgabeadresse von Subroutinen ein. Der Stapelspeicher ist typischerweise wesentlich kleiner und deutlich aktiver als der Heap. Wir werden den Stapelspeicher nicht gesondert betrachten, weil ihn
+
+
+
+Es ist auch nützlich,
+Ihre Befehlszeile sollte daher so aussehen:
+valgrind --tool=massif --depth=5 --alloc-fn=g_malloc --alloc-fn=g_realloc --alloc-fn=g_try_malloc \\
+ --alloc-fn=g_malloc0 --alloc-fn=g_mem_chunk_alloc same-gnome
+Das Programm
+Interpretieren der Ergebnisse
+Die grafische Ausgabe von
+Die Textdatei ist hierarchisch in Abschnitte gegliedert. Am oberen Ende finden sich die größten Speicherverbraucher, in absteigender Ordnung nach Speicherzeit. Darunter finden sich weitere Abschnitte, die je nach dem Platz im Aufruf-Stack feiner detaillierter sind. Um dies zu verdeutlichen, verwenden wir die Ausgabe des oben stehenden Befehls.
+
+
+Oben in der Grafik sehen Sie ein großes gelbes Band mit der Bezeichnung gdk_pixbuf_new. Dies schaut nach einem idealen Kandidaten für Optimierungsversuche aus, aber wir werden die Textdatei verwenden müssen, um herauszufinden, wo gdk_pixbuf_new aufgerufen wird. Der Anfang der Textdatei sieht in etwa so aus:
+Command: ./same-gnome 
+
+== 0 ===========================
+Heap allocation functions accounted for 90.4% of measured spacetime
+
+Called from:
+ 28.8% : 0x6BF83A: gdk_pixbuf_new (in /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+
+ 6.1% : 0x5A32A5: g_strdup (in /usr/lib/libglib-2.0.so.0.400.6)
+
+ 5.9% : 0x510B3C: (within /usr/lib/libfreetype.so.6.3.7)
+
+ 3.5% : 0x2A4A6B: __gconv_open (in /lib/tls/libc-2.3.3.so)
+Die Zeile mit »=«-Zeichen deutet an, wie tief wir uns in der Stack-Trace befinden. In diesem Fall sind wir ganz oben. Danach werden die größten Speicherbeleger nach absteigender Raumzeit aufgeführt. Raumzeit ist das Produkt der Menge des belegten Speichers und wie lange er belegt wurde. Dies entspricht der Fläche der Bänder im Grafen. Dieser Teil der Datei belegt, was wir bereits wissen: der Großteil der Raumzeit ist gdk_pixbuf_new gewidmet. Um herauszufinden, was gdk_pixbuf_new aufrief, müssen wir weiter unten in der Textdatei suchen:
+== 4 ===========================
+Context accounted for 28.8% of measured spacetime
+ 0x6BF83A: gdk_pixbuf_new (in /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+ 0x3A998998: (within /usr/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-png.so)
+ 0x6C2760: (within /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+ 0x6C285E: gdk_pixbuf_new_from_file (in /usr/lib/libgdk_pixbuf-2.0.so.0.400.9)
+
+Called from:
+ 27.8% : 0x804C1A3: load_scenario (same-gnome.c:463)
+
+ 0.9% : 0x3E8095E: (within /usr/lib/libgnomeui-2.so.0.792.0)
+
+ and 1 other insignificant place
+Die erste Zeile besagt, dass wir uns nun vier Ebenen tief im Stapelspeicher befinden. Darunter ist eine Auflistung der Funktionsaufrufe, die von hier bis gdk_pixbuf_new reichen. Schließlich findet sich eine Liste von Funktionen, die sich eine Ebene darunter befinden und jene Funktionen aufrufen. es gibt natürlich auch Einträge für die Ebenen 1 bis 3, aber dies ist die erste Ebene, die man über den GDK-Code bis zum
+Jetzt, wo wir wissen, welcher Teil unseres Codes alle Raumzeit belegt, können wir ihn betrachten und die Ursache herausfinden. Es stellt sich heraus, dass load_scenario einen Pixbuf aus einer Datei lädt und diesen Speicher nie mehr frei gibt. Nachdem das Problem identifiziert wurde, können wir es beheben.
+Aufgrund der Ergebnisse handeln
+Ein Reduzieren des Verbrauches an Raumzeit ist gut, aber es gibt zwei verschiedene Wege, dies zu tun. Sie können entweder die angeforderte Speichermenge oder die Belegungszeit reduzieren. Betrachten Sie für einen Moment ein Modellsystem mit nur zwei laufenden Prozessen. Beide Prozesse belegen fast allen physikalischen Arbeitsspeicher und sobald sie sich überlappen, wird das System auslagern müssen und es wird sehr langsam. Es ist offensichtlich, dass die beiden Prozesse friedlich nebeneinander existieren können, wenn wir den Speicherverbrauch jedes Prozesses halbieren. Wenn wir statt dessen die Speicherbelegungszeit halbieren, dann können die beiden Prozesse nebeneinander existieren, aber nur solange ihre Zeiträume hoher Speicherbelegung nicht überlappen. Demnach ist es besser, die Speicherbelegung zu reduzieren.
+Unglücklicherweise schränken die Erfordernisse des Programms die Wahl der Optimierung ein. Die Größe der Pixbuf-Daten in
+
+Die Raumzeit-Belegung von gdk_pixbuf_new ist nun nur noch ein dünnes Band, das nur kurzzeitig einen Spitzenwert hat (es ist nun das sechzehnte schraffierte magenta Band von oben). Als Bonus ist der Spitzenspeicherverbrauch um 200 kB gesunken, weil die Spitze vor anderen Speicheranforderungen liegt. Wenn zwei solche Prozesse zeitgleich liefen, wäre die Wahrscheinlichkeit ziemlich gering, dass der höchste Speicherverbrauch beider zusammen fällt.
+Können wir noch zulegen? Eine schnelle Untersuchung der Textausgabe von
+Command: ./same-gnome 
+
+== 0 ===========================
+Heap allocation functions accounted for 87.6% of measured spacetime
+
+Called from:
+ 7.7% : 0x5A32A5: g_strdup (in /usr/lib/libglib-2.0.so.0.400.6)
+
+ 7.6% : 0x43BC9F: (within /usr/lib/libgdk-x11-2.0.so.0.400.9)
+
+ 6.9% : 0x510B3C: (within /usr/lib/libfreetype.so.6.3.7)
+
+ 5.2% : 0x2A4A6B: __gconv_open (in /lib/tls/libc-2.3.3.so)
+Bei näherer Betrachtung sehen wir jedoch, dass es von vielen verschiedenen Orten aus aufgerufen wird.
+== 1 ===========================
+Context accounted for 7.7% of measured spacetime
+ 0x5A32A5: g_strdup (in /usr/lib/libglib-2.0.so.0.400.6)
+
+Called from:
+ 1.8% : 0x8BF606: gtk_icon_source_copy (in /usr/lib/libgtk-x11-2.0.so.0.400.9)
+
+ 1.1% : 0x67AF6B: g_param_spec_internal (in /usr/lib/libgobject-2.0.so.0.400.6)
+
+ 0.9% : 0x91FCFC: (within /usr/lib/libgtk-x11-2.0.so.0.400.9)
+
+ 0.8% : 0x57EEBF: g_quark_from_string (in /usr/lib/libglib-2.0.so.0.400.6)
+
+ and 155 other insignificant places
+Nun begegnen wir geschmälerten Resultaten für unsere Bemühungen. Der Graph deutet einen weiteren möglichen Schritt an: Die Bänder »other« und »heap admin« sind beide ziemlich groß. Dies besagt, dass eine Vielzahl kleiner Anforderungen an vielen Orten gemacht werden. Jene zu eliminieren ist schwierig, aber wenn sie zusammen gelegt werden, dann werden die einzelnen Anforderungen größer und der Verwaltungsaufwand (»heap admin«) kann reduziert werden.
+Vorbehalte
+Es gibt ein paar Dinge, auf die man achten muss. Erstens: Raumzeit wird nur als Prozentangabe geliefert. Sie müssen mit der Gesamtgröße des Programms vergleichen, um festzustellen, ob es sich lohnt, diese Speichermenge anzugehen. Der Graph mit der vertikalen Achse in Kilobytes eignet sich gut dafür.
+Zweitens:
+Laufwerkszugriffe werden als nachteilig angesehen
+Laufwerkszugriffe sind die wohl aufwändigsten Vorgänge, die Sie überhaupt ausführen können. Sie wissen das womöglich nicht aufgrund der Anzahl der Ausführungen, aber glauben Sie mir, dass sie es sind. Folglich vermeiden Sie bitte das folgende ungünstige Verhalten:
+Viele kleine Dateien auf dem gesamten Laufwerk verteilen.
+Öffnen, stat() ausführen und lesen vieler Dateien vom gesamten Laufwerk
+Obiges mit Dateien tun, die zu verschiedenen Zeitpunkten erstellt wurden, so dass sie fragmentiert sind und noch mehr Plattenaktivität verursachen.
+Obiges mit Dateien tun, die sich in verschiedenen Ordnern befinden, so dass auf verschiedene Zylindergruppen zugegriffen wird und so noch mehr Plattenaktivität verursacht wird.
+Wiederholt obiges tun, obwohl es nur einmal getan werden muss.
+Mögliche Wege, wie Sie Ihren Code suchfreundlich optimieren können:
+Fassen Sie Daten in einer einzigen Datei zusammen.
+Halten Sie Daten im gleichen Ordner vor.
+Speichern Sie Daten zwischen, so dass sie nicht fortwährend erneut eingelesen werden müssen.
+Geben Sie Daten frei, so dass sie nicht beim Laden von Anwendungen immer wieder erneut gelesen werden müssen.
+Erwägen Sie, alle Daten in einer einzigen Binärdatei zwischenzuspeichern, die sauber aufgebaut ist und mit mmap verarbeitbar ist.
+Die Probleme mit Plattenzugriffen verstärken sich beim Lesen, was wir leider eben gerade tun. Merken Sie sich, dass im Allgemeinen Lesen synchron und Schreiben asynchron verläuft. Das verschlimmert nur das Problem mit jedem seriellen Lesevorgang und trägt zu Programmverzögerungen bei.
+Optimieren von GNOME-Software
+GNOME-Dokumentationsprojekt
+2004-2005
+Callum McKenzie
+Robert Love
+Callum
+McKenzie
+Robert
+Love
+Das vorliegende Dokument kann gemäß den Bedingungen der GNU Free Documentation License (GFDL), Version 1.1 oder jeder späteren, von der Free Software Foundation veröffentlichten Version ohne unveränderbare Abschnitte sowie ohne Texte auf dem vorderen und hinteren Buchdeckel kopiert, verteilt und/oder modifiziert werden. Eine Kopie der GFDL finden Sie unter diesem
+Bei vielen der von Firmen zur Unterscheidung ihrer Produkte und Dienstleistungen verwendeten Namen handelt es sich um Marken. An den Stellen, an denen derartige Namen in einer GNOME-Dokumentation vorkommen und wenn die Mitglieder des GNOME-Dokumentationsprojekts über diese Marken informiert wurden, sind die Namen in Großbuchstaben oder mit großen Anfangsbuchstaben geschrieben.
+0.1
+November 2007
+William Johnston
+Erstmalige Umwandlung in das DocBook-Format.
+Die Optimierung von Software kann verschiedene Ziele verfolgen: Geschwindigkeit, Programmgröße oder Speicherverbrauch. Dieser Abschnitt enthält Leitfäden und Anleitungen zum Optimieren Ihrer Software.
+Mario Blättermann <mariobl\@gnome\.org>, 2009
+Christian Kirbach <christian\.kirbach\@googlemail\.com>, 2010

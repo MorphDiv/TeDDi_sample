@@ -1,0 +1,69 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 12.
+Control Structures
+Next
+The include() statement includes and evaluates the specified file.
+The documentation below also applies to require().
+The two constructs are identical in every way except how they handle failure. include() produces a Warning while require() results in a Fatal Error.
+In other words, use require() if you want a missing file to halt processing of the page. include() does not behave this way, the script will continue regardless.
+Be sure to have an appropriate include_path setting as well.
+When a file is included, the code it contains inherits the variable scope of the line on which the include occurs.
+Any variables available at that line in the calling file will be available within the called file, from that point forward.
+Example 12-3.
+Basic include() example
+vars.php ?php $color = 'green'; $fruit = 'apple';? test.php ?php echo "A $color $fruit"; / / A include'vars.php'; echo "A $color $fruit"; / / A green apple?
+If the include occurs inside a function within the calling file, then all of the code contained in the called file will behave as though it had been defined inside that function.
+So, it will follow the variable scope of that function.
+Example 12-4.
+Including within functions
+?php function foo() {global $color; include'vars.php'; echo "A $color $fruit";} / * vars.php is in the scope of foo() so * * $fruit is NOT available outside of this * * scope. $color is because we declared it * * as global. * / foo(); / / A green apple echo "A $color $fruit"; / / A green?
+When a file is included, parsing drops out of PHP mode and into HTML mode at the beginning of the target file, and resumes again at the end.
+For this reason, any code inside the target file which should be executed as PHP code must be enclosed within valid PHP start and end tags.
+If "URL fopen wrappers" are enabled in PHP (which they are in the default configuration), you can specify the file to be included using an URL (via HTTP or other supported wrapper - see Appendix I for a list of protocols) instead of a local pathname.
+If the target server interprets the target file as PHP code, variables may be passed to the included file using an URL request string as used with HTTP GET.
+This is not strictly speaking the same thing as including the file and having it inherit the parent file' s variable scope; the script is actually being run on the remote server and the result is then being included into the local script.
+Warning
+Windows versions of PHP prior to PHP 4.3 do not support accessing remote files via this function, even if allow_url_fopen is enabled.
+Example 12-5. include() through HTTP
+?php / * This example assumes that www.example.com is configured to parse .php * * files and not .txt files.
+Also, 'Works' here means that the variables * * $foo and $bar are available within the included file. * / / / Won't work; file.txt wasn't handled by www.example.com as PHP include'http: / /www.example.com / file.txt?foo=1 bar=2'; / / Won't work; looks for a file named'file.php?foo=1 bar=2 'on the / / local filesystem. include'file.php?foo=1 bar=2'; / / Works. include'http: / /www.example.com / file.php?foo=1 bar=2'; $foo = 1; $bar = 2; include'file.txt'; / / Works. include'file.php'; / / Works.?
+Because include() and require() are special language constructs, you must enclose them within a statement block if it's inside a conditional block.
+Example 12-6. include() and conditional blocks
+?php / / This is WRONG and will not work as desired. if ($condition) include $file; else include $other; / / This is CORRECT. if ($condition) {include $file;} else {include $other;}?
+Handling Returns:
+It is possible to execute a return() It is possible to execute a return() statement inside an included file in order to terminate processing in that file and return to the script which called it.
+Also, it 's possible to return values from included files.
+You can take the value of the include call as you would a normal function.
+Note:
+In PHP 3, the return may not appear inside a block unless it' s a function block, in which case the return() applies to that function and not the whole file.
+Example 12-7. include() and the return() statement
+return.php ?php $var = 'PHP'; return $var;? noreturn.php ?php $var = 'PHP';? testreturns.php ?php $foo = include'return.php'; echo $foo; / / prints'PHP' $bar = include'noreturn.php'; echo $bar; / / prints 1?
+$bar is the value 1 because the include was successful.
+Notice the difference between the above examples.
+The first uses return() within the included file while the other does not.
+A few other ways to "include" files into variables are with fopen(), file() or by using include() along with Output Control Functions.
+See also require(), require_once(), include_once(), readfile(), virtual(), and include_path.
+Prev
+Home
+Next
+require()
+Up
+require_once()

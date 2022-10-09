@@ -1,0 +1,53 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Annexe B.
+Migration de PHP 3.0 à PHP 4.0
+Suivant
+Avec PHP 3.0, le niveau de rapport d 'erreur était obtenu en ajoutant les constantes numériques de chaque niveau de rapport.
+Généralement, on utilisait 15 pour afficher toutes les erreurs, et 7 pour afficher toutes les erreurs hormis les alertes simples.
+PHP 4.0 dispose d'un nombre significativement plus grand de niveaux de rapport d'erreur, et l 'analyseur comprend désormais les constantes, lors des modifications.
+Le niveau de rapport d 'erreur doit désormais être explicitement configuré en supprimant les niveaux dont vous ne voulez pas du niveau maximal, grâce à la fonction de OU exclusif.
+Ça a l 'air compliqué?
+Supposons que vous souhaitiez afficher toutes les erreurs, hormis les alertes de style, qui sont repérées par la constante:
+E_NOTICE.
+Il suffit d'ajouter la valeur suivante dans le fichier php.ini: error_reporting = E_ALL ~ (E_NOTICE).
+Si vous voulez supprimer en plus les alertes, vous pouvez ajouter la constante appropriée, en la combinant avec l'opérateur OU logique '|': error_reporting= E_ALL ~ (E_NOTICE | E_WARNING).
+Avertissement
+L'utilisation des vieilles valeurs de 7 et 15 est une très mauvaise idée, car elles ne prennent pas en compte les nouvelles classes d'erreurs, y compris certaines erreurs d 'analyse.
+Cela peut conduire à de très étranges résultats, où le script n'affiche plus rien, malgré une erreur d 'analyse.
+Cela a conduit à un grand nombre de rapport d'erreur dans le passé, alors que les programmeurs n'étaient tout simplement pas capables de repérer l'accolade manquante, car l 'analyseur avait la consigne de cacher ces erreurs.
+Vérifier votre niveau d 'erreur doit être le premier réflexe lorsque vos scripts meurent silencieusement.
+Le moteur Zend est considéré actuellement comme suffisamment mature pour ne plus causer ce genre de problème aujourd 'hui.
+Un grand nombre de scripts PHP PHP 3.0 utilisent des structures qui doivent être considérées comme un très mauvais style, même s 'il effectue bien la tâche qui lui est affectée, car ils ne sont pas robustes.
+PHP 4.0 affichera de nombreux messages d 'erreurs dans des situations où PHP 3.0 restera coi.
+La solution de facilité consiste à supprimer les messages de niveau E_NOTICE, mais c 'est une meilleure idée de corriger le code à la place.
+Le cas le plus courant qui génèrera des messages d'alertes est l 'utilisation de constantes sans guillemets comme index de tableaux.
+PHP 3.0, comme PHP 4.0, finiront par les interpréter littéralement comme des chaînes, si aucune constante n 'est définie à la place.
+Mais si jamais une telle constante est définie dans une autre partie du code, cela risque de produire des résultats étonnants.
+Cela peut devenir un trou de sécurité si un pirate arrive à redéfinir les constantes de telle manière que le script lui donne accès à un niveau de droits supérieur.
+PHP 4.0 vous signalera tout oubli de guillemets comme par exemple dans: $HTTP_SERVER_VARS[ REQUEST_METHOD].
+Modifier ce code en $HTTP_SERVER_VARS[ 'REQUEST_METHOD'] rendra l 'analyseur heureux, et améliorera grandement votre style et la sécurité du code.
+PHP 4.0 vous signalera les variables ou les éléments de tableaux non initialisés.
+Précédent
+Sommaire
+Suivant
+Comportement de l 'analyseur
+Niveau supérieur
+Initialiseur

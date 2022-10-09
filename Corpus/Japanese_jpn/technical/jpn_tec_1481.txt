@@ -1,0 +1,98 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+手続きおよび関数の使用法
+/text/sbasic/shared/01020300.xhp
+手続き
+関数;使い方
+変数;手続きや関数への変数の渡し方
+パラメータ;手続きと関数
+パラメータ;参照渡しと値渡し
+変数;適用範囲
+変数の適用範囲
+GLOBAL 変数
+PUBLIC 変数
+PRIVATE 変数
+関数;戻り値の型
+関数の戻り値の型
+手続きおよび関数の使用法
+ここでは、$[officename] Basic でのプロシージャーおよび関数の基本的な使用法について説明します。
+モジュールを新規作成すると、$[officename] Basic は自動的に「Main」という名前のプロシージャーを作成します。このデフォルト名は $[officename] Basic プロジェクトの開始位置や順序には関係ありません。このプロシージャー名は任意に変更できます。
+プログラムの構造は、プロシージャー (SUB) や関数 (FUNCTION) を使用することで、個々の機能別に整理することができます。
+また、手続きや関数を使用するメリットの 1 つに、こうした特定の機能を担ったプログラムコード群を他のプロジェクトで再利用できる点があります。
+プロシージャー (SUB) や関数 (FUNCTION) への変数の渡し方
+プロシージャーや関数には、変数を渡すことができます。これらの変数は、SUB および FUNCTION ステートメント部で使用を宣言する必要があります。
+Parameter1 As Type, Parameter2 As Type,...
+)
+Program code
+END SUB
+こうした SUB の呼び出しは、下記の構文で行います。
+SubName(Value1, Value2,...)
+SUB に渡す個々の変数は、SUB 宣言部の変数型と一致する必要があります。
+これらの事項は FUNCTION についても同様ですが、この場合は関数の戻り値が返されます。これらの戻り値は、各関数の処理ルーチンが終了するまでに算出しておき、戻り値とする計算結果のパラメータを関数名に代入する形で確定します(例を参照)。
+FUNCTION FunctionName(Parameter1 As Type, Parameter2 As Type,...)As Type
+Program code
+FunctionName=Result
+End Function
+こうした FUNCTION の呼び出しは、下記の構文で行います。
+Variable=FunctionName(Parameter1, Parameter2,...)
+Library.
+Module.
+Macro()
+たとえば、Grimmicks ライブラリにある Autotext マクロを呼び出すには、以下のようにコマンドを使います：
+Gimmicks.AutoText.Main()
+パラメータの参照渡しと値渡し
+SUB や FUNCTION に渡すパラメータは、参照渡しか値渡しのいずれかの形で与えることができます。明示的に指定しない限り、パラメータは参照渡しとして渡されます。この場合、SUB や FUNCTION に渡されたパラメータは、その値の読み取りだけでなく、値の変更が可能です。
+値渡しでパラメータを与えるには、下記の例のように SUB や FUNCTION の呼び出し時に「ByVal」キーワードをパラメータの直前に指定します。
+ByVal
+Parameter)
+この場合 FUNCTION 部には、パラメータ本体ではなくその値だけが渡されるため、パラメータ値が書き換えられることはありません。
+変数の適用範囲
+SUB または FUNCTION 内に定義される変数であり、手続きが完了するまでの間だけ有効です。 これは「ローカル」変数です。 多くの場合、すべての手続き内、すべてのライブラリの各モジュール内、または SUB や FUNCTION が完了したあとで、変数を有効にしておく必要があります。
+SUB や FUNCTION 外部での変数宣言
+GLOBAL VarName As TYPENAME
+こうして宣言した変数は、$[officename] セッションの終了時まで有効となります。
+PUBLIC VarName As TYPENAME
+こうして宣言した変数は、すべてのモジュールで有効となります。
+PRIVATE VarName As TYPENAME
+こうして宣言した変数は、該当モジュールの内部だけで有効となります。
+DIM VarName As TYPENAME
+こうして宣言した変数は、該当モジュールの内部だけで有効となります。
+プライベート変数の例
+CompatibilityMode(true) を設定して、プライベート変数がモジュール間でプライベートになるように強制的に設定します。
+from i17948, see i54894
+REM ***** Module1 *****
+Private myText As String
+Sub initMyText
+myText = &quot; Hello &quot;
+print &quot; in module1 : &quot; , myText
+End Sub
+REM ***** Module2 *****
+'Option Explicit
+Sub demoBug
+CompatibilityMode( true )
+initMyText
+' 空の文字列を返します
+' (あるいは Option Explicit の場合はエラーを報告します)
+print &quot; in module1 : &quot; , myText
+End Sub
+SUB や FUNCTION 終了後も値を維持できる変数
+STATIC VarName As TYPENAME
+宣言した変数は、次に SUB や FUNCTION を実行するまで有効となります。 この場合の変数宣言は、SUB や FUNCTION の内部に記述する必要があります。
+関数の戻り値のデータ型の指定
+関数の戻り値のデータ型の設定は、変数の場合と同様の型宣言子を用いて行い、下記の例のように、関数宣言時の関数名とパラメータリストに続けて「As」および型宣言用キーワードを記述することで指定します。
+Function WordCount(WordText as String) as Integer

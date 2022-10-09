@@ -1,0 +1,202 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+La création de thèmes pour l'écran de bienvenue & kdm;
+Cette section décrit la création de thèmes pour l'écran de bienvenue. Pour des exemples comprenant des captures d'écran, voyez les thèmes standards installés et les thèmes du site web des thèmes.
+Aperçu de la création de thèmes
+Vous pouvez construire des thèmes & kdm; en créant un fichier XML qui suit la spécification de $KDEDIR / share/ apps/ doc/ kdm/ greeter. dtd. Les fichiers de thème sont conservés dans le dossier $KDEDIR / share/ apps/ kdm/ themes/ nom_du_thème. Le dossier du thème doit contenir un fichier nommé KdmGreeterTheme. desktop qui a un format similaire aux autres fichiers. desktop et ressemble à ceci & #160;:
+[KdmGreeterTheme] Greeter=cercles. xml Name=Cercles Description=Thème avec des cercles bleus Author=Bond, James Bond Copyright=(c) 2002 Bond, James Bond Screenshot=copie_d_écran. png
+Les champs Name, Description, Author et Copyright peuvent être traduits tout comme dans d'autres fichiers. desktop. Tous les fichiers mentionnés doivent être dans dans le dossier du thème. Le champ Screenshot pointe vers un fichier qui doit être une copie d'écran de taille 200x150 du thème en situation réelle (il est possible de l'omettre, mais sa présence est préférable pour l'utilisateur). Le champ Greeter pointe vers un fichier XML qui contient la description du thème.
+Une fois qu'un thème a été complètement testé, créez une archive au format tarball contenant le dossier tel qu'il serait installé dans le dossier $KDEDIR / share/ apps/ kdm/ themes. Ceci est le format standard pour la distribution de thèmes & kdm;.
+Description détaillée du format XML des thèmes
+Le nœ ud de premier niveau
+Les thèmes & kdm; sont des fichiers XML avec la balise & lt; greetergt; à leur racine. Le nœ ud de premier niveau est un nœ ud item de type rect avec une mise en page fixe implicite.
+& lt; ?xml version="1.0 "encoding="UTF-8"? gt; lt; !DOCTYPE greeter SYSTEM "greeter. dtd"gt; lt; greetergt; [...] lt; /greetergt;
+Dans la balise greeter, vous pouvez trouver les nœ uds décris dans les sections suivantes de ce document. Certains de ces nœ uds sont des conteneurs (nœ uds pour la mise en page, nœ uds item) pouvant à leur tour contenir d'autres nœ uds.
+Les nœ uds item
+Un thème & kdm; est créé en spécifiant une hiérarchie de nœ uds item et de nœ uds de mise en page. Les nœ uds item peuvent avoir la valeur suivante pour l'attribut type & #160;:
+button
+Un champ de type bouton. Ce champ utilise un bouton Qt.
+Il est aussi possible de faire en sorte que tout autre item se comporte comme un bouton en positionnant son attribut button à true. Cependant, il est préférable d'utiliser des boutons Qt dans les thèmes & kdm; car ceux -ci sont accessibles aux personnes ayant des problèmes d'accessibilité.
+entry
+Une zone de saisie sur une ligne ou une liste déroulante. Veuillez noter que ceci est simplement un substituant aux éléments graphiques de Qt.
+label
+Une zone de texte. Elle doit contenir soit un nœ ud text soit un nœ ud stock afin de spécifier le texte.
+list
+Une zone de sélection d'avatar.
+pixmap
+Une image raster dans un format pris en charge par Qt, & pex; PNG, JPEG, Tiff, & etc;
+rect
+Un rectangle plein.
+svg
+Une image vectorielle au format SVG.
+& lt; item type=quot; rectquot; id=quot; bouton_déconnexionquot; button=quot; truequot; gt;.
+Par défaut, l'écran & kdm; disparaîtra après l'authentification. Ceci peut conduire à un scintillement de l'image entre les écrans de connexion et de session. L'attribut background permet aux utilisateurs de spécifier quels éléments du thème constituent l'image de fond. Lorsque cet attribut est utilisé, & kdm; supprime tous les éléments qui ne font pas partie de l'arrière-plan et effectue le rendu des éléments background qui restent sur la fenêtre racine. Ceci peut être utilisé pour créer une transition douce entre les écrans de connexion et de session & #160;: lt; item type=quot; rectquot; background=quot; truequot; gt; & lt; normal file="background. svg"/ gt; & lt; pos x=quot; 0quot; y=quot; 0quot; width=quot; 100%quot; height=quot; -75quot; /gt; lt; /itemgt; Afin d'utiliser un arrière-plan différent de celui de l'écran de connexion pour la transition, le thème doit spécifier deux nœ uds item (qui peuvent contenir des pixmaps ou des images SVG, par exemple). Le nœ ud item qui correspond à l'arrière-plan de l'écran de bienvenue ne doit pas avoir d'attribut background, au contraire de celui qui correspond à l'arrière-plan de transition. Par exemple & #160;:
+& lt; ?xml version="1.0 "encoding=quot; UTF-8quot; ?gt; lt; !DOCTYPE greeter SYSTEM & quot; greeter. dtdquot; gt; lt; greetergt; & lt; item type=quot; rectquot; background=quot; truequot; gt; & lt; normal file="background_for_login. svg" element="background"/ gt; & lt; pos x=quot; 0quot; y=quot; 0quot; width=quot; 100%quot; height=quot; 100%quot; /gt; & lt; /itemgt; & lt; item type=quot; rectquot; gt; & lt; normal file="background_for_greeter. svg"/ gt; & lt; pos x=quot; 0quot; y=quot; 0quot; width=quot; 100%quot; height=quot; 100%quot; /gt; & lt; /itemgt; [...] lt; /greetergt;
+Dans les configurations multi-écrans, les thèmes peuvent aussi spécifier l'apparence des autres écrans que celui sur lequel est l'écran de bienvenue - mais typiquement seuls les éléments d'arrière-plan apparaîtront ici. Afin de spécifier sur quel(s) écran(s) un élément doit apparaître, l'attribut screen peut être utilisé avec une valeur parmi greeter, other ou all, ce qui signifie respectivement l'écran sur lequel l'écran de bienvenue est, tous les écrans sur lesquels l'écran de bienvenue n'est pas, et tous les écrans.
+Un nom peut être donné à chaque nœ ud item via l'attribut id. Certains identifiants sont reconnus par & kdm; et donnent une fonction spéciale aux nœ uds item afférents & #160;:
+Les éléments button et ceux avec l'attribut button=quot; truequot;.
+Typiquement, les boutons déclenchent certaines actions. De plus, & kdm; cachera les boutons dont les actions sont indisponibles pour une quelconque raison.
+Identifiant (id)
+Action
+chooser_button
+Lance le sélecteur XDMCP.
+disconnect_button
+Déconnexion d'une session à distance.
+session_button
+Ouvre le menu de sélection du type de session.
+system_button
+Ouvre une menu fourre-tout avec diverses options et actions qui dépendent de la configuration.
+Éléments label
+& kdm; affichera/ cachera ces zones de texte et définira leur texte en fonction de l'état de la boîte de dialogue.
+Fonction
+pam-error
+Ceci affiche le message Échec de la connexion.
+Éléments intégrant des éléments graphiques
+& kdm; intégrera des éléments graphiques Qt particuliers dans ces éléments.
+user-entry
+Champ pour la saisie du nom d'utilisateur.
+pw-entry
+Champ pour la saisie du mot de passe.
+domain-entry
+Certains modules externes de communication utilisent ce champ pour effectuer une requête sur un nom de domaine. Si ce champ est présent, les éléments qui l'englobent doivent avoir des nœ uds d'affichage avec le type plugin-domain-entry.
+talker
+Cet élément devrait être du type rect. Il représente la zone chaude de l'écran de bienvenue & #160;: il contient les éléments label et entry qui concernent le processus d'authentification. Si un module externe de communication ne peut pas effectuer de correspondance entre ses besoins et les éléments existants, il tente d'embarquer, dans cet élément, un élément graphique complexe avec sa propre mise en page, ce qui a pour effet de ne pas du tout tenir compte du talker du thème. Strictement parlant, les thèmes & kdm; n'ont pas du tout besoin de fournir de propres conceptions de talker, car tous les modules externes d'authentification de & kdm; sont capables d'utiliser l'élément talker.
+userlist
+Cet élément doit être du type list. Si la fonctionnalité d'affichage de la liste d'utilisateurs est activée, & kdm; embarque ici le widget d'affichage de la liste d'utilisateurs. Sinon, cet élément est caché.
+xconsole
+Cet élément devrait être du type rect. Si la fonctionnalité intégrée xconsole est compilée et activée, & kdm; embarquera ici le widget de journalisation de console. Sinon, cet élément est caché.
+Autres éléments
+& kdm; affichera ou cachera ces éléments en fonction de la configuration et de l'état actuel de l'écran de bienvenue. & kdm; ne leur impose pas d'exigences, mais ils se prêtent généralement à un type particulier.
+N'est affiché que lorsque...
+timed-label
+... une connexion temporisée est en cours.
+caps-lock-warning
+... le verrouillage majuscule est activé.
+xauth-warning
+... le & X-Server; ne requiert pas d'autorisation X pour se connecter.
+userlist-rect
+... la liste d'utilisateurs est active. En imbriquant l'élément userlist dans celui -ci, il est possible de créer quelque chose qui ressemble à un cadre autour de la liste et qu'il ne soit affiché que lorsque la liste d'utilisateurs elle-même est affichée.
+xconsole-rect
+... la fonctionnalité xconsole est activée. Est similaire à userlist-rect.
+Nœ uds conteneurs pour la mise en page
+Les nœ uds de mise en page apparaissent dans les nœ uds item et contiennent d'autres nœ uds item. Le type de nœ ud de mise en page détermine la disposition de ses nœ uds fils. Un nœ ud item peut contenir un nœ ud de mise en page de chaque type.
+Nœ uds « & #160; box & #160; »
+Le « & #160; spacing & #160; » est la distance séparant les nœ uds « & #160; item & #160; » enfants voisins. Le « & #160; padding & #160; » est la marge extérieure du nœ ud « & #160; box & #160; ». Si le nœ ud « box » est homogène, l'espace alloué à chaque nœ ud « & #160; item & #160; » enfant est le même.
+Nœ uds « & #160; fixed & #160; »
+Nœ uds « & #160; pos & #160; »
+Chaque élément peut spécifier ses position et taille via le nœ ud pos. Par exemple & #160;:
+& lt; pos x=quot; 0quot; y=quot; 4quot; width=quot; 100%quot; height=quot; 100%quot; /gt;
+Si la taille n'est pas spécifiée, elle sera la taille naturelle du nœ ud « & #160; item & #160; », appelée la taille indiquée. Remarquez que tous les « & #160; items & #160; » n'ont pas de taille indiquée.
+À la fois la position et la taille peuvent être fournis en pourcentage et seront dans ce cas calculés relativement à la taille du conteneur les englobant. Pour les nœ uds « & #160; item & #160; » de niveau supérieur, il s'agit du pourcentage de l'écran entier. En ajoutant des accents circonflexes (^) à la spécification de la taille, il est possible de la modifier pour qu'elle soit relative à la taille de l'élément englobant l'élément qui l'englobe, et ainsi de suite...
+Si le nœ ud « & #160; item & #160; » contient un nœ ud « & #160; box & #160; », width et height peuvent être spécifiés à box afin de signifier qu'ils sont supposés être de la largeur et de la hauteur du nœ ud « & #160; box & #160; », c'est-à-dire les nœ uds « & #160; item & #160; » dans le nœ ud « & #160; box & #160; » plus le « & #160; padding & #160; ».
+La valeur d'un des attributs width et height peut être spécifiée à scale afin de signifier qu'il devrait être mis à l'échelle en fonction de l'échelle de l'autre dimension et relativement à sa taille indiquée. Utilisez ceci afin de conserver automatiquement le ratio des dimensions des images.
+& lt; pos x=quot; 10%quot; y=quot; 50%quot; anchor=quot; wquot; width=quot; 80%quot; height=quot; 95quot; /gt;
+Afficher des nœ uds
+Type
+Afficher si...
+chooser
+il est permis de basculer en mode de connexion à distance.
+halt et reboot
+il est permis d'effectuer un arrêt du système.
+system
+aucune condition (toujours défini dans & kdm;).
+plugin- nom
+le module externe conversation fournit un champ de saisie éponyme.
+Par exemple & #160;:
+& lt; show type=quot; chooserquot; /gt;
+& lt; show min-screen-height=quot; 768quot; /gt;
+Nœ uds « & #160; Normal & #160; » / « & #160; Active & #160; » / « & #160; Prelight & #160; »
+L'apparence de la plupart des types d'éléments peut être paramétrée via les balises suivantes & #160;:
+normal
+État normal.
+prelight
+Lorsque la souris survole l'élément.
+active
+Lorsqu'un bouton de souris est pressé sur l'élément.
+L'ensemble exact d'attributs disponibles dépend du type d'éléments & #160;:
+rect
+& lt; normal color=quot; #000000quot; alpha=quot; 0.0quot; /gt;
+label
+& lt; normal color=quot; #ffffffquot; alpha=quot; 1.0quot; font=quot; Sans 14quot; /gt;
+alpha et color sont spécifiés tout comme pour les nœ uds rect.
+pixmap
+svg
+& lt; normal file=quot; image. pngquot; tint=quot; #ddddddquot; alpha=quot; 1.0quot; /gt;
+file spécifie le fichier contenant l'image. Les chemins relatifs le sont par rapport au dossier du thème.
+element spécifie l'identifiant d'élément d'un fichier SVG. S'il est vide, le rendu de l'ensemble de l'image SVG sera effectué.
+Nœ uds de style d'élément graphique (« & #160; widget & #160; »)
+Exemple & #160;:
+& lt; style edit-font=quot; Comic 16quot; text-color=quot; #ddddddquot; frame=quot; truequot; /gt;
+Nœ uds de couleur de zone de sélection d' avatar
+& lt; color labelcolor=quot; #80ffffffquot; altlabelcolor=quot; #80f0f0f0quot; /gt;
+Nœ uds de texte
+& lt; text xml: lang=quot; frquot; gt; Optionlt; /textgt;
+%%
+Un caractère « & #160;% & #160; »
+%c
+Une horloge avec temps et date
+%d
+Nom de l'affichage (variable d'environnement DISPLAY)
+%h
+Nom d'hôte (résultat de gethostname)
+%m
+Nom de machine (partie machine du résultat de uname)
+%n
+Nom de nœ ud (partie nodename du résultat de uname)
+%o
+Nom de domaine (résultat de getdomainname)
+%r
+Nom de version (partie release du résultat de uname)
+%s
+Nom de système (partie sysname du résultat de uname)
+%t
+Nombre de secondes restantes avant que la connexion temporisée soit effectuée, auquel est ajouté la forme plurielle i18n adéquate de seconde
+%u
+Nom d'utilisateur pour la connexion temporisée
+_
+A pour effet de définir le caractère suivant comme accélérateur clavier
+Le verrouillage majuscule est activé
+chooser
+Sélecteu_r XDMCP
+quit
+_Quitter
+disconnect
+Déconn_ecter
+halt
+Étei_ndre
+language
+Lan_gue
+login
+_Connexion
+session
+_Type de session
+reboot
+Re_démarrer
+system
+_Menu
+L'utilisateur %u se connectera dans %t
+domain-label
+_Domaine & #160;:
+username-label
+_Nom d'utilisateur & #160;:
+password-label
+_Mot de passe & #160;:
+welcome-label
+Bienvenue sur %h
+& lt; stock type=quot; welcome-labelquot; /gt;
+& lt; item type=quot; labelquot; gt; & lt; stock type=quot; username-labelquot; /gt; & lt; buddy idref=quot; user-entryquot; /gt; [...] lt; /itemgt; [...] lt; item type=quot; entryquot; id=quot; user-entryquot; gt; [...] lt; /itemgt;

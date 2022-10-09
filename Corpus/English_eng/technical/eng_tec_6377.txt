@@ -1,0 +1,49 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Disk and tuner devices
+Setting up devices
+& kplayer; tries to find any disk and tuner devices you have on your system. The ones it finds it puts on the File menu and on several right click popup menus, as well as in the Devices section of the multimedia library.
+If the device you want & kplayer; to use does not show up on those lists, you can add it manually by selecting the Devices node in the multimedia library and choosing Add Device... command from the Library menu or the right click popup menu. & kplayer; will show the Add device dialog:
+Add device dialog
+Enter a unique descriptive name for the device and the path to the device node under the / dev directory. Select the device type from the drop down box. For a TV device select a channel list and an input driver, usually Video4Linux 2 or Video4Linux. A DVB device needs the path to a channel file in the zap format. You can get the file from the Internet or create it using the scan utility that comes with DVB drivers. & kplayer; looks for existing channels. conf files and selects the first one it finds by default.
+To set additional options for a device, select it in the multimedia library and choose the Properties... command from the Library menu or the right click popup menu. Most of the options are the same properties available for every multimedia item in & kplayer;.
+Tuner devices have several specific options detailed in the Properties dialog chapter. The General page has the options to select a list of channels available from the device and an input driver as discussed above. Other options are on the Video, Audio and Advanced pages of the dialog.
+For a detailed description of the multimedia library feature see the Multimedia library micro-HOWTO.
+If you had -dvd-device or -cdrom-device options in the Additional command line parameters box on the Advanced page in kplayer; Settings, you have to remove them, because since version 0.6 & kplayer; supplies those options to & mplayer; automatically.
+Playing from devices
+When you put a disk into a CD or DVD drive, & kplayer; detects what kind of disk it is and how many tracks or titles it has, and updates the device submenu of the File menu accordingly. The submenu includes commands to play the whole disk or an individual track or title from it.
+& kplayer; supports video DVD, video CD, including SVCD and other VCD varieties, audio CD, data DVD and data CD disks. If & kplayer; does not detect your disk automatically for any reason, you can kick off the detection process manually by selecting the Load Disk command from the device submenu.
+Tuner devices like TV or DVB also have their own submenus that contain commands to play each individual channel available on the device. Or you can open the device in the multimedia library, select some channels and play them using the commands on the Library menu or the right click popup menu.
+Another way to play an entire disk is through the media: / or system: / I/ O Slaves. If you have the Devices applet enabled in the & kicker; panel, it will show disks you insert into disk drives. You can then left click the disk icon and select the Play command. This will start & kplayer; if it is not already running and play the disk. Similarly, if disk icons show up on your desktop, you can right click them and select Play. You can also display the disk icons in & konqueror; file manager by opening media: / or system: / media URL s in it.
+Inverse telecine and deinterlacing
+Video on DVD disks is often telecined. The pullup filter does a decent inverse telecine. To use it, select the disk or one of its titles in the Devices section of the multimedia library and choose the Properties... command from the Library menu or the right click popup menu to open the disk properties, then go to the Advanced page and enter -vf pullup in the Additional command line arguments field before playing the video. Setting the property on the disk will apply the filter to all titles on the DVD.
+Some DVD disks and many TV and DVB channels are interlaced. There are several deinterlacing filters in & mplayer;. Each of them has its own advantages and disadvantages, so try a few of them starting with -vf yadif and see which one gives the best results for the particular video you are trying to watch. The full list is available by running
+mplayer -vf help -pphelp | grep deint
+Deblocking, deringing, denoising
+The -vf option is in charge of video filtering in & mplayer;. To get the full list of available filters, run
+mplayer -vf help
+from the command line. Most of them are described on the mplayer; manpage. One of the most useful filters is pp, the postprocessing filter. Among other things it can smooth blocky MPEG s using the deblocking filters hb and vb or h1 and v1, usually combined with the deringing filter dr like this: -vf pp=hb/ vb/ dr or -vf pp=h1/ v1/ dr. To get a full list of pp filters, run
+mplayer -pphelp
+from the command line. Another useful filter is hqdn3d that does high quality denoising: -vf hqdn3d.
+You can combine several filters together and use them on the same device or file by separating them with a comma without spaces, for example:
+-vf pullup, pp=h1/ v1/ dr, hqdn3d
+Put that into the Additional command line arguments field on the Advanced page in File Properties.
+DVD, VCD, audio CD, TV, DVB
+You can play DVD titles by entering a URL like dvd: / /1 into the Open URL dialog from the File menu in & kplayer;. The number 1 is the title number to play. Similarly, vcd: / /1 will play a VCD, SVCD and other VCD varieties, and cdda: / /12 will play the twelfth track of an audio CD. Also supported are tv: / /1 and dvb: / /channelname type URL s.
+If a DVB channel name has uppercase letters in it, like dvb: / /RAI Uno, then the standard form will not work in & kde; 3.2 and later, because & kde; libraries have been "fixed" to convert all host names to lower case without ever asking you. In that case & kplayer; will insert kplayer as the host name for you like so: dvb: / /kplayer/ RAI Uno. The host name will show up in the Path or URL field in File Properties, but & kplayer; will remove it when passing the URL to mplayer;. That host name will also work for dvd:, vcd:, cdda:, cddb: and tv: URL s, although only dvb: and tv: URL s might actually need it since they can contain letters in the channel name.
+Video on DVD disks is often telecined. The pullup filter does a decent inverse telecine. To use it, open the Advanced page of the File Properties dialog and enter -vf pullup in the Additional command line arguments field before playing the video.

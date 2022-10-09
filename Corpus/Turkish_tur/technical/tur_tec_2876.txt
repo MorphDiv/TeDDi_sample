@@ -1,0 +1,54 @@
+# language_name_wals:	Turkish
+# language_name_glotto:	Turkish
+# ISO_6393:	tur
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/tr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Kullanım Kılavuzu
+Önceki
+Bölüm 4.
+Güvenlik
+Sonraki
+Dosya Sistemi Güvenliği
+PHP birçok sunucu sisteme kurulu güvenlik sisteminin dosya ve klasör izinlerine uyum gösterir.
+Bu, size dosya sistemindeki hangi dosyaların okunabileceğini kontrol etme imkanını verir.
+Herkes tarafından okunabilir dosyaların, dosya sistemine erişimi olan kullanıcılar tarafından güvenle okunabilir olması mutlaka dikkate alınmalıdır.
+PHP dosya sistemine kullanıcı seviyesi tabanlı erişim sağlamak üzere tasarlandığından, PHP uygulamalarının / etc / password gibi sistem dosyalarını okumaları, ethernet bağlantıları üzerinde değişiklik yapmaları, yazıcıya ardı ardına görevler yüklemeleri ve benzeri birçok eylemi kolayca yapmaları mümkündür.
+Bu durum, sizi kullanıcıların hangi dosyalara okuma ve yazma hakları olduğunu denetlemeye zorunlu kılar.
+Kullanıcının kendi ana klasöründeki bir dosyayı silmek istediği aşağıdaki uygulamayı ele alalım.
+PHP web arayüzünün dosya yönetimini sağlamak için kullanıldığını, ve Apache kullanıcısının kullanıcının ana klasöründeki dosyaları silme iznine sahip olduğunu kabul edelim.
+Örnek 4-1.
+Yetersiz değişken kontrolünün yol açtığı....
+?php / / kullan inodot; c inodot;n inodot;n ana klasöründen dosya silme $username = $HTTP_POST_VARS['user_submitted_name']; $homedir = "/ home / $username"; $file_to_delete = "$userfile"; unlink ($homedir / $userfile); echo "$file_to_delete silindi !";?
+Örnek 4-2....
+Bir dosya sistemi saldırısı
+?php / / PHP kullan inodot; c inodot;s inodot;n inodot ;n izniyle silinebilecek diskteki bütün dosyalari / / siler.
+PHP kullan inodot; c inodot;s inodot; root eri scedil;imine sahipse: $username = ".. / etc / "; $homedir =" / home /.. / etc / "; $file_to_delete = "passwd"; unlink (" / home /.. / etc / passwd"); echo" / home /.. / etc / passwd silindi !";?
+PHP web kullanıcısına ait binary dosyasına yalnızca kısıtlı erişim izni ver.
+Gönderilen bütün değerleri kontrol et.
+Örnek 4-3.
+Daha güvenli dosya ismi kontrolü
+?php / / Diskten PHP kullanicisinin silme izni varsa / / dosyay inodot; siler. $username = $HTTP_SERVER_VARS['REMOTE_USER']; / / dogrulama mekanizmasi $homedir = "/ home / $username"; $file_to_delete = basename("$userfile"); / / yol ayristiriliyor unlink ($homedir / $file_to_delete); $fp = fopen(" / home / logging / filedelete.log" ,"+a"); / / silme islemi kaydediliyor $logstring = "$username $homedir $file_to_delete"; fputs ($fp, $logstring); fclose($fp); echo "$file_to_delete silindi !";?
+Örnek 4-4.
+Daha güvenli dosya ismi kontrolü
+?php $username = $HTTP_SERVER_VARS[ 'REMOTE_USER']; / / dogrulama mekanizmasi $homedir = "/ home / $username"; if (!ereg('^[^. / ][^ / ]*$', $userfile)) die('bad filename'); / /öl, islem yok if (!ereg('^[^. / ][^ / ]*$', $username)) die('bad username'); / /öl, islem yok / /vb...?
+İşletim sisteminize bağlı olarak, endişelenmenizi gerektirecek farklı dosyalar bulunur.
+Bunların arasında aygıt girişleri (/ dev / ya da COM1), konfigürasyon dosyaları (/ etc / dosyaları ve .ini dosyaları), herkesçe bilinen dosya saklama alanları (/ home /, Belgelerim), vb.
+Bu nedenle, öncelikle her şeyi yasaklayıp daha sonra izin verilecek alanları belirlemek, kullanım açısından daha kolaydır.
+Önceki
+Baþlangýç
+Sonraki
+Apache Modülü olarak Kurulum
+Yukarý
+Hata Raporlama

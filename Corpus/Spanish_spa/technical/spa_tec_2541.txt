@@ -1,0 +1,215 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Expresiones regulares
+Introducción
+Las expresiones regulares no proporcionan un método para describir el posible contenido de una cadena de texto de forma que pueda ser interpretada por un pequeño módulo de software, y se pueda investigar si un texto corresponde con el buscado y, en el caso de aplicaciones avanzadas, se pongan los medios para recuperar partes del texto coincidente.
+Por ejemplo: pongamos que quiere buscar un texto que es el comienzo de un párrafo e incluye los nombres Henrik o Pernille, seguidos de alguna forma del verbo hablar.
+En una búsqueda normal, debería comenzar a buscar por el primer nombre, Henrik quizá seguido de hab, de esta manera:
+Henrik hab, y mientras busca coincidencias, debe descartar aquellas que no estén al principio de un párrafo, así como aquellas en las que la palabra que comience por hab no pertenezca al verbo hablar.
+Y después volver a repetir todo el proceso con el otro nombre...
+Con las expresiones regulares, esta taréa se puede acometer en una sóla búsqueda, y con una gran precisión.
+Para conseguirlo, las expresiones regulares definen reglas para expresar detalladamente una generalización de la cadena a buscar.
+^[ ]{0,4}(Henrik|Pernille) hab(laba|ló)
+El ejemplo anterior muestra los cuatro conceptos principales de las expresiones regulares modernas, veamos:
+Patrones
+Aserciones
+Cuantificadores
+Retroreferencias
+El circunflejo (^) que se encuentra al principio de la expresión es una aserción, que sólo es cierta si el resto de la cadena de búsqueda se encuentra al principio de una línea.
+Las cadenas [ ] y (Henrik|Pernille) hab(laba|ló) son patrones.
+El primer es una clase de caracteres que coincide con un espacio en blanco o con un tabulador (horizontal); el otro patrón contiene un primer subpatrón que coincide con Henrik o con Pernille, después una parte de coincidencia exacta hab y por último otro subpatrón que coincide con laba o con ló.
+La cadena {0,4} es un cuantificador que dice en cualquier lugar desde 0 a 4 caracteres anteriores.
+Como el software de expresiones regulares que cuenta con el concepto de retroreferencias guarda todo la parte coincidente de la cadena así como los subpatrones demarcados entre paréntesis, proporcionando medios para acceder a esas referencias, podemos poner nuestras manos tanto en la cadena coincidente completa (cuando se busca en un texto de un editor por medio de una expresión regular, que normalmente aparece marcada como seleccionada) como en el nombre encontrado o en la última parte del verbo.
+Uniendo todo, la expresión coincidirá donde nosotros queramos, y únicamente ahí.
+Las siguientes secciones describirán con detalle cómo construir y utilizar patrones, clases de caracteres, aserciones, cuantificadores y retroreferencias, y la última sección presentará una serie de ejemplo útiles.
+Patrones
+Los patrones constan de cadenas literales y clases de caracteres.
+Los patrones pueden contener subpatrones, que son patrones colocados entre paréntesis.
+Escape de caracteres
+En los patrones, así como en las clases de caracteres, algunos caracteres tienen un significado especial.
+Para conseguir una coincidencia literal con alguno de esos caracteres, es necesario marcalos como escapados para permitir al intérprete de expresiones regulares comprender que esos caracteres deben ser incluidos con su significado literal.
+Esto se hace precendiendo el carácter de una barra invertida (\).
+El software de expresiones regulares ignorará el escapado de cualquier carácter que no tenga ningún significado especial en el contexto, así que escapar, por ejemplo, j (\j) no tiene por qué causar problemas.
+Si tiene dudas sobre cuando un carácter puede tener un significado especial, escápelo con seguridad.
+Clases de caracteres y abreviaturas
+Una clase de caracteres es una expresión que coincide con un conjunto de caracteres definido.
+En las expresiones regulares, las clases de caracteres se definen colocando los caracteres válidos de la clase entre corchetes [], o utilizando una de las clases abreviadas que se describen a continuación.
+Las clases de caracteres sencillas únicamente contienen uno o más caracteres literales, por ejemplo [abc] (que coincidirá con las letras a, b o c) o [0123456789] (que coincidirá con cualquiera de los dígitos).
+Como las letras y los números tienen un orden lógico, puede abreviarlo utilizando rangos: [a-c] es igual a [abc] y [0-9] es igual a [0123456789].
+Combinando estas formaciones, por ejemplo [a-fynot1-38] resulta completamente válido (esta última debería coincidir con cualquier de los caracteres o dígitos a, b, c, d, e, f, y, n, o, t, 1, 2, 3 o 8).
+Como las letras mayúsculas son diferentes caracteres que sus equivalentes minúsculas, para crear una clase de caracteres que sea independiente del formato de las letras, deberá escribir [aAbB].
+También es posible crea una clase negativa para que se haga coincidir todo menos.
+Para hacerlo incluya un circunflejo (^) al principio de la clase:
+[^abc] coincidirá con cualquier caracter salvo con a, b o c.
+\a
+Coincide con el carácter ASCII de la campanilla (BEL, 0x07).
+\f
+Coincide con el carácter ASCII del salto de página (FF, 0x0C).
+\n
+Coincide con el carácter ASCII de salto de línea (LF, 0x0A, nueva línea en Unix).
+\r
+Coincide con el carácter ASCII de retorno de carro (CR, 0x0D).
+ 
+Coincide con el carácter ASCII del tabulador horizontal (HT, 0x09).
+\v
+Coincide con el carácter ASCII del tabulador vertical (VT, 0x0B).
+\xhhhh
+Coincide con el carácter Unicode correspondiente al número hexadecimal hhhh (entre 0x0000 y 0xFFFF). \0ooo (i.e., \cero ooo) coincide con el carácter ASCII / Latin-1 correspondiente al número octal ooo (entre 0 y 0377).
+. (punto)
+Coincide con cualquier carácter (incluyendo nueva línea).
+\d
+Coincide con un dígito.
+Es igual que [0-9].
+\D
+Coincide con un no dígito.
+Es igual que [^0-9] o [^\d]
+\s
+Coincide con un carácter de espacio en blanco.
+Prácticamente igual que [ \n\r]
+\S
+Coincide con un no espacio en blanco.
+Prácticamente igual que [^ \r\n], e igual que [^\s].
+\w
+Coincide con cualquier carácter de una palabra, en este caso cualquier letra o número.
+Tenga en cuenta que el subrayado (_) no está incluido, a diferencia de las expresiones regulares de perl.
+Es igual que [a-zA-Z0-9].
+\W
+Coincide con cualquier carácter que no sea de una palabra, cualquier cosa menos letras o números.
+Es igual que [^a-zA-Z0-9] o [^\w].
+Las clases abreviadas se puede colocar dentro de una clase propia, por ejemplo para hacer coincidir un carácter de una palabra, un espacio en blanco o un punto, puede escribir [\w\.].
+Las notación POSIX de las clases, [:<class name>:] no está de momento implementada.
+Caracteres con significado especial dentro de las clases de caracteres
+Los siguientes caracteres tienen un significado especial dentro de la construcción de clases de caracteres [], y es necesario escaparlos para que sean incluidos literalmente en la clase:
+]
+Finaliza la clase de caracteres.
+Debe estar escapado salvo que sea el primer carácter de la clase (puede seguir a un circunflejo no escapado).
+^ (circunflejo)
+Indica que se trata de una clase negativa, si es el primer carácter.
+Debe estar escapado para buscar una coincidencia literal en el caso de que sea el primer carácter de la clase.
+- (guión)
+Indica un rango lógico.
+Debe estar escapado siempre que se busque la coincidencia literal.
+\ (barra invertida)
+El carácter de escape.
+Debe estar siempre escapado.
+Alternativas: coincidencias con uno de
+Si desea que la coincidencia sea de uno de una serie de patrones, puede separarlos con | (carácter de barra vertical).
+Por ejemplo, para encontrar John o Harry, debería utilizar una expresión de la forma John | Harry.
+Subpatrones
+Los subpatrones son patrones colocados entre paréntesis, y tienen varios usos en el mundo de las expresiones regulares.
+Especificación de alternativas
+Puede utilizar un subpatrón para agrupar un conjunto de alternativas dentro de un patrón más grande.
+Las alternativas se separan con el carácter | (barra vertical).
+Por ejemplo, para buscar la coincidencia de las palabras int, float o double, se podría utilizar el patrón int| float |double.
+Si únicamente desea encontrar una de ellas en el caso de que vaya seguida de algún tipo de espacio en blanco y después algunas letras, ponga las alternativas dentro de un subpatrón: (int|float|double )\s+\w +.
+Captura del texto coincidente (retroreferencias)
+Si desea utilizar una retroreferencia, utilice un subpatrón para que se recuerde la parte deseada del patrón.
+Por ejemplo, si desea encontrar dos apariciones de la misma palabra separadas por una coma y posiblemente algún espacio en blanco, puede escribir (\w+ ),\s*\1.
+El subpatrón \w + localizará un conjunto de caracteres de una palabra, y la expresión entera coincidirá si ese conjunto va seguido de una coma, 0 o más espacios en blanco y después un conjunto de caracteres de una palabra igual al primero. (La cadena \1 hace referencia a el primer subpatrón delimitado por paréntesis).
+Consulte también Retroreferencias.
+Aserciones de anticipación
+Una aserción de anticipación es un subpatrón, que comienza por ?= o por?!.
+Por ejemplo, si quiere buscar la cadena literal Bill, pero únicamente si no va seguida de Gates, puede utilizar la expresión:
+Bill (?!
+Los subpatrones utilizados en las aserciones no se capturan.
+Consulte también Aserciones
+Caracteres con un significado especial dentro de los patrones.
+\ (barra invertida)
+El carácter de escape.
+^ (circunflejo)
+Aserta el comienzo de la cadena.
+$
+Aserta el fin de la cadena.
+() (paréntesis derecho e izquierdo)
+Denotan subpatrones.
+{} (llaves derecha e izquierda)
+Denotan cuantificadores numéricos.
+[] (corchetes derecho e izquierdo)
+Denotan clases de caracteres.
+| (barra vertical)
+O lógico.
+Separa alternativas.
++ (signo más)
+Cuantificador, 1 o más.
+* (asterisco)
+Cuantificador, 0 o más.
+? (signo de interrogación)
+Un carácter opcional.
+Se puede interpretar como cuantificador, 0 o 1.
+Cuantificadores
+Los cuantificadores permiten que una expresión regular coincida con un número o un rango de números especificado de un carácter, una clase de caracteres o un subpatrón.
+Los cuantificadores se colocan entre llaves ({y}) tiene la forma general {[ocurrencias-mínimas][ ,[ocurrencias-máximas]]}
+{1}
+Exactamente 1 ocurrencia
+{0,1}
+Cero o 1 ocurrencias
+{,1}
+Lo mismo, pero con menos trabajo;)
+{5,10}
+Como mínimo 5 y como máximo 10 ocurrencias.
+{5,}
+Como mínimo 5 ocurrencias, sin máximo.
+* (asterisco)
+Similar a {0,}, encuentra cualquier número de ocurrencias.
++ (signo más)
+Similar a {1,}, al menos 1 ocurrencia.
+? (signo de interrogación)
+Similar a {0,1}, cero o 1 ocurrencias.
+Codicia
+Cuando se utilizan cuantificadores sin máximo, las expresiones regulares tratan de coincidir con la mayor parte posible de la cadena buscada, conociéndose este comportamiento como codicioso.
+Los procesadores de expresiones regulares modernos, proporcionan los medios para desactivar la codicia, aunque en los entornos gráficos depende del interfaz el tener acceso a esta característica.
+Por ejemplo, un diálogo de búsqueda que permita expresiones regulares, podría tener una casilla de comprobación llamada Coincidencia mínima.
+Además podría haber una indicación sobre que el comportamiento predeterminado es el codicioso.
+Ejemplos en contexto
+Estos son algunos ejemplos que utilizan cuantificadores
+^\d{ 4,5 }\s
+Coincide con los dígitos en 1234 ya y 12345 ahora, pero no con los de 567 once ni los de 223459 algún lugar
+\s +
+Coincide con uno o más espacios en blanco
+(bla){1,}
+Coincide con blablabla y con el bla de blanco o tabla
+/?>
+Coincide con / > en <cerrado / > así como con > en <abierto>.
+Aserciones
+Las aserciones permiten que una expresión regular coincida únicamente bajo una serie de condiciones controladas.
+Una aserción no necesita la coincidencia de un carácter, sino que investiga los alrededores en una busca de una posible coincidencia antes de darla por válida.
+Por ejemplo, la aserción límite de palabra no intenta encontrar un carácter que no sea de una palabra en oposición a uno que sí lo sea en su posición, en vez de eso trata de asegurarse de que no es un carácter de una palabra.
+Esto significa que la aserción puede ser válida en el caso de que no haya ningún carácter, i.e. al final de la cadena buscada.
+Algunas aserciones, de hecho, no tienen un patrón con el que coincidir, sino que la parte coincidente de la cadena no será parte del resultado de la coincidencia de la expresión completa.
+^ (circunflejo: el principio de una cadena)
+Concuerda con el comienzo de la cadena buscada.
+La expresión ^Peter coincidirá con Peter en la cadena Peter, ¡hola! pero no en ¡Hola Peter!
+$(final de la cadena)
+Coincide con el final de la cadena buscada.
+La espresión tú\?$ coincidirá con el final de la cadena ¿No lo has hecho tú?, pero con ninguna parte de ¿Tú no lo has hecho?
+\b (límite de palabra
+Coincide si hay un carácter de una palabra a un lado y otro que no sea de una palabra al otro.
+Esto es muy útil para encontrar el final de las palabras, o ambos extremos para delimitar la palabra entera.
+La expresión \ben\b coincidirá con el en separado en la cadena Estamos en el borde de la ventana, pero no con el en de ventana.
+\B (límite de no palabra)
+Coincide con todo lo que \b no lo hace.
+Eso significa que coincidirá, por ejemplo, dentro de las palabras:
+La expresión \Ben\B coincidirá en ventana pero no en entero o en estoy en mi casa.
+(?=PATRÓN) (Anticipación positiva)
+Una aserción de anticipación busca la parte de la cadena en busca de una posible coincidencia.
+La antipación positiva previene la coincidencia de la cadena si el texto que sigue no corresponde al PATRÓN de la aserción, pero el texto que coincide con eso no será incluido en el resultado.
+La expresión util( ?=\w) coincidirá con util en utilitario pero no en Eso es de gran utilidad.
+(?!PATRÓN) (Anticipación negativa)
+La anticipación negativa previene una posible coincidencia si la parte siguiente de la cadena coincide con el PATRÓN.
+La expresión const \w+\b( ?!\s*&) coincidirá con const char en la cadena const char* foo, mientras que no coincidirá con const QString en const QString& bar, ya que el & coincide con el patrón de la aserción de anticipación negativa.
+Retroreferencias

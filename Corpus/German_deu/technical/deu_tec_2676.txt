@@ -1,0 +1,78 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+PHP kann Dateiuploads mit jedem RFC-1867 konformen Browser (dazu gehören der Netscape Navigator 3 oder höher, Microsoft Internet Explorer 3 mit einem Patch von Microsoft oder höher ohne Patch) durchführen.
+Es können sowohl Text - als auch Binärdaten hochgeladen werden.
+Mit PHP´s Authentifizierungs - und Dateifunktionen besteht volle Kontrolle darüber, wer Dateien hochladen darf und was mit den Dateien geschehen soll, wenn der Upload beendet ist.
+Diesbezügliche Konfigurationshinweise:
+Siehe auch die Anweisungen file_uploads, upload_max_filesize, upload_tmp_dir und post_max_size in der php.ini
+PHP unterstützt auch Dateiuploads nach der PUT-Methode, die beispielsweise vom Netscape Composer und den W3C Amaya Clients benutzt wird.
+Siehe dazu PUT-Unterstützung für nähere Informationen.
+Eine Maske für den Dateiupload kann erstellt werden, indem man ein Formular entwirft, das ungefähr so aussieht:
+Beispiel 18-1.
+Formular für den Dateiupload
+
+Warnung
+Die maximale Dateigröße MAX_FILE_SIZE ist für den Browser nur ein Hinweis und es ist leicht, diese Grenze zu umgehen.
+Also verlassen Sie sich nicht darauf, dass der Browser Ihrem Wunsch auch nachkommt!
+Wie auch immer, die PHP-Einstellungen für die maximale Dateigröße können nicht getäuscht werden.
+Die für hochgeladene Dateien definierten Variablen sind je nach PHP Version und Konfiguration verschieden.
+Die Autoglobale $_FILES existiert seit PHP 4.1.0 und das Array $HTTP_POST_FILES seit PHP 4.0.0.
+Diese Arrays enthalten alle Informationen über Ihre hochgeladenen Dateien.
+Die Verwendung von $_FILES wird bevorzugt.
+Ist die PHP Anweisung register_globals auf on, stehen auch entsprechende Variablennamen zur Verfügung.
+Seit PHP 4.2.0 steht register_globals standardmäßig auf off.
+Im Folgenden sind die Inhalte von $_FILES Im Folgenden sind die Inhalte von $_FILES aus unserem Beispielskript aufgelistet.
+Beachten Sie, dass dies auf der Annahme basiert, dass der Name des Dateiuploads wie in dem obigen Beispielskript userfile ist.
+Der ursprüngliche Dateiname auf der Client Maschine.
+Der Mime-Type der Datei, falls der Browser diese Information zur Verfügung gestellt hat.
+Ein Beispiel wäre "image / gif".
+Die Größe der hochgeladenen Datei in Bytes.
+Der temporäre Dateiname, unter dem die hochgeladene Datei auf dem Server gespeichert wurde.
+Der Fehlercode im Zusammenhang mit dem hochladen der Datei. ['error'] wurde in PHP 4.2.0 eingeführt.
+Anmerkung:
+In den Versionen vor PHP 4.1.0 war dies $HTTP_POST_FILES, und ist keine 'Autoglobale' Variable wie $_FILES.
+PHP 3 unterstützt $HTTP_POST_FILES nicht.
+Ist register_globals in der php.ini aktiviert, stehen zusätzliche Variablen zur Verfügung.
+Zum Beispiel entspricht $userfile_name $_FILES[ 'userfile']['name'], $userfile_type entspricht $_FILES['userfile']['type'], etc.
+Beachten Sie, dass register_globals standardmäßig deaktiviert ist, jedoch wird empfohlen, sich nicht darauf zu verlassen.
+Standardmäßig werden Dateien in dem vorgegebenen temporären Verzeichnis des Servers gespeichert, außer es wurde mittels upload_tmp_dir in der php.ini ein anderer Ort konfiguriert.
+Das Standardverzeichnis des Servers kann durch das Setzen der Umgebungsvariablen TMPDIR in der Umgebung, in der PHP ausgeführt wird, geändert werden.
+Das Setzen mittels der Funktion putenv() Das Setzen mittels der Funktion putenv() innerhalb eines Skriptes ist nicht möglich.
+Mittels dieser Umgebungsvariable kann auch sichergestellt werden, dass auch andere Operationen an hochgeladenen Dateien arbeiten können.
+Beispiel 18-2.
+Dateiuploads prüfen
+Weitere Informationen finden Sie auch in den Beschreibungen für is_uploaded_file() und move_uploaded_file().
+Das folgende Beispiel verarbeitet einen von einem HTML-Formular kommenden Dateiupload.
+?php / / In PHP kleiner als 4.1.0 sollten Sie $HTTP_POST_FILES anstatt $_FILES verwenden. / / In PHP kleiner als 4.0.3 verwenden Sie copy() und is_uploaded_file() anstatt von / / move_uploaded_file() $uploaddir = '/ var / www / uploads /'; print "pre"; if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploaddir. $_FILES['userfile']['name'])) {print "File is valid, and was successfully uploaded.
+
+
+Das die hochgeladene Datei empfangende Skript sollte die notwendige Logik zur Entscheidung enthalten, was mit der hochgeladenen Datei geschehen soll.
+Sie können zum Beispiel $_FILES[ 'userfile']['size'] benutzen, um zu kleine bzw. zu große Dateien wegzuwerfen.
+Sie können $_FILES[ 'userfile']['type'] nutzen, um Dateien eines unerwünschten Typs wegzuwerfen.
+Seit PHP 4.2.0 können Sie Ihre Logik auch mittels $_FILES[ 'userfile']['error'] anhand der Fehlercodes Seit PHP 4.2.0 können Sie Ihre Logik auch mittels $_FILES['userfile']['error'] anhand der Fehlercodes planen.
+Egal welche Logik Sie verwenden, Sie sollten die Datei in dem temporären Verzeichnis entweder löschen, oder an einen anderen Ort verschieben.
+Wurde die Datei in dem temporären Verzeichnis nicht verschoben oder umbenannt, wird sie am Ende des Requests gelöscht.
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben
+Fehlermeldungen erklärt

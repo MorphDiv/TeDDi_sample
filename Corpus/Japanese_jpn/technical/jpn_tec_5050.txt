@@ -1,0 +1,33 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+To access arguments, it's necessary for each argument to have a clearly defined type. Again, PHP's extremely dynamic nature introduces some quirks. Because PHP never does any kind of type checking, it's possible for a caller to pass any kind of data to your functions, whether you want it or not. If you expect an integer, for example, the caller might pass an array, and vice versa - PHP simply won't notice.
+To work around this, you have to use a set of API functions to force a type conversion on every argument that's being passed (see 表32-1).
+Note: All conversion functions expect a **zval as parameter.
+表 32-1Argument Conversion Functions
+注意 You can find a demonstration of the behavior in cross_conversion.php on the accompanying CD-ROM. 図32-2 shows the output.
+図 32-2Cross-conversion behavior of PHP.
+
+Using these functions on your arguments will ensure type safety for all data that's passed to you. If the supplied type doesn't match the required type, PHP forces dummy contents on the resulting value (empty strings, arrays, or objects, 0 for numeric values, FALSE for Booleans) to ensure a defined state.
+Following is a quote from the sample module discussed previously, which makes use of the conversion functions:
+例 32-2PHP/Zend zval type definition.
+Actually, pval (defined in php.h) is only an alias of zval (defined in zend.h), which in turn refers to _zval_struct. This is a most interesting structure. _zval_struct is the "master" structure, containing the value structure, type, and reference information. The substructure zvalue_value is a union that contains the variable's contents. Depending on the variable's type, you'll have to access different members of this union. For a description of both structures, see 表32-2, 表32-3 and 表32-4.
+表 32-2Zend zval Structure
+表 32-3Zend zvalue_value Structure
+表 32-4Zend Variable Type Constants
+To access a long you access zval.value.lval, to access a double you use zval.value.dval, and so on. Because all values are stored in a union, trying to access data with incorrect union members results in meaningless output.
+Accessing arrays and objects is a bit more complicated and is discussed later.

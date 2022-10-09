@@ -1,0 +1,41 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# ISO_6393:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+& kommander; Basics
+Tamara King
+tik@acm. org
+Eric Laffoon
+sequitur@kde. org
+ROLES_OF_TRANSLATORS
+Concepts
+& kommander; was originally designed around a simple concept that has proven somewhat revolutionary among visual design tools. Typically these tools allow you to create dialogs and possibly mainwindow interfaces. Of course a mainwindow interface is the main program window which typically has menus, toolbars, statusbar and the application area. Dialogs are child windows which typically do n't have menus and are so named because their purpose is to have a dialog or exchange information between you and the main application. The elements on a dialog are called widgets and you hook your program into these widgets. & kommander; is different because it is inherently nonprogrammatic here. It uses the concept of associating text with the widgets on the dialog. Initially this was called Associated Text but now it is called kommander; Text. Widgets on & kommander; dialogs can include the content of other widgets by reference and a widget can reference its own content by use of a Special that looks like this, @widgetText. Specials are commands with special meaning in & kommander;. So if you created a dialog with two LineEditwidgets and named the first FirstName and the second LastName you could create a button and set its & kommander; Text to My name is @FirstName @LastName. You would need to set @widgetText in the first and last name widgets. Remember? We need to tell & kommander; to reference the text in them. You could run this from a Konsole and it would output the string for you. So it would reference the first name like so: @FirstName - > get the widget named FirstName(@FirstName) - > @widgetText - > get the contents of the LineEdit widget. So in this case @FirstName returns Eric: @FirstName - > @widgetText - > Eric.
+That is the simple core of & kommander;. What you can do with this is where it gets interesting. First of all it is worth noting that compared to the normal approach of a language based tool & kommander; does not need programming statements to define these operations. This makes & kommander; quick for developers. For end users it's much simpler than learning language constructs. For everyone it means you can focus on your task instead of having your reference material eternally at hand. Initially when people are exposed to a tool like & kommander; the first question is Where could I find a use for this cool tool? As it turns out, manipulating strings is used just about anywhere you look.
+So what can & kommander; do? Here is the list distilled to the base operations. & kommander; can:
+Pass strings to the calling program via stdout.
+Call executable programs.
+Use & DCOP; to interact with & kde; programs
+If you're not a programmer you may want that in laymans terms. In number one, if you launch & kommander; from a console then the console is the calling program. There is a parent child relationship there. Sending a message to console is done with the standard output (stdout) of the child program, so named because there is also error output. This is interesting because some programs, like & quantaplus;, use stdout to receive information from programs they launch. So & kommander; dialogs can output their text strings directly into & quantaplus; 's editor if they are called from & quantaplus;. This means & kommander; dialogs can be useful extentions to programs.
+The second case is calling an executable. Any program that runs on your system is an executable. Even a script program is run by the script's interpreter so technically it's executed too. & kommander; can run commands just like the console even if you run it from the menu. So for instance if you wanted it to open & GIMP; you would have a button derive the string gimp and put it in a special like so: @exec(gimp). Just like that you will see & GIMP; open when using this. You could also exec ls -l too but you would only see the output if you were running from a console.
+The third case is very interesting indeed. & DCOP; is short for & kde; 's D esktop CO mmunication P rotocol and it is very powerful. Go ahead and run the kdcop program and have a look around. You'll quickly see that any & kde; application that is built to standards has things happening in & DCOP; and the well designed ones have a lot going on. With & DCOP; you can query information of all sorts as well as set widget values and more. There is a section on using & DCOP; in this manual. & kommander; can send & DCOP; to any & kde; program as well as be controlled by & DCOP;. In fact you can send & DCOP; from the command line to any & kde; program. So what's the big deal? The deal is, if you want to do any volume of commands you begin to realized that command line & DCOP; is adequate for short commands, but it can cause delays for instance being called from a loop several hundred times. This is why & kommander; has a @dcop special, because this is roughly 1000 times faster. Because & kommander; can send and receive & DCOP;, & DCOP; can be used to script & kommander;. That is why we also have a local & DCOP; special, @ldcop, that allows you to type a lot less to issue a command.
+Is that all the core concepts in & kommander;? No, but it should help you to make sense of how it works so that what is covered does not look like a foreign language to you. There are a few more. Signals and slots are how & kommander; handles events. An event in a program basically means something happened like a widget was created or had its text changed. These changes emit signals and you can connect those signals to a receiving slot which will then do something when the event happens. One use of this in & kommander; is the sibling of & kommander; Text, Population Text. Population Text will populate a widget when called. Just like & kommander; Text, Population Text can contain text strings or scripts.
+That should give you the base concepts to begin using & kommander;. We try to keep the number of Specials low and we use & DCOP; a lot. The idea is that we want to keep the power of & kommander; as consistent and streamlined as possible. You will find that you can incorporate any scripting language into & kommander; where ever you need to and even multiple scripting languages in a dialog. The rest of the information in this document assumes you are familiar with the concepts and terms presented here. The examples and tutorials are also very useful to understanding what can be done with & kommander;.
+& editor;
+The Executor
+The executor, called kmdr-executor, runs & kommander; scripts. It loads. kmdr files and dynamically produces a fully functional dialog.
+Executor for Programmers
+C++ developers can easily use the KmdrDialogInstance class in their C++ programs so that the execution functionality is embedded in the their application obsoleting the need for running the external executor program. For standard dialog the dialog creation overhead is minimal but the creation of the & kde; application may delay the dialog for around a second.
+Creating a Dialog

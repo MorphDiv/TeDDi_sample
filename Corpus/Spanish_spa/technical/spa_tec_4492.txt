@@ -1,0 +1,71 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+Estas funciones trabajan usando mcrypt.
+Esta es una interfaz a la librería mcrypt, que soporta una gran variedad de algoritmos de bloque como DES, TripleDES, Blowfish (por defecto), 3-WAY, SAFER-SK64, SAFER-SK128, TWOFISH, TEA, RC2 y GOST en los modos de cifrado CBC, OFB, CFB y ECB.
+Adicionalmente, soporta RC6 e IDEA que se consideran "no-libres".
+Para usarlos, descarga libmcrypt-x.x.tar.gz de aquí y sigue las instrucciones de instalación incluidas.
+Necesitas compilar PHP con el parámetro --with-mcrypt para activar esta extensión.
+mcrypt puede usarse para encriptar y desencriptar usando los cifrados mencionados arriba.
+Los cuatro comandos importantes de mcrypt (mcrypt_cfb(), mcrypt_cbc(), mcrypt_ecb(), y mcrypt_ofb()) pueden operar en ambos modos que se llaman MCRYPT_ENCRYPT y MCRYPT_DECRYPT, respectivamente.
+Ejemplo 1.
+Encripta un valor de entrada con TripleDES en modo ECB
+?php $key = "esta es una clave muy secreta"; $input = "Nos vemos a las 9 en punto en el lugar secreto ."; $encrypted_data = mcrypt_ecb(MCRYPT_TripleDES, $key, $input, MCRYPT_ENCRYPT);?
+mcrypt puede operar en cuatro modos de cifrado (CBC, OFB, CFB y ECB).
+Perfilaremos el uso normal de cada uno de estos modos.
+Para una mejor referencia y una discusión más completa ver Applied Cryptography by Schneier (ISBN 0-471-11709-9).
+ECB (electronic codebook o libro de códigos electrónico) va bien para datos aleatorios, tales como encriptar otras claves.
+Puesto que los datos son cortos y aleatorios, las desventajas de ECB tienen un efecto negativo favorable.
+CBC (cipher block chaining o cifrado en bloque encadenado) es especialmente útil para encriptar ficheros, donde incrementa significativamente la seguridad por encima de ECB.
+CFB (cipher feedback o cifrado realimentado) es el mejor modo de encriptar flujos de bytes donde cada byte debe ser encriptado.
+OFB (output feedback o salida realimentada) es comparable al CFB, pero puede usarse en aplicaciones donde la propagación de errores no puede tolerarse.
+Actualmente PHP no soporta el encriptado / desencriptado de flujos de bits.
+Por ahora, sólo soporta el manejo de cadenas.
+Para una lista completa de los cifrados soportados, ver las definiciones al final de mcrypt.h.
+La regla general es que se puede acceder al cifrado desde PHP con MCRYPT_nombredelcifrado.
+Aquí hay una pequeña lista de los cifrados que estan soportados actualmente por la extensión mcrypt.
+Si un cifrado no está listado aquí, pero está listado por mcrypt como soportado, puedes asumir con seguridad que ésta documentación está caduca.
+
+
+MCRYPT_TripleDES
+MCRYPT_ThreeWAY
+
+
+MCRYPT_DES_COMPAT
+
+
+MCRYPT_CAST128
+MCRYPT_TEAN
+
+MCRYPT_TWOFISH (para las antiguas versiones mcrypt 2.x)
+MCRYPT_TWOFISH128 (TWOFISHxxx está disponible en las versiones más nuevas 2.x)
+
+
+MCRYPT_RC6
+MCRYPT_IDEA
+Debes (en los modos CFB y OFB) o puedes (en el modo CBC) suministrar un vector de inicialización (IV) a la correspondiente función de cifrado.
+El IV debe ser único y debe ser el mismo cuando desencriptas o encriptas.
+Con datos que son guardados encriptados, puedes cojer la salida de una función de índice bajo la cual los datos son almacenados (ej. la clave MD5 de un fichero).
+Alternativamente, puedes transmitir el IV junto con los datos encriptados (ver capítulo 9.3 de Applied Cryptography by Schneier (ISBN 0-471-11709-9) para una discusión de éste asunto).
+Anterior
+Inicio
+Siguiente
+
+Subir

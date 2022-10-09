@@ -1,0 +1,60 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# ISO_6393:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Informix (IDS) 7.x, SE 7.x, Universal Server (IUS) 9.x ,IDS 2000 用のInformixドライバは、informix拡張機能用ディレクトリの"ifx.ec" および"php3_ifx.h"に実装されています。 IDS 7.xのサポートは、BYTEおよびTEXTカラムを完全にサポートしており、 完成度はかなり高いです。 IUS 9.xのサポートは、部分的に完成しています。つまり、 新しいデータ型はサポートされていますが、SLOBおよびCLOBのサポートについては まだ作業中です。
+設定に関する注意 PHP Informix ドライバをコンパイルするには、何らかのバージョンのESQL/C が必要です。7.2x以降のバージョンに付属するESQL/Cは問題なく使用できます。 現在では、ESQL/CはInformixクライアントSDKに含まれています。
+"configure" スクリプトを実行する前に、必ず"INFORMIXDIR" 変数を設定し、 PATHに$INFORMIXDIR/bin を設定しておいてください。
+このモジュールで定義した関数を使用可能とするには、configureに --with_informix[=DIR] を指定して PHPインタプリタをコンパイルする必要があります。ただし、DIRは Informixのベースインストールディレクトリで、デフォルトはありません。
+これらの関数の動作は、 php.ini の設定により変化します。
+注意 Informix用環境変数INFORMIXDIRおよびINFORMIXSERVERがPHP ifxドライバ で利用可能であり、INFORMIXのバイナリがあるディレクトリにパスが通っ ていることを確認して下さい。テストを始める前に phpinfo() と書いたスクリプトを実行し、これを確認 して下さい。 phpinfo() があるスクリプトは、これらの環境変数の 一覧を出力します。これは、CGI版のPHPおよびApache mod_phpで共に行わ れます。これらの環境変数はApacheのスタートアップスクリプトで設定す る必要があります。
+また、Informix共有ライブラリがローダーで利用可能である必要があります。 (LD_LINBRARY_PATHまたはld.so.conf/ldconfigを確認して下さい)
+BLOB (TEXT および BYTE カラム)の使用に関する注意 通常、BLOB はBLOB ID により指定されます。 select クエリーは、BYTE および TEXT カラム毎に "blob id" を返します。 ("ifx_blobinfile(0);" により) メモリー上で BLOB を得ることを選択した場合、 "string_var = ifx_get_blob($blob_id);" で内容を得ることができます。 ファイルから BLOB カラムの内容を取得したい場合、 "ifx_blobinfile(1);" を使用して下さい。 "ifx_get_blob($blob_id);" によりファイル名を得ることができます。 BLOB の内容を得る際には、通常のファイル入出力を行ってください。
+insert/update クエリーに関しては、 "ifx_create_blob(..);" により自分で "blob id" を作成する必要があります。 その後、blob id を配列に代入し、 クエリー文字列の中の blob カラムを疑問符 (?) で置換します。 updates/inserts の場合、 ifx_update_blob() でblob の内容を設定するのが便利でしょう。
+BLOB カラムの動作は、設定用変数で変更することができます。 これらの変数は、実行時にも設定可能です。
+設定変数: ifx.textasvarchar
+設定変数: ifx.byteasvarchar
+ランタイム関数:
+ifx_textasvarchar(0): TEXT カラムを有する select クエリーに blob id を使用する columns
+ifx_byteasvarchar(0): BYTE カラムを有する select クエリーに blob id を使用する columns
+ifx_textasvarchar(1): TEXTカラムをVARCHARカラムとして返します。 このため、selectクエリーにおいてblob idを使用する必要はありません。
+ifx_byteasvarchar(1): BYTEカラムをVARCHARカラムとして返します。 このため、selectクエリーにおいてblob idを使用する必要はありません。
+設定変数: ifx.blobinfile
+ランタイム関数:
+ifx_blobinfile_mode(0): メモリーに BYTE カラムを返す, blob id によ りその内容を取り出す
+ifx_blobinfile_mode(1): モリーに BYTE カラムを返す, blob id によ りそのファイル名を取り出す
+ifx_text/byteasvarchar を 1 に設定した場合、 通常の(しかしやや長い) VARCHAR フィールドのように select クエリーで TEXT や BYTE カラムを使用することが可能です。 全ての文字列は、PHP で "数えられる" ので、これにより、"バイナリ・セー フ"が維持されます。 これを正しく処理するのはあなた次第です。 返されるデータには何でも含むことができますが、その内容について 責任を負うことになります。
+ifx_blobinfile を 1 に設定した場合、blob の内容を得るために ifx_get_blob(..) により返されたファイル名を使用して下さい。 この場合、行を取得する際に Informix により作成されたテンポラリファイル を削除する責任があります。取得された新規の行は、BYTE カラム毎に新 規のテンポラリファイルを作成します。
+テンポラリファイルの位置は、環境変数 "blobdir" により設定すること ができます。デフォルトは、"." (カレントディレクトリ)です。 putenv(blobdir="tmpblob"); のようにすることにより、誤って残ってし まったテンポラリファイルを削除することが容易になります。(テンポラ リファイルの名前は "blb" で始まります)
+自動的に "char" (SQLCHAR および SQLNCHAR) データを取り去る これは、次の設定変数により設定することが可能です。
+ifx.charasvarchar: 最後尾のスペースを何らかの削除処理を行わずに 自動的に取り去る場合に1に設定します。
+NULL 値 設定変数 ifx.nullformat (およびランタイム関数 ifx_nullformat()) を TRUE に設定した場合、文字列 "NULL" として NULL カラムを返します。 FALSE に設定した場合は空文字 列を返します。これにより、 NULL カラムと空のカラムを識別することが 可能となります。
+
+表 1Informix設定オプション
+以下に設定ディレクティブの簡単な説明を示します。
+持続性のあるInformix接続を可能とするかどうか。
+プロセス毎の持続性のあるInformix接続の最大数。
+持続的接続を含むプロセス毎のInformix接続の最大数。
+ifx_connect() または ifx_pconnect() においてホストが指定されない場 合のデフォルトのホスト。 safe mode では適用され ません。
+ifx_connect() または ifx_pconnect() においてユーザーが指定されない 場合のデフォルトのユーザー。 safe mode では適用され ません。
+ifx_connect() または ifx_pconnect() においてパスワードが指定されな い場合のデフォルトのパスワード。 safe mode では適用され ません。
+あるファイルにblobカラムを返したい場合には TRUE を指定します。メ モリ内に返したい場合には FALSE を指定します。 ifx_blobinfile_mode() により、この設定を実行 時に上書きすることができます。
+select文においてTEXTカラムを通常の文字列として返したい場合は TRUE を指定し、blob idパラメータを使用したい場合は、 FALSE を指 定します。 ifx_textasvarchar() により、この設定を実行 時に上書きすることができます。
+select文においてBYTEカラムを通常の文字列として返したい場合は TRUE を指定し、blob idパラメータを使用したい場合は、 FALSE を指 定します。 ifx_byteasvarchar() により、この設定を実行 時に上書きすることができます。
+取得時にCHARカラムから末尾の空白を取り除きたい場合に TRUE を指定 して下さい。
+リテラル文字列" NULL "として NULL カラムを返したい場合に TRUE 、 空の文字列として返したい場合は FALSE を指定して下さい。 ifx_nullformat() により、この設定を実行 時に上書きすることができます。
+
+この拡張モジュールは定数を全く定義しませ ん。

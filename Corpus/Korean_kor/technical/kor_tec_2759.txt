@@ -1,0 +1,23 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Deprecated parameter parsing API: This API is deprecated and superseded by the new ZEND parameter parsing API.
+After having checked the number of arguments, you need to get access to the arguments themselves. This is done with the help of zend_get_parameters_ex():
+zend_get_parameters_ex() accepts at least two arguments. The first argument is the number of arguments to retrieve (which should match the number of arguments with which the function has been called; this is why it's important to check for correct call syntax). The second argument (and all following arguments) are pointers to pointers to pointers to zval s. (Confusing, isn't it?) All these pointers are required because Zend works internally with **zval; to adjust a local **zval in our function, zend_get_parameters_ex() requires a pointer to it.
+The return value of zend_get_parameters_ex() can either be SUCCESS or FAILURE, indicating (unsurprisingly) success or failure of the argument processing. A failure is most likely related to an incorrect number of arguments being specified, in which case you should exit with WRONG_PARAM_COUNT.
+To retrieve more than one argument, you can use a similar snippet:
+zend_get_parameters_ex() only checks whether you're trying to retrieve too many parameters. If the function is called with five arguments, but you're only retrieving three of them with zend_get_parameters_ex(), you won't get an error but will get the first three parameters instead. Subsequent calls of zend_get_parameters_ex() won't retrieve the remaining arguments, but will get the same arguments again.

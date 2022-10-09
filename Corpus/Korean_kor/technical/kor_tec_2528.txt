@@ -1,0 +1,60 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+이 장은 PHP를 IIS (Microsoft Internet Information Server)에 설치하는데 있어서의 여러가지 주의점과 힌트를 포함하고 있다. 각각 PWS/IIS 3, PWS 4 혹은 최신 IIS 4 혹은 최신 버젼으로 나누어 설명한다.
+이 서버에서의 설정은 배포판의 INF 파일(php_iis_reg.inf)을 사용하는 것을 권한다. 여러분은 이 파일을 수정하여 여러분이 원하는 PHP 설치 디렉토리와 확장 내용들을 설정할 수 있다. 만약 수동으로 설정하고 싶다면 다음과 같이 합니다.
+이 과정은 윈도우의 resistry를 직접 만지게 됩니다. 하나의 실수가 여러분의 시스템 전체를 불안한 상태로 만들 수 있습니다. 우리는 여러분이 registry를 편집하기 전에 반드시 편집 전의 registry를 백업해 놓을 것을 절대적으로 권장합니다. PHP 개발팀은 어떠한 registry의 파손도 책임지지 않습니다. 만약 registry에 손상이 갈 경우 OS를 새로 깔기 전에는 부팅되지 않을 수도 있습니다.
+
+Regedit를 실행한다.
+다음으로 이동한다: HKEY_LOCAL_MACHINE /System /CurrentControlSet /Services /W3Svc /Parameters /ScriptMap.
+edit 메뉴를 선택하여 New- String Value 를 선택한다.
+PHP script가 사용할 확장자를 입력한다. (ex: .php)
+새 문자열 값을 더블 클릭하고 value 필드에 php.exe path를 적는다. (ex: c:\php\php.exe %s %s) '%s %s'는 매우 중요하다. PHP는 이것없이는 동작하지 않는다
+만약 PHP 스크립트의 다른 확장자가 있다면 위의 과정을 반복한다.
+다음으로 이동한다.: HKEY_CLASSES_ROOT
+edit 메뉴에서 New- Key .를 선택한다
+여러분이 이전 과정에서 설정한 확장자를 Key의 이름으로 지정한다. (ex: .php)
+새 키를 Highlight시키고 오른쪽 창에서 "default value" 를 더블 클릭한 후에 phpfile 이라고 적는다.
+위에서 설정한 다른 확장자가 있으면 다른 확장자에 대해서도 이 과정을 반복한다.
+이제 HKEY_CLASSES_ROOT 에서 New- Key 를 선택하여 새로운 Key를 만들고 phpfile 로 이름을 정한다.
+phpfile 이라고 정한 새 키를 Highlight시키고 오른쪽 창에서 "default value" 를 더블 클릭한 후에 PHP Script 라고 적는다.
+phpfile key 에서 오른쪽 버튼을 클릭하여 New- Key 를 선택하고 Shell 이라고 이름 붙인다
+Shell key 에서 오른쪽 버튼을 클릭하여 New- Key 를 선택하고 open 이라고 이름 붙인다.
+open key 에서 오른쪽 버튼을 클릭하여 New- Key 를 선택하고 command 이라고 이름 붙인다.
+command 라고 정한 새 키를 Highlight시키고 오른쪽 창에서 "default value" 를 더블 클릭한 후에 php.exe 의 path를 적는다. (ex: c:\php\php.exe -q %1) (%1 을 잊지 말도록).
+Regedit를 종료한다.
+PWS를 윈도우즈에서 현재 사용중이면, 윈도우즈를 리부트하여 registry를 다시 로드하도록 합니다.
+PWS와 IIS 3 사용자들은 현재 실제로 훌륭하게 운영중인 시스템을 갖고 있습니다. IIS 3 사용자들은 Steven Genusa가 작성한 스크립트 맵을 설정하는 매력적인 도구 를 사용할 수 있습니다.
+PHP를 window에서 PWS 4 혹은 최신 버젼에 설치하는 방법은 두가지가 있다. 하나는 PHP CGI 바이너리를 사용하는 방법이고, 다른 방법은 ISAPI 모듈 DLL로 만들어 사용하는 방법이다.
+만약 CGI 바이너리를 선택했다면 다음과 같이 한다.:
+php.exe가 어디에 있는 가를 명시하기 위해 같이 포함되어 있는 pws-php4cgi.reg 파일(sapi 디렉토리를 보라)을 편집한다. 슬래시는 반드시 escaped 되어야 한다. 예를 들어: [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\w3svc\parameters\Script Map] ".php"="C:\\PHP\\php.exe"
+PWS 매니저에서 PHP를 지원하기 원하는 디렉토리에다 오른쪽 버튼을 클릭하고 properties(등록정보)를 선택하여, 'Execute' 체크박스를 체크한 후 confirm한다.
+만약 ISAPI 모듈을 선택했다면 다음과 같이 한다.:
+php4isapi.dll가 어디에 있는 가를 명시하기 위해 같이 포함되어 있는 pws-php4isapi.reg 파일(sapi 디렉토리를 보라)을 편집한다. 슬래시는 반드시 escaped 되어야 한다. 예를 들어: [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\w3svc\parameters\Script Map] ".php"="C:\\PHP\\sapi\\php4isapi.dll"
+PWS 매니저에서 PHP를 지원하기 원하는 디렉토리에다 오른쪽 버튼을 클릭하고 properties(등록정보)를 선택하여, 'Execute' 체크박스를 체크한 후 confirm한다.
+PHP를 IIS 4가 운영중인 NT/2000 서버에 설치하려면 다음 과정을 따른다. PHP를 설치하는데는 두가지 옵션이 있다. CGI 바이너리(php.exe)를 사용하는 방법과 ISAPI 모듈을 사용하는 방법이다.
+어떤 경우든, Microsoft Management Console을 시작해야 한다. (이것은 NT 4.0 Option Pack 아래나, windows 2000에서는 Control Panel= Administrative Tools 아래에 'Internet Services Manager'이라는 이름으로 있다.) 시작한 후에, 여러분의 웹서버 노드(보통 'Default Web Server'로 되어 있다.)에서 오른쪽 버튼을 클릭하고 properties(등록정보)를 선택한다.
+만약 CGI 바이너리를 사용하기를 원한다면 다음과 같이 한다.:
+'Home Directory' 나 'Virtual Directory' 혹은 'Directory' 밑에 'Configuration' 버튼을 클릭한 후, App Mappings 탭으로 들어간다.
+Add를 클릭하여 Executable 박스에서 다음과 같이 입력한다.: c:\php\php.exe %s %s (PHP를 c:\php\에 풀어놓았다고 가정). 이때 반드시 맨 뒤에 %s %s를 붙여주어야 합니다. 그렇지 않으면 PHP는 올바르게 작동하지 않습니다.
+Extension 박스에서 PHP스크립트들의 파일 확장자를 입력합니다. 'Method exclusions'은 빈칸으로 남겨두고, Script engine 체크박스는 체크합니다. 각각의 확장자에 대하여 스텝 3과 4의 과정을 반복합니다. (.php 와 .phtml 이 일반적입니다.)
+적당한 보안을 설정한다. (이것으로 Internet Service Manager에서의 설정은 끝이다.) 만약 여러분이 NT Server에 NTFS 파일 시스템을 사용한다면, php.exe 가 있는 디렉토리에 대하여 I_USR_ 사용자에게 실행 권한을 주어야 한다
+ISAPI module로 사용하기를 원한다면 다음과 같이 한다.:
+만약 PHP를 사용한 HTTP 인증을 원하지 않는다면, 이 과정을 넘어갈 수 있다.(사실 반드시 넘어가야 한다.) ISAPI Filters 밑에서 add a new ISAPI filter를 선택한다. PHP를 필터이름으로 하고, 경로명에 php4isapi.dll를 지정한다.
+'Home Directory' 밑에 'Configuration' 버튼을 클릭한 후, App Mappings 에 새 Entry를 추가한다. 경로에는 php4isapi.dll 를 Executable로 지정하고, .php를 확장자로 지정한다. 'Method exclusions'은 빈칸으로 남겨두고, Script engine 체크박스는 체크합니다.
+IIS를 완전히 정지시킨다.
+IIS를 새로 시작한다.

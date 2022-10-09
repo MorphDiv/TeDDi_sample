@@ -1,0 +1,28 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# ISO_6393:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+require() 문은 C preprocessor의 #include 와 비슷하게, 자신을 지정된 파일로 대체한다.
+PHP에서 "URL fopen wrappers"가 enabled되어 있으면 (기본값은 enabled이다.), require() 될 함수로 일반 파일 뿐 아니라 URL도 사용할 수 있다. 자세한 내용은 Remote files 와 fopen() 을 살펴보기 바란다.
+include() 되거나 require() 되어 읽혀지는 파일은 포함된 파일의 처음에 PHP모드에서 빠져나와 HTML모드로 들어가고, 마지막에 PHP모드로 복귀한다. 따라서 포함될 파일의 PHP 코드는 적절한 PHP 시작, 종료 택 에 둘러싸여 있어야 한다.
+require() 는 함수가 아니라 제어구조이다. 따라서 당연히 함수와는 다른 규칙을 따른다. 이를테면 require() 는 다른 어떤 제어구조와도 함께사용할 수 없다. 또한, 이것은 반환값이 없다. (반환값을 돌려받으려하면 문법 에러가 난다.)
+include() 와 다르게, require() 는 언제나 해당 파일을 읽어온다. 심지어 해당 라인이 전혀 실행되지 않아도 읽어온다. 만약 조건에 따라 파일을 포함시키고 싶다면 include() 문을 사용하여야 한다. 조건절은 require() 문에 아무 영향을 미치지 못한다. 그러나, require() 문이 있는 줄이 실행되지 않으면 읽어온 파일의 어떤 코드도 실행되지는 않는다.
+마찬가지로, 순환문도 require() 문에 영향을 주지 못한다. 포함된 파일의 코드가 루프에 적용을 받기는 하지만, require() 동작 자체는 단지 한번만 일어나는 것이다.
+이것은 매 순환시마다 다른 파일을 읽어오려 한다면 순환문 안에 require() 문을 사용해서는 안된다는 것을 의미한다. 이런 경우에는 include() 문을 사용하여야 한다는 것이다.
+When a file is require() ed, the code it contains inherits the variable scope of the line on which the require() occurs. Any variables available at that line in the calling file will be available within the called file. If the require() occurs inside a function within the calling file, then all of the code contained in the called file will behave as though it had been defined inside that function.
+If the require() ed file is called via HTTP using the fopen wrappers, and if the target server interprets the target file as PHP code, variables may be passed to the require() ed file using an URL request string as used with HTTP GET. This is not strictly speaking the same thing as require() ing the file and having it inherit the parent file's variable scope; the script is actually being run on the remote server and the result is then being included into the local script.
+PHP3에서는 require() 로 포함된 파일안에서 return 문을 사용할 수 있었다. 단, return 문이 포함된 파일의 global scope에서만 가능하고, 어떠한 블록내({} 내부)에서도 사용할 수 없다. 그러나, PHP4에서는 이런 기능 자체가 없어져 버렸다. 만약 여러분이 이런 기능을 사용하고 싶다면 include() 문을 사용하기 바란다.
+See also include(), require_once(), include_once(), readfile(), and virtual().

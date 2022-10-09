@@ -1,0 +1,109 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# ISO_6393:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+udm_set_agent_param() gibt TRUE bei Erfolg, FALSE bei eine, Fehler zurück.
+Deklariert mnoGoSearch Sessionparameter.
+Die folgenden Parameter und deren Werte sind erlaubt:
+UDM_PARAM_PAGE_NUM - wird genutzt, um eine bestimmte Seite aus den Suchergebnissen auszuwählen.
+Ergebnissseiten werden von 0 an gezählt.
+UDM_PARAM_PAGE_SIZE - Anzahl der Suchergebnisse, die pro Seite angezeigt werden.
+UDM_PARAM_SEARCH_MODE - Suchmodus.
+Die folgenden Werte sind erlaubt:
+UDM_MODE_ALL - Logische UND-Verknüpfung; UDM_MODE_ANY - Logische ODER-Verknüpfung; UDM_MODE_BOOL - boolsche Suche.
+Siehe udm_find() für weitere Details zur boolschen Suche.
+UDM_PARAM_CACHE_MODE - Schaltet den Ergebnis-Cache an oder aus.
+Falls eingeschaltet wird die Suchmaschine Suchergebnisse auf der Festplatte zwischenspeichern.
+Für den Fall, dass später eine ähnliche Suche durchgeführt wird, werden die Ergebnisse für ein schnelleres Ergebnis aus dem Cache gelesen.
+Werte:
+
+UDM_PARAM_TRACK_MODE - schaltet den Trackquery-Modus an oder aus.
+Seit Version 3.1.12 von mnoGoSearch wird eine Verfolgung von Suchanfragen unterstützt.
+Um die Track-Funktion nutzen zu können, müssen zusätzliche SQL-Tabellen angelegt werden.
+Für MySQL liegen die Tabellenbeschreibungen in create / mysql / track.txt.
+Wird eine Suche durchgeführt, werden die Suchwörter in diesen Tabellen zusammen mit der Anzahl der gefundenen Dokumente und dem aktuellen Unix-Timestamp gespeichert.
+Verfügbare Werte:
+
+UDM_PARAM_PHRASE_MODE - Gibt an, ob die Index-Datenbank eine Unterstützung für "Phrases" erlaubt. (Muß vor der Indizierung in der indexer.conf eingeschaltet werden.
+Mögliche Werte:
+UDM_PHRASE_ENABLED und UDM_PHRASE_DISABLED.
+Wird der Phrase-Modus verwendet, ist es natürlich nach wie vor möglich, alle anderen Suchmodi zu verwenden.
+Seit Version 3.1.11 wird auch der Cache-Modus zusammen mit dem Phrase-Modus unterstützt.
+Beispiele:
+"Arizona desert" - Diese Abfrage gibt alle Dokumente zurück, die "Arizona desert "als eine Zeichenkette enthalten.
+Für eine Suche nach kompletten Zeichenkette müssen diese in doppelte Anführungszeichen gesetzt werden.
+UDM_PARAM_CHARSET - Legt einen lokalen Zeichensatz wie koi8-r, cp1252 fest.
+UDM_PARAM_STOPFILE - Legt den Namen und den Pfad einer stopword-Datei fest.
+Auch hier wird nicht relativ zu UDM_CONF_DIR gesucht sondern relativ zu zu dem Pfad wo das aktuelle PHP-Script läuft.
+UDM_PARAM_STOPTABLE - Lädt die stopwords aus der angegebenen SQL-Tabelle.
+Es können mehrere Stopwordtable-Kommandos verwendet werden.
+UDM_PARAM_WEIGHT_FACTOR - Legt fest, wie bestimmte Teile eines Dokumentes zur Sortierung gewertet werden.
+Zur Zeit werden Body, Title, Keywords, Description und URL unterstützt.
+Um dieses Feature nutzen zu können, muss der Grad 2 in den *Weight-Anweisungen in der indexer.conf verwendet werden.
+Stellen wir uns vor, folgende Werte würden verwendet:
+
+Solange der Indexer eine logische bit-ODER Operation verwendet, um das Gewicht einzelner Wörter festzulegen, wenn ein Wort mehrere Male im selben Dokument vorkommt, ist es möglich, zur Zeit der Suche festzustellen, welches Wort in welchem Teil des Dokumentes vorkommt.
+Wörter, die nur im Body auftauchen, haben das Gewicht 00000010 in binärer Notation.
+Wörter, die in allen Dokumententeilen vorkommen haben das Gewicht 00011111.
+Der Wert dieses Parameter ist ein String, bestehend aus den hexadezimalen Ziffern ABCDE.
+Jede Ziffer ist ein Faktor für das korrespondierende Bit.
+Für die oben angeführte Konfiguration zum Beispiel:
+E ist ein Faktor für das Gewicht 1 (URL Weight bit) D ist ein Faktor für das Gewicht 2 (BodyWeight bit) C ist ein Faktor für das Gewicht 4 (TitleWeight bit) B ist ein Faktor für das Gewicht 8 (KeywordWeight bit) A ist ein Faktor für das Gewicht 16 (DescWeight bit)
+Beispiele:
+UDM_PARAM_WEIGHT_FACTOR=00001 wird nur in URLs suchen.
+UDM_PARAM_WEIGHT_FACTOR=00100 wird nur in Titeln suchen.
+UDM_PARAM_WEIGHT_FACTOR=11100 wird in Titel, Keywords, Description aber nicht in URL und Body suchen.
+UDM_PARAM_WEIGHT_FACTOR=F9421 wird folgendermaßen Suchen und Werten:
+Beschreibung mit dem Faktor 15 (F hex) Keywords mit dem Faktor 9 Title mit dem Faktor 4 Body mit dem Faktor 2 URL mit dem Faktor 1
+Wenn die Variable UDM_PARAM_WEIGHT_FACTOR übergeben wird, wird das Originalgewicht zur Sortierung verwendet.
+UDM_PARAM_WORD_MATCH - Wortteilübereinstimmung.
+Dieser Parameter kann verwendet werden, um festzulegen, welcher Wortteil mit dem gesuchten Wort übereinstimmen muss.
+Dieses Feature funktioniert nur im "single" oder "multi "-Modus.
+Im Cachemode und in den CRC-Modi ist eine Verwendung nicht möglich.
+Erlaubt Werte:
+UDM_MATCH_BEGIN - Der Wortanfang muss übereinstimmen;
+UDM_MATCH_END - Das Wortende muss übereinstimmen;
+UDM_MATCH_WORD - Das gesamte Wort muss übereinstimmen;
+UDM_MATCH_SUBSTR - Teile des Wortes müssen übereinstimmen.
+UDM_PARAM_MIN_WORD_LEN - Legt die mininmale Wortlänge fest.
+Jedes Wort, dass kürzer als die angegebene Länge ist, wird als stopword aufgefasst.
+UDM_PARAM_ISPELL_PREFIXES - Mögliche Werte:
+UDM_PREFIXES_ENABLED und UDM_PREFIXES_DISABLED, die explizit die Verwendung von ISpell-Prefixen an - oder abschalten.
+Wird also zum Beispiel das Wort "tested" in einer Suchabfrage verwendet, werden auch Wörter wie "test "oder "testing" gefunden.
+Nur Endungen werden normalerweise Unterstützt.
+Prefixe verändern für gewöhnlich die Bedeutung von Wörtern.
+So werden bei einer Suche nach "tested" z.B. auch Dokumente gefunden, die das Wort "untested "enthalten.
+Um diese Funktion nutzen zu können, müssen vorher mittels udm_load_ispell_data() ISpell-Daten geladen werden.
+UDM_PARAM_CROSS_WORDS - Aktiviert oder deaktiviert eine Unterstützung für Crosswords.
+Mögliche Werte:
+UDM_CROSS_WORDS_ENABLED und UDM_CROSS_WORDS_DISABLED.
+Das Crosswords-Feature erlaubt es, Wörter zwischen a href=" xxx "und / a dem Dokument zuzuordnen, zu dem dieser Link führt.
+Anmerkung:
+Crosswords werden seit mnoGoSearch 3.1.11 unterstützt.
+UDM_PARAM_VARDIR - Gibt einen Pfad zu einem Verzeichnis an, in dem der Indexer Daten speichert, wenn der integrierte Datenbank-Modus oder der Cachemodus verwendet wird.
+Voreingestellt ist das / var -Verzeichnis der mnoGoSearch-Installation verwendet.
+Es können ausschliesslich Strings verwendet werden.
+Dieser Parameter ist erst ab PHP 4.1.0 verfügbar.
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben
+mSQL Funktionen

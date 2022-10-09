@@ -1,0 +1,426 @@
+# language_name_wals:	Mandarin
+# language_name_glotto:	Mandarin Chinese
+# ISO_6393:	cmn
+# year_composed:	NA
+# year_published:	2014
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hans
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/zh_CN.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+YunQiang Su <wzssyqa\@gmail\.com>, 2009
+TeliuTe <teliute\@163\.com>, 2010
+tuhaihe <wangdianjin\@linuxdeepin\.com>, 2012
+黄世海<rochester_h\@163\.com>, 2012, 2013.
+GNOME 显示管理器参考手册
+
+GDM 是 GNOME 显示管理器，一个图形界面的登录程序。
+
+
+
+
+
+
+
+
+
+对于本文档的复制、分发和/或修改必须遵循自由软件基金会 (Free Software Foundation) 发布的 GNU 自由文档许可证 (GFDL) 版本 1.1 或更高版本，该许可证没有固定的部分、白皮书和背页文本。您可以在
+本手册是在 GFDL 许可之下分发的 GNOME 手册集合的一部分。如果想要单独分发此手册，可以在手册中添加该许可证的一份副本然后分发，如该许可证的第 6 部分所述。
+各个公司使用的许多用于区别它们产品和服务的名称都声明为商标。在所有的 GNOME 文档以及 GNOME 文档项目的成员中，这些名称都是以全大写字母或首字母大写显示，从而表明它们是商标。
+文档按“原样”提供，不提供任何明示或暗示的保证，包括但不限于：文档或文档的修改版本没有适销性方面的缺陷、适合特定目的的适用性，以及没有侵权行为。您将自行承担本文档以及文档修改版本的质量、准确性以及性能方面的风险。如果任何文档或文档修改版本存在缺陷，您（而不是最初的编写者、作者或撰写人）将承担所有必需的服务、维修或更正的费用。此免责声明是本许可证的重要组成部分。如果不接受此免责声明，那么您就没有权利使用任何文档或文档的修改版本；并且
+无论在任何情况以及在任何法律理论下，本文档或文档修改版本的作者、最初的编写者、任何撰写人或任何分发者，或者任意这些方的任何提供者都不对任何人由于使用本文档或文档修改版本引起或带来的任何直接的、间接的、特殊的、偶然的或继发的损失承担任何民事（包括疏忽）、合同或其它方面的责任，这些损失包括但不限于信誉损失、工作停止、计算机失败或故障，或任何以及所有其它损失或由此引发的或与之相关的损失，即使这些方已被告知存在出现此类损失的可能性时也是如此。
+本文档以及文档的修改版本都是在遵循 GNU 自由文档许可证的条款下提供，这表示具有以下含义：
+本手册讲述的是 GNOME 显示管理器 2.26.0，它最近更新于 2009年2月10日。
+本手册的约定和术语
+Chooser - 用于选择一个远程主机，在连接的显示器上管理管理远程显示的一个程序(
+FreeDesktop —— 提供桌面标准的组织，例如 GDM 使用的桌面项目文件。
+GDM - GNOME 显示管理器，用来描述整个软件包。
+Greeter - 图形登录窗口 (
+PAM - 可插入的认证机制
+XDMCP - X 显示管理协议
+Xserver - X 窗口系统的一个实现。例如 X.org 基金会提供的 Xorg Xserver
+以尖括号中的一个单词开始的路径是相对与安装前缀的。例如，
+概览
+介绍
+GNOME 显示管理器 (GDM) 是一个实现了管理本地和远程显示所要求的所有重要功能的显示管理器。GDM 是从头开始编写的，不包含任何 XDM 或 X Consortium 的代码。
+注意 GDM 是可以设置的，并且很多配置对安全有影响。用户需要知晓的影响，会在本文档中高亮显示。
+请注意，一些操作系统设置 GDM 为不同于本文档中描述的行为。如果 GDM 并不是像叙述的样子，请查看相关的设置是否不同于此处描述的。
+想了解更多关于 GDM 的信息，请访问项目网站，地址是
+讨论和查询 GDM，请参考邮件列表
+请在
+界面稳定性
+GDM 2.20 和更早的版本支持稳定的配置界面。但是基础代码在 GDM 2.22 重写了，其并不是完全的向后兼容旧版的。部分原因是，工作方式不同了，所以一些选项没有意义了；一部分原因是一些选项从来没有使用过；另外的一部分原因是一些功能还没有重新实现。
+在稳定样式中将继续支持的接口包括：Init，PreSession， PostSession， PostLogin 和 Xsession 脚本。
+GDM 2.20 和更早的版本支持多个显卡上的多个显示器管理功能，就像使用终端服务界面，通过像是 Xnest 或 Xephyr 的程序登录一个窗口，gdmsetup 程序，基于 XML 的欢迎界面主题，以及从登录窗口运行 XDMCP chooser 的能力。2.22版重写之后，这些特性没有添加回来。
+功能描述
+GDM 负责管理系统上的显示，包括认证用户，开始用户会话，结束用户会话。GDM 是可以配置的，其配置方法在本文档的 “配置 GDM”一节说明。GDM 也适合残障人士。
+GDM 提供了管理主控制台显示的能力，且是通过虚拟终端显示。它是和其他程序集成的，例如快速用户切换小程序 (FUSA) 和 gnome-screensaver，以通过 Xserver 虚拟终端 (VT) 接口管理控制台上的多显示。它也可以管理 XDMCP 显示。
+无论怎样的显示类型，当管理显示时，GDM 将做如下的工作：启动 Xserver 进程，然后以 root 用户运行
+欢迎程序以无特权的“gdm”用户/用户组运行。该用户和组在此文档的“安全”一节中讲述。欢迎程序的主要功能是提供 选择登陆用户 和 用户认证时实现用户和系统之间对话 的机制。验证进程由可插入模块(PAM)来驱动。PAM 模块决定给要验证的用户显示什么提示(如果有的话)。在多数系统中，欢迎程序要求提供用户名和密码来进行验证。但一些系统可能设有指纹或智能卡阅读器等其他验证机制。GDM 可通过欢迎程序登陆扩展和
+智能卡扩展可通过
+同样，指纹识别扩展也可通过
+GDM 和 PAM 可配置为不需要任何输入，这将使 GDM 自动登陆并直接启动一个会话，这在一些环境中会很有用，如单用户系统或售报亭。
+除了认证，欢迎程序允许用户选择启动哪个会话，使用哪个语言。会话由 .desktop 结尾的文件定义，更多关于这个文件的信息可以在本文档的“GDM 用户会话和语言配置”节找到。默认地，GDM 被配置为显示一个头像登陆器，以使用户可以通过在一张图片上点击选择他们的账户，替代输入用户名。GDM 通过用户的
+当验证过一个用户，守护进程以 root 身份运行
+欢迎面板
+GDM 欢迎程序在屏幕底部显示一个浮动面板，提供了一些额外的功能。当选择一个用户后，还可以在面板选择登录后使用的会话、语言、键盘布局等。键盘布局选择器在您输入密码时也会改变键盘布局。面板还包括一个登录服务区域以放置状态图标。比如显示当前电量的电池图标，和用于启用辅助功能的图标。欢迎程序还提供了允许用户关闭或重启系统的按钮。如有需要，也可以配置 GDM 不提供关机和重启按钮。GDM 还可通过 PolicyKit(或 Oracle Solaris 上的 RBAC)来配置，用户拥有适当的授权才允许关机或重启。
+注意，键盘布局功能只有在支持 libxklavier 的系统上可以使用。
+辅助功能
+GDM 支持“无障碍登录”，允许用户登录他们的桌面，即使他们不能以普通的方式方便地使用屏幕、鼠标或键盘。无障碍技术(AT)功能，比如屏幕键盘、屏幕阅读器、屏幕放大器和 Xserver AccessX 键盘辅助都是可用的。如果需要，也可以放大文本或高对比图标和控制。参考本文档的“辅助功能配置”节获取更多关于多少中无障碍功能可以配置。
+在一些操作系统上，必须确保 GDM 用户是“audio”组的成员，以使要求声音输出的 AT 程序(例如文本语音转换)可以工作。
+GDM 头像登录器
+头像浏览器是一个允许用户通过点击一个图像以选择他用户名的界面。这项功能可以通过 /apps/gdm/simple-greeter/disable_user_list GConf 键来启用或禁用，其默认是启用的。禁用时，用户必须手动输入他们的用户名全名。启用时，它显示本地系统上所有的用来登录的用户名(在 /etc/passwd 文件中定义的有合法的 shell ，并且足够高的 UID 的所有用户)，以及最近登录过的远程用户。GDM 2.20 版和更早版中的头像登录器可能试图显示所有的远程用户，这在大的企业部署中造成了性能问题。
+头像登录器配置为在列表顶端显示最经常登录的用户。这可以确保经常登录的用户可以快速的找到他们的登录图片。
+头像登录器支持前缀字母过滤(type-ahead search)，其依据用户的输入来匹配列表中的用户名，动态移动选中的头像。这意味着，一个有很长用户名的用户在从列表中选择之前将只需要输入用户名开始的几个字符。
+GDM 所使用的图标可以使用 sysadmin 全局安装，也可以定位于用户主目录。如果全局安装，他们应该位于
+如果这个用户没有全局图标，GDM 将在用户的 $HOME 目录查找图像文件。GDM 将首先在
+如果一个用户没有定义的头像图片，GDM 将使用当前 GTK+ 主题的“stock_person”图标。如果没有定义这个图片，将回退使用一个通用的头像图片。
+请注意，加载和缩放位于远程用户主目录的头像可能会是非常消耗时间的任务。因为通过 NIS 或 NFS 加载图片是不实际的，GDM 不尝试从远程主目录加载头像图片。
+当这个浏览器打开时，这个计算机上的合法用户将暴露给任何人。如果启用了 XDMCP，用户名将暴露给远程用户。 这当然会对安全性有所限制，因为恶意用户不再需要猜测合法用户名。在一些非常严格的环境下，头像登录可能是不适当的。
+XDMCP
+GDM 守护进程可以被配置为监听和管理从远程显示器上的 X 显示管理协议(XDMCP)请求。XDMCP 是默认关闭的，但是如果需要可以开启。如果 GDM 构建为支持 TCP Wrapper，则守护进程将只准许在 TCP Wrappers 配置文件指定了 GDM 服务节的主机的访问。
+GDM 包括了一些使它可以在对 XDMCP 服务的拒绝服务攻击更有抵抗力的方法。许多协议参数，握手计时等，可以进行微调。默认设置可以在多数系统上合理的工作。
+GDM 默认使用普通 UDP 的用于 XDMCP 的 177 端口监听 XDMCP 请求，将通过向发端发送一个 WILLING 包响应 QUERY 或 BROADCAST_QUERY 请求。
+GDM 可以配置为实现 INDIRECT 查询和呈现一个主机选择器用以远程显示。GDM 会记住用户的选择并继续发送请求到选择管理器。GDM 也支持一个可以在用户连接成功后，让它忘记重定向协议的扩展。这个扩展仅在全部进程是 GDM 时才支持。它是透明的并且被 XDM 或其他实现 XDMCP 的守护进程所忽略。
+如果 XDMCP 好像不工作，确定所有的机器都在
+参考“安全”部分来获取关于使用 XDMCP 时的安全相关的信息。
+登录
+GDM 使用 syslog 记录错误和状态，它也可以记录调试信息，这在 GDM 不正常工作时追踪错误很有用。调试输出可以通过在
+各个 Xservers 的输出存储于 GDM 日志目录中，一般是
+会话的输出通过 GDM 守护进程以管道传送到
+注意，如果因为一些原因 GDM 不能创建这个文件，然后一个名为
+快速用户切换
+GDM 允许多个用户同时登录。一个用户登录以后，另一个用户可以使用 GNOME 面板上的 用户切换器登录，或者从 GNOME 屏幕保护的锁住屏幕上的“切换用户”按钮。进行中的会话可以使用同样的机制更改回来并且继续。注意，有些发行版可能没有默认在面板上添加用户切换器。您可以使用面板右键快捷菜单添加它。
+注意，这个功能可以在支持虚拟终端的系统上使用。如果虚拟终端不可用，这个功能将不可用。
+安全
+GDM 用户和组
+为了安全，建议用一个专用的用户和组 ID 来进行适当的操作。在大多数系统上，这个用户和组一般是“gdm”，但是可以被配置为任何一个用户或组。所有的 GDM 图形程序都以这个用户的身份运行，以使与用户交互的程序都运行在沙盒中。这个用户和组应该具有有限制的特权。
+“gdm”用户唯一需要的特权是读写
+在任何情况下，您都不应该把 GDM 用户/组配置给一个能轻易访问到的用户，比如
+GDM 欢迎界面配置存储于 GConf 中。要允许 GDM 用户更改配置，就需要“gdm”用户有一个可写的 $HOME 目录。用户可以配置默认的 GConf 到希望的样子，以避免需要提供给“gdm”用户一个可写的 $HOME 目录。但是，如果不能写入状态信息到 GConf 配置，一些功能可能被禁用。
+PAM
+GDM 使用 PAM 作为登录认证。PAM 代表可插入的认证模块，被您计算机上大多数需要认证的程序使用。它允许管理员为不同的登录程序 (例如 ssh，登录界面，屏幕保护等) 配置特定的认证行为。
+PAM 是复杂和高度可配置的，本文档不打算在细节上解释这些。而是，它打算给出 PAM 配置与 GDM 的关系，GDM 是怎样配置 PAM 的，以及已知的问题的一个概述。需要操作 PAM 配置的用户需要进一步阅读 PAM 文档，以理解怎样配置 PAM 和理解在这节中使用的条目。
+PAM 配置在不同的操作系统上有不同但相似的界面，所以查看
+注意，默认地，GDM 使用“gdm”这个 PAM 服务名作默认登录用，以及使用“gdm-autologin”PAM服务名作自动登录用。这些服务可能没有在您的 pam.d 或 pam.conf 配置文件中定义。如果没有这些条目，GDM 将使用默认的 PAM 行为。在大多数系统上，这应该可以工作的很好。但是，如果 gdm-autologin 服务没有定义，自动登录功能将可能不能失效。
+
+如果您想使 GDM 使用其他的认证机制(如指纹识别或智能卡)，您应该使用希望使用的认证类型的 PAM 服务模块，而不是试图直接修改 GDM 的源代码。请阅读您系统上的 PAM 文档。怎样做到这一点经常在
+为了能够同时使用多种认证方式，例如既可使用智能卡也可使用用户名和口令登录系统，PAM 做了一些限制。使这可以工作有一些技巧，当设置这种配置时，最好研究下这个问题一般是怎么解决的。
+如果自动登录在一个系统上不工作，检查在 PAM 配置文件中是否定义了“gdm-autologin”PAM 栈。为了使它工作，必须使用一个不做任何认证的 PAM 模块，或者简单的对它所有的公共界面返回 PAM_SUCCESS。假定您的系统上有个 pam_allow.so PAM 模块可以做到这一点，启用“gdm-autologin”的 PAM 配置可能会类似这样：
+gdm-autologin auth required pam_unix_cred.so.1
+ gdm-autologin auth sufficient pam_allow.so.1
+ gdm-autologin account sufficient pam_allow.so.1
+ gdm-autologin session sufficient pam_allow.so.1
+ gdm-autologin password sufficient pam_allow.so.1
+上边的设置将导致没有最后的日志项生成。如果想要一个最后日志项，请对这个会话使用下面的方法：
+gdm-autologin session required pam_unix_session.so.1
+如果计算机由多个人使用，这时自动登录就不合适了，您将可能希望允许一些用户不输入他们的口令就可以登录。这个功能可以作为单个用户选项，使用 gnome-system-tools 中的 users-admin 工具来启用；这由在要求口令之前检查用户是否 Unix 组“nopasswdlogin”的成员来实现。要使这可以工作，“gdm”服务的 PAM 配置文件必须包含类似于如下一行：
+gdm auth sufficient pam_succeed_if.so user ingroup nopasswdlogin
+utmp 和 wtmp
+GDM 经会话登录和注销生成 utmp 和 wtmp 用户账户数据库条目。utmp 数据库包含用户访问和审计信息，这些可以通过例如
+Xserver 认证方案
+Xserver 认证文件存储于启动时
+GDM 只支持 MIT-MAGIC-COOKIE-1 Xserver 认证方案。通常从其他方案获得的好处非常少，并且至今也没有为实现它们做出的努力。尤其要小心地使用 XDMCP，因为 Xserver 认证 cookie 以明文通过线路。如果可以嗅探，攻击者就可以容易的在您登录时嗅探您的认证口令，无论使用何种认证方案。如果可以嗅探且是不可取的，此时您应该使用 ssh 作为 X 连接的隧道而不是使用 XDMCP。您可以将 XDMCP 看成一种图形化的 telnet，其有同样的安全问题。多数情况下，ssh -Y 应该会优于 GDM 的 XDMCP 功能。
+XDMCP 安全
+即使您的显示受到 cookies 的保护，输入口令时的 XEvent 和因而的按键仍然是通过明文发送的。捕获它是很容易的。
+XDMCP 主要用于运行瘦客户机，比如在终端实验室。那些瘦客户机只需要到访问服务器的网络连接，这使这些瘦客户机在一个外部不能访问的分离网络中并且只能连接到服务器好像是最好的安全策略。仅有的需要从外部访问的点就是服务器。这种设置绝不应该使用一个未管理的集线器或其他可嗅探的网络。
+XDMCP 访问控制
+XDMCP 访问控制是使用的 TCP wrappers。也可以不带 TCP wrappers 地编译 GDM，所以这个功能可能不被一些操作系统支持。
+您应该在文件
+gdm: .evil.domain
+到
+gdm: .your.domain
+到您的
+防火墙安全
+即使是 GDM 尝试尽量智能地防止使攻击者 对 XDMCP 有机可乘，仍然建议您在您的防火墙上阻塞 XMDCP 端口(一般是 UDP 端口 177)，除非真的需要。GDM 防止拒绝服务攻击，但是 X 协议仍然继承了不安全，并且只应该在可控的环境中使用。同样，每个远程连接消耗许多资源，所以通过 XDMCP 进行拒绝服务攻击比攻击一个网页服务器容易的多。
+阻塞所有的 Xserver 端口也是明智的，它们您防火墙上的 TCP 端口 6000+ (对应每个显示号)。注意 GDM 也会使用显示号 20 和根据服务需要较大的号。
+X 在通过国际互联网使用时不是一个非常安全的协议，XDMCP 甚至更不安全。
+PolicyKit
+GDM 可以配置为使用 PolicyKit，以允许系统管理员控制登录窗口是否应该在欢迎窗口提供关机和重启按钮。
+这些按钮是由
+RBAC (基于角色的访问控制)
+GDM 可以被设置为使用 RBAC 替代 PolicyKit。这是，RBAC 的配置将被用于控制登录窗口是否在欢迎屏幕提供关机和重启键。
+例如，在 Oracle Solaris 上，“solaris.system.shutdown”认证被用于控制此项。简单修改
+ConsoleKit 的支持
+GDM 包含了对使用用户和会话登录框架，即所谓的 ConsoleKit，发布用户登录信息的支持。ConsoleKit 可以跟踪所有的当前登录用户。在这个角度上看，它可以替代大多数类 Unix 操作系统上都有的 utmp 和 utmpx文件。
+当 GDM 将为用户创建一个新的登录进程，为了为此用户打开一个新会话它将调用 ConsoleKit 的一个特权方法。同时 GDM 也提供 ConsoleKit，并附随关于用户会话的信息，例如：用户 ID，将于会话关联的 X11 显示名，会话起源的主机名(在 XDMCP 会话时有用)，此会话是否连接等。就像启用用户会话的其它程序一样，GDM 处于特别的知晓用户会话和被信任并提供他们的信息的位置。这些特权方法的使用是受到使用 D-BUS 系统信息总线安全策略的限制的。
+当一个通过 GDM 认证的现存会话上的用户请求回复一个存在的会话，GDM 调用 ConsoleKit 的一个特权方法来解锁那个会话。关于那个会话收到解锁信号后发生的精确的细节是未定的和与会话有关的。但是，大多数会话会解锁一个屏保作为回应。
+当用户选择登出，或者 GDM 或会话异常退出，用户会话将从 ConsoleKit 注销。
+配置
+GDM 有一些配置界面，包括脚本集成点、守护进程配置、欢迎界面配置、通用会话配置、与 gnome-settings-daemon 配置的集成以及会话配置。这些集成的细节在下边描述。
+脚本集成点
+GDM 脚本集成点可以在
+Xsession
+Init/
+PostLogin/
+PreSession/
+PostSession/
+
+对于每一种脚本，默认被执行的那个被叫做“Default”并且存储在一个与脚本类型相关的目录中。于是，默认的
+所有的这些脚本都使用 root 特权运行，运行成功时返回 0，如果有任何会导致登录会话结束的失败都会返回非零值。同样注意，GDM 将一直阻塞到脚本运行完毕，所以，如果这些脚本的任何一个挂起，都会导致登录进程挂起。
+当这个登录界面的 Xserver 成功启动，但是在登录图形界面的实际显示之前，GDM 将运行
+用户成功认证之后，GDM 将运行
+在用户会话初始化之后，GDM 将运行
+当一个用户结束他的会话，GDM 将会运行
+注意，
+所有的上述脚本将设置
+自启动配置
+
+任何在这个目录中的
+Xsession 脚本
+在
+守护进程配置
+GDM 守护进程使用
+注意，旧版的 GDM 支持其他的配置选项，但是最新版的 GDM 已经不支持它们了。
+
+
+[daemon]
+TimedLoginEnable=true
+TimedLogin=you
+下边是支持的配置键全表：
+[chooser]
+Multicast
+Multicast=false
+如果为 true 且启用了 IPv6，chooser 将向本地网络发送一个多播请求然后收集已经加入多播组的机器的回应。
+MulticastAddr
+MulticastAddr=ff02::1
+这是本地连接的多播地址。
+[daemon]
+TimedLoginEnable
+TimedLoginEnable=false
+如果用户使用了
+TimedLogin
+TimedLogin=
+这是会在闲置指定的秒数之后自动登录的用户。
+如果值以一个竖线 | (管道符号)结尾，GDM 将激活指定的程序，并且不管程序返回什么值到标准输出上，都作为用户值。程序以 DISPLAY 环境变量的设置来运行，因而使为每个用户指定不同显示样式成为可能。例如，如果值是 “/usr/bin/getloginuser|”，那么将会运行程序 “/usr/bin/getloginuser” 来获取用户值。
+TimedLoginDelay
+TimedLoginDelay=30
+在
+AutomaticLoginEnable
+AutomaticLoginEnable=false
+如果为 true，
+AutomaticLogin
+AutomaticLogin=
+这是如果
+User
+User=gdm
+用于运行欢迎程序和其他 GUI 程序的用户名。更多相关信息请参考本文档的
+Group
+Group=gdm
+运行欢迎程序和其他 GUI 程序的组名。更多相关信息请访问本文档的
+调试选项
+[debug]
+Enable
+Enable=false
+要启用调试，在
+欢迎程序选项
+[greeter]
+IncludeAll
+IncludeAll=true
+如果为 true，头像登陆器将显示本地机器上的所有用户；如果为 false，头像登录器将只显示最近登录过的用户。
+当这个键值为 true 时，GDM 将调用 fgetpwent() 来获取系统中的本地用户列表。所有用户 ID 小于 500(在 Oracle Solaris 上小于100)将被过滤出来。头像登陆器也将显示所有以前登录系统的用户(如 NIS/LDAP 用户)。它通过调用
+如果值为 false，GDM 只是简单显示之前登录系统的用户(本地用户或 NIS/LDAP 用户)，通过调用
+Include
+Include=
+设置到一个总是包括在头像登陆器里的用户列表。这个值设置到一个用户列表中，用逗号分隔各个用户。默认这个值为空。
+Exclude
+Exclude=bin,root,daemon,adm,lp,sync,shutdown,halt,mail,news,uucp,operator,nobody,nobody4,noaccess,postgres,pvm,rpm,nfsnobody,pcap
+设置到一个总是不包括在头像登录器中的用户列表。这个值设置为一个用户列表，用逗号分隔。注意，
+安全选项
+[security]
+DisallowTCP
+DisallowTCP=true
+如果为 true,在启动关联的 Xservers 时将总是跟随
+XDCMP 支持
+[xdmcp]
+DisplaysPerHost
+DisplaysPerHost=1
+为了防止攻击者填满等待队列，GDM 只允许一台远程计算机发起一个连接。如果希望为有多个显示器的计算机提供服务，您需要增加这个值。
+注意连接到本地的显示器数目允许值没有被限制。只有通过 XDMCP 的远程连接被这个配置选项限制。
+设置这项为 true，启用 XDMCP 支持，允许让 GDM 管理远程显示/X 终端。
+
+如果 GDM 编译为支持它，从远程显示的访问可以使用 TCP Wrappers 库控制。服务名是
+gdm: .your.domain
+您应该添加
+请注意，XDMCP 不是一个相当安全的协议，使用防火墙堵住 UDP 的 177 端口是个好注意，除非您真的需要它。
+HonorIndirect
+HonorIndirect=true
+为不提供自己显示浏览器的 X-terminals 启用 XDMCP INDIRECT 选择(例如，远程执行
+MaxPending
+MaxPending=4
+为了避免拒绝服务攻击，GDM 固定了等待连接的队列的大小。只有 MaxPending 个显示可以同时开启。
+请注意，这个参数不限制可以管理的远程显示的数目，只限制同时启动的显示连接的数目。
+MaxSessions
+MaxSessions=16
+定义可同时管理的远程显示连接的最大数目，也就是，您的主机上可以使用的远程显示的总数目。
+MaxWait
+MaxWait=30
+当 GDM 准备好管理一个显示，一个包含一个唯一的会话 ID 的 ACCEPT 包被发送给它，这个会话 ID 用于将来的 XDMCP 交谈。
+GDM 将放置会话 id 在等候队列里，等待以 MANAGE 请求显示的响应。
+如果在 MaxWait 秒内仍然没有响应，GDM 将声明显示器死机并且将其从等待队列中清除，为其他显示清理出槽。
+MaxWaitIndirect
+MaxWaitIndirect=30
+MaxWaitIndirect 参数确定，用户选择一个主机和接下来用户连接主机间接查询之间，检测最大秒数。当超时后，已选择的主机信息会遗忘，indirect slot 会释放给其他显示。如果有多于
+PingIntervalSeconds
+PingIntervalSeconds=60
+如果 Xserver 没有在指定秒数内响应，那么连接会被停止，会话中止。当出现这种情况时，从进程会以一个 ALARM 信号死亡。注意，GDM 2.20 和早期的设定为2,因而如果从 GDM 2.20 和早期版本升级到一个新版本的话，可能需要增加时间。
+注意，GDM 在过去使用有一个以分钟作单位的
+Port
+Port=177
+
+Willing
+Willing=lt;etcgt;/gdm/Xwilling
+当机器在一个 QUERY 后发送一个 WILLING 包返回，它发送一个字符串给出当前服务的状态。默认的信息是系统 ID，但有可能创建一个脚本显示自定义的消息。如果脚本不存在或者这个键是空的，那么发送默认的消息。如果脚本成功并产生了一些输出，输出的第一行被发送(仅第一行)。它最多每3秒运行一次，以防止服务可能被机器的 QUERY 包塞满而拒绝。
+简单欢迎界面配置
+GDM 默认的欢迎界面被叫做简单的欢迎界面，并且通过 GConf 配置。默认值使用 GConf 存储于
+欢迎界面配置键
+/apps/gdm/simple-greeter/banner_message_enable
+false (boolean)
+控制浮动信息文本是否显示。
+/apps/gdm/simple-greeter/banner_message_text
+NULL (string)
+指定在欢迎窗口显示浮动文本消息。
+/apps/gdm/simple-greeter/disable_restart_buttons
+控制是否在登录窗口显示重启按钮。
+/apps/gdm/simple-greeter/disable_user_list
+如果为 true，不在登录窗口显示已知用户的头像登录功能。
+/apps/gdm/simple-greeter/logo_icon_name
+computer (string)
+设置为要使用的主题图标名，以获取欢迎标志。
+/apps/gdm/simple-greeter/recent-languages
+[] (string list)
+设定语言列表，以便在登录窗口显示默认语言。默认值是“[]”，用默认的设定仅显示系统语言，选项“其他...”弹出一个对话框，显示用户可选择的所有可用的语言列表。
+不希望用户手动更改这项设置，而是，GDM 跟踪在配置键中选中的任何语言，并且在语言组合框中与“其他...”一起单独显示他们。这种方式，使常用的语言可以容易的选择。
+/apps/gdm/simple-greeter/recent-layouts
+设置在默认的登录面板上显示的键盘布局的列表。默认值是“[]”。使用默认的配置时，只显示默认的键盘布局，其他的选项在“其他...”中，其弹出一个对话框，显示所有可用的键盘布局，以供用户选择。
+不希望用户手动更改这项设置，而是，GDM 跟踪在配置键中选中的任何语言布局，并且在键盘布局组合框中与“其他...”一起单独显示他们。这种方式，使常用的键盘布局可以容易的选择。
+/apps/gdm/simple-greeter/wm_use_compiz
+控制是否使用 compiz 替换 metacity 作为窗口管理器。
+辅助功能设置
+本节描述 GDM 可用的辅助功能配置选项。
+GDM 辅助功能对话框和 Gconf 键
+登录界面的 GDM 欢迎面板显示一个辅助功能图标。点击这个图标，打开 GDM 辅助功能对话框。在 GDM 辅助功能对话框中，有一列复选框，用户可以启用或禁用相关的辅助选项。
+复选框对应屏幕键盘、屏幕放大镜和屏幕阅读器辅助工具作用于三个 GConf 键，这在本文档的下一节中讲述。通过启用或禁用这些复选框，相关联的 GConf 键设置为“true”或“false”。当 GConf 键设为 true，辅助工具关联这些 GConf 键启动，当 GConf 键设为 false，辅助工具关联这些 GConf 键禁用。这些 GConf 键在用户登录后，不会自动重置为默认状态。所以，上次 GDM 登录的会话中的辅助工具，在下次登录会话时会自动运行启动。
+GDM 辅助功能对话框中的其他的复选框没有对应的 GConf 键，因为没有启动额外的程序来提供这些辅助功能特性。其他选项对应 Xserver 对应的辅助功能特性，其在 GDM 会话中一直运行。
+辅助功能 GConf 键
+GDM 提供如下的 GConf 键来控制它的辅助功能：
+GDM 配置键
+/desktop/gnome/interface/accessibility
+控制辅助功能设施是否由 GDM 图形界面启动。这被许多辅助功能程序的工作所需要。
+/desktop/gnome/applications/at/screen_magnifier_enabled
+如果设置了，链接到 GConf 键的辅助工具将随着 GDM 图形界面程序启动。默认这是一个屏幕放大镜程序。
+/desktop/gnome/applications/at/screen_keyboard_enabled
+如果设置了，链接到 GConf 键的辅助工具将随着 GDM 图形界面程序启动。默认这是一个屏幕键盘程序。
+/desktop/gnome/applications/at/screen_reader_enabled
+如果设置了，链接到 GConf 键的辅助工具将随着 GDM 图形界面程序启动。默认这是一个屏幕阅读程序。
+链接 GConf 键到辅助工具
+对于 screen_magnifier_enabled, screen_keyboard_enabled 和 screen_reader_enabled GConf 键，要启动的辅助工具依赖于位于 GDM 自启动文件夹的桌面项文件，将在本手册的“自启动配置”一节中讲述。在 GDM 自启动文件夹中的任何桌面项文件，都能够通过 AutostartCondition 指定 GConf 键来链接到它们。桌面项文件中的 AutostartCondition 精确行应该是下列之一：
+AutostartCondition=GNOME /desktop/gnome/applications/at/screen_keyboard_enabled
+AutostartCondition=GNOME /desktop/gnome/applications/at/screen_magnifier_enabled
+AutostartCondition=GNOME /desktop/gnome/applications/at/screen_reader_enabled
+当一个辅助功能键是 true，那么所有在 GDM 自启动桌面项文件中，关联到这个键的程序都会启动(除非在那个桌面项文件中 Hidden key 也设为 true)。单一的 GConf 键甚至可以启动多个辅助工具，如果有多个 GDM 自启动文件夹里的桌面项文件用这个AutostartCondition。
+修改辅助工具配置的例子
+例如，如果 GOK 与 GNOME 一起分发，并作为默认的屏幕键盘，那么这可能被一个不同的程序所替换，如果想要这么做的话。要用键盘程序“onboard”替换 GOK，并且额外还激活辅助工具“mousetweaks”支持悬停点击，那么就需要下面的配置项。
+为 onboard 创建一个桌面项文件，再为 mousetweaks 创建另一个，例如 onboard.desktop 和 mousetweaks.desktop。这些文件必须放在 GDM 自启动文件夹，格式要求在本文档的“自启动配置”一节里解释。
+下边是作为例子的
+[Desktop Entry]
+Encoding=UTF-8
+Name=Onboard 屏幕键盘
+Comment=使用屏幕键盘
+TryExec=onboard
+Exec=onboard --size 500x180 -x 20 -y 10
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=GNOME;GTK;Accessibility;
+AutostartCondition=GNOME /desktop/gnome/applications/at/screen_keyboard_enabled
+下边是一个作为例子的
+[Desktop Entry]
+Encoding=UTF-8
+Name=模拟鼠标点击
+Comment=通过悬停指针来执行鼠标点击
+TryExec=mousetweaks
+Exec=mousetweaks --enable-dwell -m window -c -x 20 -y 240 
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=GNOME;GTK;Accessibility;
+AutostartCondition=GNOME /desktop/gnome/applications/at/screen_keyboard_enabled
+注意 AutostartCondition 一行，是为屏幕键盘将全部桌面项文件链接到 GConf 键。
+要在启动时禁用 GOK，用于 GOK 屏幕键盘的桌面项文件必须删除或禁用。否则 onboard 和 GOK 将同时启动。这可以通过删除 GDM 自启动文件夹中的 gok.desktop 文件，或者在 gok.desktop 文件中添加“Hidden=true”。
+经过这些改变，当用户在 GDM 会话中激活屏幕键盘时，GOK 将不再会运行，而 onboard 和 mousetweaks 会取代它启动。
+通用会话设置
+GDM 欢迎程序使用一些与您桌面会话中相同的框架程序，因而，一些 GConf 设置会相互影响，对于这些设置，欢迎程序会使用默认值，除非它被：1) GDM 的安装强制策略覆盖，2) 系统强制策略覆盖。GDM 安装时用它自己的强制策略为了安全锁定了一些设置。
+GNOME 设置守护进程
+GDM 启用了 gnome-settings-daemon 的下列插件：a11y-keyboard, background, sound, xsettings。
+他们负责例如背景图片，字体和主题设置，声音事件等。
+也可以使用 GConf 禁用插件。例如，如果您想禁用声音插件，就可以不设置下边这个键：
+GDM 会话配置
+GDM 会话指定使用 FreeDesktop.org Desktop Entry Specification，可以在这找到参考：
+默认情况，GDM 将桌面项文件安装在
+可以通过编辑桌面项文件并添加一行
+GDM 桌面项文件支持 GDM-specific 扩展，一个叫“X-GDM-BypassXsession”的键，如果这它没有在桌面项文件中指定，默认值是“false”。如果这个键指定为“true”，那么在启动用户会话时，GDM 将直接启动桌面项文件中的“Exec”键指定的程序。将不通过
+GDM 用户会话和语言配置
+用户选择的默认会话和语言保存在
+
+
+[Desktop]
+Session=gnome
+Language=cs_CZ.UTF-8
+GDM 命令
+GDM Root 用户命令
+GDM 包在
+
+
+-?, --help
+给出命令行选项的一个简单概述。
+--fatal-warnings
+使所有的警告都可以造成 GDM 退出。
+--timed-exit
+30秒之后退出，对调试有用。
+--version
+显示 GDM 守护进程的版本。
+
+
+
+
+
+
+疑难解答
+这一节讨论对了解 GDM 工作有用的小提示。通常，如果您使用 GDM 出现问题，您可以提交一个错误报告，或者发送邮件到 gdm-list 邮件列表，相关信息可以参阅一下本文档介绍一节内容。
+如果 GDM 没有正确地运行，显示调试信息总是一个不错的主意。要启用调试，在
+GDM 不启动
+有许多问题可能会导致 GDM 启动失败，这一节讨论一些普通问题，以及如何在 GDM 启动中跟踪一个错误。一些问题将会使 GDM 返回一个错误消息或对话框，当它试图启动的时候，但若是 GDM 没有提示就失败了，那么跟踪错误就比较困难。
+首先确保 Xserver 配置正确，GDM 配置文件在 [server-Standard] 小节里包含一个启动 Xserver 的命令。验证这个命令可以在您系统上工作，从控制台里运行这个命令应该可以启动 Xserver，如果启动失败，那么问题可能出在您的 Xserver 配置文件。访问 Xserver 的错误日志，寻找这个错误出现的可能原因。错误也可能是您的 Xserver 需要其他的命令行选项。如果是这样，那么就在 GDM 配置文件中设置 Xserver 命令，以便它正确运行在您的系统上。
+还要确保
+许可证
+本程序是自由软件；您可以在自由软件基金会发布的
+本程序的发布是希望它能够对你有所帮助，但是没有任何保证；包括商业适用性的默示担保以及特定目的适用性。查阅
+Free Software Foundation, Inc.
+
+link
+对于本文档的复制、分发和/或修改必须遵循自由软件基金会 (Free Software Foundation) 发布的 GNU 自由文档许可证 (GFDL) 版本 1.1 或更高版本，该许可证没有固定的部分、没有封面和背页文本。您可以在
+Martin
+K.
+Petersen
+mkp@mkp.net
+George
+Lebl
+jirka@5z.com
+Brian
+Cameron
+1998
+1999
+Martin K. Petersen
+2001
+2003
+2004
+George Lebl
+Red Hat, Inc.

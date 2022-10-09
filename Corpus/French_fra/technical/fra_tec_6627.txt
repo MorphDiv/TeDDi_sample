@@ -1,0 +1,1550 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# ISO_6393:	fra
+# year_composed:	NA
+# year_published:	2014
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+@@image: 'media/window.png'; md5=eb0cde3530978619c25bddfaeb453345
+Fenêtre
+Tiffany Antopolski
+tiffany.antopolski@gmail.com
+2012
+Une fenêtre de niveau supérieur qui peut contenir d'autres éléments graphiques
+Fenêtre
+La plus simple Gtk.Application
+Utilisez
+Dans cet exemple, les éléments suivants sont utilisés :
+Gtk.Application
+L'élément graphique
+L'énumération
+La méthode
+border_width
+window_position
+Marta Maria Casetti
+mmcasetti@gmail.com
+Une application Gtk+ minimale.
+Utilisez
+GtkApplication
+GtkWindow
+JavaScript
+Taryn Fox
+jewelfox@fursona.net
+Une fenêtre de niveau basique qui peut contenir d'autres éléments graphiques
+Une GtkApplication minimale
+Utilisez
+Dans cet exemple, les éléments suivants sont utilisés :
+Gtk.Window
+Fenêtre
+Utilisez
+Susanna Huhtanen
+ihmis.suski@gmail.com
+Bibliothèque locale geoNames
+Dans cette partie du guide nous allons construire la bibliothèque locale geoNames en utilisant des appels asynchrones. Dans cet exemple, les informations météorologiques sont récupérés sur geonames.org et l'application utilise les
+Bibliothèque locale pour obtenir la météo
+Création de la fonction geoNames
+Méthodes pour geoNames
+geonames.js
+Pour cela, nous avons besoin d'un nouveau fichier qui sera notre bibliothèque locale.
+Dès les premières lignes, nous importons et initialisons les bibliothèques dont nous avons besoin dans cette bibliothèque locale. « Soup » prend en charge toutes les requêtes que nous devons faire avec http.
+Création de la fonction GeoNames
+Ici, nous créons la fonction GeoNames qui prendra en charge l'obtention de la météo pour nous. Le JavaScript nous permet de créer des fonctions qui, au départ contiennent peu de code et de les étendre ensuite. Cela se fait à l'intérieur des accolades {} de GeoNames.prototype.
+Méthodes pour GeoNames
+La première méthode de GeoNames est getWeather et la seconde getIcon. Dans getWeather, une requête http est effectuée avec « soup », nous prenons en charge les erreurs puis analysons les informations à partir de la requête vers une forme que nous pouvons utiliser. Dans getIcon, vous comparons tout simplement les résultats obtenus avec getWeather à l'aide de l'instruction switch afin d'obtenir l'icône correspondant au temps actuel. Notre bibliothèque locale est prête et nous pouvons maintenant l'utiliser.
+Voici le code complet pour notre bibliothèque locale. Le fichier principal du programme l'appelle de manière asynchrone.
+Autotools et icônes
+Dans cette partie du guide, nous allons construire les « autotools » et personnaliser les icônes dont nous avons besoin pour que l'application météo fasse partie intégrante de notre bureau. Pour écrire et lancer tous les exemples de code vous-même, vous avez besoin d'un éditeur pour écrire le code, de Terminal et d'un ordinateur sur lequel GNOME 3 ou supérieur est installé. Dans ce guide, nous illustrerons les éléments suivants :
+Autotools
+Icônes personnalisées pour votre application
+Autotools et fichiers nécessaires
+Le fait d'avoir plus d'un seul fichier dans votre dossier rend l'usage d'autotools un peu complexe. Vous avez besoin des fichiers .desktop, de autogen.sh, Makefile.am, configure.ac et d'un nouveau fichier : monapplication.sh.in. Détailler le fichier autotools est un peu compliqué. Vous trouverez plus d'informations dans de nombreuses autres sources,
+weatherapp.desktop
+weatherapp.sh.in
+Makefile.am
+configure.ac
+autogen.sh
+La chose à noter dans ce fichier est que la ligne « Exec » rendra fonctionnel ce fichier « desktop » seulement après avoir exécuté tous les autres « makefiles ». Weatherapp.sh est un petit script créé avec le weatherapp.sh.in.
+Ce fichier est un modèle que le fichier Makefile va créer pour être lancé à partir de .desktop.
+Ceci nécessite un peu plus d'explication. Comparé au Makefile.am de Helloworld, celui-ci a été fortement modifié. Parcourons tous les nouveaux blocs :
+« bin_scripts » sont les fichiers nécessaires pour exécuter votre application. Dans ce cas, les deux premiers fichiers sont les programmes eux-mêmes et le troisième est le script qui lance l'application.
+EXTRA_DIST sont les fichiers qui doivent être distribués.
+le bloc « do_subst » est quelque chose qui a besoin d'être là où il est.
+Après le commentaire « #icons in the application » se trouvent tous les icônes qui sont utilisées par le programme. Pour qu'elles soient utiles, vous devez installer les icônes aux emplacements corrects, ce qui est réalisé par la partie « install-icons ».
+autogen.sh
+Lorsque vous pensez icônes personnalisées, une bonne règle empirique est : souhaitez-vous que cette icône puisse être utilisée autre part ou est-elle privée ? Dans le premier cas (par ex. des icônes dans le fichier desktop qui sont affichées par le shell) alors vous avez besoin de /usr/share/hicolor sinon (par ex. les icônes météo de votre application) /usr/share/$application/bla/bla
+Pour utiliser autotools, vous devez faire quelques modifications à vos fichiers .desktop et Makefile. Dans le fichier desktop, modifiez le nom de l'icône Icon=weather-icon. Dans le fichier Makefile.am, ajoutez ces deux lignes à la fin de votre application #the application icon.
+appicondir=$(datadir)/icons/hicolor/scalable/apps
+appicon_DATA=weather-icon.svg
+Le fichier du programme principal
+Dans cette partie du guide, nous allons construire le fichier du programme principal de l'application météo. Pour écrire et lancer tous les exemples de code vous-même, vous avez besoin d'un éditeur pour écrire le code, de Terminal et d'un ordinateur sur lequel GNOME 3 ou supérieur est installé. Dans ce guide, nous illustrerons les éléments suivants :
+Script de lancement de l'application
+Bibliothèques à importer
+Création de la fenêtre principale de l'application
+Ajout d'une grille et de tous les éléments graphiques nécessaires
+Requête des informations météo de manière asynchrone
+Connexion des signaux au bouton et champ de saisie
+weatherapp.js
+Cette ligne indique comment lancer le script. Elle doit être la première ligne de code et le script doit être exécutable. Pour donner les bonnes permissions, allez dans Terminal et lancer dans le dossier correct la commande : chmod +x nomduscript. Vous pouvez aussi utiliser le gestionnaire de fichiers graphique. Déplacez-vous dans le bon dossier où se trouve votre code, faites un clic-droit sur le fichier, sélectionnez Propriétés, cliquez sur l'onglet Permissions et cochez la case pour permettre l'exécution du fichier comme un programme.
+Afin que le programme fonctionne, vous devez importer une bibliothèque d'introspection GObject à utiliser. Pour faire une interface graphique, nous avons besoin de Gtk. Gtk est importée au début afin de pouvoir l'utiliser partout ensuite. Nous importons également notre propre bibliothèque locale JavaScript geonames afin de pouvoir l'utiliser ici.
+Dans cette section, nous créons la grille que nous allons utiliser pour positionner les éléments graphiques. Tous les boutons, étiquettes et champs de saisie sont initialisés et placés dans la grille. Comme vous pouvez le voir à partir du positionnement des différents éléments graphiques, ils ne sont pas nécessairement en relation avec un seul élément graphique. Pour l'instant, certaines étiquettes n'ont pas de contenu. Le contenu de ces éléments graphiques est appliqué plus tard. Si vous lancez l'application à cet instant, l'interface graphique est prête mais les éléments graphiques ne sont connectés à rien. Pour cela, nous avons besoin de construire d'abord la bibliothèque locale de recherche météorologique puis de récupérer les informations nécessaires de manière asynchrone. Lorsque notre bibliothèque locale est prête, nous pouvons la connecter aux éléments graphiques nécessaires.
+Cette fonction est dédiée à la recherche des informations météo et à la mise à jour des étiquettes et des icônes de manière adéquate. Au début de la fonction, nous récupérons la saisie de l'utilisateur pour la recherche. Ainsi, ici, pour la première fois, nous utilisons notre propre bibliothèque et l'attribuons à la variable GeoNames. Lors de l'attribution de WeatherService, nous lui fournissons la station. La première chose que nous faisons avec GeoNames est la requête météo. Tout ce qui se trouve derrière GeoNames.getWeather(function(error, weather) ne se produit que si nous obtenons un message d'erreur ou des informations météo. Si aucun des deux ne se produit, le reste du programme fonctionne normalement, donc main_Quit fonctionne.
+Connexion des signaux au bouton et champ de saisie.
+Enfin, nous avons les connexions qui permettent à l'application de fonctionner comme il se doit. Nous connectons à la fois le champ de saisie et le bouton afin qu'ils fassent la même chose, obtenir la météo. De cette manière, peu importe que l'utilisateur appuie sur la touche Entrée ou clique sur le bouton de recherche.
+Weatherapp.js
+Le fichier weatherapp.js ressemble à ceci :
+Exécutez-le jusqu'à obtenir tous les fichiers autotools prêts.
+$
+GJS_PATH=`pwd` gjs weatherapp.js
+Utilisez cette commande dans un terminal pendant le développement de votre module. En appelant votre programme de cette manière, il sait où trouver votre JSlibraries personnalisée, dans ce cas geonames.js.
+@@image: 'media/weatherAppJs.png'; md5=1fe859ac4854273d72ea8fc9203639b2
+4 Application météo
+Comment planifier une application qui utilise des appels asynchrones. Les appels asynchrones sont présentés au travers d'une application météo.
+4 Application météo
+Dans cette partie du guide, nous allons construire une application météo utilisant des appels asynchrones. Dans cet exemple, les informations météorologiques sont récupérées sur geonames.org et l'application utilise les
+Organisation de l'interface graphique utilisateur
+Appels asynchrones
+Bibliothèque locale GeoNames
+Après avoir suivi ce tutoriel, vous devriez voir ceci sur votre écran :
+Pour structurer une application pour GNOME 3, vous devez utiliser
+Avec beaucoup de langages de programmation, toutes les opérations sont exécutées de manière synchrone : quand vous exécutez une action, le programme attend qu'elle soit terminée avant de continuer. Cependant, cette procédure est mal adaptée aux interfaces utilisateurs graphiques, car l'application devient inactive pendant ce temps. La méthode asynchrone (async) est donc beaucoup mieux adaptée dans notre cas, car elle ne bloque pas votre interface pour d'autres actions. Elle rend ainsi votre application plus flexible et mieux armée pour affronter des appels plus longs que prévus, ou qui parfois restent bloqués pour une raison ou une autre. Vous pouvez par exemple utiliser cette méthode pour des accès entrée/sortie de fichiers systèmes et des calculs lents en arrière-plan.
+Dans cet exemple, il nous faut obtenir des données de geonames.org. Pendant ce temps, nous voulons que le reste du programme continue à tourner. Si nous utilisons pour cela une application synchrone et que nous n'arrivons pas à avoir une connexion Internet fonctionnelle avec le site geonames.org, nous n'obtiendrons aucune donnée et donc nous n'atteindrons jamais la ligne où l'instruction main_quit() est exécutée. Il faudra alors « tuer » l'application dans Terminal.
+Les différentes parties du programme
+Vala
+Tutoriels, exemples de code et plateforme de démonstrations en vala
+Tutoriels pour les débutants zéro
+Tutoriels pour les débutants zéro
+En suivant ces tutoriels, vous allez apprendre les bases de la programmation d'interfaces utilisateurs avec GTK+.
+Si vous n'avez jamais programmé auparavant, ou si vous n'êtes pas à l'aise avec le concept de programmation orienté sur les objets, il est préférable d'acquérir quelques bases avant toute chose. Vous pourriez par exemple commencer par lire le livre
+Pour lancer les exemples de code :
+Pour lancer les exemples de code :
+Copiez et collez le code dans
+Saisissez dans le terminal :
+python
+Une barre de boutons
+Tutoriels
+Fenêtres
+GtkGrid
+Décorations
+RadioButton
+Affichage d'éléments graphiques
+Boîte de dialogue
+Sélecteurs
+Conteneurs d'agencement
+Barre de défilement
+Élément graphique bouton
+Exercices
+2011
+Michael Hill
+mdhillca@gmail.com
+Licence Creative Commons Paternité-Partage des Conditions Initiales à l'Identique 3.0 Unported
+Contribution à la traduction
+Les
+Il y a de
+Pour commencer à traduire, vous devez
+Vous pouvez discuter avec d'autres traducteurs de GNOME par le canal
+Vous pouvez aussi joindre par courriel l'équipe d'internationalisation en utilisant leur
+@@image: 'media/treeview_simple_liststore.png'; md5=2dc501a2b95b094da985d37b66aee90c
+Élément graphique arborescent
+Gtk.ApplicationWindow
+Gtk.TreeView
+Gtk.TreeView
+Gtk.TreeView
+Gtk.CellRendererText
+Gtk.TreeView
+@@image: 'media/treeview_simple_liststore.png'; md5=2dc501a2b95b094da985d37b66aee90c
+Une simple vue arborescente (Treeview) avec ListStore
+Un élément graphique peut afficher n'importe quelle implémentation de TreeModel (en listes et arborescentes)
+Une simple vue arborescente (Treeview) avec ListStore
+Ce TreeView affiche un ListStore simple avec le signal « changed » de la sélection connecté.
+Gtk.TreeView
+Gtk.ListStore
+Gtk.TreeSelection
+Une simple vue arborescente (Treeview) avec ListStore
+Une simple vue arborescente (Treeview) avec ListStore
+Ce TreeView affiche un ListStore simple avec le signal « changed » de la sélection connecté.
+Gtk.ListStore
+@@image: 'media/treeview_simple_liststore.png'; md5=2dc501a2b95b094da985d37b66aee90c
+Une simple vue arborescente (Treeview) avec ListStore
+Un élément graphique utilisé pour effectuer un choix dans une liste d'éléments
+Une simple vue arborescente (Treeview) avec ListStore
+Conception de l'application
+Dans cet exemple, nous avons utilisé l'élément graphique suivant :
+Création du gestionnaire de signal
+Création de l'interface utilisateur
+Première construction du programme
+Exemples de code
+Gtk.ApplicationWindow
+Gtk.CellRendererText
+Gtk.TreeView
+Gtk.TreeView
+@@image: 'media/treeview_simple_liststore.png'; md5=2dc501a2b95b094da985d37b66aee90c
+Ce TreeView affiche un ListStore simple avec le signal « changed » de la sélection connecté.
+Gtk.CellRendererText
+@@image: 'media/treeview_simple_liststore.png'; md5=2dc501a2b95b094da985d37b66aee90c
+Une simple vue arborescente (Treeview) avec ListStore
+@@image: 'media/textview.png'; md5=049e859ed1af2d7c93d8cb5cfd9f7792
+Bouton
+Un élément graphique séparateur
+Gtk.ApplicationWindow
+Gtk.Toolbutton
+Gtk.Toolbar
+GtkWidget
+Éléments de la collection Gtk
+@@image: 'media/toolbar.png'; md5=f0350855eedf6343952b72d6d906f738
+@@image: 'media/button.png'; md5=8d69efbb3a0d3e043af6139b6492171c
+@@image: 'media/toolbar.png'; md5=f0350855eedf6343952b72d6d906f738
+@@image: 'media/statusbar.png'; md5=eb1aca55315d6cda57b12a5f36058ba8
+@@image: 'media/radiobutton.png'; md5=d115460280d8e41493dd98054b5822a5
+@@image: 'media/toolbar.png'; md5=f0350855eedf6343952b72d6d906f738
+@@image: 'media/toolbar.png'; md5=f0350855eedf6343952b72d6d906f738
+@@image: 'media/image.png'; md5=9416aa74d9d6a857783f7a36338e7a02
+Une barre de boutons
+GtkApplication
+Étiquette
+SpinButton
+append
+OpenSuSE
+RadioButton
+Fenêtre
+Gtk.Toolbar
+Gtk.Toolbutton
+Gtk.Stock
+Une barre de boutons
+Création de l'interface utilisateur
+Gtk.ApplicationWindow
+GtkGrid
+Structure du programme
+Gtk.Toolbar
+Gtk.Toolbar
+La barre d'outils peut contenir soit du texte, soit des icônes de la collection. Dans cet exemple, nous utilisons les icônes de la collection. Cet exemple possède la fonction plein écran.
+Cet exemple utilise SimpleActions (fenêtre et application). Les actions applications peuvent être facilement ajoutées au menu « Applications ».
+Gtk.Toolbar
+Gtk.ApplicationWindow
+Gtk.ToolButton
+Gtk.Toolbutton
+GtkApplication
+JavaScript
+Une barre d'outils
+Gtk.ToolButton
+Éléments de la collection Gtk
+Gdk.WindowState
+@@image: 'media/togglebutton.png'; md5=791e062613d4f9bd5936390b0aa18448
+ToggleButton
+Un bouton qui mémorise l'état
+ToggleButton
+Quand ce ToggleButton est activé, l'indicateur d'activité tourne.
+Gtk.ToggleButton
+ToggleButton
+Gtk.ApplicationWindow
+GtkToggleButton
+GtkSpinner
+ToggleButton
+Dans cet exemple, nous avons utilisé l'élément graphique suivant :
+Une barre de boutons
+Gtk.Grid
+Gtk.Spinner
+ToggleButton
+Monica Kochofar
+monicakochofar@gmail.com
+GtkToggleButton
+@@image: 'media/textview.png'; md5=049e859ed1af2d7c93d8cb5cfd9f7792
+TextView
+L'élément graphique qui affiche un GtkTextBuffer
+Élément graphique arborescent
+En appuyant sur » Entrée », nous créons une nouvelle ligne.
+Mais nous pouvons aussi aller à la ligne en écrivant une longue phrase (la césure se fait entre deux mots).
+Si nous avons un loooooooooooooooooooooooooooooooooooong
+Ceci est un exemple de Gtk.TextView.
+GtkTextBuffer
+GtkTextView
+GtkScrolledWindow
+Gtk.Widget
+Gtk.ButtonsType
+TextView
+L'élément graphique qui affiche un GtkTextBuffer
+TextView
+Ceci est un exemple de Gtk.TextView.
+Mais nous pouvons aussi aller à la ligne en écrivant une longue phrase (la césure se fait entre deux mots).
+Si nous avons un loooooooooooooooooooooooooooooooooooong
+(long comme ça)
+mot, une barre de défilement horizontale apparaît.
+Gtk.ApplicationWindow
+Élément graphique arborescent
+GtkTextView
+GtkTextBuffer
+GtkTextTags
+GtkScrolledWindow
+Énumérations standards
+@@image: 'media/textview.png'; md5=049e859ed1af2d7c93d8cb5cfd9f7792
+JavaScript
+Éditeur de texte multiligne
+Dans cet exemple, nous avons utilisé l'élément graphique suivant :
+Début du plaisir
+Création de l'interface utilisateur
+Gtk.Button
+Gtk.Label
+Gtk.RadioButton
+TextView
+Si nous avons un loooooooooooooooooooooooooooooooooooong
+Conteneurs d'agencement
+@@image: 'media/switch_off.png'; md5=211a2962708800697ad5373dcc86ad6d
+@@image: 'media/switch_on.png'; md5=95e8769f758c2d95ace0fa8ecf30b29d
+Interrupteur
+Un bouton du style « interrupteur électrique »
+Interrupteur
+Cet interrupteur bascule le titre.
+Gtk.Switch
+Cet interrupteur fait apparaître et disparaître le titre.
+Gtk.ApplicationWindow
+GtkSwitch
+GtkLabel
+@@image: 'media/switch_on.png'; md5=95e8769f758c2d95ace0fa8ecf30b29d
+JavaScript
+Dans cet exemple, nous avons utilisé l'élément graphique suivant :
+Création de l'interface utilisateur
+Début du plaisir
+GMenu
+GSimpleAction
+GtkImage
+Interrupteur
+Cet interrupteur bascule le titre de la fenêtre.
+Définition des notes
+Documentation complémentaire
+@@image: 'media/statusbar.png'; md5=eb1aca55315d6cda57b12a5f36058ba8
+Statusbar
+Rapporte les messages d'information d'importance mineure pour l'utilisateur
+Statusbar
+Cette statusbar vous indique ce qui se passe.
+Gtk.Statusbar
+Statusbar
+Cette statusbar vous informe si vous cliquez sur le bouton ou si vous appuyez sur n'importe quelle touche (et sur quelle touche).
+GtkStatusbar
+Gdk - Key Values
+@@image: 'media/statusbar.png'; md5=eb1aca55315d6cda57b12a5f36058ba8
+JavaScript
+Dans cet exemple, nous avons utilisé l'élément graphique suivant :
+Début du plaisir
+Création du gestionnaire de signal
+Gtk.Label
+Gtk.Label
+@@image: 'media/statusbar.png'; md5=eb1aca55315d6cda57b12a5f36058ba8
+Statusbar
+GtkStatusbar
+@@image: 'media/spinner.png'; md5=d04f2d81f1d72c6c2f97e8729947dfed
+Indicateur d'activité
+Un indicateur d'activité animé
+Indicateur d'activité
+Cet indicateur d'activité s'arrête et démarre en appuyant sur la barre d'espace.
+Gtk.Widget
+Gdk.keyval_name
+Indicateur d'activité
+Valeurs de touche
+JavaScript
+Indicateur d'activité
+@@image: 'media/spinbutton.png'; md5=993cbb7d9bd271a329727a926195712a
+SpinButton
+Renvoie un entier ou un nombre flottant.
+SpinButton
+Choisissez un nombre en le saisissant ou en cliquant sur les boutons -/+ !
+GtkSpinButton
+SpinButton
+Renvoie un entier ou un nombre flottant de l'utilisateur.
+Gtk.ApplicationWindow
+GtkSpinButton
+GtkAdjustment
+@@image: 'media/spinbutton.png'; md5=993cbb7d9bd271a329727a926195712a
+SpinButton
+Dans cet exemple, nous avons utilisé l'élément graphique suivant :
+Début du plaisir
+Création du gestionnaire de signal
+GtkAdjustment
+SpinButton
+Renvoie un entier ou un nombre flottant.
+quelques concepts de base sur la programmation
+@@image: 'media/textview.png'; md5=049e859ed1af2d7c93d8cb5cfd9f7792
+@@image: 'media/fedora.png'; md5=19add55f4349fd9e90f3a50b344ba626
+Création des sons avec GStreamer
+@@image: 'media/separator.png'; md5=8769b27662ce5c77f99e9ce33751a21a
+Séparateur
+Un élément graphique séparateur
+Séparateur
+Un séparateur horizontal et vertical.
+GtkSeparator
+@@image: 'media/scrolledwindow.png'; md5=697bb3205d5c4fb0b4ea8db435843157
+ScrolledWindow
+Ajoute des barres de défilement à son élément graphique enfant
+ScrolledWindow
+Une image dans une fenêtre avec barres de défilement.
+ScrolledWindow
+Gtk.ApplicationWindow
+GtkImage
+@@image: 'media/scale.png'; md5=462c52a53b773cb9e8c62c646bf88452
+Exemple de code Vala
+Un élément graphique « glissière » pour choisir une valeur dans un intervalle
+Échelle
+Faites glisser les échelles !
+GtkScale
+Gtk.ButtonsType
+Gtk.LinkButton
+Python
+Gtk.ApplicationWindow
+GtkScale
+@@image: 'media/checkbutton.png'; md5=7921a6812c87dd2b3781f4fad241e858
+JavaScript
+Dans cet exemple, nous avons utilisé l'élément graphique suivant :
+Création du gestionnaire de signal
+@@image: 'media/scale.png'; md5=462c52a53b773cb9e8c62c646bf88452
+Échelle
+@@image: 'media/record-collection.png'; md5=2d645997687ed5aacd36aafafc16e072
+3 Discothèque
+Création d'une petite base de données pour trier votre discothèque
+Projet de Documentation GNOME
+gnome-doc-list@gnome.org
+Johannes Schmid
+jhs@gnome.org
+3 Discothèque
+Dans ce tutoriel, vous allez apprendre :
+comment vous connecter à une base de données en utilisant « libgda »
+comment insérer et parcourir des enregistrements dans une table de base de données
+Introduction
+Cet exemple utilise le langage Javascript. Nous allons vous montrer comment vous connecter à une base de données et l'utiliser à partir d'un programme GTK en utilisant la bibliothèque GDA (GNOME Data Access). Vous devez bien sûr avoir déjà installé cette dernière.
+La bibliothèque GDA (GNOME Data Access) vous permet d'accéder de manière universelle à différentes sortes et types de sources de données, depuis les plus traditionnels systèmes de bases de données relationnelles, jusqu'à des sources aussi diverses qu'un serveur de messagerie, un répertoire LDAP, etc. Pour de plus amples informations et pour une documentation et l'API complète, consultez le
+Bien que la plus grosse partie du programme se réfère à l'interface utilisateur (GUI), nous allons orienter notre tutoriel sur les fonctions bases de données (avec des explications sur certaines autres fonctions que nous jugeons pertinentes). Pour de plus amples informations sur les programmes GNOME en Javascript, consultez le tutoriel
+Création d'un projet dans Anjuta
+Avant de commencer à programmer, vous devez ouvrir un nouveau projet dans Anjuta. Ceci crée tous les fichiers qui vous sont nécessaires pour construire et exécuter votre programme plus tard. C'est aussi utile pour tout regrouper en un seul endroit.
+Lancez Anjuta et cliquez sur
+Cliquez sur l'onglet
+Cliquez sur
+Structure du programme
+Cet exemple est une application GTK simple (avec une seule fenêtre) pouvant insérer des enregistrements dans une table de base de données et également consulter tous les enregistrements de cette table. Cette table possède deux champs :
+Début du plaisir
+Commençons par examiner le squelette du programme :
+Lignes 1‒4 : importations initiales. Faites surtout attention à la ligne 3, qui commande à Javascript l'importation de la bibliothèque GDA, la cible de ce tutoriel.
+Lignes 6‒17 : définition de la classe
+Lignes 19‒23 : lancement de l'application.
+Conception de l'application
+Examinons la méthode
+Lignes 22 et 27 : création des 2 entrées (pour les 2 champs) dans lesquelles l'utilisateur saisit les choses à insérer dans la base de données.
+Lignes 31‒34 : création du bouton « Insert ». Le signal
+Ligne 39 : création de l'élément graphique (
+Ligne 44 : création de l'étiquette où nous affichons le nombre d'enregistrements dans la table. Au début, elle est vide et est mise à jour ultérieurement.
+Connexion à la base de données et initialisation
+Le code permettant de se connecter à la base de données est dans la méthode
+Lignes 2‒3 : création de l'objet
+
+
+Si le fournisseur n'est pas reconnu par GDA, ou si la chaîne de connexion n'est pas complète, la ligne 2 provoque une exception. Donc, en pratique, il faut gérer cette exception grâce à l'instruction JavaScript
+Ligne 4 : ouverture de la connexion. Pour le fournisseur SQLite, si la base de donnée n'existe pas, elle est créée à cette étape.
+Lignes 6‒10 : tentative de faire une simple instruction « select » pour vérifier que la table existe (ligne 7). Si elle n'existe pas (parce que la base de données vient juste d'être créée), cette instruction provoque une exception qu'il faut gérer grâce au bloc
+Pour exécuter les commandes SQL ci-dessus, nous utilisons les fonctions globales de GDA,
+À ce niveau, nous avons configuré la base de données et cette dernière est fonctionnelle.
+Sélection
+Après connexion à la base de données, le constructeur de notre exemple appelle la méthode
+Ligne 2 : la commande
+Ligne 3 : création d'un objet
+Ligne 7 : Itération sur tous les enregistrements en les récupérant à l'aide de l'objet
+Lignes 8‒9 : nous faisons deux choses dans chaque ligne :
+Utilisez la méthode
+La méthode
+Ligne 11 : concaténation des deux chaînes pour former une seule ligne de texte en les séparant par
+Ligne 14 : à la fin de la boucle, tous les enregistrements sont formatés dans la variable
+Ligne 15 : affichage du nombre d'enregistrements dans la table avec la fonction
+Insertion
+Bien, nous savons comment nous connecter à une base de données et comment sélectionner des lignes dans une table. Il est temps maintenant d'apprendre à faire une insertion à l'aide de la commande
+Nous avons appris comment utiliser les fonctions bien pratiques
+Lignes 2‒3 : vérification du bon renseignement par l'utilisateur de tous les champs. Le code de la méthode privée
+Ligne 5 : la façon la plus rapide pour faire l'insertion à l'aide de la commande
+Ligne 7 : création de l'objet
+Ligne 8 : détermination du nom de la table sur laquelle l'instruction construite va agir (le code
+Lignes 9‒10 : détermination des champs et de leurs valeurs qui font partie de l'instruction. Le premier argument est le nom du champ (comme dans la table). Le second est la valeur pour ce champ.
+Ligne 11 : fabrication de l'objet
+Ligne 12 : enfin, exécution de l'instruction SQL (
+Ligne 14 : effacement des champs « id » et « name » à l'écran. Le code de la méthode privée
+Ligne 15 : mise à jour de l'affichage à l'écran en faisant un nouveau
+Vous pouvez aussi faire usage de paramètres pour construire l'instruction. En utilisant les objets
+Exécution de l'application
+Tout le programme nécessaire doit maintenant être en place, donc essayez de l'exécuter. Vous disposez maintenant d'une base de donnée pour votre discothèque !
+Implémentation de référence
+Si vous rencontrez des difficultés avec ce tutoriel, comparez votre programme à ce
+@@image: 'media/radiobutton.png'; md5=d115460280d8e41493dd98054b5822a5
+RadioButton
+Un choix entre plusieurs CheckButtons.
+RadioButton
+Ces boutons radio signalent leur activité dans le terminal.
+RadioButton
+Boutons exclusifs.
+Trois boutons radio. Vous pouvez voir dans le terminal s'ils sont activés ou non.
+Gtk.ApplicationWindow
+GtkRadioButton
+@@image: 'media/radiobutton.png'; md5=d115460280d8e41493dd98054b5822a5
+RadioButton
+Début du plaisir
+RadioButton
+Un choix entre plusieurs boutons de vérification.
+Ces boutons de radio signalent leur activité dans le terminal.
+Python
+Tutoriels, exemples de code et plateformes de démonstration en Python
+@@image: 'media/progressbar.ogv'; md5=36deab3dd4b5be968828fa2ef416d612
+ProgressBar
+Un élément graphique qui matérialise visuellement la progression
+ProgressBar
+Gtk.ProgressBar
+GLib.Timeout
+@@image: 'media/progressbar.ogv'; md5=36deab3dd4b5be968828fa2ef416d612
+ProgressBar
+Un élément graphique qui matérialise visuellement la progression.
+L'appui sur n'importe quelle touche démarre et arrête la barre de progression (ProgressBar).
+Pour démarrer ou arrêter cette barre de progression, appuyez sur n'importe quelle touche.
+GtkProgressBar
+GLib - La boucle de l'événement principal
+ProgressBar
+Une barre qui s'anime pour indiquer la progression
+GLib
+ProgressBar
+GLib.Timeout
+@@image: 'media/photo-wall.png'; md5=f19590d97e8ec029cda3c44b769c11cd
+@@image: 'media/photo-wall-focused.png'; md5=9f1ceecf3a28c1e468597b093a10cbae
+Mur de photos
+Un visionneur d'images avec Clutter
+Chris Kühl
+chrisk@openismus.com
+Mur de photos
+Dans cet exemple, nous allons fabriquer un visionneur d'images simple avec Clutter. Vous apprendrez :
+comment dimensionner et positionner les
+comment placer une image dans un
+comment faire des transitions simples avec la structure d'animation de Clutter,
+comment faire réagir les
+et comment récupérer des noms de fichier depuis un répertoire.
+Clutter est une bibliothèque pour créer des interfaces utilisateur dynamiques utilisant OpenGL pour l'accélération matérielle. Cet exemple montre une petite partie, mais néanmoins centrale, de la bibliothèque Clutter pour écrire un programme simple, mais sympathique, de visionneur d'images.
+Pour nous aider dans cette tâche, nous utilisons également quelques autres éléments classiques de GLib. Parmi les plus importants, nous utiliserons
+Cliquez sur l'onglet
+Assurez-vous d'avoir désactivé
+Activez
+Cliquez sur
+Un aperçu du mur de photos
+Notre visionneur d'images vous montre un mur de photos.
+Quand une image est cliquée, elle est animée pour remplir la zone d'affichage. Lorsque la photo qui possède le focus est cliquée, elle retourne à sa position d'origine en utilisant une animation qui dure également 500 millisecondes.
+Configuration initiale
+La partie de code suivante contient beaucoup de définitions et de variables qui sont utilisées dans les sections suivantes. Servez-vous en comme référence. Copiez ce code au début du fichier
+Immersion dans le code
+Nous commencerons par analyser la fonction
+Ligne 4 : configuration de
+Ligne 7 : vous devez initialiser Clutter. Attention, si vous oubliez de le faire, vous aurez de très étranges messages d'erreur. Vous êtes prévenu.
+Lignes 9‒11 : ici nous obtenons le
+Un
+Ligne 13 : ici nous appelons notre fonction pour obtenir les chemins des fichiers image. Nous l'examinerons dans un instant.
+Ligne 15-27 : c'est l'endroit où nous paramétrons les
+Ligne 29 : affichage de « stage » et de
+Ligne 32 : démarrage de la boucle principale de Clutter.
+Mise en place de nos acteurs image
+Dans Clutter, un acteur est l'élément visuel le plus élémentaire. En gros, tout ce que vous voyez est un acteur.
+Dans cette section, nous allons regarder plus en détail la boucle utilisée pour paramétrer les
+Ligne 5 : ici nous voulons obtenir le chemin à la
+Ligne 6 : c'est ici que nous créons réellement le
+Ligne 7 : nous regarderons cette fonction dans une section ultérieure.
+Ligne 8 : cela ajoute le
+Ligne 9 : cela ajoute notre
+Il est intéressant de noter que nous ajoutons les
+Chargement des images
+Oublions un court instant Clutter pour regarder comment nous pouvons obtenir les noms des fichiers contenus dans notre répertoire d'images.
+Lignes 5 et 12 : cela ouvre notre répertoire ou, en cas d'erreur, quitte la fonction après affichage d'un message d'erreur.
+Ligne 14-23 : la première ligne récupère un nouveau nom de fichier à partir du
+Mise en place des acteurs
+Examinons maintenant le choix de la taille et du positionnement des
+Ligne 7 : le fait de définir un acteur comme « reactive » signifie qu'il réagit aux événements, au
+Ligne 9-12 : nous connectons maintenant l'événement
+À cet instant, nous obtenons un mur d'images qui sont prêtes à être regardées.
+Réaction aux clics
+Ligne 1-4 : nous devons être sûr que notre fonction de rappel correspond à la signature requise par notre signal
+Quelques mots sur les arguments que nous n'utilisons pas dans cet exemple. L'événement
+
+Ligne 7 : nous définissons un drapeau de type « static » pour enregistrer l'état dans lequel nous sommes : en mode mur ou en mode focus. Nous commençons en mode mur donc aucune image ne possède le focus, par conséquent, nous paramétrons le drapeau à
+Ligne 9 : cette ligne de code exécute une fonction personnalisée
+Ligne 13-19 : ces lignes sont atteintes lorsqu'une image possède actuellement le focus et que nous voulons retourner en mode mur. La fonction
+L'adresse du
+Le mode d'animation à utiliser. Ici nous utilisons
+La durée de l'animation en millisecondes. J'ai choisi 500 ms pour cet exemple.
+Les arguments restants sont des paires propriété/valeur. Ici nous voulons définir la valeur
+Le dernier argument doit toujours être
+La propriété
+« Depth » détermine aussi quels
+Ligne 24 : ces lignes sont atteintes lorsque nous sommes actuellement dans l'état mur et que nous allons donner le focus à un
+Ligne 25 : le fait de paramétrer la propriété
+Ligne 27-33 : similaire au bloc de code ci-dessus. Notez que nous paramétrons l'altitude afin de placer l'acteur devant les autres images.
+Ligne 37 : ici nous basculons le drapeau
+Comme mentionné ci-dessus, les
+Rappelez-vous cependant que pour recevoir des événements les
+Ce qui suit est la fonction bien commode transmise à
+Ligne 2-5 : la signature de cette fonction nécessite deux
+Ligne 7 : en fonction de la valeur booléenne transmise, le
+Construction et lancement de l'application
+Le programme complet devrait maintenant être prêt à fonctionner. Tout ce dont vous avez besoin est de quelques images à charger. Par défaut, les images sont chargées à partir d'un répertoire
+Après avoir fait cela, cliquez sur
+Si vous ne l'avez pas déjà fait, choisissez l'application
+Si vous rencontrez des difficultés avec ce tutoriel, comparez votre programme à ce
+@@image: 'media/window.png'; md5=eb0cde3530978619c25bddfaeb453345
+Python
+Gtk.Label
+Gtk.ApplicationWindow
+Gtk.Label
+Gtk.ApplicationWindow
+Gtk.ApplicationWindow
+Gtk.ApplicationWindow
+Gtk.ApplicationWindow
+Gtk.ApplicationWindow
+Gtk.ApplicationWindow
+Gtk.ApplicationWindow
+Gtk.ComboBox
+Gtk.CellRendererText
+@@image: 'media/messagedialog.png'; md5=1956288274018e2386d9cba96a2101de
+Boîte de dialogue de message
+Une fenêtre de message
+Boîte de dialogue de message
+Une boîte de dialogue de message modal qui peut faire exploser le monde.
+Gtk.ResponseType
+Gtk.MessageDialog
+Gtk.DialogFlags
+Gtk.MessageType
+Gtk.ButtonsType
+Boîte de dialogue de message
+Une boîte de dialogue qui affiche les messages sur le terminal en fonction de vos choix.
+Gtk.MessageDialog
+Gtk.Dialog
+GtkApplication
+Boîte de dialogue de message
+Une fenêtre de message modale
+Dans cet exemple, nous avons utilisé l'élément graphique suivant :
+Conception de l'application
+Création du gestionnaire de signal
+Une barre de boutons
+Boîte de dialogue de message
+GtkApplication
+@@image: 'media/message-board.ogv'; md5=beb80c4538776dc2cdd26c95abea5027
+Visionneur de messages
+Un programme simple utilisant WebKitGTK+ et DOM.
+Shaun McCance
+shaunm@gnome.org
+2010
+Visionneur de messages
+comment afficher une page Web avec Webkit,
+comment manipuler le contenu d'une page Web en utilisant les fonctions DOM de WebKit.
+Ce tutoriel suppose que vous soyez familier avec le langage de programmation C et que vous possédiez les bases nécessaires à la compréhension de GTK+, y compris comment générer et placer des éléments graphiques et comment associer des fonctions de rappel à des signaux. Consultez
+La plateforme GNOME inclut WebKitGTK+, bâti sur le puissant environnement HTML WebKit. WebKit est utilisé partout dans GNOME, pas seulement pour afficher des pages Web sur internet, mais aussi pour créer de riches interfaces utilisateur qui peuvent être facilement stylisées par CSS.
+Dans ce tutoriel vous allez créer un simple visionneur de messages en utilisant Webkit. Ce visionneur de messages vous permettra de saisir du texte et de l'ajouter à une liste de messages en HTML. Avant de débuter, vous devez créer un projet dans Anjuta.
+Dans Anjuta, cliquez sur
+Sélectionnez
+Renseignez les champs de la page
+Désactivez l'option
+Vous devez indiquer à Anjuta que vous utilisez WebKitGTK+ dans ce projet. Sur la page
+Une fois terminé avec l'assistant de nouveau projet, ouvrez le fichier
+#include &lt;webkit/webkit.hgt;
+Vérifiez que tout fonctionne en construisant ce que vous avez déjà. Cliquez sur
+Vous pouvez maintenant lancer le programme. Cliquez sur
+Mise en forme de votre fenêtre et de votre affichage Web
+Maintenant que vous savez afficher une fenêtre, vous pouvez commencer à travailler avec WebKit. Pour les besoins de ce tutoriel, vous allez créer un champ texte ainsi qu'une vue Web et les placer dans une fenêtre. Trouvez la fonction
+Commencez par générer un objet
+Ensuite créez une boîte verticale et ajoutez-la à la fenêtre. Une fenêtre ne peut contenir qu'un seul élément graphique enfant, il faut donc utiliser une boîte pour en ajouter plusieurs. Le second argument de
+Il vous faut ensuite générer un objet
+Avant d'ajouter une vue Web, vous devez créer une fenêtre avec barres de défilement pour la contenir. Cette fenêtre fera apparaître des barres de défilement à droite et en bas si nécessaire, évitant ainsi à votre vue Web de remplir tout votre écran. Cette fois, transmettez
+Enfin, vous créez un
+WEBKIT_WEB_VIEW (view)
+La vue en elle-même. Comme
+"lt;htmlgt;lt;bodygt;lt;/bodygt;lt;/htmlgt;"
+Le plus simple fichier HTML que vous pourriez écrire.
+« text/html »
+Le type MIME du contenu que vous avez fourni. Dans ce cas vous utilisez du HTML simple.
+« UTF-8 »
+Le type de codage de caractères du contenu que vous avez fourni. Bien que vous n'ayez probablement utilisé que des caractères ASCII, c'est une bonne pratique de spécifier UTF-8, car c'est le codage par défaut utilisé dans toute la plateforme GNOME.
+NULL
+L'URI de base. Vous n'en avez pas besoin dans cet exemple, mais vous pourriez fournir un URI
+Chaque fois que vous ajoutez un élément graphique, vous devez appeler
+Enfin, vous devez appeler
+Construisez et exécutez le visionneur de messages une nouvelle fois. Vous devez voir apparaître une fenêtre contenant du texte et une vue Web. Pour l'instant, il ne se passe encore rien, car le champ texte et la vue Web ne savent rien l'un sur l'autre.
+Signaux de connexion
+Maintenant, vous allez faire en sorte que le visionneur de messages
+Vous devez ensuite définir
+La première chose à faire est d'obtenir un objet
+Une fois que vous avez le document, il vous faut obtenir l'élément
+shaunm
+FIXME : est-ce vrai ? est-ce que « query_selector » prend en charge le CSS, le CSSish, ou quoi ?
+Puis, vous créez un nouveau bloc
+Not passing the GError**, but we should give it a quick mention and link to somewhere that explains how GError-handling works.
+Enfin, vous devez ajouter le nouveau bloc
+Le rendre plus joli avec du CSS
+À ce stade, votre programme est tout à fait fonctionnel, mais le résultat pas très joli. Vous pouvez styliser votre affichage avec CSS, comme vous le feriez avec n'importe quelle autre page HTML. Il y a plusieurs façons d'attacher du CSS à votre page : vous pouvez l'ajouter au document HTML initial, vous pouvez l'incorporer dans l'attribut
+Dans ce tutoriel, vous allez ajouter du CSS en utilisant la propriété
+Dans cet exemple, vous n'avez que des blocs
+Pour appliquer le CSS, placez
+g_base64_encode has bad args
+Assurez-vous aussi d'ajouter les déclarations pour les variables
+gchar *tmp, *css;
+Un URI de données commence par
+Le programme ci-dessus code d'abord vos définitions CSS en Base64, puis les combine dans une chaîne constante pour générer un URI de données. La fonction
+Construisez et exécutez à nouveau le programme. Il doit maintenant fonctionner exactement de la même façon qu'à la fin du chapitre précédent, sauf que cette fois, les messages sont joliment stylisés avec une bordure et un gradient discret en arrière-plan.
+En savoir plus
+Le but de ce tutoriel était de vous montrer comment créer une application basique avec GTK+ et WebKit, et également d'afficher un document et de manipuler son contenu. Pour créer une application réelle, vous voudrez probablement en faire un peu plus. Essayez d'ajouter vous-même d'autres fonctionnalités. Voici quelques idées :
+Si vous êtes à l'aise avec CSS, essayez de modifier le style d'affichage du message. Débuter avec le CSS est facile, mais en allant plus loin ça devient un objet plus puissant. Vous allez trouver plein de tutoriels CSS sur internet, et tous sont adaptables à cette application.
+Pour l'instant, vous perdez tous vos messages chaque fois que vous fermez le visionneur de messages. Essayez d'enregistrer le contenu HTML après chaque message et d'ouvrir le fichier enregistré (s'il existe) au démarrage.
+Lien vers une méthode pour obtenir de l'HTML de DOM vers les API GIO.
+Si vous conservez vos messages pendant longtemps, un jour vous allez vous demander quand ils ont été postés. Ajoutez un horodatage à chaque message posté. Créez quelques blocs
+Lien vers « strftime » où autre
+Ce programme conserve les messages pour toujours. Réfléchissez à une façon pour autoriser l'utilisateur à supprimer des messages. Peut-être en les faisant disparaître automatiquement lorsqu'ils sont trop vieux ou quand il y a un nombre défini de messages devant eux. Ou alors en ajoutant un lien à chaque message pour pouvoir le supprimer. Ou encore en redéfinissant le menu contextuel quand vous faites un clic-droit sur un message. Ces fonctions impliquent que vous exploriez davantage encore les API DOM de WebKit.
+@@image: 'media/spinbutton.png'; md5=993cbb7d9bd271a329727a926195712a
+Un élément graphique bouton qui émet un signal quand il est cliqué
+Pour que cela fonctionne, il vous faut avoir installé Gtk3.4 ou supérieur
+Gtk.ApplicationWindow
+JavaScript
+@@image: 'media/statusbar.png'; md5=eb1aca55315d6cda57b12a5f36058ba8
+@@image: 'media/gmenu.c.png'; md5=f305fc3cae8d16d72b734ee53b559e33
+Un élément graphique qui affiche du texte
+Menu
+Ajoutez les lignes suivantes au dessus de la classe
+Mise en place des acteurs
+ApplicationWindow
+Exemples de code
+Sélecteurs
+Implémentation de référence
+Gtk.Widget
+Un élément graphique bouton connecté à une fonction de rappel
+Exemples de code
+@@image: 'media/magic-mirror.png'; md5=8171faea6ed3b6ddac0da084c29e4e22
+4 Miroir magique
+Utilisation de votre webcam comme miroir avec GStreamer et Gtk+
+Daniel G. Siegel
+dgsiegel@gnome.org
+4 Miroir magique
+Votre miroir vient juste de tomber du mur et s'est cassé en mille morceaux. Mais il vous faut un miroir pour vous raser ou pour vous maquiller ! Il ne vous reste que 15 minutes avant d'attraper le bus pour aller au travail. Comment faire ?
+Dans ce tutoriel, nous allons faire un programme qui va vous permettre d'utiliser votre webcam comme miroir. Vous apprendrez comment :
+créer une application GTK+,
+accéder à votre webcam en utilisant GStreamer et intégrer le résultat dans une fenêtre,
+récupérer des photos de votre webcam,
+Vous avez besoin de ce qui suit pour pouvoir suivre ce tutoriel :
+l'installation du paquet
+l'installation des paquets GTK, GStreamer et d'un compilateur Vala,
+des connaissances de base d'un langage de programmation d'objets.magic_mirror" au lieu de "guitar-tuner
+Sélectionnez
+Désactivez
+Assurez-vous que
+Cliquez sur
+Première construction du programme
+Le programme charge et affiche une fenêtre (vide). Vous trouverez plus de détails ci-dessous ; passez cette liste si vous comprenez les bases :
+Les deux lignes
+Le constructeur de la classe principale
+La fonction statique
+Le programme est prêt à être utilisé, donc vous pouvez le compiler en cliquant sur
+Pour configurer le répertoire de compilation, modifiez la
+Accès au flux vidéo de votre webcam avec GStreamer
+L'architecture multimédia de GStreamer sait gérer les vidéos en provenance de webcams. Ajoutons GStreamer à notre application et nous pouvons ainsi accéder au flux vidéo.
+Enlevons d'abord la fenêtre créée précédemment, car GStreamer va gérer l'affichage de l'image à l'écran.
+Créons maintenant un élément GStreamer qui va accéder à notre webcam. Nous utilisons l'élément « Camerabin », qui est un élément caméra tout-en-un et qui sait faire des photos, des vidéos, appliquer des effets et beaucoup plus encore. Parfait dans notre cas ! Avec
+Bien sûr, il est aussi possible d'ajuster plus précisément la vidéo dans d'autres fenêtres, mais c'est un sujet avancé, qui inclut des détails sur le système X Window et que nous ne traiterons pas ici.
+Compilez et exécutez le programme à nouveau. Vous obtenez finalement deux fenêtres. À l'étape suivante, nous allons intégrer la vidéo dans la fenêtre GTK+.
+Si vous rencontrez des difficultés avec ce tutoriel, comparez votre programme à ce
+Documentation complémentaire
+Pour en savoir plus à propos de la programmation en langage Vala, consultez le
+Conclusion
+Ça y est ; vous avez réussi à créer une application fonctionnelle pour webcam en 15 minutes. Maintenant, vous pouvez vous raser ou maquiller votre joli visage avant de passer une belle journée sur votre lieu de travail, où vous allez pouvoir épater vos amis et collègues avec une application géniale faite en 15 minutes.
+@@image: 'media/linkbutton.png'; md5=3712eae8953e87c65a6aa74503b8e32b
+LinkButton
+Créer des boutons reliés à un URL
+LinkButton
+Ce bouton se connecte à la page Web de GNOME live.
+Gtk.LinkButton
+LinkButton
+Un bouton relié à un URL
+Un bouton qui crée un lien vers une page Web.
+Gtk.ApplicationWindow
+GtkLinkButton
+Élément graphique LinkButton
+Un bouton qui crée un lien vers une page Web
+Un bouton qui crée un lien vers live.gnome.org.
+LinkButton
+Ce bouton se connecte à la page Web de GNOME live.
+L'objectif du programme est le suivant :
+Introduction
+@@image: 'media/label.png'; md5=734975c18653d88379f983e4501c3fc0
+Un élément graphique qui affiche du texte
+Une étiquette simple
+Python
+Gtk.ApplicationWindow
+JavaScript
+Une étiquette qui peut contenir du texte
+Une étiquette qui affiche un message sympathique.
+Étiquette
+JavaScript
+Tutoriels, exemples de code et plateformes de démonstration en JavaScript
+Équipe de documentation GNOME
+2010, 2011
+Exemples de la plateforme de développement GNOME
+Pour définir votre environnement de développement
+Tutoriels, exemples de code, plateformes de démonstration et davantage
+Contribution
+@@image: 'media/image-viewer.png'; md5=7720360611243b14283b83527be968c2
+Visionneur d'images
+Un peu plus qu'une simple application Gtk « Hello world ».
+Philip Chimento
+philip.chimento@gmail.com
+1 Visionneur d'images
+Dans ce tutoriel, nous allons écrire une application qui charge et affiche un fichier image. Vous allez apprendre :
+comment paramétrer un projet de base en utilisant
+comment écrire une
+quelques concepts de base sur la programmation
+les connaissances de base du langage de programmation
+une copie installée de
+Vous pourriez trouver la référence API de
+Lancez
+Sélectionnez
+Assurez-vous d'avoir désactivé
+Consultez le tutoriel
+Cliquez sur
+Ce programme charge une fenêtre (vide) à partir du fichier de description de l'interface et l'affiche. Vous trouverez plus de détails ci-dessous ; passez cette liste si vous comprenez les bases :
+Les deux lignes
+Le constructeur de la classe principale
+Connecter des signaux, c'est décider de ce qui doit se passer quand on appuie sur un bouton ou quand quelque chose d'autre se produit. Ici, la fonction
+La fonction
+Création de l'interface utilisateur
+Nous allons maintenant donner vie à la fenêtre vide. GTK organise l'interface utilisateur avec des
+Ajoutez les lignes suivantes au dessus de la classe
+Remplacez maintenant le constructeur actuel par celui ci-dessous :
+Les deux premières lignes sont les parties de l'interface graphique auxquelles nous aurons besoin d'accéder depuis plus d'une méthode. Nous les déclarons avant afin qu'elles soient accessibles depuis la classe plutôt que seulement dans la méthode où elles sont crées.
+Les premières lignes du constructeur créent la fenêtre vide. Les lignes suivantes créent les éléments graphiques dont nous avons besoin : un bouton pour ouvrir une image, l'élément graphique image lui-même et la boîte que nous utilisons comme conteneur.
+Les appels à
+Nous devons définir ce qui se produit lorsque l'utilisateur clique sur le bouton. GTK utilise le concept de
+Lorsque le
+On le fait en utilisant la méthode
+Dans la fonction de rappel, nous avons besoin d'accéder aux éléments graphiques
+Le dernier appel
+Affichage de l'image
+Nous allons maintenant définir le gestionnaire de signal pour le signal
+C'est un peu compliqué, donc décortiquons cette partie étape par étape :
+Un gestionnaire de signal est un type de fonction de rappel qui est appelé lorsqu'un signal est émis. Ici les termes sont utilisés indifféremment.
+Le premier argument de la fonction de rappel est toujours l'élément graphique qui a envoyé le signal. Parfois d'autres arguments apparaissent derrière reliés au signal, mais
+Dans ce cas, le
+Le méthode
+La prochaine ligne intéressante est celle où est créée la boîte de dialogue pour choisir le fichier. Le constructeur de
+Notez que nous utilisons les noms de bouton de la
+Les deux lignes suivantes limitent la boîte de dialogue
+
+Supposons que l'utilisateur a cliqué sur le bouton
+La dernière ligne de cette méthode détruit la boîte de dialogue
+La destruction masque automatiquement la boîte de dialogue.
+À ce stade, tout le programme est fonctionnel. Cliquez sur
+Si ce n'est pas encore fait, sélectionnez l'application
+Si vous rencontrez des difficultés avec ce tutoriel, comparez votre programme à ce
+Les étapes suivantes
+Voici quelques idées sur la manière d'étendre ce simple exemple :
+Paramètre en sorte que lorsque la fenêtre s'ouvre, elle fasse une taille de départ spécifiée, par exemple 200 X 200 pixels.
+Faire que l'utilisateur puisse sélectionner un dossier plutôt qu'un fichier et fournir les contrôles pour naviguer parmi toutes les images d'un dossier.
+Appliquer au hasard des filtres et des effets à l'image quand elle est chargée et permettre à l'utilisateur d'enregistrer l'image modifiée.
+
+Permettre à l'utilisateur de charger des images depuis des sites de partage, des scanners ou d'autres sources plus sophistiquées.
+Vous pouvez utiliser
+Visionneur d'images
+Un peu plus qu'une simple application « Hello world » - écrire un visionneur d'images en GTK.
+Jonh Wendell
+jwendell@gnome.org
+Dans ce tutoriel, nous allons écrire une application GTK très simple qui charge et affiche un fichier image. Vous allez apprendre comment :
+écrire une interface graphique GTK en Python,
+travailler avec des événements en connectant des signaux à des gestionnaires de signaux,
+mettre en forme des interfaces utilisateur GTK avec des conteneurs,
+charger et afficher des fichiers image.
+des connaissances de base du langage de programmation python.
+Sélectionnez
+Assurez-vous d'avoir désactivé
+Cliquez sur
+Une première application Gtk
+Voyons à quoi ressemble une application Gtk basique écrite en Python :
+Regardons ce qui se passe :
+La première ligne importe l'espace de nom Gtk (c.-à-d. cela inclut la bibliothèque Gtk). Les bibliothèques sont fournies par « GObject Introspection (gi) » qui fournit les liens de langage à beaucoup de bibliothèques GNOME.
+La méthode
+Ensuite est définie la méthode
+Le reste du fichier effectue l'initialisation pour Gtk et affiche l'interface graphique.
+Ce programme est prêt à être utilisé, donc essayez-le en utilisant le menu
+Les signaux
+Les signaux sont un des concepts clé de la programmation Gtk. Chaque fois que quelque chose arrive à un objet, il émet un signal ; par exemple, quand un bouton est cliqué, il renvoie le signal
+Les deux dernières lignes créent un bouton
+Les conteneurs : agencement de l'interface utilisateur
+Les éléments graphiques (les contrôles, comme les boutons ou les étiquettes) peuvent être disposés dans la fenêtre à l'aide de
+Une fenêtre
+Il existe un concepteur graphique d'interface utilisateur appelé
+Ajoutons la boîte et les éléments graphiques à la fenêtre. Insérez le code suivant dans la méthode
+La première ligne crée une
+Pour l'instant, la fenêtre ne contient qu'une boîte
+Placement : ajout d'éléments graphiques au conteneur
+Pour ajouter d'autres éléments graphiques à la fenêtre, insérez ce code juste dessous la ligne
+La première ligne crée une nouvelle image
+
+Si vous les laissez faire, les conteneurs Gtk (et les éléments graphiques) s'agrandissent dynamiquement pour occuper tout l'espace disponible. Vous ne positionnez pas les éléments graphiques dans la fenêtre en leur spécifiant des coordonnées x,y précises mais vous les positionnez les uns par rapport aux autres. Ceci permet un redimensionnement plus aisé de la fenêtre et les éléments graphiques devraient automatiquement prendre une taille raisonnable dans la plupart des cas.
+Notez aussi de quelle manière les éléments graphiques sont organisés hiérarchiquement. Une fois placée dans la
+Insérez maintenant ces deux lignes en dessous des deux que vous venez d'ajouter :
+Ces lignes ressemblent aux deux premières, mais cette fois elles créent un bouton
+Chargement de l'image : connexion au signal
+Quand l'utilisateur clique sur le bouton
+Connectez d'abord le signal
+Cela connecte le signal
+Chargement de l'image : écriture de la fonction de rappel du signal
+On peut maintenant créer la méthode
+C'est un peu plus compliqué que tout ce que nous avons essayé jusqu'à présent, donc décortiquons cette partie étape par étape :
+La ligne commençant par
+Les deux lignes suivantes ajoutent les boutons
+Notez que nous utilisons les noms de bouton de la
+
+Les trois lignes suivantes limitent la boîte de dialogue
+
+Supposons que l'utilisateur a cliqué sur le bouton
+Tout le programme nécessaire est maintenant en place, donc essayez de l'exécuter. Cela devrait fonctionner ; un visionneur d'images totalement fonctionnel (et une visite éclair de Python et de Gtk) en très peu de temps !
+Si vous rencontrez des difficultés avec ce tutoriel, comparez votre programme à ce
+Les classes en JavaScript
+Un peu plus qu'une simple application « Hello world » - programmer un visionneur d'images avec GTK. Inclut une introduction au langage JavaScript.
+écrire une interface utilisateur GTK de base en JavaScript,
+une copie installée de l'interpréteur
+des connaissances de base d'un langage de programmation objet.
+Sélectionnez
+Cliquez sur
+Les bases JavaScript : Hello World
+Avant de commencer à programmer le visionneur d'images, regardons de plus près la façon dont JavaScript est utilisé dans GNOME. Bien sûr, votre tout premier contact avec n'importe quel langage de programmation devrait être le « Hello World » du fichier
+print("Hello world!");
+Ceci doit vous sembler très normal si vous êtes familier avec la plupart des langages de programmation. La fonction
+Les classes en JavaScript
+Voici la méthode standard pour définir une classe en JavaScript :
+Ceci définit une classe appelée
+
+Le bloc
+La première méthode définie ici est appelée
+_init: function ()
+Nous écrivons la fonction à l'intérieur d'accolades. Deux champs sont définis ici,
+La méthode suivante est appelée
+Notez comment la définition de la classe (prototype) est structurée ; chaque définition de fonction est séparée par une virgule.
+Maintenant que MyClass a été défini, nous pouvons jouer avec :
+Ce code crée une nouvelle version de la classe appelée
+Enregistrez le code dans le fichier
+Voyons à quoi ressemble une application Gtk très basique écrite en JavaScript :
+
+La ligne suivante crée la fenêtre principale en créant un nouvel objet
+La ligne suivante affiche explicitement la fenêtre. Dans Gtk, chaque élément graphique est masqué par défaut.
+Enfin,
+Enregistrez le code dans le fichier
+Ajout de classes
+La bonne méthode de programmation avec Gtk est l'utilisation de classes. Récrivons le bout de programme que l'on vient d'écrire en utilisant des classes :JS ERROR: !!! Unhandled type int32 releasing GArgument
+Notez que le programme reste le même ; on a juste déplacé le code de création de la fenêtre dans notre propre classe
+Ce programme est modulaire et peut être divisé facilement en plusieurs fichiers ce qui le rend plus propre et plus facile à lire.
+Voici la syntaxe pour connecter n'importe quel signal à une fonction :
+Vous pouvez consulter les définitions de signal pour n'importe quel objet dans la
+Vous pouvez simplifier le code avec une définition de fonction en ligne :
+Fermeture de la fenêtre
+Quand vous fermez une fenêtre Gtk, elle n'est pas vraiment fermée, mais masquée. Cela permet de la garder accessible (utile si on veut poser la question à l'utilisateur s'il veut oui ou non fermer la fenêtre, par exemple).
+Dans notre cas, on veut réellement fermer la fenêtre. La façon la plus simple de le faire est de connecter le signal
+this.window.connect ("hide", Gtk.main_quit);
+Ceci connecte le signal
+Ajoutons la boîte et les éléments graphiques à la fenêtre. Insérez le code suivant dans la méthode
+La première ligne crée une boîte
+Pour ajouter des éléments graphiques à la boîte
+La première ligne crée une nouvelle
+
+Ces lignes ressemblent aux deux premières, mais cette fois elles créent un bouton
+Finalement, nous devons modifier la ligne
+this.window.show_all ();
+Ceci affiche l'enfant de la fenêtre Gtk et tous ses enfants, enfants de ses enfants et ainsi de suite (souvenez-vous que les éléments graphiques Gtk sont tous masqués par défaut).
+Quand l'utilisateur clique sur le bouton
+Connectez d'abord le signal
+Ici, nous utilisons l'assistant JavaScript
+const Lang = imports.lang;
+Nous pouvons maintenant créer la méthode
+La ligne commençant par
+
+Tout le programme nécessaire est maintenant en place, donc essayez de l'exécuter. Cela devrait fonctionner ; un visionneur d'images totalement fonctionnel (et une visite éclair de JavaScript et de Gtk) en très peu de temps !
+Si vous rencontrez des difficultés avec ce tutoriel, comparez votre programme à ce
+Un peu plus qu'une simple application GTKmm « Hello world ».
+Visionneur d'images
+quelques concepts de base de la programmation en C++/GObject,
+comment écrire une application Gtk en C++.
+Sélectionnez
+Assurez-vous d'avoir désactivé
+Cliquez sur
+C'est un programme C++ très basique pour configurer GTKmm. Vous trouverez plus de détails ci-dessous ; passez cette liste si vous comprenez les bases :
+Les trois lignes
+La fonction
+L'appel
+Cliquez sur
+Nous allons maintenant donner vie à la fenêtre vide. La disposition de l'interface utilisateur est faite par GTKmm avec les conteneurs
+Les premières lignes créent les éléments graphiques dont nous avons besoin : un bouton pour ouvrir une image, l'élément graphique image lui-même et la boîte que nous utilisons comme conteneur.
+Les appels à
+Il nous faut définir ce qui se passe quand l'utilisateur clique sur le bouton. GTKmm utilise le concept de
+La dernière étape consiste à afficher tous les éléments graphiques avec la commande
+Nous allons maintenant définir le gestionnaire de signal pour le signal
+La boîte de dialogue pour choisir le fichier en utilisant le constructeur
+Les deux lignes suivantes ajoutent les boutons
+Le second argument de la méthode
+Les deux lignes suivantes limitent la boîte de dialogue
+
+
+Nous masquons la boîte de dialogue
+Supposons que l'utilisateur a cliqué sur le bouton
+Si ce n'est pas encore fait, sélectionnez l'application
+Si vous rencontrez des difficultés avec ce tutoriel, comparez votre programme à ce
+Visionneur d'images
+quelques concepts de base de la programmation en C/GObject,
+comment écrire une application GTK en C.
+Sélectionnez
+Assurez-vous d'avoir désactivé
+« C » est un langage plutôt verbeux, donc ne soyez pas surpris par la quantité de code que contient le fichier. La plupart du code est générique. Il charge une fenêtre (vide) et l'affiche. Vous trouverez plus de détails ci-dessous ; passez cette liste si vous comprenez les bases :
+Les trois lignes
+La fonction
+La fonction
+La définition conditionnelle
+Nous allons maintenant donner vie à la fenêtre vide. GTK organise l'interface utilisateur avec des
+Les premières lignes créent les éléments graphiques que nous voulons utiliser : un bouton pour pouvoir ouvrir une image, l'élément graphique image lui-même et la boîte qui nous sert de conteneur. Nous utilisons des macros comme
+Les appels à
+Il nous faut définir ce qui se passe quand l'utilisateur clique sur le bouton. GTK utilise le concept de
+Le dernier signal
+Pour finir, assurez-vous de remplacer l'appel
+Nous allons maintenant définir le gestionnaire de signal pour le signal
+Le premier argument du signal est toujours l'élément graphique qui envoie le signal. Il y a parfois d'autres arguments attachés au signal, mais
+La prochaine ligne intéressante est celle où est créée la boîte de dialogue pour choisir le fichier avec
+Les deux lignes suivantes limitent la boîte de dialogue
+
+Supposons que l'utilisateur a cliqué sur le bouton
+Dans la dernière ligne de cette méthode, nous détruisons la boîte de dialogue
+Si vous rencontrez des difficultés avec ce tutoriel, comparez votre programme à ce
+@@image: 'media/image.png'; md5=9416aa74d9d6a857783f7a36338e7a02
+Un élément graphique qui affiche une image
+Image
+Cette application Gtk affiche un fichier image issu du dossier en cours.
+Si le fichier image n'est pas chargé correctement, l'image contient une icône en forme d'« image brisée ». Le
+GtkApplicationWindow
+Python
+Si le fichier image n'est pas chargé correctement, l'image contient une icône en forme d'« image brisée ». Le
+JavaScript
+Image
+@@image: 'media/helloWorldJs.png'; md5=4c88a27211dfd1b33e504c9f78602f2d
+Hello World
+Une application basique « hello, world »
+Hello World
+Un peu plus qu'une simple application « Hello world » - écrire un visionneur d'images en GTK.
+Afin que notre script fonctionne avec GNOME, nous devons importer les bibliothèques GNOME via l'introspection GObject. Dans ce cas, nous importons GTK+, la bibliothèque la plus basique qui contient les éléments graphiques utilisé pour faire les applications GNOME.
+Après l'importation de Gtk, nous devons l'initialiser. Après cela, nous pouvons démarrer la construction de notre première fenêtre. Nous faisons cela en créant une variable appelée mywindow et en lui attribuant une nouvelle Gtk.Window de type TOPLEVEL.
+Après la définition de notre première fenêtre, nous donnons à la fenêtre une propriété appelée « title ». Le titre peut être n'importe quelle chaîne de caractères. Pour être certain que cela fonctionne, il est préférable de se tenir à un codage UTF-8.
+Maintenant, nous avons une fenêtre qui possède un titre et un bouton de fermeture fonctionnel. Ajoutons le vrai texte « Hello, world ».
+Étiquette de la fenêtre
+Nous pouvons utiliser une étiquette de texte comme éléments graphiques GTK+ à condition d'avoir importer la bibliothèque GTK+. Pour l'utiliser, nous créons une nouvelle variable appelée « label » et lui attribuons un nouveau Gtk.Label. Ensuite nous lui donnons une propriété à l'intérieur des accolades {}. Dans ce cas, nous définissons le texte que l'étiquette contient. Enfin, nous disons à GNOME d'afficher l'étiquette et la fenêtre la contenant à l'écran et appelons Gtk.main() afin que l'application démarre elle-même.
+À l'avenir, gardez à l'esprit que le Gtk.Window ne peut contenir qu'un seul élément graphique à la fois. Pour construire des programmes plus élaborés, vous devez créer un élément graphique conteneur (Gtk.Box, Gtk.Grid, Gtk.Application, etc.) d'un certain type à l'intérieur de la fenêtre puis ajouter tous les autres éléments graphiques à l'intérieur.
+helloWorld.js
+Exécution de l'application à partir de Terminal
+Pour lancer cette application, enregistrez-la d'abord sous le nom helloWorld.js, puis ouvrez Terminal, allez dans le dossier où l'application est enregistrée et lancez
+helloWorld.js
+Le lancement d'applications à partir de Terminal est utile au début du processus de création de l'application. Pour avoir une
+chmod +x helloWorld.js
+L'exemple vous affiche le minimum nécessaire pour un fichier
+Allons maintenant examiner quelques parties du fichier
+Exécution de l'application
+Conception de l'application
+Ligne 6 : spécifie une commande à exécuter lorsque vous choisissez l'élément de menu. Dans cet exemple, « exec » indique juste où trouver le fichier
+Ligne 8 : indique si la commande de la clé Exec se lance dans une fenêtre de terminal.
+Pour mettre votre application dans la bonne catégorie, vous devez ajouter les catégories nécessaires à la ligne « Categories ». Plus d'informations sur les différentes catégories peuvent être trouvées dans les
+Dans cet exemple, nous utilisons une icône existante. Pour une icône personnalisée, vous devez posséder un fichier .svg de votre icône, l'enregistrer dans /usr/share/icons/hicolor/scalable/apps. Inscrivez le nom de votre fichier icône dans le fichier .desktop en ligne 7. Plus d'informations sur les icônes dans :
+Pour que votre application fasse partie intégrante de GNOME 3, vous devez l'installer à l'aide d'autotools. Autotools construit et installe tous les fichiers nécessaires et les place à leurs emplacements corrects.
+Auparavant, vous devez posséder les fichiers suivants :
+Quand le fichier autogen.sh est prêt et enregistré, exécutez
+chmod +x autogen.sh
+README
+README : informations à lire en premier par l'utilisateur.
+Une première application Gtk
+Un bouton qui crée un lien vers une page Web
+Création de la fenêtre principale de l'application
+Conception de l'application
+Exécution de l'application
+@@image: 'media/guitar-tuner.png'; md5=35e615e0f5e293671d00c5c414ac2f6b
+@@image: 'media/guitar-tuner-glade.png'; md5=f6606525443ab2160f53a87a454364d0
+@@image: 'media/guitar-tuner-pipeline.png'; md5=5adc952909d92af5dae6954781b4ad5f
+Utilisation de
+2 Accordeur de guitare
+Dans ce tutoriel, nous allons écrire un programme qui émet des sons servant à accorder une guitare. Nous allons apprendre comment :
+paramétrer un projet de base en utilisant
+créer une interface graphique simple avec le concepteur d'interface utilisateur d'
+utiliser la bibliothèque
+Création d'un projet dans
+Sélectionnez
+Assurez-vous que
+Cliquez sur
+Ce programme charge une fenêtre (vide) à partir du fichier de description de l'interface et l'affiche. Vous trouverez plus de détails ci-dessous ; passez cette liste si vous comprenez les bases :
+Le constructeur de la classe
+Connecter des signaux, c'est décider de ce qui doit se passer quand on appuie sur un bouton ou quand quelque chose d'autre se produit. Ici, la fonction
+La fonction statique
+Le programme est prêt à être utilisé, donc vous pouvez le compiler en cliquant sur
+Création de l'interface utilisateur
+Une description de l'interface utilisateur est contenue dans le fichier GtkBuilder
+La disposition de toute interface utilisateur dans GTK+ est organisée à l'aide de boîtes et de tableaux. Dans cet exemple, prenons une GtkButtonBox verticale pour y mettre six GtkButtons, un pour chacune des six cordes de la guitare.
+Dans l'onglet
+Vous pouvez aussi modifier le
+Maintenant, à partir de la section
+Pendant que le bouton est encore sélectionné, déplacez-vous dans l'onglet
+L'onglet
+Passez à l'onglet
+Répétez cette procédure pour les autres boutons, ce qui ajoute les 5 autres cordes nommées
+Enregistrez le fichier de conception de l'interface utilisateur (en cliquant sur
+Les pipelines GStreamer
+Cette section va vous montrer comment créer un programme qui produit des sons.
+Le concept de GStreamer est le suivant : il y a création d'un
+Entre la source et le collecteur, vous pouvez appliquer différents filtres et convertisseurs pour prendre en charge les effets, les conversions de format et ainsi de suite. Chaque élément du pipeline possède des propriétés pouvant être utilisées pour modifier son comportement.
+Un exemple de pipeline GStreamer.
+Configuration du pipeline
+Dans cet exemple, nous utilisons une source génératrice de son de fréquence pure appelée
+Il faut ajouter une ligne pour initialiser GStreamer ; écrivez le code suivant dans la ligne au-dessus de l'appel à
+Ensuite, copiez la fonction suivante dans le fichier
+Les trois premières lignes créent les éléments GStreamer source et sink (collecteur) (
+L'appel à
+
+Ensuite,
+Comme nous ne voulons pas jouer indéfiniment une note ennuyeuse, la dernière chose que fait
+Création du gestionnaire de signal
+Dans le concepteur d'interface utilisateur, il a été fait en sorte que tous les boutons appellent la même fonction,
+Pour cela, dans le fichier interface utilisateur (guitar_tuner.ui), sélectionnez un des boutons en cliquant dessus, puis ouvrez
+Vous pouvez aussi saisir seulement le code au début de la classe au lieu d'utiliser le glisser-déposer.
+Le récepteur du signal n'a qu'un seul argument : le
+Définition du gestionnaire de signal
+Nous voulons jouer la note adéquate quand l'utilisateur clique sur un bouton. Pour cela, nous allons étoffer le gestionnaire de signal défini auparavant. Nous aurions pu connecter chaque bouton à un gestionnaire différent, mais cela aurait dupliqué beaucoup de code. Au lieu de ça, nous allons plutôt utiliser l'étiquette du bouton pour déterminer le bouton cliqué :
+Le bouton
+L'instruction « switch » compare le texte de l'étiquette à la note que nous pouvons jouer et
+Si ce n'est déjà fait, choisissez l'application
+Si vous rencontrez des difficultés avec ce tutoriel, comparez votre programme à ce
+Pour en savoir plus à propos de la programmation en langage Vala, consultez le
+Faire que le programme joue automatiquement les notes de manière cyclique.
+Faire que le programme lise des enregistrements de vraies cordes de guitare pincées.
+Pour y parvenir, vous devrez configurer un pipeline GStreamer un peu plus sophistiqué qui vous permette de charger et lire des fichiers musicaux. Vous devrez choisir des éléments GStreamer
+Il vous faudra aussi peut-être connecter les éléments de façon plus complexe. Vous aurez sans doute besoin de consulter les
+Analyser automatiquement les notes jouées par l'utilisateur.
+Vous pourriez branchez un microphone et enregistrez les sons obtenus en utilisant l'
+Accordeur de guitare
+Utilisation de Gtk+ et de GStreamer pour construire une application d'accordeur de guitare simple pour GNOME. Explications sur la manière d'utiliser le concepteur d'interface.
+Dans ce tutoriel, nous allons écrire un programme qui émet des sons servant à accorder une guitare. Nous allons apprendre comment :
+créer un projet basique dans Anjuta,
+créer une interface graphique simple avec le concepteur d'interface utilisateur d'Anjuta,
+utiliser GStreamer pour émettre des sons.
+de connaissances de base du langage de programmation Python.
+Sélectionnez
+Cliquez sur
+Exécution du programme pour la première fois
+La plupart du code dans ce fichier est générique. Il charge une fenêtre (vide) à partir du fichier de description de l'interface et l'affiche. Vous trouverez plus de détails ci-dessous ; passez cette liste si vous comprenez les bases :include the
+Les lignes
+Nous déclarons une classe qui est la classe principale de notre application. Dans la méthode
+Connecter des signaux, c'est décider de ce qui doit se passer quand on appuie sur un bouton ou quand quelque chose d'autre se produit. Ici, la méthode
+La fonction
+Le programme est prêt à être utilisé et vous pouvez l'exécuter avec
+Une description de l'interface utilisateur est contenue dans le fichier GtkBuilder. Pour la modifier, ouvrez le fichier
+La disposition de toute interface utilisateur dans GTK+ est organisée à l'aide de boîtes et de tableaux. Dans cet exemple, prenons une
+Choisissez une
+Ensuite, choisissez un
+Pendant que le bouton est encore sélectionné, modifiez la propriété
+Passez à l'onglet
+Écriture du gestionnaire de signal
+Dans le concepteur d'interface utilisateur, il a été fait en sorte que tous les boutons appellent la même fonction,
+Pour cela, ouvrez
+Ce récepteur de signal possède deux arguments : le pointeur classique de Python et
+Laissons le gestionnaire de signal vide pour l'instant et écrivons le code qui produit les sons.
+GStreamer est l'architecture multimédia de GNOME — vous pouvez vous en servir pour des jeux, des enregistrements, pour traiter des flux vidéo, audio, de webcam entre autres. Ici, nous allons nous en servir pour émettre des tonalités à une seule fréquence.
+Le concept de GStreamer est le suivant : il y a création d'un
+Dans ce petit exemple, nous utilisons une source génératrice de son de fréquence pure appelée
+Modifiez la ligne import au début du fichier
+
+Copiez ensuite la fonction suivante quelque part dans la classe de
+Les trois premières lignes créent les éléments GStreamer source et sink (collecteur) et un élément pipeline (qui sera utilisé comme conteneur pour les deux autres éléments). Le pipeline est nommé « note » ; la source est nommée « source » et est définie comme étant le connecteur
+L'appel à
+Les deux lignes suivantes appellent
+Ensuite,
+Arrêt de la lecture
+Comme nous ne voulons pas jouer indéfiniment une note ennuyeuse, la dernière chose que fait
+Écrivons maintenant la fonction
+Vous devez définir la constante
+L'appel à
+Définition des notes
+Nous voulons jouer la note adéquate quand l'utilisateur clique sur un bouton. Avant tout, nous devons connaître la fréquence de chacune des six cordes de la guitare qui sont définies (au début de la classe principale) dans un dictionnaire de façon à pouvoir facilement les associer aux noms des cordes :
+Maintenant, nous allons étoffer le gestionnaire de signal
+Le bouton qui a été cliqué est transmis comme argument (
+Le texte de cette étiquette est alors utilisé comme clé du dictionnaire et la fonction
+Tout le programme nécessaire doit maintenant être fonctionnel. Cliquez sur
+Si vous rencontrez des difficultés avec ce tutoriel, comparez votre programme à ce
+Accordeur de guitare
+Utilisation de Gtk+ et de GStreamer pour construire une application d'accordeur de guitare simple pour GNOME.
+Dans ce tutoriel, nous allons construire une petite application, Accordeur de guitare, utilisant JavaScript, GTK+ et GStreamer. Pour écrire et lancer tous les exemples de code vous-même, vous avez besoin d'un éditeur pour écrire le code, de Terminal et d'un ordinateur sur lequel GNOME 3 ou supérieur est installé. Dans ce guide, nous illustrerons les éléments suivants :
+Les boutons pour les sons
+Création des sons avec GStreamer
+Connexion des boutons à playSound
+Le programme complet
+Exécution de l'application à partir de Terminal
+Cette ligne indique comment lancer le script. Elle doit être la première ligne de code et le script doit être exécutable. Pour donner les bonnes permissions, allez dans Terminal et lancer dans le dossier correct la commande : chmod +x nomduscript. Vous pouvez aussi utiliser le gestionnaire de fichiers graphique. Déplacez-vous dans le bon dossier où se trouve votre code, faites un clic-droit sur le fichier, sélectionnez Propriétés, cliquez sur l'onglet Permissions et cochez la case pour permettre l'exécution du fichier comme un programme.
+Afin que le programme fonctionne, vous devez importer quelques bibliothèques d'introspection GObject à utiliser. Pour faire une interface graphique, nous avons besoin de Gtk et pour que Gstreamer fonctionne, nous avons besoin de Gst. Elles sont importées au début afin de pouvoir les utiliser partout ensuite. Nous importons également au début une boucle principale Mainloop pour prendre en charge le délai à utiliser avec les sons d'accordage.
+L'importation de Gtk et Gst n'est pas suffisante, nous devons les initialiser afin qu'elles fonctionnent. Lorsque c'est fait, nous devons créer la fenêtre de l'application. Plus tard, nous allons placer tous les boutons pour faire les sons dans cette fenêtre. Afin que la fenêtre s'affiche, nous devons lui dire de s'afficher et nous avons besoin de lancer le code avec Gtk.main().
+Puisque Gtk.Window ne peut contenir qu'un seul élément graphique, nous devons créer quelque chose en dessous pour pouvoir ajouter tous les boutons nécessaires à l'intérieur. Dans cet exemple, nous utilisons Buttonbox. Après la création de Buttonbox, nous créons les boutons avec les étiquettes nécessaires. Après l'obtention des boutons, nous devons les ajouter au Buttonbox et celui-ci doit être ajouté au Gtk.Window et tout ce qui est dans Buttonbox doit être affiché.
+Après cette étape, vous devriez voir s'afficher une fenêtre à l'écran avec les 6 boutons. Pour l'instant, les boutons n'ont aucune action et nous verrons cela plus tard. Pour pouvoir connecter les signaux des boutons à quelque chose, il nous faut d'abord coder ce quelque chose.
+La chose à faire en premier est de décider quel son doit être émis à l'appui sur un bouton. La liste des fréquences gère cela. Ensuite, il nous faut émettre les sons avec la fonction playSound, à laquelle nous donnons en entrée une fréquence (définie par les variables fréquences). Construisons d'abord un pipeline, une source et un collecteur. Définissons la fréquence pour la source, ajoutons la source et le collecteur au pipeline et faisons le jouer. Enfin, utilisons la constante Mainloop pour arrêter l'émission du son après 500ms.
+Maintenant, nous avons la bonne méthode pour émettre un son après appui sur un bouton. Faisons ensuite la connexion entre l'appui sur un bouton et l'émission du son correct relié à ce bouton.
+Voici donc ce que donne toutes les parties assemblées. Lorsque vous exécutez ce code, vous devriez être capable d'accorder votre guitare (si vous avez correctement calibré vos haut-parleurs).
+Pour lancer cette application, ouvrez Terminal, allez dans le dossier où votre application est enregistrée et lancez
+GJS_PATH=`pwd` gjs guitarTuner.js
+Si vous rencontrez des difficultés avec ce tutoriel, comparez votre programme à ce
+Utilisation de GTKmm et de GStreamermm pour construire une application accordeur de guitare simple pour GNOME. Explications sur la manière d'utiliser le concepteur d'interface.
+Accordeur de guitare
+des connaissances de base de la programmation en langage C++.
+Sélectionnez
+Assurez-vous que
+Cliquez sur
+Les trois lignes
+La fonction
+Ensuite quelques fonctions sont appelées pour configurer puis exécuter l'application. La fonction
+Une description de l'interface utilisateur est contenue dans le fichier GtkBuilder. Pour la modifier, ouvrez le fichier
+Pendant que le bouton est encore sélectionné, modifiez la propriété
+Répétez cette procédure pour les autres boutons, en ajoutant les 5 cordes suivantes avec les étiquettes
+Enregistrez le fichier de conception de l'interface utilisateur (en cliquant sur
+GStreamer est l'architecture multimédia de GNOME — vous pouvez vous en servir pour des jeux, des enregistrements, pour traiter des flux vidéo, audio, de webcam entre autres. Ici, nous allons nous en servir pour émettre des tonalités à une seule fréquence. GStreamermm est le lien C++ à GStreamer que nous utilisons dans cet exemple.
+Utilisation de GStreamermm
+Pour utiliser GStreamermm, il faut l'initialiser. Ajoutez la ligne de code suivante en dessous de la ligne
+ Gst::init (argc, argv);
+Vérifiez que le fichier
+Pour simplifier la gestion du pipeline, nous définissons une classe assistant
+L'objectif du programme est le suivant :
+Le constructeur crée les éléments GStreamer source et sink (collecteur) (
+
+Dans
+Connexion des signaux
+Nous voulons jouer la note adéquate quand l'utilisateur clique sur un bouton. Cela signifie que nous devons connecter le signal émis par ce bouton. Nous voulons aussi informer la fonction appelée du son à diffuser. GTKmm rend la chose facile car il est facile de lier des informations avec la bibliothèque
+La fonction appelée lors d'un clic sur un bouton peut être très simple, car tout le travail intéressant se fait maintenant dans la classe assistant :
+Elle ne fait qu'appeler la classe assistant que nous avons configurée auparavant pour diffuser la fréquence appropriée. Avec un programme un peu plus malin, nous aurions pu aussi nous connecter directement à la classe sans passer par la fonction, mais laissons cela pour un exercice futur.
+Le code qui configure les signaux doit être ajouté à la fonction
+D'abord, nous créons une instance de notre classe assistant que nous voulons maintenant utiliser et déclarons une variable pour le bouton que nous voulons connecter.
+Ensuite, nous récupérons l'objet bouton de l'interface utilisateur qui a été créé à partir du fichier de l'interface utilisateur. Souvenez-vous que
+Enfin, nous connectons le signal
+Après avoir configuré le bouton
+À ce stade, tout le programme est fonctionnel. Cliquez sur
+Si vous rencontrez des difficultés avec ce tutoriel, comparez votre programme à ce
+Lecture complémentaire
+Pour des informations plus détaillées sur les exemples ci-dessus, consultez le
+Accordeur de guitare
+des connaissances de base de la programmation en langage C
+Sélectionnez
+Assurez-vous que
+« C » est un langage plutôt verbeux, donc ne soyez pas surpris par la quantité de code que contient le fichier. La plupart du code est générique. Il charge une fenêtre (vide) à partir du fichier de description de l'interface et l'affiche. Vous trouverez plus de détails ci-dessous ; passez cette liste si vous comprenez les bases :
+La fonction
+Pour cela, ouvrez
+Ce récepteur de signal a deux arguments : un pointeur vers le
+Insérez la ligne suivante dans le fichier
+Cela inclut la bibliothèque de GStreamer. Ajoutez aussi une ligne pour initialiser GStreamer ; mettez le code suivant dans la ligne au-dessus de
+Ensuite, copiez la fonction suivante dans le fichier
+Les cinq premières lignes créent les éléments GStreamer source et sink (collecteur) et un élément pipeline (qui sera utilisé comme conteneur pour les deux autres éléments). Le pipeline est nommé « note » ; la source est nommée « source » et définie comme étant le connecteur
+L'appel à
+
+Ensuite,
+Comme nous ne voulons pas jouer indéfiniment une note ennuyeuse, la dernière chose que fait
+Écrivons maintenant la fonction
+L'appel à
+Nous voulons jouer la note adéquate quand l'utilisateur clique sur un bouton. Avant tout, nous devons connaître la fréquence de chacune des six cordes de la guitare qui sont définies (au début du fichier
+Un pointeur vers le bouton
+On compare ensuite le texte de cette étiquette à la note à l'aide de la fonction
+Si vous rencontrez des difficultés avec ce tutoriel, comparez votre programme à ce
+ApplicationWindow
+Sous-classe GtkWindow avec la prise en charge de GtkApplication
+ApplicationWindow
+L'application Gtk la plus simple qui prend en charge les menus.
+ApplicationWindow
+Gtk.ApplicationWindow
+ApplicationWindow
+Une simple GtkApplicationWindow qui prend en charge les menus.
+ApplicationWindow
+Une fenêtre de niveau supérieur qui peut contenir d'autres éléments graphiques et prend en charge GMenu.
+Une application Gtk minimale avec une GtkApplicationWindow
+@@image: 'media/grid.png'; md5=27d45da115401127456a3b854dcfc5be
+Ranger les éléments graphiques en lignes et colonnes
+Élément graphique Grid
+Un élément graphique bouton connecté à une barre de progression.
+@@image: 'media/grid.png'; md5=27d45da115401127456a3b854dcfc5be
+Python
+Gtk.ApplicationWindow
+JavaScript
+Un élément graphique bouton connecté à une barre de progression, à l'intérieur d'une grille qui gère l'agencement.
+GtkButton
+@@image: 'media/gmenu.vala.png'; md5=7a9f381fc3ed5bf8d1c50d2acb095400
+Ryan Lortie
+desrt@desrt.ca
+Une implémentation simple de GMenuModel
+Pour que cela fonctionne, il vous faut avoir installé Gtk+-3.4 ou supérieur
+Ce programme ne se compilera pas avec l'action « quitter » connectée, tant que le
+Une application Gtk avec un GMenu de base et SimpleActions
+Menu
+append
+SimpleAction
+add_action
+@@image: 'media/gmenu.py.png'; md5=52c68b34d5d566f37e9f803dedb6353a
+Python
+Une implémentation simple de GMenuModel
+Pour que cela fonctionne, il vous faut avoir installé Gtk3.4 ou supérieur
+Gtk.ApplicationWindow
+Gtk.ApplicationWindow
+Gtk.ApplicationWindow
+@@image: 'media/gmenu.js.png'; md5=16b8bee122197771ec8498dac42f196b
+JavaScript
+@@image: 'media/gmenu.c.png'; md5=f305fc3cae8d16d72b734ee53b559e33
+GMenu
+@@image: 'media/ubuntu.png'; md5=40845e4a40b335b1958da1403f01c13f
+@@image: 'media/fedora.png'; md5=19add55f4349fd9e90f3a50b344ba626
+@@image: 'media/opensuse.png'; md5=a852a94199328e2f978c7f6a55bf8b54
+Installer les objets de développement GNOME
+Préparation de l'environnement pour le développement avec GNOME
+Installation des outils nécessaires
+Avant de pouvoir commencer à programmer, vous devez installer sur votre ordinateur les outils nécessaires au développement avec GNOME. Cela ne devrait pas vous prendre plus de dix minutes.
+Installation automatique
+Avec une distribution à jour, vous devriez pouvoir installer les paquets nécessaires tout simplement en cliquant sur
+Installation manuelle
+Si vous préférez faire une installation manuelle, consultez les instructions pour les différentes distributions sur le
+Ubuntu
+Fedora
+OpenSuSE
+Autres
+Versions requises
+Dans ce manuel, il est supposé que vous possédez au minimum les versions suivantes des outils installées :
+Anjuta - 3.0
+Devhelp - 3.0
+Glade - 3.10
+Bien sûr, n'importe quelle version supérieure convient aussi. Maintenant, nous vous souhaitons de prendre beaucoup de plaisir avec ces
+@@image: 'media/spinbutton.png'; md5=993cbb7d9bd271a329727a926195712a
+Un élément graphique utilisé pour effectuer un choix dans une liste d'éléments
+Un élément graphique bouton connecté à une fonction de rappel
+Gtk.ApplicationWindow
+GtkWidget
+Boîte de dialogue de message
+Exemple de code Vala
+@@image: 'media/image.png'; md5=9416aa74d9d6a857783f7a36338e7a02
+@@image: 'media/aboutdialog_GMenu.png'; md5=a36117a559fa98e25e2f6b3db593639f
+Gtk.MessageDialog
+@@image: 'media/entry.png'; md5=8a828cffdcbaa4bad83342e109f28cc8
+Un champ de saisie de texte sur une ligne
+Saisie
+Cette application vous accueille dans le terminal.
+Gtk.Entry
+Python
+Cette application vous accueille dans le terminal avec le nom que vous fournissez.
+Gtk.ApplicationWindow
+GtkEntry
+JavaScript
+Un champ de saisie de texte sur une ligne
+Cette application vous accueille dans le terminal.
+Saisie
+Contribution au développement
+Les tutoriels du
+Si vous voulez
+@@image: 'media/dialog.png'; md5=c90a33386a600e892fe623d4072c8c38
+Boîte de dialogue
+Une fenêtre surgissante
+Boîte de dialogue
+Une boîte de dialogue avec le signal de réponse connecté à une fonction de rappel.
+Gtk.Dialog
+Gtk.Dialog.with_buttons
+get_content_area
+Une boîte de dialogue avec le signal de réponse connecté à une fonction de rappel.
+JavaScript
+Une fenêtre surgissante personnalisable, avec une zone de contenu et une zone d'action. Cet exemple de boîte de dialogue montre que dans la zone de contenu il y a un petit message et dans la zone d'action il y a un bouton qui ferme la boîte.
+Boîte de dialogue
+C++
+Exemples de la plateforme en langage C++
+@@image: 'media/aboutdialog_GMenu.png'; md5=a36117a559fa98e25e2f6b3db593639f
+ComboBox
+Un élément graphique utilisé pour effectuer un choix dans une liste d'éléments
+ComboBox
+Cette ComboBox affiche votre sélection dans le terminal quand vous la modifiée.
+Gtk.ApplicationWindow
+Gtk.CellRendererText
+@@image: 'media/combobox.png'; md5=ab9e91bc1a58fe866cb00dd52159251d
+ComboBox
+Cette ComboBox affiche dans le terminal quand vous modifiez votre sélection.
+Gtk.ComboBox
+set_attributes
+JavaScript
+Dans cet exemple, nous avons utilisé l'élément graphique suivant :
+Début du plaisir
+Gtk.CellRendererText
+ComboBox
+Début du plaisir
+Gtk.ComboBox
+@@image: 'media/spinbutton.png'; md5=993cbb7d9bd271a329727a926195712a
+Bouton
+Bouton
+Gtk.ToolButton
+Bouton
+Gtk.ApplicationWindow
+Gtk.ToolButton
+@@image: 'media/checkbutton.png'; md5=7921a6812c87dd2b3781f4fad241e858
+CheckButton
+Créer des éléments graphiques avec un bouton de basculement discret
+CheckButton
+Ce CheckButton bascule le titre.
+Gtk.CheckButton
+CheckButton
+Un bouton de basculement dans une fenêtre
+Gtk.ApplicationWindow
+GtkCheckButton
+CheckButton
+Un bouton qui peut être connecté à d'autres éléments graphiques.
+Dans cet exemple, nous avons utilisé l'élément graphique suivant :
+Début du plaisir
+CheckButton
+tiffany.antpoolski@gmail.com
+Créer des éléments graphiques avec un bouton de basculement discret
+C
+Tutoriels, exemples de code et démonstrations de la plateforme en C
+@@image: 'media/toolbar.png'; md5=f0350855eedf6343952b72d6d906f738
+Bouton
+Gtk.ApplicationWindow
+GtkButton
+GtkButton
+@@image: 'media/button.png'; md5=8d69efbb3a0d3e043af6139b6492171c
+Bouton
+Un élément graphique bouton qui émet un signal quand il est cliqué
+Élément graphique bouton
+Un élément graphique bouton connecté à une fonction de rappel simple.
+Dans cet exemple, nous avons utilisé l'élément graphique suivant :
+Bouton
+Gtk.ApplicationWindow
+JavaScript
+Un bouton qui peut être connecté à d'autres éléments graphiques.
+Un élément graphique bouton qui change d'étiquette quand il est cliqué.
+Bouton
+Un élément graphique bouton connecté à une fonction de rappel
+Manipulation unicode
+tiffany@antopolski.com
+Contribution à l'amélioration des tutoriels du
+Envoi d'un rapport d'anomalie ou d'une suggestion d'amélioration
+Les tutoriels du
+Ce site est un système de regroupement d'anomalies où les utilisateurs et les développeurs peuvent renseigner les détails d'anomalies, de pannes et proposer des améliorations.
+Pour participer, il vous faut ouvrir un compte qui vous donne l'autorisation d'accéder au site, de remplir les formulaires d'anomalies et de faire des commentaires. Une fois enregistré, vous recevrez les mises à jour sur l'état de votre anomalie par courriel. Pour ouvrir un compte, cliquez sur le lien
+Une fois votre compte créé, identifiez-vous, cliquez sur
+Pour remplir votre rapport, sélectionnez l'élément
+Si vous demandez une nouvelle fonctionnalité, sélectionnez
+Votre rapport reçoit alors un numéro d'identification et son état va être mis à jour chaque fois que quelqu'un s'en occupera. Merci pour votre contribution à l'amélioration des tutoriels du
+Tutoriels pour les débutants zéro
+Un guide pour débuter la programmation d'interfaces graphiques avec GTK+, incluant des exemples de code et des exercices pratiques.
+Tutoriels pour les débutants zéro
+Bien que ces tutoriels soient conçus pour les débutants, ils ne couvrent pas toutes les bases de la programmation. Avant d'essayer de suivre ces tutoriels, vous devez maîtriser les concepts suivants :
+La programmation objet
+Le language de programmation Vala :
+Le tutoriel Vala
+Exemple de code Vala
+Tutoriels
+Exemples de code
+Copiez et collez le code dans
+valac --pkg gtk+-3.0
+./
+Fenêtres
+Affichage d'éléments graphiques
+Boutons et bascules
+Entrée de données numériques et de texte
+Éditeur de texte multiligne
+Menu, boîte combinée et éléments graphiques de barre d'outils
+Élément graphique arborescent
+Sélecteurs
+Sélecteurs de fichiers
+Sélecteurs de polices
+Sélecteurs de couleurs
+Conteneurs d'agencement
+Barre de défilement
+Divers
+Un guide pour débuter la programmation d'interfaces graphiques avec GTK+, incluant des exemples de code et des exercices pratiques.
+Un guide pour débuter la programmation d'interfaces graphiques avec GTK+, incluant des exemples de code et des exercices pratiques.
+0 Tutoriels pour les débutants et exemples
+Copiez et collez le code dans
+Saisissez dans le terminal :
+gjs
+Tutoriels pour les débutants zéro
+Le language de programmation C
+Copiez et collez le code dans
+gcc
+Pour davantage d'informations sur la compilation des programmes Gtk+, consultez
+valac --pkg gtk+-3.0
+Prévu bientôt...
+3 Lecteur audio
+@@image: 'media/aboutdialog_GMenu.png'; md5=a36117a559fa98e25e2f6b3db593639f
+AboutDialog
+Afficher des informations à propos d'une application
+AboutDialog
+Un exemple AboutDialog utilisant Gtk.ApplicationWindow et Menu
+set_default_size
+AboutDialog
+Une boîte de dialogue qui affiche des informations à propos d'une application
+Un exemple AboutDialog utilisant Gtk.ApplicationWindow et Menu (le « about » s'affiche si « About » a été sélectionné dans le menu).
+Gtk.ApplicationWindow
+GtkAboutDialog
+AboutDialog
+Une boîte de dialogue qui affiche des informations sur une application ainsi sur ses auteurs. Celle-ci est activée en cliquant sur « About » dans le menu de l'application, ce qui est normalement son emplacement approprié.
+Gtk.AboutDialog
+AboutDialog
+@@image: 'media/scale.png'; md5=462c52a53b773cb9e8c62c646bf88452
+@@image: 'media/button.png'; md5=8d69efbb3a0d3e043af6139b6492171c
+@@image: 'media/spinner.png'; md5=d04f2d81f1d72c6c2f97e8729947dfed
+@@image: 'media/scale.png'; md5=462c52a53b773cb9e8c62c646bf88452
+Un élément graphique bouton qui change d'étiquette quand il est cliqué.
+Connexion des signaux
+Une application basique « hello, world »
+Début du plaisir
+Exemples de code
+Exemples de code
+Exemples de code
+Exemples de code
+@@image: 'media/grid.png'; md5=27d45da115401127456a3b854dcfc5be
+@@image: 'media/grid.png'; md5=27d45da115401127456a3b854dcfc5be
+@@image: 'media/switch_on.png'; md5=95e8769f758c2d95ace0fa8ecf30b29d
+@@image: 'media/button.png'; md5=8d69efbb3a0d3e043af6139b6492171c
+@@image: 'media/grid.png'; md5=27d45da115401127456a3b854dcfc5be
+@@image: 'media/grid.png'; md5=27d45da115401127456a3b854dcfc5be
+@@image: 'media/window.png'; md5=eb0cde3530978619c25bddfaeb453345
+@@image: 'media/grid.png'; md5=27d45da115401127456a3b854dcfc5be
+Mise en place de nos acteurs image
+Réaction aux clics
+Pour lancer cette application, enregistrez-la d'abord sous le nom helloWorld.js, puis ouvrez Terminal, allez dans le dossier où l'application est enregistrée et lancez
+Le fichier weatherapp.js ressemble à ceci :
+Le fichier weatherapp.js ressemble à ceci :
+Chargement des images
+Luc Rebert, <traduc\@rebert\.name>, 2011
+Alain Lojewski, <allomervan\@gmail\.com>, 2011-2012
+Luc Pionchon <pionchon\.luc\@gmail\.com>, 2011
+Bruno Brouard <annoa\.b\@gmail\.com>, 2011-12
+Élément graphique de barre d'outils
+Un bouton qui mémorise l'état
+ToggleButton
+Le texte dit :
+GLib.Source
+Gtk.Widget.key_press_event
+Une boîte de dialogue de message modal qui peut faire exploser le monde.
+Élément graphique LinkButton
+Un élément graphique qui affiche une image.
+Les fichiers autotools pour votre application « Hello world »
+Le fichier autogen.sh installe
+pour donner au fichier les droits nécessaires à l'installation.
+Quand vous avez ces 3 fichiers avec les informations correctes et les droits nécessaires, exécutez ces commandes dans le terminal :
+./autogen.sh
+./configure --prefix=/usr/local
+sudo make install
+Dans ce tutoriel, nous allons construire une petite application, « Hello World » utilisant JavaScript et GTK+. Pour écrire et lancer tous les exemples de code vous-même, vous avez besoin d'un éditeur pour écrire le code, de Terminal et d'un ordinateur sur lequel GNOME 3 ou supérieur est installé. Dans ce guide, nous illustrerons les éléments suivants :
+Après avoir lu ce tutoriel, vous devriez voir ceci sur votre écran :
+Cela doit être la première ligne de votre script parce qu'elle indique à GNOME que nous utilisons Gjs -- les correspondances JavaScript pour GNOME -- afin de le lancer.
+Ensuite, nous devons connecter notre application au bouton de fermeture qui est créé automatiquement avec la fenêtre pour la fonction de fermeture. C'est fait avec la méthode connect(). Lorsque le bouton de fermeture est cliqué, cela envoie le signal « destroy » donc dans cette partie nous connectons le signal « destroy » à function(){Gtk.main_quit()} qui ferme vraiment la fenêtre.
+Voici à quoi ressemble le programme terminé.
+Cela rend votre script exécutable. Ensuite, lancez
+GJS_PATH=`pwd` gjs helloWorld.js
+Élément graphique Grid
+Un fichier desktop pour l'application « Hello world »
+helloWorld.desktop
+Lignes 4 : nom de l'application.
+Ligne 5  : indique une courte description d'élément.
+Si vous voulez que votre fichier
+Quand vous avez terminé d'écrire le fichier .desktop, vous devez modifier ses permissions pour permettre l'exécution du fichier en tant que programme. Pour faire cela, allez dans le dossier contenant le fichier .desktop. Faites un clic droit sur le fichier .desktop, sélectionnez Propriétés et l'onglet Permissions et cochez la case après Exécution :
+Élément graphique bouton
+Le language de programmation Python.
+Un guide complet pour débutant à la programmation GTK+
+Dans ces tutoriels et exemples, nous utilisons JavaScript et GTK+. Ces tutoriels et exemples supposent que vous êtes familier avec la syntaxe de JavaScript. Si ce n'est pas le cas, lisez

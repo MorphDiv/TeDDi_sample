@@ -1,0 +1,45 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+
+session_set_save_handler() session_set_save_handler() establece las funciones que se utilizan a nivel de usuario para el almacenamiento y recuperación de los datos asociados a una sesión.
+Es lo más útil cuando se prefiere utilizar otro método de almacenamiento distinto del proporcionaddo por las sesiones de PHP. p.ej.
+Almacenar los datos de la sesión en una base de datos local.
+Devuelve TRUE si todo fue bien, FALSE en caso de fallo.
+Nota:
+Debe cambiar la opción session.save_handler en la configuración a user en su archivo php.ini para que session_set_save_handler() tenga efecto.
+Nota:
+El manejador "escribir" no se ejecuta hasta que se cierra la salida.
+Por ello, la salida de las sentencias que coloquemos en el manejador "escribir" para el depurado nunca será enviadas al navegador.
+Si se necesita producir una salida para el depurado, se sugiere que la salida se produzca en un archivo.
+El siguiente ejemplo proporciona almacenamiento de las sesiones basado en archivos de forma similar al manejador de sesiones por defecto de PHP files.
+Este ejemplo puede ser extendido fácilmente para cubrir el almacenamiento en bases de datos usando su motor de soporte de bases de datos de PHP favorito.
+La función de lectura debe devolver siempre una cadena para que el manejador de escritura funcione como se espera.
+Devuelva una cadena vacía si no hay ningún dato a leer.
+Los valores devueltos de otros manejadores son convertidos a una expresión booleana.
+TRUE si todo ha ido correctamente, FALSE si ha habido algún problema.
+Ejemplo 1.
+Ejemplo de session_set_save_handler()
+?php function abrir ($save_path, $session_name) {global $sess_save_path, $sess_session_name; $sess_save_path = $save_path; $sess_session_name = $session_name; return(true);} function cerrar() {return(true);} function leer ($id) {global $sess_save_path, $sess_session_name; $sess_file = "$sess_save_path / sess_$id"; if ($fp = @fopen($sess_file, "r")) {$sess_data = fread($fp, filesize($sess_file)); return($sess_data);} else {return(""); / / Debe devolver "" aqu iacute;.}} function escribir ($id, $sess_data) {global $sess_save_path, $sess_session_name; $sess_file = "$sess_save_path / sess_$id"; if ($fp = @fopen($sess_file, "w")) {return(fwrite($fp, $sess_data));} else {return(false);}} function destruir ($id) {global $sess_save_path, $sess_session_name; $sess_file = "$sess_save_path / sess_$id"; return(@unlink($sess_file));} / *********************************************** * ATENCI Oacute;N - Necesitar aacute; implementar alg uacute;n * * tipo de rutinas recolectoras de basura aqu iacute; * *********************************************** / function rb ($maxlifetime) {return true;} session_set_save_handler ("abrir", "cerrar", "leer", "escribir", "destruir", "rb"); session_start(); / / proceed to use sessions normally?
+Anterior
+Inicio
+Siguiente
+
+Subir

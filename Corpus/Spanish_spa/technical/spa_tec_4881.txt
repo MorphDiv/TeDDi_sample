@@ -1,0 +1,543 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# ISO_6393:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de & cervisia;
+Bernd Gehrmann
+& Bernd. Gehrmann. mail;
+Carlos Woelz
+carloswoelz@imap-mail. com
+Marcos Fouces Lago mfouces@yahoo. es Traductor Cristina Yenyxe González García the. blue. valkyrie@gmail. com Traductor
+& Bernd. Gehrmann;
+Carlos Woelz
+& cervisia; proporciona una vista gráfica a la aplicación & CVS;.
+KDE
+kdesdk
+Cervisia
+CVS
+Control de versión
+control de revisión
+Introducción
+cervisia; es un interfaz gráfico para cvs muy sencillo de usar. El objetivo es dar soporte a & CVS; así como a otros programas de control de versiones en una misma interfaz permitiendo resolver conflictos, ver historiales de cambios y diferencias entre archivos, el estado de los archivos sobre los que se está trabajando así como permitir realizar muchas de las funciones propias de un sistema de control de versiones. Puede obtener & cervisia; compilando el módulo kdesdk o instalando el paquete kdesdk que seguramente venga con su distribución. Actualmente, sólo permite el uso de & CVS;, sin embargo se preve implementar soporte para más sistemas de control de versiones en el futuro.
+Un sistema de control de versiones es una herramienta para registrar, gestionar y distribuir diferentes versiones de varios archivos. & CVS; es una de estas herramientas, le permite compartir fácilmente sus modificaciones ya que varias personas puedes trabajar en su propia copia del archivo en su disco duro sin temor a que se sobreescriban unos a otros los cambios. Permite recuperar versiones anteriores (útil para depurar fallos), la creación de varias ramas (para la versión inestable y estable p. ej.) y mucho más.
+El principal repositorio suele contener un proyecto de varias personas (comercial o no) pero puede beneficiarse de las ventajas para el control de las revisiones que le ofrece & CVS; incluso para un proyecto en que usted sea él único miembro. Es sencillo crear un repositorio local que le permitirá identificar los cambios que causaron fallos, deshacer modificaciones, evitar pérdidas accidentales de información, & etc;.
+En el repositorio se guardan los archivos del proyecto mientras que cada miembro mantiene una copia local (en su disco duro) del mismo llamada copia local o copia de trabajo, nosotros podemos realizar modificaciones sobre ellos y enviarlas al repositorio principal al tiempo que actualizamos nuestra copia local para recibir los cambios hechos por los demás miembros.
+Primeros pasos
+Acceso al repositorio
+En esta sección veremos como usar algunas funciones básicas de un sistema de control de versiones mediante & cervisia;; veremos como se descargan módulos y como se trabaja sobre ellos. Para hacer esto, deberá tener acceso al repositorio al menos como cliente lo que significa que alguien (seguramente el administrador del & CVS;) le ha asignado una cuenta de usuario. También puede optar por crear una copia local del repositorio para su propio proyecto.
+Si piensa desarrollar un proyecto complejo, el uso de & CVS; es siempre una buena idea aunque usted sea el único miembro. Puede realizar los cambios que desee en su copia local y usar & cervisia; (o cualquier otra herramienta de administración de & CVS;) para realizar envíos y actualizaciones. Así, podrá rastrear los cambios que causaron problemas y deshacerlos, evitar pérdidas accidentales de información, & etc;. Verá que es muy sencillo crear un repositorio local con & cervisia;.
+Crear un repositorio local
+Abra el diálogo Crear nuevo repositorio (cvs init) pulsando sobre Repositorio Crear.
+Pulse el botón... para seleccionar la directorio en la que quiere crear el repositorio o escriba directamente su ubicación en el cuadro de texto. Por ejemplo, si quiere situar el repositorio en la carpeta / home/ usuario y llamarlo cvsroot, deberá escribir / home/ usuario/ cvsroot en el cuadro de texto o seleccionar la carpeta / home/ usuario y añadir cvsroot a su nombre.
+Cuando pulse Aceptar, & cervisia; creará e iniciará la carpeta para el nuevo repositorio.
+Ahora ya puede importar su trabajo al repositorio o simplemente crear una carpeta en el repositorio para comenzar un nuevo módulo partiendo de cero.
+& cervisia; permite gestionar cómodamente todos sus repositorios con el diálogo Configurar acceso a los repositorios. Para acceder a ella, seleccione Repositorio Repositorio.
+Captura de pantalla del diálogo de configuración de acceso a los repositorios de & cervisia;
+Captura de pantalla del diálogo de configuración de acceso a los repositorios de & cervisia;
+Hay varias formas de acceder a un repositorio & CVS;. Puede hacerse mediante autentificación con contraseña (: pserver:), ssh (usando: ext:), repositorio local (: local:), & etc;. El formato para la localización del repositorio es el siguiente (los parámetros opcionales se señalan entre corchetes):
+[: método: ][[usuario][: contraseña]@]nombrehost[: [puerto]]/ ruta/ al/ repositorio
+No todos estos parámetros son siempre obligatorios. La información de acceso necesaria depende de la forma de acceso que puede clasificarse en:
+Local
+El método de acceso local es el usado por omisión en & CVS; con lo cual no es necesario que indique expresamente el método: local:, puede simplemente añadir la ruta al directorio que contiene el repositorio & CVS; y al que se puede acceder desde su ordenador como / ruta/ al/ repositorio. Un ejemplo real sería: / home/ cvs.
+Puede ser que el repositorio esté situado remotamente en una partición montada a través de NFS pero no importa: si crea un repositorio local es suficiente con que escriba la ruta para llegar a él.
+& rsh;
+La localización del repositorio es algo similar a ext: nombreusaurio@host. url. org: / ruta/ al/ repositorio.
+Este método requiere que tenga una cuenta de usuario en el servidor (en este ejemplo: host. url. org) y una shell remota. por omisión, & CVS; utiliza para ello & rsh; sin embargo, y debido a sus problemas de seguridad se está usando cada vez más & ssh;.
+Si desea utilizar & ssh; deberá configurar la variable de entorno CVS_RSH adecuadamente. Esto es muy sencillo con & cervisia;.
+Observe que & cervisia; no es capaz de negociar una autenticación con el servidor así que deberá asegurarse de que puede hacer login remotamente sin que el servidor solicite una contraseña. Si utiliza una versión clásica de & rsh; puede hacer esto creando una archivo. rhosts en su directorio home con una lista de sistemas fiables (vea la página de & rsh;).
+Con & ssh; puede hacerlo copiando su clave pública (el archivo identity. pub de la carpeta $HOME /. ssh/) en el servidor. La clave no debe estar encriptada con contraseña (consulte la página de manual de & ssh; y el & CVS; / SSH FAQ en SourceForge). Para asegurarse de la forma exacta de hacerlo, pregunte al administrador del servidor.
+pserver
+La localización del repositorio es similar a esta:: pserver: usuario@host. url. org: / ruta/ al/ repositorio
+Con este método se accede al servidor mediante un protocolo con un sistema de autenticación bastante débil (pserver viene de password autentification). Antes de poder usarlo necesitará un nombre de usuario y una contraseña que le proporcionará el administrador del & CVS;. Observe que el nombre de usuario de & CVS; no tiene porque coincidir con el que tiene para el sistema. Antes de acceder al & CVS; deberá hacer login en el sistema.
+Los proyectos de código libre suelen permitir acceso anónimo a su & CVS; con lo cual podrá fácilmente descargarse el código fuente, modificarlo y crear parches para el repositorio sin necesidad de tener una cuenta en el & CVS;. En general, el acceso anónimo al & CVS; es de sólo lectura y se realiza mediante autenticación por contraseña (: pserver:), no podrá subir directamente los cambios que usted realice en el código.
+Una vez conozca el método de acceso y ubicación de un repositorio, podrá añadirlo a la lista de & cervisia;:
+Añadir un nuevo repositorio
+Abra el diálogo Configurar acceso a los repositorios desde Repositorio Repositorios....
+Pulse el botón añadir para abrir el diálogo Añadir repositorio.
+Introduzca la localización el repositorio en el cuadro de texto Repositorio. & cervisia; deshabilitará las áreas del diálogo que no sean aplicables al método de acceso señalado.
+Si usa el método ext para acceder al repositorio, introduzca el intérprete de órdenes remoto que desee usar (eg; & ssh;) en el cuadro de texto Usar shell remota.
+Pulse Aceptar. Verá el repositorio que acaba de introducir en la lista.
+Si el método de acceso de ese nuevo repositorio es mediante contraseña (pserver), necesitará identificarse antes de conectarse al servidor. Pulse sobre dicho servidor para seleccionarlo y pulse el botón Acceder. Introduzca su contraseña en la ventana emergente.
+Si todo ha ido bien, verá que la columna de Estado del repositorio en cuestión cambia de Sin acceso a Dentro del sistema.
+Pulse Aceptar para que surjan efecto estas modificaciones o siga añadiendo repositorios a la lista. & cervisia; puede almacenar tantos como desee.
+Importar un módulo al repositorio
+En esta sección veremos como introducir un nuevo proyecto en el repositorio & CVS;. Si sólo quiere trabajar en un proyecto que ya está en él, puede saltarse esta sección.
+Hay dos formas de incorporar un proyecto a & CVS;:
+Importar los archivos y carpetas a un nuevo módulo mediante el diálogo de importación de & cervisia;. Los módulos son las principales carpetas del árbol de directorios del & CVS;, sirven para separar y organizar los distintos proyectos existentes en el repositorio.
+Crear un módulo vacío y añadir manualmente los nuevos archivos y carpetas. Tendrá un mejor control sobre el proceso aunque también le llevará más tiempo.
+Recuerde que & CVS; fue diseñado para gestionar archivos de texto, muchas de sus funciones como p. ej. combinar los cambios de varios miembros, crear archivos de diferencias, & etc; sólo pueden hacerse sobre archivos de texto. Esto no quiere decir que no pueda usar & CVS; para gestionar archivos binarios, sólo que si lo hace debe indicar expresamente si un archivo es binario. Si no casi con toda seguridad & CVS; corromperá esos archivos.
+Importar un proyecto (como un nuevo módulo) tiene una serie de ventajas: usted importa recursivamente todos los archivos y directorios y el módulo se creará automáticamente, así importar grandes proyectos al repositorios es una tarea muy sencilla. Existen también algunas desventajas como no poder utilizar el diálogo de importación de & cervisia; para añadir archivos a los módulos existentes y se importarán archivos de texto y binarios. Puede evitar ese problema creando carpetas que sólo contengan un tipo de archivo o estableciendo el patrón de archivos a ignorar durante la importación.
+Por ejemplo, suponga que su proyecto sólo contiene archivos de texto e imágenes PNG (que son binarios). Puede indicarle a & CVS; que ignore todos los archivos que sigan el patrón *. png mientras importa los demás archivos como texto, o puede mover las imágenes a una carpeta separada, y a continuación importar los archivos restantes (como archivos de texto). De cualquier forma, debe descargar el módulo que se acaba de importar a la copia de trabajo nueva, copiando los archivos y carpetas que falten copiándolos, añadir y enviarlos al repositorio para completar el proceso de importación.
+Una posible alternativa consiste en añadir manualmente los archivos y carpetas creando un módulo vacío para ellos. Para añadir un módulo vacío al repositorio, cree una carpeta nueva a la carpeta raíz del repositorio de & CVS;. El nombre de esta carpeta nueva será el nombre del módulo. Descargue el nuevo módulo vacío. A continuación copie los archivos y carpetas a la copia de trabajo, añada y envíe para subir los nuevos archivos al repositorio de & CVS;.
+Captura de pantalla del diálogo de importación de & cervisia;
+Captura de pantalla del diálogo de importación de & cervisia;
+En puede ver el diálogo que le permitirá importar el proyecto a un módulo. Para abrir ese diálogo en & cervisia;, seleccione Repositorio Importar.
+Repositorio:
+Seleccione el nombre del repositorio & CVS; de la lista, también representado por la variable $CVSROOT. Deberá haber sido creado previamente y disponer de permiso de escritura. Si aún no hubiera sido creado, podrá hacerlo seleccionando Repositorio Crear.
+La pestaña de selección muestra la lista de repositorios que ha introducido previamente mediante el cuadro Configurar acceso a los repositorios. Si el repositorio está situado en otra máquina, asegúrese de que la autenticación funciona correctamente. Para más información vea.
+Módulo:
+El nombre del módulo bajo el que se guardará el proyecto. Después de la importación, podrá descargarse el proyecto usando ese nombre. Para más información vea. Este nombre también corresponde al de su correspondiente carpeta en el repositorio.
+Directorio de trabajo:
+Directorio principal del proyecto a importar. La importación comienza en ese directorio y desciende recursivamente.
+Etiqueta del vendedor:
+Históricamente, se usaba para seguir la pista del código aportado por terceras personas. Puede usar su propio nombre si no se le ocurre nada mejor, no tiene mayor importancia.
+Etiqueta de publicación:
+Esta etiqueta también se usaba históricamente para importar distintas versiones de código de tercera partes. Si no es su caso, utilice la palabra inicio o la cadena FOO_1_0 donde FOO sería el nombre de su proyecto y 1.0 la versión.
+Archivos ignorados:
+Si rellena ese campo, se introducirá una nueva opción -l nombre archivos al comando cvs import. Esta entrada debe contener una lista de patrones de nombres de archivo, separados por espacios, que deben ser ignorados. Una solución más limpia y menos propensa a error para controlar qué archivos se importan es crear un directorio donde sólo estén los archivos a importar y comenzar desde ahí. Pese a ello, este campo puede resultar útil en proyectos que contienen archivos ignorados por omisión por & CVS;, p. ej los archivos core, en cuyo caso introduzca simplemente el carácter! para que no se consideren las opciones por omisión de & CVS; para ignorar archivos. Vea.
+Comentarios:
+Utilice es campo para guardar comentarios sobre el origen, uso, desarrollo, & etc; de los archivos que está importando.
+Importar como binario
+Si marca esta casilla, se importarán todos los archivos como binarios, esto es, se añadiría el argumento -kb a la orden cvs import.
+Utilizar la hora de modificación del archivo como la de importación
+Si marca esta casilla, se considerará la hora de importación como la de modificación del archivo en lugar de considerar la propia de importación.
+Una vez que ha rellenado los campos y pulsado Aceptar, se ejecutara el siguiente comando de & CVS;:
+cvs -d repositorio import -m "" módulo etiqueta del vendedor etiqueta de la publicación
+Descargar un módulo del repositorio
+Una vez que ha configurado correctamente la localización de su repositorio e importado los primeros archivos es hora de descargar el módulo para crear su copia de trabajo.
+También deberá conocer el nombre de la rama y la etiqueta que desea.
+Las ramas de un módulo son versiones paralelas del mismo. Un ejemplo real de su uso sería la publicación de un proyecto de software. Después de una publicación importante, habrá fallos en el código que será necesario arreglar sin embargo los desarrolladores también querrán añadir nuevas características. Es muy difícil hacer esto al mismo tiempo debido a que la nuevas características también introducirán nuevos fallos dificultando el seguimiento de los más antiguos. Para resolver este problema, & CVS; permite crear una versión paralela que llamaremos & quot; rama de la versión establequot; dónde sólo es posible entregar soluciones a los fallos existentes, mientras que prosigue el desarrollo del software en la rama principal (HEAD).
+Las etiquetas se usan para marcar una determinada versión de un proyecto. & CVS; utiliza esto para marcar los archivos así, si descarga o actualiza a una etiqueta concreta siempre tendrá la misma versión de los archivos. En contraste con las ramas, las etiquetas son inamovibles, no es posible desarrollar una etiqueta. Son útiles para señalar publicaciones, grandes cambios en el código, & etc;, gracias a ellas es sencillo devolver el proyecto a una fecha o estado anterior, reproducir y hacer un seguimiento de las fallos, volver a generar el código de una determinada versión, & etc;.
+Captura de pantalla del diálogo de descarga de & cervisia;
+Captura de pantalla del diálogo de descarga de & cervisia;
+Nombre del repositorio & CVS;, también conocido como $CVSROOT. El menú desplegable le mostrará la lista de repositorios que ha introducido previamente mediante el cuadro de diálogo Configurar acceso a los repositorios. Si el repositorio es remoto asegúrese de que la autenticación es posible. Para más información consulte.
+Nombre del módulo a descargar. Si está trabajando en un repositorio ya existente seguramente el administrador le pueda dar ese nombre o bien, si el proyecto es de código libre, su nombre seguramente esté en su web. Si quiere crear un nuevo módulo partiendo de cero con los archivos de su repositorio local sólo necesitará crear una carpeta en el directorio principal del repositorio. El nombre de esa carpeta debe ser el mismo que el del módulo.
+Si el repositorio tiene un archivo $CVSROOT / módulos, podrá ver una lista de los módulos disponibles pulsando el botón Buscar lista.
+Observe que es posible descarga cualquier subdirectorio del módulo independientemente del resto del módulo, únicamente debe señalar la ruta a dicha subdirectorio. Por ejemplo, si sólo quiere bajar la subdirectorio doc/ cervisia del módulo kdesdk, escriba kdesdk/ doc/ cervisia.
+Etiqueta de la rama:
+Nombre de la rama o etiqueta que quiere descargar. Si deja ese campo vacío, & cervisia; descargará la rama principal (HEAD).
+Directorio de trabajo:
+La carpeta en la cual se descargará el módulo. Observe que el directorio principal de la copia de trabajo tiene el mismo nombre que el módulo a descargar salvo que haya indicado otra cosa en el campo Descargar como.
+Descargar como:
+Hace que los archivos de la copia de trabajo se descarguen en otra carpeta dentro del directorio de trabajo en lugar de hacerlo en la del mismo nombre que el módulo.
+Sólo exportar
+Si marca esa casilla, los archivos se exportarán en lugar de descargarse. La diferencia es que al exportar no se descargan las carpetas de administración del & CVS;. Por ejemplo, la exportación puede utilizarse para preparar el código fuente para una versión.
+Descarga recursiva
+Descargar todos los archivos y carpetas recursivamente.
+Ventana principal mostrando el estado de los archivos y actualizando
+Cuando inicia & cervisia; y abre un archivo de la copia de trabajo seleccionado Archivo Abrir directorio de trabajo puede ver dos partes en la ventana principal: la superior es un vista en árbol del directorio actual de trabajo, la inferior se usa para mostrar los comandos de & CVS; que ejecuta & cervisia; para realizar las tareas que le indicamos así como la salida de los mismos.
+por omisión, & cervisia; no muestra los archivos que contienen las subdirectorio por lo que tendrán que pinchar sobre ellas si quiere verlos. Para ver todos los archivos de la copia de trabajo, seleccione Ver Desplegar árbol de archivos. Para plegar de nuevo el árbol seleccione Ver Plegar árbol de archivos.
+De acuerdo con la configuración de. cvsignore, los archivos que no desea que se incluyan en el repositorio no se muestran en el árbol de archivos. Par cada archivo visible podrá ver su estado, por omisión éste se estable a "desconocido" debido a que & cervisia; retrasa la obtención de información hasta que seleccione los archivos y carpetas cuyo estado quiere actualizar o ver y seleccione Archivos Actualizar o Archivo Estado. De esta forma dispondrá de un mínimo de funcionalidad aunque no esté conectado permanentemente al servidor & CVS;.
+Captura de pantalla de la vista principal de & cervisia;
+Captura de pantalla de la vista principal de & cervisia;
+Las órdenes del menú Archivo solo suelen actuar sobre los archivos marcados. También puede marcar carpetas. A continuación seleccione Archivo Estado o pulse F5. & cervisia; ejecutará
+cvs update -n nombre archivos
+para recabar información sobre el estado de los archivos señalados. Observe que & cervisia; sólo recorrerá recursivamente las subdirectorios si tiene seleccionada la pertinente opción en el menú Preferencias. Ahora podrá ver el estado de cada archivo en la columna de Estado:
+Modificados localmente
+Quiere decir que ha modificado localmente el archivo respecto de la versión del repositorio.
+Añadido localmente
+Significa que tiene pendiente de entrega un archivo que no existe en el repositorio pero sí en su copia local. El archivo en cuestión sólo aparecerá en el CVS después de realizar la entrega.
+Eliminado localmente
+Significa que ha borrado un archivo de su copia local pero aún sigue existiendo en el repositorio. Sólo se eliminará después de realizar una entrega.
+Necesita actualizar
+Aparece cuando existe una versión más reciente de ese archivo en el repositorio, & eg; porque otra persona ha estado trabajando sobre él. En general querrá actualizar su copia local para tener siempre la versión más actual de todos los archivos.
+Necesita parcheado
+Muy similar al anterior sólo que al actualizarse no se transfiere todo el archivo sino sólo un parche con los cambios.
+Necesita combinarse
+Indica que deben combinarse la revisión que usted ha hecho en su copia local y la versión del repositorio. Esto suele ocurrir cuando ha modificado un archivo al mismo tiempo que otra persona. Si decide actualizar, se combinarán las modificaciones del repositorio con las suyas. En caso de conflicto (ie; que alguien haya modificado las mismas líneas que usted) el nuevo estado del archivos será « Conflicto ».
+Actualizado
+Indica que el archivo es idéntico a la versión del repositorio.
+Conflicto
+Se muestra si el archivo sigue teniendo conflictos con la versión del CVS. Seguramente haya actualizado previamente el archivo sin resolver los conflictos.
+No presente en el CVS
+Indica que el archivo no figura en el repositorio & CVS;. Si quiere que esté disponible para los demás, debe añadirlo al repositorio y si no lo desea debería añadir su nombre en el archivo. cvsignore.
+Una vez que se ha hecho una idea del estado actual del & CVS; es posible que desee actualizarse. Seleccione algunos archivos (o carpetas lo que equivale a seleccionar todos los archivos que contienen). A continuación seleccione Archivo Actualizar (por supuesto, puede hacerlo al principio de la sesión). Alguno de los archivos cambiará de estado. En general, se actualizan los archivos señalados como « Necesita ser parcheado » o « Necesita actualizar », lo que hace que puedan darse los siguientes casos en la columna de estado:
+Actualizado
+Se muestra cuando el archivo se actualizó a la versión del repositorio.
+Parchado
+Indica que el servidor & CVS; envió un parche para ese archivo y ha sido aplicado correctamente. Si no se ha conseguido aplicar debido a un conflicto entre sus modificaciones y las que otra persona ha enviado el estado para a ser Conflicto.
+Seguramente habrá notado que según el estado de un archivo, su fila tiene un color diferente. Los colores corresponden a la prioridad dada a cada estado. Por ejemplo: un archivo con un conflicto se marca en rojo debido a que tendrá que resolver dicho conflicto antes de seguir trabajando sobre él. Si su directorio contiene un gran número de archivos, es posible que le resulte más complicado tener una visión de conjunto. Para tener información más exacta acerca de qué archivos están en un estado inusual simplemente pinche sobre el encabezado de la columna Estado. Ahora se listarán los archivos por orden de prioridad con lo que tendrá toda la información importante en la parte superior de la lista. Para volver al orden alfabético pinche sobre el encabezado de la columna Nombre de archivo.
+Trabajar con los archivos
+Es posible acceder a las funciones más comunes de & CVS; directamente desde la vista principal de & cervisia;. Las órdenes suelen ejecutarse en todos los archivos seleccionados. Si tiene seleccionada alguna carpeta, el comportamiento variará según el menú Preferencias. Por ejemplo, si tiene marcada la casilla Preferencias Entregar y eliminar recursivamente y escoge Archivo Entregar... cuando tenga seleccionada una carpeta, se entregarán todos los archivos de esa carpeta así como los contenidos por otras dentro de ella. Si no la tiene marcada, sólo se entregarán los archivos de la carpeta seleccionada.
+Captura de pantalla de un menú contextual de & cervisia;
+Las funciones más frecuentes también están disponibles pulsando con el botón derecho sobre la vista en árbol, a través del menú contextual. que muestra el menú contextual de & cervisia;.
+Para editar un archivo simplemente realice una doble pulsación sobre él o selecciónelo y pulse & Enter;. El archivo se abrirá en la aplicación que KDE tenga configurada para ese tipo. Si no desea abrir el archivo en esa aplicación puede hacer una doble pulsación sobre el archivo y seleccionar Editar con y seleccionar una de las aplicacione que manejan este tipo de archivo.
+Añadir archivos
+Puede añadir archivos a un proyecto en dos pasos: primero será necesario que & CVS; sepa que existen, es decir, entregarlos al repositorio. Este método tiene una ventaja importante: puede entregar archivos conjuntamente con modificaciones realizadas en otras áreas del proyecto. Al hacer esto, es fácil ver que esos cambios son parte de un todo.
+Para terminar, seleccione todos los archivos que quiere añadir en la ventana principal de & cervisia;. Luego seleccione Archivo Añadir al repositorio o pinche con el botón derecho sobre los archivos seleccionados y seleccione Añadir al repositorio, verá el diálogo Añadir al CVS que le mostrará los archivos seleccionados. Pulse Aceptar.
+& cervisia; ejecutará la orden
+cvs add nombre archivos
+Si todo ha ido bien, la columna de estado debe señalar "Añadido al repositorio" para todos los archivos que hemos señalado.
+& CVS; no está diseñado para permitir un exhaustivo control de las revisiones de los archivos binarios, p. ej. normalmente carece de sentido combinar cambios entre archivos binarios. Además, & CVS; autocompleta por omisión la palabras clave (en la cadeeg; na dollar; Revision 1.6dollar;) cada vez que se le entrega un archivo. Si se hace esto en un archivo binario probablemente deje de ser utilizable.
+Para evitar todos estos problemas, debe asegurarse al enviar archivos binarios (como imágenes PNG o archivos postscript) de seleccionar Archivo Añadir binario. Verá el diálogo Añadir al CVS donde se listarán los binarios que haya seleccionado y se le pedirá confirmación. Pulse Aceptar.
+cvs add -kb nombre archivos
+Eliminar archivos
+Al igual que cuando los añadimos, al eliminar archivos también necesitaremos dos pasos: primero necesitamos que el servidor tenga constancia de que los queremos eliminar, para ellos seleccionamos Archivo Eliminar del repositorio o Eliminar del repositorio desde el menú contextual. Aparecerá el diálogo Eliminar del CVS listando los archivos seleccionados. Pulse Aceptar. & cervisia; ejecutará la orden
+cvs remove -f nombre archivos
+Después de eso, deberá entregarse esa modificación quizás junto a otras modificaciones.
+Este comando sólo funciona si el archivo está actualizado. Aunque pueda parecer un detalle sin importancia, piense que si el archivo se modificó desde la última vez es porque alguien aún está trabajando en él y posiblemente deba reconsiderar descartarlo.
+Añadir y eliminar directorios
+& CVS; gestiona las carpetas de modo distinto a los archivos. Éstos carecen de control de revisiones, & ie; no puede saber qué directorios existían en el proyecto en un momento dado. Por ello no es posible eliminar expresamente directorios, salvo que lo hagamos directamente en el repositorio.
+Siguiendo esto, & CVS; considera los directorios vacíos como inexistente. Podemos obligarle a eliminarlos usando la opción -P cvs update y cvs checkout. Esto puede configurarse en el menú Preferencias Eliminar directorios vacíos al actualizar.
+Es posible añadir un directorio al repositorio seleccionando Archivo Añadir al repositorio... o bien pulsando con el botón derecho sobre la carpeta seleccionada y eligiendo Añadir al repositorio... en el menú contextual. Observe que a diferencia del proceso de añadir archivos, al añadir directorios no es necesario realizar una entrega posterior. & cervisia; ejecutará la orden
+cvs add nombredir
+Entregar archivos
+Una vez que ha realizado un cierto número de cambios en su copia local y quiere que otros miembros accedan a su trabajo, deberá entregarlos. Al entregar los cambios, lo que hace es situar su propia versión de los archivos modificados como nuevas revisiones en el repositorio. Cuando otro miembro actualice su copia local recibirá (entre otros) los cambios que usted ha realizado.
+Para entregar un par de archivos, márquelos en la ventana principal de & cervisia; y seleccione Archivos Entregar o pinche con el botón derecho los archivos marcados y seleccione Entregar en el menú contextual.
+Captura de pantalla del diálogo de entrega de & cervisia;
+Verá un diálogo con una lista de los archivos seleccionados en la parte superior y los mensajes de registro en la parte inferior. & cervisia; le ayudará de varias formas a encontrar un mensaje de registro con significado: puede hacer doble click o pulsar Intro sobre un archivo para ver lo cambios que ha realizado en el mismo, puede ver una lista de los mensajes de registro que ha usado y también se ha integrado este diálogo en el editor de cambios de & cervisia;. Cuando haya terminado, se ejecutará la orden
+cvs commit -m mensaje nombres de archivos
+a tal fin.
+Un error frecuente al entregar archivos es Falló la comprobación de actualización. Esto indica que alguien ha entregado cambios al repositorio desde la última vez que usted se ha actualizado, más técnicamente: su revisión BASE no es la más reciente existente. En este caso, & CVS; no aceptará sus cambios hasta que se actualice, resuelva los posibles conflictos y realice una nueva entrega. Si está trabajando en un proyecto de software, es una norma de cortesía comprobar que el programa funciona después de introducir sus cambios ya que es posible que sus cambios no sean compatibles con los introducidos por otras personas aunque no existan conflictos en el mismo archivo.
+Otro error frecuente es La etiqueta inamovible 'X 'para el archivo 'X' no es una rama. Esto ocurre si intenta enviar un archivo al que previamente le ha asignado un determinado número de revisión o etiqueta con el comando
+% cvs update -r X
+(usado & eg; en Avanzado Actualizar a etiqueta/ fecha). En cuyo caso, la etiqueta del archivo es inamovible, & eg;, las siguientes actualizaciones no descargarán la versión más reciente de la rama. Si necesita entregar versiones posteriores a esa rama, antes deberá actualizarse a la versión más reciente de la misma.
+Con & cervisia; es bastante fácil mantener un archivo con los registros de cambios acorde con las normas de programación de & GNU;. Para usarlo, seleccione Archivo Insertar entrada de registro de cambios.... Si ya existe un archivo llamado ChangeLog en el directorio principal de su copia local, éste se cargará y podrá editarlo. Al principio del mismo se introducirá una entrada con la fecha actual y su nombre de usuario (puede configurarlo en). Una vez pulse Aceptar, el siguiente diálogo de envío que abra tendrá el último mensaje introducido en el registro de cambios como mensaje de registro.
+Resolución de conflictos
+Si le coincide modificar un archivo al mismo tiempo que otro miembro, es posible que ocurran conflictos que será detectados por & CVS; cuando actualice el archivo. & CVS; intentará combinar los cambios del otro miembro en su copia local. En el caso de que coincidan las líneas cambiadas, & CVS; no los combinará y dará un mensaje de error.
+Podrá ver los archivos con conflictos desde la vista principal de & cervisia;, aparecen marcados como "conflicto" en la columna de estado y resaltados en rojo. Tendrá que resolver los conflictos antes de entregar esos archivos ya que & CVS; no le permitirá entregarlos mientras existan conflictos. También puede resolver conflictos de manera tradicional haciendo doble click sobre el archivos en cuestión y editándolo con su editor favorito.
+& CVS; señala los cambios conflictivos poniendo marcas en la mitad de los archivos de este modo:
+& lt; lt; lt; lt; lt; lt; lt; Cambios en su copia local ======= Cambios en el repositorio & gt; gt; gt; gt; gt; gt; gt; revisión_number
+Deberá reemplazar todo este bloque con la nueva versión combinada. Claro está que tiene mucha libertad a la hora de resolver una serie de conflictos: puede escoger una de las dos reversiones y descartar los otros cambios. También puede concluir que en ambos casos los cambios son inadecuados y reescribir usted mismo las funciones e incluso reescribir todo el archivo.
+Afortunadamente, & cervisia; proporciona un útil sistema para resolver estos problemas. Ésto no quiere decir que nunca sea necesario editar los archivos a mano, pero sí que podrá evitarlo para solucionar los conflictos más triviales. Para utilizar el diálogo Resolver para el CVS, seleccione Archivo Resolver o pulse con el botón derecho el archivo seleccionado y elija Resolver desde el menú contextual.
+Captura de pantalla del diálogo de resolución de conflictos de & cervisia;
+Captura de pantalla del diálogo de resolución de conflictos de & cervisia;
+En la parte superior del diálogo verá ambas versiones del archivo. En la parte izquierda podrá ver Su versión (A) del archivo y el la derecha Otra versión (B). La sección combinada muestra las partes del archivo que se introducirán en su copia local si pulsa Aceptar.
+Podrá avanzar y retroceder a través de las secciones pulsando lt; lt; y gt; gt;. En la parte inferior del diálogo podrá ver qué sección está señalada en cada momento.
+Ahora podrá decidir para cada sección qué versión quiere tener en el archivo combinado. Pulsando A se añadirá la versión que ha editado y pulsando B la del repositorio. Pulsando A+B se añadirán ambas versiones: primero la suya y luego la del repositorio, si pulsa B+A también se añadirán las dos aunque primero la del repositorio y luego la suya.
+Si ninguna de las versiones le satisface, pulse Editar para modificar esa sección en un editor. Cuando termine pulse Aceptar para volver al diálogo Resolver para el CVS. Podrá ver la sección que acaba de editar en la Versión combinada junto con los cambios introducidos por usted.
+Para guarda sus cambios, sobreescribiendo su versión de la copia de trabajo, pulse Guardar. Observe que esto no sólo guardará la sección que está viendo sino todo el archivo. Si quiere guardarlo en otro archivo, pulse Guardar como. Pulse Cerrar para salir del diálogo. Tenga en cuenta que si lo hace sin guardar los cambios, éstos se perderán.
+Obtener información sobre archivos y crear parches
+Observar las diferencias entre revisiones
+En & cervisia; dispone de varios sitios donde acceder a una ventana que muestre las diferencias entre las revisiones de un archivo:
+Desde la vista principal podrá seleccionar Ver Diferencias con el repositorio (BASE). Esta función está basada en el comando cvs diff, le mostrará las diferencias entre su versión local y la última que actualizó (también conocida como BASE). Esto es bastante útil antes de entregar un archivo, así podrá luego encontrar fácilmente el mensaje de registro.
+Podrá ver las diferencias entre su versión local y la de la rama principal de desarrollo (también llamada HEAD) seleccionando Ver Diferencias con el repositorio (HEAD).
+Podrá ver las diferencias entre las dos últimas revisiones del archivo seleccionado, en Ver Última modificación.
+Podrá acceder a las opciones de menú Diferencias con el repositorio (BASE), Diferencias con el repositorio (HEAD) y Última modificación con una doble pulsación sobre el archivo en cuestión y seleccionándolos en el menú contextual.
+Podrá ver una ventana con las diferencias en el diálogo que se muestra cuando entrega una archivo seleccionando el nombre de un archivo ya sea haciendo doble click sobre él o pulsando Intro. Esto es muy similar a seleccionar Ver Diferencias con el repositorio sobre los archivos respectivos en la vista principal.
+Desde el diálogo de visualización de registros, podrá seleccionar dos revisiones de un archivo y ver las diferencias entre ambos (vea).
+Seguramente habrá notado que & cervisia; no sólo le muestra la salida del comando diff sino que la representa gráficamente tal como puede ver en.
+Captura de pantalla del diálogo de diferencias de & cervisia;
+Captura de pantalla del diálogo de diferencias de & cervisia;
+El texto que aparece en el diálogo incorpora una serie de mejoras respecto al que le proporcionaría el comando diff con la opción -u. Puede ver ambos archivos en sendas ventanas con las líneas ordenadas de tal modo que pueda fácilmente comparar ambos. Donde se haya borrado o añadido alguna línea, se mostrará el delimitador +++++ en el lado izquierdo de la ventana respectiva. Podrá ver los número de línea en la columna de la izquierda.
+En la segunda columna de la ventana derecha, podrá ver los cambios realizados que pueden ser: Añadido, Borrado y Modificado con las líneas resaltadas en azul, verde y rojo respectivamente. Así, podrá ver rápidamente todos los cambios realizados sobre el archivo. También puede usar la posición de las regiones coloreadas de la imagen comprimida como orientación al usar la barra de desplazamiento.
+Normalmente, las barras de desplazamiento de la izquierda y de la derecha están sincronizadas, & ie; que si mueve una, la otra también lo hará. Puede evitar esto marcando la casilla Sincronizar barras de desplazamiento.
+Para obtener más información sobre cómo personalizar el diálogo de diferencias vea.
+Crear parches
+Puede querer que alguien revise sus modificaciones antes de entregarlas o quizás carece de una cuenta de acceso en el repositorio. En estos casos, & CVS; proporciona métodos estándar para compartir los cambios que ha hecho y que otras personas puedan revisarlos y eventualmente entregarlos. Los archivos que contienen estos cambios se denominan parches y se crean mediante el comando cvs diff de igual modo que las diferencias en. El uso de este tipo de archivos disminuye el ancho de banda al ser más pequeños que el archivo completo, además un sólo parche puede contener los cambios de varios archivos.
+& cervisia; le permite acceder a esta característica seleccionando Avanzado Crear parche para el repositorio.
+La acción Crear parche para el repositorio crea un parche con todas las modificaciones realizadas en los archivos de su copia de trabajo respecto de la rama BASE del repositorio. Sin embargo, la selección de archivos en la vista principal no afecta al parche que se generará.
+Otra posibilidad es seleccionar un archivo en la vista principal y seleccionar Ver registro en el menú Ver o pulsar con el botón derecho sobre el archivo y seleccionar Ver registro en el menú contextual para que se abra el diálogo Buscar registros. Ahora deberá seleccionar la versión para la que se quiere crear un parche como revisión « A » y pulsar Crear parche. Esto creará un parche con las diferencias de su copia local respecto al archivo seleccionado y la versión seleccionada como revisión « A ».
+Antes de crear un parche, & cervisia; le muestra un diálogo para que decida el formato de salida.
+Captura de pantalla del diálogo de creación de parches de & cervisia;
+Captura de pantalla del diálogo de creación de parches de & cervisia;
+Formato de salida
+Existen tres posibilidades:
+Normal: puede usarse para hacer que el editor haga automáticamente otra copia del viejo archivo que coincida con el nuevo. Los caracteres & lt; y & gt; señalan los cambios y no dispone de información contextual.
+Unificado: es el formato más usado. Utiliza líneas contextuales además de los números de línea para registrar las diferencias lo que añade robustez al proceso de aplicar un parche. Esto formato muestra las diferencias en una forma compacta y legible con un encabezado para cada archivo implicado y secciones separadas para cada diferencia. Las líneas contextuales incluidas con cada diferencia hace que sea más sencillo entender los cambios realizados. Los caracteres + y - señalan los cambios.
+Contextual: contiene la misma información que el unificado pero de forma menos compacta. El el formato de salida, el carácter! marca los cambios.
+Cantidad de líneas contextuales:
+Ponga aquí el número de líneas contextuales para los formatos unificado y contextual, esta opción no está disponible para el formato normal ya que no contiene información contextual. Cuanta más información contextual esté disponible, más sencilla resultará su lectura y su aplicación aunque se incrementará el tamaño del parche. Es recomendable el uso de al menos dos líneas contextuales.
+Ignorar opciones
+Vea aquí los cambios que no deben considerarse como diferencias al generar parches.
+Una vez configurado el formato de salida, & cervisia; creará el parche y le mostrará el diálogo Guardar como. Introduzca el nombre y la localización del parche.
+Ver un archivo con anotaciones
+Con el comando cvs annotate, & CVS; le permite saber para cada línea modificada quien ha sido el último en hacerlo. Esto puede resultar útil para saber quién ha sido el que ha introducido un determinado cambio para contactar con él acerca de cualquier incidencia en esa parte del código.
+& cervisia; le permite ver esta información mejor que en una consola. Para ver una versión anotada, seleccione Ver Anotar. Otra forma es pulsar el botón Anotar en el diálogo Buscar registros donde podrá seleccionar qué versión del archivo quiere ver. En puede ver una captura de pantalla de ese diálogo.
+Captura de pantalla del diálogo de anotaciones de & cervisia;
+Captura de pantalla del diálogo de anotaciones de & cervisia;
+En el diálogo de anotaciones, podrá ver una ventana con la última versión del archivo seleccionado (o la revisión & quot; Aquot; de la versión, en caso de que iniciase el diálogo de anotaciones desde el de Búsqueda de registros). En las columnas antes del texto, podrá ver información sobre el último cambio de cada línea. En la primer columna se muestra el número de línea, en la segunda el nombre del autor y el número de revisión y, finalmente, en la tercera columna puede ver el contenido actual de la línea.
+En consecuencia, cuando el formato de una determinada línea le parece extraño o cree que contiene algún fallo podrá saber inmediatamente quien es el responsable. También podrá saber porque se ha modificado esa línea para lo cual deberá situar el cursos sobre el número de revisión que desee, aparecerá un cuadrito mostrándole el mensaje de registro junto con la fecha del cambio.
+Ver los registros de & CVS;
+Cuando marca un archivo en la vista principal y selecciona Examinar registro desde el menú Ver o pulsa con el botón derecho sobre el archivo y seleccione Buscar registro en el menú contextual. Se mostrará el diálogo Registro de CVS (si selecciona más de un archivo no ocurrirá nada porque & cervisia; sólo puede mostrar el registro de un archivo al mismo tiempo). Desde aquí no sólo podrá ver el historial del archivo sino que también podrá:
+Ver la revisión, autor, fecha, rama, mensaje de entrega y etiquetas para cada versión del archivo seleccionado.
+Ver una gráfico en árbol de las ramas y etiquetas del archivo seleccionado.
+Ver cualquier versión del archivo seleccionado (se abrirá con la aplicación por defecto).
+Ver una versión con anotaciones de cualquier versión del archivo seleccionado
+Ver las diferencias sobre dos versiones cualquiera del archivo seleccionado.
+Crear parches con las diferencias entre dos versiones distintas del archivo seleccionado incluyendo su propia copia local.
+Captura de pantalla del diálogo del visor de registros de & cervisia;
+Captura de pantalla del diálogo del visor de registros de & cervisia;
+Podrá ver el historial tal como lo crea la orden cvs log (Salida de CVS) en forma de Árbol o en forma de Lista. Obviamente deberá seleccionar aquel que encuentre más cómodo o que, por alguna razón, decida usar. La vista en árbol le dará una representación muy intuitiva del trabajo realizado en las distintas ramas por los distintos miembros. Podrá ver los correspondientes mensajes de registro en forma de ayudas emergentes. La forma de lista es, como su nombre indica, lineal y por tanto no aporta esa visión inmediata de las distintas ramas aunque por también concentra más información relevante en menos espacio. La información que proporciona el & CVS; es muy completa pero también larga y difícil de leer. Para ahorrarle algunos problemas podrá buscar cadenas de texto de su interés pulsando Buscar.
+Para obtener más información sobre una determinada revisión puede hacer clic sobre ella, ya sea en la lista o en el árbol. Verá como se rellenan los campos de la parte central del diálogo con la información completa aportada por cvs log. Puede ser importante marcar dos revisiones, « A » y « B », en caso de que quiera usar más características de estos botones. Puede seleccionar la revisión « A » con el botón izquierdo del ratón y la revisión « B » con el botón central. También podrá navegar por la lista mediante las teclas del cursor. Para marcar las revisiones « A » y « B » utilice los atajos de teclado Ctrl; A, Ctrl; B, respectivamente. Podrá seleccionar revisiones usando la vista Salida de CVS y haciendo clic sobre Seleccionar revisión A o Seleccionar revisión B.
+Si pulsa el botón Anotar, verá un diálogo con el texto del archivo perteneciente a la revisión marcada como & quot; Aquot;. Cada línea se precede de la información acerca de quién la editó por última vez y en qué revisión se ha hecho. Tiene más información sobre la vista de anotaciones en.
+Si pulsa en botón Diff se llamará al comando cvs diff y se le mostrará un diálogo con todas las modificaciones entre las dos revisiones marcadas. Si marca la revisión & quot; Aquot;, pero no la & quot; Bquot;, & cervisia; le mostrará las diferencias entre su versión del archivo y la de su copia de trabajo. Así, podrá ver las diferencias entre su versión y cualquier otra presente en el & CVS;. Para facilitarle esa tarea, se usan diferentes colores para resaltar las líneas que han sido añadidas, eliminadas o modificadas, Tiene más información sobre la vista de diferencias en.
+Si pulsa el botón Crear parche, verá un diálogo donde podrá configurar las opciones del formato del archivo con las diferencias que se muestran. Si marca la revisión & quot; Aquot;, pero no la & quot; Bquot;, & cervisia; le mostrará las diferencias entre su versión del archivo y la de su copia de trabajo. sí, podrá crear un parche que muestre las diferencias entre su versión y cualquier otra presente en el & CVS;. Una vez que haya configurado todos los parámetros del diálogo y pulsado Aceptar, se ejecutará el comando cvs diff para generar el parche. Aparecerá el diálogo Guardar como. Para guardarlo, introduzca el nombre de archivo y su localización. Tiene más información sobre creación de parches y sus formatos en.
+Si pulsa el botón Ver, & cervisia; descargará la revisión marcada como & quot; Aquot; y la abrirá con la aplicación asignada por omisión a ese tipo de archivo.
+Pulse Cerrar para salir del diálogo y volver a la ventana principal.
+Para generar el mensaje de registro, & cervisia; ejecuta el siguiente comando:
+cvs log nombrearchivos
+Ver el historial
+Si el repositorio que utiliza tiene activado el sistema de registro, & cervisia; le mostrará el historial de eventos como descargas, entregas, etiquetados o actualizaciones. Seleccione Historial en el menú Ver y & cervisia; ejecutará la orden
+cvs history -e -a
+Con esto obtendrá el archivo de registro completo del servidor, & ie; una lista de eventos para todos los usuarios y módulos. El resultado puede ser un archivo gigantesco.
+Ahora podrá ver la lista de eventos ordenados por fecha. En la segunda columna se muestra el tipo de evento:
+Descarga - El usuario que aparece en la segunda columna descargó un módulo
+Etiqueta. Un usuario hizo uso del comando cvs rtag. Observe que el uso de cvs rtag (tal como hace & cervisia; al seleccionar Avanzado Etiqueta/ Rama) no se registra en el historial. Esto es así por motivos históricos (vea la FAQ de & CVS;).
+Publicación - Un usuario publicó un módulo. Hoy en día este comando es de poca utilidad y se usa muy poco.
+Actualización, Borrado - Un usuario actualizó un archivo que había sido borrado en el repositorio. El archivo se borró también en su copia local.
+Actualizad, Copiado - Un usuario ha actualizado un archivo. Se ha copiado una nueva versión en su copia local.
+Actualizado, Combinado - Un usuario actualizó un archivo y las modificaciones presentes en la copia del repositorio se introdujeron en su copia local.
+Actualizado -. Conflicto - Se detectaron conflictos entre la versión local del usuario y la del repositorio.
+Entregado, Modificado - Un usuario envió al repositorio las modificaciones que realizó sobre un archivo.
+Entregado, Añadido - Un usuario añadió un archivo nuevo al proyecto y lo entregó al repositorio.
+Entregado, Eliminado - Un usuario eliminó un archivo de su copia local y del repositorio.
+Captura de pantalla del diálogo de historial de & cervisia;
+Captura de pantalla del diálogo de historial de & cervisia;
+Puede modificar el criterio del orden de listado pinchando en los encabezados de las columnas, Dispone de varias casillas de verificación para activar diversas opciones de filtrado para que se muestren sólo las entradas de su interés:
+Mostrar entregas - muestra las entregas realizadas
+Mostrar descargas - muestra las descargas realizadas
+Mostrar etiquetados - Muestra todo lo relacionado con el etiquetado
+Mostrar otros eventos - Muestra los eventos no incluidos en los apartados anteriores
+Sólo usuario - Muestra los eventos realizados por un determinado usuario
+Sólo archivos que cumplan el patrón - filtra los nombres de archivo mediante una expresión regular
+Sólo directorios que cumplan el patrón - filtra los nombres de directorios mediante una expresión regular
+Los caracteres especiales reconocidos por el sistema de expresiones regulares son:
+x* concuerda con todos los nombres que incluyan el carácter x.
+x+ concuerda con una o más apariciones del carácter x.
+x? concuerda con una o ninguna aparición del carácter x.
+^ concuerda con el inicio de la cadena.
+$concuerda con el final de la cadena.
+[a-cx-z] concuerda con una serie de caracteres & eg; en este caso serían a, b, c, x, y, z.
+Usos avanzados
+Actualizar a una determinada fecha, rama o etiqueta
+Las ramas de un módulo son versiones paralelas del mismo. Un ejemplo real de su uso es la publicación de un proyecto de software. Después de una publicación importante, habrá que corregir los fallos que vayan surgiendo en el código, pero también será necesario añadir nuevas características al código ya existente. Dado que es muy complicado realizar ambas cosas al mismo tiempo (las nuevas características incorporarán también nuevos fallos), & CVS; permite crear una versión paralela del proyecto que llamaremos & quot; rama de la versión establequot; y donde sólo se podrán añadir correcciones a los fallos existentesmientras que en la rama principal (HEAD) se siguen añadiendo nuevas características.
+Las etiquetas se usan para marcar una determinada versión de un proyecto. & CVS; asigna una determinada etiqueta a una versión de cada archivo por tanto cuando descarga o se actualiza a una determinada etiqueta siempre tendrá la misma versión del archivo; las etiquetas, a diferencias de las ramas, no se asignan dinámicamente sino que son inamovibles. Son de utilidad a la hora de marcar publicaciones del proyecto, grandes cambios en el código, & etc;
+Tanto si está participando en el desarrollo de un proyecto como si sólo hace un seguimiento del mismo, no siempre trabajará con la rama principal. Después de la publicación de una nueva versión, quizás prefiera seguir con esa rama para realizar traducciones, arreglar fallos o simplemente porque se le supone mayor estabilidad. Para ello deberá actualizarse a la rama correspondiente a la publicación aunque todos los cambios que entregue también se enviarán a la nueva rama.
+Si desea realizar el seguimiento de los fallos de alguna versión anterior, sólo tendrá que "desactualizarse" a la versión que desee. Lo mismo sucede si desea volver a la versión existente en una fecha anterior, esto es especialmente útil si se ha introducido algún error entre dos versiones distintas. Cuando pase a una determinada fecha o etiqueta, las versiones de todos sus archivos serán los mismos que los de la versión existente en esa fecha o correspondiente a la etiqueta en cuestión.
+Antes de actualizarse a una rama o etiqueta diferente, asegúrese de haber enviado todas sus modificaciones a la rama en la que está trabajando. Si se actualiza teniendo cambios pendientes, es posible que los pierda. Si lo prefiere puede realizar una nueva Descarga para trabajar con ambas versiones a la vez.
+Captura de pantalla del diálogo de actualización de & cervisia;
+Captura de pantalla del diálogo de actualización de & cervisia;
+Actualizar a una rama determinada
+Seleccione esta opción para actualizarse a una rama determinada. Introduzca el nombre de la rama en el menú desplegable o pulse el botón Buscar lista para obtener una lista de las ramas del & CVS; y seleccione la que desee.
+Actualizar a una etiqueta determinada
+Seleccione esta opción si desea actualizarse a una determinada etiqueta. Introduzca el nombre de la etiqueta en el menú desplegable o pulse Buscar lista para descargar la lista de etiquetas disponibles en el servidor & CVS; y seleccione la que desee.
+Actualizar a fecha
+Seleccione esta opción para actualizarse a la versión existente en una determinada fecha. Aquí podrá emplear una gran variedad de formatos para la fecha, p. ej. aaaa-mm-dd donde aaaa es el año, mm el mes (numérico) y dd corresponde al día. Puede utilizar frases en inglés como yesterday o 2 weeks ago.
+Actualizar a una determinada etiqueta o hacerla inamovible. & ie; no podrá entregar más modificaciones de este archivo (salvo que la etiqueta sea la de una rama). Para volver a la rama principal seleccione Avanzado Actualizar a HEAD.
+La orden ejecutada al actualizar a una rama o etiqueta es:
+cvs update -r etiqueta
+La orden para actualizarse a una fecha determinada es:
+cvs update -D fecha
+La orden ejecutada para actualizarse a la rama principal (HEAD) es:
+cvs update -A
+Etiquetado y denominación de las ramas
+Aquí discutiremos sólo los aspectos técnicos del etiquetado y denominación de las ramas. Si usted es usuario y no administrador de un repositorio, probablemente nunca se le presente este problema. Pero si usted administra un proyecto, debería leer también acerca de los problemas no técnicos (cantidad de tiempo, facilidad con la que se cometen errores...) que conlleva el mantenimiento de varias ramas de un mismo proyecto. Podrá encontrar algunas referencias sobre este tema en el apéndice.
+El etiquetado suele hacerse cada vez que se publica una nueva versión con lo cual es bastante sencillo volver a la situación anterior si algo va mal. En general, el nombre de las etiquetas está formado por el nombre del proyecto y el número de versión. Por ejemplo, puede obtener la versión 1.0 de & cervisia; si busca la etiqueta CERVISIA_1_0. & cervisia; sigue estrictamente las reglas de & CVS; sobre nombres de rama válidos. Deben empezar por una letras y sólo pueden contener más letras, números, guiones y guiones bajos.
+En general, querrá etiquetar todo el proyecto (aunque por supuesto, & CVS; le permite etiquetar sólo una parte). Para ello marque el directorio principal y seleccione Avanzado Etiqueta/ Rama. Introduzca el nombre de la rama y pulse Intro.
+La creación de una rama no es mucho más complicado: marque la casilla Crear rama con esta etiqueta en el diálogo de la etiqueta. También puede borrar una etiqueta existente seleccionando Avanzado Borrar etiqueta desde la ventana principal.
+Otro aspecto de la creación de ramas es la combinación de modificaciones de una rama cualquiera en la actual. Si desea hacerlo, seleccione Avanzado Combinar. Aparecerá un diálogo con dos opciones:
+Podrá combinar todas las modificaciones realizadas en una determinada rama en la rama actual. En ese caso, deberá marcar la casilla Combinar desde la rama e indicar desde que rama quiere combinar los cambios. & cervisia; ejecutará la orden
+cvs update -j etiqueta de la rama
+La otra posibilidad es combinar sólo los cambios realizados entre dos etiquetas de una misma rama. Esto suele ocurrir cuando se combinan varias veces una misma rama con el tronco principal. Marque la casilla Combinar modificaciones e introduzca (en el orden correcto) las dos etiquetas en cuestión. Se ejecutará la orden
+cvs update -j rama1 -j rama2
+Uso de testigos
+Un testigo sirve para que el servidor & CVS; notifique a los usuarios cuando se cambia un determinado archivo o un miembro ha empezado a editarlo. Para poder usar testigos será necesario que el archivo $CVSROOT / CVSROOT/ notify esté correctamente configurado. Este tema no será tratado aquí, si necesita información sobre cómo configurarlo, lea alguno de los libros citados en el apéndice.
+& cervisia; proporciona seis opciones para gestionar los testigos.
+Para añadir un testigo a uno o varios archivos, utilice Avanzado Añadir testigo, podrá elegir para qué acciones quiere que & CVS; le notifique en el diálogo que se le muestra. P. ej. si sólo quiere recibir una notificación cuando se modifica un determinado archivo marque las casillas Sólo y Entregas. Si quiere que se le notifique cualquier acción relacionada con un determinado archivo, marque la casilla Todos. La orden ejecutada al aceptar el diálogo será
+cvs watch add -a commit nombre archivos
+Puede variar dependiendo de las acciones a notificar que haya escogido.
+Si ya no desea seguir de cerca los cambios de un determinado archivo, puede eliminar los testigos seleccionando Avanzado Eliminar testigo, verá un diálogo con las mismas opciones que se le ofrecieron al crearlo. Una vez que dé su confirmación, & cervisia; ejecutará la orden
+cvs watch remove nombre archivos
+quizás con la opción -a para el evento elegido.
+Finalmente, si quiere ver una lista con las personas que tienen testigos en un determinado archivo, seleccione Avanzado Mostrar testigos. Se ejecutará la orden
+cvs watchers nombre archivos
+Durante el uso normal de & CVS;, cada miembro trabaja separadamente sobre su copia local del repositorio, puede modificar archivos simplemente abriéndolos en en editor sin que nadie lo sepa hasta que entregue los cambios.
+cvs edit nombre archivos
+Esto enviará una notificación a todos los que hayan puesto un testigo edit en ese archivo, también hará que se le considere a usted como un editor de ese archivo. Puede ver una lista de todos los editores de un determinado archivo seleccionando Avanzado Mostrar editores. La orden equivalente sería
+cvs editors nombre archivos
+La sesión de trabajo sobre un archivo termina automáticamente cuando se entregan los cambios. En ese momento se envía una notificación unedit a todos los que hayan registrado el correspondiente testigo para ese archivo. A veces, puede que no desee entregar el archivo sino que prefiera parar el trabajo y volver a la revisión anterior. Para ello, seleccione Avanzado Deshacer edición de archivos. Observe que & cervisia; no le pedirá confirmación, con lo que nada más seleccionarlo perderá todo el trabajo realizado desde la selección de Avanzado Editar. La orden ejecutada por & cervisia; es
+echo y | cvs unedit nombre archivos
+Hasta ahora hemos tratado el caso en que los desarrolladores hacen y deshacen cambios voluntariamente, pero & CVS; también puede obligar a hacer uso de estos mecanismo. La orden para ello es cvs watch on, que no explicaremos en detalle porque su uso recae sobre todo en los administradores del repositorio. Sin embargo, los desarrolladores deben saber que, cuando se controla la edición, la copia de trabajo se descarga como sólo lectura, es decir que, por omisión, no podrá editar un archivo (salvo que emplee diversas artimañas como chmod). Sólo si selecciona Avanzado Editar será posible editar el archivo, pero volverá a ser de sólo lectura cuando lo entregue al servidor o seleccione Avanzado Deshacer edición de archivos.
+La interfaz de edición de & cervisia; también puede ayudarle de otra forma en su trabajo con proyectos que obliguen a usar testigos. Si acaba de abrir un editor con un archivo de sólo lectura haciendo doble click sobre él o seleccionando Archivo Editar no debería ser capaz de guardar los cambios posteriores. Obviamente, existe una razón para esto: cada vez que desea modificar un archivo, será necesario ejecutar cvs edit antes así que todos los miembros que tengan un testigo sobre ese archivo recibirán una notificación informándoles que usted trabaja sobre él.
+En este caso, es recomendable marcar la opción Preferencias Hacer cvs edit automáticamente cuando sea necesario así cada vez que edite el archivo haciendo doble click sobre él, & cervisia; ejecutará el comando cvs edit antes de abrir el editor para que pueda editar normalmente el archivo. Cuando termine su trabajo, entréguelo al repositorio. Los archivos entregados vuelven a ser de sólo lectura.
+Bloqueo
+El modelo de desarrollo más frecuente en & CVS; es el llamado Descarga libre donde cada desarrollador tiene su propia copia local y puede realizar y entregar todos los cambios que desee. Con el uso de sistemas de notificación - como cvs edit - varios desarrolladores pueden trabajar al mismo tiempo en un mismo archivo mientras que los cambios respectivos se combinarán en sus copias locales cuando hagan una actualización.
+Otros sistemas de control de versiones como RCS y SourceSafe emplean un modelo distinto. Cuando un miembro quiere editar un archivo, tiene que bloquearlo y sólo una persona puede bloquear un archivo al mismo tiempo. Una vez terminado su trabajo, se desactiva el bloqueo. Por una parte este método evita por completo los conflictos pero no es posible que dos personas estén trabajando al mismo tiempo en un mismo archivo aunque lo hagan en partes distintas lo que puede ralentizar el desarrollo. No se tratarán aquí las ventajas en inconvenientes de ambos modelos y aunque & CVS; incorpora algunos métodos de bloqueo no suele ser la forma preferida de trabajo. No debería utilizar esto a no se que el responsable del proyecto lo autorice.
+Para bloquear archivos en & cervisia;. seleccione los archivos deseados en la vista principal, y después seleccione Avanzado Bloquear archivos. Esto ejecutará la orden
+cvs admin -l nombre archivos
+El efecto contrario se logra seleccionando Avanzado Desbloquear archivos, lo que ejecuta la orden
+cvs admin -u nombre archivos
+Personalizar & cervisia;
+Es posible personalizar & cervisia; de varias formas para satisfacer sus necesidades. Algunas de las opciones que se modifican más habitualmente están disponibles directamente en el menú Preferencias.
+General
+Nombre de usuario para el editor de archivos de cambios:
+Cada vez que selecciona Archivo Insertar entrada de registro de cambios se genera una entrada en el registro con la fecha actual y su nombre de usuario. En general, se considera lo más correcto introducir su nombre completo y su email en cada una de sus entradas. & cervisia; hace eso exactamente.
+Ruta al ejecutable de CVS o a 'cvs ':
+Aquí puede introducir la ruta hacia el comando cvs. por omisión, & cervisia; utilizará el ejecutable en $PATH CVS;.
+Diff
+Número de líneas de contexto en el diálogo de diff:
+& cervisia; utiliza la opción -U para la orden diff, esto hace que sólo se muestren un número limitado de líneas para cada diferencia (líneas contextuales). Aquí podrá seleccionar el argumento para -U.
+Opciones adicionales para cvs diff:
+Escriba aquí los argumentos adicionales para diff. Un caso habitual es poner -b para que diff ignore los cambios en los espacios en blanco.
+Espacios de cada tabulador en el diálogo de diferencias:
+En el diálogo de diferencias, los caracteres de tabulación presentes en el su archivo o en la salida de la orden diff se expanden como un número fijo de espacios. Por defecto, cada tabulación es reemplazada por ocho espacios, aunque puede establecer un número diferente.
+Interfaz externa de diff:
+Cuando utiliza alguna de las funciones que muestra el dialogo de diferencias como Ver Diferencias con el repositorio, & cervisia; llama a su propio interfaz para diff. Si prefiere usar otro como & kompare;, TkDiff, o xxdiff, introduzca aquí su nombre y su ruta.
+Estado
+Ejecuta Archivo-gt; Estado automáticamente, cada vez que abre una copia de trabajo remota
+Cuando marca esta opción, se ejecuta Archivo Estado cada vez que abre una copia de trabajo remota. La ejecución de esta orden puede llevar un tiempo y es necesaria la conexión al servidor (por lo que no es usable cuando está desconectado).
+Cuando se abre una copia de trabajo desde un repositorio local, se inicia automáticamente Archivo-gt; Estado
+Cuando marca esta opción, la selección Archivo Estado se inicia cada vez que abre una copia de trabajo local.
+Avanzado
+Tiempo máximo hasta que aparece un diálogo de progreso (en milisegundos):
+La práctica totalidad de los comandos de & CVS; ejecutados en el directorio de trabajo del servidor requieren estar conectado. La respuesta varía según las fluctuaciones del ancho de banda y la carga del servidor. Por este motivo, cuando se ejecutan comandos como Ver Diferencias con el repositorio, & cervisia; abre un diálogo que le indica que el comando está en ejecución y que le permite cancelarlo. Este diálogo también puede mostrar mensajes de error del & CVS;. Dado que ese diálogo puede ser molesto, sólo se muestra tras una cierta cantidad de tiempo, que por omisión, son 4 segundos. desde aquí puede cambiar ese valor.
+Nivel de compresión por defecto:
+El cliente cvs comprime los parches y archivos al enviarlos por la red. Es posible establecer el nivel de compresión mediante la opción -z. Podrá configurar & cervisia; para utilizar por omisión el nivel de compresión que defina aquí, aunque también es posible definirlo para cada repositorio en Repositorio Repositorios.
+Inicie ssh-agent o utilice uno que ya se esté ejecutando
+Marque esa casilla si utiliza repositorios ext (rsh;), & ssh; para comunicarse con el repositorio y ssh-agent para gestionar sus claves.
+Apariencia
+Tipo de letra para la ventana de protocolo...
+Pulse este botón para abrir el diálogo Seleccionar tipo de letra y elegir la que desee para la ventana de protocolo (donde se muestra la salida del cliente cvs).
+Tipo de letra para la vista anotada...
+Pulse este botón para abrir el diálogo Seleccionar tipo de letra y configurar el tipo de letra de la Vista anotada.
+Tipo de letra para vista de diferencias...
+Pulse este botón para abrir el diálogo Seleccionar tipo de letra para configurar el que se emplea en los diálogos de diferencias.
+Colores
+Si pulsa uno de los botones coloreados, se abrirá el diálogo Seleccionar color, y así podrá seleccionar el color a usar en los diálogos Conflicto, Cambio local o Cambio remoto de la ventana principal o Cambios diff, Inserción diff o Borrado diff de la interfaz de diff incluida en & cervisia;.
+Dividir horizontalmente la ventana principal
+La ventana principal de & cervisia; suele dividirse verticalmente en una ventana superior donde se sitúa el árbol de archivos y otra inferior con la salida de & CVS;. Si lo desea puede hacer que esta división sea horizontal.
+Apéndice
+Archivos ignorados
+En el árbol de archivos principal, & cervisia; no mostrará todos los archivos que realmente están ahí. Esto es igual que para la orden cvs. & cervisia; intenta emular lo mejor posible su comportamiento obteniendo información de los archivos a ignorar en los siguientes lugares:
+Una lista estática que incluye cosas como *. o y core. Vea la documentación de & CVS; para más detalles.
+El archivo $HOME /. cvsignore.
+La variable de entorno $CVSIGNORE.
+El archivo. cvsignore del directorio correspondiente.
+El propio comando cvs también busca entradas en el archivo $CVSROOT / CVSROOT/ cvsignore a pesar de que se encuentra en el servidor y se supone que & cervisia; debe ser capaz de hacer su trabajo sin conexión. Si usted trabaja con un grupo que prefiere utilizar una lista de archivos a ignorar en el servidor, es una buena idea que eche un vistazo a los patrones que aparecen en ese archivo y los incluya en el archivo. cvsignore de su propio directorio home.
+Más información y soporte
+& CVS; incluye una documentación muy completa en forma de páginas info llamada "The Cederqvist". Si está instalada en su sistema, puede consultarla escribiendo info: / cvs en la barra de direcciones de & konqueror;, o seleccionando Ayuda Manual de CVS desde & cervisia;. La versión on-line en & HTML; de Cederqvist puede consultarse en su web.
+Dado que ese libro se mantiene conjuntamente con & CVS;, suele ser la fuente más actualizada. No obstante, considere también consultar otras fuentes para aprender el manejo de & CVS;, en especial las siguientes.
+Karl Fogel ha escrito el excelente Open Source Development with & CVS;. Aproximadamente la mitad del libro trata del proceso de desarrollo de software abierto, mientras la otra mitad es documentación técnica sobre & CVS;. Afortunadamente, esta segunda parte ha sido publicada bajo la GPL y es posible descargarla en & HTML;. En la página antes mencionada, también se encuentra la lista de erratas encontradas en el libro.
+Los aspecto de & CVS; se discuten en su propia lista de correo.
+En el grupo de USENET comp. software. config. mgmt se discuten asuntos sobre sistemas de gestión en general. Aunque & CVS; representa sólo una pequeña parte de las discusiones, puede resultarle interesante discutir acerca de las ventajas de & CVS; respeto de otros sistemas.
+Por último pero no menos importante, una lista de correo de & cervisia; (de bajo tráfico).
+Referencia de comandos
+El menú Archivo
+Archivo Abrir directorio de trabajo
+Abre un directorio de trabajo en la ventana principal. Vea.
+Archivo Directorios locales recientes
+Abre uno de los directorios de trabajo usados recientemente.
+Archivo Insertar entrada de registro de cambios
+Abre el editor de registros de modificaciones listo para añadir una nueva entrada con la fecha actual. Vea.
+Ctrl; U Archivo Actualizar
+Ejecuta cvs update sobre los archivos seleccionados y modifica adecuadamente la versión de la revisión y el estado. Vea.
+F5 Archivo Estado
+Ejecuta cvs -n update sobre los archivos seleccionados y modifica en consecuencia el estado y la versión de la revisión. Vea.
+Archivo Editar
+Abre el archivo seleccionado en el editor configurado por omisión en & kde; para el tipo de archivo seleccionado.
+Archivo Resolver
+Abre un diálogo para permitir solucionar conflictos en el archivo seleccionado. Vea.
+# Archivo Enviar
+Le permite entregar al repositorio los archivos seleccionados. Vea.
+Insert Archivo Añadir al repositorio...
+Le permite añadir al repositorio los archivos seleccionados. Vea.
+Archivo Añadir binario
+Le permite entregar los archivos seleccionados como binarios (cvs add -kb). Vea).
+Supr Archivo Eliminar del repositorio...
+Le permite eliminar del repositorio los archivos seleccionados. Vea.
+Archivo Revertir
+Descarta cualquier cambio que usted haya realizado sobre los archivos seleccionados volviendo a la versión del repositorio (opción -C del comando cvs update).
+Ctrl; S Archivo Salir
+Sale de & cervisia;.
+El menú Ver
+Escape Ver Detener
+Interrumpe todos los subprocesos en ejecución.
+Ctrl; L Ver Examinar registro
+Muestra los registros de las versiones del archivo seleccionado. Vea.
+Ctrl; A Ver Anotar...
+Muestra el archivo seleccionado con anotaciones, & ie; que para cada línea del archivo usted puede ver qué autor fue el último en modificarla. Consulte.
+Ctrl; D Ver Diferencias con el repositorio (BASE)
+Muestra las diferencias entre el archivo seleccionado en el directorio de trabajo y la última revisión que usted actualizó (BASE). Vea.
+Ctrl; H Ver Diferencias con el repositorio (HEAD)
+Muestra las diferencias entre los archivos seleccionados en el directorio de trabajo y la última revisión que usted actualizó (HEAD). Vea.
+Ver Último cambio
+Muestra las diferencias entre la última revisión del archivo que usted actualizó (BASE) y la anterior. Vea.
+Ver Historial
+Muestra el historial de & CVS; tal como se recibe del servidor. Vea.
+Ver Ocultar todos los archivos
+Determina si sólo deben mostrarse los directorios en la vista de árbol. Vea.
+Ver Ocultar archivos no modificados
+Determina si deben o no estar visibles en el árbol principal los archivos desconocidos y actualizados. Vea.
+Ver Ocultar archivos eliminados
+Determina si deben o no mostrarse en el árbol principal los archivos eliminados. Vea.
+Ver Ocultar archivos que no son del CVS
+Determina si deben o no ocultarse los archivos que no pertenecen al & CVS;. Consulte.
+Ver Esconder carpetas vacías
+Determina cuándo se ocultarán las carpetas vacías en la vista del árbol principal. Consulte.
+Ver Desplegar árbol de archivos
+Abre todas las ramas en el árbol de archivos para que pueda ver todos los archivos y carpetas que contiene. Vea.
+Ver Plegar árbol de archivos
+Cierra todas las ramas del árbol de archivos. Vea.
+El menú Avanzado
+Avanzado Etiqueta/ Rama
+Etiqueta o asigna a una determinada rama los archivos seleccionados. Vea.
+Avanzado Suprimir etiqueta
+Elimina una determinada etiqueta de los archivos seleccionados. Vea.
+Avanzado Actualizar para la etiqueta/ fecha
+Asigna a los archivos seleccionados una determinada fecha o etiqueta inalterable. Vea.
+Avanzado Actualizar a HEAD
+Actualiza los archivos seleccionados a la su respectiva versión en la rama HEAD. Vea.
+Avanzado Combinar
+Combina una rama determinada o bien las modificaciones entre dos versiones de los archivos seleccionados.
+Avanzado Añadir testigo
+Añade un testigo sobre una serie de eventos en los archivos seleccionados. Vea.
+Avanzado Eliminar testigo...
+Elimina un testigo de los archivos seleccionados. Consulte.
+Avanzado Mostrar testigos
+Muestra una lista de los testigos presentes en los archivos seleccionados. Vea.
+Avanzado Editar archivos
+Ejecuta cvs edit sobre los archivos seleccionados. Vea.
+Avanzado Deshacer edición de archivos
+Ejecuta el comando cvs unedit sobre los archivos seleccionados. Vea.
+Avanzado Mostrar editores
+Ejecuta el comando cvs editors sobre los archivos seleccionados. Vea.
+Avanzado Bloquear archivos
+Bloquea los archivos seleccionados. Vea.
+Avanzado Desbloquear archivos
+Desbloquea los archivos seleccionados. Vea.
+Avanzado Crear un parche para el repositorio
+Crea un parche en base a las modificaciones hechas por usted en su copia local. Vea.
+El menú repositorio
+Repositorio Crear
+Abre un diálogo para facilitarle la creación de un nuevo repositorio local. Vea.
+Repositorio Descargar
+Abre un diálogo para permitirle descargar un determinado módulo del repositorio. Vea.
+Repositorio Importar
+Abre un diálogo para permitirle importar un paquete al repositorio. Vea.
+Repositorio Repositorios
+Configura una lista de repositorios que use a menudo junto con la forma de acceder a ellos. Vea.
+El menú Preferencias
+Preferencias Mostrar barra de herramientas
+Determina si la barra de herramientas debe o no mostrarse.
+Preferencias Crear directorios al actualizar
+Determina si al actualizarse deben crearse nuevas carpetas en nuestra copia de trabajo (opción -d del comando cvs update).
+Preferencias Eliminar directorios vacíos a actualizar
+Determina si deben eliminarse directorios vacíos al actualizar nuestra copia local (opción -P del comando cvs update).
+Preferencias Actualizar recursivamente
+Determina si las actualizaciones deben ser o no recursivas (opción -r del comando cvs update).
+Preferencias Enviar y eliminar recursivamente
+Determina si las entregas y eliminaciones deben hacerse o no recursivamente (opción -r del comando cvs add y cvs remove respectivamente).
+Preferencias Hacer cvs edit automáticamente cuando sea necesario
+Determinar si el comando cvs edit debe ejecutarse automáticamente cada vez que edite un archivo.
+Preferencias Configurar atajos de teclado
+Abre un diálogo para configurar los accesos rápidos de teclado.
+Preferencias Configurar barras de herramientas
+Abre un diálogo para configurar las barras de herramientas de & cervisia;.
+Preferencias Configurar & cervisia;
+Abre un diálogo para permitirle personalizar varios parámetros de & cervisia;.
+El menú ayuda
+& help. menu. documentation;
+Además de las entradas estándar del menú Ayuda de & kde; arriba descritas, dispose de esta entrada adicional:
+Ayuda Manual del CVS
+Abre las páginas info de & CVS; en el sistema de ayuda de & kde;.
+Créditos y licencias
+Copyright del programa
+1999-2002 & Bernd. Gehrmann; & Bernd. Gehrmann. mail;
+2002-2008 los autores de & cervisia;
+Copyright de la documentación 1999-2002 & Bernd. Gehrmann; & Bernd. Gehrmann. mail; y 2004 Carlos Woelz carloswoelz@imap-mail. com
+Traducido por Marcos Fouces Lago mfouces@yahoo. es.
+& underFDL; & underGPL;

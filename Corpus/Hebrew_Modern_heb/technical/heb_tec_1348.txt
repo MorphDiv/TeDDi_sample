@@ -1,0 +1,142 @@
+# language_name_wals:	Hebrew (Modern)
+# language_name_glotto:	Modern Hebrew
+# ISO_6393:	heb
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hebr
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/he.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+מדריך PHP
+קודם
+פרק 6. סוגי נתונים
+הבא
+
+
+
+הערה:
+
+
+
+
+
+
+
+
+
+Note that if you try to escape any other character, the backslash too will be printed!
+
+הערה:
+
+הערה:
+
+echo 'this is a simple string'; echo 'You can also have embedded newlines in strings, like this way .'; echo 'Arnold once said: "I\'ll be back"'; / / output:... "I'll be back "echo 'Are you sure you want to delete C:\\*.* ?'; / / output:... delete C:\*.*? echo 'Are you sure you want to delete C:\*.* ?'; / / output:... delete C:\*.*? echo 'I am trying to include at this point: \n a newline'; / / output:... this point: \n a newline
+
+טבלה 6-1.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+But the most important pre of double-quoted strings is the fact that variable names will be expanded.
+
+Another way to delimit strings is by using here doc syntax ("").
+
+
+
+אזהרה
+
+
+Probably the nastiest gotcha is that there may also not be a carriage return (\r) at the end of the line, only a form feed, AKA newline (\n).
+Since Microsoft Windows uses the sequence \r\n as a line terminator, your heredoc may not work if you write your script in a Windows editor.
+However, most programming editors provide a way to save your files with a UNIX line terminator.
+Here doc text behaves just like a double-quoted string, without the double-quotes.
+
+
+דוגמה 6-2.
+Here doc string quoting example
+
+
+
+
+
+הערה:
+Here doc support was added in PHP 4.
+
+
+
+The complex syntax was introduced in PHP 4, and can by recognised by the curly braces surrounding the expression.
+
+
+$beer = 'Heineken'; echo "$beer's taste is great"; / / works, "'"is an invalid character for varnames echo "He drunk some $beers"; / / won't work, 's' is a valid character for varnames echo "He drunk some ${beer}s"; / / works
+
+
+
+$fruits = array( 'strawberry '= 'red', 'banana '= 'yellow'); / / note that this works differently outside string-quotes. echo "A banana is $fruits[banana] ."; echo "This square is $square - width meters broad ."; / / Won 't work.
+For a solution, see the complex syntax. echo "This square is $square - width00 centimeters broad .";
+
+
+
+
+
+
+$great = 'fantastic'; echo "This is {$great}"; / / won 't work, outputs:
+This is {fantastic} echo "This is {$great}"; / / works, outputs:
+This is fantastic echo "This square is {$square - width}00 centimeters broad ."; echo "This works: {$arr[4][3]}"; / / This is wrong for the same reason / / as $foo[bar] is wrong outside a string. echo "This is wrong: {$arr[foo][3]}"; echo "You should do it this way: {$arr['foo'][3]}"; echo "You can even write {$obj - values[3] - name}"; echo "This is the value of the var named $name: {${$name}}";
+
+הערה:
+For backwards compatibility, you can still use the array-braces.
+
+דוגמה 6-3.
+
+?php / * Assigning a string. * / $str = "This is a string"; / * Appending to it. * / $str = $str." with some more text"; / * Another way to append, includes an escaped newline. * / $str .= "and a newline at the end.\n"; / * This string will end up being 'p Number:
+9 / p '* / $num = 9; $str = "p Number: $num / p"; / * This one will be' p Number: $num / p '* / $num = 9; $str =' p Number: $num / p '; / * Get the first character of a string * / $str = 'This is a test .'; $first = $str{0}; / * Get the last character of a string. * / $str = 'This is still a test .'; $last = $str{strlen($str)-1};?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+When the first expression is a string, the type of the variable will depend on the second expression.
+$foo = 1 + "10.5"; / / $foo is float (11.5) $foo = 1 + "-1.3e3"; / / $foo is float (-1299) $foo = 1 + "bob-1.3e3"; / / $foo is integer (1) $foo = 1 + "bob3"; / / $foo is integer (1) $foo = 1 + "10 Small Pigs"; / / $foo is integer (11) $foo = 1 + "10 Little Piggies"; / / $foo is integer (11) $foo = "10.0 pigs" + 1; / / $foo is integer (11) $foo = "10.0 pigs "+ 1.0; / / $foo is float (11)
+
+
+echo "\$foo==$foo; type is". gettype ($foo). "br \n";
+קודם
+ראשי
+הבא
+
+למעלה
