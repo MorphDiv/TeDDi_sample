@@ -23,7 +23,7 @@ ENGINE = sa.create_engine('sqlite:///test.sqlite3', echo=False)
 Model = declarative_base()
 
 
-GENRE_BROAD = {'professional', 'non-fiction', 'conversation', 'grammar', 'fiction'}
+GENRE_BROAD = {'professional', 'non-fiction', 'conversation', 'grammar', 'fiction', 'technical'}
 
 MODE = {'written', 'spoken', 'NA'}
 
