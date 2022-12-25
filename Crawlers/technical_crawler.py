@@ -212,7 +212,7 @@ def write_50k_to_file(fname,lang_dic,lang,year,resource,link,text,isWhole):
     f1 = codecs.open(fname, 'w', 'utf-8')
     meta = '''# language_name_wals:	''' + lang_dic[lang][2] + '''
 # language_name_glotto:	''' + lang_dic[lang][3] + '''
-# ISO_6393:	''' + lang_dic[lang][1] + '''
+# iso639_3:	''' + lang_dic[lang][1] + '''
 # year_composed:	NA
 # year_published:	''' + year + '''
 # mode:	written
@@ -405,7 +405,7 @@ def main():
         total_tokens = 0
 
         for curr_resource in ['ada83','OpenOffice','KDEdoc','PHP','KDE4','GNOME',
-                              'Ubuntu', 'EMEA']:
+                              'Ubuntu', 'EMEA', 'EuroPat']:
             if(skip_resource_language(curr_resource,lang)):
                 continue
             global resource
