@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,76 +15,30 @@
 # sample_type:	whole
 # comments:	NA
 
-CreateUnoListener-Funktion [Laufzeit]
-/text/sbasic/shared/03132000.xhp
+DateValue-Funktion [Laufzeit]
+/text/sbasic/shared/03030102.xhp
 Sun Microsystems, Inc.
-converted from old format - fpe dedr: fixed #i31078#
-CreateUnoListener-Funktion
-CreateUnoListener-Funktion [Laufzeit]
-Instanziert einen Listener.
-Bei vielen Uno-Schnittstellen können Sie Listener auf einer speziellen Listener-Schnittstelle registrieren.
-So können Sie den Eintritt bestimmter Ereignisse überwachen und daraufhin die jeweilige Listener-Methode aufrufen.
-Die Funktion CreateUnoListener wartet auf die aufgerufene Listener-Schnittstelle und übergibt der Schnittstelle dann ein von dieser unterstütztes Objekt.
-Dieses Objekt wird dann an die Methode zum Registrieren des Listeners übergeben.
+converted from old format - fpe
+DateValue-Funktion
+DateValue-Funktion [Laufzeit]
+Rechnet eine Datumszeichenkette in einen Zahlenwert um und gibt diesen zurück.
+Die Datumszeichenkette ist ein vollständiges Datum in einem einzigen numerischen Wert.
+Sie können diese serielle Zahl auch verwenden, um den zeitlichen Abstand zwischen zwei Datumswerten zu bestimmen.
 Syntax:
-oListener = CreateUnoListener( Praefixname, ListenerSchnittstelleName )
+DateValue [(Datum)]
+Rückgabewert:
+Datum
+Parameter:
+Datum:
+Zeichenkettenausdruck mit dem Datum, das Sie umrechnen möchten.
+Das Datumsformat des angegebenen Datums kann fast beliebig gewählt werden.
+Sie können mit dieser Funktion ein Datum zwischen dem 1.
+Dezember 1582 und dem 31.
+Dezember 9999 in einen einzigen Integerwert konvertieren.
+Diesen Wert können Sie dann verwenden, um den zeitlichen Abstand zwischen zwei Datumswerten zu bestimmen.
+Liegt das Datumsargument außerhalb des zulässigen Wertebereichs, so gibt $[officename] Basic eine Fehlermeldung zurück.
+Anders als die Funktion DateSerial, bei der Jahre, Monate und Tage als separate Zahlenwerte übergeben werden, wird das Datum bei der Funktion DateValue im Format &quot; Monat.[,]Tag.[,]Jahr &quot; übergeben.
 Beispiel:
-Folgendes Beispiel basiert auf einem BasicLibraries Objekt.
-Dim oListener
-oListener = CreateUnoListener( &quot; ContListener_ &quot; , &quot; com.sun.star.container.XContainerListener &quot; )
-Die Methode CreateUnoListener benötigt zwei Parameter.
-Der erste Parameter ist ein Präfix und wird weiter unten näher beschrieben.
-Der zweite Parameter ist der voll qualifizierte Name der Listener-Schnittstelle, die Sie verwenden möchten.
-Als nächstes muss der Listener zum Broadcaster-Objekt hinzugefügt werden.
-Dies geschieht durch Aufruf der entsprechenden Methode zum Hinzufügen des Listeners.
-Diese Methoden folgen immer dem Muster &quot; addFooListener &quot; wobei &quot; Foo &quot; den Listener-Interface-Typ ohne das 'X' bezeichnet.
-Im Beispiel soll XContainerListener registriert werden, daher ist der Name der add-Methode addContainerListener:
-Dim oLib
-oLib = BasicLibraries.Library1 ' Library1 must exist!
-oLib.addContainerListener( oListener ) ' Register the listener
-Jetzt ist der Listener registriert.
-Wenn ein Ereignis auftritt, das den Listener betrifft, wird die entsprechende Methode des com.sun.star.container.XContainerListener Interface aufgerufen.
-Das Präfix dient zum Aufruf registrierter Listener aus Basic-Subroutinen.
-Das Basic-Laufzeitsystem sucht nach Basic-Subroutinen oder -Funktionen mit dem Namen &quot; PräfixListenerMethode &quot; und ruft diese, falls vorhanden, auf.
-Ist keine entsprechende Subroutine oder Funktion vorhanden, so tritt ein Laufzeitfehler auf.
-In diesem Beispiel verwendet die Listener-Schnittstelle folgende Methoden:
-disposing:
-Methode des Listener base interface (com.sun.star.lang.XEventListener), deshalb von jedem Listener-Interface unterstützt (alle Listener-Interfaces sollten hiervon abgeleitet sein)
-elementInserted:
-Methode des Interface com.sun.star.container.XContainerListener
-elementRemoved:
-Methode des Interface com.sun.star.container.XContainerListener
-elementReplaced:
-Methode des Interface com.sun.star.container.XContainerListener
-In diesem Beispiel ist das Präfix ContListener_.
-In Basic müssen also folgende Subroutinen implementiert werden:
-ContListener_disposing
-ContListener_elementInserted
-ContListener_elementRemoved
-ContListener_elementReplaced
-Für jeden Listener-Typ existiert ein Ereignisstrukturtyp mit Informationen zum Ereignis.
-Beim Aufruf einer Listener-Methode wird dieser eine Instanz dieses Ereignisses als Parameter übergeben.
-Basic-Listener-Methoden können diese Ereignisobjekte auch aufrufen, sofern in der Sub-Deklaration der entsprechende Parameter übergeben wird.
-Beispiel:
-Sub ContListener_disposing( oEvent )
-MsgBox &quot; disposing &quot;
-MsgBox oEvent.Dbg_Properties
-End Sub
-Sub ContListener_elementInserted( oEvent )
-MsgBox &quot; elementInserted &quot;
-MsgBox oEvent.Dbg_Properties
-End Sub
-Sub ContListener_elementRemoved( oEvent )
-MsgBox &quot; elementRemoved &quot;
-MsgBox oEvent.Dbg_Properties
-End Sub
-Sub ContListener_elementReplaced( oEvent )
-MsgBox &quot; elementReplaced &quot;
-MsgBox oEvent.Dbg_Properties
-End Sub
-Wird das Event object nicht benötigt, kann der Parameter weggelassen werden:
-' Minimal implementation of Sub disposing
-Sub ContListener_disposing
-End Sub
-grundsätzlich
-Listener-Methoden implementiert werden.
+Sub ExampleDateValue
+msgbox DateValue( &quot; 12/02/1997 &quot; )
+end sub

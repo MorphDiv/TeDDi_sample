@@ -1,6 +1,6 @@
 # language_name_wals:	Mandarin
 # language_name_glotto:	Mandarin Chinese
-# ISO_6393:	cmn
+# iso639_3:	cmn
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,23 +15,45 @@
 # sample_type:	whole
 # comments:	NA
 
-ConvertToURL 函数 [运行时]
-/text/sbasic/shared/03120312.xhp
+Lof 函数 [运行时]
+/text/sbasic/shared/03020303.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-ConvertToURL 函数
-ConvertToURL 函数 [运行时]
-将系统文件名称转换成文件 URL。
+Lof 函数
+Lof 函数 [运行时]
+返回打开文件的大小，以字节为单位。
 语法：
-ConvertToURL(filename)
-返回值：
-字符串
+Lof (FileNumber)
+返回值类型：
+长整数
 参数：
-filename：
-以字符串形式表示的文件名。
+FileNumber：
+含有 Open 语句指定的文件编号的任意数字表达式。
+FileLen
+函数。
 示例：
-systemFile$ = &quot; c:\folder\mytext.txt &quot;
-url$ = ConvertToURL( systemFile$ )
-print url$
-systemFileAgain$ = ConvertFromURL( url$ )
-print systemFileAgain$
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM 必须是变体类型
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM 指定起始位置
+Put #iNumber,, &quot; 这是第一行文本 &quot; REM 用文字充填
+Put #iNumber,, &quot; 这是文本的第二行 &quot;
+Put #iNumber,, &quot; This is the third line of text &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; 这是新文本行 &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; This is the text in record 20 &quot;
+Print Lof(#iNumber)
+Close #iNumber
+end sub

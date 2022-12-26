@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,98 +15,18 @@
 # sample_type:	whole
 # comments:	NA
 
-Tony Bloomfield
-2010-01-05 4.0
-Database
-Using relational databases
-Introduction
-As of release 1.0, & kappname; allows you to hold your data in a relational database. One of the advantages of using this industry-standard format is that it may allow you to view your data using one of the graphic front ends such as OpenOffice. org, perhaps in some format that & kappname; currently does n't provide. Also, a little knowledge of SQL (Structured Query Language, the language used world-wide to access relational databases) should enable you more easily to export data to an external program, for example, a budgeting application.
-Preparation
-To access the database, & kappname; uses the SQL module supplied by & Qt; Software as part of their & Qt; programming system. This module supports a number of different database systems through a collection of drivers. Among the more popular open-source systems for which drivers are available are MySQL, SQLite (version 3 and upwards only), and PostgreSQL. The module also supports the'heavier ', more industrial, systems such as Oracle and IBM DB2.
-With the exception of SQLite, these systems use a client/ server model, where the'client 'software sits on'your' machine, while the server lives on the same machine as the database itself, which may be elsewhere on a network. Of course, in the normal scenario for a personal finance application such as & kappname;, 'your 'machine acts as both client and server. Your first task therefore, having decided which database system you wish to use, is to install the client, and most probably server, software.
-In addition to the database software itself, you must also install the corresponding & Qt; driver module. Most distributions will include driver modules for the more popular databases. Otherwise, check with the Qt; software web site and search for'SQL drivers'
-SQLite does not operate on a client/ server model; each database is held in a regular file, local or remote, accessed using the normal methods supplied by the underlying operating system. In this case, therefore, there is only one software package and the driver to install. Also, some of the following information, particularly that related to administration, may not apply to SQLite.
-Administration
-Looking after databases is a little more complex than dealing with regular files. Each system has different methods for performing those necessary administrative tasks such as creating databases, assigning permissions to various users, producing backups, & etc;. Describing these tasks is outside the scope of this manual, but all of the supported products provide comprehensive reference documentation, and a quick search of the web will point you at many tutorials on the subject.
-Creating the database
-Code has been included to create an initial database to hold your data if one does n't exist. However, it is strongly recommended that you pre-create a database, because most of the products provide a number of options which may be relevant. One that may be of particular importance to some would be the designation of the character set (eg;, UTF-8) to be used for text fields.
-At this time, you will also need to specify permissions for various users to perform different operations on the database. In most systems, the user who creates the database will be automatically assigned all permissions, but this is an area in which the documentation should be consulted.
-For your first use of the database, and occasionally at other times when the database layout changes, you will need permission (also called privileges) to create and alter tables and views (see next paragraph). There may be different names for the permission/ privilege in different systems, but something like CREATE and ALTER should be commonplace. For normal running, you will need to be able to read and write records; these are normally defined in SQL as SELECT, INSERT, UPDATE, and DELETE permissions.
-Creating Tables
-On your first use, & kappname; will attempt to create the necessary table structures. In order to achieve the maximum compatibility between various database types, only a subset of common data types are used. There may nevertheless be situations where a particular type is not supported, and in this case, provision has been made to generate the SQL code necessary to create tables. This code can then be modified as required and used to create the tables outside of & kappname;. Should you find yourself in this situation, help can usually be obtained from & devlist;. See Manual Database Creation for more information.
-Creating a Database
-Using & kappname;, open or import an existing data file, or create a new one. Then select Save as Database from the File menu. This will present the following dialog:
-Complete the fields appropriate to the database type you have selected (as usual, mandatory fields will be highlighted) and click OK to create the database.
-Database Type
-This box lists all & Qt; SQL drivers installed on your system. Select the driver for your database type. If the one you want is not in the list, you need to install the appropriate driver. See your distribution documentation, or visit the Qt; software web site and search for'SQL drivers'.
-File (Sqlite only)
-SQLite has one database per file so enter the file name in which you wish to create the database. To browse the file system, click the icon to the right of the file name. For SQLite databases, the Host name, Username, and Password fields are not relevant. The SQLite file must have the appropriate read/ write permissions set by the underlying file system to enable the appropriate access for the currently logged-in user.
-Database name (others)
-The default database name is KMyMoney, but you may choose some other name if you like. For some database types, & kappname; may not be able to create the database, so it must be pre-created using the appropriate administrative procedure. However, & kappname; will usually be able to create all table structures where necessary. If not, you can create them yourself. See Manual Database Creation for more information.
-Host name
-For the average user, the default name of localhost, being the machine you are currently using, is correct. For networked databases, enter the connected host name.
-User name and password
-Check the permissions set up on your database, or contact the database administrator, for the correct values to use here. The user name must be capable of selecting, inserting, updating, and deleting records. If the user name is the same as your login name, a password is not normally required.
-Accessing your data
-Table design
-To access your data in & kappname;, use the Open Database entry in the File menu. This will open a dialog similar to the above.
-To access your data in other formats, you will need to know a little about how it is held in relational databases. By far the easiest way to get a feel for this is to open the database in a front-end such as OpenOffice. org. This provides a list of the various tables which make up the database, and enables you to see the layout of each of them.
-To extract data, & eg;, into a spreadsheet or external file, it is almost invariably necessary to select linked data from more than one table. This is done by'joining 'the tables, using a field which is common to each. You can find a lot more information about how this is done from the online database tutorials mentioned above. The following table lists the fields used to define these inter-table relationships.
-Relationship
-Match
-With
-Institutions and Accounts
-kmmInstitutions. id
-kmmAccounts. institutionId
-Accounts Parent/ Child
-kmmAccounts. id
-kmmAccounts. parentId
-Transactions and Splits (see Note 1)
-kmmTransactions. id
-kmmSplits. transactionId
-Accounts and Splits
-kmmSplits. accountId
-Payees and Splits
-kmmPayees. id
-kmmSplits. payeeId
-Schedules and Transactions
-kmmSchedules. id
-Transactions and Currencies
-kmmTransactions. currencyId
-kmmCurrencies. ISOCode
-Accounts and Securities (see Note 2)
-kmmAccounts. currencyId
-kmmSecurities. id
-Securities and Prices
-kmmPrices. fromId or kmmPrices. toId
-Currency Rates
-Notes:
-1 & #x2013; txType = & #x201C; N#x201D; for normal transactions, & #x201C; S#x201D; for scheduled transactions
-2 & #x2013; if kmmAccounts. isStockAccount = & #x201C; Y#x201D;
-Field formats
-Several of the data fields are held in an internal format which may not be immediately useful to external programs. In these cases, the information has been duplicated in both internal and external formats.
-Monetary amounts and share values are shown both in numerator/ denominator format, and, with a field name suffixed with'Formatted ', in the form as shown on your screens.
-Similarly, some fields, such as account type appear both as a numeric code, and in a field suffixed'String 'in the form and language of the application.
-Updating your data
-Having data in an industry standard format does give you the ability to modify it outside the & kappname; application. DO NOT DO IT unless you really know what you are doing, and always be certain to make a backup copy of your data first. If you get it wrong, & kappname; may not be able to access your data, and you could even end up losing it altogether. You have been warned!
-Stored queries
-Most database systems allow you to store commonly used queries and procedures, and in some cases, these may be held as tables or other objects within your database itself. As you will have guessed from the above, all the tables used by & kappname; begin with the lowercase letters'kmm '. This standard will be maintained, and only tables beginning with these letters will be updated. Thus, provided you avoid these in the naming of your queries & etc;, you should not experience any problems.
-Manual database creation
-This section covers more advanced database usage and may be skipped by the general user.
-When to use
-There may be occasions when & kappname; is unable to create the database automatically, or creates it without some options required by the user. For example, the database system used may not completely conform to standard SQL usage, or support may be introduced for new systems which have not been fully tested in & kappname;.
-Prior to using this facility, you should try just creating the database entry itself (ie; with the CREATE DATABASE statement). Provided the database exists, & kappname; may well be able to create the tables, & etc; in the normal database save procedure described above.
-Generating the SQL
-If this fails, it is possible to generate the basic SQL commands needed to create the various tables, views and indexes required by the application. Select Generate Database SQL from the Tools menu. This will present the following dialog:
-On selecting the database type, the appropriate SQL will appear in the SQL for creation text box; this can be edited by the user, or saved to a text file by clicking Save SQL. In the latter case, the database must be created using the administrative functions provided by the database system.
-If after editing the text in the dialog, you want & kappname; to create the database, you will need to complete the other fields in the dialog, as detailed in Creating a Database above, and click Create Tables. Note that, except in the case of Sqlite, you will need either to include a suitable CREATE DATABASE statement as the first command, or have previously issued such a command externally to & kappname;
-Warning
-You should be very careful editing the definitions of any of the basic tables or views (those with names beginning with'kmm '). Some changes, such as increasing the length of an integer field, may have little impact, but you should not remove or change the sequence of any fields, or & kappname; may refuse to function, or may corrupt your data.
-Whilst adding or removing indexes may improve performance, you should also be aware that the opposite may happen. Some knowledge of the internal operation of & kappname; may help to get the best performance in these circumstances.
-Encryption
-Encryption of data in your database is not currently supported.
-Caution when using the database
-At the time of writing, the software described in this chapter is still in an experimental stage, and loss of data is possible. Please ensure that you have an alternative backup copy of your data before committing to database usage.
-Due to limitations in prior releases, only version 3 of SQLite is supported. Unfortunately, the release of the & Qt; toolkit used by & kappname; does not provide a driver for this version. However, an unofficial, extensively tested, driver is available; if you wish to use SQLite, ask on & devlist; for further information.
-Initialisation
-This button will generate the CREATE TABLE commands and save them to a text file, which may be edited if the in-built commands do not work for your database system (see previous paragraph).
+MainWindow
+Game
+Words
+Score
+Add
+temp
+WordKubes
+A simple text area
+Copyright (c) 2008 David Edmundson
+Your names
+Your emails
+Word too Small
+Not On Board
+Only Real Words Allowed
+Word already played

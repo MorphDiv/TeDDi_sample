@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,43 +15,78 @@
 # sample_type:	whole
 # comments:	NA
 
-audiocd
-& Rik. Hemsley; & Rik. Hemsley. mail;
-Benjamin Meyer
-ROLES_OF_TRANSLATORS
-Allows treating audio CD s like a real filesystem, where tracks are represented as files and, when copied from the folder, are digitally extracted from the CD. This ensures a perfect copy of the audio data.
-To see how this slave works, insert an audio CD in your & CD-ROM; drive and type audiocd: / into & konqueror;. Within a few seconds you should see a list of tracks and some folders.
-Audio CD s do n't really have folders, but the audiocd slave provides them as a convenience. If you look inside these folders you will see that they all contain the same number of tracks. If you are connected to the Internet, some folders will have the actual track titles shown as the filenames.
-The reason that these separate folders exist are so that you can choose in which format you would like to listen to (or copy) the tracks on the CD.
-If you drag a track from the Ogg Vorbis folder and drop it on another & konqueror; window open at your home folder, you should see a progress window showing you that the track is being extracted from the CD and saved to a file. Note that Ogg Vorbis is a compressed format, so the file in your home folder will appear a great deal smaller than it would have been if you had copied the raw data.
-The mechanism behind this is quite simple. When the audiocd slave is asked to retrieve a track from the Ogg Vorbis folder, it starts extracting the digital audio data from the CD. As it sends the data over to the file in your home folder, it simultaneously encodes it in Ogg Vorbis format (CD audio is in an uncompressed format to start with).
-You could also try dragging a file ending in. wav and dropping it on the & kde; Media Player, & juk;. In this case, the procedure that happens behind the scenes is similar, except that instead of encoding the audio data in Ogg Vorbis format, it is put through a very simple conversion, from raw binary data (which the. cda files in the toplevel folder represent) to RIFF WAV format, a non-compressed format that most media players understand.
-& juk; should quite happily play the. wav file, but if it has trouble, you may consider using the paranoia_level option, explained below.
-Options
-device
-Set the path to the audio CD device, & eg; audiocd: /? device = / dev/ sdc. Normally, the slave will try to find a CD drive with an audio CD inserted, but if it fails or you have more than one CD drive, you may want to try this option. Note that the configuration dialog allows you to set a default value for this option.
-fileNameTemplate
-Set the file name template, & eg; audiocd: /? fileNameTemplate = Track %{number}. Note that the configuration dialog allows you to set a default value for this option. A warning that if you set it to an empty string no files will show up.
-albumNameTemplate
-Set the album name template, & eg; audiocd: /? albumNameTemplate = %{albumartist} %{albumtitle}. Note that the configuration dialog allows you to set a default value for this option.
-niceLevel
-Sets the process nice level for encoders, & eg; audiocd: /? albumNameTemplate = niceLevel=10. Note that the configuration dialog allows you to set a default value for this option.
-paranoia_level
-Set the amount of error detection and correction used when extracting data.
-Level 0
-No detection or correction. Only useful if you have a perfect CD drive (unlikely).
-Level 1
-Enable basic error checking and correction.
-Level 2
-Default. Specifies that only a perfect extraction will be accepted.
-Note that there is a disadvantage to level 2. Extraction can be very slow, so real-time digital playback may not work properly. If you have a good quality CD drive (note that more expensive does not necessarily mean better quality) then you probably wo n't experience very slow extraction, but a poor drive may take days (!) to extract the audio from one CD.
-cddbChoice
-Specify which Internet CD Database entry to use. Audio CD s do n't have track names, but the Internet CD Database is a clever system which uses a special unique identifier generated from the number and length of tracks on each CD to cross-reference a track listing. Track listings are contributed by the Internet community and made available to all. Occasionally there will be multiple entries. You can specify which one to use.
-You can submit your own track listings using & kscd;, the & kde; CD player.
-By default audiocd tries to pick the best one.
-Examples
-audiocd: / ?device=/ dev/ scd0amp; paranoia_level=0amp; cddbChoice=0
-Gives a listing of the tracks on the audio CD inserted in / dev/ scd0, which on & Linux; specifies the first SCSI & CD-ROM; device. If you copy tracks from the CD, digital extraction will be performed without error correction or detection. The CDDB Database entry 0 will be used.
-Frequently Asked Question
-I get The file or folder / does not exist. How do I fix that? I have an audio CD in my drive!
-Try running cdparanoia -vsQ as yourself (not root). Do you see a track list? If not, make sure you have permission to access the CD device. If you're using SCSI emulation (possible if you have an IDE CD writer) then make sure you check that you have read and write permissions on the generic SCSI device, which is probably / dev/ sg0, / dev/ sg1, & etc;. If it still does n't work, try typing audiocd: / ?device=/ dev/ sg0 (or similar) to tell kio_audiocd which device your & CD-ROM; is.
+Amarok
+play
+append
+queue
+pause
+next
+mute
+up
+down
+prev
+stop
+volume
+quit
+Play
+Append
+Queue
+Pause
+Next
+Mute
+Increase
+Decrease
+Prev
+Stop
+Volume=
+Quit
+Start playing
+Audio player control
+Play next song
+Play previous song
+Pause playing
+Stop playing
+Increase volume by %1
+Reduce volume by %1
+Set volume to %1%
+Quit %1
+Append to playlist
+increase
+decrease
+Plays the selected song. If: q: is not empty it lists songs matching: q: to play them
+Displays songs matching: q: for appending the selected to the playlist
+Displays songs matching: q: for queueing them
+Plays a song from playlist
+Pauses the playing
+Plays the next song in the playlist if one is available
+Mutes/ unmutes the player
+Increases the volume by: q:. If: q: is empty it increases by the configured value
+Decreases the volume by: q:. If: q: is empty it decreases by the configured value
+Plays the previous song if one is available
+Stops the playing
+Sets the volume to: q:
+Quits the player
+%1 not found
+%1 was not found so the runner is unable to work.
+Audio Player Control Runner Settings
+The player the runner controls:
+The collection search is only available for Amarok. You may add another player. That player has to support the MPRIS specification.
+Search & collection
+Use Commands
+Play:
+Can be used as "Play" for playing and "Play < song >" for playing a song that matches to < song > (in title, artist and album)
+Append a song:
+Use: append < term > (where < term > matches to artist, title or album)
+Queue a song:
+Use: queue< term > (where < term > matches to artist, title or album)
+Pause:
+Stop:
+Previous song:
+& Next song:
+Set & volume:
+The numbers are automatically added at the end: Amarok: Volume=10
+& Increase volume by
+:
+& Decrease volume by
+& Mute:
+Quit player:

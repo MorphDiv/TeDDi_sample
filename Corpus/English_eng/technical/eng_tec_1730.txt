@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,16 +15,42 @@
 # sample_type:	whole
 # comments:	NA
 
-CreateUnoStruct Function [Run-time]
-/text/sbasic/shared/03131500.xhp
+SetAttr Statement [Run-time]
+/text/sbasic/shared/03020414.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-CreateUnoStruct function
-CreateUnoStruct Function [Run-time]
-Creates an instance of a Uno structure type.
-Use the following structure for your statement:
-Dim oStruct as new com.sun.star.beans.Property
+SetAttr statement
+SetAttr Statement [Run-time]
+Sets the attribute information for a specified file.
 Syntax:
-oStruct = CreateUnoStruct( Uno type name )
+SetAttr FileName As String, Attribute As Integer
+Parameters:
+SetAttr
+searches for the file in the current directory.
+You can also use
+URL notation
+.
+Attribute:
+Bit pattern defining the attributes that you want to set or to clear:
+Value
+0 :
+Normal files.
+1 :
+Read-only files.
+32 :
+File was changed since last backup (Archive bit).
+You can set multiple attributes by combining the respective values with a logic OR statement.
 Example:
-oStruct = CreateUnoStruct( &quot; com.sun.star.beans.Property &quot; )
+Sub ExampleSetGetAttr
+On Error Goto ErrorHandler REM Define target for error-handler
+If Dir( &quot; C: est &quot; , 16)= &quot; &quot; Then MkDir &quot; C: est &quot;
+If Dir( &quot; C: est\autoexec.sav &quot; )= &quot; &quot; THEN Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: est\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; , 0
+Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: est\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; , 1
+print GetAttr( &quot; c: est\autoexec.sav &quot; )
+end
+ErrorHandler:
+Print Error
+end
+end sub

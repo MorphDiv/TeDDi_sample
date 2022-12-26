@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,26 +15,154 @@
 # sample_type:	whole
 # comments:	NA
 
-Netzwerkprogramme
-Folgende Programme geh\xF6ren zum Paket kdenetwork.
-Stabile Programme sind im wesentlichen fehlerfrei und liegen sowohl als Quelltext wie auch in Bin\xE4rformaten vor.
-ftp.kde.org/pub/kde/stable/latest/distribution/stable
-Instabile Versionen \xE4ndern sich t\xE4glich und sind nur als Quelltext erh\xE4ltlich, d.h. man muss sie selbst kompilieren, um ein lauff\xE4higes Programm zu erhalten.
-Es ist m\xF6glich, dass sich eine instabile Version nicht einmal kompilieren l\xE4sst.
-Falls man auf Probleme st\xF6\xDFt, sollte man sie an die Entwickler zur\xFCckmelden und sie werden in einer zuk\xFCnftigen Ausgabe korrigiert.
-ftp.kde.org/pub/kde/unstable/CVS/snapshots/current
-KMail
-Ein vollwertiges E-Mail-Programm f\xFCr mehrere Server und mehrere Identit\xE4ten.
-KNode
-Ein m\xE4chtiges Usenet-News-Programm, das mehrere NNTP-Server unterst\xFCtzt.
-Kit
-Ein das TOC -Protokoll verwendendes AOL Instant Messenger-Programm.
-KSirc
-Ein IRC-Programm.
-KOrn
-Ein Biff-Miniprogramm.
-Korn \xFCberpr\xFCft E-Mail-Server darauf, ob neue Nachrichten zum herunterladen eingegangen sind.
-kppp
-Ein Internet-Einwahlprogramm.
-KTalkd
-Benutzer im Netzwerk, die den klassischen Befehl talk verwenden, k\xF6nnen durch KTalkd auch in KDE mit Ihnen Kontakt aufnehmen.
+CUPS options presently not available through KControl
+This chapter gives you some hints about further configuration posibilities which may not be available through the &kdeprint; GUI interface to CUPS.
+Overview of provided features
+All of the most often used features and functions CUPS provides are supported in &kdeprint;.
+Printer management is supported: add, remove, modify, configure, test, disable, enable...
+Job management is supported: cancel, hold, release, move to different printer
+Print options: for full control as provided by CUPS.
+Where to find help when using CUPS
+A lot of information about the inner workings of CUPS is available through the web interface, which CUPS will always support.
+It works with any browser (yes, even text-based ones).
+Just go to http://localhost:631 / for a start.
+There you find a link to locally available CUPS documentation in HTML and PDF if you are new to CUPS.
+CUPS is accessible through other means than &kdeprint;: commandline and browser are two native CUPS interfaces.
+The many commandline utilities add up to the most complete control you have on CUPS.
+The web interface is only a subset of all available configuration or control options.
+This is also true for &kdeprint;.
+Generally, as CUPS develops, most new features will first be implemented through the commandline.
+Be sure to check the latest versions of the man pages for CUPS to stay up-to-date with new features after you install a new version.
+Depending on your update method for CUPS, your active configuration file might not have been re-placed by a new one; thus your new, more capable CUPS -daemon might not have been told by the old configuration file about the new features to use.
+A complete list of available files and man pages should always be in the CUPS Software Administrator Manual (http://localhost:631/sam.html#FILES.
+In the Konqueror URL /location field, type man:/lpadmin and man:/cupsd.conf to find out about the most important command and configuration file.
+You knew already about Konqueror 's nice abilties to show you the traditional UNIX man pages, didn't you?
+Read this.
+From there you find more interesting hints and links to other man pages and documentation.
+How to find CUPS related man pages
+Here is a way to find out which CUPS related man pages there are on your system:
+Outside &kdeprint;:
+Hints & Tips Tricks with CUPS on the Commandline
+Here are a few examples of options that are presently only available if you use the commandline.
+Allowing or denying printer access for certain users
+When installing (or modifying) a printer through the command line, you can either deny or allow the usage of that printer to certain users:
+will allow the usage of this (believe me: very nice and also very professional) printer to only the three mentioned users and at the same time deny it to all others.
+If another user wants to print on the DigiMaster via this CUPS server, he will receive an error message along the lines client-error-not-possible.
+will deny the usage of this same printer to the three mentioned users and at the same time allow it to all others.
+If denied user wants to print on the DigiMaster via this CUPS server, he will receive an error message along the lines client-error-not-possible.
+Only one of the two options may be used at one time; at present there is no support to have a similar option in a per-group based way.
+This will be implemented in the future.
+Imposing Quotas for certain printers
+Sometimes you want to impose quotas for certain printers.
+With quotas you can set upper limits for the number of pages or the amount of data to be printed over a certain period to a certain printer.
+Quotas can be set with the -o option when installing a printer with the lpadmin command, or afterwards for an already existing printer.
+Following are some guidelines (which are missing at the time of writing in the, official CUPS documentation):
+With CUPS you may have pagecount- and filesize-based quotas for individual printers.
+Quotas are calculated for each user individually (so a single set of limits applies to all users for the printer concerned).
+Quotas include banner pages (if those are used).
+This means: you can limit every user to 20 pages per day on an expensive printer, but you cannot limit every user except Kurt or root.
+There are job-k-limit, job-page-limit, and job-quota-period options to give when setting up a printer.
+job-quota-period sets a time interval for quota computing (intervals are determined in seconds; so a day is 60x60x24=86.400, a week is 60x60x24x7=604,800, and a month is 60x60x24x30=2.592.000 seconds.)
+For quotas to be enforced, the time-period plus at least one job-limit must be set to non-zero.
+The default value of 0 for job-k-limit specifies that there is no limit.
+The default value of 0 for job-page-limit specifies that there is no limit.
+The default value of 0 for job-quota-period specifies that the limits apply to all jobs that have been printed by a user that are still known to the system.
+Working Examples:
+Working, as both, time-period plus one or both job-limits are defined
+This sets a limit of a file size of 1 MB (in total) for each user of existing printer danka_infotec_4850 during one week.
+This sets a limit of 100 pages (in total) for each user of existing printer danka_infotec_4105 during one week.
+This sets a combined limit of 1 MB (in total) and 100 pages (in total) for each user of existing printer danka_infotec_P450 during one week.
+Whichever limit is reached first will take effect.
+Not working examples
+NOT working, as only one, time-period or job-limit is defined)
+Related Error Messages
+Once a user reaches his quota limit, he'll get a client-error-not-possible message, if he wants to print.
+Installing a raw printer
+There are different ways to define a raw printer.
+One comfortable one is to use the lpadmin command.
+Just don't define a &PPD; file to be used for that printer and it will be a raw one:
+Raw printer queues are those which don't touch the print file to transform it to a different file format.
+You need this for example when printing from Windows clients via Samba through a CUPS server to a PCL printer: in this case the Windows side printer driver would generate the finished print file format for the target printer and filtering it through CUPS filters would only harm the purpose.
+Troubleshooting CUPS in &kdeprint;
+This section of the &kdeprint; Handbook will live from the readers 'feedback.
+Here is just a small beginning.
+Error Messages
+What does the error client-error-bad-request mean?
+The user sent a file to the CUPS which the server could not process.
+You get this also upon sending an empty file.
+And client-error-not-possible?
+User is either not allowed to print to a certain printer or has achieved his quota (based on file size and/or page number)
+How about client-error-not-found?
+The user tried to access a nonexistant resource on the CUPS server, such as trying to print a nonexistent file, or one that you are denied permission to read.
+Questions and Answers
+Why can't I re-start my jobs?
+To be able to re-start your completed jobs from the web interface, you need a setting in the /etc/cups/cupsd.conf file: set PreserveJobFiles True.
+How do I get rid of the long list of completed jobs in the web interface?
+TODO
+How does page accounting work?
+CUPS does the print accounting by passing nearly every job through the pstops filter.
+This one does, amongst other things, the page counting.
+Output of this filter there may be piped into other filters (like pstoraster --> rastertopcl) or sent to the printer directly (if it is a PostScript printer).
+In any case, this works for network, parallel, serial or USB printers the same.
+For pstops to work, it needs DSC, Document Structuring Convention compliant PostScript (or near-equivalent) as input.
+So it calculates the pages during filtering on the print server and writes info about every single page (what time, which user, which job-ID and -name, which printer, how many copies of which pages of the document, how many kilo-bytes?) into /var/log/cups/page_log.
+By the way: on my personal wishlist is a hack of webalizer to read and analyse the page_log and give a similar output.
+Anyone?
+However, it is not giving correct results in the following cases:
+The printer jams and maybe therefor throw away the job (real live experience; or maybe throwing away the job because of problems with the data format)
+Jobs printed as raw are always counted as size of 1 page (and maybe multiple copies).
+Therefore the page accounting of CUPS is only an approximation (in many cases an excellent or at least good one, in others a quite poor one).
+The only reliable print count is the one done by the internal printer counter. (Because this is the one you pay for, if you are on a click price or similar.) Some, by far not most, printers can be queried remotely for that information via SNMP (Simple Network Management Protocol).
+That means, in a bigger network with many different printers there is just no completely reliable and accurate page accounting tool!
+Why doesn't page-accounting work with Windows clients?
+From Windows clients jobs nearly always need to be sent as raw.
+Why?
+If CUPS works as a print server for Windows clients using the original native Windows driver for the target print device, this guarantees the correct formatting of the job on the clients already; therefor the server should not touch it and print raw; therefor no filtering is started (and this is not even possible as the input from the clients is not PostScript as pstops expects; hence no page-count other than the default 1.
+How do I get a list of available options for a given printer or a &PPD; file?
+See the man page for the lpoptions command.
+You may investigate a CUPS -enabled box about any option of its available printers.
+There is no need to have the printer installed locally.
+As long as the printer is available locally (through the CUPS printer browsing feature), it will also work remote.
+Remote server Transmeta and its CUPS daemon as well as the localhost's CUPS daemon need to be up and running for this to succeed.
+How do I read the listing retrieved by the lpoptions command?
+You know that for PostScript printer manufacturers it is legal to define their own internal names and procedures even for standard PostScript options.
+As long as the driver is able to retrieve the option from the &PPD; and show it to the user in a way that he understands it everything is OK.
+But what do you do, if you want to use some obscure printer options on the command line?
+How do you find out its exact syntax?
+Let's take an example.
+Looking at Hitachi's DDP70 printer and how it implements duplex printing is revealing somehow.
+How do you tell how to print double sided? duplex or Duplex?
+Or another name altogether?.
+This leads to the output
+This is to be interpreted like follows:
+The name of the investigated option is TR-Duplex;
+Behind the slash you see the translation of the option, as it should be shown in a GUI or Web interface (Duplex);
+The option may take one of the two values False or True;
+To override the present default setting (duplex) and print a job in simplex, you need to use the following command:
+How do I get a nicely formatted listing of available options for a given printer or &PPD;?
+Use the lphelp command which may be installed on your system locally.
+There is not yet a man page for lphelp.
+This lists the available options for the named printer.
+It is nicely formatted and does explain every available option and how to use it.
+You can query different printers 'options at once:
+It also works for &PPD; files.
+Just specify the path to the &PPD;:
+Solving Problems
+No system is perfect.
+Here are some commonly seen traps people have fallen into.
+My printer named 3-lp-duplex shows erratic behavior.
+What's wrong?
+The printer names used in CUPS shall start with a letter and may contain up to 128 letters, numbers or underscores.
+Using dashes may lead to problems.
+Speaking about naming: printer names in CUPS are not case sensitive.
+So a printer named Best_of_Danka will be the same as best_of_danka or BEST_OF_DANKA. (This is a requirement of &IPP;, which CUPS is fully compliant with).
+Are the rights on the remote Windows box set correctly for you?
+Are you actually allowed to print on the Windows shared printer?
+My files for printer lp sometimes mysteriously disappear and two days later I am told they got printed on a printer 3 storeys below my office.
+What's on?
+Believe me, it is very unlikely that your printer is the only one with the name lp.
+Maybe CUPS is playing a trick on you.
+As you might have the setting ImplicitClasses On activated, CUPS tries to stuff all printers it sees on the network into a Class name lp.
+All jobs destined to lp are sent to this class and the first available member prints it.
+So if you had this nice fellow (who listened closely when you raved about CUPS and &kdeprint;) install CUPS and poke around the system...get the idea?
+Take my advice: choose a unique name for any network printer! (Mind you, the one on your parallel port also turns out to be a network printer for the rest of the world if you don't take care of your settings).

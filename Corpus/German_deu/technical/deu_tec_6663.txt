@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	2014
 # mode:	written
@@ -15,17 +15,550 @@
 # sample_type:	whole
 # comments:	NA
 
-Die Verbindung wurde unerwartet beendet
-Ungültige Suchanfrage
-SoupBodyInputStream konnte nicht abgeschnitten werden
-Der Ausgabe-Zwischenspeicher ist zu klein
-Der Vorgang wurde abgebrochen
-Der Vorgang würde gestoppt werden
-Keine Adresse wurde bereitgestellt
-Ungültige »%s« Adresse: %s
-Die Adresse »%s« konnte nicht verarbeitet werden
-Nicht unterstütztes Adressenschema »%s«
-Der Rechnername ist eine IP-Adresse
-Ungültiger Rechnername
-Der Rechnername hat keine Hauptdomäne
-Nicht genug Domänen
+Mario Blättermann <mariobl\@gnome\.org>, 2009
+translated
+JHBuild-Handbuch
+JHBuild ist ein Werkzeug zum Erstellen der gesamten GNOME Arbeitsumgebung aus einer Versionsverwaltung. Es kann aber auch zum Erstellen anderer Projekte angepasst werden.
+Einführung
+JHBuild ist ein Werkzeug zur Vereinfachung der Erstellung aus einer Sammlung von Quellpaketen (auch als »Module« bekannt). Es kommt ein »Modulsatz« zum Einsatz, in welchem die zu erstellenden Module beschrieben werden. Diese Dateien enthalten Abhängigkeitsinformationen, aus welchen JHBuild erfährt, was und in welcher Reihenfolge der Benutzer erstellen will.
+JHBuild wurde ursprünglich zur Erstellung von
+JHBuild kann Module aus verschiedenen Quellen erstellen, beispielsweise aus Softwarebeständen, die
+JHBuild ist nicht dazu bestimmt, das Paketverwaltungssystem Ihrer Distribution zu ersetzen. Es vereinfacht lediglich, alles in einem separaten Installationspräfix zu erstellen, so dass das übrige System nicht beeinflusst wird.
+Erste Schritte
+JHBuild erfordert einige Konfigurationsschritte, bevor Software erstellt werden kann. JHBuild hat einige Abhängigkeiten, und es ist nötig, einige Werkzeuge zu installieren, um Softwaremodule zu erhalten und zu erstellen.
+Installieren von JHBuild
+JHBuild benötigt eine Python-Laufzeitumgebung. Stellen Sie sicher, dass Python &gt;= 2.3 installiert ist.
+Der empfohlene Weg zum Herunterladen von JHBuild führt über das Versionsverwaltungssystem
+Dadurch wird JHBuild in einen neuen Ordner namens
+Falls die oben genannten Schritte erfolgreich verlaufen, wird in
+Um
+Konfiguriere von JHBuild
+Die Datei
+Mit der Beispielkonfiguration erstellt JHBuild das Modul
+Konfigurationsvariablen sind in
+repos['git.gnome.org'] = 'ssh://
+Voraussetzungen zur Erstellung
+Bevor irgendwelche Module erstellt werden können, müssen zunächst verschiedenen Erstellungswerkzeuge installiert sein. Diese umfassen die GNU Autotools (
+JHBuild kann das Vorhandensein dieser Werkzeuge mit dem Befehl
+Installieren Sie das benötigte Paket aus dem Softwarebestand Ihrer Distribution. Eine Liste von
+Verwendung von JHBuild
+Nachdem die Einrichtung abgeschlossen ist, kann JHBuild zum Erstellen von Software verwendet werden. Führen Sie zum Erstellen aller in der Datei
+JHBuild lädt jedes der Module herunter, konfiguriert, kompiliert und installiert es. Falls in einer der Stufen Fehler auftreten, öffnet JHBuild ein Menü, um nach der weiteren Vorgehensweise zu fragen. Die Auswahl umfasst die Weiterleitung in eine Shell zum Beheben des Fehlers, die erneute Ausführung aus verschiedenen Stufen, Aufgeben oder Ignorieren des Fehlers und Fortsetzen.
+Das Aufgeben eines Moduls wirkt sich auf die davon abhängigen Module aus, wodurch deren Erstellung scheitert.
+Es folgt ein Beispiel des angezeigten Menüs:
+Es ist auch möglich, einen Modulsatz und dessen Abhängigkeiten zu erstellen, indem Sie die Modulnamen als Argumente an den
+Um Informationen über ein bestimmtes Modul anzuzeigen, verwenden Sie den Befehl
+Später kann JHBuild alles ohne Herunterladen oder Aktualisieren der Quellen erstellen:
+Um einen Befehl in der auch von JHBuild genutzten Umgebung auszuführen, benutzen Sie den
+Um eine Shell in der auch von JHBuild genutzten Umgebung auszuführen, benutzen Sie den
+JHBuild und GNOME
+GNOME erstellen
+Um GNOME zu erstellen, werden einige Entwicklerpakete benötigt. Diese sind:
+XML-DTD und XSLT-Stilvorlagen von DocBook. Diese müssen im XML-Katalog registriert sein (
+X-Bibliotheken
+
+
+
+Ausführung einer einzelnen GNOME-Anwendung
+Starten Sie eine JHBuild-Shell. In der JHBuild-Shell sind bereits alle nötigen Umgebungsvariablen gesetzt.
+Überprüfen Sie, ob die richtige Anwendung ausgeführt wird. Zum Beispiel:
+Die Anwendung ausführen:
+Alternativ rufen Sie die Anwendung dem Befehl
+Ausführung der GNOME-Arbeitsumgebung
+Öffnen Sie ein Terminal als Benutzer
+echo PATH=$PATH:~/.local/bin &gt;gt; ~/.bashrc
+Testen Sie, ob JHBuild funktioniert:
+jhbuild run pkg-config gtk+-2.0 --modversion
+GNOME für den Start über das Anmeldefenster einrichten
+Erstellen und installieren Sie JHBuild GNOME.
+#!/bin/sh
+
+GNOME=
+Machen Sie die Datei
+chmod a+x /usr/bin/gnome-jhbuild-session
+Um einen neuen Sitzungseintrag für das Anmeldefenster anzulegen, erstellen Sie die Datei
+[Desktop Entry]
+Name=GNOME (JHBuild)
+Comment=This session logs you into GNOME testing session
+TryExec=/usr/bin/gnome-jhbuild-session
+Exec=/usr/bin/gnome-jhbuild-session
+Icon=
+Type=Application
+Starten Sie
+GNOME über das Anmeldefenster ausführen
+Integration von Buildbot
+Konfigurieren eines Buildbot-Slaves
+Buildbot-Befehle sind Optionen des
+Sobald dieser Schritt erfolgreich abgeschlossen ist, sind drei neue Konfigurationsvariablen in der
+Es ist nicht möglich, eine alternative Konfigurationsdatei zu verwenden, die Option
+jhbuildbot_master = 'build.gnome.org:9070'
+jhbuildbot_slavename = 'slavename'
+jhbuildbot_password = 'password'
+Die Verwalter von
+Befehlsreferenz
+JHBuild verwendet eine Befehlszeilensyntax ähnlich wie in Werkzeugen wie CVS:
+Folgende globale Optionen stehen für JHBuild zur Verfügung:
+
+Eine alternative Konfiguration anstelle der vorgegebenen
+
+
+
+Befehlsspezifische Optionen werden nachstehend aufgelistet.
+autobuild
+Der Befehl
+Die Optionen
+
+Diese Option legt die Adresse für Berichte an JHAutobuild fest.
+
+Falls angegeben, sind die Ausgaben von JHBuild ausführlicher.
+bootstrap
+jhbuild bootstrap
+Die verfügbaren Optionen finden Sie in der
+build
+Der Befehl
+Falls keine Modulnamen auf der Befehlszeile übergeben werden, wird die
+
+
+
+
+
+
+
+
+
+
+
+--ignore-suggests
+Keine weichen Abhängigkeiten erstellen.
+
+Beim Erstellen von Modulen nicht auf das Netzwerk zugreifen. Dadurch werden Download- oder Aktualisierungsschritte in einer Erstellung übersprungen. Falls das Modul ohne Netzwerkzugriff nicht erstellt werden kann, wird die Erstellung des Moduls scheitern.
+
+Die aufgelisteten Module nicht erstellen. Wird benutzt, um die Erstellung spezifischer Abhängigkeiten zu überspringen.
+
+
+Beim genannten Modul anstatt am Beginn der Liste starten. Diese Option ist sinnvoll, wenn die Erstellung zuvor unterbrochen wurde.
+
+
+
+
+Falls die Abhängigkeiten eines oder mehrerer Module scheitern, erzwingt dies die Erstellung des Moduls durch JHBuild.
+
+Das Modul erstellen, auch wenn die Regeln es als nicht erforderlich ansehen.
+
+Einige als optionale Abhängigkeiten aufgelistete Module sind nicht für die Erstellung des Zielmoduls notwendig. Diese Option zwingt JHBuild, diese Module trotzdem einzuschließen.
+
+
+make
+Die verfügbaren Optionen finden Sie in der
+buildone
+Der Befehl
+Die Optionen
+In der Befehlszeile muss mindestens ein Modul angegeben werden.
+checkbranches
+
+Der auszucheckende Zweig.
+
+clean
+Der Befehl
+
+In der Dokumentation zum Befehl
+dot
+Die Ausgabe dieses Befehls kann leicht zum Befehl
+jhbuild dot
+Oder ein PNG-Bild:
+jhbuild dot
+Beispielausgabe von dot in JHBuild
+gui
+Der Befehl
+Starten Sie
+Die erzeugte grafische Oberfläche benötigt GTK zur Darstellung, so dass einige unterstützende Bibliotheken erforderlich sein werden.
+info
+Der Befehl
+Der Befehl gibt den Modulnamen, den Typ, die Abhängigkeiten, die davon abhängenden Pakete, den Quellordner und die Zeit der letzten Erstellung mit JHBuild aus. Falls verfügbar, können außerdem Informationen bezüglich des Modultyps ausgegeben werden, wie den CVS-Softwarebestand oder die Downloadadresse.
+Falls kein Modul angegeben wird, dann werden Informationen über alle im Modulsatz definierten Module ausgegeben.
+list
+Die Optionen
+
+
+
+Diese Option zwingt JHBuild, optionale Abhängigkeiten aufzulisten.
+rdepends
+Der Befehl
+
+Zeigt den Abhängigkeitspfad neben den Modulen an.
+
+run
+Falls Sie JHBuild zur Erstellung von GNOME verwenden, kann dieser Befehl in X-Startskripten nützlich sein.
+
+Führen Sie den Befehl im Erstellungesordner des angegebenen Moduls aus.
+
+Führen Sie den Befehl im Quellordner des angegebenen Moduls aus.
+sanitycheck
+Der Befehl
+jhbuild sanitycheck
+Beispielsweise wird Folgendes überprüft:
+Ob die Präfixes für Checkout und Installation schreibbar sind.
+Ob die benötigten Erstellungswerkzeuge installiert sind.
+Ob einige häufig verwendete Makros in den Suchpfaden der den verschiedenen Versionen von
+Ob der XML-Katalog die DocBook-DTD und die Stilvorlagen enthält.
+shell
+Starten Sie
+Dieser Befehl entspricht dem Folgenden:
+ if [ -n "$UNDER_JHBUILD" ]; then
+ PS1="[jhbuild] $PS1"
+ fi
+Der Befehl
+
+Starten Sie
+tinderbox
+Die Optionen
+
+uninstall
+Der Befehl
+update
+Die Optionen
+updateone
+Referenz der Konfigurationsdatei
+use_local_modulesets = True
+autogenargs = '--disable-static --disable-gtk-doc'
+skip = ['mozilla', 'pulseaudio']
+repos['git.gnome.org'] = 'ssh://username@git.gnome.org/git/'
+Konfigurationsvariablen
+Die Definition der Zweige hängt von der Art der Versionsverwaltung des Moduls ab:
+CVS: Revision. Beispielsweise
+Bazaar: Adresse des Modulzweiges. Beispielsweise
+Subversion: Adresse des Modulzweiges. Beispielsweise
+builddir_pattern
+ignore_suggests
+makecheck_advisory
+module_autogenargs
+module_checkout_mode
+module_makeargs
+module_makecheck
+module_nopoison
+module_extra_env
+tinderbox_outputdir
+use_local_modulesets
+Weitere Strukturen der Konfigurationsdatei
+os.environ['CFLAGS'] = '-O0 -g'
+Nach dem Verarbeiten der Konfigurationsdatei ändert JHBuild einige Pfade in Variablen wie
+Die Syntax der Modulsatz-Datei
+Modulquellen
+&lt;repository name="
+&lt;branch
+ [ repo="
+Bazaar
+&lt;repository type="bzr" name="launchpad.net"
+ href="lp:"/gt;
+&lt;repository type="bzr" name="launchpad.net"
+ href="lp:"
+ trunk-template="~bzr-pqm/%(module)s/bzr.dev"
+ branches-template="~bzr-pqm/%(module)s/%(branch)s"/gt;
+&lt;branch repo="launchpad.net"
+ module="bzr"
+ checkoutdir="bzr-next"/gt;
+&lt;branch repo="launchpad.net"
+ module="bzr"
+ branch="2.2"
+ checkoutdir="bzr-beta"/gt;
+CVS
+&lt;repository type="cvs" name="tango.freedesktop.org"
+ cvsroot=":pserver:anoncvs@anoncvs.freedesktop.org:/cvs/tango"
+ password=""/gt;
+Darcs
+&lt;repository type="darcs" name="telepathy.freedesktop.org"
+ href="http://projects.collabora.co.uk/darcs/telepathy/"/gt;
+Git
+&lt;repository type="git" name="git.freedesktop.org"
+ href="git://anongit.freedesktop.org/git/"/gt;
+&lt;branch repo="git.freedesktop.org" module="swfdec/swfdec"
+ checkoutdir="swfdec"
+ revision="
+Mercurial
+&lt;repository type="hg" name="hg.gtk-vnc"
+ href="http://gtk-vnc.codemonkey.ws/hg/" /gt;
+&lt;branch repo="hg.gtk-vnc" module="outgoing.hg" checkoutdir="gtk-vnc"/gt;
+Monotone
+&lt;repository type="mtn" name="pidgin.im"
+ server="pidgin.im" database="pidgin.im.mtn"
+ defbranch="im.pidgin.pidgin"/gt;
+Subversion
+&lt;repository type="svn" name="svn.gnome.org" default="yes"
+ href="http://svn.gnome.org/svn/"/gt;
+&lt;branch revision="gnome-2-20"/gt;
+&lt;repository type="bzr" name="launchpad.net"
+ href="lp:"/gt;
+Tarballs
+&lt;repository type="tarball" name="dbus/dbus-python"
+ href="http://dbus.freedesktop.org/releases/dbus-python/"/gt;
+&lt;branch module="dbus-python-0.80.2.tar.gz" version="0.80.2"
+ repo="dbus/dbus-python"
+ hash="md5:2807bc85215c995bd595e01edd9d2077" size="453499"gt;
+ &lt;patch file="dbus-glib-build.patch" strip="1" /gt;
+&lt;branchgt;
+Einbinden anderer Modulsätze
+&lt;include href="
+Moduldefinitionen
+autotools
+&lt;autotools id="
+%(srcdir)s/%(autogen-sh)s --prefix %(prefix)s --libdir %(libdir)s %(autogenargs)s
+cmake
+&lt;cmake id="
+distutils
+&lt;distutils id="
+linux
+&lt;linux id="
+perl
+&lt;perl id="
+testmodule
+&lt;metamodule id="
+&lt;testmodule id="
+waf
+&lt;waf id="
+testmodule
+&lt;testmodule id="
+metamodule
+&lt;metamodule id="
+Veraltete Elemente
+cvsroot
+&lt;cvsroot name="
+svnroot
+&lt;svnroot name="
+Veraltete Modultypen
+Dieser Abschnitt beschreibt veraltete Elemente, die in vorhandenen Modulsätzen noch verwendet werden können, was allerdings nicht mehr empfohlen wird.
+tarball
+&lt;tarball id="
+James
+Henstridge
+C.J.
+Adams-Collier
+Frederic
+Peters
+David
+Turner
+2004, 2008
+James Henstridge
+JHBuild-Handbuch v0.5
+Januar 2008
+JHBuild-Handbuch v0.1
+August 2007
+$
+git clone git://git.gnome.org/jhbuild
+...
+cd jhbuild
+./autogen.sh
+make install
+Alternativ installieren Sie JHBuild wie folgt, falls autotools und gnome-doc-utils nicht vorhanden sind:
+make -f Makefile.plain
+make -f Makefile.plain install
+PATH=$PATH:~/.local/bin
+Bevor JHBuild ausgeführt werden kann, muss eine Konfiguration eingerichtet werden, die sich in der Datei
+repos
+moduleset
+modules
+checkoutroot
+prefix
+autogenargs
+makeargs
+Falls dieser Befehl Fehlermeldungen ausgibt, können die Fehler auf folgende Arten behoben werden:
+Führen Sie den
+Wenn dies abgeschlossen ist, führen Sie den Befehl
+Der
+Zu den abhängigen Erstellungswerkzeugen gehören
+jhbuild build
+Auswahl:
+jhbuild build gtk+
+jhbuild build --start-at=pango
+jhbuild buildone gtk+
+jhbuild list
+jhbuild info gtk+
+jhbuild update
+jhbuild build --no-network
+Programm
+jhbuild run
+jhbuild shell
+which gedit
+
+gedit &
+jhbuild run gedit
+
+Es gibt drei verschiedene Methoden, um JHBuild-GNOME auszuführen:
+Eingebettetes Fenster
+Anmeldefenster.
+GNOME für die Ausführung in einem eingebetteten Fenster einrichten
+Testen Sie, ob
+Xephyr -ac -screen 800x600 :1 2gt; /dev/null &
+/opt/gnome
+rm -rf
+ln -s /var/run/dbus
+Machen Sie die Datei
+chmod u+x ~/.local/bin/gnome-jhbuild-xephyr-session
+Ausführung von GNOME in einem eingebetteten Fenster
+Öffnen Sie ein Terminal als Benutzer
+Rufen Sie
+#
+Setzen Sie die Umgebungsvariable
+export DISPLAY=:1
+Starten Sie GNOME:
+gnome-jhbuild-xephyr-session
+Falls erfolgreich, wird das JHBuild-GNOME in einem Xephyr-Fenster angezeigt. Falls nicht, überprüfen Sie die Ausgaben des Terminalfensters.
+jhbuild bot --setup
+jhbuild
+global-options
+command
+command-arguments
+--no-interact
+jhbuild autobuild
+--autogen
+--clean
+module
+--skip=
+--start-at=
+reporturl
+--report-url=
+--verbose
+--check
+--dist
+--distcheck
+--no-network
+tags
+--tags=
+date
+-D
+--no-xvfb
+--try-checkout
+--no-poison
+--force
+--build-optional-modules
+time
+--min-age=
+-D
+jhbuild buildone
+jhbuild checkbranches
+branch
+--branch=
+jhbuild -m gnome-2.20 checkbranches
+jhbuild clean
+jhbuild dot
+--soft-deps
+--clusters
+jhbuild gui
+jhbuild info
+-a
+-r
+-s
+--list-optional-modules
+jhbuild rdepends
+--dependencies
+--direct
+jhbuild run
+--in-builddir
+--in-checkoutdir
+argument
+jhbuild run $SHELL
+jhbuild tinderbox
+directory
+--output=
+-C
+-N
+-f
+Der Ordner zum Speichern der HTML-Dateien.
+jhbuild uninstall
+jhbuild updateone
+alwaysautogen
+branches
+buildroot
+buildscript
+build_policy
+checkout_mode
+copy_dir
+cvs_program
+installprog
+interact
+makecheck
+makeclean
+makedist
+makedistcheck
+modulesets_dir
+nobuild
+nonetwork
+nonotify
+nopoison
+notrayicon
+noxvfb
+pretty_print
+progress_bar
+quiet_mode
+skip
+sticky_date
+svn_program
+tarballdir
+trycheckout
+use_lib64
+xvfbargs
+os.environ
+Arch
+&lt;repository type="arch" name="rhythmbox"
+ archive="rhythmbox-devel@gnome.org--2004"
+ href="http://web.rhythmbox.org/arch/2004"/gt;
+Ant
+&lt;ant id="
+Beispiel für ein mit Ant erstelltes Modul
+arch-archive
+&lt;arch-archive name="
+Bevor Sie JHBuild herunterladen, stellen Sie sicher, dass auf Ihrem System Python in Version 2.0 oder neuer installiert ist. Außerdem ist es von grundlegender Bedeutung, dass die XML-Parser-Erweiterung Expat vorhanden ist. Expat wird mit Python ab Version 2.3 mitgeliefert. Um zu überprüfen, ob Expat installiert ist, führen Sie die folgenden Befehle aus:
+python
+&gt;gt;gt;
+import xml.parsers.expat
+
+Falls die obige Ausgabe ohne Ausnahme erscheint, ist Expat-XML korrekt installiert.
+&lt;branch repo="git.freedesktop.org" module="swfdec/swfdec"
+ checkoutdir="swfdec"/gt;
+Häufig gestellte Fragen
+Allgemeine Fragen zu JHBuild
+Der Befehl
+Erstellen Sie eine Datei namens
+ftp_proxy = http://
+Falls passive FTP-Verbindungen notwendig sind (z.B. manchmal mit NAT-Firewalls), fügen Sie folgende Zeile hinzu:
+passive_ftp = on
+Die Erstellung ist langsam. Gibt es eine Möglichkeit, diese zu beschleunigen?
+
+Legen Sie die Größe des Zwischenspeichers mit folgendem Befehl fest:
+ccache -M 2G
+cd ~/bin
+for cmd in cc gcc c++ g++; do
+ ln -s /usr/bin/ccache $cmd
+done
+ccache -s
+Gibt es eine bessere Möglichkeit zum Überwachen des Status von JHBuild als das Verfolgen in einem Terminalfenster?
+Falls
+Das Symbol zeigt bei Fehlermeldungen außerdem eine Sprechblase an.
+Welche anderen Voraussetzungen müssen erfüllt sein, damit GNOME mit JHBuild erstellt werden kann?
+fam oder gamin (von gnome-vfs zur Dateiüberwachung verwendet).
+Ich habe GNOME mit JHBuild erstellt. Wie kann ich es ausführen?
+Zwei Optionen:
+#!/bin/sh
+exec jhbuild run gnome-session
+# Cmnd alias specification
+Cmnd_Alias GNOME = /opt/gnome2/bin/dbus-daemon, \\
+ /opt/gnome2/sbin/hald
+
+# User privilege specification
+gnometester ALL = NOPASSWD: GNOME
+Starten Sie
+Beim Erstellen von GNOME mit JHBuild habe ich
+Setzen Sie
+mkdir -p $prefix/var/run
+cd $prefix/var/run
+ln -s /var/run/dbus dbus
+Sie werden D-Bus neu starten müssen, was normalerweise das Abmelden oder einen vollständigen Neustart des Systems erfordert.
+Die Datei
+moduleset = 'gnome-2.22'
+modules = [ 'meta-gnome-desktop' ]
+checkoutroot = os.path.join(os.environ['HOME'], 'checkout', 'gnome2')
+prefix = os.path.join(os.environ['HOME'], 'prefix')
+Beispiel:
+
+Keine weichen Abhängigkeiten auflisten.
+cvsroots
+svnroots

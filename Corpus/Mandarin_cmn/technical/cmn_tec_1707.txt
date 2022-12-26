@@ -1,6 +1,6 @@
 # language_name_wals:	Mandarin
 # language_name_glotto:	Mandarin Chinese
-# ISO_6393:	cmn
+# iso639_3:	cmn
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,44 +15,46 @@
 # sample_type:	whole
 # comments:	NA
 
-Mid 函数、Mid 语句 [运行时]
-/text/sbasic/shared/03120306.xhp
+Input# 语句 [运行时]
+/text/sbasic/shared/03020202.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-Mid 函数
-Mid 语句
-Mid 函数，Mid 语句 [运行时]
-Mid 函数
-)，或将字符串表达式的指定部分替换成另一个字符串 (
-Mid 语句
-)。
+Input 语句
+Input# 语句 [运行时]
+从打开的顺序文件读取数据。
 语法：
-Mid (Text As String, Start As Integer [, Length As Integer]) 或 Mid (Text As String, Start As Integer , Length As Integer, Text As String)
-返回值：
-字符串（仅适用于函数）
+Input #FileNumber As Integer; var1[, var2[, var3[,...]]]
 参数：
-Text：
-要修改的任意字符串表达式。
-Start：
-数字表达式，表示要替换或返回的字符串部分在字符串中的起始字符位置。允许的最大值是 65535。
-Length：
-返回要替换或要返回的字符数目的数字表达式。允许的最大值是 65535。
-Mid 函数
-中的 Length 参数，则返回字符串表达式中从开始位置到字符串结尾的所有字符。
-Mid 语句
-中的 Length 参数小于要替换的文字长度，文字将缩短到指定的长度。
-Text：
-Mid 语句
-）。
+FileNumber：
+包含要读取的数据的文件编号。该文件必须使用含有 INPUT 关键字的 Open 语句打开。
+var：
+数字或字符串变量，用于存放从打开的文件中读取的值。
+Input#
+语句从打开的文件中读取数值或字符串，并将这些数据指定到一个或多个变量。读取数字变量的过程在遇到第一个回车 (Asc=13)、换行 (Asc=10)、空格或逗号时停止，而读取字符串变量的过程在遇到第一个回车 (Asc=13)、换行 (Asc=10) 或逗号时停止。
+在打开的文件中，数据和数据类型的出现顺序必须与 &quot; var &quot; 参数中变量的传送顺序相同。如果将非数字类型的值指定给某个数字变量， &quot; var &quot; 将被指定为 &quot; 0 &quot; 。
+Line Input#
+语句逐行读取纯文本文件（只包含可打印字符的文件）。
+如果在读取某个数据元素时到达了文件末尾，就会出错，进程也会异常中止。
 示例：
-Sub ExampleUSDate
-Dim sInput As String
-Dim sUS_date As String
-sInput = InputBox( &quot; Please input a date in the international format 'YYYY-MM-DD' &quot; )
-sUS_date = Mid(sInput, 6, 2)
-sUS_date = sUS_date & &quot; / &quot;
-sUS_date = sUS_date & Right(sInput, 2)
-sUS_date = sUS_date & &quot; / &quot;
-sUS_date = sUS_date & Left(sInput, 4)
-MsgBox sUS_date
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; This is a line of text &quot;
+Print #iNumber, &quot; This is another line of text &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
 End Sub

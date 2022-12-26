@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,110 +15,11 @@
 # sample_type:	whole
 # comments:	NA
 
-Daniel Naber
-daniel. naber@t-online. de
-David Rugge
-davidrugge@mediaone. net
-ROLES_OF_TRANSLATORS
-2004-07-14 1.7
-Frequently Asked Questions (FAQ;)
-Why are my filters not applied to incoming messages of & imap; accounts?
-Normal & imap; mode does not support filtering, but the new disconnected & imap; account type does. You could try to use server-side filtering (ask your admin for how to install filters on the server and in which format), since & imap; is all about managing your email on the server. Unfortunately, although there exists a mail filter language (Sieve, defined in RFC3028), there is no standardized access protocol for installing or editing server-side Sieve scripts. If such a protocol becomes available in the future, & kmail; will most probably include support for it.
-Using PGP or GnuPG is very slow or it blocks & kmail;.
-& kmail; accesses PGP / GnuPG synchronously, & ie; it blocks while PGP / GnuPG works. This means that you might want to disable automatic retrieval of unknown keys from a keyserver to make & kmail; look more responsive. If you are using GnuPG 1.0.7 (or better) or upgraded from an earlier version, then make sure to run gpg --rebuild-keydb-caches once and gpg --check-trustdb after every import or refresh. Both will speed up GnuPG immensely.
-What should I know if I want to use PGP / GnuPG with & kmail;?
-& kmail; provides a simple and easy-to-use interface for the basic functions of these programs; still you should understand how these programs work and what might make their use insecure. Some important issues:
-You really should test if encryption works before you use it. & kmail; partly relies on PGP / GnuPG's error strings, which often change between different versions.
-& kmail; will not encrypt messages with an untrusted (unsigned) public key: if you want to encrypt to such a key you should check the identity of the key owner and only then sign the key with your secret key; if you do not want to or cannot check the identity of the key owner but nevertheless want to encrypt the message then please sign the key locally with gpg --lsign keyID.
-Trusting a foreign public key without checking it is not a good idea.
-& kmail; cannot encrypt and sign attachments if you are using the built-in OpenPGP support. For encrypted and signed attachments you need to have crypto plugins installed and configured.
-Starting with GnuPG 1.0.7 you have to set your own key to ultimate ownertrust: it is no longer implicitly done for you.
-Where does & kmail; save my settings and my mail?
-Most & kmail; settings are stored in $KDEHOME / share/ config/ kmailrc, where $KDEHOME is typically ~/. kde; the identities are stored in $KDEHOME / share/ config/ emailidentities and your mail is saved in $KDEHOME / share/ apps/ kmail (or ~/ Mail if you upgraded from a previous & kmail; version that used this location.) Note that some of the files are hidden: remember to also copy those if you want to backup or archive your mails.
-Why did & kmail; regenerate the index of a folder?
-& kmail; regenerates the index of a folder whenever the index appears to be out of date, & ie; whenever the contents of a folder are newer than the index. & kmail; regenerates the index in this case in order to prevent the loss or corruption of messages. Unfortunately, currently-deleted messages might reappear and message flags (like important, etc.) might be lost when the index is regenerated.
-An outdated index can have several causes; the two most important causes are:
-Some other program modified the contents of the folder: if you want to use & kmail; together with procmail then please read this & FAQ;. If you want to use & kmail; together with another email client then please read this & FAQ;.
-If your mail folder (usually $KDEHOME / share/ apps/ kmail/ or ~/ Mail) is on a volume which is mounted via NFS and if the clock of the NFS server is ahead of the clock of your computer then the NFS server sometimes reports a wrong file date for the index file. In this case & kmail; assumes that the index is outdated although in reality it is not. To fix this problem you (or your system administrator) have to make sure that the clock of the NFS server and the clock of your computer are always in sync. One way to achieve this is the use of the ntp daemon.
-I cannot add addresses to my address book after upgrading to KDE 3. x.
-You probably copied your old kmailrc file manually. That is not necessary, there is a script that will do such things when you run KDE 3. x for the first time. To fix the problem, remove the complete [AddressBook] group and the addressbook option in group [General] in your kmailrc file; however, chances are you will also encounter other problems that the config update script would have solved.
-Can I use & kmail; together with a different email client, & eg; mutt?
-If you're using the mbox format for your folders it is not possible to use a different email client while & kmail; is running. With mutt there may also be problems even if both programs are not running at the same time. We recommend to use the maildir format in this case, this should solve all problems.
-How can I convert my mailboxes from mbox to maildir?
-There is no automatic way to do that. You will have to create a new folder in maildir format and copy the messages from the mbox folder into this new folder. Remember to adapt any filter rules connected with the old folder before you delete it.
-How can I use a browser other than & konqueror; to open links in messages?
-Change the File Associations for HTML files using & kcontrol;.
-How can I remove attachments from messages without removing the message itself?
-This is currently not supported. As a workaround, move the message to the drafts folder, double click on it in order to open it in the composer, remove the attachments, save the message again to the drafts folder, move it back to its folder. The disadvantage of this workaround is that the date will be changed to the current date. Some other headers might also be changed.
-How can I make & kmail; check for new messages at startup?
-If & kmail; should always check for new messages at startup then enable Check mail on startup on the Accounts configuration page. Otherwise start & kmail; with kmail --check.
-Why does & kmail; get slow / stop working when I try to send big attachments?
-& kmail; is known to have problems with large attachments. We are working on a solution for this problem for & kde; 3.2 but currently it temporarily consumes virtual memory of about 10-15 times the size of the attachment. That means that if you attach a 2MB file & kmail; might temporarily need about 20-30 MB of virtual memory (= RAM + swap space). If you do not have enough virtual memory this will lead to problems.
-Where can I get a list of changes between the versions of & kmail;?
-The welcome screen lists all important changes for your version. It is displayed when you select Help kmail; Introduction.
-Can I configure the location of my mail folder?
-Exit & kmail;, make a backup of ~/. kde/ share/ config/ kmailrc, then open it with an editor and add & eg; folders=/ home/ username/. mail to the [General] section. Then move all your existing folders (including the hidden index files) to the new location. The next time you start & kmail; will use / home/ username/. mail instead of / home/ username/. kde/ share/ apps/ kmail. Note that & kmail; will lose its filters if you change the mail folder's location but forget to move your existing folders.
-How can I use mail folders that are not in the normal & kmail; message folder location?
-To add a whole mbox mail folder use ln -s / somewhere/ Mail/. remotedir. directory / home/ username/ share/ apps/ kmail/. mymailboxfile. directory. Note that it is not possible to use links to files, only links that point to folders will work.
-I'm one of those people whose mails consist of 100 quoted lines and one line written by myself. For some reason this annoys other people. Can & kmail; help me and make everyone's life better?
-Sure. Just select a short relevant part of the original mail with the mouse before you reply. Only this part will then be quoted in your reply.
-For some messages the value in the Date field is unknown or it is not correct.
-Probably the Date: header of these messages is broken and & kmail; cannot interpret it. That is not a bug in & kmail; but in the software that sent the mail.
-My signature has two dashes above it. What's up?
-Separating the signature from the message body with two dashes and a space on a single line is common usage. These symbols permit mail clients who recognize them to trim the signatures from a reply. If your signature does not already have this separator, & kmail; will automatically add it.
-& kmail; fetches the same messages over and over again.
-This happens if you have enabled Leave fetched messages on the server and your POP3 server does not support the UIDL command. There is currently no workaround besides disabling Leave fetched messages on the server. A more detailed explanation can be found in this mailing list post.
-Are there any known bugs in & kmail;?
-A list of submitted bugs is linked at the & kmail; homepage. Note that not all these bugs are valid. All in all we think that & kmail; is a very robust piece of software.
-However, you should not run & kmail; while another email client is already accessing the files in ~/ Mail; if you try to do so, you might lose messages. Note that you should make backups of your messages anyway.
-& kmail; does not display HTML mail properly.
-References to external content like images, are disabled by default, as they can be used to track whether and when you read a message. Loading external references can be activated in the Security tab in & kmail; 's configuration dialog; also Plugins (like Macromedia Flash), & Java; and JavaScript will not be displayed in & kmail; for security reasons and there is no way to activate them.
-Can I use two different versions of & kmail; at the same time? Can I go back from a current version of & kmail; to an older one?
-You can only run one instance of & kmail; at once. We also recommend to stick to a certain version and not switch back and forth between different versions. Downgrading to an older version will probably cause problems, & eg; because the index file formats might have changed. Upgrading should never be a problem.
-Does & kmail; support uuencoded files?
-Uuencoded attachments are supported, but inline uuencoded files are not.
-& kmail; crashed while I was writing a mail; is that mail is lost now?
-& kmail; tries to save your mail to ~/ dead. letter in case of a crash. The next time you start & kmail; the mail composer should appear with your mail again; If it does not, try to open ~/ dead. letter with an editor. If it does not exist then the crash was so bad that & kmail; could not save your mail.
-When I try to set a folder to be mailing list-aware, it does not do anything when receiving an email from the list.
-Associating a folder with a mailing list has nothing to do with filtering the mailing list messages & mdash; you have to add a new filter rule manually; however, once you associated a folder with a mailing list you can use Message Reply to Mailing-List... or Message New Message to Mailing-List... and the mailing list address will be set in the To: field.
-My SMTP server requires authentication; Does & kmail; support this?
-There are two common techniques used for SMTP authentication: SMTP after POP3 and SMTP Auth. SMTP Auth can be set in the General tab of the SMTP configuration dialog. To use SMTP after POP3 you have to collect all your messages in the outbox and send them just after you have fetched new mail. You can make & kmail; send the queued messages automatically with the Send messages in outbox folder option on the Accounts configuration page.
-Can I use & kmail; and procmail?
-Yes, but it is important to do it the right way or you might lose mail. In order to use procmail and & kmail; you need to set up & kmail; so that it will fetch new mail from the spoolfiles in which procmail drops your mail. Do not set up procmail to deliver mail in a & kmail; folder, this cannot work.
-For each procmail spoolfile you then need to create an account from which & kmail; will fetch new mail; you also need to make sure you specify the right lockfile name for this account. When setting up an account, & kmail; will do some minimal parsing on your. procmail file, and will try to list every spoolfile it has found, and also the lockfiles next to the procmail lockfile item. procmail lets the user specify lockfiles in three different ways, so there is no way to establish a correspondence between the spoolfiles and lockfiles; so it's really up to you to make sure you specify the right lockfile for each spoolfile.
-Spellchecking does not recognize non-English characters.
-Before you can use spellchecking the first time, you have to configure it. You can do so in the composer window's menu under Settings Spellchecker.... You can set the dictionary and the encoding there.
-How do I use my Eudora / Netscape; / Outlook /... mail folders in & kmail;?
-See the section Using other Mailbox files With & kmail;.
-Can I use encryption with my normal (non- SSL) POP3 account?
-If your POP3 server runs an ssh daemon, you can use ssh to tunnel your POP3 connection using the following command:
-ssh -L 11000:127.0.0.1:110 user@host
-Modify your & kmail; configuration to fetch the mail via POP3 from localhost and ssh will tunnel the connection for you.
-If non-encrypted messages have already been sent via Internet, the only advantage of using ssh is that your password will be sent encrypted to the POP3 server.
-Does & kmail; lock the folders it uses?
-& kmail; does not lock the files in ~/ Mail.
-To avoid the risk of losing mail if using a local account it is necessary to ensure that & kmail; uses the same type of locking as your mail delivery agent.
-There are five different locking options you can use:
-Procmail lockfile
-Mutt dotlock
-Mutt dotlock privileged
-FCNTL (default)
-none (use with care)
-Procmail lockfile will use a small utility that comes with procmail called lockfile. You can use this if your mail folder is in a folder where you have write permission. This will not work on your / var/ spool/ mail/ user file in most cases. It will create. lock files on your account when & kmail; is checking for new mail. Please note that this will only work if procmail is installed on your system.
-Mutt dotlock and Mutt dotlock privileged will both use a small utility that comes with mutt called mutt_dotlock. Mutt dotlock can be used in the same way as the Procmail lockfile option, with the same limitation with regards to the / var/ spool/ mail/ folders. However, the Mutt dotlock privileged option can create lock files in the / var/ spool/ mail folder. mutt_dotlock is a setgid program and this option will run it in setgid mode. Please note that these options will only work if mutt is installed on your system.
-FCNTL will use the fcntl() system call.
-Usage of FCNTL locking might cause system lockups when the mail spool file is on an NFS mounted device.
-If you do not want to use any locking, the none option is what you want. However, there are risks of losing mail when no locking is used.
-How do I leave messages on the server?
-See the Download filters chapter. If you want to leave all messages on the server: open up the Settings Configure & kmail;... window. Click on the Network page. Select your account from the account list and click the Modify... button. This dialog contains the Leave fetched messages on the server setting which you must enable.
-How do I automatically insert a text footer within my messages?
-The text footer is also called a signature (not to be confused with a cryptographic signature). Select Settings Configure & kmail;... Look in the Identity page for the Signature tab and add your signature there. Then go to the General tab on the Composer page and enable
-How do I set up & Sendmail; to work with & kmail; if I have a dial-up connection?
-First you should check if your distribution can do this for you. It probably has already been set up during installation.
-If that is not the case, you may want to have a look at the Mail Queue HOWTO.
-I've seen demonstrations of remote control behavior with & kmail;. Is there any documentation on the available interfaces?
-You can get a list of functions by using this command in a shell: dcop kmail KMailIface. Some documentation is also available in kdenetwork/ kmail/ kmailIface. h and kdenetwork/ kmail/ mailcomposerIface. h.
-When I reply to a message, only a part of the message is quoted. How come?
-This can happen when the message contains two dashes and a space on a single line. This is seen as the start of the signature. The remaining part of the message will not be quoted, because when you reply to a message KMail strips the signature.
-I am only using & imap;, can I get rid of those Local Folders in the folder list or at least keep them collapsed all the time?
-No you can not get rid of them. The local folders function as a fallback when the & imap; server is unreachable. Although you only use & imap;, & kmail; uses the outbox for sending the messages. If we hide all local folders you wo n't be able to fix messages in the outbox which can not be send for some reason. But it is possible to keep the local folders collapsed. What you have to do is go to Settings Configure & kmail;... and go to the section Misc, there you can setup the folder on startup. If you change that to a folder on the & imap; account, the Local Folders will stay collapsed when & kmail; starts.
+Leave me a note:
+Leave Note
+General
+Somebody has left a note at %1
+knotes cannot be found. Please install it to be able to send a note.
+Use KNotes to create notes if it is installed.
+Use KNotes
+Send

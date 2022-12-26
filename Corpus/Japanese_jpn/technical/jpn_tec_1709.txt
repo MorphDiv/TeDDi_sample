@@ -1,6 +1,6 @@
 # language_name_wals:	Japanese
 # language_name_glotto:	Japanese
-# ISO_6393:	jpn
+# iso639_3:	jpn
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,53 +15,53 @@
 # sample_type:	whole
 # comments:	NA
 
-RSet ステートメント [実行時]
-/text/sbasic/shared/03120308.xhp
+Put ステートメント [実行時]
+/text/sbasic/shared/03020204.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-RSet ステートメント
-RSet ステートメント [実行時]
-文字列変数中に右揃えで文字列を格納するか、ユーザー定義型の変数を他のユーザー定義型の変数にコピーします。
+Put ステートメント
+Put ステートメント [実行時]
+相対編成ファイルへの 1 つのレコードの書き込みおよび、バイナリファイルへの 1 つのバイトシーケンスの書き込みが行えます。
+Get
+ステートメント
 構文:
-RSet Text As String = Text ないし RSet Variable1 = Variable2
+Put [#] FileNumber As Integer, [position], Variable
 パラメータ:
-Text:
-文字列変数。
-Text
-:文字列変数中に右揃えで格納する文字列。
-Variable1:
-コピーする変数のターゲットとなるユーザー定義型の変数。
-Variable2:
-他の変数へコピーするユーザー定義型の変数。
-RSet
-は、該当文字列だけを文字列変数中に右揃えで格納します。文字列変数の残りの部分は、スペース記号が挿入されます。文字列が文字列変数よりも長い場合、文字列中の超過分の文字は切り捨てられ、残りの部分が文字列中に右揃えで収められます。
-RSet ステートメント
-では、ユーザー定義型の変数を他の変数にコピーすることもできます。
-RSet
-および
-LSet
-ステートメントを使って、文字列の右および左揃え処理を行っています。
+FileNumber:
+書き込むファイルを指定する整数表式。
+Position:
+相対編成ファイル (ランダムアクセスファイル) の場合は、書き込むレコードの番号。
+バイナリファイル (バイナリアクセス) の場合は、ファイル中の書き込みを開始するバイト位置。
+Variable:
+ファイルに書き込む変数の名前。
+Open
+ステートメントの
+Len
+句で指定されたレコード長と一致しない場合、 新たに書き込まれたレコードの末尾から次のレコードまでの間の空間は、書き込み先ファイルの既存データで埋められます。
+バイナリファイルについては、下記の点に注意が必要です。ここで指定する変数の内容は、指定位置から書き込みが開始され、データの最終バイトの次にファイルポインタが移動します。レコードの間に、スペースが残されることはありません。
 例:
-Sub ExampleRLSet
-Dim sVar as string
-Dim sExpr as string
-sVar = String(40, &quot; * &quot; )
-sExpr = &quot; SBX &quot;
-REM 40 文字長の文字列変数中に「SBX」を右揃えで格納します
-REM アスタリスク記号は、スペース記号で置き換えられます
-RSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-sVar = String(5, &quot; * &quot; )
-sExpr = &quot; 123457896 &quot;
-RSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-sVar = String(40, &quot; * &quot; )
-sExpr = &quot; SBX &quot;
-REM 40 文字長の文字列変数中に「SBX」を左揃えで格納します
-LSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-sVar = String(5, &quot; * &quot; )
-sExpr = &quot; 123456789 &quot;
-LSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-End Sub
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM バリアント型変数が必要
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM 書き込み開始位置
+Put #iNumber,, &quot; ここはテキストの始めの行です。 &quot; REM テキストで行を埋める
+Put #iNumber,, &quot; This is the second line of text &quot;
+Put #iNumber,, &quot; This is the third line of text &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; This is new text &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; This is the text in record 20 &quot;
+Print Lof(#iNumber)
+Close #iNumber
+end sub

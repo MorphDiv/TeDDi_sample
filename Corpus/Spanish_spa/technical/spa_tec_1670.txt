@@ -1,6 +1,6 @@
 # language_name_wals:	Spanish
 # language_name_glotto:	Spanish
-# ISO_6393:	spa
+# iso639_3:	spa
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,41 +15,81 @@
 # sample_type:	whole
 # comments:	NA
 
-Función Ubound [Ejecución]
-/text/sbasic/shared/03103000.xhp
-Sun Microsystems, Inc.
-converted from old format - fpe
-UBound;función
-Función Ubound [Ejecución]
-Devuelve el límite superior de una matriz.
-Sintaxis:
-UBound (NombreMatriz [, Dimensión])
-Valor de retorno:
-Entero
-Parámetros:
-NombreMatriz:
-Nombre de la matriz para la que se desea determinar el límite superior (
-Ubound
-) o inferior (
-LBound
-).
-[Dimensión]:
-Número entero que especifica para qué dimensión se desea que se devuelva el límite superior (
-Ubound
-) o inferior (
-LBound
-).
-Si no se especifica ningún valor se devuelve el límite de la primera dimensión.
-Ejemplo:
-Sub EjemploUboundLbound
-Dim sVar(10 to 20) As String
-print LBound(sVar())
-print UBound(sVar())
-end sub
-Sub EjemploUboundLbound2
-Dim sVar(10 to 20,5 To 70) As String
-Print LBound(sVar()) REM Devuelve 10
-Print UBound(sVar()) REM Devuelve 20
-Print LBound(sVar(),2) REM Devuelve 5
-Print UBound(sVar(),2) REM Devuelve 70
-end sub
+Uso de procedimientos y funciones
+/text/sbasic/shared/01020300.xhp
+procedimientos;uso
+funciones;uso
+Uso de procedimientos y funciones
+A continuación se describe el uso básico de procedimientos y funciones en $[officename] Basic.
+Cuando se crea un módulo nuevo, $[officename] Basic inserta automáticamente una SUB llamada &quot; Main &quot; .
+Este nombre predeterminado no tiene nada que ver con el orden o el punto de inicio de un proyecto de $[officename] Basic.
+Se puede cambiar sin problemas.
+Los procedimientos (SUBS) y funciones (FUNCTIONS) ayudan a mantener un aspecto estructurado separando un programa en partes lógicas.
+Una ventaja de los procedimientos y funciones es que en cuanto se desarrolla un código de programa que contiene componentes de tarea, éste puede usarse en otro proyecto.
+Paso de variables a procedimientos (SUB) y funciones (FUNCTION)
+Las variables pueden pasarse a procedimientos y funciones.
+SUB o FUNCTION deben estar declarados para que se les pueda pasar parámetros:
+Parametro1 As Tipo, Parámetro2 As Tipo,...
+)
+Código de programa
+End Sub
+A SUB se le llama mediante la sintaxis siguiente
+NombreSub(Valor1, Valor2,...)
+Los parámetros que se pasan a SUB deben coincidir con los especificados en la declaración de SUB.
+El mismo proceso se aplica a FUNCTION, para que devuelva el resultado de la función.
+Éste puede definirse justo antes de llegar al final de la función, asignando el nombre de ésta y un parámetro al valor que la función devolverá (ver ejemplo).
+FUNCTION NombreFunción(Parámetro1 As Tipo, Parámetro2 As Tipo,...) As Tipo
+Código de programa
+NombreFunción=Resultado
+End Function
+A FUNCTION se la llama mediante la sintaxis siguiente:
+Variable=NombreFunción(Parámetro1, Parámetro2,...)
+Library.Module.Macro()
+Por ejemplo, para llamar a la macro AutoTexto desde la biblioteca Gimmicks, utilice el comando siguiente:
+Gimmicks.AutoText.Main()
+Paso de variables por valor o por referencia
+Los parámetros pueden pasarse a SUB o FUNCTION por referencia o por valor.
+A menos que se especifique de otra forma, los parámetros siempre se pasan por referencia.
+Esto significa que SUB o FUNCTION obtienen el parámetro y que su valor se puede leer y modificar.
+Para pasar un parámetro por valor se inserta la palabra clave &quot; ByVal &quot; delante del parámetro cuando se llama a una SUB o FUNCTION, por ejemplo:
+ByVal
+Parámetro)
+En este caso, FUNCTION no modificará el contenido original del parámetro ya que sólo obtiene el valor y no el parámetro en sí.
+Ámbito de variables
+Un variable definido dentro un SUB o FUNCTION, esta valido solamente dentro de la función.
+Se lo conoce como un variable &quot; local &quot; .
+En algunas casos, necesita un variable que es valido en todos los procedimientos, en todos los módulos de los bibliotecas, o después que haya salida del SUB o FUNCTION.
+Declaración de variables desde fuera de SUB o FUNCTION
+GLOBAL NombreVariable As TYPENAME
+La variable es válida durante toda la sesión de $[officename].
+PUBLIC NombreVariable As TYPENAME
+La variable es válida en todos los módulos.
+PRIVATE NombreVariable As TYPENAME
+La variable sólo es válida en este módulo.
+DIM NombreVar As NOMBRETIPO
+La variable sólo es válida en este módulo.
+Ejemplo para variables privadas
+Forza variables privadas permanecer privadas configurando el modulo de compatibilidad como verdadero CompatibilityMode(true).
+from i17948, see i54894
+REM ***** Module1 *****
+Private myText As String
+Sub initMyText
+myText = &quot; Hello &quot;
+print &quot; in module1 : &quot; , myText
+End Sub
+REM ***** Module2 *****
+'Opción Explicita
+Sub demoBug
+CompatibilityMode( true )
+initMyText
+' Ahora regresa una cadena vacia
+' (o se eleva el error para Opción Explicita)
+print &quot; Now in module2 : &quot; , myText
+End Sub
+Guardado de contenido de variables después de salir de SUB o FUNCTION
+STATIC NombreVariable As TYPENAME
+La variable conserva su valor hasta la próxima vez que se entre en la FUNCTION o SUB.
+La declaración debe existir dentro de SUB o FUNCTION.
+Especificación del tipo de valor de retorno de una FUNCTION
+Al igual que con las variables, incluya un carácter de declaración de tipo después del nombre de la función o el tipo indicado por &quot; As &quot; y la palabra clave correspondiente al final de la lista de parámetros para definir el tipo del valor de retorno de la función, por ejemplo:
+Function RecuentoPalabras(TextoPalabra as String) as Integer

@@ -1,6 +1,6 @@
 # language_name_wals:	Japanese
 # language_name_glotto:	Japanese
-# ISO_6393:	jpn
+# iso639_3:	jpn
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,45 +15,46 @@
 # sample_type:	whole
 # comments:	NA
 
-Mid 関数, Mid ステートメント [実行時]
-/text/sbasic/shared/03120306.xhp
+Input# ステートメント [実行時]
+/text/sbasic/shared/03020202.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-Mid 関数
-Mid ステートメント
-Mid 関数、Mid ステートメント [実行時]
-Mid 関数
-) か、該当部分を他の文字列に置き換えます (
-Mid ステートメント
-)。
+Input ステートメント
+Input# ステートメント [実行時]
+オープン済みの順編成ファイルからデータを読み取ります。
 構文:
-Mid (Text As String, Start As Integer [, Length As Integer]) または Mid (Text As String, Start As Integer , Length As Integer, Text As String)
-戻り値:
-文字列 (関数のみ)
+Input #FileNumber As Integer; var1[, var2[, var3[,...]]]
 パラメータ:
-Text:
-操作対象とする文字列表式。
-Start:
-指定文字列中での、取得ないし置換の開始文字位置を示す整数表式。使用できる最大値は 65535 です。
-Length:
-取得ないし置換する文字の長さを示す整数表式。
-Mid 関数
-の場合、Length パラメータを指定しないと、指定文字列の開始位置から末尾までが返されます。
-Mid ステートメント
-の場合、Length パラメータの値が置き換えるテキストよりも短いと、この長さにテキストが切りつめられます。
-Text:
-文字列表式を置き換える文字列 (
-Mid ステートメント
-)。
+FileNumber:
+読み取るデータを含むファイルの番号。読み取るファイルは、Open ステートメントに INPUT キーワードを指定して、事前にオープンしておく必要があります。
+var:
+オープン済みのファイルから読み取った値を格納する、数値型ないし文字列型の変数。
+Input#
+ステートメントは、オープン済みのファイルから数値ないし文字列を読み取り、これらの値を 1 つまたは複数の変数に格納します。数値は、次に来るキャリッジリターン (ASC=13)、ラインフィード (ASC=10)、スペース、コンマまでのデータが、1 度に読み取られます。文字列は、次に来るコードがキャリッジリターン (ASC=13)、ラインフィード (ASC=10)、コンマまでのデータが、1 度に読み取られます。
+オープン済みファイル中にあるデータおよびデータ型は、「var」に指定する変数の順序と一致している必要があります。数値以外のデータを数値変数に代入すると、「var」の変数には「0」値が格納されます。
+Line Input#
+文を使用し、テキストファイル (印刷可能な文字のみで構成されるファイル) を読み取ります。
+データの読み取り中にファイル末尾に到達すると、エラーが発生してプロセスは終了させられます。
 例:
-Sub ExampleUSDate
-Dim sInput As String
-Dim sUS_date As String
-sInput = InputBox( &quot; Please input a date in the international format 'YYYY-MM-DD' &quot; )
-sUS_date = Mid(sInput, 6, 2)
-sUS_date = sUS_date & &quot; / &quot;
-sUS_date = sUS_date & Right(sInput, 2)
-sUS_date = sUS_date & &quot; / &quot;
-sUS_date = sUS_date & Left(sInput, 4)
-MsgBox sUS_date
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; This is a line of text &quot;
+Print #iNumber, &quot; This is another line of text &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+Wend
+Close #iNumber
+Msgbox sMsg
 End Sub

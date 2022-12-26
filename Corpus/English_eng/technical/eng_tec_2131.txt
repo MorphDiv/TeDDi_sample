@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,60 +15,624 @@
 # sample_type:	whole
 # comments:	NA
 
-DocInformation
-/text/swriter/01/04090004.xhp
-DocInformation
-File - Properties
+Spreadsheet Functions
+/text/scalc/01/04060109.xhp
+spreadsheets; functions
+Function Wizard; spreadsheets
+functions; spreadsheets
+Spreadsheet Functions
+Spreadsheet
+functions together with an example.
+ADDRESS function
+ADDRESS
+Returns a cell address (reference) as a text string, according to the specified row and column numbers.
+You can determine whether the address is interpreted as an absolute address (for example, $A$1) or as a relative address (as A1) or in a mixed form (A$1 or $A1).
+You can also specify the name of the sheet.
+For interoperability the ADDRESS and INDIRECT functions support an optional parameter to specify whether the R1C1 address notation instead of the usual A1 notation should be used.
+In ADDRESS, the parameter is inserted as the fourth parameter, shifting the optional sheet name parameter to the fifth position.
+In INDIRECT, the parameter is appended as the second parameter.
+In both functions, if the argument is inserted with the value 0, then the R1C1 notation is used.
+If the argument is not given or has a value other than 0, then the A1 notation is used.
+In case of R1C1 notation, ADDRESS returns address strings using the exclamation mark '!' as the sheet name separator, and INDIRECT expects the exclamation mark as sheet name separator.
+Both functions still use the dot '.' sheet name separator with A1 notation.
+When opening documents from ODF 1.0/1.1 format, the ADDRESS functions that show a sheet name as the fourth paramater will shift that sheet name to become the fifth parameter.
+A new fourth parameter with the value 1 will be inserted.
+When storing a document in ODF 1.0/1.1 format, if ADDRESS functions have a fourth parameter, that parameter will be removed.
+Do not save a spreadsheet in the old ODF 1.0/1.1 format if the ADDRESS function's new fourth parameter was used with a value of 0.
+The INDIRECT function is saved without conversion to ODF 1.0/1.1 format.
+If the second parameter was present, an older version of Calc will return an error for that function.
+Syntax:
+ADDRESS(Row; Column; Abs; A1; &quot; Sheet &quot; )
+Row
+is the row number for the cell reference
+Column
+is the column number for the cell reference (the number, not the letter)
+Abs
+determines the type of reference:
+1: absolute ($A$1)
+2: row reference type is absolute; column reference is relative (A$1)
+3: row (relative); column (absolute) ($A1)
+4: relative (A1)
+A1
+(optional) - if set to 0, the R1C1 notation is used.
+If this parameter is absent or set to another value than 0, the A1 notation is used.
+Sheet
+is the name of the sheet.
+It must be placed in double quotes.
+Example:
+=ADDRESS(1; 1; 2; &quot; Sheet2 &quot; )
+returns the following:
+Sheet2.A$1
+-6
+, you can refer indirectly to the referenced cell using a function in B2 by entering
+=ABS(INDIRECT(B2))
 .
-special $[officename] formats
-are used.
-Lists the available field types.
-To add a field to your document, click a field type, click a field in the Select list, and then click Insert.
-Type
-Meaning
-Modified
-Inserts the name of the author, and the date, or the time of the last save.
-Editing time
-Inserts the amount of time spent on editing a document.
-Description
-Description
-tab of the
-File Properties
-dialogue box.
-Document number
-Inserts the version number of the current document.
-Created
-Inserts the name of the author, and the date, or the time when the document was created.
-Info 0 - 3
-User-defined
-tab of the
-File - Properties
-dialogue box.
-Last printed
-Inserts the name of the author, and the date or time that the document was last printed.
-Keywords
-Description
-tab of the
-File Properties
-dialogue box.
-Subject
-Description
-tab of the
-File Properties
-dialogue box.
-Title
-Description
-tab of the
-File Properties
-dialogue box.
-Type
-list.
-To insert a field, click the field, and then click
-Insert
+The result is the absolute value of the cell reference specified in B2, which in this case is 6.
+AREAS function
+AREAS
+Returns the number of individual ranges that belong to a multiple range.
+A range can consist of contiguous cells or a single cell.
+The function expects a single argument.
+If you state multiple ranges, you must enclose them into additional parentheses.
+Multiple ranges can be entered using the semicolon (;) as divider, but this gets automatically converted to the tilde (~) operator.
+The tilde is used to join ranges.
+Syntax:
+AREAS(Reference)
+Reference
+is the reference to a cell or cell range.
+Example:
+=AREAS(A1:B3; F2; G1)
+returns 3, as it is a reference to three cells and/or areas.
+=AREAS(All)
+returns 1 if you have defined an area named All under
+Data - Define Range
 .
-For the &quot; Created &quot; , &quot; Modified &quot; , and &quot; Last printed &quot; field types, you can include the author, date, and time of the corresponding operation.
-Click the format that you want to apply to the selected field, or click &quot; Additional formats &quot; to define a custom format.
-Fixed content
-Inserts the field as static content, that is, the field cannot be updated.
-Fields with fixed content are only evaluated when you create a new document from a template that contains such a field.
-For example, a date field with fixed content inserts the date that a new document was created from the template.
+DDE function
+DDE
+Returns the result of a DDE-based link.
+If the contents of the linked range or section changes, the returned value will also change.
+You must reload the spreadsheet or choose
+Edit - Links
+to see the updated links.
+Cross-platform links, for example from a
+%PRODUCTNAME
+installation running on a Windows machine to a document created on a Linux machine, are not allowed.
+Syntax:
+DDE( &quot; Server &quot; ; &quot; File &quot; ; &quot; Range &quot; ; Mode)
+Server
+is the name of a server application.
+%PRODUCTNAME
+applications have the server name &quot; Soffice &quot; .
+File
+is the complete file name, including path specification.
+Range
+is the area containing the data to be evaluated.
+Mode
+is an optional parameter that controls the method by which the DDE server converts its data into numbers.
+Mode
+Effect
+0 or missing
+Number format from the &quot; Default &quot; cell style
+1
+Data are always interpreted in the standard format for US English
+2
+Data are retrieved as text strings; no conversion to numbers
+Example:
+=DDE( &quot; soffice &quot; ; &quot; c:\office\document\data1.sxc &quot; ; &quot; sheet1.A1 &quot; )
+reads the contents of cell A1 in sheet1 of the
+%PRODUCTNAME
+Calc spreadsheet data1.sxc.
+=DDE( &quot; soffice &quot; ; &quot; c:\office\document\motto.sxw &quot; ; &quot; Today's motto &quot; )
+returns a motto in the cell containing this formula.
+First, you must enter a line in the motto.sxw document containing the motto text and define it as the first line of a section named
+Today's Motto
+(in
+%PRODUCTNAME
+Writer under
+Insert - Section
+).
+If the motto is modified (and saved) in the
+%PRODUCTNAME
+Writer document, the motto is updated in all
+%PRODUCTNAME
+Calc cells in which this DDE link is defined.
+ERRORTYPE function
+ERRORTYPE
+error value
+occurring in a different cell.
+With the aid of this number, you can generate an error message text.
+%PRODUCTNAME
+if you click the cell containing the error.
+Syntax:
+ERRORTYPE(Reference)
+Reference
+contains the address of the cell in which the error occurs.
+Example:
+=ERRORTYPE(A1)
+returns the number 518.
+INDEX function
+INDEX
+INDEX returns a sub-range, specified by row and column number or an optional range name.
+Depending on context, INDEX returns a reference or content.
+Syntax:
+INDEX(Reference; Row; Column; Range)
+Reference
+is a reference, entered either directly or by specifying a range name.
+If the reference consists of multiple ranges, you must enclose the reference or range name in parentheses (round brackets).
+Row
+(optional) is the row index of the reference range for which to return a value.
+In the case of zero (no specific row) all referenced rows are returned.
+Column
+(optional) is the column index of the reference range for which to return a value.
+In the case of zero (no specific column) all referenced columns are returned.
+Range
+(optional) is the index of the subrange if referring to a multiple range.
+Example:
+=INDEX(Prices; 4; 1)
+returns the value from row 4 and column 1 of the database range defined in
+Data - Define
+as
+Prices
+.
+=INDEX(SumX; 4; 1)
+returns the value from the range
+SumX
+in row 4 and column 1 as defined in
+Insert - Names - Define
+.
+=INDEX(A1:B6; 1)
+returns a reference to the first row of A1:B6.
+=INDEX(A1:B6; 0; 1 )
+returns a reference to the first column of A1:B6.
+=INDEX((multi); 4; 1)
+indicates the value contained in row 4 and column 1 of the (multiple) range, which you named under
+Insert - Names - Set
+as
+multi
+.
+The multiple range may consist of several rectangular ranges, each with a row 4 and column 1.
+If you now want to call the second block of this multiple range enter the number
+2
+as the
+range
+parameter.
+=INDEX(A1:B6; 1; 1)
+indicates the value in the upper-left of the A1:B6 range.
+=INDEX((multi); 0; 0; 2)
+returns a reference to the second range of the multiple range.
+INDIRECT function
+INDIRECT
+reference
+specified by a text string.
+This function can also be used to return the area of a corresponding string.
+Syntax:
+INDIRECT(Reference; A1)
+Reference
+is a reference to a cell or an area (in text form) for which to return the contents.
+A1
+(optional) - if set to 0, the R1C1 notation is used.
+If this parameter is absent or set to another value than 0, the A1 notation is used.
+If you open an Excel spreadsheet that uses indirect addresses calculated from string functions, the sheet addresses will not be translated automatically.
+For example, the Excel address in INDIRECT( &quot; filename!sheetname &quot; & B1) is not converted into the Calc address in INDIRECT( &quot; filename.sheetname &quot; & B1).
+INDIRECT cannot resolve range names as in INDIRECT( &quot; RangeName &quot; ).
+Example:
+=INDIRECT(A1)
+equals 100 if A1 contains C108 as a reference and cell C108 contains a value of
+100
+.
+=SUM(INDIRECT( &quot; a1: &quot; & ADDRESS(1; 3)))
+totals the cells in the area of A1 up to the cell whose address is defined by row 1 and column 3.
+Therefore, area A1:C1 is totalled.
+COLUMN function
+COLUMN
+Returns the column number of a cell reference.
+If the reference is a cell the column number of the cell is returned; if the parameter is a cell area, the corresponding column numbers are returned in a single-row
+array
+if the formula is entered
+as an array formula
+.
+If the COLUMN function with an area reference parameter is not used for an array formula, only the column number of the first cell within the area is determined.
+Syntax:
+COLUMN(Reference)
+Reference
+is the reference to a cell or cell area whose first column number is to be found.
+%PRODUCTNAME
+Calc automatically sets the reference to the current cell.
+Example:
+=COLUMN(A1)
+equals 1.
+Column A is the first column in the table.
+=COLUMN(C3:E3)
+equals 3.
+Column C is the third column in the table.
+=COLUMN(D3:G10)
+returns 4 because column D is the fourth column in the table and the COLUMN function is not used as an array formula.
+(In this case, the first value of the array is always used as the result.)
+{=COLUMN(B2:B7)}
+and
+=COLUMN(B2:B7)
+both return 2 because the reference only contains column B as the second column in the table.
+Because single-column areas have only one column number, it does not make a difference whether or not the formula is used as an array formula.
+=COLUMN()
+returns 3 if the formula was entered in column C.
+{=COLUMN(Rabbit)}
+returns the single-row array (3, 4) if &quot; Rabbit &quot; is the named area (C1:D3).
+COLUMNS function
+COLUMNS
+Returns the number of columns in the given reference.
+Syntax:
+COLUMNS(Array)
+Array
+is the reference to a cell range whose total number of columns is to be found.
+The argument can also be a single cell.
+Example:
+=COLUMNS(B5)
+returns 1 because a cell only contains one column.
+=COLUMNS(A1:C5)
+equals 3.
+The reference comprises three columns.
+=COLUMNS(Rabbit)
+returns 2 if
+Rabbit
+is the named range (C1:D3).
+vertical search function
+VLOOKUP function
+VLOOKUP
+Vertical search with reference to adjacent cells to the right.
+This function checks if a specific value is contained in the first column of an array.
+The function then returns the value in the same row of the column named by
+Index
+.
+If the
+SortOrder
+parameter is omitted or set to TRUE or one, it is assumed that the data is sorted in ascending order.
+In this case, if the exact
+SearchCriterion
+is not found, the last value that is smaller than the criterion will be returned.
+If
+SortOrder
+is set to FALSE or zero, an exact match must be found, otherwise the error
+Error:
+Value Not Available
+will be the result.
+Thus with a value of zero the data does not need to be sorted in ascending order.
+Syntax:
+=VLOOKUP(SearchCriterion; Array; Index; SortOrder)
+SearchCriterion
+is the value searched for in the first column of the array.
+Array
+is the reference, which is to comprise at least two columns.
+Index
+is the number of the column in the array that contains the value to be returned.
+The first column has the number 1.
+SortOrder
+is an optional parameter that indicates whether the first column in the array is sorted in ascending order.
+Enter the Boolean value FALSE (or zero) if the first column is not sorted in ascending order.
+Sorted columns can be searched much faster and the function always returns a value, even if the search value was not matched exactly, if it is between the lowest and highest value of the sorted list.
+In unsorted lists, the search value must be matched exactly.
+Otherwise the function will return this message:
+Error:
+Value Not Available
+.
+Example:
+100
+, E1 contains the name
+Vegetable Soup
+, and so forth, for 100 menu items.
+The numbers in column D are sorted in ascending order; thus, the optional
+Sort order
+parameter is not necessary.
+Enter the following formula in B1:
+=VLOOKUP(A1; D1:E100; 2)
+As soon as you enter a number in A1 B1 will show the corresponding text contained in the second column of reference D1:E100.
+Entering a non-existent number displays the text with the next number down.
+To prevent this, enter FALSE as the last parameter in the formula so that an error message is generated when a non-existent number is entered.
+sheet numbers; looking up
+SHEET function
+SHEET
+Returns the sheet number of a reference or a string representing a sheet name.
+If you do not enter any parameters, the result is the sheet number of the spreadsheet containing the formula.
+Syntax:
+SHEET(Reference)
+Reference
+is optional and is the reference to a cell, an area, or a sheet name string.
+Example:
+=SHEET(Sheet2.A1)
+returns 2 if Sheet2 is the second sheet in the spreadsheet document.
+number of sheets; function
+SHEETS function
+SHEETS
+Determines the number of sheets in a reference.
+If you do not enter any parameters, it returns the number of sheets in the current document.
+Syntax:
+SHEETS(Reference)
+Reference
+is the reference to a sheet or an area.
+This parameter is optional.
+Example:
+=SHEETS(Sheet1.A1:Sheet3.G12)
+returns 3 if Sheet1, Sheet2, and Sheet3 exist in the sequence indicated.
+MATCH function
+MATCH
+Returns the relative position of an item in an array that matches a specified value.
+The function returns the position of the value found in the lookup array as a number.
+Syntax:
+MATCH(SearchCriterion; LookupArray; Type)
+SearchCriterion
+is the value which is to be searched for in the single-row or single-column array.
+LookupArray
+is the reference searched.
+A lookup array can be a single row or column, or part of a single row or column.
+Type
+may take the values 1, 0, or -1.
+If Type = 1 or if this optional parameter is omitted, it is assumed that the first column of the search array is sorted in ascending order.
+If Type = -1 it is assumed that the column is sorted in descending order.
+This corresponds to the same function in Microsoft Excel.
+If Type = 0, only exact matches are found.
+If the search criterion is found more than once, the function returns the index of the first matching value.
+Only if Type = 0 can you search for regular expressions.
+If Type = 1 or the third parameter is omitted, the last value that is smaller than or equal to the search criterion is returned.
+This applies even when the search array is not sorted.
+For Type = -1, the first value that is larger than or equal is returned.
+Example:
+=MATCH(200; D1:D100)
+searches the area D1:D100, which is sorted by column D, for the value 200.
+As soon as this value is reached, the number of the row in which it was found is returned.
+If a higher value is found during the search in the column, the number of the previous row is returned.
+OFFSET function
+OFFSET
+Returns the value of a cell offset by a certain number of rows and columns from a given reference point.
+Syntax:
+OFFSET(Reference; Rows; Columns; Height;width)
+Reference
+is the cell from which the function searches for the new reference.
+Rows
+is the number of rows by which the reference was corrected up (negative value) or down.
+Columns
+(optional) is the number of columns by which the reference was corrected to the left (negative value) or to the right.
+Height
+(optional) is the vertical height for an area that starts at the new reference position.
+Width
+(optional) is the horizontal width for an area that starts at the new reference position.
+Rows
+and
+Columns
+must not lead to zero or negative start row or column
+Height
+and
+Width
+must not lead to zero or negative count of rows or columns.
+Example:
+=OFFSET(A1; 2; 2)
+returns the value in cell C3 (A1 moved by two rows and two columns down).
+If C3 contains the value
+100
+this function returns the value 100.
+=OFFSET(B2:C3; 1; 1)
+returns a reference to B2:C3 moved down by 1 row and one column to the right (C3:D4).
+=OFFSET(B2:C3; -1; -1)
+returns a reference to B2:C3 moved up by 1 row and one column to the left (A1:B2).
+=OFFSET(B2:C3; 0; 0; 3; 4)
+returns a reference to B2:C3 resized to 3 rows and 4 columns (B2:E4).
+=OFFSET(B2:C3; 1; 0; 3; 4)
+returns a reference to B2:C3 moved down by one row resized to 3 rows and 4 columns (B2:E4).
+=SUM(OFFSET(A1; 2; 2; 5; 6))
+determines the total of the area that starts in cell C3 and has a height of 5 rows and a width of 6 columns (area=C3:H7).
+LOOKUP function
+LOOKUP
+Returns the contents of a cell either from a one-row or one-column range or from an array.
+Optionally, the assigned value (of the same index) is returned in a different column and row.
+As opposed to
+VLOOKUP
+and
+HLOOKUP
+, search and result vector may be at different positions; they do not have to be adjacent.
+Additionally, the search vector for the LOOKUP must be sorted in ascending order, otherwise the search will not return any usable results.
+If LOOKUP cannot find the search criterion, it matches the largest value in the search vector that is less than or equal to the search criterion.
+Syntax:
+LOOKUP(SearchCriterion; SearchVector; ResultVector)
+SearchCriterion
+is the value to be searched for; entered either directly or as a reference.
+SearchVector
+is the single-row or single-column area to be searched.
+ResultVector
+is another single-row or single-column range from which the result of the function is taken.
+The result is the cell of the result vector with the same index as the instance found in the search vector.
+Example:
+=LOOKUP(A1; D1:D100; F1:F100)
+searches the corresponding cell in range D1:D100 for the number you entered in A1.
+For the instance found, the index is determined, for example, the 12th cell in this range.
+Then, the content of the 12th cell is returned as the value of the function (in the result vector).
+STYLE function
+STYLE
+Applies a style to the cell containing the formula.
+After a set amount of time, another style can be applied.
+This function always returns the value 0, allowing you to add it to another function without changing the value.
+Together with the CURRENT function you can apply a colour to a cell regardless of the value.
+For example: =...+STYLE(IF(CURRENT() > 3; &quot; red &quot; ; &quot; green &quot; )) applies the style &quot; red &quot; to the cell if the value is greater than 3, otherwise the style &quot; green &quot; is applied.
+Both cell formats have to be defined beforehand.
+Syntax:
+STYLE( &quot; Style &quot; ; Time; &quot; Style2 &quot; )
+Style
+is the name of a cell style assigned to the cell.
+Style names must be entered in quotation marks.
+Time
+is an optional time range in seconds.
+If this parameter is omitted the style will not be changed after a certain amount of time has passed.
+Style2
+is the optional name of a cell style assigned to the cell after a certain amount of time has passed.
+If this parameter is omitted &quot; Default &quot; is assumed.
+Example:
+=STYLE( &quot; Invisible &quot; ; 60; &quot; Default &quot; )
+formats the cell in transparent format for 60 seconds after the document was recalculated or loaded, then the Default format is assigned.
+Both cell formats must be defined beforehand.
+Since STYLE() has a numerical return value of zero, this return value gets appended to a string.
+This can be avoided using T() as in the following example
+= &quot; Text &quot; & T(STYLE( &quot; myStyle &quot; ))
+See also CURRENT() for another example.
+CHOOSE function
+CHOOSE
+Uses an index to return a value from a list of 1 to 30 values.
+Syntax:
+CHOOSE(Index; Value1; Value2; ...
+Value30)
+Index
+is a reference or number in the range 1 to 30 indicating which value is to be taken from the list.
+Value1; Value2; ...
+Value30
+is the list of values entered as a reference to a cell or as 1 to 30 individual values.
+Example:
+=CHOOSE(A1; B1; B2; B3; &quot; Today &quot; ; &quot; Yesterday &quot; ; &quot; Tomorrow &quot; )
+, for example, returns the contents of cell B2 for A1 = 2; for A1 = 4, the function returns the text
+&quot; Today &quot;
+.
+HLOOKUP function
+HLOOKUP
+Searches for a value and reference to the cells below the selected area.
+This function tests whether the first row of an array contains a certain value.
+The function returns the value in a row of the array, named in the
+Index
+, in the same column.
+Syntax:
+HLOOKUP(SearchCriteria; Array; Index; Sorted)
+VLOOKUP
+(columns and rows are exchanged)
+ROW function
+ROW
+Returns the row number of a cell reference.
+If the reference is a cell, it returns the row number of the cell.
+If the reference is a cell range, it returns the corresponding row numbers in a one-column
+Array
+if the formula is entered
+as an array formula
+.
+If the ROW function with a range reference is not used in an array formula, only the row number of the first range cell will be returned.
+Syntax:
+ROW(Reference)
+Reference
+is a cell, an area, or the name of an area.
+%PRODUCTNAME
+Calc automatically sets the reference to the current cell.
+Example:
+=ROW(B3)
+returns 3 because the reference refers to the third row in the table.
+{=ROW(D5:D8)}
+returns the single-column array (5, 6, 7, 8) because the reference specified contains rows 5 through 8.
+=ROW(D5:D8)
+returns 5 because the ROW function is not used as array formula and only the number of the first row of the reference is returned.
+{=ROW(A1:E1)}
+and
+=ROW(A1:E1)
+both return 1 because the reference only contains row 1 as the first column in the table.
+(Because single-row areas only have one row number it does not make any difference whether or not the formula is used as an array formula.)
+=ROW()
+returns 3 if the formula was entered in row 3.
+{=ROW(Rabbit)}
+returns the single-column array (1, 2, 3) if &quot; Rabbit &quot; is the named area (C1:D3).
+ROWS function
+ROWS
+Returns the number of rows in a reference or array.
+Syntax:
+ROWS(Array)
+Array
+is the reference or named area for which the total number of rows is to be determined.
+Example:
+=ROWS(B5)
+returns 1 because a cell only contains one row.
+=ROWS(A10:B12)
+returns 3.
+=ROWS(Rabbit)
+returns 3 if &quot; Rabbit &quot; is the named area (C1:D3).
+HYPERLINK function
+HYPERLINK
+When you click a cell that contains the HYPERLINK function, the hyperlink opens.
+CellText
+parameter, the formula locates the URL, and then displays the text string or number.
+Open Hyperlink
+.
+Syntax:
+HYPERLINK( &quot; URL &quot; ) or HYPERLINK( &quot; URL &quot; ; &quot; CellText &quot; )
+URL
+specifies the link target.
+The optional
+CellText
+parameter is the text string or a number that is displayed in the cell and the result of the function.
+If the
+CellText
+parameter is not specified, the
+URL
+is displayed in the cell text and in the result of the function.
+The number 0 is returned for empty cells and matrix elements.
+Example:
+=HYPERLINK( &quot; http://www.example.org &quot; )
+displays the text &quot; http://www.example.org &quot; in the cell and executes the hyperlink http://www.example.org when clicked.
+=HYPERLINK( &quot; http://www.example.org &quot; ; &quot; Click here &quot; )
+displays the text &quot; Click here &quot; in the cell and executes the hyperlink http://www.example.org when clicked.
+=HYPERLINK( &quot; http://www.example.org &quot; ;12345) displays the number 12345 and executes the hyperlink http://www.example.org when clicked.
+=HYPERLINK($B4)
+where cell B4 contains
+http://www.example.org
+.
+The function adds &quot; http://www.example.org &quot; to the URL of the hyperlink cell and returns the same text which is used as formula result.
+=HYPERLINK( &quot; http://www. &quot; ; &quot; Click &quot; ) & &quot; example.org &quot;
+displays the text &quot; Click example.org &quot; in the cell and executes the hyperlink http://www.example.org when clicked.
+=HYPERLINK( &quot; #Sheet1.A1 &quot; ; &quot; Go to top &quot; )
+displays the text Go to top and jumps to cell Sheet1.A1 in this document.
+=HYPERLINK( &quot; file:///C:/writer.odt#Specification &quot; ; &quot; Go to Writer bookmark &quot; )
+displays the text Go to Writer bookmark, loads the specified text document and jumps to bookmark &quot; Specification &quot; .
+GETPIVOTDATA function
+GETPIVOTDATA
+The GETPIVOTDATA function returns a result value from a DataPilot table.
+The value is addressed using field and item names, so it remains valid if the layout of the DataPilot table changes.
+Syntax:
+Two different syntax definitions can be used:
+GETPIVOTDATA(TargetField; DataPilot; [ Field 1; Item 1; ... ])
+GETPIVOTDATA(DataPilot; Constraints)
+The second syntax is assumed if exactly two parameters are given, of which the first parameter is a cell or cell range reference.
+The first syntax is assumed in all other cases.
+The Function Wizard shows the first syntax.
+First Syntax:
+TargetField
+is a string that selects one of the DataPilot table's data fields.
+The string can be the name of the source column, or the data field name as shown in the table (like &quot; Sum - Sales &quot; ).
+DataPilot
+is a reference to a cell or cell range that is positioned within a DataPilot table or contains a DataPilot table.
+If the cell range contains several DataPilot tables, the table that was created last is used.
+Field n / Item n
+pairs are given, the grand total is returned.
+Otherwise, each pair adds a constraint that the result must satisfy.
+Field n
+is the name of a field from the DataPilot table.
+Item n
+is the name of an item from that field.
+If the DataPilot table contains only a single result value that fulfills all of the constraints, or a subtotal result that summarises all matching values, that result is returned.
+If there is no matching result, or several ones without a subtotal for them, an error is returned.
+These conditions apply to results that are included in the DataPilot table.
+If the source data contains entries that are hidden by settings of the DataPilot table, they are ignored.
+The order of the Field/Item pairs is not significant.
+Field and item names are not case-sensitive.
+If no constraint for a page field is given, the field's selected value is implicitly used.
+If a constraint for a page field is given, it must match the field's selected value, or an error is returned.
+Page fields are the fields at the top left of a DataPilot table, populated using the &quot; Page Fields &quot; area of the DataPilot Layout dialogue box.
+From each page field, an item (value) can be selected, which means only that item is included in the calculation.
+Second Syntax
+below).
+Second Syntax:
+DataPilot
+has the same meaning as in the first syntax.
+Constraints
+is a space-separated list.
+Entries can be quoted (single quotes).
+The whole string must be enclosed in quotes (double quotes), unless you reference the string from another cell.
+One of the entries can be the data field name.
+The data field name can be left out if the DataPilot table contains only one data field, otherwise it must be present.
+Field[Item]
+(with literal characters [ and ]), or only
+Item
+if the item name is unique within all fields that are used in the DataPilot table.
+Field[Item;Function]
+, which will cause the constraint to match only subtotal values which use that function.
+The possible function names are Sum, Count, Average, Max, Min, Product, Count (Numbers only), StDev (Sample), StDevP (Population), Var (Sample), and VarP (Population), case-insensitive.
+UFI:
+Example from spec doc is quite difficult to localize.
+Try to find other one

@@ -1,6 +1,6 @@
 # language_name_wals:	Mandarin
 # language_name_glotto:	Mandarin Chinese
-# ISO_6393:	cmn
+# iso639_3:	cmn
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,34 +15,422 @@
 # sample_type:	whole
 # comments:	NA
 
-打印机
-/text/swriter/01/04070300.xhp
-Sun Microsystems, Inc.
-UFI: fixed bug #i27718# plus another wrong label
-打印机
-设置信封的打印选项。
-查看打印机文件，定义加载信封的方式，以确保它能被正确输送和打印。根据不同的打印模式，可能要求您将信封左对齐、右对齐或居中，要打印的页面向上或向下放入进纸器中。
-水平，左边
-信封左对齐后横向放入打印机送纸器。
-水平，居中
-信封居中对齐后横向放入打印机送纸器。
-水平，右边
-信封右对齐后横向送入打印机送纸器。
-垂直，左边
-信封左对齐后纵向放入打印机送纸器。
-垂直，居中
-信封居中对齐后纵向放入打印机送纸器。
-垂直，右边
-信封右对齐后纵向放入打印机送纸器。
-从上方开始打印
-信封的打印面向上放入打印机送纸器中。
-从下方开始打印
-信封的打印面向下放入打印机送纸器。
-向右
-输入打印区域向右偏移量。
-向下
-输入打印区域向下的偏移量。
-当前的打印机
-显示当前打印机的名称。
-设置
-打开“打印设置”对话框，在此可定义其他打印机设置，例如纸张格式和方向等。
+信息函数
+/text/scalc/01/04060104.xhp
+信息函数
+函数向导; 信息
+函数; 信息函数
+信息函数
+信息
+函数。
+以下列表中数据是函数说明的一些示例：
+C
+D
+2
+值
+值
+3
+-5
+-3
+4
+-2
+0
+5
+-1
+1
+6
+0
+3
+7
+2
+4
+8
+4
+6
+9
+6
+8
+INFO 函数
+INFO
+返回有关当前工作环境的特定信息。该函数接收单个文本参数，并根据该参数返回数据。
+语法
+INFO( &quot; Type &quot; )
+Type
+的值以及 INFO 函数的返回值。
+&quot; Type &quot; 的值
+返回值
+&quot; osversion &quot;
+由于兼容性原因，始终为 &quot; Windows (32-bit) NT 5.01 &quot;
+&quot; system &quot;
+&quot; release &quot;
+产品版本标识符，例如
+&quot; numfile &quot;
+由于兼容性原因，始终为 1
+&quot; recalc &quot;
+当前的公式重新计算模式，可以为“自动”或“手动”（已本地化为 %PRODUCTNAME 语言）
+Type
+参数的本地化值，但 %PRODUCTNAME Calc 只接受英文值。
+示例
+=INFO( &quot; release &quot; )
+返回当前使用的 %PRODUCTNAME 的产品版本号。
+D5
+包含一个文本字符串
+system
+时，
+=INFO(D5)
+返回操作系统的类型。
+CURRENT 函数
+CURRENT
+该函数返回直到计算公式时的结果，该公式是函数的一部分（也就是说已经得到的计算结果）。它主要用途是与函数 STYLE() 一同应用到由单元格内容决定所选的样式中。
+语法
+CURRENT()。
+示例
+=1+2+CURRENT()
+该示例返回 6。公式从左到右计算：1 + 2 等于 3，这是遇到 CURRENT() 时得到的结果；因此 CURRENT() 为 3，加上最初的 3 后得到 6。
+=A2+B2+STYLE(IF(CURRENT() > 10;”Red”;”Default”))
+STYLE
+获得更多信息。
+= &quot; choo &quot; & CURRENT()
+该示例返回 choochoo。
+FORMULA 函数
+公式单元格; 在其他单元格中显示公式
+显示; 在任何位置显示公式
+mw added &quot; formula cells; &quot; and &quot; displaying; &quot;
+FORMULA
+将公式单元格的公式显示为文本字符串。
+语法
+FORMULA(Reference)
+Reference
+是对包含公式的单元格的引用。
+无效引用或对无公式单元格的引用将导致错误值 #N/A。
+示例
+=SUM(1;2;3)
+，则
+=FORMULA(A8)
+返回文本 =SUM(1;2;3)。
+ISREF 函数
+引用; 测试单元格内容
+单元格内容; 对引用进行测试
+mw added &quot; references; &quot; and &quot; cell contents; &quot;
+ISREF
+测试参数是否为引用。
+如果参数为引用，则返回 TRUE，否则返回 FALSE。当所给参数是个引用时，函数不检查正被引用的值。
+语法
+ISREF(Value)
+value
+是要测试的值，将确定它是否是引用。
+示例
+=ISREF(C5)
+返回结果 TRUE，因为 C5 是一个有效的引用。
+=ISREF( &quot; abcdef &quot; )
+总是返回 FALSE，因为文本永远不可能是引用。
+=ISREF(4)
+返回 FALSE。
+=ISREF(INDIRECT( &quot; A6 &quot; ))
+返回 TRUE，因为 INDIRECT 是返回引用的函数。
+=ISREF(ADDRESS(1; 1; 2; &quot; Sheet2 &quot; ))
+返回 FALSE，因为 ADDRESS 是返回文本的函数，尽管它看起来像引用。
+ISERR 函数
+错误代码; 控制
+mw added &quot; error codes, &quot;
+ISERR
+测试错误条件（#N/A 错误值除外），并返回 TRUE 或 FALSE。
+语法
+ISERR(Value)
+Value
+是任意值或表达式，将对其进行测试以确定是否存在 #N/A 以外的错误值。
+示例
+=ISERR(C8)
+返回 TRUE，其中单元格 C8 包含
+=1/0
+，因为 1/0 是错误值。
+=ISERR(C9)
+返回 FALSE，其中单元格 C9 包含
+=NA()
+，因为 ISERR() 忽略 #N/A 错误。
+ISERROR 函数
+识别; 一般错误
+mw added &quot; recognizing; &quot;
+ISERROR
+测试错误条件（包括 #N/A 错误值），并返回 TRUE 或 FALSE。
+语法
+ISERROR(Value)
+Value
+是（或表示）要测试的值。如果存在错误，则 ISERROR() 返回 TRUE，否则返回 FALSE。
+示例
+=ISERROR(C8)
+返回 TRUE，其中单元格 C8 包含
+=1/0
+，因为 1/0 是错误值。
+=ISERROR(C9)
+返回 TRUE，其中单元格 C9 包含
+=NA()
+。
+ISFORMULA 函数
+识别公式单元格
+公式单元格; 识别
+mw inserted &quot; recognizing... &quot; and &quot; formula cells; &quot;
+ISFORMULA
+如果单元格含有公式，返回 TRUE。
+语法
+ISFORMULA(Reference)
+引用
+指示对某个单元格的引用，将在该单元格中执行测试以确定它是否包含公式。
+示例
+5
+，则
+=ISFORMULA(C4)
+返回 FALSE。
+ISEVEN_ADD 函数
+ISEVEN_ADD
+用于测试偶数。如果接受测试的数字能被 2 整除，则返回 1。
+语法
+ISEVEN_ADD(Number)
+Number
+是被检验的值。
+示例
+=ISEVEN_ADD(5)
+返回 0。
+2
+，则
+=ISEVEN_ADD(A1)
+返回 1。
+ISNONTEXT 函数
+单元格内容; 没有文本
+mw added &quot; cell contents; &quot;
+ISNONTEXT
+测试单元格内容是文字还是数字，如果内容是文字，则返回 FALSE。
+如果发生错误，函数返回 TRUE。
+语法
+ISNONTEXT(Value)
+数值
+是指一个数值或一个表达式。检查它是文字还是数字(或逻辑值)。
+示例
+abcdef
+，则
+=ISNONTEXT(D2)
+返回 FALSE。
+8
+，则
+=ISNONTEXT(D9)
+返回 TRUE。
+ISBLANK 函数
+空白单元格内容
+空白单元格; 识别
+mw added &quot; blank... &quot; and &quot; empty cells; &quot;
+ISBLANK
+如果引用的单元格是空白的，则返回 TRUE。
+此函数用于确定单元格内容是否为空。含有公式的单元格不为空。
+语法
+ISBLANK(Value)
+value
+是要测试的内容。
+示例
+=ISBLANK(D2)
+返回 FALSE 作为结果。
+ISLOGICAL 函数
+数字格式; 逻辑
+逻辑数字格式
+mw added &quot; number formats; &quot; and &quot; logical... &quot;
+ISLOGICAL
+测试逻辑值（TRUE 或 FALSE）。
+如果发生错误，函数返回 FALSE。
+语法
+ISLOGICAL(Value)
+Value
+为逻辑值（TRUE 或 FALSE），则返回 TRUE，否则将返回 FALSE。
+示例
+=ISLOGICAL(99)
+返回 FALSE，因为 99 是数字，而不是逻辑值。
+=ISLOGICAL(ISNA(D4))
+返回 TRUE，而不考虑单元格 D4 的内容，因为 ISNA() 返回逻辑值。
+ISNA 函数
+#N/A 错误; 识别
+mw added &quot; #N/A ... &quot;
+ISNA
+如果单元格含有错误值 #NA（值不可用），返回逻辑值 TRUE 。
+如果发生错误，函数返回 FALSE。
+语法
+ISNA(Value)
+数值
+是指一个要检查的数值或一个表达式。
+示例
+=ISNA(D3)
+返回 FALSE 作为结果。
+ISTEXT 函数
+单元格内容; 文本
+ISTEXT
+如果单元格内容是文本，则返回逻辑值 TRUE。
+如果发生错误，函数返回 FALSE。
+语法
+ISTEXT(Value)
+数值
+是指一个要检查的数值，一个数字，一个逻辑值或一个错误值。识别它们是文字还是数字。
+示例
+abcdef
+，则
+=ISTEXT(D9)
+返回 TRUE。
+3
+，则
+=ISTEXT(C3)
+返回 FALSE。
+ISODD_ADD 函数
+ISODD_ADD
+如果数字不能被 2 整除，则返回 TRUE (1)。
+语法
+ISODD_ADD(number)
+Number
+是被检验的值。
+示例
+=ISODD_ADD(5)
+返回 1。
+ISNUMBER 函数
+单元格内容; 数字
+mw added &quot; cell contents; &quot;
+ISNUMBER
+如果值是一个数字，则返回逻辑值 TRUE。
+语法
+ISNUMBER(Value)
+value
+是要测试的表达式，将确定它是数字还是文字。
+示例
+4
+，则
+=ISNUMBER(C3)
+返回 TRUE。
+abcdef
+，则
+=ISNUMBER(C2)
+返回 FALSE。
+N 函数
+N
+返回给定的参数的数值。如果参数是文本、FALSE 或者 #NA，返回 0。
+如果发生错误，此函数返回错误值而不是 #NA。
+语法
+N(Value)
+value
+是要转换成数字的参数。N() 会在可行的情况下返回数值。对于逻辑值 TRUE 和 FALSE，N() 将分别返回 1 和 0。对于文本和错误将返回 0。
+示例
+=N(123)
+返回 123
+=N(TRUE)
+返回 1
+=N(FALSE)
+返回 0
+=N( &quot; abc &quot; )
+返回 0
+=N(1/0) returns #DIV/0!
+NA 函数
+#N/A 错误; 指定给单元格
+mw added &quot; #N/A error; &quot;
+NA
+返回错误值 #NA。
+语法
+NA()
+示例
+=NA()
+转换当前单元格内容为 #N/A。
+TYPE 函数
+TYPE
+返回数值的类型。
+语法
+TYPE(Value)
+value
+是要确定数据类型的特定数值。value 1 = 数字，value 2 = 文字，value 4 = 布尔值，value 8 = 公式，value 16 = 错误值。
+示例（请您参考以上的示例表格）
+=TYPE(C2)
+返回 2 作为结果。
+=TYPE(D9)
+返回 1 作为结果。
+CELL 函数
+单元格信息
+有关单元格的信息
+mw added two entries
+CELL
+返回单元格地址、格式或内容等信息。
+语法
+CELL( &quot; InfoType &quot; ; Reference)
+InfoType
+为一个字符串，指定信息类型。这个字符串始终是英语。可以任意选择大小写。
+InfoType
+含义
+COL
+返回引用列的编号。
+=CELL( &quot; COL &quot; ;D2)
+返回 4。
+ROW
+返回引用行的编号。
+=CELL( &quot; ROW &quot; ;D2)
+返回 2。
+SHEET
+返回引用工作表的编号。
+=CELL( &quot; Sheet &quot; ;Sheet3.D2)
+返回 3。
+ADDRESS
+返回引用单元格的绝对地址。
+=CELL( &quot; ADDRESS &quot; ;D2)
+返回 $D$2。
+=CELL( &quot; ADDRESS &quot; ;Sheet3.D2)
+返回 $Sheet3.$D$2。
+=CELL( &quot; ADDRESS &quot; ;'X:\dr est.sxc'#$Sheet1.D2)
+返回 'file:///X:/dr/test.sxc'#$Sheet1.$D$2。
+FILENAME
+返回引用单元格的文件名称和工作表名称。
+=CELL( &quot; FILENAME &quot; ;D2)
+返回 'file:///X:/dr/own.sxc'#$Sheet1。
+=CELL( &quot; FILENAME &quot; ;'X:\dr est.sxc'#$Sheet1.D2)
+返回 'file:///X:/dr/test.sxc'#$Sheet1。
+COORD
+得出在 Lotus(TM)-Notation 内的完整的单元格地址。
+=CELL( &quot; COORD &quot; ; D2)
+返回 $A:$D$2。
+=CELL( &quot; COORD &quot; ; Sheet3.D2)
+返回 $C:$D$2。
+CONTENTS
+返回引用单元格的内容，无格式化。
+TYPE
+返回单元格内容的类型。
+b=blank。空单元格
+l=label。文字，公式的结果作为文字
+v=value。数值，一个公式的结果作为数值
+WIDTH
+返回引用列的宽度。度量单位是插入列内的 0 的数目，0 为默认大小的默认字体。
+PREFIX
+返回引用单元格的对齐方式。
+'=左对齐或左右对齐
+&quot; = 右对齐
+^= 居中
+\ = 重复（目前不能使用）
+保护
+返回单元格保护状态。
+1 =单元格受保护
+0 =单元格未受保护
+格式
+返回说明数字格式的的字符串。
+, = 带有千位分隔符的数字
+F = 不带有千位分隔符的数字
+C =货币格式
+S =科学计数法，比如 1.234+E56
+P = 百分数
+在上面的格式中，小数点后面的小数位作为数字给出。示例：数字格式 #,##0.0 返回“,1”，数字格式 00.000% 返回“P3”
+D1 =D-MMM-YY、D-MM-YY 和类似格式
+D2 =DD-MM
+D3 =MM-YY
+D4 =DD-MM-YYYY HH:MM:SS
+D5 =MM-DD
+D6 =HH:MM:SS AM/PM
+D7 =HH:MM AM/PM
+D8 =HH:MM:SS
+D9 =HH:MM
+G =全部其他格式
+-(负号)在结束位置=负数会用颜色标出
+()（括号）在结束位置 = 在格式码中会出现一个前括号
+颜色
+如果负数用颜色格式化，结果为 1，否则为 0。
+PARENTHESES
+当格式码中包含一个左括号时，结果为1，否则为0。
+引用
+引用
+引用
+，$[officename] Calc 就使用含有这个公式的单元格的位置。Microsoft Excel 使用光标所在的单元格的引用。

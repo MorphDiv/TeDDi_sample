@@ -1,6 +1,6 @@
 # language_name_wals:	Russian
 # language_name_glotto:	Russian
-# ISO_6393:	rus
+# iso639_3:	rus
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,20 +15,61 @@
 # sample_type:	whole
 # comments:	NA
 
-Функция GetSolarVersion [время выполнения]
-/text/sbasic/shared/03131000.xhp
-Sun Microsystems, Inc.
-converted from old format - fpe
-Функция GetSolarVersion
-Функция GetSolarVersion [время выполнения]
-Возвращает внутренний номер текущей версии $[officename].
+Инструкция MkDir [время выполнения]
+/text/sbasic/shared/03020411.xhp
+инструкция MkDir
+Инструкция MkDir [время выполнения]
+Создает новый каталог на носителе данных.
 Синтаксис:
-s = GetSolarVersion
-Возвращаемое значение:
-String
+MkDir Текст As String
+Параметры:
+Текст
+.
+Любое строковое выражение, содержащее имя и путь каталога, который должен быть создан.
+Здесь можно также использовать
+URL-нотацию
+.
+Если не указан полный путь, то директория будет создана в текущей директории.
 Пример:
-Sub ExampleGetSolarVersion
-Dim sSep As String
-sSep = GetSolarVersion
-MsgBox sSep,64, &quot; Номер версии технологии Solar &quot;
-End Sub
+Sub ExampleFileIO
+' Пример для функций организации файлов
+Const sFile1 as String = &quot; file://c|/autoexec.bat &quot;
+Const sDir1 as String = &quot; file://c|/Temp &quot;
+Const sSubDir1 as String = &quot; Тест &quot;
+Const sFile2 as String = &quot; Copied.tmp &quot;
+Const sFile3 as String = &quot; Renamed.tmp &quot;
+Dim sFile as String
+sFile = sDir1 + &quot; / &quot; + sSubDir1
+ChDir( sDir1 )
+If Dir(sSubDir1,16)= &quot; &quot; then ' Данный каталог существует ?
+MkDir sSubDir1
+MsgBox sFile,0, &quot; Создание каталога &quot;
+End If
+sFile = sFile + &quot; / &quot; + sFile2
+FileCopy sFile1 , sFile
+MsgBox fSysURL(CurDir()),0, &quot; Текущий каталог &quot;
+MsgBox sFile & Chr(13) & FileDateTime( sFile ),0, &quot; Время создания &quot;
+MsgBox sFile & Chr(13) & FileLen( sFile ),0, &quot; Длина файла &quot;
+MsgBox sFile & Chr(13) & GetAttr( sFile ),0, &quot; Атрибуты файла &quot;
+Name sFile as sDir1 + &quot; / &quot; + sSubDir1 + &quot; / &quot; + sFile3
+' Переименование в том же каталоге
+sFile = sDir1 + &quot; / &quot; + sSubDir1 + &quot; / &quot; + sFile3
+SetAttr( sFile, 0 ) 'Удаление всех атрибутов
+MsgBox sFile & Chr(13) & GetAttr( sFile ),0, &quot; Новые атрибуты файла &quot;
+Kill sFile
+RmDir sDir1 + &quot; / &quot; + sSubDir1
+еnd sub
+' Преобразование системного пути в URL-адрес
+Function fSysURL( fSysFp as String ) as String
+Dim iPos As String
+iPos = 1
+iPos = Instr(iPos,fSysFp, getPathSeparator())
+do while iPos > 0
+mid( fSysFp, iPos , 1, &quot; / &quot; )
+iPos = Instr(iPos+1,fSysFp, getPathSeparator())
+loop
+' двоеточие для DOS
+iPos = Instr(1,fSysFp, &quot; : &quot; )
+if iPos > 0 then mid( fSysFp, iPos , 1, &quot; | &quot; )
+fSysURL = &quot; file:// &quot; & fSysFp
+End Function

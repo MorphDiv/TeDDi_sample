@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,432 +15,53 @@
 # sample_type:	whole
 # comments:	NA
 
-Details zu aRts
-Architektur
-Module & Kan\xE4le
-aRts beruht auf einem Synthesemodell, bei dem aus kleinen Modulen, die jedes f\xFCr sich eine spezialisierte Aufgabe haben, komplexe Strukturen aufgebaut werden.
-Die Module haben normalerweise Eing\xE4nge, \xFCber die Signale und Parameter \xFCbergeben werden, und Ausg\xE4nge, an denen die Ergebnissignale anliegen.
-Das Modul Synth_ADD zum Beispiel addiert die zwei Eingangssignal zu einem Summensignal, das als Ausgangssignal verf\xFCgbar ist.
-Die Stellen, mit denen die Ein-/Ausgangssignale verbunden werden hei\xDFen Kan\xE4le (ports).
-Strukturen
-Eine Struktur besteht aus mehreren verbundenen Modulen, bei denen einige Kan\xE4le feste Parameter haben, andere untereinander verbunden sind w\xE4hrend einige Kan\xE4le vielleicht gar nicht verbunden sind.
-aRts-builder dient zur Beschreibung dieser Strukturen.
-Sie beschreiben, welche Module in welcher Weise verbunden werden sollen.
-Wenn Sie damit fertig sind, k\xF6nnen Sie die Beschreibung speichern oder aRts zu der Erzeugung der Struktur veranlassen (Struktur ausf\xFChren).
-Als Ergebnis h\xF6ren Sie wahrscheinlich einige Kl\xE4nge, falls nichts schiefgegangen ist.
-Aussetzer
-Was bedeutet Verz\xF6gerung?
-Angenommen Sie haben ein Programm mit Namen Mausklick, das ein Klicken von sich geben soll, wenn Sie eine Maustaste bet\xE4tigen.
-Die Verz\xF6gerungszeit ist die Zeit zwischen dem Bet\xE4tigen der Maustaste und dem Ert\xF6nen des Klicken.
-Die Einstellung der Verz\xF6gerungszeit besteht aus mehreren Verz\xF6gerungszeiten, die unterschiedliche Ursachen haben.
-Verz\xF6gerungszeit in einfachen Anwendungen
-In dieser einfachen Anwendung werden an folgenden Stellen Verz\xF6gerungen verursacht:
-Zeit, die der Betriebssystemkern ben\xF6tigt, um dem X11-Server den Mausklick mitzuteilen.
-Zeit, die der X11-Server ben\xF6tigt, um der Anwendung den Mausklick mitzuteilen.
-Zeit, die die Anwendung ben\xF6tigt, um aufgrund des Mausklicks einen Klick-Ton auszul\xF6sen.
-Zeit, die die Anwendung ben\xF6tigt, um dem Soundserver den Befehl zum Klick-Ton zu geben.
-Zeit, die der Klick-Ton ben\xF6tigt (den der Soundserver sofort in den Ausgabestrom einmischt), um den Datenpuffer zu passieren, bis er die Stelle erreicht, an der die Soundkarte gerade Daten wiedergibt.
-Zeit, die der Klick-Ton von den Lautsprechern bis zu Ihrem Ohr ben\xF6tigt.
-Die ersten drei Verz\xF6gerungszeiten sind extern f\xFCr aRts.
-Sie sind wichtig, aber nicht Gegenstand dieser Dokumentation.
-Sie sollten sich dennoch dieser Verz\xF6gerungen bewusst sein, denn selbst wenn Sie alle anderen Verz\xF6gerungen sehr gering halten, erhalten Sie vielleicht dennoch nicht exakt die erwarteten Resultate.
-Ein Spielbefehl an den Server besteht normalerweise aus einem &MCOP;-Funktionsaufruf.
-Es gibt Geschwindigkeitstests,die belegen, dass ein solcher Befehl auf einem Rechner bei der jetzigen Implementation etwa 9000 mal pro Sekunde ausgef\xFChrt werden kann.
-Ich denke, das meiste der Zeit wird Kernel-Overhead f\xFCr die Umschaltung zwischen verschiedenen Anwendungen sein.
-Nat\xFCrlich h\xE4ngen diese Werte von den exakten Parametertypen des Aufrufs ab.
-Die \xDCbergabe eines vollst\xE4ndigen Bildes in einem Aufruf dauert l\xE4nger als die \xDCbergabe eines einzigen Werte.
-Das Gleiche gilt f\xFCr den R\xFCckgabewert.
-F\xFCr normale Zeichenketten (wie der Dateiname der zu spielenden wav -Datei) sollte das aber kein Problem darstellen.
-Das bedeutet, diese Zeit kann mit 1/9000 Sekunde abgesch\xE4tzt werden.
-Das ist weniger als 0,15 ms.
-Sie werden sehen, das diese Zeitspanne unwichtig ist.
-Die n\xE4chste Verz\xF6gerungszeit ist die Zeit vom Starten des Soundservers und der Ankunft dieses Beginns auf der Soundkarte.
-Der Server muss einen Puffer verwenden, damit man keine Aussetzer h\xF6rt, wenn eine andere Anwendung wie der X11-Server oder das Mausklick -Programm aktiv sind.
-Das wird unter Linux verwirklicht, indem eine Anzahl Bruchst\xFCcke einer bestimmte Gr\xF6\xDFe erzeugt werden.
-Der Server f\xFCllt die Bruchst\xFCcke und die Soundkarte spielt die Bruchst\xFCcke ab.
-Angenommen es gibt drei Bruchst\xFCcke.
-Der Server f\xFCllt das Erste, die Soundkarte beginnt mit dem Abspielen.
-Der Server f\xFCllt das Zweite.
-Der Server f\xFCllt das Dritte.
-Der Server ist fertig, andere Anwendungen k\xF6nnen nun aktiviert werden.
-Nach dem ersten Bruchst\xFCck spielt die Soundkarte das Zweite ab und der Server f\xFCllt das erste Bruchst\xFCck wieder.
-Das geht immer so weiter.
-Damit ergibt sich eine maximale Verz\xF6gerungszeit von (Anzahl der Bruchst\xFCcke)*(Gr\xF6\xDFe eines Bruchst\xFCckes)/(Samplingrate * (Gr\xF6\xDFe eines Samples)).
-Bei 44kHz Stereo und 7 Bruchst\xFCcken von je 1024 Byte Gr\xF6\xDFe (die aktuellen Standardwerte von aRts) entspricht das einer Verz\xF6gerungszeit von 40 ms.
-Diese Werte k\xF6nnen Sie Ihren Anforderungen anpassen.
-Allerdings steigt die CPU -Belastung mit kleineren Verz\xF6gerungszeiten, da der Soundserver die Puffer h\xE4ufiger und in kleineren Bruchst\xFCcken f\xFCllen muss.
-Es ist au\xDFerdem meistens unm\xF6glich, bessere Werte zu erreichen, ohne das Aussetzer zu h\xF6ren sind, es sei denn, sie versehen den Soundserver mit Echtzeit-Priorit\xE4t.
-Dennoch ist eine Einstellung von 3 Bruchst\xFCcken mit je 256 Bytes, die einer Verz\xF6gerung von 4,4 ms entsprechen, realistisch.
-Mit 4,4 ms Verz\xF6gerungszeit belastet aRts die CPU im Ruhezustand mit 7,5%.
-Mit einer Verz\xF6gerung von 40 ms betr\xE4gt die Belastung etwa 3% (bei einem PII-350, diese Werte k\xF6nnen abh\xE4ngig von der Soundkarte, Kernel-Version und anderen Faktoren variieren).
-Jetzt zu der Zeit, die der Klick-Ton von den Lautsprechern bis zum Ohr ben\xF6tigt.
-Bei einer angenommenen Distanz von 2 Metern ergibt sich bei einer Schallgeschwindigkeit von 330 Meter pro Sekunde eine Verz\xF6gerung von etwa 6 ms.
-Verz\xF6gerungszeit in Streaming-Anwendungen
-Streaming-Anwendungen produzieren ihre Kl\xE4nge selbst.
-Angenommen, ein Spiel, das einen konstanten Strom von Samples erzeugt, soll nun f\xFCr die Wiedergabe durch aRts verwendet werden.
-Als Beispiel:
-Wenn ich eine Taste dr\xFCcke, h\xFCpft die Spielfigur und es ert\xF6nt ein Boing-Klang.
-Als Erstes muss man wissen, wie aRts Streaming realisiert.
-Der Ablauf ist \xE4hnlich wie bei der Ausgabe auf einer Soundkarte.
-Das Spiel sendet einige Pakete mit Samples zum Soundserver.
-Angenommen, es sinc drei Pakete.
-Sobald der Soundserver das erste Paket wiedergegeben hat, schickt er eine Best\xE4tigung zur\xFCck zum Spiel.
-Das Spiel erzeugt ein neues Paket und schickt es zum Server.
-W\xE4hrenddessen verarbeitet der Server das zweite Paket und so weiter.
-Die Verz\xF6gerungszeiten hier sind \xE4hnlich wie bei dem einfachen Beispiel:
-Zeit, bis der Betriebssystemkern dem X11-Server den Tastendruck mitgeteilt hat.
-Zeit, bis der X11-Server dem Spiel den Tastendruck mitgeteilt hat.
-Zeit, bis das Spiel entschieden hat, das aufgrund des Tastendrucks ein Boing-Ton auszugeben ist.
-Zeit, bis das Paket mit dem Anfang des Boing-Tons den Soundserver erreicht hat.
-Zeit, bis der Boing-Ton (den der Soundserver sofort in die Ausgabe einmischt) den Datenpuffer passiert hat bis zu der Stelle, an der die Soundkarte gerade wiedergibt.
-Zeit, die der Boing-Ton von den Lautsprechern bis zum Ohr ben\xF6tigt.
-Die externen Verz\xF6gerungen sind gehen wiederum \xFCber den Inhalt dieses Dokumentes hinaus.
-Offensichtlich h\xE4ngt die Streaming-Verz\xF6gerung von der Zeit ab, die alle Pakete ben\xF6tigen, einmal wiedergegeben zu werden.
-Also ist diese Zeit (Anzahl der Pakete)*(Gr\xF6\xDFe eines Paketes)/(Samplingrate * (Gr\xF6\xDFe eines Samples))
-Wie man sieht, ist das die gleiche Formel, wie sie bei den Bruchst\xFCcken verwandt wird.
-F\xFCr Spiele sind solch geringer Verz\xF6gerungszeiten wie oben \xFCberfl\xFCssig.
-Eine realistische Festlegung f\xFCr Spiekle w\xE4ren 2046 Bytes pro Paket bei drei Paketen.
-Die resultierende Verz\xF6gerung ist dann etwa 35 ms.
-Diese Berechnung basiert auf folgenden Annahmen: das Spiel rendert 25 Bilder pro Sekunde (f\xFCr die Anzeige).
-Einen Verschiebung zwischen Ton und Film von einem Bild nimmt man nicht wahr.
-Daher ist eine Verz\xF6gerung von 1/25 Sekunde f\xFCr Streaming akzeptabel, was wiederum bedeutet, das 40ms in Ordnung sind.
-Au\xDFerdem werden die meisten Leute ihre Spiele nicht mit Echtzeit-Priorit\xE4t spielen und daher ist die Gefahr von Aussetzern nicht zu vernachl\xE4ssigen.
-Bei 3 Paketen je 256 Bytes ist Streaming m\xF6glich (nach eigenen Tests) - es verbraucht aber eine Menge CPU -Zeit.
-F\xFCr die Serververz\xF6gerungszeiten k\xF6nnen Sie genau wie oben rechnen.
-Einige \xDCberlegungen zu CPU -Zeit
-Es gibt eine Menge Faktoren, die in komplexen Situationen mit einigen Streaming-Anwendungen und einigen Anderen sowie einigen Plugins auf dem Server einen Einflu\xDF auf die CPU -Zeit haben.
-Um einige zu nennen:
-CPU -Zeit f\xFCr die notwendigen Berechnungen.
-aRts interner Scheduler-Aufwand - wie aRts entscheidet, wann welches Modul was berechnen soll.
-Aufwand zur Konvertierung von Ganzzahlen in Kommazahlen.
-&MCOP;-Protokoll-Aufwand.
-Kernel:
-Proze\xDF-/Kontextumschaltung.
-Kernel:
-Kommunikationsaufwand.
-F\xFCr die CPU -Berechnungszeit bei zwei gleichzeitig abgespielten Datenstr\xF6men muss man Additionen durchf\xFChren.
-Falls man einen Filter verwendet, sind einige weitere Berechnungen notwendig.
-Ein einfaches Beispiel mit zwei Str\xF6men mit vier CPU -Zyklen pro Addition f\xFChren auf einem 350MHz-Prozessor zu 44100*2*4/350000000 = 0,1% CPU -Auslastung.
-aRts internes Scheduling: aRts muss bestimmen, welches Plugin wann was berechnet.
-Das ben\xF6tigt Zeit.
-Wenn man Genaueres wissen will, sollte man einen Profiler zu Rate ziehen.
-Generell l\xE4sst sich Folgendes sagen: je weniger Wert man auf Echtzeit legt (also je gr\xF6\xDFer die zu berechnenden Bl\xF6cke sind) um so wenig Scheduling Zeit wird ben\xF6tigt.
-Bei mehr als 128 Samples in einem St\xFCck (also einer Bruchst\xFCckgr\xF6\xDFe von 512 Bytes) ist der Scheduling-Aufwand wahrscheinlich nicht einmal nennenswert.
-Aufwand zur Konvertierung von Ganzzahlen in Kommazahlen: aRts verwendet intern Kommazahlen als Datenformat.
-Sie sind einfach zu verarbeiten und auf zeitgem\xE4\xDFen Prozessoren kaum langsamer als Ganzzahlen.
-Wenn aber Programme ihre Daten nicht in Kommazahlen abspielen (wie ein Spiel, das seine K\xE4nge \xFCber aRts ausgibt), m\xFCssen diese Daten konvertiert werden.
-Das Gleiche gilt f\xFCr die Ausgabe auf einer Soundkarte.
-Soundkarten ben\xF6tigen Ganzzahlen, also muss eine Konvertierung durchgef\xFChrt werden.
-Die folgenden Zahlen geh\xF6ren zu einem Celeron, ungef\xE4hre ticks pro Sample, mit -O2 +egcs 2.91.66 (berechnet von Eugene Smith hamster@null.ru).
-Diese Zahlen sind naturgem\xE4\xDF sehr prozessorabh\xE4ngig.
-Das bedeutet 1% CPU -Zeit f\xFCr die Konvertierung und 5% f\xFCr die Interpolation auf diesem 350 MHz-Prozessor.
-&MCOP; Protokoll-Aufwand: &MCOP; vertr\xE4gt ungef\xE4hr 9000 Aufrufe pro Sekunde.
-Das hat wenige mit &MCOP; als mit den zwei Kernelgr\xFCnden zu tun, die weiter unten beschrieben werden.
-Dennoch gibt das einen Anhaltspunkt f\xFCr die Berechnung der Kosten von Streaming.
-Jedes \xFCbertragene Datenpaket erfordert einen &MCOP;-Aufruf.
-Nat\xFCrlich ist das nur ein Richtwert, da gro\xDFe Pakete langsamer als 9000 Pakete/s sind.
-Angenommen man verwendet als Paketgr\xF6\xDFe 1024 Bytes.
-F\xFCr einen Stream mit 44kHz Stereo muss man also 44100*4/1024 = 172 Pakete pro Sekunde \xFCbertragen.
-Weiter angenommen, 9000 Pakete pro Sekunde entspricht einer CPU -Auslastung von 100%, dann erh\xE4lt man (172*100)/9000 = 2% CPU -Auslastung bei einem Streaming mit 1024 Bytes pro Paket.
-Das sind nur N\xE4herungen.
-Sie zeigen aber deutlich, dass man viel besser dran ist (wenn man die Verz\xF6gerungszeit tolerieren kann) mit einer Paketgr\xF6\xDFe von 4096 Bytes.
-Wir k\xF6nnen eine kompakte Rechnung durchf\xFChren, wenn wir die Paketgr\xF6\xDFe f\xFCr 100% CPU -Auslastung berechnen mit 44100*4/9000 = 19,6 Samples; daraus erhalten wir folgende Formel:
-Streaming CPU -Auslastung in Prozent = 1960/(Paketgr\xF6\xDFe)
-das ergibt 0,5% CPU -Auslastung bei Streaming mit einer Paketgr\xF6\xDFe von 4096 Bytes.
-Kernel Proze\xDF-/Kontextumschaltung: dieser Aufwand ist ein Teil des &MCOP;-Protokolls.
-Die Umschaltung zwischen zwei Prozessen ben\xF6tigt Zeit.
-Es wird der Speicher neu aufgeteilt, der Cache wird ung\xFCltig, und vieles mehr (falls ein Kernel-Experte dieses liest - teilen Sie mir bitte die genauen Gr\xFCnde mit).
-Das bedeutet: es ben\xF6tigt Zeit.
-Ich wei\xDF nicht wie viele Kontextwechsel Linux vertr\xE4gt, aber sicher nur eine endliche Zahl.
-Daher nehme ich an, das ein erheblicher Teil des &MCOP; Protokollaufwandes durch Kontextumschaltung zu Stande kommt.
-Ich f\xFChrte einige Tests mit &MCOP;-Kommunikation innerhalb eines Prozesses durch.
-Sie war wesentlich schneller (etwa viermal so schnell).
-Kernel:
-Kommunikationsaufwand:
-Das ist ebenfalls ein Bestandteil des &MCOP; Protokollaufwandes.
-Die Daten\xFCbertragung zwischen Prozessen wird momentan mittels Sockets durchgef\xFChrt.
-Das ist praktisch, da die \xFCblichen select()-Methoden verwendet werden k\xF6nnen, um die Ankunft einer Nachricht zu \xFCberpr\xFCfen.
-Das kann leicht mit anderen Ein-/Ausgabequellen wie Audio Ein-/Ausgabe, X11-Server-Kommunikation und einigem Anderen kombiniert werden.
-Diese Lese- und Schreibaufrufe kosten mit Sicherheit Prozessorzeit.
-Kleine Aufrufe (um ein Midi-Ereignis zu \xFCbertragen) sind vermutlich nicht so schlimm, gro\xDFe Aufrufe (z.B. um ein Videobild mit einigen Megabytes zu \xFCbertragen) stellen sicherlich ein Problem dar.
-In &MCOP; sollte daher m\xF6glichst gemeinsam genutzter Speicher verwendet werden.
-Das sollte aber keine \xC4nderungen f\xFCr die Anwendungsprogrammierer mit sich bringen.
-Durch einen Profiler kann man herausbekommen, in welchem Ma\xDFe genau heutiges Audio Streaming unter der Nichtverwendung von gemeinsam genutztem Speicher leidet.
-Da Audio Streaming mit artsd und artscat mit 6% CPU -Auslastung (Wiedergabe von mp3) durchgef\xFChrt werden kann (und 5% f\xFCr den mp3-Dekoder), kann es nicht so schlimm sein.
-Das enth\xE4lt alles einschlie\xDFlich der notwendigen Berechnungen und dem Socket-Aufwand, daher vermute ich, durch gemeinsam genutzten Speicher k\xF6nnten vielleicht 1% CPU -Auslastung gespart werden.
-Einige genaue Zahlen
-Diese Zahlen wurden mit der aktuellen CVS-Version ermittelt.
-Au\xDFerdem wollte ich Grenzf\xE4lle testen, also sind das F\xE4lle, die in normalen Anwendungen nicht auftreten sollten.
-Ich habe ein Programm namens streamsound geschrieben, das Streaming Daten an aRts sendet.
-Die Anwendung l\xE4uft hier mit Echtzeit-Priorit\xE4t (ohne Probleme) und einem kleinen Plugin (f\xFCr Laustst\xE4rkeskalierung und Clipping) auf seiten des Servers:
-Das Streaming wird jeweils mit 3 Bruchst\xFCcken je 1024 Bytes (18 ms) durchgef\xFChrt.
-Drei Programme laufen gleichzeitig.
-Das scheint ein bisschen zu viel zu sein; mit einem Profiler kann man versuchen, den Aufwand zu verbessern.
-Das ist ein nicht realistisches Testbeispiel.
-Als weiteren Test wurde versucht, die minimal m\xF6gliche Verz\xF6gerungszeit herauszufinden.
-Resultat: man kann Streaming ohne Unterbrechungen mit einem Anwendungsprogramm bei zwei Bruchst\xFCcken je 128 Bytes zwischen aRts und der Soundkarte sowie zwischen der Anwendung und aRts durchf\xFChren.
-Das entspricht einer maximalen Verz\xF6gerung von 128*4/44100*4 = 3 ms, wobei 1,5 ms von der Soundkarte und 1,5 ms durch die Kommunikation mit aRts entstehen.
-Beide Anwendungen ben\xF6tigen Echtzeit-Priorit\xE4t.
-Das ben\xF6tigt allerdings einen erheblichen Anteil der CPU.
-Das Beispiel liegt bei etwa 45% auf meinem P-II/350.
-Es wird ein Klicken h\xF6rbar, wenn man Fenster in X11 bewegt oder Festplattenaktivit\xE4t verursacht.
-Das h\xE4ngt mit dem Kernel zusammen.
-Das Problem ist, das zwei Echtzeitanwendungen einen erheblichen Aufwand verursachen, mehr noch, wenn Sie auch noch miteinander kommunizieren.
-Schlie\xDFlich ein realistischeres Beispiel.
-Es besteht aus aRts mit artsd und einem artscat (ein Streaming Programm) bei 16 Bruchst\xFCcken mit je 4096 Bytes:
-Busse
-Busse sind dynamisch erzeugte Verbindungen zum Transport von Audiosignalen.
-Grundlegend werden alle Signale von Uplinks addiert und an die Downlinks weitergeleitet.
-Busse existieren momentan nur in Stereo.
-Wenn Sie Mono-Daten transportieren wollen, senden Sie sie \xFCber einen Kanal und setzen Sie den anderen auf Null.
-Zur Verwendung erstellen Sie einen oder mehrere Synth_BUS_UPLINK-Module und benennen Sie sie mit dem Busnamen, auf dem Sie senden sollen (z.B. audio oder drums).
-Dann senden Sie die Daten an diese Uplinks.
-Auf der anderen Seite ben\xF6tigen Sie einen oder mehrere Synth_BUS_DOWNLINK-Module, denen Sie die gleichen Busnamen geben (also audio oder drums... gleiche Busnamen werden verbunden).
-\xDCber diese Busenden erscheinen die gesendeten Signale wieder in einer Struktur.
-Die Uplinks und Downlinks k\xF6nnen zu unterschiedlichen Strukturen geh\xF6ren.
-Sie k\xF6nnen sogar zwei Instanzen von aRts-builder verwenden und in einer davon einen Uplink und in der Anderen den passenden Downlink haben.
-Eine besondere Eigenschaft ist die Dynamik dieser Verbindungen.
-Teile k\xF6nnen sich jederzeit ein- oder ausklinken; das sollte kein Klicken oder andere Ger\xE4usche verursachen.
-Nat\xFCrlich sollte kein Teil ausgeklinkt werden, w\xE4hrend sein Signalpegel h\xF6her als Null ist, da sonst nat\xFCrlich ein Klicken zu h\xF6ren sein wird.
-Trader
-aRts /&MCOP; basiert sehr auf der Aufteilung von Aufgaben in kleine Komponenten.
-Das System wird dadurch sehr flexibel, da man das System auf einfache Weise durch das Hinzuf\xFCgen neuer Komponenten, die neue Effekte, Dateiformate, Oszillatoren, GUI-Elemente,... bereitstellen, erweitert werden kann.
-Da beinahe alles als Komponente programmiert ist, kann beinahe alles einfach erweitert werden, ohne die existierenden Quellen zu ver\xE4ndern.
-Neue Komponenten, die das System erweitern, werden einfach dynamisch geladen.
-F\xFCr einen reibungslosen Ablauf sind zwei Dinge erforderlich:
-Komponenten m\xFCssen sich bekannt machen - sie m\xFCssen ihre Funktionen beschreiben, damit andere Programme sie verwenden k\xF6nnen.
-Anwendungen m\xFCssen aktiv nach verwendbaren Komponenten suchen, anstatt immer die gleichen DInge f\xFCr eine Aufgabe zu verwenden.
-Die Kombination davon:
-Komponenten, die sagen:
-Hier bin ich, verwende mich, und Anwendungen (oder, wenn man so will, andere Komponenten), die nach verwendbaren Komponenten suchen, um eine Aufgabe zu erledigen, nennt man Handel.
-In aRts beschreiben Komponenten sich selbst, indem sie Werte festlegen, die sie als Eigenschaften unterst\xFCtzen.
-Eine typische Eigenschaft einer Komponente zum Laden einer Datei k\xF6nnte die Dateinamenerweiterung sein, die sie verarbeiten kann.
-Typische Werte k\xF6nnten wav, aiff oder mp3 sein.
-Jede Komponente kann viele verschiedene Werte f\xFCr eine Eigenschaft anbieten.
-Eine einzige Komponente kann somit sowohl das Einlesen von wav als auch aiff -Dateien anbieten, indem sie diese Werte f\xFCr die Eigenschaft Extension angibt.
-Um das durchzuf\xFChren, muss die Komponente eine .mcopclass -Datei an geeigneter Stelle platzieren, in der sie die unterst\xFCtzten Eigenschaften festlegt.
-It is important that the filename of the .mcopclass -file also says what the interface of the component is called like.
-The trader doesn't look at the contents at all, if the file (like here) is called Arts/WavPlayObject.mcopclass, the component interface is called Arts::WavPlayObject (modules map to directories).
-To look for components, there are two interfaces (which are defined in core.idl, so you have them in every application), called Arts::TraderQuery and Arts::TraderOffer.
-You to go on a shopping tour for components like this:
-Create a query object:
-Specify what you want.
-As you saw above, components describe themselves using properties, for which they offer certain values.
-So specifying what you want is done by selecting components that support a certain value for a property.
-This is done using the supports method of a TraderQuery:
-Finally, perform the query using the query method.
-Then, you'll (hopefully) get some offers:
-Now you can examine what you found.
-Important is the interfaceName method of TraderOffer, which will tell you the name of the component, that matched the query.
-You can also find out further properties by getProperty.
-The following code will simply iterate through all components, print their interface names (which could be used for creation), and delete the results of the query again:
-For this kind of trading service to be useful, it is important to somehow agree on what kinds of properties components should usually define.
-It is essential that more or less all components in a certain area use the same set of properties to describe themselves (and the same set of values where applicable), so that applications (or other components) will be able to find them.
-Author (type string, optional):
-This can be used to ultimately let the world know that you wrote something.
-You can write anything you like in here, e-mail adress is of course helpful.
-Buildable (type boolean, recommended):
-This indicates whether the component is usable with RAD tools (such as aRts-builder) which use components by assigning properties and connecting ports.
-It is recommended to set this value to true for almost any signal processing component (such as filters, effects, oscillators,...), and for all other things which can be used in RAD like fashion, but not for internal stuff like for instance Arts::InterfaceRepo.
-Extension (type string, used where relevant):
-Everything dealing with files should consider using this.
-You should put the lowercase version of the file extension without the. here, so something like wav should be fine.
-Interface (type string, required):
-This should include the full list of (useful) interfaces your components supports, probably including Arts::Object and if applicable Arts::SynthModule.
-Language (type string, recommended):
-If you want your component to be dynamically loaded, you need to specify the language here.
-Currently, the only allowed value is C++, which means the component was written using the normal C++ API.
-If you do so, you'll also need to set the Library property below.
-Library (type string, used where relevant):
-Components written in C++ can be dynamically loaded.
-To do so, you have to compile them into a dynamically loadable libtool (.la) module.
-Here, you can specify the name of the .la -File that contains your component.
-Remember to use REGISTER_IMPLEMENTATION (as always).
-MimeType (type string, used where relevant):
-Everything dealing with files should consider using this.
-You should put the lowercase version of the standard mimetype here, for instance audio/x-wav.
-URL (type string, optional):
-If you like to let people know where they can find a new version of the component (or a homepage or anything), you can do it here.
-This should be standard HTTP or FTP URL.
-Namespaces in aRts
-Einleitung
-Each namespace declaration corresponds to a module declaration in the &MCOP; &IDL;.
-In this case, the generated C++ code for the &IDL; snippet would look like this:
-So when referring the classes from the above example in your C++ code, you would have to write M::A, but only B.
-However, you can of course use using M somewhere - like with any namespace in C++.
-How aRts uses namespaces
-There is one global namespace called Arts, which all programs and libraries that belong to aRts itself use to put their declarations in.
-This means, that when writing C++ code that depends on aRts, you normally have to prefix every class you use with Arts::, like this:
-The other alternative is to write a using once, like this:
-In &IDL; files, you don't exactly have a choice.
-If you are writing code that belongs to aRts itself, you'll have to put it into module aRts.
-If you write code that doesn't belong to aRts itself, you should not put it into the Arts namespace.
-However, you can make an own namespace if you like.
-In any case, you'll have to prefix classes you use from aRts.
-Internals:
-How the Implementation Works
-Often, in interfaces, casts, method signatures and similar, &MCOP; needs to refer to names of types or interfaces.
-These are represented as string in the common &MCOP; datastructures, while the namespace is always fully represented in the C++ style.
-This means the strings would contain M::A and B, following the example above.
-Note this even applies if inside the &IDL; text the namespace qualifiers were not given, since the context made clear which namespace the interface A was meant to be used in.
-Threads in aRts
-Basics
-Using threads isn't possible on all platforms.
-This is why aRts was originally written without using threading at all.
-For almost all problems, for each threaded solution to the problem, there is a non-threaded solution that does the same.
-For instance, instead of putting audio output in a seperate thread, and make it blocking, aRts uses non-blocking audio output, and figures out when to write the next chunk of data using select().
-However, aRts (in very recent versions) at least provides support for people who do want to implement their objects using threads.
-For instance, if you already have code for an mp3 player, and the code expects the mp3 decoder to run in a seperate thread, it's usally the easiest thing to do to keep this design.
-The aRts /&MCOP; implementation is built along sharing state between seperate objects in obvious and non-obvious ways.
-A small list of shared state includes:
-The Dispatcher object which does &MCOP; communication.
-The Reference counting (Smartwrappers).
-The IOManager which does timer and fd watches.
-The ObjectManager which creates objects and dynamically loads plugins.
-The FlowSystem which calls calculateBlock in the appropriate situations.
-All of the above objects don't expect to be used concurrently (&dh; called from seperate threads at the same time).
-Generally there are two ways of solving this:
-Require the caller of any functions on this objects to acquire a lock before using them.
-Making these objects really threadsafe and/or create per-thread instances of them.
-aRts follows the first approach: you will need a lock whenever you talk to any of these objects.
-The second approach is harder to do.
-A hack which tries to achieve this is available at http://space.twc.de/~stefan/kde/download/arts-mt.tar.gz, but for the current point in time, a minimalistic approach will probably work better, and cause less problems with existing applications.
-When/how to acquire the lock?
-You can get/release the lock with the two functions:
-Arts::Dispatcher::lock()
-Arts::Dispatcher::unlock()
-Generally, you don't need to acquire the lock (and you shouldn't try to do so), if it is already held.
-A list of conditions when this is the case is:
-You receive a callback from the IOManager (timer or fd).
-You get call due to some &MCOP; request.
-You are called from the NotificationManager.
-You are called from the FlowSystem (calculateBlock)
-There are also some exceptions of functions. which you can only call in the main thread, and for that reason you will never need a lock to call them:
-Constructor/destructor of Dispatcher/IOManager.
-Dispatcher::run() / IOManager::run()
-IOManager::processOneEvent()
-But that is it.
-For everything else that is somehow related to aRts, you will need to get the lock, and release it again when done.
-Always.
-Here is a simple example:
-Threading related classes
-The following threading related classes are currently available:
-Arts::Thread - which encapsulates a thread.
-Arts::Mutex - which encapsulates a mutex.
-Arts::ThreadCondition - which provides support to wake up threads which are waiting for a certain condition to become true.
-Arts::SystemThreads - which encapsulates the operating system threading layer (which offers a few helpful functions to application programmers).
-See the links for documentation.
-References and Error Handling
-&MCOP; references are one of the most central concepts in &MCOP; programming.
-This section will try to describe how exactly references are used, and will especially also try to cover cases of failure (server crashes).
-Basic properties of references
-An &MCOP; reference is not an object, but a reference to an object:
-Even though the following declaration Arts::Synth_PLAY p; looks like a definition of an object, it only declares a reference to an object.
-As C++ programmer, you might also think of it as Synth_PLAY *, a kind of pointer to a Synth_PLAY object.
-This especially means, that p can be the same thing as a NULL pointer.
-You can create a NULL reference by assigning it explicitly
-Invoking things on a NULL reference leads to a core dump
-will lead to a core dump.
-Comparing this to a pointer, it is essentially the same as QWindow* w = 0; w->show(); which every C++ programmer would know to avoid.
-Uninitialized objects try to lazy-create themselves upon first use
-is something different than dereferencing a NULL pointer.
-You didn't tell the object at all what it is, and now you try to use it.
-The guess here is that you want to have a new local instance of a Arts::Synth_PLAY object.
-Of course you might have wanted something else (like creating the object somewhere else, or using an existing remote object).
-However, it is a convenient short cut to creating objects.
-Lazy creation will not work once you assigned something else (like a null reference).
-The equivalent C++ terms would be QWidget* w; w->show(); which obviously in C++ just plain segfaults.
-So this is different here.
-This lazy creation is tricky especially as not necessarily an implementation exists for your interface.
-For instance, consider an abstract thing like a Arts::PlayObject.
-There are certainly concrete PlayObjects like those for playing mp3s or wavs, but Arts::PlayObject po; po.play(); will certainly fail.
-The problem is that although lazy creation kicks in, and tries to create a PlayObject, it fails, because there are only things like Arts::WavPlayObject and similar.
-Thus, use lazy creation only when you are sure that an implementation exists.
-References may point to the same object
-creates two references referring to the same object.
-It doesn't copy any value, and doesn't create two objects.
-All objects are reference counted So once an object isn't referred any longer by any references, it gets deleted.
-There is no way to explicitely delete an object, however, you can use something like this Arts::Synth_PLAY p; p.start(); [...] p = Arts::Synth_PLAY::null(); to make the Synth_PLAY object go away in the end.
-Especially, it should never be necessary to use new and delete in conjunction with references.
-The case of failure
-As references can point to remote objects, the servers containing these objects can crash.
-What happens then?
-A crash doesn't change whether a reference is a null reference.
-This means that if foo.isNull() was true before a server crash then it is also true after a server crash (which is clear).
-It also means that if foo.isNull() was false before a server crash (foo referred to an object) then it is also false after the server crash.
-Invoking methods on a valid reference stays safe Suppose the server containing the object calc crashed.
-Still calling things like int k = calc.subtract(i,j) are safe.
-Obviously subtract has to return something here, which it can't because the remote object no longer exists.
-In this case (k == 0) would be true.
-Generally, operations try to return something neutral as result, such as 0.0, a null reference for objects or empty strings, when the object no longer exists.
-Checking error() reveals whether something worked.
-In the above case, int k = calc.subtract(i,j) if(k.error()) {printf("k is not i-j!\n ");} would print out k is not i-j whenever the remote invocation didn't work.
-Otherwise k is really the result of the subtract operation as performed by the remote object (no server crash).
-However, for methods doing things like deleting a file, you can't know for sure whether it really happened.
-Of course it happened if .error() is false.
-However, if .error() is true, there are two possibilities:
-The file got deleted, and the server crashed just after deleting it, but before transferring the result.
-The server crashed before beeing able to delete the file.
-Using nested invocations is dangerous in crash resistent programs
-Using something like window.titlebar().setTitle("foo "); is not a good idea.
-Suppose you know that window contains a valid Window reference.
-Suppose you know that window.titlebar() will return a Titlebar reference because the Window object is implemented properly.
-However, still the above statement isn't safe.
-What could happen is that the server containing the Window object has crashed.
-Then, regardless of how good the Window implementation is, you will get a null reference as result of the window.titlebar() operation.
-And then of course invoking setTitle on that null reference will lead to a crash as well.
-So a safe variant of this would be Titlebar titlebar = window.titlebar(); if(!window.error()) titlebar.setTitle("foo "); add the appropriate error handling if you like.
-If you don't trust the Window implementation, you might as well use Titlebar titlebar = window.titlebar(); if(!titlebar.isNull()) titlebar.setTitle("foo "); which are both safe.
-There are other conditions of failure, such as network disconnection (suppose you remove the cable between your server and client while your application runs).
-However their effect is the same like a server crash.
-Overall, it is of course a consideration of policy how strictly you try to trap communcation errors throughout your application.
-You might follow the if the server crashes, we need to debug the server until it never crashes again method, which would mean you need not bother about all these problems.
-Internals:
-Distributed Reference Counting
-An object, to exist, must be owned by someone.
-If it isn't, it will cease to exist (more or less) immediately.
-Internally, ownership is indicated by calling _copy(), which increments an reference count, and given back by calling _release().
-As soon as the reference count drops to zero, a delete will be done.
-As a variation of the theme, remote usage is indicated by _useRemote(), and dissolved by _releaseRemote().
-These functions lead a list which server has invoked them (and thus owns the object).
-This is used in case this server disconnects (&dh; crash, network failure), to remove the references that are still on the objects.
-This is done in _disconnectRemote().
-Now there is one problem.
-Consider a return value.
-Usually, the return value object will not be owned by the calling function any longer.
-It will however also not be owned by the caller, until the message holding the object is received.
-So there is a time of ownershipless objects.
-Now, when sending an object, one can be reasonable sure that as soon as it is received, it will be owned by somebody again, unless, again, the receiver dies.
-However this means that special care needs to be taken about object at least while sending, probably also while receiving, so that it doesn't die at once.
-The way &MCOP; does this is by tagging objects that are in process of being copied across the wire.
-Before such a copy is started, _copyRemote is called.
-This prevents the object from being freed for a while (5 seconds).
-Once the receiver calls _useRemote(), the tag is removed again.
-So all objects that are send over wire are tagged before transfer.
-If the receiver receives an object which is on his server, of course he will not _useRemote() it.
-For this special case, _cancelCopyRemote() exists to remove the tag manually.
-Other than that, there is also timer based tag removal, if tagging was done, but the receiver didn't really get the object (due to crash, network failure).
-This is done by the ReferenceClean class.
-GUI -Elemente
-GUI -Elemente sind augenblicklich in einem experimentellen Stadium.
-Dieser Abschnitt beschreibt also, wie aRts sp\xE4ter einmal mit GUI -Elementen umgehen soll.
-Au\xDFerdem ist ein gewisser Teil an Programmzeilen bereits vorhanden.
-GUI -Elemente dienen der Interaktion eines Benutzers mit synthetisierten Strukturen.
-Im einfachsten Fall soll der Benutzer in der Lage sein, einige Parameter der Struktur direkt zu ver\xE4ndern (z.B. einen Verst\xE4rkungsfaktor, der vor dem Abspielmodul verwendet wird).
-In einem komplexeren Fall w\xE4re vorstellbar, das ein Benutzer Parameter einer ganzen Gruppe von Strukturen oder noch nicht ausgef\xFChrten Strukturen \xE4ndert, wie z.B. die ADSR -H\xFCllkurve (envelope) des aktiven MIDI -Instrumentes.
-Eine andere denkbare Einstellung w\xE4re der Dateiname eines Instrumentes, das auf einem Sample basiert.
-Auf der anderen Seite k\xF6nnte der Benutzer \xFCberwachen wollen, was innerhalb des Synthesizers passiert.
-Dazu k\xF6nnte es Oszilloskope, Spektrumanalysatoren, Lautst\xE4rkeanzeigen und Experimente geben, um z.B. in der Lage zu sein, den Frequenzgang eines bestimmten Filtermodules zu analysieren.
-Schlie\xDFlich sollte es m\xF6glich sein, mit GUI -Elementen die gesamte Struktur zu kontrollieren, die in aRts ausgef\xFChrt wird.
-Der Benutzer sollte in der Lage sein, Instrumente MIDI -Kan\xE4len zuzuordnen, neue Effekte zu starten und zu seinem Hauptmischpult (das ebenfalls aus aRts -Strukturen besteht) einen weiteren Kanal hinzuzuf\xFCgen und eine neue Strategie f\xFCr seine Equalizer einzustellen.
-Die GUI -Elemente bieten dem Benutzer damit Zugriff auf alle M\xF6glichkeiten, die das virtuelle Studio aRts bietet.
-Nat\xFCrlich sollen die GUI -Elemente auch mit MIDI -Eingaben interagieren k\xF6nnen (ein Schieberegler soll sich selbstst\xE4ndig in eine neue Position bewegen, wenn ein Midi-Ereignis gerade diesen Parameter ge\xE4ndert hat), weiterhin sollen die Elemente selbst Ereignisse generieren k\xF6nnen, um die Aufnahme der Benutzereingaben zu erm\xF6glichen.
-Technisch gesprochen ben\xF6tigt man eine &IDL;-Basisklasse f\xFCr alle Kontrollelemente (Arts::Widget) und kann von dieser eine Anzahl h\xE4ufig verwendeter Kontrollelemente (wie Arts::Poti, Arts::Panel, Arts::Window,...) ableiten.
-Diese Kontrollelemente sollten mit einer Bibliothek wie Qt oder Gtk implementiert werden.
-Schlie\xDFlich sollten die GUI s der Effekte aus diesen Elementen gebildet werden.
-Ein Freeverb-Effekt k\xF6nnte z.B. aus f\xFCnf Arts::Poti - und einem Arts::Window -Element gebildet werden.
-Wenn es also eine Qt -Implementation dieser grundlegenden Elemente gibt, kann der Effekt sich mit Hilfe von Qt darstellen.
-Wenn es eine Gtk-Implementation gibt, funktioniert das f\xFCr Gtk ebenfalls (die Funktionsweise sollte mehr oder weniger gleichwertig sein).
-Da wir &IDL; benutzen, sollte aRts-builder (oder andere Programme) in der Lage sein, GUI s optisch zusammenzuf\xFChren oder mit einigen Parametern basierend auf den Schnittstellen selbst zusammenzustellen.
-Es sollte relativ einfach sein, eine GUI nach Beschreibung erstellen -Klasse zu programmieren, die eine GUI -Beschreibung (in der Form Parameter und Kontrollelement) in ein GUI -Objekt umsetzt.
-Basierend auf &IDL; und dem aRts /&MCOP;-Komponentenmodell sollte es genau so leicht sein, ein neues GUI -Objekt zu erstellen, wie es ist, ein neues Plugin f\xFCr aRts zu schreiben, das einen weiteren Filter bereitstellt.
+Proxy-Server
+Einf\xFChrung
+Proxies sind Programme, die auf einem Rechner laufen, der in Ihrem Netz als Internetserver fungiert.
+Diese Programme empfangen die HTTP - und FTP -Anfragen aus dem eigenen Netz, holen die angeforderten Seiten aus dem Internet und geben sie an den Rechner weiter, von dem die Anfrage kam.
+Wenn Sie einen Proxy eingerichtet haben werden, HTTP - und/oder FTP -Anfragen durch den Rechner weitergeleitet, der als Proxy-Server fungiert.
+Allerdings ist es meist zweckm\xE4\xDFig, bestimmte Rechner anzugeben, mit denen eine direkte Verbindung (also ohne Proxy-Server) hergestellt werden soll.
+Wenn Sie sich zum Beispiel innerhelb eines lokalen Netzes befinden, brauchen Anfragen an lokale Rechner normalerweise nicht \xFCber einen Proxy-Server zu laufen.
+Sie brauchen Proxy-Server nur einzurichten, falls Ihr Netzwerkadministrator es verlangt (wenn Sie sich \xFCber Modem einw\xE4hlen, w\xE4re das zum Beispiel Ihr Internet Service Provider [ISP]).
+Wenn Sie nicht wissen, worum es bei Proxy-Konfiguration geht und wenn Ihre Internet-Verbindung in Ordnung ist, dann brauchen Sie nichts an der Konfiguration \xE4ndern.
+Benutzung
+Die erste Option auf der Seite ist das Ankreuzfeld Proxy verwenden.
+Durch markieren dieses Ankreuzfeldes wird die Verwendung von Proxy-Servern f\xFCr die Internetverbindung aktiviert.
+Die Verwendung von Proxy-Servern ist optional, hat aber den Vorteil, dass der Zugriff auf Daten aus dem Internet beschleunigt wird.
+Falls man sich nicht sicher ist, ob man einen Proxy-Server verwenden sollte, sollte man den die vom Internet-Provider gegebenen Informationen durchsehen oder den Systemverwalter fragen.
+Falls man die Verwendung eines Proxy-Servers aktiviert hat, kann man die Einstellungen auf mehrere Arten \xE4ndern.
+Automatisch gefundene Skript-Datei
+Dieses Optionsfeld sollte man ausw\xE4hlen, wenn eine Proxy-Konfigurationsdatei automatisch gesucht und heruntergeladen werden soll.
+Der Unterschied zur n\xE4chsten Auswahlm\xF6glichkeit ist, dass diese Auswahl es nicht erfordert, die Quelle der Konfigurations-Skriptdatei anzugeben.
+Stattdessen wird sie automatisch mit Hilfe des Web Access Protocoll Discovery -Systems (WAPD) heruntergeladen.
+Falls es mit dieser Einstellung Probleme gibt, kann man unter FAQ auf http://www.konqueror.org weitere Informationen finden.
+Angegebene Skriptdatei
+Dieses Optionsfeld sollte man zur Einrichtung des Proxy-Servers w\xE4hlen, wenn man eine Skriptdatei von einer bestimmten Adresse herunterladen m\xF6chte.
+Man kann die Adresse in das Eingabefeld Pfad eingeben oder \xFCber das Symbol Ordner aus dem Dateisystem ausw\xE4hlen.
+Voreingestellte Umgebungsvariablen
+Einige Systeme wurden mit Hilfe von $HTTP_PROXY eingerichtet, um sowohl mit graphischen als auch mit nichtgraphischen Anwendungen die selbe Proxy-Konfiguration zu verwenden.
+Falls das auf das eigene System zutrifft, sollte man diese Auswahlm\xF6glichkeit w\xE4hlen und den Knopf Einrichtung... verwenden, um die Umgebungsvariablen anzugeben, die zur Einrichtung des Proxy-Servers verwendet werden.
+Benutzerdefinierte Einstellungen
+Markieren Sie dieses Optionsfeld und klicken Sie auf Einrichtung..., die Adresse des oder der Proxy-Server manuell einzutragen.
+Falls man diese Option ausw\xE4hlt, erscheint ein weiterer Dialog.
+Die bei der Proxy-Konfiguration ben\xF6tigten Informationen sind die Internetadresse und die Port-Nummer.
+Sie sollten beide in die entsprechenden Textfelder eingeben.
+Der Pfeil-Knopf auf der rechten Seite kopiert die Eingaben der HTTP -Zeile in die FTP -Zeile.
+Das kann Ihnen Zeit sparen, wenn beide Zeilen identisch sind.
+Wenn es Rechner gibt, auf die Sie ohne Proxy zugreifen m\xF6chten, dann k\xF6nnen Sie die Namen dieser Rechner durch Bet\xE4tigen von Hinzuf\xFCgen zur Liste mit der Beschriftung Kein Proxy f\xFCr: hinzuf\xFCgen.
+Ein Beispiel f\xFCr solche Rechner sind solche, die in Ihrem lokalen Netzwerk sind und zu denen Sie daher direkten Zugang haben.
+Au\xDFerdem kann man Proxy nur f\xFCr die Eintr\xE4ge in der Liste verwenden ausw\xE4hlen.
+Markiert man dieses Ankreuzfeld, so wird die Verwendung der Ausnahmeliste umgekehrt, d.h. der Proxy-Server wird nur verwendet, wenn die angeforderte URL in der Adressliste aufgef\xFChrt ist.
+Diese Option ist sehr n\xFCtzlich, falls man den Proxy nur f\xFCr den Zugriff auf wenige Seiten, z.B. f\xFCr ein internes Intranet, ben\xF6tigt.
+Falls man eine noch komplexere Konfiguration ben\xF6tigt, sollte man ein Konfigurationsskript verwenden.
+Autorisierung
+Hier kann man zwischen zwei Autorisierungsmethoden ausw\xE4hlen, falls der Proxy eine Autorisierung erfordert.
+Man kann die Standardeinstellung Bei Bedarf nachfragen verwenden.
+In dieser Einstellung fragt Konqueror dann nach Benutzername und Passwort, wenn diese erforderlich sind.
+Die andere Option ist Automatisch anmelden.
+Abschnittsautor
+Dieses Kapitel wurde geschrieben von:
+Krishna Tateneni tateneni@pluto.njcc.com.
+Kleineres Update von Mike McBride mpmcbride7@yahoo.com
+Eine weitere Aktualisierung von Lauri Watts lauri@kde.org
+Deutsche \xDCbersetzung von Stefan Winter kickdown@online.de

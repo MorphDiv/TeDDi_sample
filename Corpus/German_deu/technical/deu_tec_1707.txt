@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,45 +15,50 @@
 # sample_type:	whole
 # comments:	NA
 
-Mid-Funktion, Mid-Anweisung [Laufzeit]
-/text/sbasic/shared/03120306.xhp
+Input#-Anweisung [Laufzeit]
+/text/sbasic/shared/03020202.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-Mid-Funktion
-Mid-Anweisung
-Mid-Funktion, Mid-Anweisung [Laufzeit]
-Mid-Funktion
-) oder ersetzt ihn durch eine andere Zeichenkette (
-Mid-Anweisung
-).
+Input-Anweisung
+Input#-Anweisung [Laufzeit]
+Erlaubt das Einlesen von Daten aus einer geöffneten sequentiellen Datei.
 Syntax:
-Mid (Text As String, Anfang As Integer [, Laenge As Integer]) oder Mid (Text As String, Anfang As Integer , Laenge As Integer, Text As String)
-Rückgabewert:
-String (only by Function)
+Input #Dateinummer As Integer; var1[, var2[, var3[,...]]]
 Parameter:
-Text:
-Ein beliebiger Zeichenkettenausdruck, den Sie bearbeiten möchten.
-Anfang:
-Integer-Ausdruck, der die Zeichenposition in der Zeichenkette angibt, an welcher der zu ersetzende oder zurückzugebende Zeichenkettenabschnitt anfängt.
-Laenge:
-Integer-Ausdruck, der die Anzahl der Zeichen angibt, die Sie ersetzen oder zurückgeben möchten.
-Mid-Funktion
-die Angabe zu length, werden alle Zeichen ab der angegebenen Position bis zum letzten Zeichen der Zeichenfolge ermittelt.
-Mid-Anweisung
-kleiner als die Länge des zu ersetzenden Textes, so wird der Text auf die angegebene Länge gekürzt.
-Text:
-Die Zeichenkette, durch die der Zeichenkettenabschnitt ersetzt werden soll (
-Mid-Anweisung
-).
+Dateinummer:
+Die Nummer der Datei mit den zu lesenden Daten.
+Die Datei muss zuvor mit einer Open-Anweisung und dem Schlüsselwort INPUT geöffnet worden sein.
+var:
+Eine numerische oder Zeichenkettenvariable, der Sie die aus der geöffneten Datei gelesenen Werte zuweisen.
+Input#
+liest numerische Werte oder Zeichenketten aus einer geöffneten Datei und weist die Daten einer oder mehreren Variablen zu.
+Numerische Variablen werden bis zum ersten Wagenrücklauf (Asc=13), Zeilenvorschub (Asc=10), Leerzeichen oder Komma gelesen.
+Zeichenkettenvariablen werden bis zum ersten Wagenrücklauf (Asc=13), Zeilenvorschub (Asc=10) oder Komma gelesen.
+Daten und Datentypen in der geöffneten Datei müssen in derselben Reihenfolge wie die im Parameter &quot; var &quot; übergebenen Variablen erscheinen.
+Wenn Sie versuchen, einer numerischen Variable nicht-numerische Werte zuzuweisen, erhält &quot; var &quot; den Wert 0.
+Line Input#
+, um reine Textdateien (Dateien, die ausschließlich druckbare Zeichen enthalten) zeilenweise einzulesen.
+Wird während des Lesens eines Datenelements das Ende der Datei erreicht, so wird der Lesevorgang abgebrochen, und es tritt ein Fehler auf.
 Beispiel:
-Sub ExampleGermanDate
-Dim sInput As String
-Dim sGe_date As String
-sInput = InputBox( &quot; Geben Sie bitte ein Datum im englischen Format MM-DD-YYYY ein &quot; )
-sGe_date = Mid(sInput, 4, 2)
-sGe_date = sGe_date & &quot; . &quot;
-sGe_date = sGe_date & Left(sInput, 2)
-sGe_date = sGe_date & &quot; . &quot;
-sGe_date = sGe_date & Right(sInput, 4)
-MsgBox sGe_date
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sZeile As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\daten.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; Das ist eine Zeile Text &quot;
+Print #iNumber, &quot; Das ist eine weitere Zeile Text &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sZeile
+If sZeile < > &quot; &quot; then
+sMsg = sMsg & sZeile & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
 End Sub

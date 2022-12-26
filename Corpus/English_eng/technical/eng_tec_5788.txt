@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,684 +15,72 @@
 # sample_type:	whole
 # comments:	NA
 
-The & kdiff3; Handbook
-Joachim Eibl
-joachim. eibl at gmx. de
-ROLES_OF_TRANSLATORS
-Joachim Eibl
-& kdiff3; is a file and directory diff and merge tool which
-compares and merges two or three text input files or directories,
-shows the differences line by line and character by character(!),
-provides an automatic merge-facility,
-has an editor for comfortable solving of merge-conflicts,
-provides networktransparency via KIO,
-has options to highlight or hide changes in white-space or comments,
-supports Unicode, UTF-8 and other file encodings,
-prints differences,
-supports version control keyword and history merging.
-This document describes & kdiff3; -version 0.9.92.
-KDE
-kdeextragear
-kdiff3
-diff
-merge
-CVS
-triplediff
-compare
-files
-directories
-version control
-three-way-merge
-in-line-differences
-synchronise
-kpart
-kio
-networktransparent
-editor
-white space
-comments
-Introduction
-Yet Another Diff Frontend?
-Several graphical diff tools exist. Why choose & kdiff3;? Let me say, why I wrote it.
-& kdiff3; started because I had to do a difficult merge. Merging is necessary when several people work on the same files in a project. A merge can be somewhat automated, when the merge-tool not only has the new modified files (called "branches"), but also the original file (called "base"). The merge tool will automatically choose any modification that was only done in one branch. When several contributors change the same lines, then the merge tool detects a conflict which must be solved manually.
-The merge then was difficult because one contributor had changed many things and corrected the indentation in many places. Another contributor also had changed much text in the same file, which resulted in several merge conflicts.
-The tool I used then, only showed the changed lines, but not what had changed within these lines. And there was no information about where only the indentation was changed. The merge was a little nightmare.
-So this was the start. The first version could show differences within a line and showed white space differences. Later many other features were added to increase the usefulness.
-For example if you want to compare some text quickly, then you can copy it to the clipboard and paste it into either diff window.
-A feature that required a big effort was the directory comparison and merge facility, which turned the program almost into a full file browser.
-I hope & kdiff3; works for you too. Have fun!
-Joachim Eibl (2003)
-Screenshots and Features
-This screenshot shows the difference between two text files
-(Using an early version of & kdiff3;):
-3-way-merging is fully supported. This is useful if two people change code independently. The original file (the base) is used to help & kdiff3; to automatically select the correct changes. The merge-editor below the diff-windows allows you to solve conflicts, while showing you the output you will get. You can even edit the output. This screenshot shows three input files being merged:
-& kdiff3; also helps you to compare and merge complete directories. This screenshot shows & kdiff3; during a directory merge:
-More Features
-Line-By-Line And Char-By-Char Diff-Viewer
-By using the possibilities of a graphical color display & kdiff3; shows exactly what the difference is. When you have to do many code-reviews, you will like this.
-See White-Space Differences At One Glance
-Spaces and tabs that differ appear visibly. When lines differ only in the amount of white space this can be seen at one look in the summary column on the left side. (No more worries when people change the indentation.)
-Triple-Diff
-Analyze three files and see where they differ.
-The left/ middle/ right windows are named A/ B/ C and have the blue/ green/ magenta color respectively.
-If one file is the same and one file is different on a line then the color shows which file is different. The red color means that both other files are different.
-Comfortable Merge Of Two Or Three Input Files
-& kdiff3; can be used to merge two or three input files and automatically merges as much as possible. The result is presented in an editable window where most conflicts can be solved with a single mouseclick: Select the buttons A/ B/ C from the button-bar to select the source that should be used. You can also select more than one source. Since this output window is an editor even conflicts which need further corrections can be solved here without requiring another tool.
-And...
-Fast navigation via buttons.
-A mouse-click into a summary column sync's all windows to show the same position.
-Select and copy from any window and paste into the merge result window.
-Overview column that shows where the changes and conflicts are.
-The colors are adjustable to your specific preferences.
-Adjustable Tab size.
-Option to insert spaces instead of tabs.
-Open files comfortably via dialog or specify files on the command line.
-Search for strings in all text windows. Find (Ctrl-F) and Find Next (F3)
-Show the line numbers for each line.
-Paste clipboard or drag text into a diff input window.
-Networktransparency via KIO.
-Can be used as diff-viewer in KDevelop 3.
-Word-wrap for long lines.
-Support for Unicode, UTF-8 and other codecs.
-Support for right to left languages.
-...
-File Comparison And Merge
-Command-Line Options
-Comparing 2 files:
-kdiff3 file1 file2
-Merging 2 files:
-kdiff3 file1 file2 -m kdiff3 file1 file2 -o outputfile
-Comparing 3 files:
-kdiff3 file1 file2 file3
-Merging 3 files:
-kdiff3 file1 file2 file3 -m kdiff3 file1 file2 file3 -o outputfile
-Note that file1 will be treated as base of file2 and file3.
-Special case: Files with the same name
-If all files have the same name but are in different directories, you can reduce typework by specifying the filename only for the first file. E. g.:
-kdiff3 dir1/ filename dir2 dir3
-Commandline for starting a directory comparison or merge:
-This is very similar, but now it's about directories.
-kdiff3 dir1 dir2 kdiff3 dir1 dir2 -o destdir kdiff3 dir1 dir2 dir3 kdiff3 dir1 dir2 dir3 -o destdir
-For directory comparison and merge you can continue to read here.
-Other command line options
-To see all available command line options type
-kdiff3 --help
-Example output:
-Options: -m, --merge Merge the input. -b, --base file Explicit base file. For compatibility with certain tools. -o, --output file Output file. Implies -m. E. g.: -o newfile. txt --out file Output file, again. (For compatibility with certain tools.) --auto No GUI if all conflicts are auto-solvable. (Needs -o file) --qall Do n't solve conflicts automatically. (For compatibility...) --L1 alias1 Visible name replacement for input file 1 (base). --L2 alias2 Visible name replacement for input file 2. --L3 alias3 Visible name replacement for input file 3. -L, --fname alias Alternative visible name replacement. Supply this once for every input. --cs string Override a config setting. Use once for every setting. E. g.: --cs "AutoAdvance=1" --confighelp Show list of config settings and current values. --config file Use a different config file.
-The option --cs allows you to adjust a configuration value that is otherwise only adjustable via the configure dialogs. But be aware that when & kdiff3; then terminates the changed value will be stored along with the other settings. With --confighelp you can find out the names of the available items and current values.
-Via --config you can specify a different config file. When you often use & kdiff3; with completely different setups this allows you to easily switch between them.
-Ignorable command line options
-Many people want to use & kdiff3; with some version control system. But when that version control system calls & kdiff3; using command line parameters that & kdiff3; does n't recognise, then & kdiff3; terminates with an error. The integration settings allow to specify command line parameters that should be ignored by & kdiff3;. They will appear in the usage help like in this example:
--- foo Ignored. (User defined.)
-Command line options to ignore:
-A list of options, separated via semicolon ';'. When one of these options appears on the commandline, then & kdiff3; will ignore it and run without reporting an error. (Default is "u; query; html; abort").
-When this is n't enough, then it is recommended to write a shell script that does the option translation.
-Open-Dialog
-Since many input files must be selectable, the program has a special open dialog:
-The open dialog allows to edit the filenames by hand, selecting a file via the file-browser ("File...") or allows to choose recent files from the drop-down lists. If you open the dialog again, then the current names still remain there. The third input file is not required. If the entry for "C" remains empty, then only a two file diff analysis will be done.
-You can also select a directory via "Dir...". If for A a directory is specified then a directory-comparison/ merge starts. If A specifies a file but B, C or the output specify a directory, then & kdiff3; uses the filename from A in the specified directories.
-If "Merge" is selected, then the "Output"-line becomes editable. But it is not required to specify the output filename immediately. You can also postpone this until saving.
-The "Configure..." -button opens the options-dialog, so that you can set the options before running the analysis.
-Paste and Drop Input
-Sometimes you want to compare parts of a text that is not an own file. & kdiff3; also allows you to paste text from the clipboard into the diff input window that has the focus. The diff analysis happens immediately then. In the open dialog you need not specify files then, but just close it via "Cancel".
-You can also use drag and drop: Drag a file from a file manager or selected text from an editor and drop it onto a diff input window.
-What's the idea? Sometimes a file contains two similar functions, but checking how similar they really are is a big effort if you first must create two files and then load them. Now you can simply copy, paste and compare the relevant sections.
-Note: Currently you cannot drag anything from & kdiff3;. Only dropping in the diff input is supported.
-Warning: Some editors still interpret the drag and drop into another program like cut (instead of copy) and paste. Your original data might be lost then.
-Comparing Files And Interpreting The Information In The Input Windows
-Info Line
-At the top of each text window is its "info line". The info lines of the input windows contain a letter "A", "B" or "C", the editable filename, a button for browsing, and the line number of the first visible line in the window. (Note that window "C" is optional.) Each info line appears in a different color.
-When you selected another file via browsing or finished editing the filename here by pressing enter, the new file will be loaded and compared with the already loaded file(s).
-Coloring
-The three input windows are assigned the letters "A", "B" and "C". "A" has color blue, "B" has green and "C" has magenta. (These are the defaults, but can be changed in the Settings-Menu.)
-When a difference is detected then the color shows which input file differs. When both other input files differ then the color used to express this is red by default ("Conflict color" in the Settings). This colorscheme is especially useful in the case of three input files, which will be seen in the next section (Merging).
-Summary Column
-Left of each text is the "summary column". If differences occurred on a line then the summary column shows the respective color. For a white-space-only difference the summary is chequered. For programming languages where white space is not so important this is useful to see at one glance if anything of importance was modified. (In C/ C++ white space is only interesting within strings, comments, for the preprocessor, and some only very esoteric situations.)
-The vertical line separating the summary column and the text is interrupted if the input file had no lines there. When word-wrap is enabled then this vertical line appears dotted for wrapped lines.
-Overview Column
-On the right side a "overview"-column is visible left of the vertical scrollbar. It shows the compressed summary column of input" A ". All the differences and conflicts are visible at one glance. When only two input windows are used, then all differences appear red here because every difference is also a conflict. A black rectangle frames the visible part of the inputs. For very long input files, when the number of input lines is bigger than the height of the overview column in pixels, then several input lines share one overview line. A conflict then has top priority over simple differences, which have priority over no change, so that no difference or conflict is lost here. By clicking into this overview column the corresponding text will be shown.
-Manually Aligning Lines
-Sometimes the algorithm places the wrong lines next to each other. Or you want to compare one piece of text with text at a completely different position in the other file. For these situations you can manually instruct & kdiff3; to align certain lines. Mark the text for which you want to improve the alignment with the mouse as you would for copy and paste in the first diff view and then choose "Add Manual Diff Alignment" in the "Diffview"-menu (keyboard shortcut" Ctrl-Y "). An orange bar will appear in the summary column next to the chosen text. Repeat this for the second and (if available) third diff view. & kdiff3; will immediately recalculate the differences everytime you do this, and will align the chosen lines. Of course some of the previously matching lines in between might not match anymore.
-Currently merging does n't support the use of manual diff help.
-Manually Joining and Splitting Diff Sections
-In some cases & kdiff3; will see too many or too few diff sections for merging. In such a case you can join or split existing sections.
-Add new sections by first selecting text in the lines that belong together in either input window (as for copying to the clipboard). Then choose "Split Diff At Selection" in the "Merge" menu. Splits will be added above the first line and below the last line of the selected text. If you only want to add one section, then select text beginning at another section-split.
-For joining sections in either input window select something in the lines from the sections to join. (You can join several sections in one step too.) Then choose "Join selected Diffs" in the "Merge"-menu.
-Merging And The Merge Output Editor Window
-The merge output editor window (below the diff input windows) also has an info line at the top showing "Output:", the filename and "[Modified]" if you edited something. Usually it will contain some text through the automatic merge facilities, but often it will also contain conflicts.
-!!! Saving is disabled until all conflicts are resolved!!! (Use the "Go to prev/ next unsolved conflicts"-buttons to find the remaining conflicts.)
-With only two input files every difference is also a conflict that must be solved manually.
-With three input files the first file is treated as base, while the second and third input files contain modifications. When at any line only either input B or input C have changed but not both then the changed source will automatically be selected. Only when B and C have changed on the same lines, then the tool detects a conflict that must be solved manually. When B and C are the same, but not the same as A, then C is selected.
-The Summary Column
-The merge output editor window also has a summary column on the left. It shows the letter of the input from which a line was selected or nothing if all three sources where equal on a line. For conflicts it shows a questionmark "?" and the line shows "lt; Merge Conflictgt;", all in red. Because solving conflicts line by line would take very long, the lines are grouped into groups that have the same difference and conflict characteristics. But only-white-space-conflicts are separated from non-white-space-conflicts in order to ease the merging of files were the indentation changed for many lines.
-Setting The Current Group And Synchronising Merge And Diff View Position
-When clicking into the summary column with the left mouse button in either window then the beginning of the group belonging to that line will shown in all windows. This group then becomes the "current group". It is highlighted with the "Current range (diff) background color" and a black bar appears on the left side of the text.
-Choosing Inputs A, B or C For Current Conflict And Editing
-The button bar below the menubar contains three input selector buttons containing the letters "A", "B" and "C". Click the input selector button to insert (or remove if already inserted) the lines from the respective source. To choose the lines from several inputs click the respective buttons in the needed order. For example if you want that the lines from "B" appear before the lines from "A" in the output, first click "B", then "A".
-If you use the auto-advance option ("Automatically go to next unsolved conflict after source selection"), you should disable this before choosing lines from several inputs or if you want to edit the lines after your choice. Otherwise & kdiff3; will jump to the next conflict after choosing the first input.
-It is often helpful directly edit the merge output. The summary column will show "m" for every line that was manually modified. When for instance the differences are aligned in a way that simply choosing the inputs wo n't be satisfactory, then you can mark the needed text and use normal copy and paste to put it into the merge output.
-Sometimes, when a line is removed either by automatic merge or by editing and no other lines remain in that group, then the text & lt; No src linegt; will appear in that line. This is just a placeholder for the group for when you might change your mind and select some source again. This text wo n't appear in the saved file or in any selections you want to copy and paste.
-The text "lt; Merge Conflictgt;" will appear in the clipboard if you copy and paste some text containing such a line. But still be careful to do so.
-Choosing Input A, B, or C for All Conflicts
-The normal merge will start by solving simple conflicts automatically. But the "Merge"-menu provides some actions for other common needs. If you have to select the same source for most conflicts, then you can choose" A "," B "or" C "everywhere, or only for the remaining unsolved conflicts, or for unsolved white space conflicts. If you want to decide every single delta yourself, you can" Set deltas to conflicts ". Or if you want to return to the automatic choices of & kdiff3; then select" Automatically solve simple conflicts ". & kdiff3; then restarts the merge. For actions that change your previous modifications & kdiff3; will ask for your confirmation before proceeding.
-Note: When choosing either source for unsolved white space conflicts and the options "Ignore Numbers" or "Ignore C/ C++ Comments" are used then changes in numbers or comments will be treated like white space too.
-Automatic Merge of Version Control Keywords and History (Log)
-Many version control systems support special keywords in the file. (e. g. "#36; Date#36;", "#36; Header#36;", "#36; Author#36;", "#36; Log#36;" etc.) During the check-in the version control system (VCS) changes these lines. For instance "#36; Date#36;" will turn into "#36; Date: 2005/ 03/ 22 18:45:01 & #36;". Since this line will be different in every version of the file, it would require manual interaction during the merge.
-& kdiff3; offers automatic merge for these items. For simple lines that match the "Auto merge regular expression"-option in all input-files & kdiff3; will choose the line from B or - if available - from C. (Additionally it is necessary that the lines in question line up in the comparison and the previous line contains no conflict.) This auto merge can either be run immediately after a merge starts (activate the option" Run regular expression auto merge on merge start ") or later via the merge menu" Run Regular Expression Auto Merge ".
-Automatic merge for version control history (also called "log") is also supported. The history automerge can either run immediately when the merge starts by activating the option "Merge version control history on merge start" or later via the merge menu "Automatically Solve History Conflicts".
-Usually the version control history begins with a line containing the keyword "#36; Log#36;". This must be matched by the "History start regular expression"-option. & kdiff3; detects which subsequent lines are in the history by analysing the leading characters that came before the" #36; Log#36; "-keyword. If the same" leading comment"-characters also appears in the following lines, then they are also included in the history.
-During each check-in the VCS writes a unique line specifying version-, date- and time-information followed by lines with user comments. These lines form one history-entry. This history section grows with every check-in and the most recent entries appear at the top (after the history start line).
-When for parallel development two or more developers check-in a branch of the file then the merge history will contain several entries that appear as conflicts during the merge of the branches. Since merging these can become very tedious, & kdiff3; offers support with two possible strategies: Just insert the history information from both contributors at the top or sort the history information by a user defined key.
-The just-insert-all-entries-method is easier to configure. & kdiff3; just needs a method to detect, which lines belong to one history entry. Most VCS insert an empty line after each history entry. If there are no other empty lines, this is a sufficient criterion for & kdiff3;. Just set an empty "History entry start regular expression". If the empty line criterion is n't sufficient, you can specify a regular expression to detect the history entry start.
-Note that & kdiff3; will remove duplicate history entries. If a history entry appeared several times in the history of a input file, only one entry will remain in the output.
-If you want to sort the history, then you have to specify how the sort key should be built. Use parentheses in the "History entry start regular expression" to group parts of the regular expression that should later be used for the sort key. Then specify the "History entry start sort key order" specifying a comma "," separated list of numbers referring to the position of the group in the regular expression.
-Because this is not so easy to get right immediately, you are able to test and improve the regular expressions and key-generation in a dedicated dialog by pressing the "Test your regular expressions"-button.
-Example: Assume a history that looks like this: / ************************************************************************** ** HISTORY: & #36; Log: \ oms_merge_main_view\\MyApplication\\src\\complexalgorithm. cpp & #36; ** ** \\main\\integration_branch_12 2 Apr 2001 10:45:41 tom ** Merged branch simon_branch_15. ** ** \\main\\henry_bugfix_branch_7\\1 30 Mar 2001 19:22:05 henry ** Improved the speed for subroutine convertToMesh(). ** Fixed crash. **************************************************************************/ The history start line matches the regular expression ". *\\#36; Log. *\\#36;. *". Then follow the history entries.
-The line with the "#36; Log#36;" -keyword begins with two "*" after which follows a space. & kdiff3; uses the first non-white-space string as "leading comment" and assumes that the history ends in the first line without this leading comment. In this example the last line ends with a string that also starts with two "*", but instead of a space character more "*" follow. Hence this line ends the history.
-If history sorting is n't required then the history entry start line regular expression could look like this. (This line is split in two because it would n't fit otherwise.) \\s*\\\\main\\\\\\S+\\s+[0-9]+ (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) [0-9][0-9][0-9][0-9] [0-9][0-9]: [0-9][0-9]: [0-9][0-9]\\s+. * For details about regular expressions please see the regular expression documentation by Trolltech. Note that "\\s" (with lowercase "s") matches any white space and "\\S" (with uppercase "S") matches any non-white-space. In our example the history entry start contains first the version info with reg. exp. "\\\\main\\\\\\S+", the date consisting of day "[0-9]+", month "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)" and year "[0-9][0-9][0-9][0-9]", the time "[0-9][0-9]: [0-9][0-9]: [0-9][0-9]" and finally the developers login name ". *".
-Note that the "leading comment"-characters (in the example" ** ") will already be removed by & kdiff3; before trying to match, hence the regular expression begins with a match for none or more white-space characters" \\s* ". Because comment characters can differ in each file (e. g. C/ C++ uses other comment characters than a Perl script) & kdiff3; takes care of the leading comment characters and you should not specify them in the regular expression.
-If you require a sorted history. Then the sortkey must be calculated. For this the relevant parts in the regular expression must be grouped by parentheses. (The extra parentheses can also stay in if history sorting is disabled.) \\s*\\\\main\\\\(\\S+)\\s+([0-9]+) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ([0-9][0-9][0-9][0-9]) ([0-9][0-9]: [0-9][0-9]: [0-9][0-9])\\s+(. *) The parentheses now contain 1. version info, 2. day, 3. month, 4. year, 5. time, 6. name. But if we want to sort by date and time, we need to construct a key with the elements in a different order of appearance: First the year, followed by month, day, time, version info and name. Hence the sortkey order to specify is "4,3,2,5,1,6".
-Because month names are n't good for sorting ("Apr" would be first) & kdiff3; detects in which order the month names were given and uses that number instead ("Apr"- >" 04 "). And if a pure number is found it will be transformed to a 4-digit value with leading zeros for sorting. Finally the resulting sort key for the first history entry start line will be:
-2001 04 0002 10:45:41 integration_branch_12 tom
-For more information also see Merge Settings.
-Navigation And Editing
-Much navigation will be done with the scroll bars and the mouse but you can also navigate with the keys. If you click into either window then you can use the cursor buttons left, right, up, down, page up, page down, home, end, ctrl-home, ctrl-end as you would in other programs. The overview-column next to the vertical scroll bar of the input files can also be used for navigating by clicking into it.
-You can also use the wheel mouse to scroll up and down.
-In the merge output editor you can also use the other keys for editing. You can toggle between insert and overwrite mode with the insert key. (Default is insert-mode.)
-A left-mouse-button-click into any summary column will synchronise all windows to show the beginning of the same group of lines (as explained in section "Setting The Current Group And Synchronising Merge And Diff View Position").
-The button bar also contains nine navigation buttons with which you can jump to the current/ first/ last difference, to the next/ previous difference (ctrl-down/ ctrl-up), to the next/ previous conflict (ctrl-pgdown/ ctrl-pgup), or to the next/ previous unsolved conflict. Note that for & kdiff3; a "conflict" that was not automatically solved at the start of the merge stays a "conflict" even if it is solved. Hence the necessity to distinguish "unsolved conflicts".
-Auto-Advance
-There also is a button "Automatically go to next unsolved conflict after source selection" (Auto-Advance). If you enable this, then, when one source is selected, & kdiff3; will jump to and select the next unsolved conflict automatically. This can help when you always want to choose one source only. When you need both sources, or you want to edit after selecting, then you probably want to switch this off. Before proceeding to the next unsolved conflict & kdiff3; shows you the effect of your choice for a short time. This delay is adjustable in the Diff- & Merge-Settings: You can specify the "Auto-Advance delay" in milli seconds between 0 and 2000. Hint: Tired of many clicks? - Use a small Auto-Advance-delay and the shortcuts Ctrl-1/ 2/ 3 to select A/ B/ C for many conflicts.
-Select, Copy And Paste
-The input windows do n't show a cursor, so selections must be made with the mouse by clicking with the left mouse button at the start, holding down the mousebutton and moving to the end, where you release the mouse button again. You can also select a word by double clicking it. In the merge output editor you can also select via the keyboard by holding the "shift"-button and navigation with the cursor keys.
-If the selection exceeds the visible range you can move the mouse over the window borders which causes & kdiff3; to scroll in that direction.
-For very large selections you can also use the navigation keys while holding down the mouse. E. g. use page up and page down to quickly go to a certain position. At the end position release the mouse button.
-In order to select everything in the current window use menu "Edit"- >" Select All "(Ctrl-A).
-To copy to the clipboard you must press the "Copy"-button (Ctrl-C or Ctrl-Insert). But there exists an option" Auto Copy Selection ". If this is enabled, then whatever you select is copied immediately and you do n't need to explicitly copy. But pay attention when using this because the contents of the clipboard might then be destroyed accidentally.
-"Cut" (Ctrl-X or Shift-Delete) copies to the clipboard and deletes the selected text.
-"Paste" (Ctrl-V or Shift-Insert) inserts the text in the clipboard at the cursorposition or over the current selection. If you paste to either diff input window the contents of the clipboard will be shown in that window and the comparison will restart immediately. This is useful if you want to quickly grab a piece of text from somewhere and compare it with something else without first creating files.
-Saving
-Saving will only be allowed, when all conflicts were solved. If the file already exists and the "Backup files"-option is enabled then the existing file will be renamed with an". orig"-extension, but if such a file exists it will be deleted. When you exit or start another diff-analysis and data was n't saved yet, then & kdiff3; will ask if you want to save, cancel or proceed without saving. (kdiff3; does not catch any signals. So if you "kill" & kdiff3; then your data will be lost.)
-Line endings are saved according to the normal method on the underlying operating system. For Unices each line ends with an linefeed-character "\", while for Win32-based systems each line ends with a carriage-return + a linefeed "\\r\". & kdiff3; does not preserve the line-endings of the input files, which also means that you should n't use & kdiff3; with binary files.
-Finding Strings
-You can search for a string in any text-window of & kdiff3;. The "Find..." -command (Ctrl-F) in the Edit-menu opens a dialog that lets you specify the string to search for. You can also select the windows which should be searched. Searching will always start at the top. Use the "Find Next"-command (F3) to proceed to the next occurrence. If you select to search several windows then the first window will be searched from top to bottom before the search starts in the next window at the top again, etc.
-Printing
-& kdiff3; supports printing for textfile differences. The "Print..." -command (Ctrl-P) in the File-menu opens a dialog that allows you to select the printer and to adjust other options.
-There are several possibilities to adjust the range. Due to different printing dialogs on different operating systems, the method to achieve certain range selections varies.
-All:
-Print everything.
-Current:
-Print a page starting at the first visible line in the window. (On systems without this option this can be achieved by specifying page number 10000 for printing.)
-Selection:
-Before choosing to print select text with the mouse (like for copy and paste) in one of the diff input windows to define the start and end line. If no text in one of the diff input windows was selected, then this wo n't be an available choice. (On systems without this option this can be achived by specifying page number 9999 for printing.)
-Range:
-Specify the first and last page.
-Other important options for printing will be taken from the normal options:
-Font, font size
-Show line numbers
-Word wrap
-Colors
-etc.
-Landscape formatting is also recommended for printing.
-Options
-Options and the recent-file-list will be saved when you exit the program, and reloaded when you start it. (Menu Settings- > Configure & kdiff3;...)
-Font
-Select a fixed width font. (On some systems this dialog will also present variable width fonts, but you should not use them.)
-Italic Font for Deltas:
-If you select this, then text differences will be drawn with the italic version of the selected font. If the font does n't support italic, then this does nothing.
-Colors
-Foreground color:
-Usually black.
-Background color:
-Usually white.
-Diff Background color:
-Usually light gray.
-Color A:
-Usually dark blue.
-Color B:
-Usually dark green.
-Color C:
-Usually dark magenta.
-Conflict Color:
-Usually red.
-Current range background color:
-Usually light yellow.
-Current range diff background color:
-Usually dark yellow.
-Color for manually selected diff ranges:
-Usually orange.
-Newest file color in directory comparison:
-Usually green.
-Oldest file color in directory comparison:
-Middle age file color in directory comparison:
-Color for missing files in directory comparison:
-Changing the colors for directory comparison will be effective only when starting the next directory comparison.
-On systems with only 16 or 256 colors some colors are not available in pure form. On such systems the "Defaults"-button will choose a pure color.
-Editor Settings
-Tab inserts spaces:
-If this is disabled and you press the tabulator key, a tab-character is inserted, otherwise the appropriate amount of characters is inserted.
-Tab size:
-Can be adjusted for your specific needs. Default is 8.
-Auto indentation:
-When pressing Enter or Return the indentation of the previous line is used for the new line.
-Auto copy selection:
-Every selection is immediately copied to the clipboard when active and you need n't explicitly copy it.
-Line end style:
-When saving you can select what line end style you prefer. The default setting is the common choice for the used operating system.
-Diff Settings
-When comparing files, & kdiff3; first it tries to match lines that are equal in all input files. Only during this step it might ignore white space. The second step compares each line. In this step white space will not be ignored. Also during the merge white space will not be ignored.
-Preserve Carriage Return:
-Some editors (on some systems) save carriage return '\\r 'and linefeed '\ '-characters at the end of line, while others will only save the linefeed '\'. Usually & kdiff3; ignores the carriage return, but then files that do n't have equal sizes, look equal in side by side comparison. When this option is on, then the carriage return characters are made visible but are treated as white space. This option must be off during a merge. Default is off.
-Ignore numbers:
-Default is off. Number characters ('0'-'9 ','. ', '-') will be ignored in the first part of the analysis in which the line matching is done. In the result the differences will be shown nevertheless, but they are treated as white space.
-Ignore C/ C++ comments:
-Default is off. Changes in comments will be treated like changes in white space.
-Ignore case:
-Default is off. Case-differences of characters (like'A 'vs. 'a') will be treated like changes in white space.
-Preprocessor-Command:
-See next section.
-Line-Matching Preprocessor-Command:
-Try Hard:
-Try hard to find an even smaller delta. (Default is on.) This will probably be effective for complicated and big files. And slow for very big files.
-Merge Settings
-Auto Advance Delay (ms):
-When in auto-advance-mode this setting specifies how long to show the result of the selection before jumping to the next unsolved conflict.
-White space 2/ 3-file merge default:
-Automatically solve all white-space conflict by choosing the specified file. (Default is manual choice.) Useful if white space really is n't important in many files. If you need this only occasionally better use "Choose A/ B/ C For All Unsolved Whitespace Conflicts" in the merge menu. Note that if you enable either "Ignore numbers" or "Ignore C/ C++ comments" then this auto-choice also applies for conflicts in numbers or comments.
-Auto merge regular expression:
-Regular expression for lines where & kdiff3; should automatically choose one source. See also Automatic Merge...
-Run regular expression auto merge on merge start:
-If activated & kdiff3; runs the automatic merge using the "Auto merge regular expression" when a merge is started.
-History start regular expression:
-Regular expression for the start of the merge history entry. Usually this line contains the "#36; Log#36;" -keyword. Default value: ". *\\#36; Log. *\\#36;. *"
-History entry start regular expression:
-A merge history entry consists of several lines. Specify the regular expression to detect the first line (without the leading comment). Use parentheses to group the keys you want to use for sorting. If left empty, then & kdiff3; assumes that empty lines separate history entries. See also Automatic Merge...
-History merge sorting:
-Enable version control history sorting.
-History entry start sort key order:
-Each parentheses used in the regular expression for the history start entry groups a key that can be used for sorting. Specify the list of keys (that are numbered in order of occurrence starting with 1) using ',' as separator (e. g. "4,5,6,1,2,3,7"). If left empty, then no sorting will be done. See also Automatic Merge...
-Merge version control history on merge start:
-If activated & kdiff3; runs the automatic history merging using aforementioned options when a merge is started.
-Max number of history entries:
-& kdiff3; truncates the history list after the specified number of entries. Use -1 to avoid truncation. (Default is -1).
-Test your regular expressions
-This button shows a dialog that allows you to improve and test the regular expressions above. Just copy the respective data from your files into the example lines. The "Match results" will immediately show whether the match succeeds or not. The "Sort key result" will display the key used for history merge sorting.
-Irrelevant merge command:
-Specify a command of your own that should be called when & kdiff3; detects that for a three file merge the file from B does n't contribute any relevant data that is n't already contained in the file from C. The command is called with the three filenames as parameters. Data matched by the "Auto merge regular expression" or in the history is n't considered relevant.
-Directory Merge
-These options are concerned with scanning the directory and handling the merge: See the Directory Comparison/ Merge Docs for details.
-Yet there is one option here that is also relevant for saving single files:
-Backup files:
-When a file is saved and an older version already exists, then the original version will be renamed with an ". orig" extension. If an old backup file with ". orig" extension already exists then this will be deleted without backup.
-Regional and Language Options
-Language:
-Adjust the language of the user interface. Changing this option does n't affect the running program. You have to exit and restart & kdiff3; so that the language is changed. (This option is not available in the KDE version of & kdiff3; because the language is adjustable in the global KDE settings.)
-Use the same encoding for everything:
-The following encoding options can be adjusted separately for each item or if this option is true, all values will take the first value.
-Local Encoding:
-Above the codec-selectors appears a note that tells you what the local encoding is. (This is not adjustable but for your information just in case you do n't know your local encoding, but need to select it.)
-File Encoding for A/ B/ C:
-Adjust the file encoding for input files. This has an effect on how the special characters are interpreted. Since you can adjust each codec separately you can even compare and merge files that were saved using different codecs.
-File Encoding for Merge Output and Saving:
-When you have edited a file, then you can adjust which encoding will be used when saving to disk.
-File Encoding for Preprocessor Files:
-When you define preprocessors then they might not be able to operate on your codec. (e. g.: Your files are 16-bit-unicode and your preprocessor can only take 8-bit-ascii.) With this option you can define the encoding of preprocessor output.
-Right To Left Language:
-Some languages are written right to left. When this option is enabled, & kdiff3; draws the text from right to left in the diff input windows and in the merge output window. Note that if you start & kdiff3; with the command line option "--reverse" then all layouting will be done right to left too. (This is a feature provided by Qt.) This documentation was written assuming that "Right To Left Language" or reverse layout are disabled. So some references to "left" or "right" must be replaced by their respective counterpart if you use these options.
-Miscellaneous
-(These options and actions are available in menus or the buttonbar.)
-Show line numbers:
-You can select if line numbers should be shown for the input files.
-Show space and tabulator characters for differences:
-Sometimes the visible spaces and tabs are disturbing. You can turn this off.
-Show white space:
-Turn this off to suppress any highlighting of white-space-only changes in the text or overview-columns. (Note that this also applies to changes in numbers or comments if the options "Ignore numbers" or "Ignore C/ C++ comments" are active.)
-Overview options:
-These choices are only available when you compare three files. In normal mode all differences are shown in one color-coded overview-column. But sometimes you are especially interested in the differences between only two of these three files. Selecting "A vs. B", "A vs. C" or "B vs. C"-overview will show a second overview column with the required information next to the normal overview.
-Word wrap diff windows:
-Wrap lines when their length would exceed the width of a window.
-Show Window A/ B/ C:
-Sometimes you want to use the space on the screen better for long lines. Hide the windows that are not important. (In the Windows-menu.)
-Toggle Split Orientation:
-Switch between diff windows shown next to each other (A left of B left of C) or above each other (A above B above C). This should also help for long lines. (In the Windows-menu.)
-Start a merge quickly:
-Sometimes you are viewing the deltas and decide to merge. "Merge current file" in the Directory-menu also works if you only compare two files. A single click starts the merge and uses the filename of the last input-file as the default output filename. (When this is used to restart a merge, then the output filename will be preserved.)
-Configuring Keyboard-Shortcuts
-Currently only the KDE-version supports user-configurable keyboard-shortcuts. (Menu Settings- > Configure Shortcuts...)
-Preprocessor Commands
-& kdiff3; supports two preprocessor options.
-When any file is read, it will be piped through this external command. The output of this command will be visible instead of the original file. You can write your own preprocessor that fulfills your specific needs. Use this to cut away disturbing parts of the file, or to automatically correct the indentation etc.
-When any file is read, it will be piped through this external command. If a preprocessor-command (see above) is also specified, then the output of the preprocessor is the input of the line-matching preprocessor. The output will only be used during the line matching phase of the analysis. You can write your own preprocessor that fulfills your specific needs. Each input line must have a corresponding output line.
-The idea is to allow the user greater flexibility while configuring the diff-result. But this requires an external program, and many users do n't want to write one themselves. The good news is that very often sed or perl will do the job.
-Example: Simple testcase: Consider file a. txt (6 lines): aa ba ca da ea fa And file b. txt (3 lines): cg dg eg Without a preprocessor the following lines would be placed next to each other: aa - cg ba - dg ca - eg da ea fa This is probably not wanted since the first letter contains the actually interesting information. To help the matching algorithm to ignore the second letter we can use a line matching preprocessor command, that replaces'g 'with'a': sed's/ g/ a/ 'With this command the result of the comparison would be: aa ba ca - cg da - dg ea - eg fa Internally the matching algorithm sees the files after running the line matching preprocessor, but on the screen the file is unchanged. (The normal preprocessor would change the data also on the screen.)
-sed Basics
-This section only introduces some very basic features of sed. For more information see info: / sed or http: / /www. gnu. org/ software/ sed/ manual/ html_mono/ sed. html. A precompiled version for Windows can be found at http: / /unxutils. sourceforge. net. Note that the following examples assume that the sed -command is in some directory in the PATH-environment variable. If this is not the case, you have to specify the full absolute path for the command.
-Also note that the following examples use the single quotation mark (') which wo n't work for Windows. On Windows you should use the double quotation marks (") instead.
-In this context only the sed -substitute-command is used: sed's/ REGEXP / REPLACEMENT / FLAGS 'Before you use a new command within & kdiff3;, you should first test it in a console. Here the echo -command is useful. Example: echo abrakadabra | sed's/ a/ o/' - > obrakadabra This example shows a very simple sed-command that replaces the first occurance of "a" with "o". If you want to replace all occurances then you need the "g"-flag: echo abrakadabra | sed's/ a/ o/ g '- > obrokodobro The" |"-symbol is the pipe-command that transfers the output of the previous command to the input of the following command. If you want to test with a longer file then you can use cat on Unix-like systems or type on Windows-like systems. sed will do the substitution for each line.
-cat filename | sed options
-Examples For sed -Use In & kdiff3;
-Ignoring Other Types Of Comments
-Currently & kdiff3; understands only C/ C++ comments. Using the Line-Matching-Preprocessor-Command you can also ignore other types of comments, by converting them into C/ C++-comments. Example: To ignore comments starting with "#", you would like to convert them to "/ /". Note that you also must enable the "Ignore C/ C++-Comments" option to get an effect. An appropriate Line-Matching-Preprocessor-Command would be: sed's/ #/ \\/ \\/ / 'Since for sed the "/" -character has a special meaning, it is necessary to place the "\\"-character before each" / "in the replacement-string. Sometimes the"\\ "is required to add or remove a special meaning of certain characters. The single quotation marks (') before and after the substitution-command are important now, because otherwise the shell will try to interpret some special characters like '# ', '$' or '\\ 'before passing them to sed. Note that on Windows you will need the double quotation marks (") here. Windows substitutes other characters like'% ', so you might have to experiment a little bit.
-Caseinsensitive Diff
-Use the following Line-Matching-Preprocessor-Command to convert all input to uppercase: sed's/ \\(. *\\)/ \\U\\1/ 'Here the ". *" is a regular expression that matches any string and in this context matches all characters in the line. The "\\1" in the replacement string refers to the matched text within the first pair of "\\(" and "\\)". The "\\U" converts the inserted text to uppercase.
-Ignoring Version Control Keywords
-CVS and other version control systems use several keywords to insert automatically generated strings (info: / cvs/ Keyword substitution). All of them follow the pattern "$KEYWORD generated text$". We now need a Line-Matching-Preprocessor-Command that removes only the generated text: sed's/ \\$\\(Revision\\|Author\\|Log\\|Header\\|Date\\). *\\$/ \\$\\1\\$/ 'The "\\|" separates the possible keywords. You might want to modify this list according to your needs. The "\\" before the "$" is necessary because otherwise the "$" matches the end of the line.
-While experimenting with sed you might come to understand and even like these regular expressions. They are useful because there are many other programs that also support similar things.
-Ignoring Numbers
-Ignoring numbers actually is a built-in option. But as another example, this is how it would look as a Line-Matching-Preprocessor-command. sed's/ [0123456789. -]/ /g 'Any character within '[' and ']' is a match and will be replaced with nothing.
-Ignoring Certain Columns
-Sometimes a text is very strictly formatted, and contains columns that you always want to ignore, while there are other columns you want to preserve for analysis. In the following example the first five columns (characters) are ignored, the next ten columns are preserved, then again five columns are ignored and the rest of the line is preserved. sed's/..... \\(..........\\)..... \\(. *\\)/ \\1\\2/ 'Each dot'. 'matches any single character. The "\\1" and "\\2" in the replacement string refer to the matched text within the first and second pair of "\\(" and "\\)" denoting the text to be preserved.
-Combining Several Substitutions
-Sometimes you want to apply several substitutions at once. You can then use the semicolon ';' to separate these from each other. Example:
-echo abrakadabra | sed's/ a/ o/ g; s/ \\(. *\\)/ \\U\\1/ '- > OBROKODOBRO
-Using perl instead of sed
-Instead of sed you might want to use something else like perl. perl -p -e's/ REGEXP / REPLACEMENT / FLAGS 'But some details are different in perl. Note that where sed needed "\\(" and "\\)" perl requires the simpler "(" and ")" without preceding '\\'. Example:
-sed's/ \\(. *\\)/ \\U\\1/ 'perl -p -e's/ (. *)/ \\U\\1/'
-Order Of Preprocessor Execution
-The data is piped through all internal and external preprocessors in the following order:
-Normal preprocessor,
-Line-Matching-Preprocessor,
-Ignore case (conversion to uppercase),
-Detection of C/ C++ comments,
-Ignore numbers,
-Ignore white space
-The data after the normal preprocessor will be preserved for display and merging. The other operations only modify the data that the line-matching-diff-algorithm sees.
-In the rare cases where you use a normal preprocessor note that the line-matching-preprocessor sees the output of the normal preprocessor as input.
-Warning
-The preprocessor-commands are often very useful, but as with any option that modifies your texts or hides away certain differences automatically, you might accidentally overlook certain differences and in the worst case destroy important data.
-For this reason during a merge if a normal preprocessor-command is being used & kdiff3; will tell you so and ask you if it should be disabled or not. But it wo n't warn you if a Line-Matching-Preprocessor-command is active. The merge will not complete until all conflicts are solved. If you disabled "Show White Space" then the differences that were removed with the Line-Matching-Preprocessor-command will also be invisible. If the Save-button remains disabled during a merge (because of remaining conflicts), make sure to enable "Show White Space". If you do n't want to merge these less important differences manually you can select "Choose [A|B|C] For All Unsolved White space Conflicts" in the Merge-menu.
-Directory Comparison and Merge with & kdiff3;
-Introduction into Directory Comparison and Merge
-Often programmers must modify many files in a directory to achieve their purpose. For this & kdiff3; also lets you compare and merge complete directories recursively!
-Even though comparing and merging directories seems to be quite obvious, there are several details that you should know about. Most important is of course the fact that now many files might be affected by each operation. If you do n't have backups of your original data, then it can be very hard or even impossible to return to the original state. So before starting a merge, make sure that your data is safe, and going back is possible. If you make an archive or use some version control system is your decision, but even experienced programmers and integrators need the old sources now and then. And note that even though I (the author of & kdiff3;) try to do my best, I ca n't guarantee that there are no bugs. According to the GNU-GPL there is NO WARRANTY whatsoever for this program. So be humble and always keep in mind:
-To err is human, but to really mess things up you need a computer.
-So this is what this program can do for you: & kdiff3;...
-... reads and compares two or three directories recursively,
-... takes special care of symbolic links,
-... lets you browse files on mouse double click,
-... for each item proposes a merge operation, which you can change before starting the directory merge,
-... lets you simulate the merge and lists the actions that would take place, without actually doing them,
-... lets you really do the merge, and lets you interact whenever manual interaction is needed,
-... lets you run the selected operation for all items (key F7) or the selected item (key F6),
-... lets you continue the merge after manual interaction with key F7,
-... optionally creates backups, with the ". orig" extension,
-Starting Directory Comparison Or Merge
-This is very similar to the single file merge and comparison. You just have to specify directories on the command line or in the file-open dialog.
-Compare/ Merge two directories:
-kdiff3 dir1 dir2 kdiff3 dir1 dir2 -o destdir
-If no destination directory is specified, then & kdiff3; will use dir2.
-Compare/ Merge three directories:
-kdiff3 dir1 dir2 dir3 kdiff3 dir1 dir2 dir3 -o destdir
-When three directories are merged then dir1 is used as the base for the merge. If no destination directory is specified, then & kdiff3; will use dir3 as the destination directory for the merge.
-Note that only the comparison starts automatically, not the merge. For this you first must select a menu entry or the key F7. (More details later.)
-Directory Merge Visible Information
-While reading the directories a message-box appears that informs you of the progress. If you abort the directory scan, then only files that have been compared until then will be listed.
-When the directory scan is complete then & kdiff3; will show a listbox with the results left,...
-... and details about the currently selected item on the right:
-The Name Column
-Each file and directory that was found during the scan is shown here in a tree. You can select an item by clicking it with the mouse once.
-The directories are collapsed by default. You can expand and collapse them by clicking on the "+"/" - "or by double-clicking the item or by using the left/ right-arrow-keys. The" Directory"-menu also contains two actions "Fold all subdirs" and "Unfold all subdirs" with which you can collapse or expand all directories at once.
-If you double-click a file item then the file comparison starts and the file-diff-window will appear.
-The image in the name column reflects the file type in the first directory ("A"). It can be one of these:
-Normal file
-Normal directory (directory-image)
-Link to a file (file-image with a link arrow)
-Link to a directory (directory-image with a link arrow)
-If the file type is different in the other directories, then this is visible in the columns A/ B/ C and in the window that shows the details about the selected item. Note that for such a case no merge operation can be selected automatically. When starting the merge, then the user will be informed of problems of that kind.
-The Columns A/ B/ C and the Coloring Scheme
-As can be seen in the image above the colors red, green, yellow and black are used in the columns A/ B/ C.
-Black: This item does n't exist in this directory.
-Green: Newest item.
-Yellow: Older than green, newer than red.
-Red: Oldest item.
-But for items that were identical in the comparison their color also is identical even if the age is not.
-Directories are considered equal if all items they contain are identical. Then they also will have the same color. But the age of a directory is not considered for its color.
-The idea for this coloring scheme I came upon in dirdiff. The colors resemble the colors of a leaf that is green when new, turns yellow later and red when old.
-The Operation Column
-After comparing the directories & kdiff3; also evaluates a proposal for a merge operation. This is shown in the "Operation" column. You can modify the operation by clicking on the operation you want to change. A small menu will popup and allows you to select an operation for that item. (You can also select the most needed operations via keyboard. Ctrl+1/ 2/ 3/ 4/ Del will select A/ B/ C/ Merge/ Delete respectively if available.) This operation will be executed during the merge. It depends on the item and on the merge-mode you are in, what operations are available. The merge-mode is one of
-Three directory-merge ("A" is treated as older base of both).
-Two directory-merge.
-Two directory-sync-mode (activate via option "Synchronize Directories").
-In three directory merge the operation proposal will be: If for an item...
-... all three directories are equal: Copy from C
-... A and C are equal but B is not: Copy from B (or if B does not exist, delete the destination if exists)
-... A and B are equal but C is not: Copy from C (or if C does not exist, delete the destination if exists)
-... B and C are equal but A is not: Copy from C (or if C does not exist, delete the destination if exists)
-... only A exists: Delete the destination (if exists)
-... only B exists: Copy from B
-... only C exists: Copy from C
-... A, B and C are not equal: Merge
-... A, B and C do n't have the same file type (e. g. A is a directory, B is a file): "Error: Conflicting File Types". While such items exist the directory merge cannot start.
-In two directory merge the operation proposal will be: If for an item...
-... both directories are equal: Copy from B
-... A exists, but not B: Copy from A
-... B exists, but not A: Copy from B
-... A and B exist but are not equal: Merge
-... A and B do n't have the same file type (e. g. A is a directory, B is a file): "Error: Conflicting File Types". While such items exist the directory merge cannot start.
-Sync-mode is active if only two directories and no explicit destination were specified and if the option "Synchronize directories" is active. & kdiff3; then selects a default operation so that both directories are the same afterwards. If for an item...
-... both directories are equal: Nothing will be done.
-... A exists, but not B: Copy A to B
-... B exists, but not A: Copy B to A
-... A and B exist, but are not equal: Merge and store the result in both directories. (For the user the visible save-filename is B, but then & kdiff3; copies B also to A.)
-When two directories are merged and the option "Copy newer instead of merging" is selected, then & kdiff3; looks at the dates and proposes to choose the newer file. If the files are not equal but have equal dates, then the operation will contain "Error: Dates are equal but files are not." While such items exist the directory merge cannot start.
-The Status Column
-During the merge one file after the other will be processed. The status column will show "Done" for items where the merge operation has succeeded, and other texts if something unexpected happened. When a merge is complete, then you should make a last check to see if the status for all items is agreeable.
-Statistics Columns
-When the file comparison mode "Full Analysis" is enabled in the options, then & kdiff3; will show extra columns containing the numbers of unsolved, solved, nonwhite and whitespace conflicts. (The solved-column will only show when comparing or merging three directories.)
-Selecting Listed Files
-Several options influence which files are listed here. Some are accessible in the settings dialog. The Directory-menu contains the entries:
-"Show Identical Files": Files that have been detected equal in all input directories.
-"Show Different Files": Files that exist in two or more directories but are not equal.
-"Show Files only in A": Files that exist only in A, but not in B or C.
-"Show Files only in B": Files that exist only in B, but not in A or C.
-"Show Files only in C": Files that exist only in C, but not in A or B.
-Activate only the "Show"-options for the items you want listed. If for example you only want to list all items that exist either in A or in B but not in both, you'll have to activate" Show Files only in A "and" Show Files only in B "and deactivate all others (" Show Identical Files "," Show Different Files "," Show Files only in C "). The list will be updated immediately to reflect the change.
-These options also apply for directories with one exception: Disabling "Show Different Files" will not hide any complete directories. This will work only for files within.
-Note that of these only the "Show Identical Files"-option is persistant. The others are enabled when starting & kdiff3;.
-Doing A Directory Merge
-You can either merge the currently selected item (file or directory), or all items. When you have made all your operation choices (in all subdirectories too) then you can start the merge.
-Be aware that if you did n't specify a destination directory explicitly, then the destination will be "C" in three directory mode, "B" in two directory merge mode, and in sync-mode it will be "A" or/ and "B".
-If you have specified a destination directory also check that all items that should be in the output, are in the tree. There are some options that cause certain items to be omitted from the directory comparison and merge. Check these options to avoid unpleasant surprises:
-"Recursive Directories": If this is off, then items in subdirectories will not be found.
-"Pattern"/" Anti-Pattern ": Include/ exclude items that match
-"Exclude Hidden Files"
-"Show"-options (Show Identical/ Different Files, Files only in A/ B/ C)
-If you change the settings in order to list more files, you must do a rescan via menu "Directory"- >" Rescan "yourself. (The reason for this is that for faster comparison-speed & kdiff3; omits the comparison for files suppressed by these criteria.) If you changed your file and dir patterns to exclude files, then the file-list will immediately be updated on closing the options-dialog.
-Note that when you write to a completely new directory then you usually also want to copy the identical files. In that case enable the "Show Identical Files"-option. If your destination-directory is one of the inputs, then this is n't necessary because the file is already there.
-If you are satisfied so far, the rest is easy.
-To merge all items: Select "Start/ Continue directory merge" in the "Directory"-menu or press F7 (which is the default shortcut). To merge only the current item: Select" Run Operation For Current Item "or press F6.
-If due to conflicting filetypes still some items with invalid operations exist, then a messagebox will appear and these items will be pointed out, so you can select a valid operation for the item.
-If you merge all items a dialog will appear giving you the options "Do it", "Simulate it" and "Cancel".
-Select "Simulate it" if you want to see what would be done without actually doing it. A verbose list of all operations will be shown.
-Otherwise select "Do it" to really start merging.
-Then & kdiff3; will run the specified operation for all items. If manual interaction is required (single file merge), then a merge window will open (see the big screenshot).
-When you have finished with manually merging a file, again select "Start/ Continue directory merge" or the key F7. If you have n't saved it yet, a dialog will ask you to do so. Then & kdiff3; will continue with the next item.
-When & kdiff3; encounters an error, it will tell you so and will show the verbose-status-information. At the bottom of this list, there will be some error messages which should help you to understand the cause of the problem. When you continue merging (F7 key) & kdiff3; will give you the choice to retry or skip the item that caused the problem. This means that before continuing you can choose another operation or solve the problem by other means.
-When the merge is complete, then & kdiff3; will inform you via a message box.
-If some items were merged individually before running the directorymerge then & kdiff3; remembers this (while this merge-session goes on), and does n't merge them again when later the merge for all items is run. Even when the merge was skipped or nothing was saved these items count as completed. Only when you change the merge operation the "Done"-status of the item will be removed and it can be merged again.
-Options for Comparing and Merging Directories
-The & kdiff3; -preferences (menu "Settings"-gt;" Configure & kdiff3; ") has a section called" Directory Merge "with these options:
-Recursive Directories:
-Select whether to search directories recursively.
-File Pattern(s):
-Only files that match any pattern here will be put in the tree. More than one pattern may be specified here by using the semicolon ";" as separator. Valid wildcards: '* 'and'? '. (e. g. "*. cpp; *. h"). Default is "*". This pattern is not used on directories.
-File Anti-Pattern(s):
-Files that match this pattern will be excluded from the tree. More than one pattern may be specified here via using the semicolon ";" as separator. Valid wildcards: '* 'and'? '. Default is "*. orig; *. o; *. obj".
-Directory Anti-Pattern(s):
-Directories that match this pattern will be excluded from the tree. More than one pattern may be specified here via using the semicolon ";" as separator. Valid wildcards: '* 'and'? '. Default is "CVS; deps;. svn".
-Use CVS-Ignore:
-Ignore files and directories that would also be ignored by CVS. Many automatically generated files are ignored by CVS. The big advantage is that this can be directory specific via a local ". cvsignore"-file. (See info: / cvs/ cvsignore.)
-Find Hidden Files and Directories:
-On some file systems files have an "Hidden"-attribute. On other systems a filename starting with a dot". "causes it to be hidden. This option allows you to decide whether to include these files in the tree or not. Default is on.
-Follow File Links:
-For links to files: When disabled, then the symbolic links are compared. When enabled, then the files behind the links are compared. Default is off.
-Follow Directory Links:
-For links to directories: When disabled, then the symbolic links will be compared. When enabled then the link will be treated like a directory and it will be scanned recursively. (Note that the program does n't check if the link is "recursive". So for example a directory that contains a link to the directory would cause an infinite loop, and after some time when the stack overflows or all memory is used up, crash the program.) Default is off.
-Case Sensitive Filename Comparison:
-Default is false on Windows, true for other operating systems.
-File Comparison Mode:
-Binary Comparison:
-This is the default file comparison mode.
-Full Analysis:
-Do a full analysis of each file and show the statistics information columns. (Number of solved, unsolved, nonwhite and white conflicts.) The full analysis is slower than a simple binary analysis, and much slower when used on files that do n't contain text. (Specify the appropriate file-antipatterns.)
-Trust the modification date:
-If you compare big directories over a slow network, it might be faster to compare the modification dates and file length alone. But this speed improvement comes with the price of a little uncertainty. Use this option with care. Default is off.
-Trust the size:
-Similar to trusting the modification date. No real comparison happens. Two files are considered equal if their file-sizes are equal. This is useful when the file-copy operation did n't preserve the modification date. Use this option with care. Default is off.
-Synchronize Directories:
-Activates "Sync-Mode" when two directories are compared and no explicit destination directory was specified. In this mode the proposed operations will be chosen so that both source directories are equal afterwards. Also the merge result will be written to both directories. Default is off.
-Copy newer instead of merging:
-Instead of merging the proposed operation will copy the newer source if changes happened. (Considered unsafe, because it implies that you know, that the other file has n't been edited too. Check to make sure in every case.) Default is off.
-If a file or complete directory is replaced by another or is deleted then the original version will be renamed with an ". orig" extension. If an old backup file with ". orig" extension already exists then this will be deleted without backup. This also affects the normal merging of single files, not only in directory-merge mode. Default is on.
-Other Functions in Directory Merge Window
-Split/ Full Screen Mode
-Usually the directory merge list view remains visible while a single file is compared or merged. With the mouse you can move the splitter bar that separates the file list from the text-diff windows. If you do n't want this, you can disable "Split Screen View" in the "Directory"-menu. Then you can use" Toggle View "in the" Directory"-menu to switch between the file list and the text-diff view that then occupy the full screen.
-Comparing or Merging a Single File
-Probably you will prefer a simple double mouse click on a file in order to compare it. Nevertheless there also exists an entry in the "Directory"-menu. You can also directly merge a single file by selecting it and choosing" Merge current file "in the" Merge"-Menu. On saving the result, the status will be set to done, and the file will not be merged again if a directory merge is started.
-But note that this status information will be lost when you rerun a directory scan: "Directory"-menu:" Rescan "
-Comparing or Merging Files with Different Names
-Sometimes you need to compare or merge files with different names (e. g. the current file and the backup in the same folder).
-Select the exact file by clicking onto the icon in the column A, B or C. The first file selected thus will be marked with an "A", the second and third with "B" and "C" regardless on what column they are in. Only up to three files can be chosen like this.
-Proceed by choosing "Compare Explicitly Selected Files" or "Merge Explicitly Selected Files" from the "Directory"-menu. For your convenience these menu entries also appear as context menu when you right-click the last selected file.
-The comparison or merge of a file will happen in the same window. If this method is used for directories a new window will be opened.
-Miscellaneous Topics
-Networktransparency via KIO
-KIO-Slaves
-KDE supports networktransparency via KIO-slaves. & kdiff3; uses this for reading input files and for scanning directories. This means that you can specify files and directories on local and remote resources via URLs.
-Example:
-kdiff3 test. cpp ftp: / /ftp. faraway. org/ test. cpp kdiff3 tar: / home/ hacker/ archive. tar. gz/ dir. / dir
-The first line compares a local file with a file on an FTP-server. The second line compares a directory within an compressed archive with a local directory.
-Other KIO-slaves that are interesting are:
-Files from the WWW (http:),
-Files from the FTP (ftp:),
-Encrypted file transfer (fish:, sftp:),
-Windows-resources (smb:),
-Local files (file:),
-Other things that are possible, but probably less useful are:
-Man-pages (man:),
-Info-pages (info:),
-How To Write URLs
-An URL has a different syntax compared with paths for local files and directories. Some things should be considered:
-A path can be relative and can contain "." or "..". This is not possible for URLs which are always absolute.
-Special characters must be written with "escaping". ("#"- >" %23 ", space- >" %20 ", etc.) E. g. A file with the name" / #foo# "would have the URL" file: / %23foo%23 ".
-When URLs do n't work as expected, try to open them in Konqueror first.
-Capabilities of KIO-Slaves
-Networktransparency has one drawback: Not all resources have the same capabilities.
-Sometimes this is due to the file system of the server, sometimes due to the protocol. Here is a short list of restrictions:
-Sometimes there is no support for links.
-Or there is no way to distinguish if a link points to a file or a directory; always assuming a file. (ftp:, sftp:).
-Ca n't always determine the filesize.
-Limited support for permissions.
-No possibility to modify permissions or modification time, so permissions or time of a copy will differ from the original. (See the option "Trust the size".) (To modify permissions or modification time is only possible for local files.)
-Using & kdiff3; as a KPart
-& kdiff3; is a KPart. Currently it implements the KParts: :ReadOnlyPart-interface.
-It's main use is as difference-viewer in KDevelop. KDevelop always starts the internal difference viewer first. To invoke & kdiff3; press the right mouse button on the difference viewer window and select "Show in KDiff3Part" from the contextmenu.
-& kdiff3; normally requires two complete files as input. When used as part & kdiff3; will assume that the inputfile is a patch-file in the unified format. & kdiff3; then retrieves the original filenames from the patch-file. At least one of the two files must be available. & kdiff3; will then invoke patch to recreate the second file.
-In Konqueror you can select a patch-file and select "Preview in"-"KDiff3Part" from the contextmenu. Be aware that this wo n't work if none of the original files are available, and it is not reliable if the original file(s) have changed since the patch-file was generated.
-When run as a part & kdiff3; only provides the a two-file-diff, a very small toolbar and menu. Merging or directory-comparison are not supported then.
-Questions and Answers
-& reporting. bugs; & updating. documentation;
-Why is it called "kdiff3;"?
-Tools named "KDiff" and "KDiff2" (now called "Kompare") already exist. Also "KDiff3" should suggest that it can merge like the "diff3"-tool in the Diff-Tool collection.
-Why did I release it under GPL?
-I'm using GPL programs for a very long time now and learned very much by having a look at many of the sources. Hence this is my "Thank You" to all programmers that also did so or will do the same.
-Some buttons and functions are missing. What's wrong?
-You compiled from source but you probably did n't specify the correct KDE-prefix with configure. By default configure wants to install in / usr/ local but then KDE ca n't find the user-interface resource file (i. e. kdiff3ui. rc). The README-file contains more information about the correct prefix.
-Often lines that are similar but not identical appear next to each other but sometimes not. Why?
-Lines where only the amount of white space characters is different are treated as "equal" at first, while just one different non-white character causes the lines to be "different". If similar lines appear next to each other, this actually is coincidence but this fortunately is often the case. See also Manual Diff Help.
-Why must all conflicts be solved before the merge result can be saved?
-For each equal or different section the editor in the merge result window remembers where it begins or ends. This is needed so that conflicts can be solved manually by simply selecting the source button (A, B or C). This information is lost while saving as text and it is too much effort to create a special file format that supports saving and restoring all necessary information.
-How can I synchronise the diff and merge views, so that all views show the same text position?
-Click into the summary column left of the text. (See also here.)
-Why does the editor in the merge result window not have an "undo"-function?
-This was too much effort until now. You can always restore a version from one source (A, B or C) by clicking the respective button. For big editing the use of another editor is recommended anyway.
-When I removed some text, then suddenly "lt; No src linegt;" appeared and cannot be deleted. What does that mean and how can one remove this?
-For each equal or different section the editor in the merge result window remembers where it begins or ends. "lt; No src linegt;" means that there is nothing left in a section, not even a new line character. This can happen either while merging automatically or by editing. This is no problem, since this hint wo n't appear in the saved file. If you want the original source back just select the section (click on the left summary column) and then click the source button with the needed contents (A/ B or C).
-Why does n't & kdiff3; support syntax-highlighting?
-& kdiff3; already uses many colors for difference highlighting. More highlighting would be confusing. Use another editor for this.
-Can I use & kdiff3; to compare OpenOffice. Org, Word, Excel, PDF-, & etc; files?
-Although & kdiff3; will analyse any kind of file the result will probably not be very satisfactory for you.
-& kdiff3; was made to compare pure text files. OpenOffice, Word, Excel etc. store much more information in the files (about fonts, pictures, pages, colors etc.) which & kdiff3; does n't know about. So & kdiff3; will show you the contents of the file interpreted as pure text, but this might be unreadable or at least it will look very odd.
-Since most programs nowadays store their contents in XML-format, you might be able to read it as pure text. So if the change was only small, & kdiff3; still might help you.
-The best solution if you only want to compare the text (without embedded objects like pictures) is to use "Select All" and "Copy" in your program to copy the interesting text to the clipboard and then in & kdiff3; paste the text into either diff input window. (See also Select, Copy And Paste.)
-Where has the directory option "List only deltas" gone?
-There are now several "Show"-options in the directory menu. Disabling" Show identical files "will achieve what enabling" List only deltas "used to do.
-How can I make a big selection in the diff input window because scrolling takes so long?
-Start the selection as usual (click and hold the left mouse button). Then use the navigation keys (e. g. page up, page down) while holding the left mouse button down. (See also Select, Copy And Paste.)
-There is so much information here, but your question is still not answered?
-Please send me your question. I appreciate every comment.
-Credits and License
-& kdiff3; - File and Directory Comparison and Merge Tool
-Program copyright 2002-2007 Joachim Eibl joachim. eibl at gmx. de
-Several cool ideas and bugreports came from colleagues and many people out in the Wild Wild Web. Thank you!
-Documentation Copyright & copy; 2002-2007 Joachim Eibl joachim. eibl at gmx. de
-CREDIT_FOR_TRANSLATORS
-& underFDL; & underGPL;
-Installation
-How to obtain & kdiff3;
-You can download the latest version of & kdiff3; from its homepage http: / /kdiff3. sourceforge. net.
-& kdiff3; is also available for other platforms. See the homepage for details.
-Requirements
-In order to successfully use all features of & kdiff3;, you need & kde; > 3.1.
-For information about how to run & kdiff3; on other platforms without KDE please see the homepage.
-You can find a list of changes at http: / /kdiff3. sourceforge. net/ ChangeLog or in the "ChangeLog"-file of the source package.
-Compilation and Installation
-In order to compile and install & kdiff3; on a system with KDE, type the following in the base directory of the & kdiff3; distribution:
-%. / configure --prefix= kde-dir% make% make install
-kde-dir specifies the directory containing KDE on your system. If you are not sure, read the README-file for details.
-If you do n't use KDE do n't use configure but follow the instructions for Qt-only systems in the README file.
-Since & kdiff3; uses autoconf and automake you should have no trouble compiling it. Should you run into problems please report them to the & kde; mailing lists.
-"Cut" (Ctrl-X or Shift-Delete) copies to the clipboard and deletes the selected text and "Paste" (Ctrl-V or Shift-Insert) inserts the text in the clipboard at the cursorposition or over the current selection.
-"List only Deltas": Files that match in all directories do n't appear in the tree, and hence also not in the destination.
-(In the current version, you must do a rescan via menu "Directory"- >" Rescan "yourself, after changing options affecting the directory scan.)
-List only deltas:
-Only items that are not equal in all input directories will be listed and only the changed files are visible. Hence files that are equal in all directories wo n't be copied during a merge and if the destination dir does not contain the files before the merge, you might miss some files later. (This option is likely to be changed in a later version.) Default is off.
-3-way-merging is fully supported. This is useful if two people change code independently.
-The original file (the base) is used to help & kdiff3; to automatically select the correct changes.
-The merge-editor below the diff-windows allows you to solve conflicts, while showing you the output you will get.
-You can even edit the output.
-This screenshot shows three input files being merged:
-Documentation of File Comparison And Merge
-Note the input selector buttons containing the letters A, B and C in the button bar below the menu bar. When clicking on either input selector button, the lines from that input will be added at the end of the selected group if that group did n't contain that source before. Otherwise the lines from that input will be removed.
-Besides, you can directly edit any line. The summary column will show m for every line that was modified.
-Tired of many clicks? Use a small Auto-Advance-delay and the shortcuts Ctrl; 1, Ctrl; 2 and Ctrl; 3 to select files A, B or C for many conflicts.
-Cut (Ctrl; X or Shift; Delete) copies to the clipboard and deletes the selected text and Paste (Ctrl; V or Shift; Insert) inserts the text in the clipboard at the cursor position or over the current selection.
-Use locale encoding:
-For displaying foreign characters. Try changing this if some characters of your language are n't displayed correctly.
-Default is off. Case-differences of characters (like A vs. a) will be treated like changes in white space.
-Example: Simple testcase: Consider file a. txt (6 lines):
-aa ba ca da eafa
-And file b. txt (3 lines):
-cg dg eg
-Without a preprocessor the following lines would be placed next to each other:
-aa - cg ba - dg ca - eg da ea fa
-This is probably not wanted since the first letter contains the actually interesting information. To help the matching algorithm to ignore the second letter we can use a line matching preprocessor command, that replaces g with a:
-sed's/ g/ a/ '
-With this command the result of the comparison would be:
-aa ba ca - cg da - dg ea - eg fa
-Internally the matching algorithm sees the files after running the line matching preprocessor, but on the screen the file is unchanged. (The normal preprocessor would change the data also on the screen.)
-In this context only the sed substitute command is used:
-sed's/ REGEXP / REPLACEMENT / FLAGS '
-Before you use a new command within & kdiff3;, you should first test it in a console. Here the echo -command is useful. Example:
-echo abrakadabra | sed's/ a/ o/ 'obrakadabra
-This example shows a very simple sed-command that replaces the first occurance of a with o. If you want to replace all occurances then you need the g flag:
-echo abrakadabra | sed's/ a/ o/ g 'obrokodobro
-The | symbol is the pipe-command that transfers the output of the previous command to the input of the following command. If you want to test with a longer file then you can use cat on Unix-like systems or type on & Windows; -like systems. sed will do the substitution for each line.
-Currently & kdiff3; understands only C/ C++ comments. Using the Line-Matching-Preprocessor-Command you can also ignore other types of comments, by converting them into C/ C++-comments.
-To ignore comments starting with #, you would like to convert them to / /. Note that you also must enable the Ignore C/ C++-Comments option to get an effect. An appropriate Line-Matching-Preprocessor-Command would be:
-sed's/ #/ \\/ \\/ / '
-Use the following Line-Matching-Preprocessor-Command to convert all input to uppercase:
-sed's/ \\(. *\\)/ \\U\\1/ '
-sed's/ \\$\\(Revision\\|Author\\|Log\\|Header\\|Date\\). *\\$/ \\$\\1\\$/ '
-The \\| separates the possible keywords. You might want to modify this list according to your needs. The\\ before the $is necessary because otherwise the $matches the end of the line.
-sed's/ [0123456789. -]/ /g '
-Any character within [and] is a match and will be replaced with nothing.
-sed's/..... \\(..........\\)..... \\(. *\\)/ \\1\\2/ '
-Each dot. matches any single character. The \\1 and \\2 in the replacement string refer to the matched text within the first and second pair of \\( and\\) denoting the text to be preserved.
-Instead of sed you might want to use something else like perl.
-perl -p -e's/ REGEXP / REPLACEMENT / FLAGS '
-But some details are different in perl. Note that where sed needed \\( and\\) perl requires the simpler (and) without preceding\\.
-Doing A Merge
-Other Functions
-Network Transparency via KIO
-& install. compile. documentation;
+Create new puzzle
+Create puzzle
+Create a new puzzle with the given information, and save it in my collection
+Image file:
+Puzzle type:
+Puzzle name:
+Optional comment:
+Name of image author:
+Basic slicing options
+Puzzle information
+Advanced slicing options
+Puzzle cannot be created: The slicer plugin could not be loaded.
+Puzzle cannot be created: The file you selected is not an image.
+Puzzle cannot be created: Slicing failed because of undetermined problems.
+Palapeli
+KDE Jigsaw Puzzle Game
+Copyright 2009, Stefan Majewsky
+Stefan Majewsky
+URL of puzzle file (will be opened if -i is not given)
+Import the given puzzle file into the local collection (does nothing if no puzzle file is given)
+If the -i/ --import option is specified, the main window will not be shown after importing the given puzzle.
+*. puzzle|Palapeli puzzles (*. puzzle)
+My collection
+[No name]
+by %1
+You have finished the puzzle the last time. Do you want to restart it now?
+Great! You have finished the puzzle.
+Lock the puzzle table area
+Your progress is saved automatically while you play.
+Automatic saving
+Create & new puzzle...
+Create a new puzzle using an image file from your disk
+& Import from file...
+Import a new puzzle from a file into your collection
+& Export to file...
+Export the selected puzzle from your collection into a file
+& Delete
+Delete the selected puzzle from your collection
+& Restart puzzle...
+Delete the saved progress
+No puzzle loaded
+You finished the puzzle.
+%1% finished
+Show statusbar of puzzle table
+Puzzle table
+General settings
+Error: No puzzle file given.
+The given puzzle file is corrupted.
+The puzzle file could not be imported into the local collection.
+Importing puzzle "%1" into your collection
+libpala-puzzlebuilder
+Automatic builder for Palapeli puzzles
+Configuration file
+Output file
+Piece count
+Piece aspect ratio
+Your names
+Your emails
+Collection actions toolbar
+Puzzle table toolbar
+Precision of snapping (as a percentage of piece size).
+The background image to use for the View.
+Whether to show the status bar on the puzzle table. (It is not a real status bar, but the position and provided functionality is similar.)
+Whether dragging with the left mouse button down will move the viewport.
+Background:
+Snapping precision:
+Dragging with the left mouse button moves viewport
+Piece count in horizontal direction
+Piece count in vertical direction

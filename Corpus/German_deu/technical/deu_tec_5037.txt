@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,201 +15,25 @@
 # sample_type:	whole
 # comments:	NA
 
-Das Handbuch zu & kcachegrind;
-Josef Weidendorfer
-Josef.Weidendorfer@gmx.de
-Ursprünglicher Autor der Dokumentation
-Federico Zenith
-federico.zenith@member.fsf.org
-Aktualisierung und Korrekturen
-Thomas Reitelbach tr@erdfunkstelle.de Deutsche Übersetzung
-& Josef.Weidendorfer;
-Federico Zenith
-& kcachegrind; ist ein KDE-Werkzeug zur Visualisierung von Profiler-Daten.
-KDE
-kdesdk
-Cachegrind
-Callgrind
-Valgrind
-Profiling
-Einleitung
-& kappname; ermöglicht das Durchsehen der Profildaten, die von einem Profiler erzeugt wurden. In diesem Kapitel wird erklärt, warum man Profiler-Daten erhebt und wie man sie erzeugt. Außerdem werden einige verfügbare Profiler-Werkzeuge vorgestellt.
-Profiling
-Wenn ein Programm entwickelt wird, gehört es zu den abschließenden Schritten, es in der Geschwindigkeit zu optimieren. Es ist natürlich nicht sinnvoll, die Funktionen zu optimieren, die selten aufgerufen werden. Daher muss der Programmautor wissen, in welchem der Programmabschnitt die meiste Zeit verbraucht wird.
-Für sequentiell ablaufenden Code reicht es in der Regel aus, statistische Daten über die Laufzeiteigenschaften des Programms zu ermitteln. Dazu gehört die in bestimmten Funktionen verbrachte Zeit und die zugehörigen Codezeilen. Das Erheben dieser Daten nennt man Profiling. Dabei läuft das Programm in einer kontrollierten Laufzeitumgebung des Profiling-Werkzeugs ab, welches am Ende des Durchlaufs eine Zusammenfassung der gesammelten Daten ausgibt. Im Gegensatz dazu gibt es auch parallel ablaufenden Code. Geschwindigkeitsprobleme resultieren hier häufig daraus, dass ein Prozessor auf Daten eines anderen Prozessors warten muss. Diese Wartezeit lässt sich nicht ohne Weiteres ermitteln und zuordnen; in einem solchen Fall müssen Ereignisse mit Hilfe von Zeitstempeln rückverfolgt werden. Diese Art Daten kann & kcachegrind; nicht anzeigen.
-Nach der Analyse der erzeugten Profiling-Daten sollte es ein Leichtes sein, den möglichen Flaschenhals im Code aufzufinden: Beispielsweise kann man den Code in besonders häufig aufgerufenen Funktionen optimieren. Danach sollte man den Erfolg der Optimierungen mit einem erneuten Profiler-Durchlauf überprüfen.
-Profiling-Methoden
-Um verbrauchte Zeit zu messen oder eingetretene Ereignisse in einem bestimmten Code-Bereich aufzuzeichnen (eg; einer Funktion) muss zusätzlicher Code vor und hinter dem fraglichen Bereich einprogrammiert werden. Dieser Code misst dann die Zeit oder liest einen globalen Ereigniszähler aus und berechnet die Unterschiede. Diese Veränderung des Original-Codes nennt man Instrumentieren. Die Instrumentierung kann der Programmierer, der Compiler oder auch die Laufzeitumgebung einrichten. Die fraglichen Code-Bereiche sind zumeist verschachtelt und der Aufwand für die Messung dieser Bereiche beeinflusst immer auch die Messergebnisse. Daher sollte die Methode der Instrumentierung nur in ausgewählten Bereichen angewandt und die Ergebnisse mit Bedacht ausgewertet werden. Dieser Umstand macht eine wirklich exakte Messung zu einer äußerst komplexen Aufgabe.
-Eine exakte Messung ist dennoch möglich, nämlich mit Hilfe von Hardware-Zählwerken, so wie sie in den heutigen modernen Prozessoren vorkommen. Diese Zähler inkrementieren mit jedem auftretenden Ereignis. Wir möchten auftretende Ereignisse bestimmten Code-Bereichen zuordnen können. Ohne Hardware-Zähler müssten wir jedes Ereignis selbst mit Hilfe von Software zählen - was natürlich nicht möglich ist. Unter der Annahme, dass die Ereignisverteilung im Quell-Code gleichmäßig ist, wurde jedoch eine Methode entwickelt, die nur jedes n-te Ereignis untersucht - wodurch die Kosten der Messung beeinflussbar sind: Sampling. Zeitbasiertes Sampling (Time Based Sampling, & TBS;) untersucht in regelmäßigen Zeitabständen den Programmzähler und erzeugt ein Histogramm über den Programmcode. Das ereignisbasierte Sampling (Event Based Sampling, & EBS;) untersucht im Gegensatz dazu den Hardware-Zähler moderner Prozessoren. Dazu wird eine Interrupt-Leitung verwendet, die bei einem Zähler-Niedrigstand auslöst; daraufhin wird ein Histogramm der zugehörigen Ereignisverteilung erzeugt: Innerhalb dieser Routine wird der Ereigniszähler wieder auf das Element n der Sampling-Methode zurückgesetzt. Der Vorteil des Sampling ist, dass der Programmcode nicht verändert werden muss. Aber es handelt sich immer noch um eine Kompromisslösung: Die Methode misst genauer, wenn n möglichst klein ist. Mit schrumpfendem n steigen jedoch auch die Kosten für die Messung über die Interrupt-Leitung.
-Eine weitere Messmethode ist es, bestimmte Ereignisse im Rechner zu simulieren, während der fragliche Code läuft; eine geführte Simulation. Eine solche Simulation wird von einem mehr oder weniger genauen Rechnermodell abgeleitet. Mit exakten Rechnermodellen sind ziemlich genaue Rückschlüsse auf die Realität möglich - jedoch ist der für solche Tests nötige Zeitaufwand in der Praxis oft inakzeptabel. Der Vorteil einer Simulation ist, dass im Grunde beliebig komplexer Messungs-Code in den Quell-Code eingefügt werden kann, ohne die Messergebnisse zu beeinflussen. Dies direkt vor der Ausführung (Laufzeit-Instrumentierung) mit der Original-Binärdatei durchgeführt ist für den Benutzer sehr komfortabel: Es ist kein erneutes Kompilieren erforderlich. Eine Simulation ist dann sinnvoll, wenn nur Teile einer Maschine mit einem einfachen Modell simuliert werden sollen. Ein weiterer Vorteil ist, dass die Messergebnisse aus Simulationen einfacher Rechnermodelle auch leichter zu interpretieren sind: oftmals ist das Problem mit echter Hardware, dass sich Ereignisse verschiedener Rechnermodule überschneiden.
-Profiling-Werkzeuge
-Am bekanntesten ist der GCC-Profiler gprof: Man muss das Programm mit der Option -pg kompilieren. Bei der Programmausführung wird dann eine Datei namens gmon.out erzeugt, die mittels gprof in ein leserliches Format umgewandelt werden kann. Ein Nachteil ist natürlich das notwendige Rekompilieren des Programms, welches außerdem statisch gelinkt werden muss. In diesem Fall wird compilergenerierte Instrumentierung angewandt - alle Aufrufe rund um Funktionen und die zugehörigen Funktionsaufrufe werden gemessen. Zusammen mit zeitbasiertem Sampling (TBS;) ergibt sich daraus ein Histogramm der Verteilung der verbrauchten Zeit im Code. Aus den beiden Zeiten lässt sich die Zeit errechnen, die ein Programm in bestimmten Funktionen und den von dort aufgerufenen Funktionen verbringt.
-Es gibt auch Bibliotheken zur exakten Messung aufgetretener Ereignisse. Diese sind in der Lage, Hardware-Zeitgeber auszulesen. Am bekanntesten sind der Patch PerfCtr für & Linux; und die architekturunabhängigen Bibliotheken PAPI und PCL. Dennoch ist zur exakten Messung eine Instrumentierung des Codes nötig. Man kann dazu entweder die Bibliotheken selbst oder automatische Systeme wie ADAPTOR (für FORTRAN-Quellcode) oder DynaProf (Code-Einschleusung über DynInst) verwenden.
-& oprofile; ist ein systemweites Profiling-Werkzeug für & Linux;. Es verwendet Sampling.
-Eine sehr komfortable Möglichkeit des Profiling ist es jedoch, & cachegrind; oder & callgrind; zu verwenden. Dabei handelt es sich um Simulatoren, die auf das Instrumentierungs-Grundgerüst von & valgrind; aufsetzen. Diese sind eine gute Alternative zu den anderen Profiling-Werkzeugen, weil keine Hardware-Zähler verwendet werden (oftmals ist das mit heutigen & Linux;-Installationen schwierig) und die Programmdateien nicht verändert werden müssen. Der Nachteil einer Simulation ist natürlich die Geschwindigkeitseinbuße. Diese kann allerdings reduziert werden, indem man die Simulation auf die interessanten Programmabschnitte beschränkt. Ohne Messung bzw. Simulation der Instrumentierung reduziert & valgrind; die Geschwindigkeit um den Faktor 3 bis 5. Wenn nur das Aufruf-Diagramm und die Anzahl der Funktionsaufrufe von Interesse sind, kann man den Cache-Simulator ganz ausschalten.
-Die Cache-Simulation ist der erste Schritt zur Abschätzung der echten Zeiten. Auf zeitgemäßen Rechnern ist die Laufzeit von Programmen stark abhängig von der Ausnutzung des sogenannten Aufruf-Caches (kleine und sehr schnelle Puffer, die erneuten Zugriff auf die gleichen Speicherbereiche erheblich beschleunigen). & cachegrind; führt eine Cache-Simulation durch, in der die Speicheradressen abgefangen werden. Die erhobenen Daten enthalten auch die Anzahl der Instruktionen, Zugriffe auf Daten-Bereiche im Cache sowie fehlgeschlagene Zugriffe auf 1st- / und 2nd-Level-Cache. Diese Informationen werden den entsprechenden Code-Zeilen und Funktionen des Programms zugeordnet. Durch eine geschickte Kombination der erhaltenen Daten lässt sich eine gute Abschätzung der benötigten Zeit ermitteln.
-& callgrind; ist eine Erweiterung für & cachegrind;, die das Aufruf-Diagramm eines Programms zur Laufzeit erzeugt. Ein Aufruf-Diagramm gibt Auskunft darüber, welche Funktionen die anderen Funktionen aufrufen und wieviele Ereignisse in einem Funktionsdurchlauf abgearbeitet werden. Des Weiteren können die zu sammelnden Profiler-Daten nach Threads und Aufrufketten-Kontext unterteilt werden. Mit Callgrind ist es möglich, Profiling-Daten auf Instruktions-Ebene zu erhalten und damit auch disassemblierten Code zu untersuchen.
-Darstellung
-Profiling-Werkzeuge erzeugen für gewöhnlich eine sehr große Datenmenge. Durch diese sollte man möglichst einfach im Aufruf-Diagramm auf und ab navigieren können. Außerdem sollte man schnell und komfortabel zwischen verschiedenen Sortier-Modi für Funktionen und verschiedenen Ansichten für Ereignistypen umschalten können. Es bietet sich daher an, diese Aufgabe einem Programm mit grafischer Oberfläche zu überlassen.
-& kappname; ist eine grafische Oberfläche für Profiling-Daten und erfüllt all diese Wünsche. Obwohl das Programm ursprünglich programmiert wurde, um die Daten von & cachegrind; und & calltree; anzuzeigen, gibt es auch Konverter, mit denen sich Daten anderer Profiling-Werkzeuge anzeigen lassen. Im Anhang finden Sie auch eine Beschreibung des Datenformats von & cachegrind;/callgrind;.
-Neben einer Liste der Funktionen sortiert nach exklusiven und inklusiven Kosten, optional gruppiert nach Quelldatei, Bibliothek oder C++-Klasse, unterstützt & kappname; mehrere Ansichten einer ausgewählten Funktion. Im Einzelnen sind dies:
-eine Aufruf-Diagramm-Ansicht, die den Bereich des Aufruf-Diagramms um die gewählte Funktion darstellt,
-eine Baumansicht, die die Beziehungen eingebetteter Aufrufe zueinander darstellt, (mit den inklusiven Kosten zur schnellen Ermittlung problematischer Funktionen),
-eine Quellcode- und Disassembler-Ansicht, die Details zu den Kosten einzelner Quelltextzeilen und Assembler-Anweisungen darstellt.
-& kcachegrind; verwenden
-Visualisierungsdaten erheben
-Als erstes muss man Geschwindigkeitsdaten erzeugen, indem man bestimmte Laufzeit-Eigenschaften eines Programms mit einem Profiling-Werkzeug misst. & kcachegrind; selbst enthält kein Profiling-Werkzeug, kann aber gut mit & callgrind; zusammenarbeiten. Wenn man einen Konverter einsetzt, kann man auch die von & oprofile; erzeugten Profiler-Daten visualisieren. Eine Erklärung der genauen Bedienung dieser Programme würde den Rahmen dieses Handbuchs sprengen; jedoch erhalten Sie dennoch im folgenden Kapitel eine kurze Schnellstart-Einführung.
-& callgrind;
-& callgrind; ist ein Bestandteil von valgrind;. Früher hieß das Programm & calltree;, der Name war jedoch sehr irreführend.
-Die häufigste Verwendung von valgrind --tool=callgrind ist, indem man es dem zu messenden Programm auf der Befehlszeile voranstellt. Beispiel: valgrind --tool=callgrind meinprogramm parameter Beim Programmende wird die Datei callgrind.out.pid erzeugt, die Sie dann in & kcachegrind; laden können.
-Eine fortgeschrittenere Methode ist es, Profiling-Daten immer nur dann zu erzeugen, wenn eine bestimmte Funktion Ihres Programms aufgerufen wird. Wenn Sie beispielsweise für konqueror die Profiling-Daten zum Rendern einer Webseite erzeugen möchten, könnten Sie Daten erheben, wenn der Menüeintrag Ansicht/Aktualisieren benutzt wird (dies ist gleichzusetzen mit einem Aufruf von KonqMainWindow::slotReload). Benutzen Sie dazu den folgenden Aufruf: valgrind --tool=callgrind --dump-before=KonqMainWindow::slotReload konqueror Dadurch werden mehrere Profiler-Dateien erzeugt, jede mit einer eindeutigen, aufsteigenden Nummer im Dateinamen. Es wird auch eine Datei ohne aufsteigende Nummer erzeugt; wenn Sie diese in & kcachegrind; laden, werden die Folgedateien auch geladen und können in der Komponenten-Übersicht und Komponenten-Liste betrachtet werden.
-& oprofile;
-& oprofile; finden Sie unter http://oprofile.sf.net. Folgen Sie der Installationsanleitung auf der Webseite. Bevor Sie dies allerdings tun, prüfen Sie, ob das Programm nicht bereits von Ihrer Distribution mitgeliefert wird (so & eg; bei SuSE).
-Systemweites Profiling ist nur dem Systemverwalter erlaubt, da so alle Aktionen im System überwacht werden können. Die folgenden Schritte müssen Sie also als Systemverwalter ausführen. Richten Sie zuerst den Profiling-Prozess ein; mit der & GUI; oprof_start oder mit dem Befehlszeilenprogramm opcontrol. Timer-Modus (TBS, siehe Einführung) sollte voreingestellt sein. Um die Messung zu starten, führen Sie opcontrol -s aus. Starten Sie nun die Anwendung an deren Werten Sie interessiert sind und führen anschließend opcontrol -d aus. Die Messergebnisse werden in Dateien im Ordner /var/lib/oprofile/samples / gespeichert. Um die Daten zu betrachten, führen Sie opreport -gdf | op2callgrind in einem leeren Ordner aus. Es wird für jedes auf dem Systen laufende Programm eine Datei angelegt, die für sich in & kcachegrind; geöffnet werden kann.
-Grundlagen der Benutzerschnittstelle
-Wenn Sie & kcachegrind; mit einer Profildaten-Datei als Argument starten, oder nachdem Sie über Datei Öffnen eine Datei geöffnet haben, sehen Sie ein Navigationspanel mit der Liste der Funktionen links und dem Hauptbereich rechts, in dem die ausgewählte Funktion dargestellt wird. Dieser Darstellungsbereich kann so eingerichtet werden, dass er mehrere Darstellungsarten kombiniert.
-Der aktuelle Ereignistyp ist wichtig für die Darstellung: Für & callgrind; ist das zum Beispiel Cache Misses oder Cycle Estimation; für & oprofile; im einfachsten Fall Timer. Sie können den Ereignistyp mit dem Kombinationsfeld in der Werkzeugleiste oder in der Ereignistyp-Ansicht ändern. Wenn Sie die Funktion main wählen und einen Blick auf den Aufruf-Graphen werfen, sehen Sie einen ersten Überblick über die Laufzeit-Charakteristik. Sie sehen dort die Aufrufe, die von Ihrem Programm getätigt wurden. Beachten Sie, dass die Aufruf-Graph-Ansicht nur Funktionen anzeigt, die eine hohe Anzahl Ereignisse aufweisen. Wenn Sie im Aufruf-Graphen auf eine Funktion klicken, werden die aufgerufenen Funktionen um die ausgewählte herum angezeigt.
-Um die & GUI; besser kennen zu lernen, lesen Sie zusätzlich zu diesem Handbuch auch den Dokumentationsabschnitt auf der Webseite http://kcachegrind.sf.net. Zudem hat jedes Element in & kcachegrind; eine Was ist das -Hilfe.
-Grundlegende Konzepte
-Dieses Kapitel erläutert einige in & kcachegrind; verwendete Konzepte und Begriffe aus der Bedienungsoberfläche.
-Das Datenmodell der Profildaten
-Kosteneinheiten
-Kosten von Ereignistypen (wie L2-Misses) sind Kostenpunkten zugeordnet, was Elemente mit Bezugspunkten im Quelltext oder in Datenstrukturen eines gegebenen Programms sind. Kostenpunkte können nicht nur einfache Positionen im Quelltext oder in Daten sein, sondern auch Positions-Tupel. Ein Aufruf, zum Beispiel, hat eine Quelle und ein Ziel, und eine Datenadresse kann einen Datentyp und eine Adresse im Quelltext haben, an der er alloziert wird.
-& kcachegrind; sind die wie folgt genannten Kostenpunkte bekannt. Einfache Positionen: Instruktion. Eine Assembler-Instruktion an einer bestimmten Adresse. Quelltextzeile einer Funktion. Alle Instruktionen, die der Compiler (über Debug-Informationen) einer Quelltextzeile zuordnet (Dateiname und Zeilennummer) und die im Kontext einer Funktion ausgeführt werden. Letzteres ist wichtig, da eine Zeile innerhalb einer Inline-Funktion im Kontext verschiedener Funktionen auftauchen kann. Instruktionen ohne Zuordnung erscheinen mit Zeilennummer 0 in Datei???. Funktion. Alle Quelltextzeilen einer Funktion. Eine Funktion wird über ihren Namen und, sofern vorhanden, ihre Position in einem Binärobjekt angegeben. Letzteres ist wichtig, da jedes Binärobjekt eines Programms Funktionen mit demselben Namen enthalten kann (auf diese kann & eg; mit dlopen/dlsym zugegriffen werden; der Laufzeit-Linker löst Funktionen in verwendeten Binärobjekten in einer bestimmten Suchreihenfolge auf). Wenn ein Profiling-Werkzeug den Symbolnamen einer Funktion nicht bestimmen kann, & eg; weil keine Debug-Informationen verfügbar sind, wird entweder die Adresse der zuerst ausgeführten Instruktion, oder??? angegeben. Binärobjekt. Alle Funktionen, die innerhalb der Grenzen eines gegebenen Binärobjekts liegen. Dies gilt für die primäre Programmdatei, sowie für Shared-Libraries. Quelltextdatei. Alle Funktionen, deren erste Instruktion einer Zeile der gegebenen Quelltextdatei zugeordnet ist. Klasse. Symbolnamen von Funktionen sind normalerweise hierarchisch in Namensräumen geordnet, & eg; C++-Namensräume, oder Klassen in objektorientierten Sprachen; daher kann eine Klasse selbst Funktionen der Klasse und eingebetteter Klassen enthalten. Profilabschnitt. Ein Zeitabschnitt eines Profiler-Durchlaufs mit einem gegebenen Thread-ID, Prozess-ID und ausgeführter Befehlszeile. Wie Sie an der Liste erkennen können, definiert ein Satz Kostenpunkte oft einen neuen Kostenpunkt; daher entsteht eine Einrechnungshierarchie von Kostenpunkten, die durch die obige Beschreibung ersichtlich sein sollte.
-Positions-Tupel: Aufruf von Instruktionsadresse auf Zielfunktion. Aufruf von Quelltextzeile auf Zielfunktion. Aufruf von Quellfunktion auf Zielfunktion. (Un)bedingter Sprung von Quellinstruktion auf Zielinstruktion. (Un)bedingter Sprung von Quellzeile auf Zielzeile. Sprünge zwischen Funktionen werden nicht unterstützt, da diese in einem Aufrufgraphen nicht sinnvoll sind; daher müssen Konstruktionen wie Ausnahmen (Exceptions) und Long-Jumps in C so verändert werden, dass sie, sofern nötig, als Pop-Instruktion auf den Aufrufstapel ausgeführt werden.
-Ereignistypen
-In den Profildaten können weitere Ereignistypen angegeben werden, indem ihnen ein Name zugeordnet wird. Ihre Kosten bezogen auf einen Kostenpunkt ist ein 64-Bit-Integer.
-Ereignistypen, deren Kosten in einer Profildaten-Datei angegeben sind, heißen echte Ereignisse. Zusätzlich können Sie Formeln für Ereignistypen definieren, die aus echten Ereignissen errechnet werden. Diese heißen abgeleitete Ereignisse.
-Darstellungsstatus
-Der Darstellungsstatus eines & kcachegrind;-Fensters beinhaltet: den anzuzeigenden primären und sekundären Ereignistyp, die Funktionsgruppierung (für die Funktionsprofil-Liste und die Einfärbung der Elemente), die Abschnitte des Profils, die in die Darstellung eingehen ein aktiver Kostenpunkt (eg; eine Funktion, die aus der Funktionsprofil-Ansicht ausgewählt wurde), ein ausgewählter Kostenpunkt. Dieser Status beeinflusst die Darstellung.
-Ein Kostenpunkt (der aktive) wird immer dargestellt. Ist eine Darstellung nicht angemessen für einen Kostenpunkt, wird sie ausgeblendet (eg; wenn ein & ELF;-Objekt aus der Gruppenliste ausgewählt wird, sind Anmerkungen am Quelltext nicht sinnvoll).
-Zum Beispiel zeigt die Aufgerufene-Liste einer aktiven Funktion alle Funktionen, die auf der aktiven heraus aufgerufen wurden. Sie können eine dieser Funktionen markieren, ohne sie zu aktivieren. Wird der Aufruf-Graph daneben angezeigt, wird hier automatisch die gleiche Funktion ausgewählt.
-Bestandteile der Benutzeroberfläche
-Navigationsbereich
-Docks sind Seitenfenster, die an jeder Seite des & kcachegrind;-Fensters angebracht werden können. Sie enthalten jeweils eine Liste mit Kostenpunkten in einer bestimmten Ordnung.
-Funktionsprofil. Das Funktionsprofil ist eine Liste von Funktionen, in der die Inklusiv- und Exklusivkosten, die Anzahl der Aufrufe, der Name und die Position der Funktionen angezeigt werden.
-Übersicht der Profilabschnitte
-Aufrufstapel
-Der Darstellungsbereich, gewöhnlich der rechte Bereich im & kcachegrind;-Hauptfenster, ist aus einem (Standard), oder mehreren Unterfenstern aufgebaut, die entweder waagerecht oder senkrecht angeordnet sind. Jedes Unterfenster enthält verschiedene Darstellungsansichten, die jeweils immer einen Kostenpunkt anzeigen. Der Name dieses Kostenpunkts wird oben in der Unterfensteransicht angezeigt. Sind mehrere Unterfensteransichten vorhanden, ist immer nur eine von ihnen aktiv. Der Name des Kostenpunkts wird im aktiven Unterfenster fett dargestellt und bestimmt den aktiven Kostenpunkt im & kcachegrind;-Fenster.
-Bereiche eines Unterfensters
-Jede Unterfensteransicht kann bis zu vier Bereiche enthalten, oben, rechts, links und unten. Zudem kann jeder Bereich mehrere Darstellungsansichten enthalten. Die anzuzeigende Ansicht eines Bereichs wird über die Unterfensterleiste ausgewählt. Die Unterfensterleisten der oberen und rechten Bereiche befindet sich oben; die der linken und unteren Bereiche befinden sich unten. Sie können festlegen, welche Darstellungsart in welchem Bereich angezeigt wird, indem Sie das Kontextmenü des Unterfensters verwenden.
-Darstellungsabgleich über ausgewähltes Element in einer Unterfensteransicht
-Neben einem aktiven Element hat jede Unterfensteransicht ein ausgewähltes Element. Da die meisten Darstellungsarten mehrere Elemente anzeigen, wobei das aktive irgendwie zentriert wird, können Sie das gewählte Element ändern, indem Sie in der Darstellung navigieren (mit Mausklick oder der Tastatur). Ausgewählte Elemente werden hervorgehoben. Wenn Sie die Auswahl in einer Darstellung ändern, wird die Hervorhebung in allen anderen Darstellungen ebenfalls geändert.
-Abgleich zwischen Unterfenstern
-Sind mehrere Unterfensteransichten vorhanden, ändert eine Auswahländerung in einer Ansicht eine Aktivitätsänderung in der nächsten Ansicht. Diese Verknüpfung ermöglicht eine schnelle Navigation in Aufruf-Graphen.
-Layouts
-Das Layout aller Unterfensteransichten eines Fensters kann gespeichert werden (siehe Menüpunkt Ansicht - > Layout). Nach dem Kopieren des aktuellen Layouts (Ctrl;+Plus oder im Menü) und Ändern einiger Größen oder Verschieben einer Darstellungsansicht in einen anderen Bereich einer Unterfensteransicht können Sie mit & Ctrl;+Pfeil links bzw. & Ctrl;+Pfeil rechts zwischen dem alten und dem neuen Layout umschalten. Die Layouts werden über & kcachegrind;-Sitzungen mit dem gleichen Profiler-Befehl hinweg gespeichert. Sie können die aktuellen Layouts als Voreinstellung für neue Sitzungen speichern, oder das Standard-Layout wiederherstellen.
-Flaches Profil
-Das flache Profil enthält eine Gruppenliste und eine Funktionsliste. Die Gruppenliste zeigt alle Gruppen, in denen Kosten verursacht werden, abhängig vom gewähten Gruppentyp. Die Gruppenliste ist ausgeblendet, wenn die Gruppierung ausgeschaltet ist.
-Die Funktionsliste enthält die Funktionen der gewählten Gruppe (oder alle Funktionen, wenn die Gruppierung abgeschaltet ist), sortiert nach Spalten, & eg; Inklusiv- oder Exklusivkosten. Die Anzahl der Elemente in der Liste ist begrenzt, und kann unter Einstellungen - > & kcachegrind; einrichten angepasst werden.
-Übersicht der Profilabschnitte
-Während eines Profiler-Durchlaufs können mehrere Profildaten-Dateien erzeugt werden, die alle zusammen in & kcachegrind; geladen werden können. Das Dock Übersicht der Profilabschnitte zeigt diese an, waagerecht angeordnet nach Erstellungszeit. Die Größen der Rechtecke sind proportional zu den Kosten der Abschnitte. Sie können einen oder mehrere Abschnitte auswählen um die Anzeige der Kosten in den anderen & kcachegrind;-Ansichten auf diese Abschnitte zu beschränken.
-Die Abschnitte sind weiter unterteilt in einen Partitions- und einen Inklusivkosten-Modus:
-Detailansicht: Sie sehen die Aufteilung der Dateien eines Profildaten-Abschnitts in Gruppen, je nachdem, welcher Gruppentyp ausgewählt ist. Sind zum Beispiel & ELF;-Objektgruppen ausgewählt, sehen Sie farbige Rechtecke für jedes benutze & ELF;-Objekt (Shared-Library oder Programmdatei), deren Größe durch die verursachten Kosten bestimmt wird.
-Diagramm-Modus
-Es wird ein Rechteck mit den Inklusivkosten der aktiven Funktion angezeigt. Dieses ist wiederum in die Inklusivkosten der aufgerufenen Funktionen unterteilt.
-Aufrufstapel
-Dieser Aufrufstapel ist nicht echt sondern ein sehr wahrscheinliches Abbild. Er wird von der aktiven Funktion her aufgebaut und enthält alle Aufrufer und Aufgerufenen absteigend mit den höchsten Kosten oben.
-Die Spalten Kosten und Aufrufe zeigen die Kosten aller Aufrufe der Funktion eine Zeile höher.
-Ansichten
-Ereignistyp
-Die Liste Ereignistyp zeigt alle verfügbaren Kostentypen und die dazugehörigen Exklusiv- und Inklusivkosten der aktuell aktiven Funktion für den Ereignistyp.
-Wenn Sie einen Ereignistyp wählen, ändern Sie den Kostentyp, der überall in & kcachegrind; angezeigt wird.
-Aufruflisten
-Diese Listen zeigen Aufrufe auf/von der derzeit aktiven Funktion. Alle Aufrufer/Aufgerufene bedeutet, dass diese Funktionen in Richtung vom Aufrufer zum Aufgerufenen erreichbar sind, selbst wenn andere Funktionen dazwischen stehen.
-Die Ansicht von Aufruflisten enthält:
-Alle Aufrufer
-Alle Aufgerufenen
-Karten
-Eine Baumstruktur-Darstellung des primären Ereignistyps, auf- oder abwärts in der Aufrufhierarchie. Jedes farbige Rechteck stellt eine Funktion dar; die Größe ist (abgesehen von zeichnerischen Ungenauigkeiten) proportional zu den verursachten Kosten, während die aktive Funktion ausgeführt wird.
-In der Aufruferkarte zeigt der Graph die eingebettete Hierarchie aller Aufrufer der aktiven Funktion; in der Aufrufkarte werden alle Aufgerufenen der aktiven Funktion angezeigt.
-Einstellungen zum Erscheinungsbild finden Sie im Kontextmenü. Wählen Sie Ungenaue Ränder ausblenden um genaue Größen-Proportionen zu bekommen. Da diese Funktion sehr zeitintensiv sein kann, ist es ratsam, die maximale Verschachtelungstiefe zu begrenzen. Beste Teilungsrichtung pro Ebene bestimmt die Teilungsrichtung anhand des Seitenverhältnisses des übergeordneten Elements. Immer beste Teilungsrichtung entscheidet anhand des verbleibenden Platzes für jedes Geschwister. Proportionen ignorieren nutzt den Platz zuerst für die Funktionsbeschriftung. Beachten Sie, dass das Größenverhältnis stark abweichen kann.
-Tastatursteuerung ist mit der linken und rechten Pfeiltaste möglich, um die Geschwister zu durchlaufen, und mit den Tasten Pfeil hoch/runter, um Verschachtelungebenen hoch bzw. runter zu gehen. Die Eingabetaste aktiviert das aktuelle Element.
-Aufrufgraph
-Diese Ansicht zeigt den Aufrufgraph um die aktive Funktion herum an. Die angezeigten Kosten sind nur die Kosten, die bei der Ausführung der Funktion angefallen sind; & ie; die Kosten für main(), sofern angezeigt, sollten den Kosten der aktiven Funktion entsprechen, da diese ein Teil der Inklusivkosten von main() sind, die bei der Ausführung der aktiven Funktion angefallen sind.
-Für Zyklen wird ein blauer Pfeil angezeigt, der angibt, dass es sich nicht um einen echten Aufruf handelt; er wurde zum richtigen Zeichnen eingefügt, wird aber nie ausgeführt.
-Ist der Graph größer als der Zeichenbereich, wird in einer Ecke eine Übersicht angezeigt. Es gibt ähnliche Darstellungen für die Aufruf-Baumansicht; die ausgewählte Funktion ist hervorgehoben.
-Code-Kommentierung
-Die kommentierten Quelltext/Assembler-Listen zeigen die Quelltextzeilen bzw. disassemblierten Instruktionen der aktiven Funktion zusammen mit den (Exklusiv)-Kosten, die beim Ausführen der Quelltextzeile/Instruktion verursacht wurden. Im Falle eines Aufrufs werden Zeilen mit Details zum Aufruf in den Quelltext eingefügt: (Inklusiv)-Kosten innerhalb des Aufrufs, Anzahl der Aufrufe und Aufrufziel.
-Wählen Sie so eine Aufrufinformationslinie, um das Aufrufziel zu aktivieren.
-Befehlsreferenz
-Das Hauptfenster von & kcachegrind;
-Das Menü Datei
-Ctrl; N Datei Neu
-Öffnet ein leeres Hauptfenster, in das Sie Profildaten laden können. Diese Aktion wird eigentlich nicht benötigt, da Datei Öffnen.... ein neues Hauptfenster öffnet, wenn im aktuellen Fenster bereits Daten angezeigt werden.
-Ctrl; O Datei Öffnen...
-Öffnet den "Datei öffnen"-Dialog zur Auswahl der zu ladenden Profildaten-Datei. Wenn im aktuellen Fenster bereits Daten angezeigt werden, wird ein neues Hauptfenster geöffnet. Zum hinzufügen zusätzlicher Profildaten im aktuellen Fenster, verwenden Sie Datei Hinzufügen....
-Der Name von Profildaten-Dateien endet normalerweise auf .pid.part-threadID, wobei part und threadID optional sind und pid und part für mehrere Profildaten-Dateien eines einzelnen Programmdurchlaufs verwendet werden. Wenn Sie eine Datei mit der Endung .pid öffnen, werden vorhandene Daten-Dateien desselben Durchlaufs automatisch geladen.
-Beispiel: Existieren die Profildatendateien cachegrind.out.123 und cachegrind.out.123.1, wird beim Laden der ersten Datei automatisch die zweite Datei mit geladen.
-Datei Hinzufügen...
-Fügt im aktuellen Fenster eine Profildaten-Datei hinzu. Hiermit können Sie das Laden mehrerer Daten-Dateien in einem Hauptfenster erzwingen, obwohl diese nicht aus demselben Durchlauf stammen, also nicht den Namenskonventionen für Profildaten-Dateien entsprechen. Das ist vor allem zum Direktvergleich einsetzbar.
-F5 Datei Neu laden
-Profildaten neu laden. Dies ist vor allem dann sinnvoll, wenn eine neue Profildaten-Datei für eine bereits geladene Anwendung erzeugt wird.
-Ctrl; Q Datei Beenden
-Beendet & kappname;
-Fragen und Antworten
-& reporting.bugs; & updating.documentation;
-Wozu ist & kcachegrind; gut?
-& kcachegrind; ist nützlich für die späte Software-Entwicklungs-Etappe Profiling. Wenn man keine Anwendungen entwickelt, dann braucht man & kcachegrind; nicht.
-Was ist der Unterschied zwischen Incl. und Self?
-Dies sind Kosteneigenschaften für Funktionen hinsichtlich einiger Ereignistypen. Da sich Funktionen gegenseitig aufrufen können, ist es sinvoll, zwischen Kosten zu unterscheiden, die die Funktion selbst verursacht (Exklusivkosten) und solchen, die alle aufgerufenen Funktionen berücksichtigt (Inklusivkosten).
-Also werden Sie für main() immer Inklusivkosten von nahezu 100% haben, wogegen die Exlusivkosten vernachlässigbar sind, wenn die eigentliche Arbeit in einer anderen Funktion erledigt wird.
-Die Werkzeug- und Menüleiste ist bei mir sehr spartanisch. Ist das normal?
-Ihre & kcachegrind;-Installation ist fehlerhaft. Es wird empfohlen, das Programm mit Installationspräfix-Pfad Ihrer systemweiten KDE-Installation zu übersetzen, & eg; configure --prefix=/opt/kde4; make install. Wenn Sie einen anderen Ordner, & eg; $HOME/kde, wählen, müssen Sie die Umgebungsvariable KDEDIR auf diesen Ordner setzen, bevor Sie & kcachegrind; ausführen.
-Wenn ich in der Aufrufgraph-Ansicht auf eine Funktion klicke, werden für main() die gleichen Kosten angezeigt, wie für die gewählte Funktion. Sollten diese nicht immer 100% betragen?
-Sie haben eine Funktion unterhalb von main() gewählt, die geringere Kosten als main() hat. Für jede Funktion wird nur der Teil der Gesamtkosten angezeigt, der von der aktivierten Funktion verursacht wird. Daher können die Kosten für eine Funktion nie höher sein als die der aktivierten Funktion.
-Kostenpunkt
-Abstraktes Element mit Bezug zu Stellen im Quelltext denen sich Ereigniszahlen zuordnen lassen. Kostenpunkte werden in den Maßen Position in Quelltext (eg; Zeile, Funktion), Position der Daten (eg; aufgerufene Datentypen, Datenobjekt), Ort der Ausführung (eg; Thread, Prozess) und Tupel oder Tripel der genannten Positionen (eg; Aufrufe, Zugriff auf Objekte, aus dem Cache entfernte Daten).
-Ereigniskosten
-Summe der Ereignisse eines Ereignistyps, der während der Ausführung aufgetreten ist und zu einem bestimmten Kostenpunkt gehört. Die Kosten werden dem Punkt zugeordnet.
-Ereignistyp
-Art eines Ereignisses, dessen Kosten einem Kostenpunkt zugeordnet werden können. Es gibt echte und abgeleitete Ereignistypen.
-Abgeleiteter Ereignistyp
-Virtueller Ereignistyp, der nur in Darstellungen angezeigt wird, die mit einer Formel aus einem echten Ereignistyp errechnet werden.
-Profildatendatei
-Eine Datei mit Daten, die Messwerte eines Profile-Experiments (oder eines Abschnitts davon) enthält oder beim Nachverarbeiten von Profildaten erzeugt wurde. Die Datenmenge verhält normalerweise linear zur Größe des Quelltextes.
-Profile-Experiment
-Ein Programmablauf, der von einem Profiling-Werkzeug überwacht wird und eine oder mehrere Profildaten-Dateien aus Abschnitten und/oder Threads des Ablaufs erzeugt.
-Profile-Projekt
-Eine Konfiguration für Profile-Experimente, die für ein zu überwachendes Programm, vielleicht in mehreren Versionen, verwendet wird. Profildaten zu vergleichen, ist nur dann sinnvoll, wenn sie in Experimenten eines Profile-Projekts erzeugt wurden.
-Profiling
-Der Prozess des Sammelns statistischer Informationen über die Laufzeit-Eigenschaften eines Programmablaufs.
-Echte Ereignistypen
-Ereignistyp, der mit einem entsprechenden Werkzeug gemessen werden kann. Es ist ein Sensor für den gegebenen Ereignistyp erforderlich.
-Profildaten
-Eine Abfolge zeitlich markierter Ereignisse, die beim Überwachen eines Programmablaufs aufgetreten sind. Die Datenmenge verhält sich normalerweise linear zu Laufzeit des Programms.
-Tracing
-Der Prozess des Überwachens eines Programmaufrufs. Dabei werden auftretende Ereignisse nach Zeitstempeln sortiert in eine Datei geschrieben, die Profildatendatei.
-Danksagungen und Lizenz
-Dank an Julian Seward für seine einzigartige Anwendung & valgrind; und Nicholas Nethercote für den & cachegrind; Zusatz. Ohne diese Programme würde & kcachegrind; nicht existieren. Viele Ideen für die Benutzeroberfläche stammen ebenfalls von ihnen.
-Dank für die vielen Fehlerberichte und Vorschläge von verschiedenen Nutzern.
-Übersetzung Thomas Reitelbach tr@erdfunkstelle.de
-& underFDL;
-Installation
-Bezugsquellen von & kcachegrind;
-& kcachegrind; ist Teil des & kde;-Paketes & package;. Zusätzlich gibt es das Programm, & callgrind;, und weitere Dokumentation Sie auf der Webseite http://kcachegrind.sf.net. Dort gibt es weitere Installations- und Kompilierungshinweise.
-Anforderungen
-Um & kcachegrind; benutzen zu können, benötigen Sie & kde; 4.x. Um die Ablaufprotokolle zu erzeugen, sind zusätzlich & cachegrind; oder & calltree;/callgrind; erforderlich.
-Kompilierung und Installation
-& install.compile.documentation;
-Einrichtung
-Alle Einstellungsmöglichkeiten sind entweder im Einstellungsdialog oder in den Kontextmenüs der Graphen zu finden.
-Beim ersten Start ist dieser Bereich in einen oberen und einen unteren Abschnitt unterteilt, in denen jeweils verschiedene Darstellungsarten ausgewählt werden können. Verwenden Sie das Kontextmenü der Unterfenster und passen Sie die Aufteilung Ihren Wünschen an. Um zwischen verschiedenen Darstellungsarten zu wechseln, verwenden Sie Ansicht - > Layout - > Kopieren, ändern das Layout und wechseln mit Ansicht - > Layout - > Nächstes Layout zwischen den Layouts. Sie können auch den dazugehörigen Kurzbefehl verwenden.
-Übersicht der Profilabschnitte
-Aufrufstapel
-Darstellungsbereich
-Darstellungen
-Direkte Aufrufer
-Direkt Aufgerufene
-Datei Neu laden
-Das Menü Ansicht
-Ansicht Erster Ereignistyp
-Noch zu schreiben
-Ansicht Zweiter Ereignisyp
-Ansicht Gruppierung
-Ansicht Layout
-Ansicht Teilen
-Glossar
-Es folgt eine unsortierte Liste mit einigen Begriffserklärungen.
-Profildaten-Schnipsel: Daten aus einer Profildaten-Datei.
-& kappname;
+CMYK (8-Bit Ganzzahl pro Kanal)
+Cyan
+Magenta
+Gelb
+Schwarz
+Alpha
+CMYK (16-bit Ganzzahl pro Kanal)
+CMYK (16-bit Ganzzahl pro Kanal)
+Graustufen (16-bit Ganzzahl pro Kanal)
+Grau
+CMYK (16-bit Ganzzahl pro Kanal)
+CMYK (16-bit Ganzzahl pro Kanal)
+Graustufen (16-bit Ganzzahl pro Kanal)
+Graustufen (16-bit Ganzzahl pro Kanal)
+CMYK (8-Bit Ganzzahl pro Kanal)
+CMYK8-Histogramm
+CMYK8-Histogramm
+GRAY/Alpha16-Histogramm
+GRAY/Alpha8-Histogramm
+CMYK16-Histogramm
+CMYK8-Histogramm
+CMYK16-Histogramm

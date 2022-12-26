@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,100 +15,5 @@
 # sample_type:	whole
 # comments:	NA
 
-Spéciaux et variables globales prédéfinies
-
-& traducteurYohannHamon;
-Les spéciaux sont des fonctions qui sont traduites et exécutées par & kommander;. Vous devriez garder en tête que jusqu'à ce que & kommander; soit doté d'un analyseur syntaxique (« & #160; parser & #160; ») complet tous les spéciaux & kommander; seront exécutés en premier avant que le soit le script. Dans la plupart des cas ce n'est pas un problème, mais cela peut l'être parfois.
-@dcop( appId, objet, fonction, arguments)
-Faire un appel & DCOP;. @dcop( kmail, KMailIface, checkMail(),)
-@dcopid
-L'identifiant & DCOP; id du processus. (kmdr-executor-@pid)
-@dialog( BoîteDeDialogue [, paramètres])
-Exécute la boîte de dialogue Kommander spécifiée. La boîte de dialogue est recherchée dans le dossier des boîtes de dialogue et dans le dossier courant. Ceci suspend l'appel de l'exécuteur et configure le dossier par défaut à celui dans lequel l'application Kommander se situe. Des paramètres peuvent être transmis par la méthode Unix usuelle avec laquelle vous pouvez transmettre des paramètre nommés tel que variable=valeur. Vous pouvez alors trouver les paramètres transmis avec les variables globales. @global(variable) retournerais valeur.
-@env( VariableEnvironnement)
-Est remplacé par la variable d'environnement spécifiée. @env(PWD) est développé en $PWD. Souvenez vous que $est un caractère du shell et qu'il ne devrait pas être utilisé.
-@exec( commande)
-Retourne le résultat de l'exécution de la commande spécifié. @exec(ls -l).
-@execBegin... @execEnd
-La même chose que @exec mais accèpte les scripts multilignes et le « & #160; shebang & #160; » (NdT & #160;: premiers caractères d'un script qui sont utilisés pour spécifier l'interpréteur à utiliser). C'est utile pour différent langages de script soit pour les déclarer soit pour utiliser un « & #160; shebang & #160; ».
-@execBegin(php)
-@execBegin #! /usr/ bin/ php
-La première fonction utilise le nom de l'exécutable PHP. & kommander; recherche dans la variable d'environnement PATH pour php et si il n'est pas trouvé recherche si il n'est pas enregistré avec & kommander; dans une location autre que celles de votre PATH. Si ce n'est pas le cas, il précise à l'utilisateur qu'il ne peut pas être trouvé. Le second exemple utilise le classique shebang ce qui peut présenter certains avantages et certains problèmes également. Si vous avez une version beta de PHP5, par exemple dans / usr/ local/ bin, qui ne serait pas trouvée parce qu'elle est cherchée dans / usr/ bin cela peut être utile. Cependant, si vous distribuez votre boîte de dialogue à quelqu'un qui a PHP seulement dans / usr/ local/ bin il ne sera pas trouvé à l'aide du « & #160; shebang & #160; » utilisé. En conséquence l'utilisation de « & #160; shebang & #160; » est à faire avec précautions et l'utilisation de l'exécutable est recommandé si vous partagez vos fichiers.
-@global( variable)
-Est remplacé par la valeur de la variable globale spécifiée.
-@null
-Retourne la valeur null. Maintenant que Kommander vérifie le cas des textes d'élément graphique vides lors de l'exécution, les erreurs obtenues lorsqu'un état n'est pas configuré pour un élément graphique seront évitées.
-@parentPid
-Le & PID; du processus parent.
-@pid
-Le & PID; du processus.
-@readSetting( clé, valeurParDefaut)
-Lecture d'une valeur depuis kommanderrc
-@selectedWidgetText
-Le contenu sélectionné d'un élément graphique qui peut présenter plusieurs valeurs, comme un élément graphique de liste.
-@setGlobal( variable, valeur)
-Paramètre la variable globale à la valeur spécifiée.
-@widgetText
-Le contenu d'un élément graphique
-@writeSetting( clé, valeur)
-Écrit la valeur dans kommanderrc
-Groupe de fonction tableau (« & #160; Array & #160; »)
-@Array. values( tableau)
-Retourne une liste de toutes les valeurs contenues dans le tableau séparées par des caractères fin de ligne (« & #160; EOL & #160; »). Peut être utilisé pour se déplacer dans un tableau.
-@Array. keys( tableau)
-Retourne une liste de toutes les clés d'un tableau séparées par des caractères fin de ligne.
-@Array. setValue( tableau, clé, valeur)
-Configure la clé et la valeur d'un élément d'un tableau. Si le tableau n'existe pas il est créé.
-@Array. clear( tableau)
-Supprime tous les éléments du tableau.
-@Array. count( tableau)
-Retourne le nombre d'éléments d'un tableau.
-@Array. value( tableau, clé)
-Retourne la valeur associée à la clé spécifiée.
-@Array. remove( tableau, clé)
-Supprime l'élément associé à la clé spécifiée.
-@Array. fromString( tableau, chaîneCaractères)
-Ajoute tous les éléments de la chaîne de caractères au tableau. La chaîne de caractères doit avoir le format clé\ valeur\.
-@Array. toString( tableau, chaîneCaractères)
-Retourne tous les éléments du tableau dans un format clé\ valeur.
-Groupe de fonction fichier
-@File. read( fichier)
-Retourne le contenu du fichier spécifié.
-@File. write( Fichier ChaîneCaratères)
-Écrit la chaîne de caractères dans un fichier.
-@File. append( Fichier ChaîneCaratères)
-Ajoute la chaîne de caractères à la fin d'un fichier.
-Groupe de fonction de chaîne de caractères
-@String. length( chaîneCaractères)
-Retourne le nombre de caractères d'une chaîne de caractères.
-@String. contains( chaîneCaractères, sousChaîne)
-Vérifie si la chaîne de caractères contient la sous-chaîne spécifiée.
-@String. find( chaîneCaractères)
-Retourne la position d'une sous-chaîne dans une chaîne de caractères ou -1 si elle n'est pas trouvée.
-Cette fonction aura une position de démarrage pour la recherche dans la version Alpha 6 représentée par un entier.
-@String. left( chaîneCaractères, entier)
-Retourne les « & #160; entier & #160; » premiers caractères d'une chaîne de caractères.
-@String. right( chaîneCaractères, entier)
-Retourne les derniers « & #160; entier & #160; » caractères de la chaîne de caractères.
-@String. mid( chaîneCaractères, entier Début, entier Fin)
-Retourne la sous-chaîne de la chaîne de caractères commençant à la position spécifiée.
-@String. remove( chaîneCaractères, sous-chaîne)
-Supprime toutes les occurrences d'une sous-chaîne spécifiée.
-@String. replace( chaîneCaractères, sous-chaîne Cherche, sous-chaîne Remplace)
-Remplace toutes les occurances d'une sous-chaîne par une autre sous-chaîne spécifiée.
-@String. upper( sous-chaîne)
-Converti la chaîne de caractères en majuscules.
-@String. lower( chaîneCaractères)
-Converti la chaîne de caractères en minuscules.
-@String. compare( chaîneCaractères, chaîneCaractères)
-Compare deux chaînes de caractères. Retourne 0 si elles sont égales, -1 si la première est inférieure et 1 si la première est supérieure.
-@String. isEmpty( chaîneCaractères)
-Vérifie si la chaîne de caractères est vide.
-@String. isNumber( chaîneCaractères)
-Vérifie si la chaîne de caractères est un nombre valable.
-Variables globales prédéfinies
-Les variables globales prédéfinies sont accessibles comme toutes les autres variables globales à l'aide de la fonction @global.
-@global(_KDDIR)
-Le dossier dans lequel se situe la boîte de dialogue courrante.
-@global(_NAME)
-Le nom de la boîte de dialogue
+Convertisseur d'unités & #160;:
+Convertir & #160;:

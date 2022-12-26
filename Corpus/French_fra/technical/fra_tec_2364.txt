@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,9 +15,103 @@
 # sample_type:	whole
 # comments:	NA
 
-Configuration du MIDI
-L'utilisation de ce module est simple.
-Cliquez une fois sur le périphérique MIDI de la liste que vous voulez utiliser.
-Auteurs
-Mike McBride mmcbride@ematic.com
-Traduction française par Ludovic Grossard ludovic.grossard@libertysurf.fr
+Questions et réponses
+Cette section répond aux questions les plus fréquemment posées à propos de aRts.
+Généralités
+KDE utilise aRts pour le son, et aRts utilise les pilotes sonores du noyau de Linux, soit OSS, soit ALSA (en utilisant l'émulation OSS).
+Si votre carte son est reconnue par ALSA ou OSS et correctement configurée (&cad; que les autres applications Linux l'utilisent sans problème), ça marchera.
+Il n'y a pour l'instant que la gestion des pilotes pour OSS (ou compatible) sur d'autres plates-formes (&pex; FreeBSD).
+Vous êtes encouragés à contribuer en ajoutant la gestion du son pour d'autres plates-formes.
+Le code source correspondant est kdelibs/arts/flow/audiosubsys.cc.
+Si ce n'est pas le cas, téléchargez kdesupport, recompilez tout et ça devrait marcher.
+Connectez -vous en root
+ouvrez une fenêtre Konqueror
+allez dans le dossier /dev
+cliquez sur le fichier dsp avec le bouton droit de la souris, et choisissez propriétés.
+cliquez sur l'onglet Permissions
+cochez les cases Lecture et Écriture dans toutes les sections.
+cliquez sur OK
+Pour restreindre l'accès au son à certains utilisateurs, vous pouvez utiliser les permissions de groupe.
+Avec certaines distributions Linux, par exemple Debian/Potato, /dev/dsp appartient déjà au groupe audio ,donc vous devez juste ajouter les utilisateurs à ce groupe.
+/dev/admmidi0
+/dev/adsp0
+/dev/amidi0
+/dev/amixer0
+/dev/audio
+/dev/audio0
+/dev/cdrom
+/dev/dmfm0
+/dev/dmmidi0
+/dev/dsp
+/dev/dsp0
+/dev/midi0
+/dev/midi0
+/dev/midi00
+/dev/midi00
+/dev/mixer
+/dev/mixer0
+/dev/mpu401data
+/dev/mpu401stat
+/dev/music
+/dev/rmidi0
+/dev/rtc
+/dev/sequencer
+/dev/smpte0
+/dev/sndstat
+Tout particulièrement, full duplex est susceptible de ne pas fonctionner avec divers pilotes, donc essayez de le désactiver.
+Vous ne pouvez pas modifier le dossier de aRts de manière parfaite.
+Le problème est que la localisation de artsd est compilée dans artswrapper pour des raisons de sécurité.
+Vous pouvez cependant utiliser le fichier .mcoprc (entrées TraderPath/ExtensionPath) pour qu'un artsd déplacé puisse au moins trouver ses composants.
+Noatun
+aRts-builder
+aKtion
+KMid
+KMidi
+KMix
+Kscd
+Des jeux KDE tels que KPoker et KTuberling
+Brahms
+Kaboodle
+Kdao
+xmms (avec le module externe aRts)
+Real Networks RealPlayer 8.0 (fonctionne avec artsdsp; le support natif de aRts est en cours d'étude)
+aucune
+Cette section est incomplète - si vous avez plus d'informations sur les applications reconnues ou non, prévenez l'auteur afin de les inclure ici.
+Applications non- aRts
+Lorsque le serveur sonore de aRts est utilisé par KDE, il utilise le périphérique sonore.
+Si le serveur ne fait rien pendant 60 secondes, il est suspendu automatiquement et libère le périphérique.
+Si vous démarrez artsd depuis le centre de configuration de KDE, la suspension automatique est réglée par défaut à 60 secondes.
+Si vous démarrez artsd depuis la ligne de commande, vous devrez utiliser l'option -s pour spécifier le temps de suspension automatique, sinon elle sera désactivée par défaut.
+Actuellement, il n'est pas suspendu si le mode full duplex est activé.
+Désactivez -le depuis le KControl.
+Il est conseillé généralement de désactiver le mode full duplex si vous utilisez aRts pour lire de l'audio et pas pour enregistrer.
+Non, utiliser artsdsp peut entraîner des temps de latence et une augmentation légère de l'utilisation du CPU par rapport à l'utilisation directe des API de aRts.
+À part ça, si ça ne fonctionne pas pour une application, il faut considérer ça comme un bogue dans artsdsp.
+La technique utilisée par artsdsp devrait, si elle est implantée correctement, permettre à toute application de fonctionner avec (y compris les grosses applications comme Quake 3).
+Temps de latence
+Ce n'est probablement pas un bogue, mais dû au fait que le noyau de Linux n'est pas adapté à l'ordonnancement temps-réel.
+Il y a des situations où aRts ne pourra pas continuer à jouer.
+Vous pouvez cependant activer les droits temps-réel (via KControl), et utiliser un temps de réponse important (comme 250ms ou le plus grand possible) ,ce qui devrait améliorer la situation.
+Le texte d'aide pour ce réglage dans le KControl peut être trompeur.
+Une valeur faible signifie que aRts aura moins de temps pour réponde à un événement extérieur (&cad; le temps qui sépare le moment ou une fenêtre est fermée ,et le moment ou un son est joué par artsd).
+Plus de ressources CPU seront aussi utilisées, ce qui peut entraîner des interruptions brèves du son.
+Vérifiez le réglage du temps de réponse.
+Cependant, la version actuelle n'est pas encore vraiment optimisée.
+Ça devrait s'améliorer, mais jusque là, aucune estimation sur la vitesse de artsd ne peut vraiment être faite.
+Transparence réseau
+Activez -la à partir de Serveur de son dans le KControl (Échanger les informations de sécurité et de référence sur le serveur X11 et Activer la transparence réseau).
+Copiez ensuite votre fichier .mcoprc sur toutes les machines à partir desquelles vous voulez utiliser la transparence réseau.
+Connectez -vous à nouveau.
+Assurez -vous que les hôtes mis en jeu se connaissent bien entre eux (&cad; qu'ils ont des noms résolvables ou qu'ils sont dans /etc/hosts).
+Enfin, dans toutes les versions de KDE de la série 2.0.x, un bogue apparaît si vous n'avez pas de nom de domaine.
+Il est possible de contourner ce problème en ajoutant une entrée à /etc/hosts (&cad; orion. si votre nom d'hôte est orion).
+Exécutez ensuite
+La sortie indiquera le nom d'hôte et le port en cours d'utilisation par aRts.
+Par exemple, tcp :orion :1698 signifierait que tout client essayant d'utiliser la transparence réseau devrait savoir comment atteindre l'hôte orion.
+Divers
+La cause la plus probable est que vous utilisez de vieilles structures ou de vieux modules qui ne sont pas reconnus pas la version pour KDE 2.
+Malheureusement, la documentation disponible sur internet se réfère à aRts -0.3.4.1 qui est une ancienne version.
+Le plantage le plus souvent rencontré est l'apparition du message d'erreur [artsd] Synth_PLAY :audio subsystem is already used. dans aRts-builder lorsqu'une structure est exécutée.
+Utilisez un module Synth_AMAN_PLAY plutôt qu'un module Synth_PLAY et le problème disparaîtra.
+Voyez aussi l'aide de aRts-builder en appuyant sur F1 depuis aRts-builder).
+Les versions récentes de aRts-builder (KDE 2.1 beta1 et suivantes) sont livrées avec plusieurs exemples.

@@ -1,6 +1,6 @@
 # language_name_wals:	Russian
 # language_name_glotto:	Russian
-# ISO_6393:	rus
+# iso639_3:	rus
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,12 +15,53 @@
 # sample_type:	whole
 # comments:	NA
 
-Управление точками останова
-/text/sbasic/shared/02/11170000.xhp
+On Error GoTo ...
+Инструкция Resume [время выполнения]
+/text/sbasic/shared/03050500.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-Управление точками останова
-Служит для вызова диалогового окна для управления точками останова.
-значок
-Manage Breakpoints
-Диалоговое окно ''Управление точками останова''
+параметр Resume Next
+On Error GoTo ... инструкция Resume
+On Error GoTo ...
+Инструкция Resume [время выполнения]
+Включает процедуру обработки ошибок после появления ошибки или возобновляет выполнение программы.
+Синтаксис:
+On {Error GoTo Метка_строки | GoTo 0 | Resume Next}
+Параметры:
+GoTo Метка_строки
+.
+Если возникает ошибка, включается процедура обработки ошибок, которая начинается со строки &quot; Метка_строки &quot; .
+Resume Next
+.
+Если возникает ошибка, выполнение программы продолжается с инструкции, следующей за инструкцией, в которой эта ошибка возникла.
+GoTo 0
+.
+Обработчик ошибок в текущей процедуре отключается.
+Инструкция On Error GoTo применяется для реагирования на ошибки, возникающие в макросе.
+Эту инструкцию необходимо вставить в начало процедуры (в локальной процедуре обработки ошибок) или в начало модуля.
+Пример:
+Sub ExampleReset
+On Error Goto ErrorHandler
+Dim iNumber As Integer
+Dim iCount As Integer
+Dim sLine As String
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; Это строка текста &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+For iCount = 1 to 5
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+rem
+end if
+Next iCount
+Close #iNumber
+Exit Sub
+ErrorHandler:
+Reset
+MsgBox &quot; Все файлы будут закрыты &quot; ,0, &quot; Ошибка &quot;
+End Sub

@@ -1,6 +1,6 @@
 # language_name_wals:	Japanese
 # language_name_glotto:	Japanese
-# ISO_6393:	jpn
+# iso639_3:	jpn
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,23 +15,45 @@
 # sample_type:	whole
 # comments:	NA
 
-ConvertToURL 関数 [実行時]
-/text/sbasic/shared/03120312.xhp
+Lof 関数[実行時]
+/text/sbasic/shared/03020303.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-ConvertToURL 関数
-ConvertToURL 関数 [実行時]
-システムファイル名をファイル URL へ変換します。
+Lof 関数
+Lof 関数 [実行時]
+オープン済みファイルのサイズを、バイト単位で返します。
 構文:
-ConvertToURL(filename)
+Lof (FileNumber)
 戻り値:
-文字列
+ロング整数
 パラメータ:
-Filename:
-ファイル名を示す文字列。
+FileNumber:
+Open ステートメントが割り当てたファイル番号を示す数値表式。
+FileLen
+関数を使用する必要があります。
 例:
-systemFile$ = &quot; c:\folder\mytext.txt &quot;
-url$ = ConvertToURL( systemFile$ )
-print url$
-systemFileAgain$ = ConvertFromURL( url$ )
-print systemFileAgain$
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM バリアント型変数が必要
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM 開始位置
+Put #iNumber,, &quot; This is the first line of text &quot; REM テキストの書き込み
+Put #iNumber,, &quot; This is the second line of text &quot;
+Put #iNumber,, &quot; This is the third line of text &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; This is a new line of text &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; This is the text in record 20 &quot;
+Print Lof(#iNumber)
+Close #iNumber
+end sub

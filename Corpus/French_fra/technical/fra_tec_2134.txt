@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,55 +15,319 @@
 # sample_type:	whole
 # comments:	NA
 
-Balises spéciales
-/text/swriter/01/04090007.xhp
+Add-in de programmation de $[officename] Calc
+/text/scalc/01/04060112.xhp
 Sun Microsystems, Inc.
-converted from old format - fpe
-Balises;$[officename] Writer
-$[officename] Writer;balises HTML spéciales
-HTML;balises spéciales pour les champs
-Champs;import/export HTML
-Champs horaires;HTML
-Champs de date;HTML
-Champs d'information document
-MW changed &quot; $[officename] Writer;tags &quot; to &quot; $[officename];special HTML tags &quot;
-Balises spéciales
-Lorsque vous enregistrez au format HTML un document contenant des champs, $[officename] convertit automatiquement les champs de date, les champs horaires et les champs Info document en balises HTML spéciales.
-Le contenu de ces champs est placé entre la balise ouvrante HTML et la balise fermante HTML des champs convertis.
-Ces balises HTML spéciales ne correspondent pas aux balises HTML standard.
-Les champs spécifiques à $[officename] Writer sont identifiés par la balise < SDFIELD > dans un document HTML.
-Le type, le format et le nom du champ spécial sont indiqués dans la balise HTML ouvrante.
-Le format d'une balise de champ reconnue par un filtre HTML varie en fonction du type du champ.
-Champs de date et champs horaires
-Pour les champs &quot; Date &quot; et &quot; Heure &quot; , le paramètre TYPE correspond à DATETIME.
-Le format de la date et de l'heure est spécifié par le paramètre SDNUM (par exemple, JJ/MM/AA pour la date et HH:MM:SS pour l'heure).
-Pour les champs de date et champs horaires fixes, la date et l'heure sont spécifiées par le paramètre SDVAL.
-Le tableau suivant fournit des exemples de balises HTML spéciales qui sont reconnues comme champs de date ou champs horaires par l'application $[officename] :
-Champs
-Balise $[officename]
-Date fixe
-< SDFIELD TYPE=DATETIME SDVAL= &quot; 35843,4239988426 &quot; SDNUM= &quot; 1031;1031;JJ.MM.AA &quot; > 17.02.98 < /SDFIELD >
-Date variable
-< SDFIELD TYPE=DATETIME SDNUM= &quot; 1031;1031;JJ.MM.AA &quot; > 17.02.98 < /SDFIELD >
-Heure fixe
-< SDFIELD TYPE=DATETIME SDVAL= &quot; 35843,4240335648 &quot; SDNUM= &quot; 1031;1031;HH:MM:SS &quot; > 10:10:36 < /SDFIELD >
-Heure variable
-< SDFIELD TYPE=DATETIME SDNUM= &quot; 1031;1031;HH:MM:SS &quot; > 10:10:36 < /SDFIELD >
-Champs Info document
-Pour les champs Info document, le paramètre TYPE correspond à DOCINFO.
-Le paramètre SUBTYPE indique le type du champ, par exemple, SUBTYPE=CREATE pour le type &quot; Création &quot; du champ Info document.
-Pour les types date et heure du champ Info document, le paramètre FORMAT correspond à DATE ou TIME, et le paramètre SDNUM indique le format numérique utilisé.
-Le paramètre SDFIXED indique si le contenu du champ Info document est fixe.
-Lorsqu'un champ de date ou champ horaire est fixe, son contenu correspond au paramètre SDVAL ; sinon, le contenu correspond au texte figurant entre les balises HTML SDFIELD.
-Le tableau suivant fournit des exemples de balises HTML spéciales qui sont reconnues comme types de champ Info document par l'application $[officename] :
-Champs
-Balise $[officename]
-Description (contenu fixe)
-< SDFIELD TYPE=DOCINFO SUBTYPE=COMMENT SDFIXED > Description < /SDFIELD >
-Date de création
-< SDFIELD TYPE=DOCINFO SUBTYPE=CREATE FORMAT=DATE SDNUM= &quot; 1031;1031;TT AA &quot; > 1.
-Trimestre 98 < /SDFIELD >
-Heure de création (contenu fixe)
-< SDFIELD TYPE=DOCINFO SUBTYPE=CREATE FORMAT=TIME SDVAL= &quot; 0 &quot; SDNUM= &quot; 1031;1031;HH:MM:SS AM/PM &quot; SDFIXED > 03:58:35 PM < /SDFIELD >
-Date de modification
-< SDFIELD TYPE=DOCINFO SUBTYPE=CHANGE FORMAT=DATE SDNUM= &quot; 1031;1031;NN JJ.MMM AA &quot; > Lun 23 Fév 98 < /SDFIELD >
+converted from old format - fpe dedr: fixed #i30855#
+Programmation;add-ins
+Bibliothèques partagées;programmation
+Fonctions DLL externes
+Fonctions;DLL de l'add-in de $[officename] Calc
+Add-ins;programmation
+mw made &quot; external... &quot; a one level entry and deleted one &quot; functions;... &quot; entry
+Add-in de programmation de $[officename] Calc
+fonctions API
+.
+assistant Fonctions
+, dans la catégorie
+Add-in
+.
+Si vous souhaitez programmer vous-même un add-in, vous trouverez ici des informations sur les fonctions devant être exportées par la
+bibliothèque partagée
+externe DLL
+pour que l'add-in puisse être joint correctement.
+bibliothèque partagée
+DLL
+appropriée.
+Pour être reconnue par $[officename], la
+bibliothèque partagée
+DLL
+doit posséder certaines propriétés, comme expliqué ci-dessous.
+Grâce à  ces informations, vous pourrez programmer votre propre add-in pour l'
+assistant Fonctions
+de $[officename] Calc.
+Concept de l'add-In
+Chaque bibliothèque Add-In propose plusieurs fonctions.
+Certaines fonctions sont utilisées à des fins administratives.
+Dans la plupart des cas, vous pouvez donner le nom de votre choix à vos propres fonctions.
+Cependant, celles-ci doivent suivre certaines règles concernant la transmission des paramètres.
+Les conventions de nommage et d'appel varient en fonction des plates-formes.
+la bibliothèque partagée
+DLL d'add-in
+GetFunctionCount
+et
+GetFunctionData
+doivent exister.
+Ces dernières permettent de déterminer les fonctions ainsi que les types de paramètres et les valeurs de retour.
+Les types Double et Chaîne sont supportés pour les valeurs de retour.
+Pour les paramètres, les plages de cellules
+Double Array
+,
+String Array
+et
+Cell Array
+sont également supportées.
+Les paramètres sont transmis par référence.
+Il est donc possible de modifier les valeurs.
+Ceci n'est cependant pas supporté par $[officename] Calc car sans intérêt au niveau d'un tableur.
+Les bibliothèques peuvent être rechargées pendant l'exécution et les fonctions administratives peuvent en analyser le contenu.
+Des informations vous sont fournies pour chaque fonction : nombre et type de paramètres, noms de fonctions internes et externes et numéro administratif.
+Le lancement des fonctions s'effectue de manière synchronisée et donne le résultat immédiatement.
+Il est également possible de lancer des fonctions en temps réel (fonctions asynchrones) mais en raison de leur complexité elles ne peuvent pas être présentées ultérieurement.
+Généralités pour l'interface
+Seize est le nombre maximal de paramètres que peut contenir une fonction add-in liée à $[officename] Calc : une valeur de retour et jusqu'à 15 paramètres de saisie de fonction.
+Les types de données sont définies de la manière suivante :
+Type de données
+Définition
+CALLTYPE
+sous Windows :
+FAR PASCAL (_far _pascal)
+sinon : par défaut (données par défaut spécifiques au système d'exploitation)
+USHORT
+Integer sans signe de 2 octets
+DOUBLE
+Format dépendant de la plateforme occupant 8 octets
+Paramtype
+dépendant de la fonction comme int
+PTR_DOUBLE =0 Pointeur sur un double
+PTR_STRING =1 Pointeur sur une chaîne de caractère qui se termine par zéro
+PTR_DOUBLE_ARR =2 Pointeur sur une matrice double
+PTR_DOUBLE_ARR =3 Pointeur sur une String Array
+PTR_DOUBLE_ARR =4 Pointeur sur une Cell Array
+NONE =5
+Bibliothèque partagée
+DLL
+: fonctions
+bibliothèque partagée
+externe DLL
+.
+bibliothèque partagée
+DLL
+:
+void CALLTYPE fn(out, in1, in2, ...)
+Résultat : code de sortie
+plage de cellules
+est une matrice de type double, chaîne ou cellule.
+GetFunctionCount()
+GetFunctionData
+et
+GetParameterDescription
+.
+Syntaxe
+void CALLTYPE GetFunctionCount(USHORT & nCount)
+Paramètre
+USHORT & nCount:
+Résultat : référence à la variable qui doit contenir le nombre de fonctions Add-in.
+Si Add-In met par exemple 5 fonctions à disposition de $[officename] Calc, on a donc nCount=5.
+GetFunctionData()
+Détermine toutes les informations importantes relatives à une fonction Add-In.
+Syntaxe
+void CALLTYPE GetFunctionData(USHORT & nNo, char* pFuncName, USHORT & nParamCount, Paramtype* peType, char* pInternalName)
+Paramètre
+USHORT & nNo:
+Entrée : numéro de fonction compris entre 0 et nCount-1 compris.
+char* pFuncName:
+bibliothèque partagée
+DLL
+.
+Ce nom n'a pas d'influence sur celui utilisé dans l'
+assistant Fonctions
+.
+USHORT & nParamCount:
+Résultat : nombre de paramètres de la fonction AddIn.
+Ce nombre doit être supérieur à 0 puisqu'il existe toujours un code de sortie dont la valeur maximale est égale à 16.
+Paramtype* peType:
+Résultat : pointeur sur une matrice présentant exactement 16 variables de type Paramtype.
+Les premières entrées nParamCount sont complétées avec le type du paramètre correspondant.
+char* pInternalName:
+assistant Fonctions
+.
+Peut contenir des trémas.
+Les paramètres pFuncName et pInternalName sont des char Arrays implémentés dans $[officename] Calc avec la taille 256.
+GetParameterDescription()
+assistant Fonctions
+.
+Syntaxe
+void CALLTYPE GetParameterDescription(USHORT & nNo, USHORT & nParam, char* pName, char* pDesc)
+Paramètre
+USHORT & nNo:
+Entrée : numéro de la fonction compris entre 0 et nCount-1 dans la bibliothèque.
+USHORT & nParam:
+Entrée : indique pour quel paramètre la description est nécessaire, les paramètres commencent par 1.
+Si nParam commence par 0, la description de la fonction doit être dans pDesc et pName est dans ce cas inutile.
+char* pName:
+Résultat : ajoute le nom ou le type de paramètre, par exemple le mot &quot; Nombre &quot; ou &quot; Chaîne de caractères &quot; ou &quot; Date &quot; ou autre est défini dans $[officename] Calc sous la forme char[256].
+char* pDesc:
+Résultat : ajoute la description du paramètre, par exemple &quot; Valeur pour laquelle la somme doit être calculée &quot; .
+Implémentée dans $[officename] sous la forme char[256].
+assistant Fonctions
+est limité et que vous ne pourrez pas entièrement utiliser ces 256 caractères.
+Plages de cellules
+Les tableaux qui suivent vous renseignent sur les structures de données qu'un module de programme externe doit avoir pour permettre la soumission de plages de cellules.
+Pour chaque type de données, $[officename] Calc distingue trois Arrays.
+Matrice double
+Vous pouvez appliquer une plage de cellules ayant des valeurs du type Nombre/Double en guise de paramètre.
+La définition d'une matrice double s'effectue de la manière suivante dans $[officename] Calc :
+Offset
+Nom
+Description
+0
+Col1
+Numéro de colonne du coin supérieur gauche de la plage de cellules.
+La numérotation commence par 0.
+2
+Row1
+Numéro de ligne du coin supérieur gauche de la plage de cellules, numérotation à partir de 0.
+4
+Tab1
+Numéro de table du coin supérieur gauche de la plage de cellules, numérotation à partir de 0.
+6
+Col2
+Numéro de colonne du coin inférieur droit de la plage de cellules.
+La numérotation commence par 0.
+8
+Row2
+Numéro de ligne du coin inférieur droit de la plage de cellules, numérotation à partir de 0.
+10
+Tab2
+Numéro de table du coin inférieur droit de la plage de cellules, numérotation à partir de 0.
+12
+Count
+Nombre des éléments suivants.
+Les cellules vides ne sont ni prises en compte ni soumises.
+14
+Col
+Numéro de colonne de l'élément.
+La numérotation commence par 0.
+16
+Row
+Numéro de ligne de l'élément, numérotation à partir de 0.
+18
+Tab
+Numéro de table de l'élément, numérotation à partir de 0.
+20
+Error
+Numéro d'erreur où la valeur 0 vaut pour &quot; Aucune erreur &quot; .
+Si l'élément provient d'une cellule de formule, la valeur de l'erreur est déterminée via la formule.
+22
+Valeur
+Variable IEEE de type Double/Virgule flottante de 8 octets
+30
+...
+Élément suivant
+Matrice de chaîne
+Une plage de cellules qui comprend des valeurs de type Texte, est soumise en tant que matrice de chaîne.
+La définition d'une matrice de chaîne s'effectue de la manière suivante dans $[officename] Calc :
+Décaler
+Nom
+Description
+0
+Col1
+Numéro de colonne du coin supérieur gauche de la plage de cellules.
+La numérotation commence par 0.
+2
+Row1
+Numéro de ligne du coin supérieur gauche de la plage de cellules, numérotation à partir de 0.
+4
+Tab1
+Numéro de table du coin supérieur gauche de la plage de cellules, numérotation à partir de 0.
+6
+Col2
+Numéro de colonne du coin inférieur droit de la plage de cellules.
+La numérotation commence par 0.
+8
+Row2
+Numéro de ligne du coin inférieur droit de la plage de cellules, numérotation à partir de 0.
+10
+Tab2
+Numéro de table du coin inférieur droit de la plage de cellules, numérotation à partir de 0.
+12
+Count
+Nombre des éléments suivants.
+Les cellules vides ne sont ni prises en compte ni soumises.
+14
+Col
+Numéro de colonne de l'élément.
+La numérotation commence par 0.
+16
+Row
+Numéro de ligne de l'élément, numérotation à partir de 0.
+18
+Tab
+Numéro de table de l'élément, numérotation à partir de 0.
+20
+Error
+Numéro d'erreur où la valeur 0 vaut pour &quot; Aucune erreur &quot; .
+Si l'élément provient d'une cellule de formule, la valeur de l'erreur est déterminée via la formule.
+22
+Len
+Longueur de la chaîne suivante, y compris l'octet de fin.
+Lorsque la longueur y compris l'octet de fin ne renvoie pas à une valeur exacte, un deuxième octet nul est inséré à la chaîne afin d'obtenir une valeur précise.
+Len se calcule via ((StrLen+2) & ~1).
+24
+String
+Chaîne se terminant par 0
+24+Len
+...
+Élément suivant
+Matrice de cellule
+Les matrices de cellules sont utilisées pour appeler des plages de cellules contenant à la fois du texte et des nombres.
+Dans $[officename] Calc, une matrice de cellules est définie comme suit :
+Décaler
+Nom
+Description
+0
+Col1
+Numéro de colonne du coin supérieur gauche de la plage de cellules.
+La numérotation commence par 0.
+2
+Row1
+Numéro de ligne du coin supérieur gauche de la plage de cellules, numérotation à partir de 0.
+4
+Tab1
+Numéro de table du coin supérieur gauche de la plage de cellules, numérotation à partir de 0.
+6
+Col2
+Numéro de colonne du coin inférieur droit de la plage de cellules.
+La numérotation commence par 0.
+8
+Row2
+Numéro de ligne du coin inférieur droit de la plage de cellules, numérotation à partir de 0.
+10
+Tab2
+Numéro de table du coin inférieur droit de la plage de cellules, numérotation à partir de 0.
+12
+Count
+Nombre des éléments suivants.
+Les cellules vides ne sont ni prises en compte ni soumises.
+14
+Col
+Numéro de colonne de l'élément.
+La numérotation commence par 0.
+16
+Row
+Numéro de ligne de l'élément, numérotation à partir de 0.
+18
+Tab
+Numéro de table de l'élément, numérotation à partir de 0.
+20
+Error
+Numéro d'erreur où la valeur 0 vaut pour &quot; Aucune erreur &quot; .
+Si l'élément provient d'une cellule de formule, la valeur de l'erreur est déterminée via la formule.
+22
+Type
+Type de contenu de cellule, 0 == Double, 1 == chaîne
+24
+Value or Len
+Si Type == 0 :
+Variable IEEE de type Double/Virgule flottante de 8 octets
+Si Type == 1 :
+Longueur de la chaîne suivante, y compris l'octet de fin.
+Lorsque la longueur y compris l'octet de fin ne renvoie pas à une valeur exacte, un deuxième octet nul est inséré à la chaîne afin d'obtenir une valeur précise.
+Len se calcule via ((StrLen+2) & ~1).
+26 if Type==1
+String
+Si Type == 1 : chaîne se terminant par 0
+32 ou 26+Len
+...
+Élément suivant

@@ -1,6 +1,6 @@
 # language_name_wals:	Japanese
 # language_name_glotto:	Japanese
-# ISO_6393:	jpn
+# iso639_3:	jpn
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,61 +15,23 @@
 # sample_type:	whole
 # comments:	NA
 
-CreateUnoListener 関数[実行時]
-/text/sbasic/shared/03132000.xhp
+DateValue 関数[実行時]
+/text/sbasic/shared/03030102.xhp
 Sun Microsystems, Inc.
-converted from old format - fpe dedr: fixed #i31078#
-CreateUnoListener 関数
-CreateUnoListener 関数 [実行時]
-リスナーインスタンスを作成します。
-Uno インタフェースの多くでは、リスナーを特殊なリスナーインタフェースに登録することができます。これにより、特定のイベントの発生を監視して、必要なリスナーメソッドを呼び出すことができます。CreateUnoListener 関数は、呼び出されたリスナーインタフェースの到着を待ち、そのインタフェースのサポートするオブジェクトへ、インタフェースを引き渡します。次にこのオブジェクトはメソッドへ引き渡されてリスナーが登録されます。
+converted from old format - fpe
+DateValue; 関数
+DateValue 関数 [実行時]
+日付文字列から日付の値を返します。日付文字列は 1 つの数値で表される完全な日付です。このシリアル値を使用して、2 つの日付の間の差を調べることもできます。
 構文:
-oListener = CreateUnoListener( Prefixname, ListenerInterfaceName )
+DateValue [(date)]
+戻り値:
+日付
+パラメータ:
+Date:
+変換する日付データを示す文字列表式。日付を示す書式は、各種のフォーマットが使用できます。
+この関数の変換範囲は 1582 年 12 月 1 日から 9999 年 12 月 31 日までの日付で、これらの日付を該当する数値に変換します。こうして変換される数値を用いると、異なる日付間の日数計算などが行えます。なお引数に指定した日付が上記の範囲を超えている場合、$[officename] Basic はエラーメッセージを表示します。
+DateSerial 関数の場合は年、月、日を個別の値として指定するのに対して、DateValue 関数の場合は「年.[,]月.[,]日」の形式で一括して指定します。
 例:
-下記の例は、Basic ライブラリオブジェクトをベースにしています。
-Dim oListener
-oListener = CreateUnoListener( &quot; ContListener_ &quot; , &quot; com.sun.star.container.XContainerListener &quot; )
-CreateUnoListener メソッドは、2 つのパラメータを使用します。1 番目のパラメータはプレフィックスで、詳細は後述します。2 番目のパラメータは、使用する Listener インタフェースの完全な名前です。
-Listener は Broadcaster Object に追加する必要があります。この処理は、Listener 追加用のメソッドを呼び出すことで実行します。通常こうしたメソッドの取るパターンは「addFooListener」という形式で、ここで「Foo」が Listener Interface Type で「X」は付きません。ここでの例では、addContainerListener メソッドを呼び出して XContainerListener を登録しています。
-Dim oLib
-oLib = BasicLibraries.Library1 ' Library1 の存在が必要
-oLib.addContainerListener( oListener ) ' リスナーの登録
-これで Listener が登録されます。イベントが発生すると、該当する Listener が com.sun.star.container.XContainerListener Interface から呼び出されます。
-プレフィックスは、登録した Listener を Basic サブルーチンから呼び出します。Basic の実行時システムは、「PrefixListenerMethod」という名前の Basic サブルーチンや関数を検索して、該当するものを発見した段階でこれらを呼び出します。該当するものが存在しないと、実行時エラーが発生します。
-ここでの例では、Listener-Interface は下記のメソッドを利用しています。
-disposing:
-リスナーのベースインタフェース (com.sun.star.lang.XEventListener):すべての Listener Interface のベースインタフェース
-elementInserted:
-com.sun.star.container.XContainerListener インタフェースのメソッド
-elementRemoved:
-com.sun.star.container.XContainerListener インタフェースのメソッド
-elementReplaced:
-com.sun.star.container.XContainerListener インタフェースのメソッド
-ここでの例では、プレフィックスを ContListener_ としています。このため下記のサブルーチン群を Basic に実装しておく必要があります。
-ContListener_disposing
-ContListener_elementInserted
-ContListener_elementRemoved
-ContListener_elementReplaced
-Listener の種類ごとに、イベント情報を格納するイベント構造型が存在します。Listener メソッドが呼び出されると、このイベントのインスタンスがメソッドにパラメータとして渡されます。Basic の Listener メソッドは、該当するパラメータが Sub 宣言部で渡される限り、これらのイベントオブジェクトを呼び出すこともできます。たとえば、
-Sub ContListener_disposing( oEvent )
-MsgBox &quot; disposing &quot;
-MsgBox oEvent.Dbg_Properties
-End Sub
-Sub ContListener_elementInserted( oEvent )
-MsgBox &quot; elementInserted &quot;
-MsgBox oEvent.Dbg_Properties
-End Sub
-Sub ContListener_elementRemoved( oEvent )
-MsgBox &quot; elementRemoved &quot;
-MsgBox oEvent.Dbg_Properties
-End Sub
-Sub ContListener_elementReplaced( oEvent )
-MsgBox &quot; elementReplaced &quot;
-MsgBox oEvent.Dbg_Properties
-End Sub
-使用しないオブジェクトについては、イベントオブジェクトのパラメータを省略できます。
-' disposing 用 Sub の最小構成
-Sub ContListener_disposing
-End Sub
-常に
-実装しておく必要があります。
+Sub ExampleDateValue
+msgbox DateValue( &quot; 1997/12/02 &quot; )
+end sub

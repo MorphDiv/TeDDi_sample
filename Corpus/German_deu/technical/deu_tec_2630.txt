@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,180 +15,716 @@
 # sample_type:	whole
 # comments:	NA
 
-Das Handbuch zu ksysv
-Dieses Handbuch beschreibt den KDE System V Init Editor ksysv.
-Einf\xFChrung
-Willkommen zum KDE System V init Editor, eher bekannt (und im folgenden auch so benannt) als ksysv.
-Dieser Abschnitt f\xFChrt ein paar Konzepte ein und beschreibt, was Sie mit ksysv tun k\xF6nnen.
-Eine kurze Beschreibung von System V init
-Die System V init entwickelt sich rasch zum Standard f\xFCr die Kontrolle von Programmstarts beim Hochfahren des Systems in der Linux Welt.
-Und zwar deshalb, weil sie leichter zu benutzen, m\xE4chtiger und zugleich flexibler ist als die traditionelle BSD -init.
-Die init-Bin\xE4rdatei liegt unter /sbin und nicht unter /etc.
-Dies ist deshalb wichtig, weil vielleicht jemand versuchen k\xF6nnte, eine Maschine auf System V init umzustellen, ohne eine Neuinstallation und Neuformatierung vorzunehmen.
-Der Linux Kernel sieht zuerst unter /etc nach einer init-Datei.
-Deshalb m\xFCssen Sie sichergehen, da\xDF die alte init von dort entfernt wurde, falls es dort eine gab.
-init.d /
-rc0.d /
-rc1.d /
-rc2.d /
-rc3.d /
-rc4.d /
-rc5.d /
-rc6.d
-rc.local sollte seinerseits unter /etc/rc.d liegen, wenn Sie es ben\xF6tigen.
-Die meisten Systeme besitzen diese Datei, auch wenn es eigentlich nicht viel Verwendung daf\xFCr gibt.
-Sie k\xF6nnen ebenfalls ein rc.serial in /etc/rc.d anlegen, wenn Sie beim Hochfahren etwas ausf\xFChren lassen wollen, was mit dem seriellen Anschlu\xDF zu tun hat.
-der Kernel sucht an verschiedenen Stellen nach dem Programm init und startet die erste, die er findet;
-init startet /etc/rc.d/rc.sysinit.
-rc.sysinit tut eine Menge notwendiger Dinge und startet dann rc.serial (wenn es existiert);
-init startet rc.local
-init startet alle Skripte f\xFCr das voreingestellte Runlevel.
-Aber wie startet es nun all die richtigen Skripte?
-Sie werden bemerken, das sich in diesem Verzeichnis keine richtigen Dateien befinden.
-Stattdessen ist jeder Eintrag hier eine Verkn\xFCpfung zu einem der Skripte im Verzeichnis init.d.
-Wie startet und stoppt init eigentlich Systemdienste?
-Ganz einfach:
-Jedes der Skripte ist so geschrieben, da\xDF es ein Argument wie start und stop akzeptiert.
-Sie k\xF6nnen diese Skripte tats\xE4chlich von Hand auf der Kommandozeile folgenderma\xDFen starten:
-Dies w\xFCrde den httpd-Server anhalten.
-Init liest einfach den Namen, und wenn der ein K bei sich hat, dann ruft sie das Skript mit einem stop -Argument auf.
-Wenn er ein S mit sich f\xFChrt, dann l\xE4\xDFt init das Skript mit einem start -Argument laufen.
-Warum all diese Runlevel?
-Grundlagen der Bildschirmabl\xE4ufe
-Hier lernen Sie die Benutzung von ksysv.
-Sie sollte nicht sehr schwierig sein, weil das Programm so benutzerfreundlich wie m\xF6glich angelegt wurde.
-Maus
-Die Verwendung von ksysv mit einer Maus oder einem anderen Zeigeger\xE4t ist einfach, um nicht zu sagen trivial:
-Ziehen Sie einfach einen Eintrag aus dem Bereich der Verf\xFCgbaren Systemdienste auf eins der sechs Runlevel, um es auf diesem Level zu starten (bzw. zu stoppen).
-Sie k\xF6nnen Skripte auch zwischen Runleveln verschieben oder die Position innerhalb eines Levels ver\xE4ndern, indem sie es woanders hin ziehen.
-Dabei wird der Eintrag von seinem urspr\xFCnglichen Runlevel (oder seiner Position) entfernt.
-Dies geschieht nur dann nicht, wenn sie einen Eintrag aus dem Bereich der Verf\xFCgbaren Systemdienste herausziehen.
-Beachten Sie:
-Eintr\xE4ge werden verschoben, wenn Sie diese in einen neuen Bereich ziehen.
-Um sie lediglich auf eine neues Runlevel zu kopieren, m\xFCssen Sie ausdr\xFCcklich Kopieren aus dem Men\xFC Bearbeiten oder aus dem Kontextmen\xFC w\xE4hlen und in den Zielbereich Einf\xFCgen -- sogar dann, wenn derselbe Eintrag bereits zuvor im Zielbereich der Aktion existiert hat.
-Die Sortiernummer eines Eintrags kann manchmal nicht berechnet werden.
-In so einem Fall m\xFCssen Sie die Sortiernummern der umgebenden Eintr\xE4ge bearbeiten, bevor Sie nochmals versuchen k\xF6nnen, den Systemdienst einzuf\xFCgen.
-Beachten Sie:
-Sortiernummern k\xF6nnen von 00 bis 99 reichen, nicht h\xF6her.
-Sie k\xF6nnen Eintr\xE4ge l\xF6schen, indem Sie sie in den Papierkorb ziehen.
-Beachten Sie:
-Gegenw\xE4rtig gibt es keine M\xF6glichkeit, Eintr\xE4ge wiederherzustellen, die in den Papierkorb geworfen wurden.
-Seien Sie also vorsichtig.
-Tastatur
-Sie k\xF6nnen die Tabulator -Taste benutzen, um die verschiedenen Arbeitsbereiche zu aktivieren (Verf\xFCgbare Systemdienste, Runlevel 1 Start, Runlevel 1 Stop etc.) sowie die Cursor-Tasten, um eine Auswahl ober- oder unterhalb der bisherigen zu treffen.
-Um die Sortiernummer oder den Namen eines Eintrags manuell zu \xE4ndern, dr\xFCcken Sie die Eingabe -Taste, um den Eigenschaften-Dialog zu \xF6ffnen.
-Benutzen Sie die Tabulator -Taste, um zwischen verschiedenen Feldern zu wechseln.
-Schlie\xDFen Sie den Dialog durch erneutes Dr\xFCcken der Eingabe -Taste, um die \xC4nderungen zu akzeptieren, oder dr\xFCcken Sie Esc, um die \xC4nderungen zu verwerfen.
-Die Men\xFC-Eintr\xE4ge
-Es folgt eine Punkt-f\xFCr-Punkt-Erl\xE4uterung der Men\xFCs von ksysv.
-Das Men\xFC Datei
-Wegen der Gefahr des Datenverlusts bitten alle Eintr\xE4ge im Men\xFC Datei um Best\xE4tigung, bevor sie ihre Arbeit tun.
-Datei Zuletzt gespeicherte Konfiguration...
-Alle durchgef\xFChrten \xC4nderungen verwerfen und die letzte gespeicherte Konfiguration aufrufen.
-Eine gespeicherte Konfiguration laden.
-Macht Ihre \xC4nderungen dauerhaft wirksam.
-Es werden keine Sicherungsdateien angelegt.
-Seien Sie also vorsichtig.
+Das Handbuch zu kvoctrain
+Dieses Handbuch beschreibt kvoctrain in der Version 0.8.0. kvoctrain ist ein kleines Hilfsmittel, um Ihnen beim Lernen von Vokabeln zu helfen.
+Einleitung
+Was ist kvoctrain?
+kvoctrain ist ein kleines Hilfsmittel, um Vokabeln aus fremden Sprachen zu lernen.
+Sie k\xF6nnen eine eigene Datenbank mit den W\xF6rtern erstellen, die Sie brauchen.
+Es ist als Alternative zu normalen Karteikarten gedacht.
+Sie werden sich vielleicht an Karteikarten aus der Schule erinnern.
+Der Lehrer schrieb den Originalausdruck auf die Vorderseite einer Karte und die \xDCbersetzung auf die R\xFCckseite.
+Dann haben Sie die Karten nacheinander angeschaut und wenn Sie die \xDCbersetzung wussten, dann konnten Sie die Karte weglegen.
+Wenn Sie die \xDCbersetzung nicht gewusst haben, dann haben Sie die Karten beiseite gelegt, um es nochmal zu versuchen.
+kvoctrain soll Ihnen keine Grammatik lehren oder andere komplizierte Dinge.
+Das kann dieses Programm nicht leisten und wird das h\xF6chstwahrscheinlich auch in Zukunft nicht leisten.
+Benutzung
+\xDCberblick
+Farben zeigen die Wissensstufe (1 bis 7) an.
+Ein gr\xFCnes H\xE4kchen in der zweiten Spalte bedeutet, dass diese Zeile f\xFCr eine Abfrage benutzt wird (wenn Sie diese das letzte Mal nicht beendet haben), ein rotes Kreuz bedeutet, dass Sie die Zeile abgeschaltet haben.
+Wenn Sie Zeilen ausw\xE4hlen, um mit ihnen zu arbeiten, erscheinen diese mit einem anderen Hintergrund.
+Nat\xFCrlich ist es auch m\xF6glich, KVoctrain als normales W\xF6rterbuch zu benutzen und Eintr\xE4ge manuell zu suchen.
+T:
+Der Typ des Wortes
+P:
+Wie man den Ausdruck ausspricht.
+Wenn Sie eine Schriftart installiert haben, die IPA-Zeichen enth\xE4lt, k\xF6nnen Sie auch Zeichen aus dem phonetischen Alphabet verwenden.
+Mehr dar\xFCber auf der Seite \xFCber den Einstellungsdialog.
+R:
+Ihre pers\xF6nlichen Anmerkungen
+Bearbeiten in der Tabelle
+Es gibt zwei Einstellungen, die ihnen erlauben, den Inhalt von Zellen im Hauptfenster zu ver\xE4ndern.
+Sie k\xF6nnen die gew\xFCnschte Einstellung im Optionsmen\xFC w\xE4hlen.
+Bearbeiten in der Tabelle
+Wenn diese Einstellung aktiviert ist k\xF6nnen Sie die Lektion oder den Status einer Tabellenzeile aus einem Listenfeld ausw\xE4hlen.
+Dieses Listenfeld erscheint, wenn Sie auf die entsprechende Zelle klicken oder wenn Sie die Leertaste dr\xFCcken, wenn die Marke in der Zelle steht.
+Um ein Wort oder einen Ausdruck zu ver\xE4ndern, beginnen Sie einfach mit dem Tippen und dr\xFCcken die Eingabetaste wenn Sie fertig sind.
+Bitte beachten Sie:
+Sie k\xF6nnen den Eingabedialog in dieser Einstellung nicht aufrufen.
+Bearbeiten in der Tabelle ausgeschaltet
+Wenn das Bearbeiten in der Tabelle ausgeschaltet ist, m\xFCssen Sie F2 dr\xFCcken, um das Listenfeld zu \xF6ffnen oder um \xC4nderungen an Eintr\xE4gen vorzunehmen.
+Um den Eingabedialog aufzurufen, dr\xFCcken Sie einfach die Eingabetaste wenn sich die Marke in einer Zelle befindet, oder klicken Sie einfach doppelt auf die gew\xFCnschte Zelle.
+Die Tastatur benutzen
+Tab
+Die Eingabemarke wird zu dem Suchfeld bewegt.
+Wenn Sie beginnen, etwas einzugeben, wird kvoctrain nach jedem Tastendruck den n\xE4chsten Treffer suchen.
+Die Marke im W\xF6rterbuch wird dann an diesen Ort bewegt.
+Wenn Sie die Eingabetaste dr\xFCcken, wird die Marke zum n\xE4chsten Treffer weiterbewegt.
+Pfeil nach links
+Die Marke im W\xF6rterbuch wird eine Spalte nach links bewegt.
+Wenn sie die Spalte erreicht hat, die sich ganz links befindet, passiert nichts.
+Pfeil nach rechts
+Die Marke im W\xF6rterbuch wird eine Spalte nach rechts bewegt.
+Wenn sie die Spalte erreicht hat, die sich ganz rechts befindet, passiert nichts.
+Pfeil nach oben
+Die Marke im W\xF6rterbuch wird eine Zeile nach oben bewegt.
+Wenn sie die Zeile erreicht hat, die sich ganz oben befindet, passiert nichts.
+Pfeil nach unten
+Die Marke im W\xF6rterbuch wird eine Zeile nach unten bewegt.
+Wenn sie die Zeile erreicht hat, die sich ganz unten befindet, passiert nichts.
+Bild aufw\xE4rts
+Die Marke im W\xF6rterbuch wird eine Seite (die Anzahl der sichtbaren Zeilen - 1) nach oben bewegt.
+Wenn die Marke \xFCber die erste m\xF6gliche Zeile hinaus bewegt werden w\xFCrde, passiert nichts.
+Bild abw\xE4rts
+Die Marke im W\xF6rterbuch wird eine Seite nach unten bewegt.
+Wenn die Marke \xFCber die letzte m\xF6gliche Zeile hinaus bewegt werden w\xFCrde, passiert nichts.
+Enter
+Zeigt den Bearbeitungsdialog f\xFCr diesen Eintrag an.
+Einf\xFCgen
+Zeigt den Dialog, in den Sie einen neuen Originalausdruck eingeben k\xF6nnen und f\xFCgt eine neue Zeile mit diesem Ausdruck am Ende des W\xF6rterbuches hinzu.
+Die Marke wird an das Ende des W\xF6rterbuchs bewegt.
+Wenn Sie "Intelligentes Einf\xFCgen" aktiviert haben, werden Sie nach dem Original und den \xDCbersetzungen gefragt, bis Sie das Eingeben durch Dr\xFCcken von ESC beenden.
+Del
+Nachdem Sie einen Sicherheitsdialog beantwortet haben, wird die gerade markierte Zeile oder die ganze Auswahl aus dem W\xF6rterbuch entfernt.
++ oder -
+Wenn Sie Strg und eine der beiden Tasten, + oder -, auf dem Nummernblock dr\xFCcken, k\xF6nnen Sie das vorherige oder n\xE4chste Element aus dem Listenfeld w\xE4hlen, in dem die aktuelle Lektion angezeigt wird.
+Wenn Sie keinen Nummernblock haben, k\xF6nnen Sie auch die normalen + oder - Tasten benutzen.
+Benutzung der Maus
+Wenn Sie doppelt auf einen Ausdruck in der Tabelle klicken, wird das einen Dialog \xF6ffnen, in dem Sie diesen Eintrag bearbeiten k\xF6nnen.
+Wenn Sie mit der linken Maustaste auf einen Spaltenkopf klicken, wird das die Spalte in aufsteigender Reihenfolge sortieren.
+Der n\xE4chste Klick wird sie in absteigender Reihenfolge sortieren.
+Wenn die Spalte sortiert ist, sehen Sie ein Dreieck, das die Richtung anzeigt.
+Wenn Sie die linke Maustaste ungef\xE4hr eine Sekunde auf dem Spaltenkopf gedr\xFCckt halten, wird das Spaltenmen\xFC herausklappen.
+Arbeiten mit Markierungen
+Wenn Sie Strg gedr\xFCckt halten, wenn Sie auf einen Eintrag klicken, wird die ganze Zeile f\xFCr die weitere Bearbeitung markiert.
+Ein Klick auf einen markierten Eintrag wird die Markierung entfernen.
+Um die Auswahl zu bearbeiten rufen Sie den Eingabedialog mit der Eingabetaste auf.
+In diesem Fall erscheint der Dialog ver\xE4ndert.
+Einige Eigenschaften sind nicht erreichbar.
+Zum Beispiel macht es keinen Sinn den Ausdruck oder die Bemerkungen eines ganzen Bereichs zu bearbeiten.
+Verf\xFCgbare Dateiformate
+kvoctrain kann die folgenden Dateiformate lesen und schreiben:
+Das eigene XML-\xE4hnliche Dateiformat mit der Erweiterung .kvtml
+Wenn Sie Dokumente mit Anderen austauschen m\xF6chten, ist dieses Dateiformat das einzige, das alle Dokumenteigenschaften von kvoctrain speichern kann.
+Vokabeldateien von vocabbox, welcher der schlankeste Vokabeltrainer ist, den ich kenne.
+Ich empfehle dieses Programm, wenn Sie ein wirklich kompaktes brauchen.
+Dateien die vom Vocabulary Trainer erstellt wurden.
+Das ist ein Programm f\xFCr Microsoft Windows.
+Es benutzt die Dateierweiterung lex.
+Leider ist der Verweis auf die Originaldateien bei Compuserve tot, aber es k\xF6nnen immer noch viele Dateien irgendwo im Umlauf sein, also habe ich das Format behalten.
+Einfache Textdateien mit besonderen Trennzeichen zwischen den Eintr\xE4gen, die auch von einfache Datenbankprogrammen verwendet werden.
+Die Erweiterung ist csv. kvoctrain erkennt auch, ob diese Dateien in UTF8 gespeichert wurden, da auch solche Dateien verf\xFCgbar sind um die korrekten Zeichen zu behalten.
+Mehr dar\xFCber im Abschnitt \xFCber Verschl\xFCsselungen und Zeichens\xE4tze.
+Es gibt viele W\xF6rterb\xFCcher im Internet, die ein Tabulatorzeichen oder ein oder zwei Doppelpunkte benutzen, um die verschiedenen Sprachen zu trennen.
+Um diese Trennzeichen auszuw\xE4hlen, benutzen Sie den Dialog mit den Einstellungen f\xFCr die Zwischenablage.
+kvoctrain liest die ersten paar Bytes aus einer Datei und r\xE4t das Dateiformat.
+Wenn keiner der besonderen Typen wie ktvml oder lex erkannt werden, benutzt es das csv Format.
+Verf\xFCgbare Wortarten
+bestimmter Artikel
+unbestimmter Artikel
+der, die, das
+ein, eine
+Konjunktion
+verbindet W\xF6rter oder S\xE4tze
+und, aber
+Eigenname
+Name einer Person, Kreatur, manchmal auch einer Sache
+Big Ben, Tom
+maskulin
+feminin
+neutrum
+Name von Dingen, Gef\xFChle
+Tisch, Kaffee (Im Englischen wird hier nicht unterschieden)
+ordinal
+kardinal
+Z\xE4hlen oder Beziffern von Dingen
+erste(r), zweite(r)
+eins, zwei
+Phrase
+spezielle Kombination von W\xF6rtern
+zwei Fliegen mit einer Klappe schlagen
+Pr\xE4position
+zeigt die Beziehung an
+hinter, zwischen
+Possessivpronomen
+Personalpronomen
+zeigt den Besitz an
+dient als Ersetzung f\xFCr ein Nomen
+mein(e), dein(e)
+du, sie
+Interrogation
+beginnt eine Frage (Fragewort)
+Wer, Was
+regelm\xE4\xDFiges Verb
+unregelm\xE4\xDFiges Verb
+wer etwas tut oder was passiert
+kochen, kochte, gekocht
+gehen, ging, gegangen
+\xDCber Zeichens\xE4tze, Verschl\xFCsselungen, Unicode und solche seltsamen Dinge
+Jede menschenlesbare Textdatei besteht aus einer Reihe von Bytes oder Achtbitzeichen.
+Die tats\xE4chliche Bedeutung dieser Bytes kann auf viele verschiedene Arten geschehen, je nach dem, auf welchem System sie angezeigt werden oder in welcher Sprache der Text geschrieben ist.
+Da normalerweise ein Byte die kleinste \xFCbliche Einheit f\xFCr Daten auf dem Computer ist, wird jedes Zeichen auf dem Bildschirm durch genau ein Byte repr\xE4sentiert.
+Jedes Byte kann einen Wert von 0 bis 255 haben und deswegen kann man bis zu 256 verschieden Zeichen in einer Datei darstellen.
+An diesem Punkt sollte es offensichtlich sein, dass Sie den korrekten Zeichensatz ausw\xE4hlen m\xFCssen, der die Bytes so anzeigt, wie das von ihnen gewollt war.
+Leider ist die Benutzung von Unicode ein bisschen komplizierter und funktioniert nicht mit den meisten aktuellen Werkzeugen.
+Texte in Unicode k\xF6nnen auch l\xE4nger werden.
+Ein Kompromiss ist, UTF-8 zu benutzen, welches 7 Bits (8 Bits sind ein Byte) f\xFCr die \xFCblichen Zeichen der ASCII Tabelle benutzt und f\xFCr speziellere Zeichen 2, 3 oder sogar 4 und mehr Bytes benutzt.
+Um so viele Sprachen wie m\xF6glich zu unterst\xFCtzen, bot kvoctrain in der Version 0.7 die M\xF6glichkeit einen speziellen Zeichensatz f\xFCr jede Sprache auszuw\xE4hlen.
+Wenn Sie ihre Dateien in der fr\xFCheren 8Bit-Einstellung gespeichert haben, k\xF6nnten Sie die falschen Zeichen sehen, wenn Sie die Datei mit der Version 0.8 oder h\xF6her \xF6ffnen.
+Kontaktieren Sie mich (kvoctrain@ewald-arnold.de) in diesem Falle.
+http://www.hut.fi/u/jkorpela/chars.html
+http://linuxdoc.org/HOWTO/Unicode-HOWTO.html
+http://czyborra.com/charsets/codepages.html
+Und wie sollte ich lernen?
+Der normale Weg, mit kvoctrain zu lernen, ist, eine der zuf\xE4lligen Abfragefunktionen zu benutzen.
+Es \xFCberwacht ihr Wissen, indem es den Ausdr\xFCcken eine der sieben Noten (Stufe 1 bis Stufe 7) zuweist.
+Es sind einige M\xF6glichkeiten vorgesehen, die im Dialog "Abfrage-Einstellungen" eingerichtet werden k\xF6nnen.
+Um die Menge der Ausdr\xFCcke zu begrenzen, sollten Sie die Abfrage auf eine Lektion und/oder auf eine Wortart beschr\xE4nken.
+Ich pers\xF6nlich bevorzuge ca.
+50 W\xF6rter pro Durchlauf und unterteile die Lektionen dementsprechend.
+Au\xDFerdem kann der Bereich f\xFCr die Abfrage von der aktuellen Note, der Anzahl der Abfragen und vom Datum der letzten Abfrage abh\xE4ngen.
+Das Lernen ist effektiv, wenn man W\xF6rter eine bestimmte Zeit in Abh\xE4ngigkeit von der Note nicht wiederholt.
+Es gibt einen Blockier- und Ablaufmechanismus f\xFCr diesen Fall, also sind Sie nicht gezwungen die Einstellungen nach jedem Durchlauf umzustellen.
+Ein gewusster Ausdruck wird wenigstens f\xFCr die angegebene Zeitdauer blockiert und nach dem Ablauf der Ablaufzeit wieder gezeigt.
+Die Richtung des Lernens kann zuf\xE4llig ver\xE4ndert werden, um das Lernen ausschlie\xDFlich in eine Richtung zu vermeiden.
+F\xFCr ihren pers\xF6nlichen Geschmack oder um einfach mit einem neuen Wort bekannt zu werden, k\xF6nnen Sie eine Abfrage w\xE4hlen, die die L\xF6sung zusammen mit einigen anderen, zuf\xE4llig ausgew\xE4hlten W\xF6rtern anzeigt. (oft als "Multiple Choice" bezeichnet)
+Spezielle Wortarten brauchen spezielle Abfragen.
+Zu diesem Zweck gibt es Abfrage f\xFCr die Konjugation von Verben, Steigerungen von Adjektiven und f\xFCr die Artikel von Nomen.
+Alle diese Einstellungen k\xF6nnen in Abfragegruppen zusammengefasst werden und unter einem beliebigen Namen festgehalten werden.
+Beim Abfragen zeigt kvoctrain die Ausdr\xFCcke in zuf\xE4lliger Reihenfolge, bis Sie alle als gewusst markieren.
+Wenn Sie keine spezielle Lektion angegeben haben, werden alle Lektionen nacheinander abgefragt.
+Verbleibende Ausdr\xFCcke einer gerade laufenden Abfrage werden gespeichert, wenn Sie kvoctrain verlassen.
+Wenn Sie kvoctrain wieder benutzen, k\xF6nnen Sie die Abfrage wiederaufnehmen (Das gilt noch nicht f\xFCr spezielle Abfragen mit Verben, Artikeln und Steigerungen).
+Die noch nicht abgefragen Ausdr\xFCcke werden mit einem gr\xFCnen H\xE4kchen im Hauptfenster markiert.
+Die Men\xFCleiste
+Das Datei -Men\xFC
+Datei Neu
+Erstellt ein neues Dokument.
+\xD6ffnet ein existierendes Dokument.
+Datei Zuletzt ge\xF6ffnete Dateien...
+\xD6ffnet eine der zuletzt ge\xF6ffneten Dateien.
+Datei Beispieldatei \xF6ffnen...
+\xD6ffnet eine Beispieldatei, die mit kvoctrain ausgeliefert wurde.
+Datei Mischen...
+Mischt ein anderes W\xF6rterbuch mit dem aktuellen.
+Nur die Teile des zweiten W\xF6rterbuchs werden gemischt, die den gleichen internationalen Sprachcode haben wie das aktuelle W\xF6rterbuch.
+Benutzen Sie also immer die korrekten Codes.
+Das hilft, die W\xF6rterb\xFCcher mit anderen zu tauschen. kvoctrain hilft Ihnen auch dabei und bietet Ihnen alle Codes in den Allgemeinen Einstellungen an.
+Speichert das Dokument.
 Datei Speichern unter...
-Eine Kopie der neuen Konfiguration speichern.
-Speichert den Ablauf der durchgef\xFChrten \xC4nderungen.
-Die Logdatei ausdrucken.
-Beendet ksysv.
-Das Men\xFC Bearbeiten
-Macht die letzte nicht gespeicherte \xC4nderung r\xFCckg\xE4ngig.
-Letzte r\xFCckg\xE4ngig gemachte Aktion wieder herstellen.
-Schneidet den gerade ausgew\xE4hlten Systemdienst aus und kopiert den Eintrag in die Zwischenablage.
-Kopiert den gerade ausgew\xE4hlten Systemdienst in die Zwischenablage ohne ihn zu l\xF6schen.
-F\xFCgt den Inhalt der Zwischenablage an der aktuellen Cursorposition ein.
-Bearbeiten Eigenschaften
-\xD6ffnet den Dialog Eigenschaften f\xFCr den gerade ausgew\xE4hlten Systemdienst.
-Das Men\xFC Werkzeuge
-Werkzeuge Systemdienst starten...
-Startet den angew\xE4hlten Systemdienst.
-Werkzeuge Systemdienst anhalten...
-Den angew\xE4hlten Systemdienst anhalten.
-Werkzeuge Systemdienst neu starten...
-Den angew\xE4hlten Systemdienst neu starten.
-Werkzeuge Systemdienst bearbeiten...
-Dem angew\xE4hlten Systemdienst bearbeiten.
-Das Men\xFC Einstellungen
-Einstellungen Werkzugleiste anzeigen
-Anzeige der Werkzeugleiste ein- und ausschalten.
-Einstellungen Statusleiste anzeigen
-Anzeige der Statusleiste ein- und ausschalten.
-Einstellungen Logdatei anzeigen
-Schaltet die Anzeige der Logdatei in einem extra Fenster ein oder aus (alle Vorg\xE4nge, Fehlermeldungen, usw. werden in einer Logdatei gespeichert).
-Einstellungen Einstellungen speichern
-Alle bisher erw\xE4hnten Einstellungen gelten nur bis zum n\xE4chsten Systemstart, es sei denn, Sie w\xE4hlen diesen Men\xFCpunkt.
-Dies gilt einschlie\xDFlich der Fenstergr\xF6\xDFe und -aufteilung.
-Einstellungen Tastenzuordnungen vornehmen...
-Die Zuordnungen von Tastendr\xFCcken zu Aktionen ver\xE4ndern.
-Einstellungen Werkzeugleisten einrichten...
-Die Werkzeugleisten nach Ihren W\xFCnschen anpassen.
-Einstellungen SysV-Init Editor einrichten...
-Das Verhalten von ksysv anpassen.
-Das Men\xFC Hilfe
+Speichert das Dokument unter einem anderen Namen.
+Datei Beenden
+Beendet kvoctrain.
+Das Bearbeiten -Men\xFC
+Kopiert die aktuelle Zeile in die Zwischenablage.
+Die Eintr\xE4ge werden von besonderen Zeichen getrennt, die in den Allgemeinen Einstellungen ausgew\xE4hlt werden k\xF6nnen.
+F\xFCgt aus der Zwischenablage ein.
+Die Eintr\xE4ge werden von den oben genannten Trennzeichen getrennt und als neue Zeile mit einer oder mehr Spalten eingef\xFCgt.
+Sie k\xF6nnen auch die Reihenfolge festlegen, in der die Spalten in die Zwischenablage kopiert werden.
+Mehrere Zeilen (z.B. aus einer CSV Datenbankdatei) werden auch als neue Zeilen eingef\xFCgt.
+Markiert das ganze W\xF6rterbuch f\xFCr die weitere Bearbeitung.
+Entfernt die Auswahl.
+F\xFCgt den Inhalt der Zwischenablage in das Suchfeld ein und sucht diesen Ausdruck in allen Eintr\xE4gen der aktuellen Spalte.
+Einfg Bearbeiten Neuen Eintrag hinzuf\xFCgen
+F\xFCgt einen oder mehrere neue Ausdr\xFCcke hinzu.
+Lesen Sie den Abschnitt Einf\xFCgen f\xFCr weitere Informationen.
+Eingabetaste Bearbeiten Ausgew\xE4hlten Bereich bearbeiten
+Bearbeitet den aktuellen Ausdruck.
+Lesen Sie den Abschnitt Eingabetaste f\xFCr weitere Informationen.
+Entf Bearbeiten Ausgew\xE4hlten Bereich l\xF6schen
+L\xF6scht die Auswahl.
+Lesen Sie den Abschnitt Entfernen f\xFCr weitere Informationen.
+Bearbeiten Ausgew\xE4hlten Bereich speichern...
+Speichert die Auswahl in eine Datei.
+Das W\xF6rterbuch -Men\xFC
+W\xF6rterbuch Statistik anzeigen
+Ruft den Statistikdialog auf, der die wichtigsten Daten \xFCber ihr W\xF6rterbuch anzeigt.
+W\xF6rterbuch Lektionen zuweisen
+Sucht im W\xF6rterbuch nach Eintr\xE4gen, die noch keiner Lektion angeh\xF6ren.
+Diesen Eintr\xE4gen werden dann neue Lektionen zugewiesen.
+W\xF6rterbuch Aufr\xE4umen
+Sucht nach Eintr\xE4gen, die sich exakt gleichen (Original und alle \xDCbersetzungen) und entfernt alle bis auf einen.
+W\xF6rterbuch Sprache hinzuf\xFCgen
+H\xE4ngt eine neue Spalte (eine neue Sprache) an.
+W\xF6rterbuch Sprache einstellen
+Stellt den Sprachcode und den Namen einer Spalte ein.
+W\xF6rterbuch Sprache entfernen
+Entfernt eine der \xDCbersetzungen
+W\xF6rterbuch Dokumenteigenschaften
+Ruft den Dialog f\xFCr die Dokumenteigenschaften auf.
+W\xF6rterbuch Spracheigenschaften
+Ruft den Dialog f\xFCr die Spracheigenschaften auf.
+Das Lernen -Men\xFC
+Lernen Sprachname
+Stellt ein Untermen\xFC f\xFCr jede Sprache mit alle Abfragedialogen bereit.
+Dieses Untermen\xFC ist dasselbe wie das entsprechende Spaltenmen\xFC f\xFCr die Sprache.
+Lernen Zufallsabfrage fortsetzen
+Setzt eine Zufallsabfrage fort, die zuvor nicht beendet wurde.
+Verbleibende Eintr\xE4ge werden mit einem gr\xFCnen H\xE4kchen markiert.
+Lernen Mehrfachauswahl fortsetzen
+Setzt die vorherige Zufallsabfrage mit Mehrfachauswahl fort.
+Das Men\xFC Optionen
+Optionen Werkzeugleiste
+Schaltet die Werkzeugleiste ein oder aus.
+Optionen Statusleiste
+Schaltet die Statusleiste am unteren Fensterrand ein oder aus.
+Optionen Bearbeiten in der Tabelle
+Schaltet das Bearbeiten in der Tabelle ein und aus.
+Optionen Allgemeine Einstellungen
+Ruft den Dialog mit den Allgemeinen Einstellungen auf.
+Optionen Abfrage-Einstellungen
+Ruft den Dialog mit den Abfrage-Einstellungen auf.
+Optionen Einstellungen speichern
+Speichert die Einstellungen.
+Dieser Punkt ist nur anw\xE4hlbar, wenn die Einstellungen nicht schon automatisch gespeichert werden.
+Das Hilfe Men\xFC
 F1 Hilfe Inhalt...
-Startet das Hilfe-System von KDE mit der ksysv -Hilfe (diesem Dokument).
+Startet das Hilfe-System von KDE mit der kvoctrain -Hilfe (diesem Dokument).
 \xC4ndert den Mauscursor zu einer Kombination von Zeiger und Fragezeichen.
-Das Klicken auf ein Element innerhalb von ksysv \xF6ffnet ein Hilfefenster, das die Funktion des Elementes beschreibt (wenn es denn Hilfe f\xFCr das bestimmte Element gibt).
+Das Klicken auf ein Element innerhalb von kvoctrain \xF6ffnet ein Hilfefenster, das die Funktion des Elementes beschreibt (wenn es denn Hilfe f\xFCr das bestimmte Element gibt).
 Hilfe Berichten Sie Probleme oder W\xFCnsche...
 \xD6ffnet den Dialog f\xFCr Problemberichte, in dem man Fehler und W\xFCnsche berichten kann.
 Zeigt Versions- und Autoreninformationen an.
 Hilfe \xDCber KDE
 Zeigt Versionsinformation und Grunds\xE4tzliches zu KDE an.
-Konfiguration
-G\xFCltige Abschnitte der Konfigurationsdateien
-Abschnitte und Schl\xFCsselwerte der Konfigurationsdateien, die vom Programm erkannt werden, sowie ihre Voreinstellungen:
-[Path Settings]
-[Colors]
-[Geometry]
-[Andere Einstellungen]
-Fragen und Antworten
-Ich habe mit den Standard-Runleveln herumexperimentiert, und jetzt startet die Maschine best\xE4ndig neu.
-Was kann ich tun?
-Geben Sie am LILO -Prompt linux single ein und dr\xFCcken Sie die Eingabe -Taste, um im Einzelnutzer-Modus zu starten.
-Dann bearbeiten Sie die Datei /etc/inittab und \xE4ndern das standardm\xE4\xDFige Runlevel auf einen vern\xFCnftigen Wert (3 sollte normalerweise in Ordnung sein).
-Meine Maschine h\xE4ngt kurz nach dem Neustart.
-Bitte schauen Sie bei Frage 1 nach!
-Ich habe einige Systemdienste mit ksysv zur Ausf\xFChrung unter Runlevel X vorgesehen, aber sie werden nicht ausgef\xFChrt.
-Wenn Sie SuSE oder Delix (DLD) benutzen, dann m\xFCssen Sie zus\xE4tzliche Dateien in /etc bearbeiten, die nur in diesen Distributionen vorhanden sind.
-Bitte lesen Sie die Details im Handbuch der Distribution nach.
-Die Art, wie Systemdienste in diesen Distributionen gestartet werden, vereinfacht die Konfiguration f\xFCr die propriet\xE4ren Einrichtungsprogramme dieser Distributionen, entspricht aber leider keinem Standard.
-Die Autoren von ksysv planen eine Erweiterung des Programms f\xFCr diesen Ansatz.
-Falls Sie eine andere Distributon verwenden:
-\xDCberpr\xFCfen Sie bitte, ob alle Konfigurationsdateien vorhanden sind, die vom jeweiligen Systemdienst ben\xF6tigt werden (und auch, ob sie sich im richtigen Verzeichnis befinden).
-Manche D\xE4monen (wie z.B.
-Apache bzw. httpd) gehen einfach stumm \xFCber Bord, wenn ihre Konfigurationsdateien nicht vorhanden oder falsch eingerichtet sind.
-Standardbedeutung der Runlevel
-Red Hat
-Runlevel 0:
-Halt (f\xE4hrt die Maschine runter)
-Runlevel 1:
-Einzelbenutzermodus
-Runlevel 2:
-Konsolenmodus, ohne NFS.
-Runlevel 3:
-Konsolenmodus mit allen Netzdiensten.
-Runlevel 4:
-Nicht verwendet.
-Runlevel 5:
-Mehrbenutzer-Modus -- mit X11 und vollem Netzwerk
-Runlevel 6:
-Neustart
+Spaltenmen\xFC
+Das folgende Kontextmen\xFC wird erscheinen, wenn Sie die linke Maustaste \xFCber dem dritten Spaltenkopf (Ihre Originalausdr\xFCcke) l\xE4nger als eine Sekunde gedr\xFCckt halten.
+Zufallsabfrage erstellen
+Erstellt eine Zufallsabfrage mit dieser Spalte mit allen nicht gewussten Ausdr\xFCcken entsprechend ihrer Grenzwerte.
+Mehrfachauswahl erstellen
+Erstellt eine zuf\xE4llige Mehrfachauswahl mit dieser Spalte mit allen nicht gewussten Ausdr\xFCcken entsprechend ihrer Grenzwerte.
+Verben abfragen
+Alle Verben mit ihren Konjugationen werden abgefragt.
+Artikel lernen
+Fragt die Artikel ab, wenn das Geschlecht der Nomen definiert ist.
+Steigerungsformen lernen
+Fragt die Steigerungsformen ab.
+Synonyme
+Fragt die Synonyme ab.
+Antonyme
+Fragt die Antonyme ab.
+Beispiele
+Fragt Beispiele ab.
+Ausdruck
+Fragt Ausdr\xFCcke ab.
+Sortieren
+Sortiert diese Spalte in aufsteigender bzw. absteigender Reihenfolge.
+Sprache einstellen
+W\xE4hlt eine Sprache f\xFCr diese Spalte.
+Wenn die gew\xFCnschte Sprache nicht im Men\xFC zu finden ist, m\xFCssen Sie sie im Dialog Allgemeine Einstellungen einrichten.
+Die zwei folgenden Eintr\xE4ge erscheinen nur, wenn Sie den Spaltenkopf dr\xFCcken, der zu einer \xDCbersetzung geh\xF6rt.
+Benotung zur\xFCcksetzen
+Setzt die Benotung aller markierten Eintr\xE4ge in den anf\xE4nglichen Status zur\xFCck.
+Wenn Sie eine Lektion aus der Lektionsbox in der Werkzeugleiste ausgew\xE4hlt haben, werden nur die Mitglieder dieser Lektion zur\xFCckgesetzt.
+Ansonsten sind alle Eintr\xE4ge betroffen.
+Sprache entfernen
+Entfernt diese Spalte und alle ihre Eintr\xE4ge
+Dialoge
+Dokumenteigenschaften
+Allgemeine Eigenschaften
+Titel
+Hier geben Sie den Titel des Dokuments ein, der in der Titelzeile des Fensters angezeigt wird.
+Autoren
+Normalerweise werden Sie Ihren Namen in dieses Feld eingeben.
+Wenn es mehr als einen Autor gibt, k\xF6nnen Sie eine Zeile f\xFCr jede Person verwenden.
 Lizenz
-ksysv Copyright (c) 1997-1998 Peter Putzer
-Peter Putzer, putzer@kde.org - Entwickler
-Handbuch:
-Peter Putzer, putzer@kde.org
-Eric Bischoff, ebisch@cybercable.tm.fr - Bearbeiter
-\xDCbersetzer:
-Thomas Diehl th.diehl@gmx.net
-\xDCbersetzer:
-Volker Dose vpdose@cpmgut.toppoint.de
+Wenn Sie die Benutzung ihres W\xF6rterbuchs einschr\xE4nken (oder besser: erlauben) wollen sollten Sie die entsprechende Erlaubnis oder Lizenz hier eingeben.
+Ich empfehle etwas in der Art wie Free Document License.
+Bemerkungen
+Dieses Feld sollte Dinge enthalten, die nicht in eine der anderen Kategorien passen.
+Lektionsbeschreibungen
+Hier f\xFCgen Sie die Beschreibung ihrer Lektionen hinzu und bearbeiten oder l\xF6schen dieselben.
+Wortarten
+Genau wie im vorherigen Abschnitt k\xF6nnen Sie hier ihre eigenen Wortarten bearbeiten.
+Da der Dialog genauso aussieht, wie der vorherige, gibt es hierzu kein Bild.
+Zeitformen
+Benutzungsmarken
+Die letzte Seite gibt ihnen die M\xF6glichkeit ihre eigenen Benutzungsmarken einzugeben.
+Wenn Sie denken, dass ein wichtiger Eintrag fehlt (in den obigen Zeit-, Wortarten- oder Benutzungsmarken-Abschnitten), sollten Sie mich benachrichtigen, damit ich diesen Eintrag als Standard in die Anwendung integrieren kann.
+Auf diesem Weg k\xF6nnen alle Benutzer davon profitieren.
+Dokumenteinstellungen
+Sortieren erlauben
+Wenn Sie ein W\xF6rterbuch mit einer bestimmten Ordnung erstellt haben, k\xF6nnen Sie dieses Feld benutzen, um das Sortieren f\xFCr dieses Dokument auszuschalten.
+Ein Klick auf einen Spaltenkopf wird dann die Spalte nicht mehr sortieren.
+Leider gibt es keine Kompatibilit\xE4t mehr zur\xFCck zu den Versionen 0.6, aber die Vorteile sind das wert.
+Spracheigenschaften
+Die folgenden Seiten dieses Dialogs zeigen f\xFCr jede Sprache des W\xF6rterbuchs verschiedene Elemente, die in den entsprechenden Abfragen benutzt werden.
+Artikel
+F\xFCr jedes Geschlecht k\xF6nnen Sie hier den bestimmten und unbestimmten Artikel eingeben.
+Wenn es keinen f\xFCr diese Sprache gibt, lassen Sie das Feld leer.
+Konjugation
+In der gleiche Weise geben Sie die Personalpronomen f\xFCr die erste, zweite und dritte Person in Plural (Mehrzahl) und in Singular (Einzahl) ein.
+Da viele Sprachen in der dritten Person Plural nicht unterscheiden, gibt es ein Ankreuzfeld, um das anzuzeigen.
+Lassen Sie die unwichtigen Felder leer.
+Die Version 0.7 von kvoctrain bot auch eine Auswahl f\xFCr besondere Zeichens\xE4tze.
+In Qt 3 wird das nicht mehr gebraucht.
+Wenn Sie wichtige Dateien haben, die falsch in der neuen Version angezeigt werden, sollten Sie mich (kvoctrain@ewald-arnold.de) kontaktieren, da es dann eventuell sinnvoll w\xE4re, ein Konvertierungswerkzeug zu erstellen.
+Allgemeine Einstellungen
+Allgemeine Optionen
+Intervall der automatischen Sicherheitskopien
+Wenn Sie das ausw\xE4hlen wird kvoctrain das Dokument automatisch nach Ablauf der Zeitspanne, die Sie hier eingeben, speichern, wenn es ver\xE4ndert wurde.
+kvoctrain wird dann auch nicht mehr nach ihrer Zustimmung fragen, wenn ungespeicherte Daten beim Beenden vorhanden sind, sondern wird sie automatisch speichern.
+Ein Intervall von 0 schaltet dieses Verhalten aus.
+Intelligentes Anf\xFCgen
+Wenn dieses Verhalten aktiviert ist, werden Sie immer wieder einen Eingabedialog erhalten.
+Wenn Sie das erste Original eingegeben haben, m\xFCssen Sie dann die entsprechenden \xDCbersetzungen eingeben.
+Dann machen Sie weiter mit dem n\xE4chsten Original und seinen \xDCbersetzungen, bis Sie die Eingabe durch Dr\xFCcken der Taste ESC beenden.
+Wenn man in diesem Modus die Lektion im Eingabedialog ver\xE4ndert, hat das denselben Effekt, wie das Ausw\xE4hlen der Lektion in der Werkzeugleiste.
+Auf diesem Weg ist die Lektion schon ausgew\xE4hlt, wenn der n\xE4chste Eingabedialog erscheint.
+Sie m\xFCssen die Lektionen im Voraus in den Dokumenteigenschaften erstellen.
+Einstellungen automatisch speichern
+Wenn das ausgew\xE4hlt ist, werden alle Einstellungen beim Beenden von kvoctrain gespeichert.
+Ansonsten m\xFCssen Sie den Men\xFCeintrag daf\xFCr benutzen.
+Spaltenver\xE4nderung
+Wenn Sie die Gr\xF6\xDFe des Hauptfensters ver\xE4ndern, ist es bequem, wenn die Breite der Spalten auch automatisch ver\xE4ndert wird.
+Automatisch
+kvoctrain gibt jeder Spalte den selben Platz, au\xDFer der Spalte mit den Lektionsnamen ganz links, die nur die H\xE4lfte des Platzes bekommt.
+Die zweite Spalte, die den Status der Zeile enth\xE4lt, hat eine feste Breite.
+Prozent
+Die Breite der Spalten werden mit dem gleichen Faktor ver\xE4ndert, mit dem das Hauptfenster verkleinert oder vergr\xF6\xDFert wurde.
+Wenn die letzte Auswahl fest gesetzt ist, dann werden die Spaltenbreiten nicht ver\xE4ndert.
+Verf\xFCgbare Sprachen
+Sprachcode
+Jeder Spalte kann eine Sprache zugeordnet werden.
+Das wird intern mit den \xFCblichen Internationalen Sprachcodes realisiert, z.B. en, en, it.
+Diese Codes werden auch mit dem Dokument gespeichert.
+Sie sollten immer die korrekten Codes benutzen, um W\xF6rterb\xFCcher mit anderen teilen zu k\xF6nnen.
+Auch das Mischen von W\xF6rterb\xFCchern h\xE4ngt von korrekten Sprachcodes ab.
+Alternative Codes
+Manchmal ist es n\xFCtzlich, einen zweiten Sprachcode anzugeben, da manche Sprachen einen kurzen Code und einen oder zwei l\xE4ngere Codes haben.
+F\xFCr Deutsch wird z.B. normalerweise de benutzt, jedoch sind nach ISO639-2 auch deu oder ger m\xF6glich.
+Sprachbezeichnung
+Hier k\xF6nnen Sie dem Sprachcode einen beschreibenden Namen in Ihrer eigenen Sprache geben, welcher in den Spaltenk\xF6pfen im Hauptfenster angezeigt wird.
+Bild
+Zus\xE4tzlich k\xF6nnen Sie hier ein sch\xF6nes Symbol zu ihrer Sprache hinzuf\xFCgen, welches im Spaltenkopf gezeigt wird.
+L\xF6schen
+L\xF6scht den aktuellen Sprachcode aus der Liste.
+Hinzuf\xFCgen
+Nachdem Sie einen neuen Sprachcode in das linke Feld eingegeben haben, benutzen Sie diesen Knopf um ihn zu Ihrer Liste hinzuzuf\xFCgen.
+Danach k\xF6nnen Sie die Felder f\xFCr den langen Namen und f\xFCr das Bild f\xFCr den Spaltenkopf ausf\xFCllen.
+Sprache aus der KDE Datenbank hinzuf\xFCgen
+Wenn Sie diesen Knopf dr\xFCcken, dann \xF6ffnet sich ein Men\xFC, das alle Sprachen enth\xE4lt, die in Ihrer KDE Installation bekannt sind.
+Sie k\xF6nnen Ihre gew\xFCnschte Sprache mit allen ihren Eigenschaften ihrer pers\xF6nlichen Liste hinzuf\xFCgen.
+Vielleicht wollen Sie den Sprachnamen oder das entsprechende Bild \xE4ndern, aber ich lege Ihnen ans Herz, wenigstens den 2-Byte Sprachcode und die 3-Byte Alternative nicht zu ver\xE4ndern, wenn Sie keine speziellen Grund daf\xFCr haben.
+Das dient dazu, Dokumentendateien zu erzielen, die \xFCberall benutzt werden k\xF6nnen.
+Sprache aus ISO639-1 hinzuf\xFCgen
+Wenn Sie diesen Knopf dr\xFCcken, \xF6ffnet sich ein Men\xFC, das alle Sprachcodes enth\xE4lt, die von ISO639-1 abgedeckt werden.
+Tabellenansicht
+Tabellenschriftart
+W\xE4hlen Sie eine Schriftart, in der das W\xF6rterbuch in der Hauptansicht angezeigt wird.
+IPA Schriftart
+W\xE4hlen Sie eine Schriftart, in der die Buchstaben aus dem internationalen phonetischen Alphabet angezeigt werden.
+Sie wird benutzt, um die Aussprache des Ausdrucks unten in der Statusleiste anzuzeigen.
+Vielleicht haben Sie keine Schriftart, die IPA-Zeichen enth\xE4lt, da diese Zeichen selten benutzt werden.
+Sie k\xF6nnen sich eine kostenlose freie Schriftart von http://bibliofile.mc.duke.edu/gww/fonts/Unicode.html oder http://www.hclrss.demon.co.uk/unicode/fonts.html herunterladen.
+Installieren Sie diese Schriftarten zum Beispiel mit kfontinst.
+Wenn Sie StarOffice installiert haben, haben Sie vielleicht die Schriftart Lucida Sans Unicode, die auch die meisten ben\xF6tigten Zeichen enth\xE4lt (stellen Sie sicher, dass Sie eine Schriftart ausw\xE4hlen, die auf Unicode endet).
+Ich habe auch eine "Reference und Introduction to Phonetic Symbols" (Referenz und Einf\xFChrung in die phonetischen Symbole) gefunden.
+Zus\xE4tzlich gibt es auch "The International Phonetic Association", wo Sie noch mehr Informationen finden k\xF6nnen.
+Notenfarben
+Jeder Note kann eine individuelle Farbe zugeordnet werden.
+Zum Beispiel bevorzuge ich gr\xFCn f\xFCr die beste Note und rot f\xFCr die schlechteste.
+Wenn sie keine Farben, sondern nur schwarz auf wei\xDF m\xF6chten, entfernen Sie das Kreuz aus dem entsprechenden Feld.
+Zwischenablage
+Trenner
+Das ist eine Folge von einem oder mehreren Zeichen, die die Felder der Zeilen trennen, wenn Daten von einer zu einer anderen Anwendung \xFCber die Zwischenablage ausgetauscht werden.
+Der \xFCblichste Eintrag ist Tabulator, der das Tabulatorzeichen benutzt.
+Eine andere M\xF6glichkeit ist es, ein Semikolon zu benutzen, wenn Sie Daten in eine Datenbankdatei im CSV Format exportieren m\xF6chten.
+Dieses Zeichen wird auch benutzt, um solche Dateien korrekt zu lesen.
+Reihenfolge
+Wenn Sie aus der Zwischenablage einf\xFCgen, wei\xDF kvoctrain nicht, zu welchen Sprachen die verschiedenen Felder geh\xF6ren und w\xFCrde sie einfach von links nach rechts einf\xFCgen.
+Um ein korrektes Verhalten zu erreichen, k\xF6nnen Sie in diesem Feld die gew\xFCnschte Reihenfolge eintragen, wenn Sie ihr W\xF6rterbuch anders angeordnet haben.
+Die Kn\xF6pfe auf der rechten Seite des Listenfeldes bewegen die aktuelle Sprache nach oben oder nach unten.
+Der Knopf \xDCberspringen wird eine L\xFCcke einf\xFCgen, was bedeutet, das das sp\xE4ter errechnete Feld aus der Zwischenablage \xFCbersprungen wird.
+Aktuelles Dokument benutzen
+Wenn das aktiviert ist, wird angenommen, dass die Eintr\xE4ge in der Zwischenablage in derselben Reihenfolge sind wie im aktuellen Dokument.
+Abfrage-Einstellungen
+Einstellungsgruppen
+Je nach W\xF6rterbuch oder dem Zeitpunkt, an dem Sie die Vokabeln lernen, w\xE4ren verschiedene Einstellungen optimal.
+Zu diesem Zweck k\xF6nnen alle Einstellungen auf den Seiten dieses Dialogs unter einem beliebig gew\xE4hlten Namen zusammengefasst werden.
+Sie k\xF6nnen die Einstellungen speichern und Sie dann wieder aufrufen, wann immer Sie es wollen.
+Merken
+Speichert die Einstellungen der anderen Seite unter dem aktuellen Namen.
+Das Speichern auf die Festplatte wird wie die anderen Einstellungen mittels des Men\xFCeintrags im Optionsmen\xFC durchgef\xFChrt.
+Einige Eigenschaften werden mit dem Dokument gespeichert.
+Zum Beispiel die in der Abfrage enthaltenen Lektionen, da das vom benutzten Dokument abh\xE4ngt.
+Zur\xFCckrufen
+Holt die Einstellungen der Gruppe im Listenfeld zur\xFCck.
+Neu
+Erstellt eine neue Gruppe mit den aktuellen Einstellungen.
+L\xF6schen
+Entfernt die aktuelle Gruppe.
+Allgemeine Abfrage-Einstellungen
+Zeit pro Abfrage
+Sie k\xF6nnen ein Zeitlimit setzen, innerhalb dessen Sie die Antwort wissen m\xFCssen.
+Zus\xE4tzlich k\xF6nnen Sie einstellen, was kvoctrain tun soll, wenn das Limit erreicht ist.
+Neben der M\xF6glichkeit ohne Zeitlimit k\xF6nnen Sie ausw\xE4hlen, dass die richtige L\xF6sung angezeigt wird oder dass sofort mit der n\xE4chsten Frage fortgefahren wird.
+Sie k\xF6nnen auch einen kleinen Fortschrittsbalken aktivieren, der die verbleibende Zeit anzeigt.
+Wenn das Zeitlimit mehrere Male in Folge abgelaufen ist, nimmt kvoctrain an, dass gerade niemand vor dem Bildschirm sitzt und stoppt die Abfrage.
+Richtung zuf\xE4llig \xE4ndern
+Normalerweise erfolgt eine Abfrage in einer Richtung, die von der Spalte abh\xE4ngt, die Sie benutzt haben, um die Abfrage zu starten.
+Mit diesem Feld k\xF6nnen Sie bestimmten, dass die Richtungen zuf\xE4llig ver\xE4ndert werden.
+Abfragegrenzwerte
+In diesem Dialog k\xF6nnen Sie einstellen, welche Eintr\xE4ge f\xFCr die n\xE4chste Zufallsabfrage ausgew\xE4hlt werden.
+Wenn Sie den Blockiermechanismus im n\xE4chsten Dialog aktiviert haben, werden die Grenzwerte aus Note, Anzahl der Abfragen, Fehleranzahl und letzte Abfrage abgeschaltet und nicht in Betracht gezogen.
+Lektion
+Bestimmt, welche Lektionen genommen oder ausgelassen werden.
+Beliebige Lektionen k\xF6nnen hier f\xFCr die Berechnungen ausgew\xE4ht werden.
+F\xFCr die Bequemlichkeit gibt es zwei zus\xE4tzliche Kn\xF6pfe, die alle Eintr\xE4ge oder keinen ausw\xE4hlen.
+Beginnend mit Version 0.7.0 wird dieser Teil nicht mehr global, sondern mit dem Dokument gespeichert.
+Wortart
+W\xE4hlt die Wortart aus. kvoctrain achtet dabei nicht auf Untertypen.
+Note
+Dasselbe f\xFCr die Note.
+Anzahl der Abfragen
+W\xE4hlt aus, wie oft die Auswahl abgefragt werden muss.
+Fehleranzahl
+Dasselbe f\xFCr die Anzahl der Fehler
+Letzte Abfrage
+Abfragen ausw\xE4hlen, die vor oder innerhalb der gegebenen Zeitspannen liegen.
+Eintr\xE4ge, die noch nicht abgefragt wurden, werden immer ausgew\xE4hlt, wenn Sie vor ausw\xE4hlen.
+Es werden nur Eintr\xE4ge ausgew\xE4hlt, wenn alle Bedingungen erf\xFCllt sind.
+Wenn Sie wollen, dass eine Eigenschaft ignoriert wird, w\xE4hlen Sie dort Gleichg\xFCltig aus.
+Sperren und Ablaufen
+Auf dieser Seite stellen Sie die Zeit ein, die ein gewusster Eintrag von den Abfragen ausgeschlossen wird bzw. wann er sp\xE4testens abgefragt werden muss.
+Es gibt zwei Bedingungen, die erf\xFCllt werden m\xFCssen, ansonsten wird Ihnen eine entsprechende Warnung gezeigt.
+Die Zeit muss sich von Stufe zu Stufe vergr\xF6\xDFern.
+Die Sperrzeit muss k\xFCrzer sein als die f\xFCr das Ablaufen auf derselben Stufe.
+Wenn entweder Sperren oder Ablaufen aktiv ist, werden die Grenzwerte von Note, Anzahl der Abfragen, Fehleranzahl und Letzte Abfrage auf der vorherigen Dialogseite nicht in Betracht gezogen.
+Eingabedialog
+Allgemeine Eigenschaften
+Ausdruck
+Enth\xE4lt ihre W\xF6rter.
+Lektion
+W\xE4hlt die gew\xFCnschte Lektion aus.
+Aussprache
+In diesem Feld k\xF6nnen Sie beschreiben, wie das Wort ausgesprochen wird.
+Das k\xF6nnen Sie entweder mit einfachen ASCII Zeichen und einer lustigen, sehr pers\xF6nlichen Aussprachebeschreibung tun oder Sie benutzen einfach das Internationale Phonetische Alphabet.
+Der Knopf rechts ruft einen Dialog auf, in dem Sie alle Zeichen ausw\xE4hlen k\xF6nnen, die zu diesem Alphabet geh\xF6ren.
+Typ
+Hier k\xF6nnen Sie einen der vordefinierten Typen f\xFCr ihren Ausdr\xFCck ausw\xE4hlen.
+Wenn Sie den Typ eines Eintrags ver\xE4ndern, wird auch den anderen Eintr\xE4gen in der gleichen Zeile der neue Typ zugewiesen.
+Unterart
+Einige Typen enthalten auch Untertypen.
+Wenn es keinen Untertyp gibt, ist dieses Feld nicht aktiv.
+Jeder Eintrag einer Zeile kann einen von den anderen verschiedenen Untertyp haben.
+Das ist n\xFCtzlich f\xFCr Nomen, da das Geschlecht eines Nomens von Sprache zu Sprache verschieden sein kann.
+Der Knopf rechts von diesem Feld ruft die entsprechende Seite der Dokumenteigenschaften auf, damit Sie sofort einen neuen Typ eingeben k\xF6nnen.
+Benutzungsmarken
+Eine oder mehrere Benutzungsmarken k\xF6nnen hier ausgew\xE4hlt werden, um die normale Benutzung des Ausdrucks zu beschreiben, z.B.
+Medizin oder Chemie.
+Zeichen aus dem Internationalen Phonetischen Alphabet ausw\xE4hlen
+Wenn Sie eine IPA-f\xE4hige Schriftart installiert haben, sollte Ihr Dialog ungef\xE4hr so aussehen:
+Wenn Sie keine solche Schriftart installiert haben, k\xF6nnen Sie den Verweis zu einer frei verf\xFCgbaren im Abschnitt Anzeigeeinstellungen finden.
+Zus\xE4tzliche Eigenschaften
+Weniger wichtige Eigenschaften, f\xFCr die kein Platz mehr auf den vorherigen Seiten war, befinden sich hier.
+Es gibt f\xFCr die meisten dieser Felder auch spezielle Abfragen.
+Synonym
+Hier k\xF6nnen Sie W\xF6rter eingeben, die die gleiche Bedeutung haben, wie der Ausdruck.
+Es gibt auch eine Abfrage f\xFCr dieses Feld.
+Antonym
+Das Feld ist f\xFCr W\xF6rter, die das Gegenteil bedeuten.
+Dieses Feld kann auch abgefragt werden.
+Beispiel
+Zus\xE4tzlich k\xF6nnen Sie hier einen Beispielsatz f\xFCr den Ausdruck eingeben.
+Es gibt einen einfachen Abfragetyp, der Sie mit dem Inhalt dieses Feldes fragt, wobei das gefragte Wort durch Punkte ersetzt wird.
+Bemerkungen
+Das ist ein freies Feld, um zus\xE4tzliche Informationen zu speichern.
+Ausdruck
+Hier k\xF6nnen Sie eine Beschreibung in anderen Worten eingeben.
+Es gibt auch einen Abfragentyp f\xFCr dieses Feld.
+Vorschl\xE4ge f\xFCr die Mehrfachauswahl
+Wenn Sie eine bessere Mehrfachauswahl-Abfrage erstellen wollen, ist es gut, Ausdr\xFCcke anzubieten, die der L\xF6sung sehr \xE4hnlich sind, um es schwieriger zu machen.
+Wenn Sie keine anbieten, hat kvoctrain nur die M\xF6glichkeit, bei solchen Abfragen zuf\xE4llige Ausdr\xFCcke zu nehmen, was die Abfrage aber sehr vereinfacht.
+Sie k\xF6nnen zu diesem Zwecke hier bis zu f\xFCnf Ausdr\xFCcke eingeben.
+Zus\xE4tzliche Eigenschaften f\xFCr Verben
+Diese Seite ist nur erreichbar, wenn Sie Verb als Wortart ausgew\xE4hlt haben.
+F\xFCr jede Zeit, die kvoctrain bekannt ist, k\xF6nnen Sie hier die Konjugationen f\xFCr das Verb in den verschiedenen Personen eingeben.
+Die Zeit kann aus der Liste ausgew\xE4hlt werden.
+Nachdem Sie das getan haben, werden die Felder entsprechend aktualisiert.
+Da einige Sprachen in der dritten Person Plural nicht unterscheiden, k\xF6nnen Sie das entsprechende Feld ankreuzen.
+N\xE4chste sucht nach der n\xE4chsten Zeitform mit schon eingegebenen Konjugationen.
+Zus\xE4tzliche Eigenschaften f\xFCr Adjektive
+Eigenschaften vom oder zum Original
+F\xFCr einige Eigenschaften ist es m\xF6glich, Werte vom Original oder zum Original einzustellen.
+Zum Beispiel k\xF6nnen Sie eine Note haben, wenn die \xDCbersetzung abgefragt wurde (= > vom Original).
+Das Gegenteil ist die Note, wenn eine der \xDCbersetzungen gegeben war und der Originalausdruck gefragt war (= > zum Original).
+Note
+Enth\xE4lt die aktuelle Note dieses Ausdrucks
+Falscher Freund
+Manchmal gibt es ein Wort in einer fremden Sprache, dass genauso wie ein Wort in Ihrer Muttersprache aussieht, so dass Sie denken, es habe dieselbe Bedeutung.
+In Wirklichkeit ist das aber nicht so.
+Geben Sie solche W\xF6rter in dieses Feld ein.
+Letzte Abfrage
+Das ist das Datum, wann dieser Eintrag das letzte Mal abgefragt wurde.
+Wenn er noch nicht abgefragt wurde, sehen Sie nur --.
+Aus Bequemlichkeitsgr\xFCnden gibt es zwei Kn\xF6pfe, um das aktuelle Datum einzustellen oder um das Datum auf noch nicht abgefragt zur\xFCckzustellen.
+Aus internen Gr\xFCnden ist es nicht m\xF6glich, mit den vorherigen Versionen von kvoctrain ein Datum vor dem 12.
+August 1999 zu speichern.
+Die Version 0.8 und sp\xE4tere sind davon nicht betroffen.
+Insgesamt
+Zeigt an, wie oft dieser Eintrag abgefragt wurde.
+Falsch
+Zeigt an, wie oft Sie nicht die richtige Antwort wussten.
+Das Hauptfenster andocken
+Nachdem Sie den Eingabedialog geschlossen haben, kehrt das Hauptfenster zu seiner vorherigen Gr\xF6\xDFe und Position zur\xFCck.
+Abfragedialoge
+Normale Zufallsabfrage
+Nachdem Sie Zufallsabfrage erstellen ausgew\xE4hlt haben, erscheint das Hauptfenster.
+Alle Eintr\xE4ge, die in ihre aktuellen Grenzwerte passen, werden in eine Liste gestellt und in zuf\xE4lliger Reihenfolge mit der folgenden Dialogbox gezeigt.
+Im Dialogbereich mit dem Originalausdruck sind einige Eigenschaften, die Sie aktivieren k\xF6nnen, um ihnen ein paar Hinweise zu geben.
+Sie m\xFCssen die L\xF6sung in das entsprechende Textfeld eingeben.
+Alle zeigen
+Zeigt die komplette L\xF6sung im \xDCbersetzungs feld.
+Mehr zeigen
+Jeder Mausklick auf diesen Knopf zeigt ein weiteres Zeichen der L\xF6sung, um Ihnen eine kleine Hilfe zu geben.
+\xDCberpr\xFCfen
+Vergleicht Ihre Antwort mit der korrekten L\xF6sung.
+Zur Zeit muss Ihre L\xF6sung genau \xFCbereinstimmen, um akzeptiert zu werden.
+Wenn die Antwort richtig war, \xE4ndert sich die Farbe der \xDCbersetzung auf Gr\xFCn, ansonsten wird die Antwort rot.
+Wei\xDF nicht
+Sagt kvoctrain, dass Sie die Antwort nicht gewusst haben und dass die entsprechende Note verschlechtert werden muss.
+Ich wei\xDF es
+Klicken Sie auf diesen Knopf, um kvoctrain mitzuteilen, dass Sie die Antwort wussten.
+Der Eintrag wird dann von der schlechten Liste entfernt.
+Bearbeiten
+Wenn Sie einen Fehler in der Abfrage finden, k\xF6nnen Sie hier sofort den Eingabedialog aufrufen und den Fehler korrigieren.
+Abfrage anhalten
+H\xE4lt die Abfrage an und zeigt wieder das W\xF6rterbuch an.
+In der rechten unteren Ecke sehen Sie zwei Fortschrittsbalken, die die verbleibende Zeit und die Anzahl der noch verbleibenden W\xF6rter anzeigen.
+Die Abfrage der aktuellen Lektion wird wiederholt, bis alle Ausdr\xFCcke gewusst wurden.
+Die Anzahl der Versuche wird unter dem Fortschrittsbalken angezeigt.
+Wenn die aktuelle Lektion beendet ist, beginnt kvoctrain mit der n\xE4chsten (unter der Bedingung, dass Sie die Abfrage-Einstellungen dementsprechend eingestellt haben).
+Das erste Dr\xFCcken der Eingabetaste zeigt die komplette L\xF6sung (zu Beginn ist der Knopf Alle zeigen der Standard-Knopf) und macht den Wei\xDF nicht zum neuen Standard-Knopf.
+Wenn Sie noch einmal die Eingabetaste dr\xFCcken, wird das den Dialog verlassen und kvoctrain mitteilen, dass Sie die Antwort nicht gewusst haben.
+Zur Zeit m\xFCssen Sie selbst entscheiden, ob Sie die Antwort wussten oder nicht.
+Die n\xE4chsten Version werden vielleicht einen mehr oder weniger intelligenten Algorithmus anbieten, um diese Entscheidung von ihrer Antwort abh\xE4ngig zu machen.
+Wenn Sie die korrekte Antwort wussten, wird die Note um eine Stufe erh\xF6ht.
+Wenn Sie es nicht wussten, wird die Note auf Stufe 1 zur\xFCckgesetzt, welche die schlechteste ist.
+Zufallsabfrage mit Mehrfachauswahl
+Dieser Typ der Abfrage arbeitet genau wie der vorherige.
+Die L\xF6sung wird zusammen mit zuf\xE4lligen ausgew\xE4hlten anderen gezeigt und Sie m\xFCssen eine Antwort aus den f\xFCnf angebotenen ausw\xE4hlen.
+Diese Abfrage arbeitet am effizientesten, wenn Sie auf der entsprechenden Eingabedialogseite \xE4hnliche L\xF6sungen eingeben.
+Zus\xE4tzlich kann auch ein falscher Freund hinzugef\xFCgt werden.
+Abfrage von Konjugationen
+Dieser Dialog erscheint, wenn Sie eine Abfrage der Verben starten.
+Alle Zeiten werden abgefragt, die Daten f\xFCr die Konjugation enthalten.
+Nat\xFCrlich m\xFCssen Sie f\xFCr ein erfolgreiches Resultat alle wissen.
+Abfrage von Artikeln
+In diesem Dialog wird der Artikel des Nomens abgefragt.
+Es ist wichtig, dass Sie den richtigen Untertyp des Wortes im Eingabedialog ausgew\xE4hlt haben.
+Abfrage von Steigerungsformen
+Alle Ausdr\xFCcke, die Steigerungsformen enthalten, werden gezeigt.
+Ein Wort wird zuf\xE4llig ausgew\xE4hlt und Sie m\xFCssen die verbleibenden zwei ausf\xFCllen.
+Abfrage von Synonymen, Antonymen, Ausdr\xFCcken und Beispiels\xE4tzen.
+Die Abfrage f\xFCr die oben genannten zus\xE4tzlichen Eigenschaften Ihres Ausdrucks sehen im Grunde f\xFCr alle Typen \xE4hnlich aus.
+Sie werden mit dem Ausdruck gefragt und m\xFCssen die entsprechende Eigenschaft eingeben.
+Die Abfrage mit dem Beispiel ist etwas anders, da kvoctrain den Ausdruck nimmt und ihn durch einige Punkte ersetzt, also ist es nur sinnvoll, wenn ihr Ausdruck ein einzelnes Wort ist.
+Dokumentstatistik
+Allgemein
+Auf dieser Seite finden Sie die wichtigsten allgemeinen Informationen \xFCber Ihr Dokument.
+Den Dateiname
+Den Titel
+Den Namen des Autors
+und die Anzahl von Eintr\xE4gen und Lektionen
+Alle Sprachen im W\xF6rterbuch
+Je nachdem wie viele Sprache Sie in ihrem Dokument haben, werden Sie hier keine, eine oder mehrere zus\xE4tzliche Seiten sehen.
+Jede Seite enth\xE4lt zwei Balken f\xFCr jede Lektion, die die Anzahl von Eintr\xE4gen pro Note anzeigen.
+Ein Klick mit der rechten Maustaste auf eine der Balken wird ein Men\xFC aufrufen, das die exakten Zahlen enth\xE4lt.
+W\xF6rterb\xFCcher
+Ein W\xF6rterbuch zu kvoctrain beitragen
+Wenn Sie ein W\xF6rterbuch erstellt haben, senden Sie mir eine E-Mail an kvoctrain@ewald-arnold.de und erz\xE4hlen Sie mir davon.
+Ich plane, Verweise auf diese Dateien zu sammeln und sie in dieses Handbuch zu integrieren.
+Wenn ich einen elektronischen Aufenthaltsort f\xFCr kvoctrain mit genug Platz gefunden haben, k\xF6nnte ich sie auch dort aufbewahren.
+Aber bitte:
+Schicken Sie mir keine Dateien, bevor Sie mich benachrichtigt haben.
+Vielleicht hat schon jemand anders ein solches W\xF6rterbuch erstellt.
+Die W\xF6rterb\xFCcher sollten eine vern\xFCnftige Qualit\xE4t haben, da ich sie nicht \xFCberpr\xFCfen oder verbessern m\xF6chte.
+Wenn Sie bestehende W\xF6rterb\xFCcher ver\xE4ndern oder neue W\xF6rterb\xFCcher erstellen, die auf gesch\xFCtztem Material basieren, m\xFCssen Sie den Autor um Erlaubnis fragen.
+Sogar das Entnehmen von w\xF6rtlichen Beispielen aus Schulb\xFCchern k\xF6nnte problematisch sein.
+Andere W\xF6rterb\xFCcher im Web
+Wenn Sie Deutsch sprechen und Englisch lernen wollen (oder umgekehrt) k\xF6nnen Sie sich die monatliche Vokabelliste vom deutschen Magazin Spotlight Online herunterladen.
+kvoctrain enth\xE4lt eine Anwendung, die spotlight2kvtml hei\xDFt, um diese Listen in das kvtml Format umzusetzen.
+Die Originaldateien sind Windows Word DOC-Dateien, also m\xFCssen Sie sie vorher als ANSI-TXT-Dateien speichern, bevor Sie die Umsetzung starten.
+StarOffice oder kword k\xF6nnen das tun.
+spotlight2kvtml braucht 3 Parameter: dateiname, Monat und Jahr und produziert eine Datei im selben Verzeichnis mit dem selben Namen und der Erweiterung kvtml.
+spotlight2kvtml 0199txt 01 99
+Dank der Mitarbeit von Andreas Neuper k\xF6nnen Sie Dateien von Langenscheidt herunterladen.
+Das ist eine deutsche Seite und enth\xE4lt Dateien in verschiedenen Sprachen.
+Dieses Paket enth\xE4lt das Perlskript langen2kvtml, das diese Listen in das kvtml-Format umsetzt.
+langen2kvtml braucht nur den originalen Dateinamen als Parameter und versucht so viele Informationen wie m\xF6glich aus der Quelldatei herauszubekommen.
+Zum Beispiel werden die Lektionsnamen, Konjugationen und Artikel beibehalten.
+Es erzeugt eine Datei im selben Verzeichnis mit demselben Namen und der Erweiterung kvtml.
+W\xF6rterb\xFCcher im ASCII-Format sind zum Beispiel erh\xE4ltlich von:
+ftp.uni-ulm.de/pub/misc/ict/english_german.tar.gz (ungef\xE4hr 350 kB)
+ftp.gwdg.de/pub/misc/dictionary/english/words.gz (ungef\xE4hr 1035 kB)
+sable.ox.ac.uk/pub/wordlists
+W\xF6rterb\xFCcher vom *Quick project im CSV Format, aber verschl\xFCsselt in UTF8 also sollten Sie alle Zeichen korrekt sehen k\xF6nnen.
+Die Dateien sind auf dem entsprechenden Downloadabschnitt zu finden.
+Sie sind im Windows .EXE Format gepackt, also brauchen Sie unzip um sie zu entpacken.
+Wenn Sie noch eine Quelle wissen, benachrichtigen Sie mich (kvoctrain@ewald-arnold.de), damit ich sie hier auff\xFChre.
+\xDCbersetzungsprogramme
+Wenn Sie nicht lernen wollen, sondern nur eine schnelle \xDCbersetzung von Ausdr\xFCcken haben wollen, w\xE4ren Sie ungl\xFCcklich mit kvoctrain, wenn Ihr Rechner nicht genug Speicher und Taktfrequenz hat.
+Eine Datei mit 150000 Eintr\xE4gen verbraucht ungef\xE4hr 60 MB und braucht Jahre zum Laden, wenn Ihr System zu wenig Arbeitsspeicher hat.
+In diesem Fall m\xF6chten Sie vielleicht eins der folgenden Programme ausprobieren.
+kdsing (KDE)
+steak/xsteak (console/X).
+Ding (TCL).
+qtrans (Qt 2.x).
+Interessante Verweise
+\xC4hnliche Projekte
+QVocab (Qt)
+Vokabel-Trainer (Tcl/Tk)
+Lingvisto (X)
+KVoclearn (KDE)
+SVT (console)
+chflashcard (X11, f\xFCr Chinesisch)
+Vocabulary Trainer (Freeware, f\xFCr alle Arten von Windows)
+Acavoc (Java)
+Der Autor dieses Programms hat auch einen theoretischen Artikel \xFCber das Lernen von Sprachen geschrieben (nur in Deutsch).
+wordtrain (console)
+vocabbox (Python Qt / KDE)
+DokVok (KDE)
+gvoc
+Wordlearn (Windows 32/kommerziell)
+GVoctra (DOS)
+Vocitrainer (Mac/Win32, kommerziell)
+Andere interessante Verweise
+Vielleicht haben Sie auch Interesse an dem einen oder anderen Verweis, den ich w\xE4hrend meiner Arbeit an kvoctrain gefunden habe.
+GNU Unifont Projekt
+SEUL Educational Projects
+Referenz und Einf\xFChrung in die phonetischen Symbole
+The International Phonetic Association
+Mitwirkende und Lizenz
+Thanks
+kvoctrain ist meine erste GUI Anwendung f\xFCr KDE, also musste ich mir ein einiges an Code von anderen Anwendungen ausleihen.
+Das meiste wurde entnommen aus
+Klpq (Tabellenfunktionen in Versionen bis 0.7)
+KHexEdit (der \xDCber... -Dialog in Versionen bis 0.7).
+Ich m\xF6chte den folgenden Personen pers\xF6nlich f\xFCr ihren Beitrag zu kvoctrain danken:
+Andrea Marconi f\xFCr die \xDCbersetzung ins Italienische
+Hans Kottman f\xFCr die \xDCbersetzung ins Franz\xF6sische
+Grzegorz Ilczuk f\xFCr die \xDCbersetzung ins Polnische
+Eric Bischoff f\xFCr die Umsetzung der Dokumentation ins DocBook-Format
+Ich m\xF6chte auch den anderen, nicht genannten Personen danken, vor allem dem ganzen KDE Team f\xFCr deren Hilfe, konstruktive Kritik, Vorschl\xE4ge oder Fehlerberichte.
+Copyright
+kvoctrain Programm Copyright 1999-2001 Ewald Arnold ewald@ewald-arnold.de
+Dokumentation Copyright 1999-2000 Ewald Arnold ewald@ewald-arnold.de
+Deutsche \xDCbersetzung von Thorsten M\xFCrell thorsten@muerell.de
 Installation
-ksysv ist Teil des KDE -Projekts http://www.kde.org /.
-ksysv k\xF6nnen Sie im kdeadmin-Paket finden auf ftp://ftp.kde.org/pub/kde /, der Haupt- FTP -Site des KDE -Projekts.
-Um ksysv auf Ihrem System zu kompilieren und zu installieren, schreiben Sie das Folgende in das Hauptverzeichnis in der ksysv -Distribution:
-Da ksysv autoconf und automake benutzt, sollte es dabei keine Schwierigkeiten geben.
+Woher man kvoctrain bekommt
+kvoctrain ist Teil des KDE -Projekts http://www.kde.org /.
+kvoctrain k\xF6nnen Sie im kdeedu-Paket finden auf ftp://ftp.kde.org/pub/kde /, der Haupt- FTP -Site des KDE -Projekts.
+Aktuelle Snapshots und W\xF6rterbuchdateien k\xF6nnen auf der KVocTrain Homepage heruntergeladen werden.
+Anonymer CVS Download ist auch verf\xFCgbar.
+Benutzen Sie bitte nicht den CVS Code vom Sourceforge-Server, da diese Zweig veraltet ist.
+Ein weitere Ort mit vorkompilierten Packeten ist Linuxberg.
+Voraussetzungen
+Um kvoctrain erfolgreich zu kompilieren, brauchen Sie die KDE Bibliotheken und die Qt C++ Bibliotheken.
+Alle ben\xF6tigten Dateien k\xF6nnen unter ftp.kde-org/pub/kde gefunden werden.
+kvoctrain wurde mit KDE 3.0 und Qt 3.0 getestet.
+Es sollte auch grunds\xE4tzlich unter KDE 2.x und Qt 2.x laufen, wenn es entsprechend kompiliert wurde, aber ich m\xF6chte nichts versprechen.
+Kompilierung und Installation
+Um kvoctrain auf Ihrem System zu kompilieren und zu installieren, schreiben Sie das Folgende in das Hauptverzeichnis in der kvoctrain -Distribution:
+Da kvoctrain autoconf und automake benutzt, sollte es dabei keine Schwierigkeiten geben.
 Sollten dennoch Probleme auftauchen, wenden Sie sich bitte an die KDE -Mailinglisten.

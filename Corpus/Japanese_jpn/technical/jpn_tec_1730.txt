@@ -1,6 +1,6 @@
 # language_name_wals:	Japanese
 # language_name_glotto:	Japanese
-# ISO_6393:	jpn
+# iso639_3:	jpn
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,16 +15,38 @@
 # sample_type:	whole
 # comments:	NA
 
-CreateUnoStruct 関数[実行時]
-/text/sbasic/shared/03131500.xhp
+SetAttr ステートメント [実行時]
+/text/sbasic/shared/03020414.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-CreateUnoStruct 関数
-CreateUnoStruct 関数 [実行時]
-Uno 構造型のインスタンスを作成します。
-ステートメントには下記の構造体を使用します。
-Dim oStruct as new com.sun.star.beans.Property
+SetAttr ステートメント
+SetAttr ステートメント [実行時]
+指定ファイルの属性情報を設定します。
 構文:
-oStruct = CreateUnoStruct( Uno type name )
+SetAttr FileName As String, Attribute As Integer
+パラメータ:
+SetAttr
+は、現在のディレクトリ中で該当ファイルを検索します。また
+URL 指定
+を用いることもできます。
+Attribute:
+設定ないし解除する属性情報を指定するビットパターン。
+値
+0 : 通常のファイル。
+1 : 読み取り専用のファイル。
+32 : 前回のバックアップ時から変更のあったファイル (アーカイブビット)。
+これらの属性値は、論理演算用の OR ステートメントと組み合わせて指定することもできます。
 例:
-oStruct = CreateUnoStruct( &quot; com.sun.star.beans.Property &quot; )
+Sub ExampleSetGetAttr
+On Error Goto ErrorHandler REM エラーハンドラ用ターゲットを設定
+If Dir( &quot; C: est &quot; ,16)= &quot; &quot; Then MkDir &quot; C: est &quot;
+If Dir( &quot; C: est\autoexec.sav &quot; )= &quot; &quot; THEN Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: est\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; ,0
+Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: est\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; ,1
+print GetAttr( &quot; c: est\autoexec.sav &quot; )
+End
+ErrorHandler:
+Print Error
+End
+end sub

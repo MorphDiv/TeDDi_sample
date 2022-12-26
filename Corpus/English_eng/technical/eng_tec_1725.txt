@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,23 +15,47 @@
 # sample_type:	whole
 # comments:	NA
 
-GetSystemTicks Function [Run-time]
-/text/sbasic/shared/03130700.xhp
+GetAttr Function [Run-time]
+/text/sbasic/shared/03020409.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-GetSystemTicks function
-GetSystemTicks Function [Run-time]
-Returns the number of system ticks provided by the operating system.
-You can use this function to optimise certain processes.
+GetAttr function
+GetAttr Function [Run-time]
+Returns a bit pattern that identifies the file type or the name of a volume or a directory.
 Syntax:
-GetSystemTicks()
+GetAttr (Text As String)
 Return value:
-Long
+Integer
+Parameters:
+Text:
+Any string expression that contains an unambiguous file specification.
+You can also use
+URL notation
+.
+This function determines the attributes for a specified file and returns the bit pattern that can help you to identify the following file attributes:
+Value
+0 :
+Normal files.
+1 :
+Read-only files.
+8 :
+Returns the name of the volume
+16 :
+Returns the name of the directory only.
+32 :
+File was changed since last backup (Archive bit).
+If you want to know if a bit of the attribute byte is set, use the following query method:
 Example:
-Sub ExampleWait
-Dim lTick As Long
-lTick = GetSystemTicks()
-wait 2000
-lTick = (GetSystemTicks() - lTick)
-MsgBox &quot; &quot; & lTick & &quot; Ticks &quot; ,0, &quot; The pause lasted &quot;
-End Sub
+Sub ExampleSetGetAttr
+On Error Goto ErrorHandler REM Define target for error-handler
+If Dir( &quot; C: est &quot; , 16) = &quot; &quot; Then MkDir &quot; C: est &quot;
+If Dir( &quot; C: est\autoexec.sav &quot; ) = &quot; &quot; THEN Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: est\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; , 0
+Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: est\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; , 1
+print GetAttr( &quot; c: est\autoexec.sav &quot; )
+end
+ErrorHandler:
+Print Error
+end
+end sub

@@ -1,6 +1,6 @@
 # language_name_wals:	Spanish
 # language_name_glotto:	Spanish
-# ISO_6393:	spa
+# iso639_3:	spa
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,37 +15,46 @@
 # sample_type:	whole
 # comments:	NA
 
-Función Right [Ejecución]
-/text/sbasic/shared/03120307.xhp
+Función Line # Input [Ejecución]
+/text/sbasic/shared/03020203.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-Right;función
-Función Right [Ejecución]
-Devuelve los &quot; n &quot; caracteres que se encuentran más a la derecha de una expresión de cadena.
-Función Left
-.
+Sentencia de linea de ingreso
+mw changed index entry
+Función Line # Input [Runtime]
+Lee cadenas de un archivo secuencial en una variable.
 Sintaxis:
-Right (Texto As String, n As Integer)
-Valor de retorno:
-Cadena
+Line Input #NúmeroArchivo As Integer, Var As String
 Parámetros:
-Texto:
-Cualquier expresión de cadena de la que se desee devolver los caracteres que se encuentren más a la derecha.
-n:
-Expresión entera que defina el número de caracteres que se desee devolver.
-Si
-n
-= 0, se devuelve una cadena de longitud cero.
-El ejemplo siguiente convierte una fecha en formato AAAA-MM-DD al formato de fecha de EEUU (MM/DD/AAAA).
+FileNumber:
+Número del archivo que contenga los datos que se desee leer.
+El archivo debe ser abierto en modo avanzado con la instrucción Open mediante la palabra clave READ.
+var:
+El nombre de la variable que almacene el resultado.
+Line Input#
+, puede leer cadenas desde un archivo abierto en una variable.
+Las variables de cadena se leen línea a línea hasta el primer retorno de carro (Asc=13) o avance de línea (Asc=10).
+Las marcas de final de línea no se incluyen en la cadena resultante.
 Ejemplo:
-Sub EjemploUSDate
-Dim sEntrada As String
-Dim afecha_EUA As String
-sEntrada = InputBox( &quot; Escriba una fecha en formato internacional 'AAAA-MM-DD' &quot; )
-sfecha_EUA = Mid(sEntrada, 6, 2)
-sfecha_EUA = sfecha_EUA & &quot; / &quot;
-sfecha_EUA = sfecha_EUA & Right(sEntrada, 2)
-sfecha_EUA = sfecha_EUA & &quot; / &quot;
-sfecha_EUA = sfecha_EUA & Left(sEntrada, 4)
-MsgBox sfecha_EUA
+Sub EjemploTrabajoConArchivo
+Dim iNumero As Integer
+Dim sLinea As String
+Dim aArchivo As String
+Dim sMensaje as String
+aArchivo = &quot; c:\data.txt &quot;
+iNumero = Freefile
+Open aArchivo For Output As #iNumero
+Print #iNumero, &quot; Esta es una línea de texto &quot;
+Print #iNumero, &quot; Esta es otra línea de texto &quot;
+Close #iNumero
+iNumero = Freefile
+Open aArchivo For Input As iNumero
+While not eof(iNumero)
+Line Input #iNumero, sLinea
+If sLinea < > &quot; &quot; then
+sMensaje = sMensaje & sLinea & chr(13)
+end if
+wend
+Close #iNumero
+Msgbox sMensaje
 End Sub

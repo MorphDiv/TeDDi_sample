@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,55 +15,55 @@
 # sample_type:	whole
 # comments:	NA
 
-RSet Statement [Run-time]
-/text/sbasic/shared/03120308.xhp
+Put Statement [Run-time]
+/text/sbasic/shared/03020204.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-RSet statement
-RSet Statement [Run-time]
-Right-aligns a string within a string variable, or copies a user-defined variable type into another.
+Put statement
+Put Statement [Run-time]
+Writes a record to a relative file or a sequence of bytes to a binary file.
+Get
+statement
 Syntax:
-RSet Text As String = Text or RSet Variable1 = Variable2
+Put [#] FileNumber As Integer, [position], Variable
 Parameters:
-Text:
-Any string variable.
-Text:
-String that you want to right-align in the string variable.
-Variable1:
-User-defined variable that is the target for the copied variable.
-Variable2:
-User-defined variable that you want to copy to another variable.
-RSet
-aligns the string to the right within the string variable.
-Any remaining characters in the string variable are replaced with spaces.
-If the string is longer than the string variable, characters exceeding the length of the variable are truncated and only the remaining characters are right-aligned within the string variable.
-RSet statement
-to assign variables of one user-defined type to another.
-RSet
-and
-LSet
-statements to modify the left and right alignment of a string.
+FileNumber:
+An integer expression that defines the file that you want to write to.
+Position:
+For relative files (random access files), the number of the record that you want to write.
+For binary files (binary access), the position of the byte in the file from which you want to start writing.
+Variable:
+Name of the variable that you want to write to the file.
+Len
+clause of the
+Open
+statement, the space between the end of the newly written record and the next record is padded with existing data from the file that you are writing to.
+Note for binary files:
+The contents of the variables are written to the specified position and the file pointer is inserted directly after the last byte.
+No space is left between the records.
 Example:
-Sub ExampleRLSet
-Dim sVar as string
-Dim sExpr as string
-sVar = String(40, &quot; * &quot; )
-sExpr = &quot; SBX &quot;
-REM Right-align &quot; SBX &quot; in a 40-character string
-REM Replace asterisks with spaces
-RSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-sVar = String(5, &quot; * &quot; )
-sExpr = &quot; 123457896 &quot;
-RSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-sVar = String(40, &quot; * &quot; )
-sExpr = &quot; SBX &quot;
-REM Left-align &quot; SBX &quot; in a 40-character string
-LSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-sVar = String(5, &quot; * &quot; )
-sExpr = &quot; 123456789 &quot;
-LSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-End Sub
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM Must be a variant type
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM Position to start writing
+Put #iNumber,, &quot; This is the first line of text &quot; REM Fill line with text
+Put #iNumber,, &quot; This is the second line of text &quot;
+Put #iNumber,, &quot; This is the third line of text &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; This is new text &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; This is the text in record 20 &quot;
+Print Lof(#iNumber)
+Close #iNumber
+end sub

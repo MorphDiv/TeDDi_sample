@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,93 +15,97 @@
 # sample_type:	whole
 # comments:	NA
 
-Instruction Dim [Exécution]
-/text/sbasic/shared/03102100.xhp
+Exemples de programmation pour les contrôles dans l'éditeur de boîte de dialogue
+/text/sbasic/guide/sample_code.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-Dim, instruction
-Matrices;cotation
-Cotation;matrices
-Instruction Dim [Exécution]
-Déclare une variable ou une matrice.
-Si les variables sont séparées par des virgules (par exemple DIM sPar1, sPar2, sPar3 AS STRING), seules les variables de variant peuvent être définies.
-Utilisez une ligne de définition pour chaque variable.
-DIM sPar1 AS STRING
-DIM sPar1 AS STRING
-DIM sPar3 AS STRING
-Dim déclare les variables locales dans des sous-routines.
-Les variables globales sont déclarées avec l'instruction PUBLIC ou PRIVATE.
-Syntaxe :
-[ReDim]Dim VarName [(start To end)] [As VarType][, VarName2 [(start To end)] [As VarType][,...]]
-Paramètres :
-VarName :
-tout nom de variable ou de matrice.
-Start, End :
-valeurs numériques ou constantes définissant le nombre d'éléments (NumberElements=(end-start)+1) et la plage d'index.
-Si ReDim est appliquée au niveau de la procédure, les paramètres Start et End peuvent être des expressions numériques.
-VarType :
-mot-clé déclarant le type de données d'une variable.
-Keyword :
-type de variable
-Bool :
-variable logique (True, False)
-Currency :
-variable au format monétaire (monnaie avec 4 décimales)
-Date :
-variable de date
-Double :
-variable à virgule flottante double précision (1,79769313486232 x 10E308 - 4,94065645841247 x 10E-324)
-Integer :
-variable au format nombre entier (-32768 - 32767)
-Long :
-variable au format nombre entier long (-2.147.483.648 - 2.147.483.647)
-Object :
-variable d'objet (Remarque : cette variable peut uniquement être définie par la suite avec le mot-clé Set !)
-Single :
-variable à virgule flottante simple précision (3,402823 x 10E38 - 1,401298 x 10E-45).
-String :
-variable de chaîne comprenant au maximum 64 000 caractères ASCII.
-[Variant] :
-variable de type variant (contient tous les types spécifiés dans la définition).
-Si aucun mot-clé n'est spécifié, les variables sont automatiquement définies comme étant de type variant, excepté si une instruction de DefBool à DefVar est utilisée.
-Dans $[officename] Basic, il n'est pas nécessaire de déclarer les variables explicitement.
-Toutefois, vous devez déclarer une matrice avant de pouvoir les utiliser.
-Vous pouvez déclarer une variable avec l'instruction Dim en utilisant des virgules pour séparer les différentes déclarations.
-Pour déclarer un type de variable, saisissez le caractère de déclaration de type après son nom ou utilisez le mot-clé correspondant.
-$[officename] Basic supporte les matrices unidimensionnelles ou multidimensionnelles définies par un type de variable spécifié.
-Les matrices peuvent être utilisées si le programme comprend des listes ou des tables à éditer.
-L'avantage des matrices est qu'elles permettent d'appeler des éléments individuels à partir d'index, lesquels peuvent être formulés comme expressions numériques ou variables.
-Les matrices sont déclarées avec l'instruction Dim.
-Il existe deux méthodes pour définir la plage d'index :
-DIM text(20) as String REM 21 éléments numérotés de 0 à 20
-DIM text(5 to 25) as String REM 21 éléments numérotés de 5 à 25
-DIM text(-15 to 5) as String REM 21 éléments (0 compris)
-REM Numérotés de -15 à 5
-Champ de données en deux dimensions
-DIM text(20,2) as String REM 63 éléments ; de 0 à 20 niveau 1, de 0 à 20 niveau 2 et de 0 à 20 niveau 3.
-Vous pouvez déclarer un type de matrice comme dynamique si une instruction ReDim définit le nombre de dimensions dans la sous-routine ou la fonction contenant la matrice.
-En règle générale, la dimension de la matrice ne peut être définie qu'une seule fois et vous ne pouvez pas la modifier.
-Dans une sous-routine, vous pouvez déclarer une matrice avec l'instruction ReDim.
-Vous ne pouvez définir les dimensions qu'avec des expressions numériques.
-Cela garantit que les champs ne dépassent pas la taille nécessaire.
-Exemple :
-Sub ExampleDim1
-Dim sVar As String
-Dim iVar As Integer
-sVar = &quot; Office &quot;
+Exemples de programmation de contrôles
+Boîtes de dialogue;chargement (exemple)
+Boîtes de dialogue;affichage (exemple)
+Contrôles;lecture ou édition des propriétés (exemple)
+Zones de liste;suppression d'entrées (exemple)
+Zones de liste;ajout d'entrées (exemple)
+Exemples;programmation de contrôles
+Éditeur de boîte de dialogue;exemples de programmation de contrôles
+Exemples de programmation pour les contrôles dans l'éditeur de boîte de dialogue
+boîte de dialogue
+appelée &quot; Dialog1 &quot; .
+Utilisez les outils de la
+barre de contrôles
+dans l'éditeur de boîte de dialogue pour créer la boîte de dialogue et les contrôles suivants : une
+case à cocher
+appelée &quot; CheckBox1 &quot; , un
+champ d'étiquettes
+appelé &quot; Label1 &quot; , un
+bouton
+appelé &quot; CommandButton1 &quot; , et une
+zone de Liste
+appelée &quot; ListBox1 &quot; .
+Respectez la casse lorsque vous joignez un contrôle à une variable d'objet.
+Fonctions globales pour le chargement des boîtes de dialogue
+Function LoadDialog(Libname as String, DialogName as String, Optional oLibContainer)
+Dim oLib as Object
+Dim oLibDialog as Object
+Dim oRuntimeDialog as Object
+If IsMissing(oLibContainer ) then
+oLibContainer = DialogLibraries
+End If
+oLibContainer.LoadLibrary(LibName)
+oLib = oLibContainer.GetByName(Libname)
+oLibDialog = oLib.GetByName(DialogName)
+oRuntimeDialog = CreateUnoDialog(oLibDialog)
+LoadDialog() = oRuntimeDialog
+End Function
+Affichage d'une boîte de dialogue
+rem Définition globale de variables
+Dim oDialog1 AS Object
+Sub StartDialog1
+BasicLibraries.LoadLibrary( &quot; Outils &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+oDialog1.Execute()
+end sub
+Lecture ou édition des propriétés des contrôles dans le programme
+Sub Sample1
+BasicLibraries.LoadLibrary( &quot; Outils &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM Obtenir un modèle de boîte de dialogue
+oDialog1Model = oDialog1.Model
+REM Afficher le texte de Label1
+oLabel1 = oDialog1.GetControl( &quot; Label1 &quot; )
+MsgBox oLabel1.Text
+REM Définir un nouveau texte pour le contrôle Label1
+oLabel1.Text = &quot; Nouveaux fichiers &quot;
+REM Afficher les propriétés du modèle pour le contrôle CheckBox1
+oCheckBox1Model = oDialog1Model.CheckBox1
+MsgBox oCheckBox1Model.Dbg_Properties
+REM Définir un nouveau statut pour CheckBox1 pour le modèle de contrôle
+oCheckBox1Model.State = 1
+REM Afficher les propriétés du modèle pour le contrôle CommandButton1
+oCMD1Model = oDialog1Model.CommandButton1
+MsgBox oCMD1Model.Dbg_Properties
+REM Afficher les propriétés du contrôle CommandButton1
+oCMD1 = oDialog1.GetControl( &quot; CommandButton1 &quot; )
+MsgBox oCMD1.Dbg_Properties
+REM Exécuter la boîte de dialogue
+oDialog1.Execute()
 End Sub
-Sub ExampleDim2
-REM Champ de données en deux dimensions
-Dim stext(20,2) as String
-Const sDim as String = &quot; Dimension : &quot;
-for i = 0 to 20
-for ii = 0 to 2
-stext(i,ii) = str(i) & sDim & str(ii)
-next ii
-next i
-for i = 0 to 20
-for ii = 0 to 2
-msgbox stext(i,ii)
-next ii
-next i
-End Sub
+Ajout d'une entrée à ListBox
+Sub AddEntry
+BasicLibraries.LoadLibrary( &quot; Outils &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM Ajouter une nouvelle entrée au contrôle ListBox
+oDialog1Model = oDialog1.Model
+oListBox = oDialog1.GetControl( &quot; ListBox1 &quot; )
+dim iCount as integer
+iCount = oListbox.ItemCount
+oListbox.additem( &quot; Nouvel élément &quot; & iCount,0)
+end sub
+Suppression d'une entrée du contrôle ListBox
+Sub RemoveEntry
+BasicLibraries.LoadLibrary( &quot; Outils &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM Supprimer la première entrée du contrôle ListBox
+oDialog1Model = oDialog1.Model
+oListBox = oDialog1.GetControl( &quot; ListBox1 &quot; )
+oListbox.removeitems(0,1)
+end sub

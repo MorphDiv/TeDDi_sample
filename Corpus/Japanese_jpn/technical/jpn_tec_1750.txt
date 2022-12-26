@@ -1,6 +1,6 @@
 # language_name_wals:	Japanese
 # language_name_glotto:	Japanese
-# ISO_6393:	jpn
+# iso639_3:	jpn
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,14 +15,37 @@
 # sample_type:	whole
 # comments:	NA
 
-処理ステップ
-/text/sbasic/shared/02/11060000.xhp
+eSerial 関数[実行時]
+/text/sbasic/shared/03030205.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-処理ステップ
-マクロを実行し、次のプロシージャーのあとで停止します。
-オブザーバ
-コマンドと併用して利用します。
-アイコン
-処理ステップ
-シングルステップ関数
+TimeSerial 関数
+TimeSerial 関数 [実行時]
+数値として渡される時、分、秒の指定値を基に、該当する時刻データのシリアル換算値を計算します。こうして変換される数値を用いると、異なる時刻間の経過時間などが計算できます。
+構文:
+TimeSerial (hour, minute, second)
+戻り値:
+日付
+パラメータ:
+hour:
+シリアル値に換算する時刻データで、時を示す整数表式。これには下記の値を指定できます。 0-23.
+minute:
+シリアル値に換算する時刻データで、分を示す整数表式。通常使用するのは 0 から 59 までの値です。この範囲外の値も指定できますが、その場合は時の値に影響が生じます。
+second:
+シリアル値に換算する時刻データで、秒を示す整数表式。通常使用するのは 0 から 59 までの値です。この範囲外の値も指定できますが、その場合は分の値に影響が生じます。
+例:
+12, -5, 45 は 11, 55, 45 と見なされます。
+12, 61, 45 は 13, 2, 45 と見なされます。
+12, 20, -2 は 12, 19, 58 と見なされます。
+12, 20, 63 は 12, 21, 4 と見なされます。
+時刻データを TimeSerial 関数で変換して得られる数値は、時刻間の時間計算などに利用できます。
+TimeSerial 関数の返す値は、バリアント型の VarType 7 (Date) です。この値は、内部的には0から 0.9999999999 の倍精度値として格納されます。DateSerial や DateValue 関数では、日付データをシリアル値に変換する際に、固定設定された基準日からの経過日数として換算していますが、TimeSerial 関数で返される値は、時刻間の計算には使えるものの、そのまま直接的な評価が行えるものではありません。
+TimeValue 関数の場合、時刻データを 1 つの文字列の形で渡します。これに対して TimeSerial 関数では、関数に渡すパラメータ (時、分、秒) は、それぞれ個別の数値表式として指定します。
+例:
+Sub ExampleTimeSerial
+Dim dDate As Double, sDate As String
+dDate = TimeSerial(8,30,15)
+sDate = TimeSerial(8,30,15)
+MsgBox dDate,64, &quot; Time as a number &quot;
+MsgBox sDate,64, &quot; Formatted time &quot;
+End Sub

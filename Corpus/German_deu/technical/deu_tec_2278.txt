@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,5 +15,32 @@
 # sample_type:	whole
 # comments:	NA
 
-H\xE4ufig gestellte Fragen
-Einige h\xE4ufig gestellte Fragen werden in diesem Abschnitt behandelt.
+kppp und die Sicherheit
+Dieses Kapitel ist haupts\xE4chlich f\xFCr Administratoren( root), Leute mit hohen Sicherheitsanspr\xFCchen oder einfach technisch Interessierte.
+Es ist nicht notwendig, dieses Kapitel zu lesen, wenn Sie nur Linux f\xFCr sich zu Hause laufen lassen (obwohl Sie vielleicht etwas Neues lernen k\xF6nnten, wenn Sie es lesen).
+Den Zugang zu kppp beschr\xE4nken
+Ein Systemadministrator m\xF6chte vielleicht Zugang zu kppp auf diejenigen beschr\xE4nken, denen es erlaubt ist, es zu benutzen.
+Es gibt zwei Wege, dies zu tun:
+Den Zugang zu kppp durch Gruppenrechte beschr\xE4nken
+Man erstellt zun\xE4chst eine neue Benutzergruppe (sie k\xF6nnte z.B. dialout heissen) und f\xFCgt jeden Benutzer, der kppp benutzen darf, zu dieser Gruppe hinzu.
+Dann tippt man folgendes ein:
+Dabei wird vorausgesetzt, dass sich KDE in /opt/kde befindet und die neue Gruppe dialout heisst.
+Den Zugang mit den Mitteln von kppp beschr\xE4nken
+Beim Start \xFCberpr\xFCft kppp, ob eine Datei /etc/kppp.allow existiert.
+Falls es eine solche Datei gibt, k\xF6nnen nur Benutzer, die in dieser Datei aufgelistet sin, eine Verbindung herstellen.
+Diese Datei muss f\xFCr jeden Benutzer lesbar sein (nat\xFCrlich nicht f\xFCr jeden schreibbar).
+Nur Benutzernamen werden erkannt, man kann also keine UID verwenden.
+Hier ein kurzes Beispiel:
+Im obigen Beispei d\xFCrfen nur die Benutzer fred, karl und daisy eine Verbindung herstellen.
+Au\xDFerdem darf das jeder Benutzer mit der UID 0 (daher muss root nicht explizit genannt werden).
+kppp hat das SUID -Bit gesetzt.
+Wo bleibt die Sicherheit?
+Es ist realistisch gesehen nicht m\xF6glich, ein W\xE4hlprogramm ohne gesetztes SUID -Bit zu schreiben, das sicher und dabei f\xFCr unerfahrene Benutzer einfach zu benutzen ist. kppp geht das Sicherheitsproblem mit folgender Strategie an:
+Gleich nach dem Programmstart startet kppp einen neuen Prozess.
+Der Slaveprozess beh\xE4lt seine Privilegien bei und k\xFCmmert sich um alles, f\xFCr das man root -Rechte ben\xF6tigt.
+Um diesen Teil sicher zu machen, werden hier keine Funktionen der KDE - / Qt -Bibliotheken aufgerufen, sondern nur einfache Funktionen der C-Bibliothek.
+Der Quellcode f\xFCr diesen Prozess ist kurz (etwa 500 Zeilen) und gut dokumentiert.
+Dadurch ist es einfach, Sicherheitsl\xF6cher zu entdecken.
+Master- und Slaveprozess kommunizieren mit standard UNIX IPC.
+Vielen Dank an Harri Porten f\xFCr das Schreiben dieses exzellenten Quelltextes.
+Ich dachte, es sei unm\xF6glich - er schrieb es in einer Woche.

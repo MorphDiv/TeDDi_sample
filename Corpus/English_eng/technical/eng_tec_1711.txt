@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,25 +15,43 @@
 # sample_type:	whole
 # comments:	NA
 
-UCase Function [Run-time]
-/text/sbasic/shared/03120310.xhp
+Eof Function [Run-time]
+/text/sbasic/shared/03020301.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-UCase function
-UCase Function [Run-time]
-Converts lowercase characters in a string to uppercase.
-LCase Function
+Eof function
+Eof Function [Run-time]
+Determines if the file pointer has reached the end of a file.
 Syntax:
-UCase (Text As String)
+Eof (intexpression As Integer)
 Return value:
-String
+Bool
 Parameters:
-Text:
-Any string expression that you want to convert.
+Intexpression:
+An integer expression that evaluates to the number of an open file.
+Use EOF to avoid errors when you attempt to read input past the end of a file.
+When you use the Input or Get statement to read from a file, the file pointer is advanced by the number of bytes read.
+When the end of a file is reached, EOF returns the value &quot; True &quot; (-1).
 Example:
-Sub ExampleLUCase
-Dim sVar As String
-sVar = &quot; Blackpool &quot;
-Print LCase(sVar) REM returns &quot; blackpool &quot;
-Print UCase(sVar) REM returns &quot; BLACKPOOL &quot;
-end Sub
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; First line of text &quot;
+Print #iNumber, &quot; Another line of text &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
+End Sub

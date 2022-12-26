@@ -1,6 +1,6 @@
 # language_name_wals:	Spanish
 # language_name_glotto:	Spanish
-# ISO_6393:	spa
+# iso639_3:	spa
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,86 +15,102 @@
 # sample_type:	whole
 # comments:	NA
 
-aRts Interfaces de programación de aplicaciones (APIs)
+El manual de KLettres
+Se concede permiso para copiar, distribuir y / o modificar este documento bajo los términos de la Licencia Libre de Documentación de GNU, versión 1.1 o posterior publicada por la Free Software Foundation; con secciones no invariantes, con textos que no estén en la cubierta, y con textos que no estén en la contraportada.
+Se incluye una copia de la licencia en.
+KLettres es una aplicación especialmente diseñada para ayudar al usuario a aprender el alfabeto en un nuevo idioma y posteriormente aprender a leer sílabas sencillas.
+El usuario puede ser un niño con una edad desde los dos años y medio o un adulto que desea adquirir conocimientos elementales de un idioma extranjero.
+En este momento están disponibles tres idioma: danés, francés y holandés.
 Introducción
-aRts no es sólo un conjunto de software, también proporciona una serie de APIs para propósitos variados.
-En esta sección trataré de describir de una forma resumida lo que se suponen que hacen esas APIs, y cómo interaccionan.
-Hay que hacer una importante distinción: la mayoría de las APIs son independientes del lenguaje y la localización ya que están especificadas como mcopidl.
-Es decir, se pueden utilizar los servicios que ofrecen desde cualquier lenguaje, implementarlas en cualquier lenguaje y no será necesario tener en cuenta si se trata de objetos locales o remotos.
-Esta es una lista de las primeras:
-core.idl
-Definiciones básicas que forman el núcleo de la funcionalidad MCOP, como el propio protocolo, definiciones del objeto, el intercambiador, el sistema de flujo y demás.
-artsflow.idl
-Aquí está contenido el sistema de flujo que se utilizará para conectar flujos de audio, la definición de Arts::SynthModule que es la base de cualquier interfaz que tenga flujos y finalmente algunos objetos de audio útiles.
-kmedia2.idl
-Aquí, se define un objeto que puede reproducir un medio, Arts::PlayObject.
-Los reproductores de medios como noatun de KDE serán capaces de reproducir cualquier medio para el que se encuentre un objeto PlayObject.
-Así que cobra sentido implementar objetos PlayObject para varios formatos (como mp3, video mpeg, midi, wav,...) en esa base, y, de hecho, ya hay muchos.
-soundserver.idl
-Aquí, se define un interfaz para el servidor de sonido global del sistema.
-El interfaz se llama Arts::SoundServer, que implementa funcionalidad como aceptar flujos desde la red, reproducir muestras, crear objetos de aRts propios y demás.
-La transparencia de red está implícita debido al uso de MCOP (como para todo lo demás).
-artsbuilder.idl
-Este módulo define funcionalidad básica de la gráfica de flujo, es decir, la combinación de obtejos sencillos en otro más complejos, definiendo una gráfica de ellos.
-Define los interfaces básicos Arts::StructureDesc, Arts::ModuleDesc y Arts::PortDesc que contienen una descripción de una estructura, un módulo y un puerto.
-También hay un modo de obtener una "red viviente de objetos" de estas conexiones y descripciones de valor, utilizando una factoría.
-artsmidi.idl
-Este módulo define funcionalidad MIDI básica, como objetos que producen eventos MIDI, lo que es un evento MIDI, un Arts::MidiManager para conectar los productores y consumidores de eventos MIDI, etc.
-Como siempre, se implica transparencia de red.
-artsmodules.idl
-Aquí hay varios filtros adicionales, osciladores, efectos, retardos y demás, todo lo requerido para poder realizar procesamiento de señal y construir instrumentos complejos a partir de estos elementos básicos.
-artsgui.idl
-Este se encarga de los objetos visuales.
-Define el tipo básico Arts::Widget de donde se derivan todos los módulos del entorno gráfico.
-Esto proporciona independencia del conjunto de herramientas, edición visual del entorno gráfico y entornos gráficos serializables.
-Además, al tener los elementos del entorno gráfico atributos normales, sus valores puede estar conectados directamente a algunos módulos de procesamiento de señal. (Por ejemplo, el valor de un control al corte de un filtro).
-Como siempre: transparencia de red.
-Donde es posible, el propio aRts está implementado usando IDL.
-Por otro lado, hay algunas APIs específicas del lenguaje que utilizan C o C++.
-Lo más correcto es utilizar interfaces IDL donde se pueda, y las otras APIs donde sea necesario.
-Esta es una lista de APIs específicas del lenguaje:
-KNotify, KAudioPlayer (incluido en libkdecore)
-Estas son APIs convenientes para los casos más sencillos y comunes, donde sólo se quiere reproducir una muestra.
-Las APIs están en C++, optimizado para Qt / KDE, y son tan sencillas como se puede.
-libartsc
-Interfaz de C para el servidor de sonido.
-Muy útil para portar aplicaciones antíguas.
-libmcop
-Toda la magia de MCOP se produce aquí.
-La biblioteca contiene los elementos básicos necesarios que debe conocer para escribir una aplicación MCOP sencilla, el repartidor, temporizadores, administración de entrada / salida, pero también los elementos internos que hacen que funcione el propio protocolo MCOP.
-libartsflow
-Además de la implementación de artsflow.idl, algunas utilidades como la conversión del ratio de muestreo.
-libqiomanager
-Integración de MCOP en el bucle de eventos de Qt, cuando escriba aplicaciones Qt utilizando MCOP.
-knotify
-kaudioplayer
-libkmid
-kmedia2
-servidor de sonido
-artsflow
-API de C
-Introducción
-El API de C de aRts se diseñó para facilitar la escritura y adaptación de aplicaciones en C al servidor de sonido aRts.
-Proporciona funcionalidad de flujos (envío de suceciones de muestras a artsd), ya sea exclusivas o no.
-En la mayoría de las aplicaciones, basta con eliminar unas pocas llamadas al sistema que realizan la comunicación con el dispositivo de audio y sustituirlas por las llamadas a aRts correspondientes.
-Yo he realizado dos adaptaciones como demostración del concepto: mpg123 y quake.
-Los parches se puede obtener aquí.
-Usted mismo puede enviar sus propios parches al mantenedor de aRts o de otros paquetes de software para facilitar el uso de aRts en su código.
-Un vistazo rápido
-Enviar audio al servidor de sonido a través de la API es muy sencillo:
-incluya el archivo de cabecera utilizando #include <artsc.h>
-inicialice la API con arts_init()
-construya un flujo de muestras con arts_play_stream()
-configure los parámetros específicos con arts_stream_set()
-escriba los datos de las muestras en el flujo con arts_write()
-cierre el flujo con arts_close_stream()
-libere la API con arts_free()
-Este ejemplo es un pequeño programa que ilustra el funcionamiento:
-Compilación y enlace: artsc-config
-Para compilar y enlazar de un forma sencilla los programas que utilicen la API para C de aRts, se proporciona la utilidad artsc-config que conoce la bibliotecas que son necesarias para el enlace y dónde se encuentran los archivos de inclusión.
-Se ejecuta utilizando
-para determinar las bibliotecas y
-para establecer parámetros de compilación de C adicionales.
-El ejemplo anterior se compilaría con la línea de comandos:
-Referencia de la biblioteca
-[POR HACER: generar la documentación de artsc.h utilizando kdoc]
+KLettres es una aplicación muy sencilla que ayuda a los niños o a los adultos a aprender el alfabeto y otros sonidos sencillos de su propio idioma o de uno extranjero.
+El programa elige una letra o una sílaba de forma aleatória, esta letra / sílaba se aparece en pantalla y se escucha su sonido correspondiente.
+El usuario debe entonces escribir esta letra o sílaba.
+El entrenamiento finaliza en los niveles en los que no se muestra ninguna letra o sílaba y simplemente se escucha su sonido.
+No es necesario que el usuario sepa manejar el ratón, basta con utilizar el teclado.
+En este momento hay tres idiomas disponibles: danés, francés y holandés.
+KLettres se puede configurar con dos aspectos diferentes para adaptarse mejor a sus necesidades.
+Para un niño, no son visibles ni la barra de menús ni el botón de idioma.
+Asumimos que un niño no va a cambiar el idioma por sí mismo.
+Una caja le permite elegir entre los diferentes niveles.
+Para un usuario más mayor, el fondo no es tan infantil y la barra de menús está presente.
+Para utilizar el danés como idioma de aprendizaje, es necesario que disponga de un teclado con configuración para dicho idioma, ya que será necesario introducir las letras especiales del alfabeto danés.
+Utilice el Centro de control de KDE en la sección Periféricos y subsección Teclado.
+Uso de KLettres
+KLettres tiene 4 niveles.
+Los niveles 1 y 2 tratan el alfabeto y los niveles 3 y 4 corresponden a las sílabas.
+Para los niños muy pequeños (2 1 / 2 a 4), sugiero que se sienten con usted al ordenador y realicen el juego juntos.
+Niveles 1 y 2
+Esta instantánea muestra el nivel 1 de KLettres, el idioma es el holandés y el aspecto es "adultos".
+En el nivel 1, el usuario ve la letra y escucha el sonido.
+Entonces tendrá que escribir la letra en la casilla.
+Si es correcta, aparecerá la siguiente (sin tener que pulsar ninguna tecla adicional).
+Si el usuario pulsa una letra incorrecta, volverá a escuchar el sonido.
+En este nivel, el usuario memoriza las letras y las reconoce en el teclado.
+El usuario puede teclear tanto en minúsculas como en mayúsculas.
+Las letras se ponen automáticamente en mayúsculas para que un niño pueda indentificarlas en el teclado.
+Sólo puede teclear una letra cada vez.
+El nivel de dificultad predeterminado de KLettres es el 1.
+La primera vez que se ejecuta KLettress, se coloca de forma predeterminada en el idioma francés y en el nivel 1.
+Después de la primera vez, se almacenan las opciones del idioma en un archivo de configuración y se cargan cada vez que se inicia KLettres, siempre en el nivel 1.
+El aspecto se guarda en el archivo de configuración y, por lo tanto, permanece hasta que usted lo cambie.
+Las letras aparecen en orden aleatorio.
+Esta es una instantánea del nivel 1, con el aspecto "infantil" y el idioma francés.
+Pinchando en el desplegable de nivel y eligiendo Nivel 2, o por medio de la utilización del menú de niveles, se para al nivel 2.
+En ese nivel el usuario sólo oye el sonido de la letra y debe teclearla.
+Si se equivoca, la letra aparecerá para ayudarle.
+Niveles 3 y 4
+Aquí puede ver el nivel 3 de KLettres, con el aspecto de "adultos" y el idioma holandés.
+En el nivel 3 el usuario ve una sílaba y escucha el sonido de la misma.
+Entonces tendrá que teclear las letras en la casilla.
+Si la primera letra es incorrecta, el usuario no podrá teclear la segunda.
+La letra desaparece y deberá volver a intentarlo.
+El número de letras es de dos o tres, dependiendo del idioma.
+Aquí puede ver el nivel 4 de KLettres, con el aspecto "infantil" y el idioma francés.
+Los sonidos aparecen en orden aleatorio.
+Pinchando en el desplegable de niveles o utilizando el menú Niveles en la barra de menús y eligiendo Nivel 4 se pasa al nivel 4.
+En ese nivel, el usuario sólo oye el sonido de la sílaba y debe teclear las letras.
+Este nivel es un poco complicado para un niño.
+Referencia de comandos
+La ventana principal de KLettres
+El menú Archivo
+Sale de KLettres
+El menú Niveles
+Elige el nivel
+El menú Opciones
+Conmuta la barra de menús
+Conmuta la barra de herramientas
+Elige el idioma de aprendizaje entre danés, francés y holandés.
+Elige el estilo de KLettres entre "Adultos" y "Niños ".
+Guía del desarrollador de KLettres
+En este momento los más necesitados son los sonidos ingleses.
+Sería el idioma predeterminado si no estuviese disponible el idioma del usuario.
+Preguntas y respuestas
+No aparece la imagen de fondo.
+Debe configurar el código fuente con la opción de prefijo establecida al directorio de KDE o añadir este directorio a las rutas predeterminadas (PATH).
+¿Por qué hay únicamente tres idiomas?
+Para añadir un nuevo idioma, necesito los sonidos del alfabeto y algunas sílabas básicas.
+Alguien que hable ese idioma debe grabar estos sonidos en formato ogg.
+En los niveles 3 y 4 las sílabas las debe escoger un profesor: deben ser las sílabas que se deben aprender inmediatamente depués del alfabeto para aprender los elementos básicos del idioma.
+Por favor, escríbame si usted puede ayudarme en esto.
+Créditos y licencia
+KLettres
+Copyright del programa 2001 Anne-Marie Mahfouf annma@kde.org
+Sonidos holandeses:
+Geert Stams geert@pa3csg.myweb.nl
+Sonidos daneses:
+Erik Kjaer Pedersen erik@binghamton.edu
+Imagen de fondo:
+Renaud Blanchard kisukuma@chez.com
+Imagen de inicio:
+Primoz Anzur zerokode@yahoo.com
+Sonido de inicio:
+Ludovic Grossard ludovic.grossard@libertysurf.fr / email
+Soporte y guía de programación:
+Robert Gogolok mail@robert-gogolok.de
+Copyright de la documentación 2001 Anne-Marie Mahfouf annma@kde.org
+Traducido por Miguel Revilla Rodríguez yo@miguelrevilla.com
+Esta documentación está sujeta a los términos de la Licencia de Documentación Libre GNU.
+Este programa está sujeto a los términos de la Licencia Pública General GNU.
+Instalación
+Requerimientos
+Para poder utilizar KLettres, necesita KDE 3 y Qt 3.

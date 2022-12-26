@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,10 +15,109 @@
 # sample_type:	whole
 # comments:	NA
 
-Protocoles
-Sur la gauche du module, vous verrez une liste des modules d'entrées-sorties installés sur votre système.
-Les modules d'entrées-sorties sont la façon dont les applications KDE parlent aux autres ordinateurs, aux autres applications, ou agissent sur les fichiers.
-Cliquez sur le nom d'un module d'entrées-sorties pour afficher des informations d'aide à propos de ce module d'entrées-sorties, tel que comment l'utiliser et ce qu'il fait.
-Le module protocoles est purement informatif, vous ne pouvez changer aucun paramètre ici.
-Auteurs de la section
-Traduction française par Yves Dessertine yves.d@hrnet.fr
+Manuel de KLjettool
+Permission est accordée de copier, distribuer et/ou modifier ce document selon les termes de la Licence de Documentation Libre GNU (GNU Free Documentation License), Version 1.1 ou toute version ultérieure publiée par la Free Software Foundation avec aucune section invariante, avec aucun texte de devant de couverture, et avec aucun texte d'arrière de couverture.
+Une copie de la licence est fournie dans.
+KLjettool est un programme qui vous permet d'ajuster vos paramètres de fonctionnement des Laserjet Hewlett-Packard.
+Introduction
+KLjettool est un programme qui vous permet d'ajuster les paramètres opérationnels de votre Hewlett-Packard.
+Certaines imprimantes Hewlett-Packard telle que la 5L ou la 6L ne possèdent plus de fenêtre de contrôle matériel et l'imprimante est contrôlée complètement de façon logicielle.
+Cependant ce logiciel est la plupart du temps disponible uniquement pour les plates-formes Windows.
+KLjettool rempli le vide de ce genre de besoin pour de tels logiciels sous plate-forme UNIX.
+Il devrait fonctionner avec n'importe quelle imprimante comprenant le PJL (langage de tâches d'impression, Printer Job Language) d'Hewlett-Packard.
+Cependant certaines fonctionnalités peuvent n'avoir aucun effet sur votre modèle en particulier.
+J'espère que vous apprécierez ce petit outil.
+Bernd Johannes Wuebben wuebben@kde.org
+Faire fonctionner KLjettool
+Certaines distributions Linux possèdent un sous-système d'impression qui ne respecte pas les fichiers PJL générés par KLjettool.
+Le sous-système d'impression sur ces systèmes ne reconnaît pas un fichier PJL en tant que tel et tente de le transformer en utilisant ses filtres.
+Cela a pour conséquence de faire mal fonctionner KLjettool.
+Cette section décrit les étapes nécessaires pour que LJetTool fonctionne sur les systèmes Linux Red Hat pre 5.0 (KLjettool devrait fonctionner tel quel sur les distributions basées sur la Linux Red Hat 5.0).
+Je suppose que des étapes semblables seront nécessaires sur d'autres systèmes.
+Cependant, les étapes qui nécessitent d'être passées ne sont pas difficiles.
+Tous ce qu'il y a faire est de s'assurer que le sous-système d'impression envoie à l'imprimante les fichiers PJL sans les modifier.
+Un système Linux Red Hat ne reconnaît pas PJL tel quel, et tente de faire des choses bizarres avec, au lieu de les lui envoyer non modifié à l'imprimante, donc nous devons lui dire comment s'y prendre avec un fichier PJL.
+Cependant, avant que vous fassiez les changements suggérés ici sur votre système, assurez -vous que KLjettool ne fonctionne vraiment pas sur votre système.
+Red Hat et d'autres distributions aurait très bien pu mettre à jour leur sous-système d'impression au moment où vous lisez ces lignes.
+Je pense que d'autres distributions avec un sous-système d'impression tout aussi sophistiqué tel que celui du système Red Hat devraient aussi apprendre à utiliser les fichiers PJL (Printer Job Language, langage de tâche d'impression) qui sont envoyés à l'imprimante.
+Sur un système Red Hat, le script /var/spool/lpd/lp/filter est appelé à partir de /etc/printcap, à chaque fois qu'un document est imprimé en utilisant la commande lpr.
+Le filtre lance le programme file sur le fichier à imprimer et file dira au script filter quelle sorte de document nous sommes en train d'utiliser.
+Ensuite, selon le type de document, le bon programme est lancé pour produire un fichier dans un format que l'imprimante peut comprendre.
+Le programme file utilise le fichier /etc/magic pour déterminer le type de document qui doit être imprimé (p. ex.
+PostScript, DVI, texte, etc.).
+Par exemple, si j'imprime un document PostScript, myfile.ps, file dira au script filter que nous travaillons sur un fichier PostScript et filter lancera ghostscript d'abord pour convertir myfile.ps en pcl, un langage que ma laserjet utilise, avant d'envoyer le fichier à l'imprimante.
+Malheureusement, un système Red Hat ne reconnaît pas les fichiers PJL et essaye de faire de mauvais traitements avec le fichier PJL plutôt que de l'envoyer à l'imprimante sans le modifier.
+Ajouter une ligne dans le fichier /etc/magic pour que le programme file reconnaisse correctement un fichier PJL comment étant un fichier PJL.
+Ajouter simplement les deux lignes suivantes à votre fichier /etc/magic.
+Peu importe l'endroit où vous ajoutez ces deux lignes.
+Dites au script /var/spool/lpd/lp/filter ce qu'il doit faire avec les fichiers PJL.
+Cela peut être fait en ajoutant les deux lignes suivantes dans le script filter.
+Si vous jetez un oeil au script filter, l'endroit où vous devrez mettre ces lignes apparaîtra clairement (environ à la ligne 220 dans la version que j'ai).
+Ces lignes spécifient simplement au script de laisser un fichier PJL seul et de l'envoyer à l'imprimante sans le modifier.
+J'apprécierais énormement de recevoir des instructions sur ce qui doit être fait (s'il y a des choses à faire) pour faire fonctionner KLjettool sur d'autres systèmes qui utilise un sous-système de filtre d'impression élaboré.
+Usage
+KLjettool est très simple à utiliser.
+En fait, la plupart de ses fonctions sont compréhensibles d'elles-mêmes.
+Écran de KLjettool
+Aide
+Ce bouton ouvre ce document dans le navigateur d'aide.
+OK
+Ce bouton rend vos modifications permanentes, et ferme KLjettool.
+Appliquer
+Ce bouton rend vos modifications permanentes, mais il ne ferme pas KLjettool, donc vous pouvez tester votre configuration et l'ajuster encore et encore.
+Fermer
+Quitte le programme sans sauver les modifications.
+L'onglet Imprimante
+Mode
+Vous avez le choix entre le mode Économie et le mode Présentation.
+Le mode Économie est plus approprié pour une utilisation quotidienne, et consomme moins de cartouche.
+Le mode Présentation produits des documents de très haute qualité, mais consomme plus de cartouche.
+Résolution
+Choisissez entre 300 dpi et 600 dpi pour votre imprimante.
+Imprimante
+Vous pouvez en choisir une parmi une liste d'imprimantes.
+Densité
+Ceci permet de définir le niveau de noir de votre impression finale.
+Amélioration de la résolution
+Détermine le mode d'amélioration de la résolution.
+L'onglet Papier
+Format
+Cette liste déroulante vous permet de choisir le format de votre papier parmi une liste de tailles standards.
+Copies
+Choisissez combien de copies de chaque page vous imprimerez.
+Ce choix n'écrasera pas la configuration d'une autre application.
+Elle sera ajoutée à la configuration de toutes les autres applications.
+(Vous pouvez voir le nombre totale de copies comme un problème de multiplication).
+Enfin, si vous demandez à KWord d'imprimer 2 copies de la lettre, et que vous avez demandé à KLjettool d'imprimer 2 copies de la lettre, vous obtiendrez 4 copies de la lettre (2 multiplié par 2 = 4 copies).
+Lignes
+Cela détermine le nombre de ligne imprimée sur une page.
+Orientation
+Vous pouvez choisir de forcer KLjettool à imprimer une page en travers (paysage) ou normalement (portrait).
+Divers
+Alimentation manuelle
+Utilisé pour que l'imprimante prenne le papier à partir de l'ouverture d'alimentation manuelle, plutôt que le plateau de papier normal.
+Poursuite automatique
+S'il est sélectionné, et si le format ou le type de papier nécessaire n'est pas disponible dans l'imprimante, l'imprimante ne prendra pas en compte le format de papier, et utilisera le papier présent dans le plateau par défaut.
+S'il n'est pas sélectionné, l'imprimante attendra que du papier de taille correcte soit inséré.
+L'onglet Opérations
+Mode fin de ligne
+Détermine comment les fins de ligne sont envoyés à l'imprimante.
+Si vous n'avez pas de problème, ne le modifiez pas.
+Protection des pages
+Active l'option de protection des pages sur votre imprimante.
+Référez -vous au manuel de votre imprimante pour l'explication de cette fonctionnalité.
+Temps d'attente pour l'économiseur d' énergie
+Détermine le temps d'inactivité avant que l'imprimante entre dans le mode d'économisation d'énergie.
+L'onglet Polices
+L'onglet A propos
+Il fournit des informations sur le programme et les droits d'auteur.
+Remerciements et licence
+KLjettool
+Programme sous copyright 1997-2000 Bernd Johannes Wuebben wuebben@kde.org
+Espen Sand espen@kde.org
+Cette documentation est soumise aux termes de la Licence de Documentation Libre GNU (GNU Free Documentation License).
+Installation
+Comment obtenir KLjettool
+KLjettool fait partie du projet KDE http ://www.kde.org/.
+KLjettool se trouve dans le paquetage kdeutils à l'adresse ftp ://ftp.kde.org/pub/kde/, le site FTP principal du projet KDE.
+Compilation et installation

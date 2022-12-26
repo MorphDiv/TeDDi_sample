@@ -1,6 +1,6 @@
 # language_name_wals:	Spanish
 # language_name_glotto:	Spanish
-# ISO_6393:	spa
+# iso639_3:	spa
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,64 +15,34 @@
 # sample_type:	whole
 # comments:	NA
 
-PAP y CHAP
-A partir de la versión 0.9.1, kppp admite directamente la forma más utilizada de autenticación PAP.
-PAP con kppp
-Hay dos modos diferentes de utilizar PAP.
-Autenticación del lado del cliente
-Esta variante es utilizada por muchos proveedores de Internet comerciales.
-Básicamente significa que usted (o, mejor dicho, su ordenador) debe identificarse en el servidor PPP del proveedor.
-El servidor PPP no necesita identificarse en su ordenador.
-Esto no supone un problema de seguridad, ya que usted debería saber con qué ordenador está tratando de conectarse.
-Si su proveedor le proporciona un nombre de usuario y una contraseña, y le dice que utilice autenticación PAP, esta será la variante que deberá elegir.
-Autenticación en dos sentidos
-Es similar a la anterior pero en este caso su ordenador requiere que el servidor PPP del proveedor se identifica en su ordenador.
-Para poder establecer la conexión, deberá escoger el método de autenticación Basado en script, no PAP, y tendrá que modificar manualmente el archivo / etc / ppp / pap-secrets.
-Mientras kppp no proporcione un método integrado que admita esta variante, no será sencilla establecer una conexión de este tipo.
-Preparación de kppp para PAP
-Asegúrese de que el archivo / etc / ppp / options (y / .ppprc si existe) no contiene ninguno de los siguientes argumentos:
-+pap
--pap
-papcrypt
-+chap
-+chap
-+ua
-remotename
-Sería raro que encontrase en el archivo alguna de estas opciones, pero para asegurarse, por favor comprúebelo.
-Inicie kppp
-Pinche en Configuración
-Elija la cuenta con la que desea utilizar PAP y pinche en el botón Editar
-Elija el apartado Marcar
-Seleccione PAP en el desplegable Autenticación.
-Si no desea tener que escribir la contraseña cada vez que realiza una conexión, marque Guardar contraseña.
-Esto guardará la contraseña en un archivo, así que asegúrese de que nadie tiene acceso a su cuenta.
-Y eso es todo.
-Cierre las ventanas de diálogo, teclee el nombre de usuario y la contraseña que le proporcionó su proveedor, y pinche en Conectar.
-Un método alternativo para utilizar PAP y CHAP con kppp
-Esta sección está basada en un correo electrónico de Keith Brown kbrown@pdq.net y explica cómo hacer que kppp funcione con una cuenta PAP o CHAP genérica.
-Si su proveedor le entregó un nombre de usuario y una contraseña, lo más probable es que pueda saltarse esta sección, ya que las instrucciones de la anterior deberían ser suficientes.
-PAP parace mucho más complicado en un principio de lo que es en realidad.
-El servidor (la máquina a la que se está conectando) básicamente le dice al cliente (su ordenador) que se identifique utilizando PAP.
-El cliente (pppd) busca en un archivo específico una entrada que contenga un nombre de servidor coincidente, y un nombre de cliente para esta conexión, y entonces envía la contraseña que encuentra.
-Eso es todo.
-Ahora veamos cómo hacer que ocurra eso.
-Asumo que la versión de pppd instalada es la 2.2.x o posterior, y que los archivos de configuración se encuentran en el directorio / etc / ppp.
-Con ánimo ilustrativo, imagine que usted tiene una cuenta de Internet con glob.net con el nombre de usuario userbaz y la contraseña foobar
-En primer lugar, necesita añadir todo esto a un archivo llamado / etc / ppp / pap-secrets.
-El formato que nos interesa es:
-Así que debería añadir la siguiente línea a / etc / ppp / pap-secrets y guardar el archivo:
-Puede utilizar cualquier nombre de servidor que desee, siempre y cuando utilice el mismo nombre en los argumentos de ejecución de pppd, como verá en breve.
-En este caso se ha reducirdo a glob, ya que este nombre únicamente sirve para localizar la contraseña correcta.
-Lo siguiente que debe hacer es configurar la conexión en kppp.
-Básicamente se hace de la misma forma que cualquier otra conexión, así que no entraremos en detalles, salvo para decir que deberá asegurarse de que el archivo / etc / ppp / options está vacío, y que no desea crear un acceso basado en guiones.
-En el diálogo de configuración de kppp, en la parte inferior del apartado Marcar, hay un botón llamado Personaliza opciones del pppd.
-Este botón abrirá un diálogo de edición donde podrá introducir los valores que se enviarán a pppd como argumentos de la línea de comandos.
-En caso de que haya argumentos con múltiples valores, deberá introducir cada valor en una línea de la lista, en el orden correcto.
-Puede introducir cualquier otro argumento que desee.
-A continuación añada los argumentos que pppd utiliza para manejar la autenticación PAP.
-En este ejemplo, vamos a añadir user, userbaz, remotename y glob en ese orden.
-La opción user le indica a pppd qué usuario debe buscar en el archivo pap-secrets para enviarlo a continuación al servidor.
-La opción remotename es utilizado para que pppd busque la coincidencia en el archivo pap-secrets, así que, como ya se ha dicho, puede ser cualquier palabra que desee siempre que coincida con la almacenada en pap-secrets file.
-Y eso es todo sobre el tema, ahora debería ser capaz de configurar su propia conexión utilizando autenticación PAP.
-CHAP no es muy diferente.
-Puede leer en la guía de administradores de red de Linux el formato del archivo chap-secrets y los argumentos de pppd utilizados, y el resto es sencillo.
+Agente de usuario
+Introducción
+Cuando Konqueror se conecta a un sitio web para descargar información, se envia información identificativa al sitio web en una cabecera de datos denominada "Agente de usuario".
+Debido a pequeñas diferencias en el modo en que los diferentes navegadores funcionan, los servidores web que presuponen el uso de un sólo navegador pueden no mostrarse adecudamente cuando se ven con otro navegador.
+Algunos servidores web están diseñados para examinar el contenido de la cabecera del agente de usuario e incorporar esta información en el código HTML, de modo que el contenido se muestre correctamente independientemente del navegador utilizado.
+Sin embargo, puede que encuentre algún servidor web que rehuse funcionarcorrectamente a no ser que esté utilizando un navegador considerado como correcto por dicho sitio.
+En estos casos puede ser necesario engañar al sitioweb haciendo que Konqueror se identifique comootro navegador utilizando el contenido de la cabecera de agente deusuario.
+Uso
+En este módulo del centro de control de KDE usted puede configurar el tipo de navegador con el que Konqueror se identificará.
+Puede controlar dicha información en función del sitio web.
+Usualmente en el cuadro con la lista etiquetado como Identificaciones de agente configuradas:, estará vacío, de modo que Konqueror use la identificación predeterminada.
+Para configurar una nueva asociación de agente, pulse el botón Nuevo....
+Introduzca el nombe del servidor o dominio en el recuadro de texto en la parte superior del diálogo emergente, que está etiquetado como Al conectarse al siguiente lugar.
+Advierta que no puede utilizar el comodin * en este cuadro de texto.
+Sin embargo la cadena kde.org servirá para todos las máquinas en el dominio kde.org.
+Después de introducir el nombre del servidor, introduzca la etiqueta identificativa en la siguiente caja combo, etiquetada como Utilizar la siguiente identidad o elija una opción de la lista.
+Si no elige una cadena de la lista, necesitará al menos conocer qué aspecto tiene una identificación válida desde el navegador.
+Por ejemplo, podría introducir Mozilla / 4.0 (compatible; MSIE 4.0).
+En el campo etiquetado como Apodo (descripción) puede introducir un nombre descriptivo para el agente configurado, e.g.
+Netscape Navigator 4.75 en Linux para la identificación de agente Mozilla / 4.75 (X11; U; Linux 2.2.14 i686).
+Puede pulsar sobre cualquier entrada existente en la lista Agentes configurados, y despuésmodificar los contenidos en los cuadros de texto, pulsando sobre el botón Cambiar.
+El botón Eliminar se puede utilizar para suprimir la entrada seleccionada de la lista de identificaciones de agente configuradas.
+El botón Borrar todo borrará todas las cadenas configuradas de de agente de usuario.
+Pulse Aplicar para que sus cambios tengan efecto.
+Puede utilizar las casillas de selección en la parte superior de la pantalla para crear un agente de usuario que sea único suyo, eligiendo su propia combinación de nombre de sistema operativo y versión, plataforma, tipo de procesador, e idioma.
+En todos los casos, el agente de usuraio que se envia por omisión se muestra en negrita en la parte superior de la página.
+Sección de autores
+Sección escrita por:
+Krishna Tateneni tateneni@pluto.njcc.com.
+Actualizada por Jost Schenck jost@schenck.de.
+Traducción por Pablo de Vicente pvicentea@nexo.es

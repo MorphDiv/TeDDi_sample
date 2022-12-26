@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,22 +15,51 @@
 # sample_type:	whole
 # comments:	NA
 
-Inserting a Fixed or Variable Date Field
-/text/swriter/guide/fields_date.xhp
-inserting;date fields
-dates;inserting
-date fields;fixed/variable
-fixed dates
-variable dates
-Inserting a Fixed or Variable Date Field
-You can insert the current date as a field that updates each time you open the document, or as a field that does not update.
-Insert - Fields - Other
-and click the
-Document
-tab.
-Type
-list and do one of the following:
-Select
-list.
-Select
-list.
+Handling of Empty Cells
+/text/scalc/05/empty_cells.xhp
+empty cells;handling of
+i86303
+Handling of Empty Cells
+Starting with OpenOffice.org 3.0 and StarOffice 9, the handling of empty cells changed.
+Previously, empty cells were forced to numeric 0 in some contexts and to empty string in others, except in direct comparison where =A1=0 and =A1= &quot; &quot; both resulted in TRUE if A1 was empty.
+Emptiness now is inherited until used, so both =VLOOKUP(...)=0 and =VLOOKUP(...)= &quot; &quot; give TRUE if the lookup resulted in an empty cell being returned.
+A simple reference to an empty cell is still displayed as numeric 0 but is not necessarily of type numeric anymore, so also comparisons with the referencing cell work as expected.
+For the following examples, A1 contains a number, B1 is empty, C1 contains the reference to B1:
+A1:
+1 B1: < empty > C1: =B1 (displays 0)
+=B1=0 = > TRUE
+=B1= &quot; &quot; = > TRUE
+=C1=0 = > TRUE
+=C1= &quot; &quot; = > TRUE (previously was FALSE)
+=ISNUMBER(B1) = > FALSE
+=ISNUMBER(C1) = > FALSE (previously was TRUE)
+=ISNUMBER(VLOOKUP(1; A1:C1; 2)) = > FALSE (B1)
+=ISNUMBER(VLOOKUP(1; A1:C1; 3)) = > FALSE (C1, previously was TRUE)
+=ISTEXT(B1) = > FALSE
+=ISTEXT(C1) = > FALSE
+=ISTEXT(VLOOKUP(1; A1:C1; 2)) = > FALSE (B1, previously was TRUE)
+=ISTEXT(VLOOKUP(1; A1:C1; 3)) = > FALSE (C1)
+=ISBLANK(B1) = > TRUE
+=ISBLANK(C1) = > FALSE
+=ISBLANK(VLOOKUP(1; A1:C1; 2)) = > TRUE (B1, previously was FALSE)
+=ISBLANK(VLOOKUP(1; A1:C1; 3)) = > FALSE (C1)
+Note that Microsoft Excel behaves different and always returns a number as the result of a reference to an empty cell or a formula cell with the result of an empty cell.
+For example:
+A1: < empty >
+B1: =A1 = > displays 0, but is just a reference to an empty cell
+=ISNUMBER(A1) = > FALSE
+=ISTEXT(A1) = > FALSE
+=A1=0 = > TRUE
+=A1= &quot; &quot; = > TRUE
+=ISNUMBER(B1) = > FALSE (Microsoft Excel:
+TRUE)
+=ISTEXT(B1) = > FALSE
+=B1=0 = > TRUE
+=B1= &quot; &quot; = > TRUE (Microsoft Excel:
+FALSE)
+C1: =VLOOKUP(...) with empty cell result = > displays empty (Microsoft Excel: displays 0)
+=ISNUMBER(VLOOKUP(...)) = > FALSE
+=ISTEXT(VLOOKUP(...)) = > FALSE
+=ISNUMBER(C1) = > FALSE (Microsoft Excel:
+TRUE)
+=ISTEXT(C1) = > FALSE

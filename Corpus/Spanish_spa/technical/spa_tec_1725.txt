@@ -1,6 +1,6 @@
 # language_name_wals:	Spanish
 # language_name_glotto:	Spanish
-# ISO_6393:	spa
+# iso639_3:	spa
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,23 +15,47 @@
 # sample_type:	whole
 # comments:	NA
 
-Función GetSystemTicks [Ejecución]
-/text/sbasic/shared/03130700.xhp
+Función GetAttr [Ejecución]
+/text/sbasic/shared/03020409.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-GetSystemTicks;función
-Función GetSystemTicks [Ejecución]
-Devuelve el número de ticks del sistema que proporciona el sistema operativo.
-Esta función puede utilizarse para optimizar algunos procesos.
+GetAttr;función
+Función GetAttr [Runtime]
+Devuelve un patrón de bits que identifica el tipo de archivo o el nombre de un volumen o de un directorio.
 Sintaxis:
-GetSystemTicks()
+GetAttr (Texto As String)
 Valor de retorno:
-Largo
+Entero
+Parámetros:
+Texto:
+Cualquier expresión de cadena que contenga una especificación de archivo inequívoca.
+También se puede usar la
+notación URL
+.
+Esta función determina los atributos de un archivo especificado y devuelve el patrón de bits que puede ayudar a identificar los atributos de archivo siguientes:
+Valor
+0 :
+Archivos normales.
+1 :
+Archivos de sólo lectura.
+8 :
+Devuelve el nombre del volumen
+16 :
+Sólo devuelve el nombre del directorio.
+32 :
+El archivo se cambió desde la última copia de seguridad (bit Archive).
+Para saber si está activado algún bit de atributo, se utiliza el método de consulta siguiente:
 Ejemplo:
-Sub EjemploWait
-Dim lTick As Long
-lTick = GetSystemTicks()
-wait 2000
-lTick = (GetSystemTicks() - lTick)
-MsgBox &quot; &quot; & lTick & &quot; Ticks &quot; ,0, &quot; La pausa ha durado &quot;
-End Sub
+Sub EjemploSetGetAttr
+On Error Goto ManejadorError REM Define destino para manejar errores
+If Dir( &quot; C: est &quot; ,16)= &quot; &quot; Then MkDir &quot; C: est &quot;
+If Dir( &quot; C: est\autoexec.sav &quot; )= &quot; &quot; THEN Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: est\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; ,0
+Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: emp\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; 0,1
+print GetAttr( &quot; c: est\autoexec.sav &quot; )
+end
+ManejadorError:
+Print Error
+end
+end sub

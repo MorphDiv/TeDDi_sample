@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,93 +15,107 @@
 # sample_type:	whole
 # comments:	NA
 
-Le manuel de KDE su
+Le manuel de KTron
 Permission est accordée de copier, distribuer et/ou modifier ce document selon les termes de la Licence de Documentation Libre GNU (GNU Free Documentation License), Version 1.1 ou toute version ultérieure publiée par la Free Software Foundation avec aucune section invariante, avec aucun texte de devant de couverture, et avec aucun texte d'arrière de couverture.
 Une copie de la licence est fournie dans.
-KDE su est une interface graphique pour la commande UNIX su.
+KTron est un simple clone de Tron, auquel vous pouvez jouer seul ou contre un ami.
 Introduction
-Ce programme est prévu pour être lancé depuis la ligne de commande ou depuis un fichier .desktop.
-Bien qu'il demande le mot de passe superutilisateur à travers une boîte de dialogue graphique, je le considère plus comme une ligne de commande connectée à une interface graphique que comme un véritable programme graphique.
-Utiliser KDE su
-Les options de la ligne de commande sont expliquées ci-dessous.
--c PROGRAMME
--f FICHIER
-Cette option permet une utilisation efficace de KDE su dans les fichiers .desktop.
-Elle dit à KDE su d'examiner le fichier spécifié par l'argument FICHIER.
-Si ce fichier est accessible en écriture par l'utilisateur courant, KDE su exécutera la commande pour le compte de l'utilisateur courant.
-Si ce n'est pas le cas, la commande sera exécutée pour le compte de l'utilisateur USER (par défaut root).
--t
--n
-Ne conserve pas le mot de passe.
-Ceci désactive la case à cocher conserver le mot de passe dans la boîte de dialogue correspondante.
--q
--d
-Affiche les informations de débogage.
--v
-Affiche l'information sur la version et sort.
--h
-Affiche un peu d'aide.
--s
-Arrête le démon (daemon) kdesu.
-Consulter.
-Configuration
-Mode écho
-Conservation des mots de passe
-Vous pouvez demander à KDE su de se souvenir des mots de passe en cochant la case conserver les mots de passe.
-Si c'est le cas, vous pouvez préciser une limite de temps dans le champ texte qui suit.
-C'est la durée, en minutes, pendant laquelle le mot de passe restera en mémoire.
-Par défaut, KDE su ne mémorise pas les mots de passe.
-Fonctionnement interne
-Authentification X
-Le programme que vous exécutez va fonctionner sous l'identité du superutilisateur et n'aura généralement pas accès à votre affichage Xwindow.
-KDE su contourne ce problème en ajoutant un cookie d'authentification pour votre affichage dans un fichier temporaire nommé .Xauthority.
-Après la fin de la commande, ce fichier sera supprimé.
-Si vous ne voulez pas utiliser de cookies X, vous devrez vous débrouiller par vos propres moyens.
-KDE su le détectera et n'ajoutera pas de cookie, mais il vous faudra vous assurer que le superutilisateur est autorisé à accéder à votre affichage Xwindow.
-Interface avec su
-KDE su utilise la commande su du système pour acquérir ses privilèges.
-Dans cette section, j'explique en détail ce fonctionnement.
-Du fait que certaines implantations de su (comme celle de Red Hat) ne veulent pas lire le mot de passe depuis stdin, KDE su crée une paire pty/tty et exécute su avec ses entrées-sorties standards connectées à tty.
-Pour exécuter la commande choisie par l'utilisateur, au lieu d'un shell interactif, KDE su utilise l'argument -c avec su.
-Cet argument est compris par tous les shells que je connais, donc le programme devrait être portable. su passe cet argument -c au shell de l'utilisateur, et le shell exécute le programme.
-Vérification du mot de passe
-Conservation du mot de passe
-Pour votre confort, KDE su comprend une fonction de conservation du mot de passe.
-Si vous vous intéressez aux questions de sécurité, vous devriez lire ce paragraphe.
-Le fait de permettre à KDE su de se souvenir des mots de passe ouvre une (petite) brèche de sécurité dans votre système.
-Évidemment, KDE su n'autorise personne d'autre que vous-même (votre user id) à utiliser ces mots de passe, mais, si on n'y prend pas garde, ceci descend le niveau de sécurité du superutilisateur à celui d'un utilisateur normal (vous).
-Un hacker qui prendrait possession de votre compte pourrait ainsi obtenir l'accès superutilisateur.
-KDE su essaye d'éviter cela.
-La technique qu'il utilise pour cela est, au moins de mon point de vue, raisonnablement sûre et elle est exposée ci-dessous.
-KDE su utilise un daemon, nommé kdesud.
-Ce daemon attend des commandes dans un socket UNIX placé dans /tmp.
-Le mode de ce socket est 0600, ainsi seul votre utilisateur peut s'y connecter.
-Si la conservation des mots de passe est activée, KDE su exécute les commandes par l'intermédiaire de ce daemon.
-Il écrit la commande et le mot de passe superutilisateur dans ce socket, puis le daemon exécute la commande su comme décrit précédemment.
-Ensuite, la commande et le mot de passe ne sont pas détruits.
-Au lieu de cela, ils sont conservés pour une durée déterminée.
-Il s'agit de la durée spécifiée dans le module de contrôle.
-Si une autre requête pour la même commande intervient pendant cette période, le client ne vous demandera pas de fournir de nouveau le mot de passe.
-Pour empêcher les hackers qui prendraient le contrôle de votre compte de voler les mots de passe au daemon (par exemple en lui attachant un débogueur), le daemon est installé set-group-id nogroup.
-Ceci devrait interdire à tous les utilisateurs normaux (y compris vous) de récupérer les mots de passe dans le processus kdesud.
-Par ailleurs, le daemon fixe la variable d'environnement DISPLAY à la valeur qu'elle avait quand il a été lancé.
-Ainsi, la seule chose que puisse faire un hacker est d'exécuter une application sur votre écran.
-Un point faible dans ce schéma est que le programme que vous exécutez n'a peut être pas été écrit avec un grand souci de sécurité (comme c'est le cas pour les programmes setuid root).
-Ceci signifie que ce programme pourrait avoir des débordements de tampons ("buffer overruns") ou d'autres faiblesses qu'un hacker pourrait utiliser.
-La conservation des mots de passe est donc le fruit d'un compromis entre confort et sécurité.
-Je vous incite à y réfléchir et à décider par vous-même si vous souhaitez vous en servir ou pas.
-Auteur
-KDE su
-Copyright 2000 Geert Jansen
-KDE su est écrit par Geert Jansen.
-Il est par certains aspects basé sur le KDE su de Pietro Iglio, version 0.3.
-Pietro et moi nous sommes mis d'accord pour que je me charge de la maintenance de ce programme à l'avenir.
-L'auteur peut être joint par email à g.t.jansen@stud.tue.nl.
-Merci de me signaler tous les bugs que vous pourriez rencontrer afin que je les résolve.
-Si vous avez une suggestion, n'hésitez pas à m'en faire part.
+KTron est un simple clone de Tron pour l'environnement de bureau KDE.
+Vous pouvez jouer à KTron contre l'ordinateur ou contre un ami.
+Le but du jeu est de survivre plus longtemps que votre adversaire.
+Pour ce faire, évitez de heurter le mur, votre propre queue ou celle de votre adversaire.
+Jouer à KTron
+Règles
+Une fois qu'une partie est débutée, le serpent ne cesse d'avancer (a moins que la partie ne soit mise en pause).
+Tout ce que vous avez à faire est d'éviter de vous écraser en changeant votre joueur de direction.
+De plus, vous pouvez essayer de gêner votre adversaire.
+Il est pour cela possible d'augmenter sa vitesse en actionnant la touche accélérateur.
+L'appui de la touche de direction opposée à votre direction actuelle vous fera vous écraser.
+Une partie commence quand tous les joueurs humains ont appuyé sur une touche de direction.
+La première direction suivie par chaque joueur est alors celle qui correspond à la touche actionnée.
+Si vous voulez suspendre la partie, choisissez l'option Suspendre/Continuer dans le menu Jeu ou actionnez le raccourci-clavier (voir la section Attribution des touches).
+De plus, le jeu est suspendu quand la fenêtre perd le focus du clavier, par exemple lorsque vous activez une autre fenêtre.
+Pour reprendre la partie, utilisez à nouveau l'option Suspendre/Continuer ou le raccourci-clavier.
+La partie reprendra aussi si tous les joueurs humains appuient sur une de leurs touches de direction.
+Attention, votre joueur part dans cette direction immédiatement.
+Une partie consiste en plusieurs manches, et se termine lorsqu'un joueur a au moins neuf points, et s'il a plus deux points supplémentaires par rapport à son adversaire.
+Le score actuel est toujours affiché dans la barre d'état.
+Le joueur Ordinateur
+Si vous choisissez Débutant, l'ordinateur ne se soucie pas de son adversaire et se contente de se déplacer.
+C'est le même algorithme que celui utilisé par xtron 1.1.
+Aux niveaux Moyen et Expert, l'ordinateur tente de gêner l'adversaire lorsqu'il s'en approche.
+Utilisation du clavier
+Chaque joueur utilise cinq touches.
+Quatre touches pour changer de direction et une pour accélérer.
+Vous n'avez pas besoin d'appuyer sur la touche en permanence.
+Appuyez simplement un bref instant pour changer la direction de votre joueur.
+L'accélération est active seulement lorsque vous maintenez la touche enfoncée.Lorsque vous relâchez la touche d'accélération, la vitesse retourne à la normale.
+Référence des commandes
+Les chapitres suivants décrivent brièvement chaque option de la barre des menus.
+Le menu Jeu
+Commence une nouvelle partie.
+P Jeu Pause/Reprendre
+Met la partie en pause.
+Quitte.
+Le menu Configuration
+Configuration Afficher la barre d' état
+Affiche ou cache la barre d'état.
+Configuration Configurer les raccourcis clavier
+Affiche une boîte de dialogue standard de KDE permettant de configurer les raccourcis clavier.
+Configuration L'ordinateur est
+Fixe le nombre de joueurs ordinateur, ainsi que leur niveau, Débutant, Moyen ou Expert
+L'ordinateur peut être le Joueur 1, le Joueur 2 ou les deux à la fois.
+Le niveau Débutant ignorera l'adversaire, se déplacera au hasard.
+Les niveaux Moyen et Expert vont faire de sorte à ce que l'ordinateur gêne activement l'adversaire.
+Configuration Rapidité
+Fixe la vitesse du jeu, de lent 1 à rapide 10.
+La vitesse par défaut est 5.
+Configuration Apparence Style des lignes
+Configuration Apparence Couleur du joueur 1
+Change la couleur du joueur 1 en utilisant un sélecteur de couleur.
+Configuration Apparence Couleur du joueur 2
+Change la couleur du joueur 2 en utilisant un sélecteur de couleur.
+Configuration Apparence Couleur du fond...
+Change la couleur du fond, en utilisant un sélecteur de couleur.
+Configuration Apparence Image de fond...
+Permet la sélection d'une image de fond à l'aide d'une boîte de dialogue.
+Configuration Taille
+Sélectionne la largeur avec laquelle les joueurs de KTron sont dessinés, de Très petite à Très grande.
+Configuration Autres...
+Des noms plus descriptifs peuvent être donnés aux joueurs, plutôt que Joueur 1 et Joueur 2.
+L'accélération peut être désactivée, laissant les deux joueurs se déplacer à vitesse constante.
+Les couleurs des joueurs peuvent êtres changées lorsque l'un d'entre eux gagne.
+Le menu Aide
+F1 Aide Contenu
+Invoque le système d'aide de KDE en démarrant avec le manuel de KTron (ce document).
+Dessine un point d'interrogation (?) à côté du pointeur de la souris.
+Cliquer sur un item dans KTron affiche alors une fenêtre d'aide (si celle-ci existe pour cet item particulier), expliquant la fonction de l'élément en question.
+Aide Rapport de bogue
+Ouvre une boîte de dialogue de rapport de bogue.
+Vous pouvez alors envoyer un rapport de bogue ou émettre un souhait.
+Affiche des informations sur la version et sur l' auteur
+Aide À propos de KDE
+Affiche la version de KDE et d'autres informations basiques
+Raccourcis clavier par défaut
+Le tableau suivant vous montre les raccourcis clavier par défaut.
+Raccourcis clavier pour le Joueur 1
+Raccourcis clavier pour le Joueur 2
+Raccourcis clavier généraux
+Remerciements et licence
+KTron
+Programme Copyright 1999 Matthias Kiefer matthias.kiefer@gmx.de
+Des portions de code proviennent de xtron 1.1 de Rhett D.
+Jacobs rhett@hotel.canberra.edu.au>
+Documentation Copyright 1999 Matthias Kiefer matthias.kiefer@gmx.de
+Documentation mise à jour pour KDE 2.0 par Fabian Dal Santo linuxgnu@yahoo.com.au
+Traduction française par Yves Dessertine yves.d@hrnet.fr
 Cette documentation est soumise aux termes de la Licence de Documentation Libre GNU (GNU Free Documentation License).
-Ce programme est soumis aux termes de la License Artistique.
+Ce programme est soumis aux termes de la Licence Générale Publique GNU (GNU General Public License).
 Installation
-Téléchargement
-KDE su se trouve dans le paquetage kdebase à l'adresse ftp ://ftp.kde.org/pub/kde/, le site FTP principal du projet KDE.
-Compilation
+Comment obtenir KTron
+KTron se trouve dans le paquetage kdegames à l'adresse ftp ://ftp.kde.org/pub/kde/, le site FTP principal du projet KDE.
+Programmes requis
+Pour mener à bien la compilation de KTron, vous avez besoin de KDE 3.0.
+Toutes les bibliothèques requises ainsi que KTron lui-même peuvent être téléchargés à l'adresse ftp ://ftp.kde.org/pub/kde/.
+Compilation et installation
+Si toutefois vous aviez des problèmes, veuillez les signaler à l'auteur à l'adresse Matthias Kiefer

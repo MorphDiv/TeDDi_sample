@@ -1,6 +1,6 @@
 # language_name_wals:	Spanish
 # language_name_glotto:	Spanish
-# ISO_6393:	spa
+# iso639_3:	spa
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,9 +15,46 @@
 # sample_type:	whole
 # comments:	NA
 
-Otras órdenes
-/text/sbasic/shared/03130000.xhp
+Función FileAttr [Ejecución]
+/text/sbasic/shared/03020405.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-Otras órdenes
-Esta es una lista de funciones e instrucciones que no pertenecen a ninguna otra categoría.
+FileAttr;función
+Función FileAttr [Runtime]
+Devuelve el modo de acceso o el número de acceso de un archivo que se abrió con la instrucción Open.
+El número de acceso de archivo depende del sistema operativo (OSH = manejador de sistema operativo).
+Si se utiliza un sistema operativo de 32 bits, no es posible usar la función FileAttr para determinar el número de acceso de archivo.
+Open
+Sintaxis:
+FileAttr (NúmeroArchivo As Integer, Atributo As Integer)
+Valor de retorno:
+Entero
+Parámetros:
+NúmeroArchivo:
+El número del archivo que se abrió con la instrucción Open.
+Atributo:
+Expresión de entero que indica el tipo de información que se desea devolver.
+Se pueden especificar los valores siguientes:
+1:
+La función FileAttr indica el modo de acceso del archivo.
+2:
+La función FileAttr devuelve el número de acceso de archivo del sistema operativo.
+Si se especifica un atributo de parámetro con un valor de 1, se aplican los valores de retorno siguientes:
+1 - INPUT (archivo abierto para entrada)
+2 - OUTPUT (archivo abierto para salida)
+4 - RANDOM (archivo abierto para acceso aleatorio)
+8 - APPEND (archivo abierto para adjunción)
+32 - BINARY (archivo abierto en modo binario).
+Ejemplo:
+Sub EjemploFileAttr
+Dim iNumero As Integer
+Dim sLinea As String
+Dim aArchivo As String
+aArchivo = &quot; c:\data.txt &quot;
+iNumero = Freefile
+Open aArchivo For Output As #iNumero
+Print #iNumero, &quot; Esta es una línea de texto &quot;
+MsgBox FileAttr(#iNumero, 1 ),0, &quot; Modo de acceso &quot;
+MsgBox FileAttr(#iNumero, 2 ),0, &quot; Atributo de archivo &quot;
+Close #iNumero
+End Sub

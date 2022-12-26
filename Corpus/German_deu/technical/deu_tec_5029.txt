@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,240 +15,37 @@
 # sample_type:	whole
 # comments:	NA
 
-Thomas Diehl thd@kde.org GUI-Übersetzung Matthias Schulz matthias.schulz@kdemail.net Deutsche Übersetzung
-Arbeiten mit Syntax-Hervorhebungen
-Überblick
-Syntax-Hervorhebungen bewirken, dass der Editor den Text automatisch in verschiedenen Farben und Schriftstilen anzeigt, abhängig von der Funktion der Zeichenkette in Beziehung zum Zweck des Dokumentes. Zum Beispiel können in Quelltext Kontrollbefehle fett dargestellt werden, während Daten und Kommentare andere Farben als der Rest des Textes bekommen. Dies verbessert die Lesbarkeit des Textes erheblich und verhilft damit dem Autor zu mehr Effizienz und Produktivität.
-Eine Perl-Funktion, mit Hervorhebungen angezeigt.
-Eine Perl-Funktion, mit Hervorhebungen angezeigt.
-Die selbe Perl-Funktion, ohne Hervorhebungen.
-Die selbe Perl-Funktion, ohne Hervorhebungen.
-Welche der beiden ist einfacher zu lesen?
-& kate; enthält ein flexibles, konfigurierbares und leistungsfähiges System für Syntax-Hervorhebungen, und die Standarddistribution enthält bereits Definitionen für eine Anzahl von Programmiersprachen, Markup- und Skriptsprachen sowie andere Textformaten. Außerdem können Sie eigene Definitionen in einfachen & XML;-Dateien erstellen.
-& kate; erkennt auf Basis des & MIME;-Typs, der Dateiendung oder des Inhalts des Dokumentes bereits beim Öffnen des Dokumentes automatisch die richtigen Regeln für die Syntax-Hervorhebungen. Wenn die automatische Auswahl nicht die richtigen Regeln ausgewählt hat, können Sie dies manuell korrigieren (Dokument Hervorhebungsmodus).
-Die Schriftstile und Farben, die von jeder Syntax-Hervorhebungsdefinition benutzt werden, können auf der Seite Hervorhebungs-Schriftarten des Einrichtungsdialogs festgelegt werden, die Einrichtung der & MIME;-Typen, auf die diese angewendet werden, ist auf der Seite Dateitypen möglich.
-Syntax-Hervorhebungen sind dazu gedacht die Lesbarkeit von Text zu verbessern, aber nicht dazu geeignet die Richtigkeit des Quelltextes zu überprüfen. Die Erstellung der Regeln für die Hervorhebungen ist kompliziert, abhängig davon, welches Format Sie benutzen. In manchen Fällen sind die Autoren der Regeln stolz, wenn 98nbsp;% des Textes korrekt hervorgehoben werden, meistens jedoch sehen Sie die nicht korrekten 2nbsp;% nur bei seltenen Konstruktionen.
-Sie können weitere oder aktualisierte Syntax-Hervorhebungsdefinitionen von der & kate;-Webseite durch Klicken auf Herunterladen im Dialog Hervorhebungen einrichten des Einrichtungsdialogs einrichten bzw. aktualisieren.
-Das & kate; Syntax-Hervorhebungssystem
-Dieser Abschnitt behandelt die Mechanismen des & kate; Syntax-Hervorhebungssystems genauer. Wenn Sie selbst Definitionen erstellen oder verändern möchten, sollten Sie diesen genau lesen.
-Wie es funktioniert
-Immer, wenn Sie ein Dokument öffnen, ist eines der ersten Dinge, die & kate; macht, festzustellen, welche Syntaxdefinition für dieses Dokument benutzt werden soll. Während Sie den Text lesen und neuen Text eingeben, analysiert das Syntax-Hervorhebungssystem den Text anhand der Regeln in der Syntaxdefinition und markiert ihn dementsprechend.
-Wenn Sie Text eingeben, wird der neue Text sofort analysiert und markiert.
-Die Syntaxdefinitionen, die in & kate; benutzt werden, sind & XML;-Dateien, die Folgendes enthalten
-Regeln für das Erkennen von Text, organisiert in Kontextblöcken
-Listen mit Schlüsselworten
-Stildefinitionen
-Beim Analysieren von Text werden die Erkennungsregeln in der Reihenfolge, in der sie definiert wurden, überprüft und wenn der Anfang des aktuellen Textes mit einer Definition übereinstimmt, wird der zugehörige Kontext benutzt. Der nächste Startpunkt wird nach dem Ende des erkannten Bereichs gesetzt und von dort aus wird eine neue Schleife für die Regeln mit dem Kontext der gerade gefundenen Regel gestartet.
-Regeln
-Die Erkennungsregeln sind das Herzstück des Syntax-Hervorhebungssystems. Eine Regel besteht aus einer Zeichenkette, einem Zeichen oder einem regulären Ausdruck. Mit diesen wird der zu analysierende Text verglichen. Sie enthalten Informationen, welche Darstellung für das erkannte Stück Text verwendet werden soll und ob entweder zu einem explizit angegebenem Kontext oder zum vorher vom Text benutzten Kontext gewechselt werden soll.
-Die Regeln sind in Kontextgruppen organisiert. Eine Kontextgruppe wird für die grundlegenden Textkonzepte innerhalb des Formates benutzt, & eg; für Textteile in Anführungszeichen oder Kommentarblöcke in Programmquelltext. Dadurch wird sichergestellt, dass sich das Syntax-Hervorhebungssystem nicht unnötig durch alle Regeln hindurcharbeiten muss und dass einige Zeichenketten im Text abhängig vom aktuellen Kontext unterschiedlich behandelt werden können.
-Kontexte können dynamisch generiert werden, um das Benutzen von Daten in Regeln zu erlauben, die nur auf diese Instanz zutreffen.
-Kontextstile und Schlüsselwörter
-In einigen Programmiersprachen werden Integerzahlen durch den Compiler (das Programm, das den Quelltext in ein ausführbares Programm übersetzt) anders behandelt als Gleitkommazahlen, und es gibt Zeichen, die eine spezielle Bedeutung innerhalb einer in Anführungszeichen eingeschlossenen Zeichenkette haben. In solchen Fällen ist es sinnvoll, diese unterschiedlich darzustellen, so dass sie beim Lesen einfach vom umgebenden Text zu unterscheiden sind. Auch wenn diese keine speziellen Kontexte repräsentieren, können sie durch das Syntax-Hervorhebungssystem erkannt und anders dargestellt werden.
-Eine Syntaxdefinition kann so viele verschiedene Stile beinhalten, wie für das Format notwendig sind.
-In vielen Formaten gibt es Listen mit Wörtern, die einem speziellen Konzept zugehörig sind. In Programmiersprachen sind & eg; die Kontrollanweisungen ein Konzept, die Datentypen ein anderes und die eingebauten Funktionen ein drittes. Das Syntax-Hervorhebungssystem von & kate; kann benutzt werden, um solche Wörter anhand der Listen zu finden und zur Hervorhebung der Konzepte im Text zu markieren.
-Standardstile
-Wenn Sie eine C++-Quelltextdatei, eine & Java;-Quelltextdatei und eine HTML -Datei in & kate; öffnen, sehen Sie dass auch in unterschiedlichen Formaten und damit unterschiedlichen Worten, die spezielle Behandlung bekommen, die benutzten Farben dieselben sind. Der Grund dafür ist, dass & kate; vordefinierte Standardstile benutzt, die von den individuellen Syntaxdefinitionen verwendet werden.
-Dadurch wird die Erkennung von ähnlichen Konzepten in verschiedenen Textformaten einfach. Kommentare & eg; gibt es in fast allen Programmiersprachen, Skripten und Markup-Sprachen; diese werden in allen Sprachen gleich dargestellt, so dass Sie sich auf die Arbeit konzentrieren können und nicht über den Zweck einzelner Einträge nachdenken müssen.
-Alle Stile in einer Syntaxdefinition nutzen einen der Standardstile. Einige wenige Syntaxdefinitionen nutzen mehr Stile als Standardstile vorhanden sind. Wenn Sie ein Format sehr oft benutzen, kann es die Arbeit wert sein, den Einrichtungsdialog zu starten und nachzusehen, ob mehrere Konzepte die selben Stile benutzen. In der Programmiersprache Perl & eg; gibt es zwei Typen von Zeichenketten, so dass Sie die Hervorhebung durch eine etwas andere Darstellung des zweiten Typs verbessern können. Alle verfügbaren Standardstile, werden weiter unten erklärt.
-Die Hervorhebungsdefinition für das & XML; Format
-Dieser Abschnitt ist ein Überblick über die Hervorhebungsdefinition für das & XML;-Format.. Es beschreibt die Hauptbestandteile, deren Bedeutung und Verwendung. Im nächsten Kapitel werden die Erkennungsregeln detailliert beschrieben.
-Die formale Definition, auch als DTD bekannt, wird in der Datei language.dtd gespeichert, die in Ihrem System im Ordner $KDEDIR /share/apps/kate/syntax stehen sollte.
-Hauptbestandteile der & kate;-Hervorhebungsdefinitionen
-Eine Hervorhebungsdefinitionsdatei enthält einen Kopf mit der XML-Version und dem Dokumententyp:
-& lt;?xml version=quot;1.0quot; encoding=quot;UTF-8quot;?gt; & lt;!DOCTYPE language SYSTEM & quot;language.dtdquot;gt;
-Die Wurzel der Definitionsdatei ist das Element language. Verfügbare Eigenschaften sind:
-Notwendige Eigenschaften:
-name setzt den Namen der Sprache. Dieser erscheint nachher in Menüs und in Dialogen.
-Die Eigenschaft section definiert die Kategorie.
-extensions definiert die Dateinamenerweiterungen wie & eg; & quot;*.cpp;*.hquot;.
-Optionale Eigenschaften:
-mimetype ordnet Dateien basierend auf deren & MIME;-Type zu.
-version definiert die aktuelle Version der Definitionsdatei.
-kateversion definiert die letzte unterstützte Version von & kate;.
-casesensitive definiert, ob bei den Schlüsselwörtern Groß-/Kleinschreibung unterschieden wird oder nicht.
-priority ist notwendig, wenn eine andere Hervorhebungsdefinitionsdatei die gleichen Dateinamenerweiterung benutzt. Die Definitionsdatei mit der höheren Priorität wird dann benutzt.
-author enthält den Namen des Autors und dessen E-Mail-Adresse.
-license enthält die Lizenz der Datei, normalerweise wird hier die LGPL, GPL oder eine andere benutzt.
-hidden definiert, ob der Name in Menüs von & kate; erscheinen soll.
-Die nächste Zeile könnte wie folgt aussehen:
-& lt;language name=quot;C++quot; version=quot;1.00quot; kateversion=quot;2.4quot; section=quot;Sourcesquot; extensions=quot;*.cpp;*.hquot; /gt;
-Als nächstes kommt das Element highlighting, das das optionale Element list und die notwendigen Elemente contexts und itemDatas enthält.
-list -Elemente enthalten eine Liste von Schlüsselwörtern. In diesem Fall sind die Schlüsselwörter class und const. Sie können so viele hinzufügen, wie Sie brauchen.
-Das Element contexts enthält alle Kontexte. Der erste Kontext ist Standard bei Start der Hervorhebungen. Es gibt zwei Regeln im Kontext Normal Text, die auf die Liste mit Schlüsselwörtern mit dem Namen somename und eine Regel, die Anführungszeichen entdeckt und zum Kontext string umschaltet. Weitere Informationen zu Regeln finden Sie im nächsten Kapitel.
-Der dritte Teil ist das Element itemDatas. Es enthält alle Farb- und Schriftartstile, die durch die Kontexte und Regeln benötigt werden. In diesem Beispiel werden itemData, Normal Text, String und Keyword benutzt.
-& lt;highlightinggt; & lt;list name=quot;somenamequot;gt; & lt;itemgt; class & lt;/itemgt; & lt;itemgt; const & lt;/itemgt; & lt;/listgt; & lt;contextsgt; & lt;context attribute=quot;Normal Textquot; lineEndContext=quot;#popquot; name=quot;Normal Textquot; & gt; & lt;keyword attribute=quot;Keywordquot; context=quot;#stayquot; String=quot;somenamequot; /gt; & lt;DetectChar attribute=quot;Stringquot; context=quot;stringquot; char=quot;amp;quot;quot; /gt; & lt;/contextgt; & lt;context attribute=quot;Stringquot; lineEndContext=quot;#stayquot; name=quot;stringquot; & gt; & lt;DetectChar attribute=quot;Stringquot; context=quot;#popquot; char=quot;amp;quot;quot; /gt; & lt;/contextgt; & lt;/contextsgt; & lt;itemDatasgt; & lt;itemData name=quot;Normal Textquot; defStyleNum=quot;dsNormalquot; /gt; & lt;itemData name=quot;Keywordquot; defStyleNum=quot;dsKeywordquot; /gt; & lt;itemData name=quot;Stringquot; defStyleNum=quot;dsStringquot; /gt; & lt;/itemDatasgt; & lt;/highlightinggt;
-Der letzte Teil der Hervorhebungsdefinition ist der optionale Abschnitt general. Dieser kann Informationen über Schlüsselwörter, Codeausblendungen, Kommentare und Einrückungen enthalten.
-Der Abschnitt comment definiert, mit welcher Zeichenkette eine einzelne Kommentarzeile beginnt. Sie können außerdem mehrzeilige Kommentare definieren, indem Sie multiLine mit der zusätzlichen Eigenschaft end benutzen. Diese werden benutzt, wenn Sie das Tastaturkürzel für Kommentar / Kommentar entfernen drücken.
-Der Abschnitt keywords definiert, ob in den Schlüsselwortlisten nach Groß- und Kleinschreibung unterschieden wird oder nicht. Andere Eigenschaften werden später erläutert.
-& lt;generalgt; & lt;commentsgt; & lt;comment name="singleLine "start="#"/gt; & lt;/commentsgt; & lt;keywords casesensitive="1"/gt; & lt;/generalgt; & lt;/languagegt;
-Die Abschnitte im Einzelnen
-Dieser Teil beschreibt alle verfügbaren Eigenschaften für Kontexte, itemDatas, Schlüsselwörter, Kommentare, Codeausblendungen und Einrückungen.
-Das Element context gehört in die Gruppe contexts. Ein Kontext selbst definiert spezielle Regeln, wie zum Beispiel, was geschehen soll, wenn das Hevorhebungssystem ein Zeilenende erreicht. Die verfügbaren Eigenschaften sind:
-Der Kontextname name. Regeln benutzen diesen Namen, um festzulegen, zu welchem Kontext umgeschaltet wird, wenn die Regel zutrifft.
-Der Kontext lineEndContext definiert den Kontext, zu dem das Hervorhebungssystem umschaltet, wenn es ein Zeilenende erreicht. Das kann entweder der Name eines anderen Kontextes sein, #stay um den Kontext nicht umzuschalten, (eg; tue nichts) oder #pop das bewirkt, dass der Kontext verlassen wird. Es ist möglich, zum Beispiel zu #pop#pop#pop verwenden.
-lineBeginContext definiert den Kontext, der an einem Zeilenanfang verwendet wird. Standard hierfür ist: #stay.
-fallthrough definiert,ob das Hevorhebungssystem zu dem in fallthroughContext definiertem Kontext umschaltet, wenn keine Regel zutrifft Standard ist hier: false.
-fallthroughContext definiert den nächsten Kontext, wenn keine Regel zutrifft.
-dynamic Wenn zutreffend, erinnert sich der Kontext an Zeichenketten und Platzhalter, die durch dynamische Regeln gespeichert wurden. Dies wird & eg; für HERE-Dokumente benötigt. Standard: false.
-Das Element itemData ist in der Gruppe itemDatas. Es definiert die Schriftarten und Schriftfarben. So ist es möglich, Ihre eigenen Schriftarten und -farben festzulegen. Wir empfehlen jedoch, bei den vordefinierten Einstellungen zu bleiben, so dass in unterschiedlichen Sprachen trotzdem die gleichen Farben angezeigt werden. Manchmal ist es doch nötig, die Farben und Schriftarten zu ändern. Der Name der Eigenschaft und defStyleNum müssen angeben werden, alle anderen können verwendet werden, sind aber nicht unbedingt nötig. Die verfügbaren Eigenschaften sind:
-name setzt den Namen von itemData. Kontexte und Regel benutzen diesen Namen in ihrer Eigenschaft attribute, um den Bezug zum itemData herzustellen.
-defStyleNum definiert, welcher Stil standardmäßig benutzt wird. Die verfügbaren Stile werden später näher erläutert.
-color definiert eine Farbe. Erlaubte Formate hierfür sind :‚ #rrggbb‘ oder‚ #rgb‘.
-selColor definiert die Farbe für die Hervorhebung.
-italic Wenn zutreffend, dann wird der Text in Kursivschrift dargestellt.
-bold Wenn zutreffend, dann wird der Text in Fettschrift dargestellt.
-underline Wenn zutreffend, dann wird der Text unterstrichen dargestellt.
-strikeout Wenn zutreffend, dann wird der Text durchgestrichen dargestellt.
-Das Element keywords in der Gruppe general definiert Eigenschaften von Schlüsselwörtern. Verfügbare Eigenschaften sind:
-casesensitive kann true oder false sein. Wenn es true ist, dann wird bei allen Schlüsselwörtern die Groß- und Kleinschreibung beachtet.
-weakDeliminator ist eine Liste von Zeichen, die nicht als Wortbegrenzung wirken. Der Punkt '.' ist zum Beispiel eine Wortbegrenzung. Nehmen Sie an, ein Schlüsselwort in einer list enthält einen Punkt, diese Schlüsselwort kann nur dann erkannt werden, wenn Sie den Punkt als weakDeliminator festlegen.
-additionalDeliminator definiert zusätzliche Wortbegrenzungen.
-wordWrapDeliminator definiert Zeichen, nach denen ein Zeilenumbruch erfolgen kann.
-Standard für Wortbegrenzer und Zeilenumbruchbegrenzer sind die Zeichen .():!+,-lt;=gt;%amp;*/;?[]^{|}~\\, Leerzeichen ('') und der Tabulator ('\ ').
-Das Element comment in der Gruppe comments definiert Eigenschaften für Kommentare, die für Extras Kommentar und Extras Kommentar entfernen benutzt werden. Verfügbare Eigenschaften hierfür sind:
-name ist entweder singleLine oder multiLine. Wenn Sie multiLine auswählen, müssen auch die Eigenschaften end und region benutzt werden.
-start definiert die Zeichenkette, die einen Kommentart beginnt. In C++ ist dies zum Beispiel & quot;/*quot;.
-end definiert die Zeichenkette, die einen Kommentar beendet. In C++ ist dies zum Beispiel & quot;*/quot;.
-region sollte der Name von ausblendbaren Mehrzeilenkommentaren sein. Nehmen Sie an, Sie haben beginRegion= Comment... endRegion= Comment in Ihren Regeln, dann sollten Sie region= Comment benutzen. Auf diesem Wege funktioniert das automatische Entfernen von Kommentaren auch dann, wenn Sie nicht den gesamten Text des mehrzeiligen Kommentars auswählen. Es muss nur der Cursor innerhalb des mehrzeiligen Kommentars stehen.
-Das Element folding in der Gruppe general definiert Eigenschaften für ausblendbaren Code. Verfügbare Eigenschaften sind:
-indentationsensitive Wenn true, werden die Codeausblendungsmarkierungen basiert auf Einrückungen gesetzt, wie zum Beispiel in der Skriptsprache Python. Normalerweise brauchen Sie dies nicht zu setzen, Standard ist false.
-Das Element indentation in der Gruppe general definiert, welche Einrücker benutzt werden. Wir empfehlen jedoch, dieses Element nicht zu benutzen, da der Typ des Einrückers normalerweise durch den Dateityp oder durch Hinzufügen einer Modezeile zur Textdatei gesetzt wird. Wenn Sie trotzdem einen Einrücker bestimmen, dann zwingen Sie den Nutzer eine bestimmte Einrückung zu verwenden, die dieser eventuell nicht nutzen möchte. Verfügbare Eigenschaften sind:
-mode ist der Name des Einrückers. Verfügbare Einrücker sind zurzeit: normal, cstyle, csands, xml, python und varindent.
-Verfügbare Standardstile
-Standardstile wurden als kurze Zusammenfassung bereits erklärt. Standardstile sind vordefinierte Schriftarten und -farben.
-Hier nur noch einmal die Liste der verfügbaren Standardstile:
-dsNormal, benutzt für normalen Text.
-dsKeyword, benutzt für Schlüsselwörter.
-dsDataType, benutzt für Datentypen.
-dsDecVal, benutzt für Dezimalwerte.
-dsBaseN, benutzt für Werte mit einer anderen Zahlenbasis als 10.
-dsFloat, benutzt für Gleitkommazahlen.
-dsChar, benutzt für einzelne Buchstaben.
-dsString, benutzt für Zeichenketten.
-dsComment, benutzt für Kommentare.
-dsOthers, benutzt für‚ andere‘ Dinge.
-dsAlert, benutzt für Warnhinweise.
-dsFunction, benutzt für Funktionsaufrufe.
-dsRegionMarker, benutzt für Markierungen von Bereichen.
-dsError, benutzt für Hervorhebungen von Fehlern und für fehlerhafter Syntax.
-Hervorhebungs-Erkennungsregeln
-Dieser Abschnitt beschreibt die Hervorhebungs-Erkennungsregeln
-Jede Regel kann auf Null oder mehrere Zeichen am Anfang der untersuchten Zeichenkette zutreffen. Wenn eine Übereinstimmung gefunden wird, wird den erkannten Zeichen der Stil oder die Eigenschaft, die durch die Regel festgelegt wurde, zugeordnet, Außerdem kann die Regel ein Umschalten des aktuellen Kontexts anfordern.
-Eine Regel sieht wie folgt aus:
-& lt;RuleName attribute=quot;(identifier)quot; context=quot;(identifier)quot; [rule specific attributes] /gt;
-Die attribute (Eigenschaft) legt den Namen des Stils fest, der für die erkannten Zeichen benutzt werden soll und der context (Kontext) legt den Kontext fest, der ab hier benutzt werden soll.
-Der context (Kontext) kann durch Folgendes identifiziert werden:
-Einen identifier, der der Name eines anderen Kontextes ist.
-Eine Anweisung, die vorgibt, im aktuellen Kontext zu bleiben (#stay), oder zu einem vorher in der Zeichenkette benutzten Kontext zurückzuspringen (#pop).
-Zum Zurückgehen über mehrere Schritte kann das Schlüsselwort #pop wiederholt werden: #pop#pop#pop
-Regeln können child rules (Unterregeln) haben, deren Einhaltung nur dann untersucht wird, wenn die Einhaltung der Hauptregel erkannt wurde. Der gesamten erkannten Zeichenkette wird die durch die Hauptregel festgelegte attribute (Eigenschaft) zugeordnet. Eine Regel mit Unterregel sieht & eg; so aus:
-& lt;RuleName (attributes)gt; & lt;ChildRuleName (attributes) /gt;... & lt;/RuleNamegt;
-Regelspezifische Eigenschaften sind unterschiedlich und werden im Folgenden beschrieben.
-Gemeinsame Eigenschaften
-Alle Regeln haben die folgenden Eigenschaften gemeinsam und sind immer verfügbar, wenn (common attributes) erscheint. attribute und context sind notwendige Eigenschaften, alle anderen sind optional, müssen also nicht benutzt werden.
-attribute: Eine Eigenschaft zeigt auf ein bestimmtes itemData -Element.
-context: Legt den Kontext fest, zu dem das Hervorhebungssystem umschaltet, wenn die Regel als zutreffend erkannt wird.
-beginRegion: Beginnt einen Codeausblendungsblock. Standard ist: unset.
-endRegion: Beendet eine Codeausblendungsblock. Standard ist: unset.
-lookAhead: Wenn true, dann wird das Hervorhebungssystem die Länge der Übereinstimmung nicht verarbeiten. Standard ist: false.
-firstNonSpace: Trifft nur dann zu, wenn die Zeichenkette als erstes nach Zwischenräumen in der Zeile erkannt wird. Standard ist: false.
-column: Trifft nur dann zu, wenn die Spalte zutrifft. Standard ist: unset.
-Dynamische Regeln
-Einige Regeln erlauben die Benutzung der optionalen Eigenschaft dynamic, Standard ist hier false .Wenn diese Eigenschaft auf true gesetzt wird, kann eine Regel in ihren Eigenschaften string oder char Platzhalter verwenden, die den zutreffenden Text aus einer als regulärem Ausdruck formulierten Regel enthält. Diese Regel muss direkt in den gegenwärtigen Kontext umgeschaltet haben. In einem string wird der Platzhalter %N (wobei N eine Zahl sein muss) ersetzt durch das Ergebnis für N aus dem aufrufenden regulären Ausdruck. In einem char muss der Platzhalter auch eine Zahl N sein und wird durch das erste Zeichen aus dem Ergebnis für N aus dem aufrufenden regulären Ausdruck ersetzt. Immer wenn eine Regel diese Eigenschaft erlaubt, dann enthält diese ein (dynamic).
-dynamic: kann (true oder false) sein.
-Die Regeln im Einzelnen:
-DetectChar
-Findet ein einzelnes bestimmtes Zeichen. Häufig zum Finden des Endes von Zeichenketten in Anführungszeichen benutzt.
-& lt;DetectChar char=quot;(character)quot; (common attributes) (dynamic) /gt;
-Die Eigenschaft char definiert das zu erkennende Zeichen.
-Detect2Chars
-Findet zwei bestimmte Zeichen in einer bestimmten Reihenfolge.
-& lt;Detect2Chars char=quot;(character)quot; char1=quot;(character)quot; (common attributes) (dynamic) /gt;
-Die Eigenschaft char definiert das erste zu erkennende Zeichen, char1 das zweite.
-AnyChar
-Findet ein Zeichen aus einem bestimmten Satz von Zeichen.
-& lt;AnyChar String=quot;(string)quot; (common attributes) /gt;
-Die Eigenschaft String definiert den Satz der Zeichen.
-StringDetect
-Findet eine bestimmte Zeichenkette.
-& lt;StringDetect String=quot;(string)quot; [insensitive=quot;true|falsequot;] (common attributes) (dynamic) /gt;
-Die Eigenschaft String definiert die zu erkennende Zeichenkette. Die Eigenschaft insensitive ist standardmäßig auf false gesetzt und wird an die Zeichenketten-Vergleichsfunktion übergeben. Wenn der Wert auf true gesetzt wird, wird Groß- und Kleinschreibung ignoriert.
-RegExpr
-Prüft die Übereinstimmung mit einem regulären Ausdruck.
-& lt;RegExpr String=quot;(string)quot; [insensitive=quot;true|falsequot;] [minimal=quot;true|falsequot;] (common attributes) (dynamic) /gt;
-Die Eigenschaft String definiert den regulären Ausdruck.
-Die Eigenschaft insensitive ist standardmäßig auf false gesetzt und wird an die Funktion zur Auswertung des regulären Ausdrucks übergeben.
-Die Eigenschaft minimal ist standardmäßig auf false gesetzt und wird an die Funktion zur Auswertung des regulären Ausdrucks übergeben.
-Weil die Regeleinhaltung immer am Anfang der aktuellen Zeichenkette geprüft wird, kann mit dem Hochzeichen (^) angegeben werden, dass die Regeleinhaltung nur am Anfang der Zeile untersucht werden soll.
-Sehen Sie unter Reguläre Ausdrücke für weitere Informationen zu diesen nach.
-keyword
-Erkennt ein Schlüsselwort aus einer angegebenen Liste.
-& lt;keyword String=quot;(list name)quot; (common attributes) /gt;
-Die Eigenschaft String definiert die Schlüsselwortliste durch deren Name. Eine Liste mit diesem Namen muss vorhanden sein.
-Int
-Erkennt eine ganze Zahl(integer).
-& lt;Int (common attributes) (dynamic) /gt;
-Diese Regel hat keine speziellen Eigenschaften. Unterregeln werden häufig dazu benutzt, um Kombinationen von L und U nach der Zahl zu erkennen, die den Typ der Integerzahl im Programm beschreiben. Eigentlich sind alle Regel als Unterregeln erlaubt, aber die DTD erlaubt nur die Unterregel StringDetect.
-Das folgende Beispiel trifft auf Integerzahlen, gefolgt vom Zeichen‚ L‘ zu.
-& lt;Int attribute="Decimal "context="#stay" & gt; & lt;StringDetect attribute="Decimal "context="#stay" String="L "insensitive="true"/gt; & lt;/Intgt;
-Float
-Findet eine Gleitkommazahl.
-& lt;Float (common attributes) /gt;
-Diese Regel hat keine speziellen Eigenschaften. AnyChar ist als Unterregel erlaubt und wird normalerweise dazu benutzt, um Kombinationen zu finden. Sehen Sie in der Beschreibung der Regel Int für nähere Informationen hierzu nach.
-HlCOct
-Findet eine oktale Zahl.
-& lt;HlCOct (common attributes) /gt;
-Diese Regel hat keine speziellen Eigenschaften.
-HlCHex
-Findet eine Hexadezimalzahl.
-& lt;HlCHex (common attributes) /gt;
-HlCStringChar
-Findet ein Steuerzeichen.
-& lt;HlCStringChar (common attributes) /gt;
-Solche Zeichen sind durch druckbare Zeichen dargestellte nichtdruckbare Zeichen, die in Programmquelltexten häufig benutzt werden. & eg;:\ (Zeilenvorschub) oder \ (TAB)
-Die folgenden Zeichen werden erkannt, wenn sie einem\\ folgen: abefnrtvquot; '?. Zusätzlich werden auch hexadezimale (\\xff) oder oktale (\\033) Zahlen nach einem\\ erkannt.
-HlCChar
-Findet ein C Zeichen.
-& lt;HlCChar (common attributes) /gt;
-Trifft zu, wenn C Zeichen in einfachen Anführungszeichen (Beispiel: 'c') vorkommen. In den Anführungszeichen kann ein einfaches Zeichen oder Sonderzeichen (Beispiel: '') stehen. Für Zeichenfolgen von Sonder zeichen sehen Sie unter HlCStringChar nach.
-RangeDetect
-Findet eine Zeichenkette mit definierten Anfangs- und Endzeichen.
-& lt;RangeDetect char=quot;(character)quot; char1=quot;(character)quot; (common attributes) /gt;
-char definiert das Zeichen am Anfang des Bereichs, char1 das Zeichen am Ende des Bereichs.
-Diese Regel ist für das Finden von kleinen Zeichenketten in Anführungszeichen nützlich, kann aber wegen der verwendeten Funktion keine über mehrere Zeilen gehenden Zeichenketten finden.
-LineContinue
-Findet das Zeilenende.
-& lt;LineContinue (common attributes) /gt;
-Diese Regel wird zum Umschalten des Kontextes am Ende einer Zeile benutzt, wenn das letzte Zeichen ein Linksschrägstrich ('\\') ist. Dies wird in C/C++ zum Fortsetzen von Makros oder Zeichenketten gebraucht.
-IncludeRules
-Schließt Regeln aus einem anderen Kontext, einer anderen Sprache oder einer anderen Datei ein.
-& lt;IncludeRules context=quot;contextlinkquot; [includeAttrib=quot;true|falsequot;] /gt;
-Die Eigenschaft context definiert, welcher Kontext eingeschlossen werden soll.
-Wenn diese eine einfache Zeichenkette ist, dann werden alle definierten Regeln in den gegenwärtigen Kontext eingeschlossen. Beispiel:
-& lt;IncludeRules context=quot;anotherContextquot; /gt;
-Wenn die Zeichenkette mit ##, dann verwendet das Hervorhebungssystem eine andere Sprachdefinition mit dem angegebenen Namen. Beispiel:
-& lt;IncludeRules context=quot;##C++quot; /gt;
-Wenn die Eigenschaft includeAttrib true ist, dann wird die Zieleigenschaft zu der aus der Quelle geändert. Dies wird zum Beispiel für Kommentare gebraucht, wenn der Text, der durch den eingeschlossenen Kontext anders hervorgehoben wird, als im gegenwärtigen Kontext.
-DetectSpaces
-Finde Zwischenräume.
-& lt;DetectSpaces (common attributes) /gt;
-Benutzen Sie diese Regel, wenn Sie wissen, dass jetzt mehrere Zwischenräume folgen, zum Beispiel am Anfang von eingerückten Zeilen. Diese Regel überspringt mehrere Zwischenräume mit einem Mal, ohne diese einzeln auf die Einhaltung von anderen Regeln zu testen und dann nach Nichtzutreffen einzeln zu überspringen.
-DetectIdentifier
-Finde Zeichenketten als Bezeichner (als regulärer Ausdruck: [a-zA-Z_][a-zA-Z0-9_]*).
-& lt;DetectIdentifier (common attributes) /gt;
-Benutzen Sie diese Regel zum Überspringen von Wörtern mit einem Mal, ohne die Zeichen im Wort einzeln auf die Einhaltung von anderen Regeln zu testen und dann nach Nichtzutreffen zu überspringen.
-Tipps & Tricks
-Wenn Sie einmal verstanden haben, wie das Umschalten zwischen Kontexten funktioniert, dann ist es einfach Hervorhebungsdefinitionen zu schreiben. Sie sollten jedoch sorgfältig entscheiden, welche Regel in welcher Situation Sie verwenden. Reguläre Ausdrücke sind sehr leistungsfähig, aber verglichen mit einfachen Regeln langsam. Sie sollten daher die folgenden Tipps beachten.
-Wenn Sie nur zwei Zeichen vergleichen, dann benutzen Sie Detect2Chars an Stelle von StringDetect. Das Gleiche gilt für DetectChar.
-Reguläre Ausdrücke sind einfach zu benutzen, aber oft gibt es einen anderen viel schnelleren Weg, um das gleiche Ergebnis zu erreichen. Nehmen Sie an, Sie wollen feststellen, ob das Zeichen '#' das erste Zeichen einer Zeile ist. Ein regulärer Ausdruck dafür wäre: lt;RegExpr attribute=quot;Macroquot; context=quot;macroquot; String=quot;^\\s*#quot; /gt; Sie können aber auch die wesentlich schnellere Lösung: lt;DetectChar attribute=quot;Macroquot; context=quot;macroquot; char=quot;#quot; firstNonSpace=quot;truequot; /gt; benutzen. An Stelle des regulären Ausdrucks '^#' können Sie DetectChar mit der Eigenschaft column=quot;0quot; benutzen. Die Eigenschaft column zählt Zeichenbasiert, so dass auch ein Tabulator nur ein Zeichen ist.
-Sie können zwischen Kontexten umschalten, ohne Zeichen zu verarbeiten. Nehmen Sie an, Sie wollen den Kontext umschalten, wenn Sie die Zeichenkette * / finden, aber Sie müssen diese Zeichenkette im nächsten Kontext verarbeiten. Die folgende Regel trifft zu und die Eigenschaft lookAhead sorgt dafür, dass die zutreffende Zeichenkette für den folgenden Kontext bereitgehalten wird.
-& lt;Detect2Chars attribute=quot;Commentquot; context=quot;#popquot; char=quot;*quot; char1=quot;/quot; lookAhead=quot;truequot; /gt;
-Benutzen Sie DetectSpaces, wenn Sie wissen, dass mehrere Zwischenräume vorkommen.
-Benutzen Sie DetectIdentifier an Stelle des regulären Ausdrucks '[a-zA-Z_]\\w*'.
-Benutzen Sie Standardstile wann immer das möglich ist. Die Nutzer finden dadurch eine vertraute Umgebung vor.
-Sehen Sie in anderen XML-Dateien nach, wie andere Nutzer komplizierte Regeln geschrieben haben.
-Sie können jede XML-Datei mit dem Befehl xmllint --dtdvalid language.dtd mySyntax.xml auf korrekte Syntax prüfen.
-Wenn Sie komplexe reguläre Ausdrücke oft wiederholen, können Sie ENTITIES benutzen. Beispiel:
-& lt;?xml version="1.0 "encoding="UTF-8"?gt; & lt;!DOCTYPE language SYSTEM" language.dtd "[& lt;!ENTITY myref" [A-Za-z_:][\\w.:_-]*"gt; ]gt;
-Nun können Sie amp;myref; an Stelle des regulären Ausdrucks benutzen.
+Fest
+Lokales Datumsformat
+Kurzes Datumsformat
+Lokales Datums- und Zeitformat
+Kurzes Datums- und Zeitformat
+Tag
+Monat
+Jahr
+Stunde
+Minute
+Sekunde
+Flexible Stellenanzahl (1-31)
+Zweistellig (01-31)
+Abgekürzter Name
+Ausgeschriebener Name
+Flexible Stellenanzahl (1-12)
+Zweistellig (01-12)
+Abgekürzter Possessivname
+Ausgeschriebener Possessivname
+Zweistellig (01-99)
+Vierstellig
+Flexible Stellenanzahl (1-23)
+Zweistellig (01-23)
+Flexible Stellenanzahl (1-59)
+Zweistellig (01-59)
+am/pm
+AM/PM
+Seitenanzahl
+Seitenzahl
+Datumskorrektur:
+Tage
+Wählen Sie, wie das Datum angezeigt werden soll:
+Benutzerdefiniertes Format
+...

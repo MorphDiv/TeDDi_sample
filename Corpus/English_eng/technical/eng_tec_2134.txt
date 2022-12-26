@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,55 +15,328 @@
 # sample_type:	whole
 # comments:	NA
 
-Special Tags
-/text/swriter/01/04090007.xhp
+Add-in for Programming in $[officename] Calc
+/text/scalc/01/04060112.xhp
 Sun Microsystems, Inc.
-converted from old format - fpe
-tags; in $[officename] Writer
-$[officename] Writer; special HTML tags
-HTML;special tags for fields
-fields;HTML import and export
-time fields;HTML
-date fields;HTML
-DocInformation fields
-MW changed &quot; $[officename] Writer;tags &quot; to &quot; $[officename];special HTML tags &quot;
-Special Tags
-When you save a document that contains fields as an HTML document, $[officename] automatically converts date, time, and DocInformation fields to special HTML tags.
-The field contents are inserted between the opening and closing HTML tags of the converted fields.
-These special HTML tags do not correspond to standard HTML tags.
-$[officename] Writer fields are identified by the < SDFIELD > tag in an HTML document.
-The field type, the format, and the name of the special field are included in the opening HTML tag.
-The format of a field tag that is recognised by an HTML filter depends on the field type.
-Date and Time Fields
-For &quot; Date &quot; and &quot; Time &quot; fields, the TYPE parameter equals DATETIME.
-The format of the date or the time is specified by the SDNUM parameter, for example, DD:MM:YY for dates, or HH:MM:SS for time.
-For fixed date and time fields, the date or the time is specified by the SDVAL parameter.
-Examples of date and time special HTML tags that are recognised by $[officename] as fields are shown in the following table:
-Fields
-$[officename] Tag
-Date is fixed
-< SDFIELD TYPE=DATETIME SDVAL= &quot; 35843,4239988426 &quot; SDNUM= &quot; 1031;1031;DD/MM/YY &quot; > 17/02/98 < /SDFIELD >
-Date is variable
-< SDFIELD TYPE=DATETIME SDNUM= &quot; 1031;1031;DD/MM/YY &quot; > 17/02/98 < /SDFIELD >
-Time is fixed
-< SDFIELD TYPE=DATETIME SDVAL= &quot; 35843,4240335648 &quot; SDNUM= &quot; 1031;1031;HH:MM:SS &quot; > 10:10:36 < /SDFIELD >
-Time is variable
-< SDFIELD TYPE=DATETIME SDNUM= &quot; 1031;1031;HH:MM:SS &quot; > 10:10:36 < /SDFIELD >
-DocInformation Fields
-For DocInformation fields, the TYPE parameter equals DOCINFO.
-The SUBTYPE parameter displays the specific field type, for example, for the &quot; Created &quot; DocInformation field, SUBTYPE=CREATE.
-For date and time DocInformation fields, the FORMAT parameter equals DATE or TIME, and the SDNUM parameter indicates the number format that is used.
-The SDFIXED parameter indicates if the content of the DocInformation field is fixed or not.
-The contents of a fixed date or time field are equal to the SDVAL parameter, otherwise the contents are equal to the text found between the SDFIELD HTML tags.
-Examples of DocInformation special HTML tags that are recognised by $[officename] as fields are shown in the following table:
-Fields
-$[officename] Tag
-Description (fixed content)
-< SDFIELD TYPE=DOCINFO SUBTYPE=COMMENT SDFIXED > Description < /SDFIELD >
-Creation date
-< SDFIELD TYPE=DOCINFO SUBTYPE=CREATE FORMAT=DATE SDNUM= &quot; 1031;1031;QQ YY &quot; > 1.
-Quarter 98 < /SDFIELD >
-Creation time (fixed content)
-< SDFIELD TYPE=DOCINFO SUBTYPE=CREATE FORMAT=TIME SDVAL= &quot; 0 &quot; SDNUM= &quot; 1031;1031;HH:MM:SS AM/PM &quot; SDFIXED > 03:58:35 PM < /SDFIELD >
-Modification date
-< SDFIELD TYPE=DOCINFO SUBTYPE=CHANGE FORMAT=DATE SDNUM= &quot; 1031;1031;NN DD MMM, YY &quot; > Mo 23 Feb, 98 < /SDFIELD >
+converted from old format - fpe dedr: fixed #i30855#
+programming; add-ins
+shared libraries; programming
+external DLL functions
+functions; $[officename] Calc add-in DLL
+add-ins; for programming
+mw made &quot; external... &quot; a one level entry and deleted one &quot; functions;... &quot; entry
+Add-in for Programming in $[officename] Calc
+API functions
+.
+Function Wizard
+in the
+Add-In
+category.
+If you would like to program an Add-In yourself, you can learn here which functions must be exported by the
+shared library
+external DLL
+so that the Add-In can be successfully attached.
+Tools - Options - $[officename] - Paths - Add-ins
+for a suitable
+shared library
+DLL
+.
+To be recognised by $[officename], the
+shared library
+DLL
+must have certain properties, as explained in the following.
+This information allows you to program your own Add-In for
+Function Wizard
+of $[officename] Calc.
+The Add-In Concept
+Each Add-In library provides several functions.
+Some functions are used for administrative purposes.
+You can choose almost any name for your own functions.
+However, they must also follow certain rules regarding parameter passing.
+The exact naming and calling conventions vary for different platforms.
+Shared Library
+AddIn DLL
+GetFunctionCount
+and
+GetFunctionData
+must exist.
+Using these, the functions as well as parameter types and return values can be determined.
+As return values, the Double and String types are supported.
+As parameters, additionally the cell areas
+Double Array
+,
+String Array
+, and
+Cell Array
+are supported.
+Parameters are passed using references.
+Therefore, changing these values is theoretically possible.
+However, this is not supported in $[officename] Calc because it does not make sense within spreadsheets.
+Libraries can be reloaded during run-time and their content can be analysed by the administrative functions.
+For each function, information is available about count and type of parameters, internal and external function names and an administrative number.
+The functions are called synchronously and return their results immediately.
+Real time functions (asynchronous functions) are also possible; however, they are not explained in detail because of their complexity.
+General information about the interface
+The maximum number of parameters in an Add-In function attached to $[officename] Calc is 16: one return value and a maximum of 15 function input parameters.
+The data types are defined as follows:
+Data types
+Definition
+CALLTYPE
+Under Windows:
+FAR PASCAL (_far _pascal)
+Other: default (operating system specific default)
+USHORT
+2 Byte unsigned Integer
+DOUBLE
+8 byte platform-dependent format
+Paramtype
+Platform-dependent like int
+PTR_DOUBLE =0 pointer to a double
+PTR_STRING =1 pointer to a zero-terminated string
+PTR_DOUBLE_ARR =2 pointer to a double array
+PTR_STRING_ARR =3 pointer to a string array
+PTR_CELL_ARR =4 pointer to a cell array
+NONE =5
+Shared Library
+DLL
+functions
+Shared Library
+external DLL
+.
+Shared Library
+DLL
+functions, the following applies:
+void CALLTYPE fn(out, in1, in2, ...)
+Output:
+Resulting value
+Cell area
+is an array of types double array, string array, or cell array.
+GetFunctionCount()
+GetFunctionData
+and
+GetParameterDescription
+functions later.
+Syntax:
+void CALLTYPE GetFunctionCount(USHORT & nCount)
+Parameter:
+USHORT & nCount:
+Output:
+Reference to a variable, which is supposed to contain the number of Add-In functions.
+For example:
+If the Add-In provides 5 functions for $[officename] Calc, then nCount=5.
+GetFunctionData()
+Determines all the important information about an Add-In function.
+Syntax:
+void CALLTYPE GetFunctionData(USHORT & nNo, char* pFuncName, USHORT & nParamCount, Paramtype* peType, char* pInternalName)
+Parameter:
+USHORT & nNo:
+Input:
+Function number between 0 and nCount-1, inclusively.
+char* pFuncName:
+Shared Library
+DLL
+.
+This name does not determine the name used in the
+Function Wizard
+.
+USHORT & nParamCount:
+Output:
+Number of parameters in Add-In function.
+This number must be greater than 0, because there is always a result value; the maximum value is 16.
+Paramtype* peType:
+Output:
+Pointer to an array of exactly 16 variables of type Paramtype.
+The first nParamCount entries are filled with the suitable type of parameter.
+char* pInternalName:
+Function Wizard
+.
+May contain umlauts.
+The pFuncName and pInternalName parameters are char arrays, which are implemented with size 256 in $[officename] Calc.
+GetParameterDescription()
+Function Wizard
+.
+Syntax:
+void CALLTYPE GetParameterDescription(USHORT & nNo, USHORT & nParam, char* pName, char* pDesc)
+Parameter:
+USHORT & nNo:
+Input:
+Number of the function in the library; between 0 and nCount-1.
+USHORT & nParam:
+Input:
+Indicates, for which parameter the description is provided; parameters start at 1.
+If nParam is 0, the description itself is supposed to be provided in pDesc; in this case, pName does not have any meaning.
+char* pName:
+Output:
+Takes up the parameter name or type, for example, the word &quot; Number &quot; or &quot; String &quot; or &quot; Date &quot; , and so on.
+Implemented in $[officename] Calc as char[256].
+char* pDesc:
+Output:
+Takes up the description of the parameter, for example, &quot; Value, at which the universe is to be calculated. &quot; Implemented in $[officename] Calc as char[256].
+Function Wizard
+is limited and that the 256 characters cannot be fully used.
+Cell areas
+The following tables contain information about which data structures must be provided by an external program module in order to pass cell areas. $[officename] Calc distinguishes between three different arrays, depending on the data type.
+Double Array
+As a parameter, a cell area with values of the Number/Double type can be passed.
+A double array in $[officename] Calc is defined as follows:
+Offset
+Name
+Description
+0
+Col1
+Column number in the upper-left corner of the cell area.
+Numbering starts at 0.
+2
+Row1
+Row number in the upper-left corner of the cell area; numbering starts at 0.
+4
+Tab1
+Table number in the upper-left corner of the cell area; numbering starts at 0.
+6
+Col2
+Column number in the lower-right corner of the cell area.
+Numbering starts at 0.
+8
+Row2
+Row number in the lower-right corner of the cell area; numbering starts at 0.
+10
+Tab2
+Table number in the lower-right corner of the cell area; numbering starts at 0.
+12
+Count
+Number of the following elements.
+Empty cells are not counted or passed.
+14
+Col
+Column number of the element.
+Numbering starts at 0.
+16
+Row
+Row number of the element; numbering starts at 0.
+18
+Tab
+Table number of the element; numbering starts at 0.
+20
+Error
+Error number, where the value 0 is defined as &quot; no error. &quot; If the element comes from a formula cell the error value is determined by the formula.
+22
+Value
+8 byte IEEE variable of type double/floating point
+30
+...
+Next element
+String Array
+A cell area, which contains values of data type Text and is passed as a string array.
+A string array in $[officename] Calc is defined as follows:
+Offset
+Name
+Description
+0
+Col1
+Column number in the upper-left corner of the cell area.
+Numbering starts at 0.
+2
+Row1
+Row number in the upper-left corner of the cell area; numbering starts at 0.
+4
+Tab1
+Table number in the upper-left corner of the cell area; numbering starts at 0.
+6
+Col2
+Column number in the lower-right corner of the cell area.
+Numbering starts at 0.
+8
+Row2
+Row number in the lower-right corner of the cell area; numbering starts at 0.
+10
+Tab2
+Table number in the lower-right corner of the cell area; numbering starts at 0.
+12
+Count
+Number of the following elements.
+Empty cells are not counted or passed.
+14
+Col
+Column number of the element.
+Numbering starts at 0.
+16
+Row
+Row number of the element; numbering starts at 0.
+18
+Tab
+Table number of the element; numbering starts at 0.
+20
+Error
+Error number, where the value 0 is defined as &quot; no error. &quot; If the element comes from a formula cell the error value is determined by the formula.
+22
+Len
+Length of the following string, including closing zero byte.
+If the length including closing zero byte equals an odd value a second zero byte is added to the string so that an even value is achieved.
+Therefore, Len is calculated using ((StrLen+2) & ~1).
+24
+String
+String with closing zero byte
+24+Len
+...
+Next element
+Cell Array
+Cell arrays are used to call cell areas containing text as well as numbers.
+A cell array in $[officename] Calc is defined as follows:
+Offset
+Name
+Description
+0
+Col1
+Column number in the upper-left corner of the cell area.
+Numbering starts at 0.
+2
+Row1
+Row number in the upper-left corner of the cell area; numbering starts at 0.
+4
+Tab1
+Table number in the upper-left corner of the cell area; numbering starts at 0.
+6
+Col2
+Column number in the lower-right corner of the cell area.
+Numbering starts at 0.
+8
+Row2
+Row number in the lower-right corner of the cell area; numbering starts at 0.
+10
+Tab2
+Table number in the lower-right corner of the cell area; numbering starts at 0.
+12
+Count
+Number of the following elements.
+Empty cells are not counted or passed.
+14
+Col
+Column number of the element.
+Numbering starts at 0.
+16
+Row
+Row number of the element; numbering starts at 0.
+18
+Tab
+Table number of the element; numbering starts at 0.
+20
+Error
+Error number, where the value 0 is defined as &quot; no error. &quot; If the element comes from a formula cell the error value is determined by the formula.
+22
+Type
+Type of cell content, 0 == Double, 1 == String
+24
+Value or Len
+If type == 0:
+8 byte IEEE variable of type double/floating point
+If type == 1:
+Length of the following string, including closing zero byte.
+If the length including closing zero byte equals an odd value a second zero byte is added to the string so that an even value is achieved.
+Therefore, Len is calculated using ((StrLen+2) & ~1).
+26 if type==1
+String
+If type == 1:
+String with closing zero byte
+32 or 26+Len
+...
+Next element

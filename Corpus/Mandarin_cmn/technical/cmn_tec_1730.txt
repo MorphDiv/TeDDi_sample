@@ -1,6 +1,6 @@
 # language_name_wals:	Mandarin
 # language_name_glotto:	Mandarin Chinese
-# ISO_6393:	cmn
+# iso639_3:	cmn
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,16 +15,38 @@
 # sample_type:	whole
 # comments:	NA
 
-CreateUnoStruct 函数 [运行时]
-/text/sbasic/shared/03131500.xhp
+SetAttr 语句 [运行时]
+/text/sbasic/shared/03020414.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-CreateUnoStruct 函数
-CreateUnoStruct 函数 [运行时]
-创建一个 Uno 结构类型的实例。
-在语句中使用以下结构：
-Dim oStruct as new com.sun.star.beans.Property
+SetAttr 语句
+SetAttr 语句 [运行时]
+设置指定文件的属性信息。
 语法：
-oStruct = CreateUnoStruct( Uno type name )
+SetAttr FileName As String, Attribute As Integer
+参数：
+SetAttr
+将在当前目录中搜索该文件。也可以使用
+URL 表示法
+。
+Attribute：
+位模式，用于定义需要设置或清除的属性：
+数值
+0：一般文件。
+1：只读文件。
+32：上一次备份后文件已被修改（存档位）。
+用逻辑 OR 语句组合相应的值，您可以设置多种属性。
 示例：
-oStruct = CreateUnoStruct( &quot; com.sun.star.beans.Property &quot; )
+Sub ExampleSetGetAttr
+On Error Goto ErrorHandler REM 定义错误处理程序的目标
+If Dir( &quot; C: est &quot; ,16)= &quot; &quot; Then MkDir &quot; C: est &quot;
+If Dir( &quot; C: est\autoexec.sav &quot; )= &quot; &quot; THEN Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: est\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; ,0
+Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: est\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; ,1
+print GetAttr( &quot; c: est\autoexec.sav &quot; )
+end
+ErrorHandler:
+Print Error
+end
+end sub

@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,86 +15,2611 @@
 # sample_type:	whole
 # comments:	NA
 
-Les secrets de & kde;
-Nicolas Goutte goutte@kde. org
-Fichiers de configuration à modifier à la main
-Introduction
-Dans & kde;, les fichiers de configuration sont faciles à modifier avec un simple éditeur de texte comme & kate; puisque les fichiers de configuration sont des fichiers texte.
-Un exemple de fichier texte & #160;:
-[General] AutoSave=1 LastFile=/ var/ tmp/ test. txt
-Les fichiers de configuration propres à l'utilisateur sont stockés dans. kde/ share/ config (remplacez. kde par votre paramètre $KDEHOME) et les fichiers globaux dans le sous-dossier share/ config du chemin d'installation de & kde; (vous pouvez trouver ce chemin d'accès en exécutant la commande kde4-config --prefix). Leurs noms de fichiers se terminent généralement par « & #160; rc & #160; » (sans point initial), par exemple kopeterc.
-Modifier des fichiers de configuration à la main peut mettre en péril la stabilité de votre installation & kde;. Les applications ne vérifient d'ordinaire ce qu'elles lisent dans les fichiers de configuration. Cela signifie qu'elles peuvent être perturbées par ce qu'elles obtiennent comme configuration, voire planter & #160; ».
-Sauvegardes
-Donc, la première règle est de faire une sauvegarde de votre fichier avant de le modifier. Il vaut mieux stocker la sauvegarde en dehors de tout sous-dossier. kde (ou le dossier $KDEHOME correspondant). Les sauvegardes sont de toute façon une bonne idée en cas de dysfonctionnement majeur de & kde; qui endommagerait des fichiers de configuration importants (par exemple vos paramètres & kmail; qui sont dans le fichier kmailrc). Un tel dysfonctionnement majeur a peu de chances de se produire, mais cela peut toujours arriver.
-Édition
-Donc pourquoi voudriez -vous toucher aux fichiers de configuration en fait & #160;? Bien, en premier lieu, vous devrez le faire quand vous voulez mettre en application le mode KIOSK. Peut-être un développeur vous a -t-il demandé d'ajouter un élément pour l'aider à résoudre un problème avec l'application. Peut-être voulez -vous vous tirer d'un problème sans avoir à supprimer tout le dossier. kde. Ou alors voulez -vous approfondir les arcanes de & kde;.
-De toute façon, quelle que soit votre motivation, vous voulez modifier à la main un fichier de configuration.
-Lorsque vous projetez de modifier un tel fichier, assurez -vous que l'application qui l'utilise ne tourne pas. Si c'est un des fichiers de configuration fondamentaux, pensez à le modifier quand & kde; ne tourne pas du tout.
-Prêt & #160;? Donc, faites une sauvegarde du fichier (vous l'ai -je déjà dit & #160;?), démarrez votre éditeur favori (supposons que ce soit & kate;), chargez le fichier (veillez à le charger au format UTF-8, & kate; l'affiche en tant que « & #160; utf8 & #160; »).
-Maintenant, vous avez un fichier comme & #160;:
-[Group] Key1=Value1 Key2=Value2 Key3=Value3
-Vous pouvez maintenant le modifier (avec prudence & #160;!) puis l'enregistrer (à nouveau, soyez sûr qu'il est au format UTF-8).
-À présent, vous pouvez tester l'application et, si cette dernière ne fonctionne plus correctement, la fermer et restaurer la sauvegarde du fichier de configuration.
-Informations connexes
-offre plus d'informations sur la structure de & kde; pour vous aider à chercher le fichier que vous devez modifier.
-Scriptage du bureau
-& kde; fournit un système de communication interprocessus puissant nommé & DCOP; (Deskop COmmunication Protocol ou protocole de communication pour l'environnement de bureau). En utilisant & DCOP;, vous pouvez contrôler un large ensemble de fonctions dans & kde; depuis la ligne de commande ou en écrivant un script dans votre langage de scripts favori. Vous pouvez également obtenir des informations sur les applications & kde;. Par exemple, plusieurs lecteurs multimédia de & kde; fournissent des méthodes pour les interroger à propos du morceau en cours de lecture.
-De manière plus générale, chaque application & kde; fournit une ou plusieurs interfaces & DCOP;, qui à leur tour fournissent des méthodes (ou, si vous préférez, des fonctions) qu'une autre application peut appeler. Ainsi, la première étape dans l'utilisation de & DCOP; est de trouver la méthode appropriée pour la tâche en question. La façon la plus simple pour cela est d'utiliser l'interface graphique kdcop pour les méthodes & DCOP; disponibles.
-Lancez kdcop depuis une & konsole; ou le mini CLI (la fenêtre qui apparaît avec Alt; F2). La fenêtre de kdcop affiche les applications en cours d'exécution qui fournissent des interfaces & DCOP;, en utilisant une vue arborescente. En général, trouver la méthode correcte nécessite un peu de recherche dans cette arborescence, mais voici une petite astuce & #160;: les interfaces marquées (défaut) contiennent habituellement les fonctions les plus souvent utilisées.
-Afin de tester que la fonction fait bien ce qu'on attend d'elle, double-cliquez sur l'élément setColor. Pour régler la couleur v, cliquez sur le bouton de sélection de couleurs, et choisissez une couleur. Choisissez si la couleur doit être une couleur A avec la case à cocher. Cliquez sur OK et la couleur de fond est appliquée.
-Pour accéder aux méthodes & DCOP; à partir de votre langage de script favori, vous pouvez soit utiliser les bindings & DCOP; s'ils sont disponibles dans le module kdebindings, soit appeler l'application cdop en ligne de commande. Pour des utilisations simples, l'appel en ligne de commande de dcom est suffisant. Pour appeler une méthode & DCOP; depuis la ligne de commande, nous avons besoin de spécifier l'application et l'interface auxquelles appartient la méthode, la méthode elle-même, et les arguments, dans une forme adéquate pour la console.
-Nous spécifions l'application, l'interface et la méthode dans cet ordre, suivi des arguments dans le même ordre que celui montré dans kdcop. kdcop dispose de beaucoup d'autres options & #160;: jetez un coup d 'œ il à la sortie de dcop --help.
-C'en est en fini de la théorie, il est temps maintenant de passer à la pratique & #160;:
-Voici un script permettant de changer la couleur de fond avec & DCOP;
-Avec l'application en ligne de commande dcop et un peu de Perl, nous allons faire un script simple qui modifie lentement la couleur de fond du bureau de manière cyclique, en passant par toutes les couleurs de l'arc-en-ciel.
-Tout d'abord, nous cherchons la méthode appropriée avec kdcop. Pour cet exemple, nous court-circuitons la recherche, et y allons directement & #160;: la méthode qui nous intéresse est kdesktop KBackgroundIface setColor. Les types des arguments et de la valeur retournée sont montrés avec le style du langage C++. Pour setColor, les arguments sont une couleur, c, qui spécifie la nouvelle couleur d'arrière-plan, et une valeur booléenne (vrai ou faux), isColorA, qui spécifie s'il s'agit de la première ou de la seconde couleur (ceci est utile pour configurer des gradients).
-Pour utiliser notre méthode setColor depuis la ligne de commande, nous utilisons ce qui suit & #160;:
-% dcop kdesktop KBackgroundIface setColor '#ffffff 'false
-Pour spécifier la couleur, nous utilisons une valeur RGB hexadécimale, comme en & HTML;. Notez qu'elle est entourée par des guillemets simples pour protéger le # depuis la console.
-Pour trouver la valeur RGB hexadécimale de la couleur, ouvrez n'importe quelle boîte de dialogue de sélection de couleur dans une application & kde; (par exemple, dans & centreConfiguration;, Apparence et thèmes Couleurs), choisissez la couleur et utilisez la valeur donnée dans la zone de texte HTML.
-C'est tout ce dont nous avons besoin pour & DCOP;, maintenant il s'agit d'écrire le script correspondant. C'est une implémentation (extrêmement & #160;!) difficile & #160;:
-< ![CDATA[ $min =49; # Minimum value of R, G, or B colour $max=174; # Maximum value of R, G, or B colour $step=5; # Amount to step colour by on each step $sleeptime=15; # Interval in seconds between each step @start = ($max, $min, $min); @colour = @start; while (1) {foreach (0..5) {my $which = $_% 3; # Which colour (R, G or B) to change my $updown = $_% 2; # Whether to increase or decrease the colour value do {if ($updown == 0) {$colour[$which]+=$step;} if ($updown == 1) {$colour[$which]-=$step;} my $dcopcall=sprintf "dcop kdesktop KBackgroundIface setColor '#%x%x%x'true\ ", @colour; system($dcopcall); sleep $sleeptime;} while (($colour[$which] > = $min) and ($colour[$which ]< = $max));}}]] >
-Exécutez simplement le scripts sans arguments, et l'arrière plan changera de manière cyclique sur tout le spectre des couleurs, jusqu'à ce que le script soit arrêté, et voilà & #160;!
-Bien évidemment, Perl n'est pas le seul langage que vous pouvez utiliser pour écrire des scripts avec & DCOP; mdash; si vous préférez le scripts shell, c'est également possible & #160;:
-Régler l'arrière plan depuis internet
-Le script suivant récupère l'image principale de la BD User Friendly et la met comme papier peint du bureau, en utilisant les outils disponibles classiques et un peu de & DCOP; & #160;:
-< ![CDATA[ #!/bin/sh COMICURL=`wget -qO - http://www .userfriendly.org/static/index.html |\\ grep Latest | sed -e "s,. *SRC=\\",, "-e "s,\\" > .*,," ` TMPFILE=`mktemp / tmp/ $0. XXXXXX ` || exit 1 wget -q -O $TMPFILE $COMICURL dcop kdesktop KBackgroundIface setWallpaper $TMPFILE 1]] >
-La première ligne après #! /bin/ sh utilise wget et des expressions rationnelles magiques pour extraire l'emplacement de l'image depuis le source de la page principale & HTML;. La deuxième et la troisième ligne téléchargent l'image, et enfin dcop met l'image téléchargée en fond d'écran.
-Ajout d'associations de touches supplémentaires à & kde;
-De nombreux claviers modernes contiennent des touches supplémentaires qui ne sont par défaut affectées à aucune action.
-Les claviers « & #160; multimédia & #160; » offrent souvent de générer un signal et on peut simplement les choisir en tant qu'association de touches à l'intérieur d'une application exactement comme on choisirait n'importe quelle autre touche. Certaines touches, cependant, ne sont pas détectées et appuyer dessus dans Configurer les raccourcis clavier... n'a aucun effet.
-Certains ordinateurs portables IBM, par exemple, ont des touches supplémentaires autour des touches fléchées gauche et droite, qui ressemblent à page gauche et page droite.
-Utilisez xev pour chercher le code des touches. Dans ce cas, il s'agit de 233 et234.
-Choisissez les symboles des touches. Comme il y en a toute une série qui ne sont pas utilisées par défaut, beaucoup sont libres. Vous pouvez en trouver la liste dans / usr/ X11R6/ include/ X11/ keysymdef. h (ou son équivalent sur votre système).
-Créez un fichier dans votre dossier personnel appelé. Xmodmap et ajoutez -le à ceci & #160;:
-keycode 233 = Ecran_Virtuel_Suivant keycode 234 = Ecran_Virtuel_Precedent
-Exécutez la commande xmodmap ~/. Xmodmap
-À ce stade, vous devriez pouvoir exécuter xev à nouveau et constater que les touches génèrent maintenant les symboles de touches que vous avez affectés. Vous pouvez à présent simplement les affecter à n'importe quelle action, normalement.
-La page de manuel xev. Vous pouvez la consulter en saisissant man: / xev dans une fenêtre & konqueror; ou en saisissant man xev dans un terminal.
-Ajout d'associations de touches pour de nouvelles actions
-La plupart des actions, soit dans le bureau, soit dans les applications, sont aisément disponibles pour une association de touche. Si l'action pour laquelle vous voulez un raccourci est quelque chose que vous avez écrit vous -même ou n'est pas disponible autrement, vous pouvez toujours affecter un raccourci.
-Pour relier les deux sections précédentes, peut-être voulez -vous affecter une touche inutilisée autrement sur votre clavier, à un script ou à une commande dcop. Notre exemple ici consistera à affecter les deux touches que nous avons ajoutées dans pour aller sur le bureau virtuel précédent ou suivant, deux fonctions pour lesquelles vous aurez besoin de DCOP (comme étudié dans.
-Vous y arriverez facilement à l'aide de la méthode suivante & #160;:
-Ouvrez le & centreConfiguration; et, dans la section Régionalisation et accessibilité, sélectionnez Actions d'entrées,
-choisissez Nouvelle action,
-nommez la nouvelle action, & pex; Écran virtuel suivant,
-sélectionnez Raccourcis clavier - > Commande & #160; / & #160; URL (simple) pour le Type de l'action & #160;:,
-dans l'onglet Raccouci clavier, cliquez sur bouton dont vous souhaitez qu'il déclenche la commande. Pour cet exemple, cliquez sur celui sur lequel il y a l'image Page suivante. Ecran_virtuel_suivant apparaît alors dans l'image de la touche,
-dans l'onglet Paramètres de la commande / de l'URL, saisissez la commande à exécuter dans le champ & #160;: dcop kwin default nextDesktop.
-Répétez l'opération avec la touche Ecran_virtuel_precedent et dcop kwin default previousDesktop.
-Maintenant, appuyer sur Ecran_virtuel_precedent ou Ecran_virtuel_suivant vous fera basculer sur le bureau virtuel précédent et suivant, respectivement.
-Évidemment, vous pouvez affecter n'importe quelle touche libre à n'importe quelle action.
-Reportez -vous à la documentation de KHotKeys en la cherchant dans le & centreAide; ou en saisissant help: / khotkeys dans une fenêtre & konqueror;.
-Adriaan de Groot groot@kde. org
-& kdebugdialog; - Contrôle de la sortie de débogage de & kde;
-Utilisation de base
-& kdebugdialog; n'est pas dans le & menuk; par défaut. Vous devez le lancer depuis le shell ou le mini-CLI avec la commande kdebugdialog. & kdebugdialog; fait apparaître une fenêtre avec une longue liste de zones de débogage. Chaque zone comporte une case que vous pouvez (dé)cocher afin de (dés)activer la sortie de débogage pour cette partie de & kde;.
-Comme la liste des zones de débogage est triée numériquement et non alphabétiquement, « & #160; kio & #160; » (127) vient avant « & #160; artskde & #160; » (400). Les nombres vont jusqu'à 200000 ou environ, mais il n'y a réellement que 400 & #160; zones. Vous n'avez donc pas à faire défiler la liste entière pour trouver la zone dont vous avez besoin. Il y a une zone de modification au début de la boîte de dialogue, où vous pouvez saisir une partie du nom de la zone que vous voulez. La liste des éléments qui est affichée est filtrée de façon à n'inclure que les zones de débogage qui contiennent le texte que vous avez saisi. Par exemple, la saisie de k ne filtre rien du tout, mais la saisie de kont vous affichera juste les zones de débogage de & kontact;. Comme moyen encore plus rapide de (dés)activer la sortie de débogage, il y a également les boutons Tout sélectionner et Tout désélectionner, qui amèneront & kde; à produire une énorme quantité de sortie de débogage ou très peu.
-KDebugDialog en mode complet
-En mode complet, ce que vous obtenez quand vous démarrez kdebugdialog en kdebugdialog --fullmode, la même liste de zones de débogage qu'en mode plein est disponible, mais vous ne pouvez en sélectionner qu'une à la fois dans une liste déoulante. Vous pouvez ensuite définir la sortie pour divers types de messages & #160;: Informations, Avertissement, Erreur et Erreur fatale. Pour chacun de ces types, vous pouvez choisir où sont envoyés les messages. Les choix sont & #160;:
-Fichier, dans lequel vous pouvez saisir un nom de fichier. Ce fichier est écrit dans votre dossier $HOME.
-Boîte de dialogue. Chaque message de débogage est affiché dans une boîte de dialogue d'information et vous devez cliquer sur OK pour continuer avec l'application.
-Shell, l'élément par défaut. Les messages sont affichés sur stderr et apparaîtront soit dans la fenêtre du shell où l'application a été démarrée, soit dans. xsession-errors.
-Journal système. Cette option envoie chaque message de débogage à la fonction de journalisation système, qui peut effectuer son propre traitement du message.
-Aucun. Cette option supprime la sortie de ce type de message.
-Pour les messages générés par des erreurs fatales, il est en principe peu judicieux de choisir « & #160; Aucun & #160; » ou « & #160; Syslog & #160; », puisque dans les deux cas, vous ne verrez probablement pas le message et que l'application qui rencontre l'erreur fatale disparaîtra sans laisser d'indices quant à la raison de sa disparition. Vous pouvez contrôler que l'application disparaisse ou non sur une erreur fatale avec la case Arrêter lors de problèmes critiques, qui est cochée par défaut & mdash; mais vous pourriez vous attendre à ce qu'une application « & #160; plante & #160; » (d'une manière brutale) si elle rencontre une erreur fatale, de toute façon.
+Nom@title collumn attachment size.
+Taille@title collumn attachment encoding.
+Encodage@title collumn attachment type.
+Type@title collumn attachment compression checkbox.
+Compresser@title collumn attachment encryption checkbox.
+Chiffrer@title collumn attachment signed checkbox.
+Signature
+contient
+ne contient pas
+est égal à
+est différent de
+correspond à l'exp. rat.
+ne correspond pas à l'exp. rat.
+est dans le carnet d' adresses
+n'est pas dans le carnet d' adresses
+est dans la catégorie
+n'est pas dans la catégorie
+possède une pièce jointe
+ne possède pas de pièce jointe
+est
+n'est pas
+est égal à
+est différent de
+est supérieur à
+est inférieur ou égal à
+est inférieur à
+est supérieur ou égal à
+octetsUnit suffix where units are days.
+joursUnit label of the expiry time.
+Impossible de créer le fichier %1 & #160;: %2
+Impossible de créer le dossier
+Un ou plusieurs certificats S/ MIME ou clés OpenPGP ne sont pas absolument sûrs pour le chiffrement.
+Un ou plusieurs certificats S/ MIME ou clés OpenPGP du destinataire « & #160; %1 & #160; » ne sont pas absolument sûrs pour le chiffrement.
+Les clés suivantes ne sont que moyennement sûres & #160;:
+Les clés ou certificats suivants ont un niveau de confiance inconnus & #160;:
+Les clés ou certificats suivants sont révoqués & #160;:
+Clés de chiffrement non totalement sûres
+Clé OpenPGP expirée
+Certificat S/ MIME expiré
+La clé OpenPGP expire bientôt
+Le certificat S/ MIME expire bientôt
+Une ou plus de vos clés de chiffrement OpenPGP configurées ou de vos certificats S/ MIME n'est pas utilisable pour le chiffrement. Veuillez reconfigurer vos clés de chiffrement et les certificats pour cette identité dans la fenêtre de configuration. Si vous choisissez de continuer, et que les clés sont nécessaires plus tard, on vous demandera de spécifier les clés à utiliser.
+Clés de chiffrement inutilisables
+Une ou plus de vos clés de signature OpenPGP configurées ou de vos certificats S/ MIME n'est pas utilisable pour la signature. Veuillez reconfigurer vos clés de signature et les certificats pour cette identité dans la fenêtre de configuration. Si vous choisissez de continuer, et que les clés sont nécessaires plus tard, on vous demandera de spécifier les clés à utiliser.
+Clés de signature inutilisables
+Après examen des préférences de chiffrement du ou des destinataires, il s'avère que le message doit être chiffré en utilisant OpenPGP, au moins pour certains destinataires. Cependant, aucune clé de chiffrement OpenPGP valable et sûre n'a été configurée pour cette identité. Vous pouvez continuer sans chiffrer pour vous -même, mais vous ne pourrez pas relire votre propre message par la suite.
+Après examen des préférences de chiffrement du ou des destinataires, il s'avère que le message doit être chiffré en utilisant S/ MIME, au moins pour certains destinataires. Cependant, aucun certificat de chiffrement S/ MIME valable n'a été configuré pour cette identité. Vous pouvez continuer sans chiffrer pour vous -même, mais vous ne pourrez pas relire votre propre message par la suite.
+Après examen des préférences de signature du ou des destinataires, il s'avère que le message doit être signé en utilisant OpenPGP, au moins pour certains destinataires. Cependant, aucun certificat de signature OpenPGP valable n'a été configuré pour cette identité.
+Ne pas signer en OpenPGP
+Après examen des préférences de signature du ou des destinataires, il s'avère que le message doit être signé en utilisant S/ MIME, au moins pour certains destinataires. Cependant, aucun certificat de signature S/ MIME valable n'a été configuré pour cette identité.
+Ne pas signer en S/ MIME
+Après examen des préférences de signature, aucun type ne correspond aux clés disponibles. Voulez -vous envoyer votre message sans le signer & #160;?
+Aucune signature possible
+Vous n'avez pas sélectionné de clé de chiffrement pour vous -même. Vous ne pourrez pas déchiffrer vos propres messages si vous les chiffrez.
+Avertissement de clé de signature manquante
+Chiffrer
+Vous n'avez pas sélectionné de clé de chiffrement pour le destinataire de ce message. Par conséquent, le message ne sera pas chiffré.
+Vous n'avez sélectionné de clé de chiffrement pour aucun des destinataires de ce message. Par conséquent, le message ne sera pas chiffré.
+Enregistrer non chiffré
+Vous n'avez pas sélectionné de clé de chiffrement pour un des destinataires de ce message. Cette personne ne pourra pas déchiffrer le message, si vous le chiffrez.
+Vous n'avez pas sélectionné de clé de chiffrement pour certains des destinataires de ce message. Ces personnes ne pourront pas déchiffrer le message, si vous le chiffrez.
+Sélection de la clé de chiffrementif in your language something like 'key(s) 'is not possible please use the plural in the translation
+Il y a un problème avec les clés de chiffrement pour « & #160; %1 & #160; ». Veuillez resélectionner les clés qui doivent être utilisées pour ce destinataire. if in your language something like 'key(s) 'is not possible please use the plural in the translation
+Aucune clé de chiffrement valable et sûre n'a été trouvée pour « & #160; %1 & #160; ». Sélectionnez la ou les clés à utiliser pour ce destinataire. Si cette liste est vide, vous pouvez également rechercher ue clé externe. if in your language something like 'key(s) 'is not possible please use the plural in the translation
+Plusieurs clés correspondent à « & #160; %1 & #160; ». Sélectionnez la clé à utiliser pour ce destinataire.
+Sélection du nom
+Quel est le nom du contact « & #160; %1 & #160; » dans votre carnet d'adresses & #160;?
+Sélectionnez le carnet d'adresses dans lequel enregistrer ce nouveau contact & #160;:
+Filtrer sur l'afficheur des journaux
+Journaliser les activités de filtrage
+Vous pouvez (dés)activer la journalisation des activités de filtrage ici. Naturellement, les données du journal sont collectées et ne s'affichent que lorsque la journalisation est activée.
+Détails de la journalisation
+Journaliser la description du motif
+& Journaliser l'évaluation des règles de filtrage
+Vous pouvez contrôler les réactions dans le journal concernant l'évaluation des règles de filtrage des filtres appliqués & #160;: le fait d'avoir coché cette option fournira les réactions détaillées de chaque règle de filtrage individuellement & #160;; en revanche, seules les réactions sur le résultat de l'évaluation de toutes les règles d'un seul filtre seront indiquées.
+Journaliser l'évaluation du motif des filtres
+Journaliser les actions des filtres
+Limite de taille des journaux & #160;: @label: spinbox Set the size of the logfile to unlimited.
+illimitée
+La collecte des données du journal utilise de la mémoire pour enregistrer temporairement les données du journal & #160;; ici, vous pouvez limiter la quantité maximale de mémoire à utiliser & #160;: si la taille des données collectées dans le journal dépasse cette limite, les plus anciennes données seront rejetées jusqu'à ce que la limite ne soit plus dépassée.
+Impossible d'écrire sur le fichier %1 & #160;: « & #160; %2 & #160; » est la description détaillée des erreurs.
+Erreur de KMail
+Ami
+Travail
+Ultérieurement
+Mauvais module externe de cryptographie.
+Résultats différents pour les signatures
+Le moteur de cryptographie n'a pas retourné de données en texte clair.
+État & #160;: Status of message unknown.
+(inconnu)
+Le module externe de cryptographie « & #160; %1 & #160; » n'est pas initialisé.
+Le module externe de cryptographie « & #160; %1 & #160; » ne peut pas vérifier les signatures.
+Aucun module externe de cryptographie n'a été trouvé. %1 is either 'OpenPGP 'or 'S/ MIME'
+Aucun module externe « & #160; %1 & #160; » n'a été trouvé.
+Le message est signé, mais il est impossible de vérifier la validité de la signature. La raison est & #160;: %1
+Données chiffrées non affichées
+Ce message est chiffré.
+Déchiffrer le message
+Impossible de déchiffrer les données.
+Le module externe de cryptographie « & #160; %1 & #160; » ne peut pas déchiffrer les données.
+Erreur & #160;: %1
+Le module externe de cryptographie « & #160; %1 & #160; » ne peut déchiffrer les messages.
+Remarque & #160;: Ce message HTML peut contenir des références externes à des images, etc. Pour des raisons de sécurité & #160; / confidentialité, les références externes ne sont pas chargées. Si vous avez confiance en l'expéditeur de ce message, vous pouvez alors charger ses références externes en cliquant ici.
+Nota & #160;: Ceci est un message HTML. Pour des raisons de sécurité, seul le code brut HTML est affiché. Si vous avez confiance dans l'expéditeur de ce message, vous pouvez activer l'affichage formaté du code HTML pour ce message en cliquant ici.
+Impossible d'importer le certificat. Explication & #160;: %1
+Désolé, aucun certificat n'a été trouvé dans ce message.
+État de l'importation des certificats & #160;:
+Désolé, il n'y a pas de détails sur l'importation des certificats.
+Détails de l'importation des certificats & #160;: Certificate import failed.
+Échec & #160;: %1 (%2)
+Nouveau ou modifié & #160;: %1 (clé secrète disponible)
+Nouveau ou modifié & #160;: %1
+Le module Chiasmus ne propose pas la fonction « & #160; x-obtain-keys & #160; ». Veuillez rapporter ce bogue.
+Erreur du module Chiasmus
+Valeur de retour non attendue du module Chiasmus & #160;: la fonction « & #160; x-obtain-keys & #160; » n'a pas retourné de liste de chaînes de caractères. Veuillez rapporter ce bogue.
+Aucune clé trouvée. Veuillez vous assurer qu'un emplacement vers une clé valable a été défini dans la configuration de Chiasmus.
+Sélection de la clé de chiffrement Chiasmus
+Le module Chiasmus ne propose pas la fonction « & #160; x-decrypt & #160; ». Veuillez rapporter ce bogue.
+La fonction « & #160; x-decrypt & #160; » n'accepte pas les paramètres attendus. Veuillez rapporter ce bogue.
+Erreur de déchiffrement Chiasmus
+Valeur de retour non attendue du module Chiasmus & #160;: la fonction « & #160; x-decrypt & #160; » n'a pas retourné de tableau d'octets. Veuillez rapporter ce bogue. display name for an unnamed attachment
+Sans nomMissing profile description placeholder
+Erreur & #160;: signature non vérifiée
+Signature correcte
+Signature incorrecte
+Pas de clé publique pour vérifier la signature
+Aucune signature n'a été trouvée
+Erreur en vérifiant la signature
+Aucune information d'état n'est disponible.
+Signature correcte.
+Une clé a expiré.
+La signature est expirée.
+Impossible de vérifier & #160;: clé manquante.
+Liste de révocation de certificats non disponible.
+La liste de révocation de certificats est trop ancienne.
+Impossible de trouver une politique.
+Une erreur système est survenue.
+Une clé a été révoquée.
+Signature incorrecte.
+Signature non valable.
+Pas assez d'informations pour vérifier la signature.
+La signature est valable.
+Signé par %2.
+État inconnu de la signature
+Afficher les détails
+Aucun journal détaillé disponible
+Erreur lors de la réception du journal de diagnostic & #160;: %1The Audit Log is a detailed error log from the gnupg backend
+Afficher le journal détaillé
+Masquer les détails
+Message encapsulé
+Veuillez patienter pendant le chiffrement de ce message...
+Message chiffré
+Message chiffré (déchiffrage indisponible)
+Raison & #160;: %1
+Veuillez patienter pendant la vérification de cette signature...
+certificatStart of warning message.
+Avertissement & #160;:
+L'adresse de l'expéditeur n'est pas stockée dans le %1 utilisé pour signer.
+Expéditeur & #160;:
+stocké & #160;:
+Aucune adresse électronique n'est stockée dans le « & #160; %1 & #160; » utilisé pour signer. De ce fait, il est impossible de la comparer avec l'adresse de l'expéditeur « & #160; %2 & #160; ».
+Pas assez d'informations pour vérifier la signature. %1
+Le message a été signé avec une clé inconnue.
+Le message a été signé par « & #160; %1 & #160; ».
+Le message a été signé avec la clé « & #160; %1 & #160; ».
+Le message a été signé le %1 avec la clé « & #160; %2 & #160; ».
+Le message a été signé par « & #160; %3 & #160; » le %1 avec la clé « & #160; %2 & #160; ».
+Le message a été signé par « & #160; %2 & #160; » avec la clé « & #160; %1 & #160; ».
+Le message a été signé le %1 avec la clé inconnue « & #160; %2 & #160; ».
+Le message a été signé avec la clé inconnue « & #160; %1 & #160; ».
+Impossible de vérifier la validité de la signature.
+Le message a été signé par « & #160; %2 & #160; » (clé numéro & #160;: %1).
+La signature est valable, mais il est impossible de déterminer la validité de la clé.
+La signature est valable et la clé est moyennement sûre.
+La signature est valable et la clé est sûre.
+La signature est valable et la clé est totalement sûre.
+La signature est valable mais la clé n'est pas sûre.
+Attention & #160;: la signature n'est pas valable.
+Fin du message signé
+Fin du message chiffré
+Fin du message encapsulé
+Impossible de déchiffrer le message.
+KWallet n'est pas disponible. Il est pourtant fortement recommandé de l'utiliser pour gérer vos mots de passe. KMail peut cependant conserver le mot de passe dans son fichier de configuration. Il y est stocké dans un format brouillé, mais ne devrait pas être considéré comme protégé d'une tentative de déchiffrement si l'accès au fichier de configuration est obtenu. Voulez -vous conserver le mot de passe du compte « & #160; %1 & #160; » dans le fichier de configuration & #160;?
+KWallet non disponible
+Conserver le mot de passe
+Ne pas conserver le mot de passe
+Créer un compte ultérieurement
+URL & #160;:
+Serveur entrant & #160;:
+Bienvenue dans l'assistant de comptes KMail
+Il semble que vous démarrez KMail pour la première fois. Vous pouvez utiliser cet assistant pour configurer simplement vos comptes. Saisissez simplement les données de connexion fournies par votre fournisseur de courriers électroniques dans les pages suivantes.
+Il semble que vous démarrez KMail pour la première fois. Saisissez simplement les données de connexion fournies par votre fournisseur de courriers électroniques dans les pages suivantes.
+Créer une nouvelle identité
+Une identité correspond à votre adresse électronique, votre nom, votre entreprise... Ne décochez pas cette option sans savoir ce que vous faites, puisque certains serveurs refusent d'envoyer un courriel dont l'identité jointe n'est pas celle de l'expéditeur.
+Assistant de compte
+Sélectionnez le type de compte que vous voulez créer
+Type de compte
+Nom réel & #160;:
+Adresse électronique & #160;:
+Organisation & #160;:
+Informations sur le compte
+Utilisateur & #160;:
+Mot de passe & #160;:
+Informations sur l' utilisateur
+Sélectionner...
+Serveur sortant & #160;:
+Utiliser la réception locale
+Si votre machine locale est utilisée comme un serveur de courriels (SMTP), vous devriez activer cette option.
+Informations sur le serveurDefault name for new email accounts/ identities.
+Sendmail
+Compte local
+Vérification des possibilités de sécurité existantes de « & #160; %1 & #160; »...
+Modifier avec & #160;:
+Impossible pour KMail de détecter la fermeture de l'éditeur sélectionné. Pour éviter la perte de données, la modification de la pièce jointe est annulée.
+Impossible de modifier la pièce jointe
+Diagnostics Sieve
+Collection des informations de diagnostic sur la gestion de Sieve...
+Collection des données du compte « & #160; %1 & #160; »...
+------------------------------------------------------------
+(Ce compte ne gère pas Sieve)
+(Ce compte n'est pas de type IMAP)
+Contenu du script « & #160; %1 & #160; » & #160;:
+(Ce script est vide)
+------------------------------------------------------------ %1 ------------------------------------------------------------
+Capacités Sieve & #160;:
+(Aucune capacité spécifique disponible)
+Scripts Sieve disponibles & #160;:
+(Aucun script Sieve disponible sur le serveur)
+Script actif & #160;: %1
+Le script « & #160; Sieve & #160; » est correctement installé sur le serveur. La réponse & #160; d'absence est maintenant active.
+Le script « & #160; Sieve & #160; » est correctement installé sur le serveur. La réponse & #160; d'absence a été désactivée.
+Nouveau dossier
+Nouveau sous-dossier de %1@label: textbox Name of the new folder.
+Nom & #160;: Group to which the snippet belongs.
+Saisissez le nom du nouveau dossier.
+& Format de la boîte aux lettres & #160;:
+Sélectionnez si vous voulez stocker les messages dans un dossier avec un fichier par message (« & #160; maildir & #160; ») ou dans un seul gros fichier (« & #160; mbox & #160; »). KMail utilise un dossier contenant des messages par défaut, et il n'est généralement pas nécessaire de modifier ce paramètre. Laissez l'option telle quelle si vous n'êtes pas sûr.
+Le dossier & contient & #160;:
+Sélectionnez cette option si vous voulez que le nouveau dossier stocke des courriels ou qu'il contienne des éléments de travail en groupe, comme des tâches ou des notes. Le choix par défaut est de contenir du courrier électronique. Si vous n'êtes pas sûr, laissez cette option comme telle. type of folder content
+Courrieltype of folder content
+Agendatype of folder content
+Contactstype of folder content
+Notestype of folder content
+Tâchestype of folder content
+Journal
+Espace de noms du & dossier & #160;:
+Sélectionnez l'espace de noms personnel dans lequel créé le dossier.
+Veuillez spécifier le nom du nouveau dossier.
+Aucun nom indiqué
+Les noms de dossier ne peuvent pas contenir le caractère « & #160; / & #160; » (slash) & #160;; veuillez en choisir un autre.
+Les noms de dossier ne peuvent pas contenir le caractère « & #160;. & #160; » (point) & #160;; veuillez en choisir un autre.
+Votre serveur IMAP n'accepte pas le caractère « & #160; %1 & #160; » & #160;; veuillez choisir un autre nom de dossier.
+Impossible de créer le dossier %1, car il existe déjà.
+Impossible de créer le dossier %1. Permissions
+Aucun@action: inmenu Group header background color setting
+LuStatus of an item
+AjoutPermissions
+ÉcriturePermissions
+Tout
+Identifiant & utilisateur & #160;:
+L'identifiant utilisateur est le nom de l'utilisateur (« & #160; login & #160; ») sur le serveur IMAP. Il peut s'agir d'un simple nom ou de l'adresse électronique complète de l'utilisateur & #160;; le « & #160; login & #160; » de votre propre compte sur le serveur vous indiquera duquel il est question.
+Permissions
+Permissions personnalisées
+Permissions personnalisées (%1)
+ID utilisateur
+Ajouter une entrée...
+Modifier l'entrée...
+Supprimer l' entrée
+Erreur lors de la réception des permissions utilisateur.
+Informations non reçues du serveur pour le moment, veuillez utiliser « & #160; Relever les courriels & #160; » et posséder les droits d'administration sur le dossier.
+Erreur & #160;: aucun compte IMAP défini pour ce dossier
+Connexion au serveur %1, veuillez patienter...
+Erreur lors de la connexion au serveur %1
+Ce serveur IMAP n'offre aucune prise en charge pour les listes de contrôle d'accès (ACL)
+Erreur lors de la réception de la liste de contrôle d'accès (ACL) depuis le serveur %1
+Modifier les permissions
+Ajouter des permissions
+Voulez -vous vraiment supprimer vos propres permissions pour ce dossier & #160;? Vous ne pourrez plus y accéder par la suite.
+Supprimer
+& Nouveau sous-dossier...
+& Nouveau dossier...
+& Copier le dossier vers
+& Copier le dossier vers
+& Déplacer le dossier vers
+& Déplacer le dossier vers
+Ajouter au dossiers favoris
+Déplacer dans ce dossier
+Copier dans ce dossier
+Nouveaux messages dans
+KMail - Il n'y a aucun message non lu
+Chercher des messages@action: button Search for messags
+& Chercher
+Chercher dans tous les dossiers locaux
+Chercher dans & #160;:
+Inclure les sous-dossiers@title: column Subject of the found message.
+SujetDescription of Type Date
+Expéditeur & #160; / destinataireSender of a message
+DateDescription of Type Sender
+Dossier
+& Nom de la recherche & #160;:
+Dernière recherche
+& Ouvrir le dossier de recherche
+Ouvrir le & message
+UnTexteDeLongueurMoyenne... @info: status finished searching.
+Prêt.
+& Répondre...
+Répondre à tous...
+Répondre dans la & liste de diffusion... Message- >
+& Transmettre
+Dans le corps du message...
+En pièce jointe... @action: inmenu Message- > Forward- >
+Enregistrer les pièces jointes sous...
+Effacer la sélectionSearch finished.
+Effectué
+Recherche annulée
+Recherche dans « & #160; %1 & #160; » (message %2)
+Copier & dans
+& Déplacer dans
+Emplacement
+Il n'y a rien à annuler.
+La structure des informations qui a été retournée par le module externe de cryptographie n'a pas été correctement calculée. Le module externe est peut-être endommagé. Veuillez contacter l'administrateur de votre système.
+Aucun module externe de cryptographie n'a été trouvé, et le code OpenPGP incorporé n'a pas pu fonctionner correctement. Vous pouvez faire deux choses pour y remédier & #160;: soit activer un module en utilisant la boîte de dialogue « & #160; Configuration & #160; / & #160; Configurer KMail & #160; / & #160; Modules externes de cryptographie & #160; » soit spécifier les réglages traditionnels OpenPGP dans le même onglet de la boîte de dialogue « & #160; Identité & #160; / & #160; Options avancées & #160; »
+Le module Chiasmus ne propose pas la fonction « & #160; x-encrypt & #160; ». Veuillez rapporter ce bogue.
+La fonction « & #160; x-encrypt & #160; » n'accepte pas les paramètres attendus. Veuillez rapporter ce bogue.
+Erreur de chiffrement Chiasmus
+Valeur de retour non attendue du module Chiasmus & #160;: la fonction « & #160; x-encrypt & #160; » n'a pas retourné de tableau d'octets. Veuillez rapporter ce bogue.
+Le format de chiffrement OpenPGP dans le corps du message ne permet pas de chiffrer et signer les pièces jointes. Voulez -vous vraiment utiliser ce format déconseillé & #160;?
+Format de message non sécurisé
+Utiliser OpenPGP intégré
+Utiliser OpenPGP & #160; / & #160; MIME
+Après examen des préférences de signature, il s'avère que vous avez demandé à être averti lors de l'envoi de messages à ce destinataire. Faut -il signer ce message & #160;?
+Signer le message & #160;? to sign
+& Signer
+& Ne pas signer
+Il y a des conflits dans les préférences de signature de ces destinataires. Faut -il signer le message & #160;?
+Vous avez demandé à ce que le message soit signé, mais aucune clé de signature valable n'a été configurée pour cette identité.
+Envoyer non signé & #160;?
+Envoyer non signé
+Certaines parties de ce message ne seront pas signées. L'envoi de messages partiellement signés peut enfreindre la politique du site. Signer toutes les parties du message & #160;?
+Ce message ne sera pas signé. L'envoi de messages non signés peut enfreindre la politique du site. Signer le message & #160;?
+& Signer toutes les parties
+Avertissement de message non signé
+Envoyer tel quel
+Des clés de chiffrage valables et sûres ont été trouvées pour tous les destinataires. Chiffrer le message & #160;?
+Après examen des préférences de chiffrement, il s'avère que vous avez demandé à être averti lors de l'envoi de messages à ce destinataire. Faut -il chiffrer ce message & #160;?
+Chiffrer le message & #160;?
+Signer et chiffrer
+& Signature seulement
+Envoyer tel quel
+Il y a des conflits de préférences pour le chiffrement. Ce message doit -il être chiffré & #160;?
+Ne & pas chiffrer
+Vous avez demandé le chiffrement de ce message et le chiffrement d'une copie pour vous -même, mais aucune clé de chiffrement valable et sûre n'a été configurée pour cette identité.
+Envoyer non chiffré & #160;?
+Certaines parties de ce message ne seront pas chiffrées. L'envoi de messages partiellement chiffrés peut enfreindre la politique du site et & #160; / & #160; ou compromettre certaines informations sensibles. Faut -il chiffrer toutes les parties & #160;?
+Ce message ne sera pas chiffré. L'envoi de messages non chiffrés peut enfreindre la politique du site et & #160; / & #160; ou compromettre certaines informations sensibles. Faut -il chiffrer le message & #160;?
+Chiffrer & toutes les parties
+Message chiffré
+Erreur & #160;: le module de cryptographie n'a pas retourné les données encodées. Veuillez rapporter ce bogue & #160;: %1
+Aucun encodage approprié n'a été trouvé pour votre message. Veuillez choisir un encodage dans le menu « & #160; Option & #160; ».
+Certains caractères ne sont pas disponibles dans l'encodage « & #160; %1 & #160; ». Voulez -vous tout de même envoyer le message et perdre certains caractères ou laisser KMail essayer de trouver automatiquement un encodage compatible & #160;?
+Certains caractères seront perdus
+Envoyer quand même
+Détecter l'encodage automatiquement
+Impossible de signer ce message, car aucune clé de signature valable n'a été trouvée. Ceci ne devrait pas se produire, veuillez signaler ce bogue.
+Impossible de signer ce message, car l'interface choisie ne semble pas gérer la signature. Ceci ne devrait pas se produire, veuillez signaler ce bogue.
+Journal détaillé de GnuPG pour cette opération de signature
+Échec de la signature. Veuillez vérifier que le programme « & #160; gpg-agent & #160; » est en cours d'exécution.
+Impossible de chiffrer ce message, car l'interface choisie ne semble pas gérer le chiffrement. Ceci ne devrait pas se produire, veuillez signaler ce bogue.
+Journal détaillé de GnuPG pour cette opération de chiffrement
+Impossible de chiffrer et de signer ce message, car l'interface choisie ne semble pas pouvoir combiner chiffrement et signature. Ceci ne devrait pas se produire, veuillez signaler ce bogue.
+Pas de sujetdisplayed when a mail has unknown sender, receiver or date
+[vCard]
+CC & #160;:
+BCC & #160;:
+Date & #160;:
+De & #160;: To-field of the mailheader.
+À & #160;:
+Répondre à & #160;:
+Probabilité de %1 & #160;% d'être un courriel non sollicité avec une assurance de %3 & #160;%. Rapport complet & #160;: Probabilité=%2 Assurance=%4
+Probabilité de %1 & #160;% d'être un courriel non sollicité. Rapport complet & #160;: Probabilité=%2
+Aucun agent de courrier indésirable
+Le résultat du filtre de courrier indésirable n'est pas un nombre
+Ce seuil n'est pas un nombre correct
+Le résultat du filtre de courrier indésirable ne peut être extrait de l' en-tête
+Le seuil ne peut être extrait de l' en-tête
+Erreur lors de l'évaluation du résultat de niveau de courrier indésirable
+%1. Rapport complet & #160;: %2
+(renvoyé depuis %1)To-field of the mail header.
+Client de messagerie & #160;:
+X-Mailer & #160;:
+Niveau de pourriel & #160;: To field of the mail header.
+Description
+Enregistrer & sous... to open
+Ouvrir
+Ouvrir avec... to view something
+Afficher
+Enregistrer toutes les pièces jointes...
+Copier
+Supprimer la pièce jointe
+Modifier la pièce jointe
+Propriétés
+Données binaires non spécifiées
+Erreur lors du renommage du dossier.
+Ce compte ne gère pas les quotas.
+Erreur lors de la réception du quota depuis le serveur %1
+Aucun quota défini pour ce dossier.
+Ouvrir la pièce jointe « & #160; %1 & #160; » & #160;? Remarque & #160;: l'ouverture d'une pièce jointe peut compromettre la sécurité de votre système.
+Ouvrir la pièce jointe & #160;?
+& Ouvrir avec « & #160; %1 & #160; »
+& Ouvrir avec...
+Ne pas reposer la question
+Test pour l'interface D-Bus de KMail
+Tester l'éditeur de destinataire
+Erreur lors de la suppression des messages sur le serveur & #160;:
+Erreur lors de la réception du message sur le serveur & #160;:
+Erreur lors de l'envoi du dossier
+Impossible de marquer le dossier %1 sur le serveur.
+Ceci peut arriver du fait qu'il vous manque les autorisations pour réaliser cette opération ou parce que le dossier est déjà présent sur le serveur. Le message d'erreur avec le serveur pendant la communication est & #160;:
+Impossible de supprimer le dossier « & #160; %1 & #160; » sur le serveur & #160;:
+Impossible de lire le dossier « & #160; %1 & #160; » sur le serveur & #160;:
+Impossible de renommer le dossier « & #160; %1 & #160; »
+Placer le focus sur la recherche rapide
+Étendre la sélection au message précédent
+Étendre la sélection au message suivant
+Anciens dossiers@info/ plain Displayed grayed-out inside the textbox, verb to search
+Chercher
+Dossiers
+Dossiers favoris
+Supprimer les messages dupliqués
+Déplacer le message dans le dossier
+Copier le message dans le dossier
+Aller dans le dossier...
+Abandonner l'opération en cours
+Focus sur le dossier suivant
+Focus sur le dossier précédent
+Sélectionner le dossier ayant le focus
+Focus sur le message suivant
+Focus sur le message précédent
+Sélectionner le message ayant le focus
+Nouveau message arrivé %1
+Un nouveau message est arrivé
+(aucun modèle)
+Propriétés du dossier « & #160; %1 & #160; »
+Ce dossier n'a aucune option d'expiration activée
+Voulez -vous vraiment purger les messages expirés du dossier %1 & #160;?
+Purger le dossier
+Expirer les anciens messages
+Vider la corbeille
+Déplacer dans la corbeille
+Voulez -vous vraiment vider la corbeille & #160;?
+Voulez -vous vraiment déplacer tous les messages du dossier %1 dans la corbeille & #160;?
+Tous les messages ont été déplacés vers la corbeille
+Supprimer la recherche
+Voulez -vous vraiment supprimer la recherche %1 & #160;? Les messages y apparaissant seront toujours disponibles dans leurs dossiers originaux. @action: button Delete search
+& Supprimer
+Supprimer le dossier
+Voulez -vous vraiment effacer le dossier vide %1 & #160;?
+Voulez -vous vraiment supprimer le dossier vide %1 ainsi que ses sous-dossiers & #160;? Ils peuvent ne pas être vides et leurs données seront alors perdues. Attention, les messages supprimés ne sont pas placés dans la corbeille et sont donc définitivement perdus.
+Voulez -vous vraiment supprimer le dossier %1 et effacer son contenu & #160;? Attention, les messages supprimés ne sont pas placés dans la corbeille et sont donc définitivement perdus.
+Voulez -vous vraiment supprimer le dossier %1, tous ses sous-dossiers, ainsi que leur contenu & #160;? Attention, les messages supprimés ne sont pas placés dans la corbeille et sont donc définitivement perdus. @action: button Delete folder
+Vous allez reconstruire l'index du dossier %1. Cette action détruira toutes les informations sur les états des messages. Voulez -vous vraiment continuer & #160;? @title
+Voulez -vous vraiment recréer l'index & #160;? @action: button
+Recréer l' index
+L'index du dossier « & #160; %1 & #160; » a été recréé.
+Index recréé
+Voulez -vous vraiment rafraîchir le cache IMAP & #160;? Ceci supprimera toutes les modifications que vous avez faites en local dans vos dossiers IMAP.
+Rafraîchir le cache IMAP
+& Rafraîchir
+Voulez -vous vraiment purger tous les messages expirés & #160;?
+Purger les anciens messages ayant expirés & #160;?
+Purger
+L'utilisation du HTML dans les messages vous rend plus vulnérable au « & #160; spam & #160; » et peut augmenter les risques de vulnérabilité et d'intrusion dans votre système.
+Avertissement concernant la sécurité
+Utiliser le HTML
+Le chargement des références externes dans les courriels HTML vous rend plus vulnérable au courrier indésirable et peut augmenter les risques de vulnérabilité et d'intrusion dans votre système.
+Charger les références externes
+Supprimer les messages
+Supprimer le message
+Déplacement des messages...
+Suppression des messages...
+Les messages ont été supprimés avec succès.
+Les messages ont été correctement déplacés.
+Échec de la suppression des messages.
+Annulation de la suppression des messages.
+Les messages n'ont pas pu être déplacés.
+Le déplacement des messages a été annulé.
+Déplacer les messages vers le dossier
+Copie des messages...
+Les messages ont été correctement copiés.
+Échec de la copie des messages.
+Annulation de la copie des messages.
+Copier les messages dans le dossier
+Déplacer les messages dans la corbeille...
+Les messages ont été correctement déplacés à la corbeille.
+Échec du déplacement des messages dans la corbeille.
+Annulation du déplacement des messages dans la corbeille.
+Filtrer sur la liste de diffusion...
+Filtrer sur la liste de diffusion « & #160; %1 & #160; »...
+Aller dans le dossier
+Filtrage des messages
+Filtrage du message %1 sur %2
+Impossible de traiter les messages & #160;:
+Les fonctionnalités de KMail pour répondre lors des absences utilisent un filtrage côté serveur. Vous n'avez pas encore configuré les paramètres correspondant au serveur IMAP jouant ce rôle. Vous pouvez faire cette opération en utilisant l'onglet « & #160; Filtrage & #160; » de la boîte de dialogue correspondant à la configuration des comptes IMAP.
+Aucun serveur frontal de filtrage configuré
+Impossible de lancer le gestionnaire de certificats. Veuillez vérifier votre installation.
+Impossible de démarrer l'afficheur des journaux GnuPG (« & #160; kwatchgnupg & #160; »). Veuillez vérifier votre installation.
+Travailler hors ligne
+Travailler en lignetab title when loading an IMAP folder
+Chargement...
+Purger tous les dossiers
+Expirer les anciens messages des dossiers
+& Rafraîchir le cache local IMAP
+Vider & toutes les corbeilles
+Relever le courriel
+Relever le courriel des dossiers favoris
+Relever le courriel dans
+Relever le courriel
+& Envoyer les messages en attente
+État de connexion (inconnu)
+Envoyer les messages en attente via
+Carnet d' adresses
+Gestionnaire des certificats
+Affichage des journaux GnuPG
+& Importer des messages
+& Déboguer Sieve...
+Affichage des journaux de filtrage...
+& Assistant de gestion des messages non sollicités...
+& Assistant de gestion des virus...
+& Assistant de comptes...
+Modifier les réponses pour les absences...
+& Déplacer dans la corbeille@action: intoolbar Move to Trash
+Corbeille
+Déplacer le message dans la corbeille@action Hard delete, bypassing trash
+& Déplacer le fil de discussion dans la corbeille
+Déplacer le fil de discussion dans la corbeille
+Supprimer le & fil de discussion
+Chercher les messages...
+Chercher dans le message...
+Sélectionner tous les messages
+& Propriétés
+Gestion de listes de diffusion...
+& Affecter un raccourci clavier...
+Tout marquer comme & lu
+Paramètres d' expiration
+Purger le dossier
+Relever le courriel dans ce dossier
+Reconstruire l'index...
+& Dossier d'archive...
+Préférer le & HTML au texte simple
+Charger les références externes
+Copier le dossier
+Couper le dossier
+Coller le dossier
+Copier les messages
+Couper les messages
+Coller les messages
+& Nouveau message... @action: intoolbar New Empty Message
+NouveauStatus of an item
+Message depuis un & modèle
+Nouveau message dans la liste de diffusion...
+Réexpédier...
+& Créer un filtre
+Filtrer sur le sujet...
+Filtrer sur l'expéditeur...
+Filtrer sur le destinataire...
+Filtrer sur la liste de diffusion...
+Nouveau message d'après un modèle
+Marquer le & fil de discussion
+Marquer comme & lu
+Marquer tous les messages du fil de discussion comme lus
+Marquer comme & nouveau
+Marquer tous les messages du fil de discussion comme nouveaux
+Marquer comme non lu
+Marquer tous les messages du fil de discussion comme non lus
+Marquer comme & important
+Retirer la marque « & #160; important & #160; »
+Marquer comme & action à effectuer
+Retirer la marque « & #160; action à effectuer & #160; »
+& Suivre le fil de discussion
+& Ignorer le fil de discussion
+& Enregistrer les pièces jointes...
+Appliquer tous les filtres
+Appliquer les filtresView- >
+& Déplier le fil de discussion
+Déplier le fil de discussion courantView- >
+& Réduire le fil de discussion
+Réduire le fil de discussion courantView- >
+Déplier tous les fils de discussion
+Déployer tous les fils du dossier courantView- >
+Réduire tous les fils de discussion
+Refermer tous les fils du dossier courant
+Afficher le source
+& Afficher le message
+Message suivant
+Aller au message suivant
+Message suivant non lu@action: inmenu Goto next unread message
+Suivant
+Aller au prochain message non lu
+Message & précédent
+Aller au message précédent
+& Message précédent non lu@action: inmenu Goto previous unread message.
+Précédent
+Aller au message précédent non lu
+Dossier suivant non lu
+Aller au dossier suivant contenant des messages non lus
+Dossier précédent non lu
+Aller au dossier précédent contenant des messages non lusGo- >
+Texte suivant non lu
+Aller au prochain texte non lu
+Faire défiler le message courant vers le bas. À la fin du document, passer au message non lu suivant.
+Configurer les & filtres...
+Configurer les filtres & POP...
+Gérer les scripts & Sieve...
+& Introduction à KMail
+Afficher la page de bienvenue de KMail
+Configurer les & notifications...
+& Configurer KMail...
+& Vider la corbeille
+Tout déplacer dans la & corbeille
+Supprimer la recherche
+Supprimer le & dossier
+Marquer & #160; / retirer l'étiquette « & #160; %1 & #160; »
+Étiquette « & #160; %1 & #160; »
+Aucun message dupliqué n'a été trouvé.
+Filtre %1
+Dépanner le cache IMAP...
+Raccourci du dossier %1
+Inscription
+Inscription locale
+Réponse « & #160; Pas au bureau & #160; » active
+Ce paramètre doit être fourni par l'administrateur de votre système. Si vous estimez qu'il y a une erreur, veuillez le contacter.
+Voulez -vous vraiment supprimer l'identité nommée %1 & #160;?
+Supprimer l' identité
+Supprimer
+Ajouter...
+Modifier...
+Définir par défaut@title: tab Tab page where the user configures accounts to receive mail
+Réception@title: tab Tab page where the user configures accounts to send mail
+Envoi
+Comptes d'envoi (ajoutez au moins un compte & #160;!) & #160;:
+Options communes
+& Confirmer avant l' envoi
+Jamais automatiquement
+Lors des vérifications manuelles du courriel
+Lors de toutes les vérifications du courriel
+Envoyer maintenant
+Envoyer ultérieurement
+Autoriser les caractères 8 & #160; bits
+Conformité MIME (« & #160; Quoted Printable & #160; »)
+Envoyer les messages de la boîte d'envoi & #160;:
+Type d'envoi par & défaut & #160;:
+Propriétés du message & #160;:
+Domaine par défaut & #160;:
+Le domaine par défaut est utilisé pour compléter l'adresse de courrier électronique qui consiste seulement en le nom de l'utilisateur.
+Impossible de créer le compte
+Ajouter un compte
+Impossible de trouver le compte
+Modifier le compte
+Impossible de trouver le compte %1.
+Polices
+Couleurs
+Disposition
+Liste des messages
+Fenêtre de courriel
+Boîte à miniatures
+Étiquettes de messages
+Texte du message
+Liste des messages - Nouveaux messages
+Liste des messages - Messages non lus
+Liste des messages - Messages importants
+Liste des messages - Messages d'actions à effectuer
+Liste des dossiers
+Citation & #160; - premier niveau
+Citation & #160; - deuxième niveau
+Citation & #160; - troisième niveau
+Police à espacement fixe
+Éditeur
+Sortie sur imprimante
+Utiliser des polices personnalisées
+Appliquer à & #160;:
+Lien
+Lien visité
+Mots mal orthographiés
+Nouveau message@title Message template
+Message non lu
+Message important
+Message d'action à effectuer
+Message OpenPGP & #160; - Chiffré
+Message OpenPGP & #160; - signature valable avec clé sûre
+Message OpenPGP & #160; - signature valable avec clé non sûre
+Message OpenPGP & #160; - signature non vérifiée
+Message OpenPGP - signature non valable
+Barre de couleur d'avertissement autour des messages HTML
+Nom du dossier et taille proche du quota
+Barre d'état d'arrière-plan pour le HTML - message non HTML
+Barre d'état d'avant-plan pour le HTML - message non HTML
+Barre d'état d'arrière-plan pour le HTML - message HTML
+Barre d'état d'avant-plan pour le HTML - message HTML
+Utiliser des couleurs personnalisées
+& Réutiliser ces couleurs pour les citations plus profondes
+Seuil d'approchement du quota & #160;:
+%
+Afficher les dossiers favoris
+Afficher le champ de recherche rapide
+Astuces des dossiers
+Toujours@action: inmenu
+Lorsque le texte s'obscurcit@action: inmenu Never display tooltips.
+Jamais@action: inmenu
+Format & standard (%1)
+Format régional (%1)
+Format fantaisie (%1)
+Format personnalisées & #160;: General options for the message list.
+Général@label: textbox Name of the option
+Agrégation par défaut & #160;:
+Thème par défaut & #160;:
+Afficher la date
+Information sur le format personnalisé...
+Ces expressions peuvent être utilisées pour la date & #160;: d & #160;: le jour sans zéro au début (1-31) dd & #160;: le jour avec un zéro au début (01-31) ddd & #160;: le nom abrégé du jour (Lun - Dim) dddd & #160;: le nom long du jour (Lundi - Dimanche) M & #160;: le mois sans zéro au début (1-12) MM & #160;: le mois avec un zéro au début (01-12) MMM & #160;: le nom abrégé du mois (Jan - Déc) MMMM & #160;: le nom long du mois (Janvier - Décembre) yy & #160;: l'année sur deux chiffres (00-99) yyyy & #160;: l'année sur quatre chiffres (0000-9999) Ces expressions peuvent être utilisées pour l'heure & #160;: h & #160;: l'heure sans zéro au début (0-23 ou 1-12 en cas d'affichage AM & #160; / & #160; PM) hh & #160;: l'heure avec un zéro au début (00-23 ou 01-12 en cas d'affichage AM & #160; / & #160; PM) m & #160;: les minutes sans zéro au début (0-59) mm & #160;: les minutes avec un zéro au début (00-59) s & #160;: les secondes sans zéro au début (0-59) ss & #160;: les secondes avec un zéro au début (00-59) z & #160;: les millisecondes sans zéro au début (0-999) zzz & #160;: les millisecondes avec un zéro au début (000-999) AP & #160;: inverse l'affichage en AM & #160; / & #160; PM. AP sera remplacé soit par « & #160; AM & #160; » soit par « & #160; PM & #160; » ap & #160;: inverse l'affichage en AM & #160; / & #160; PM. ap sera remplacé soit par « & #160; am & #160; » soit par « & #160; pm & #160; » Z & #160;: la zone horaire en format numérique (-0500) Tous les autres caractères d'entrée seront ignorés.
+Encodage de caractères par défaut & #160;:
+Automatique
+& Surcharger par l'encodage de caractères & #160;:
+Activer l'icône de la boîte à miniatures
+Mode boîte à miniatures
+Toujours afficher KMail dans la boîte à miniatures
+N'afficher KMail dans la boîte à miniatures que s'il y a des messages non lus
+Étiquettes & disponibles
+Ajouter une nouvelle étiquette
+Supprimer l'étiquette sélectionnée
+Augmenter la priorité de cette étiquette
+Réduire la priorité de cette étiquette
+Configuration des étiquettes@label: listbox Name of the tag
+Nom & #160;: @label: textbox Description of the option
+Modifier la couleur du texte & #160;:
+Modifier la & couleur d'arrière-plan & #160;:
+Modifier la police & #160;:
+& Icône de l'étiquette de message & #160;:
+Raccourci clavier & #160;:
+Activer la & barre de boutonsGeneral settings for the composer.
+Modèles standards
+Modèles personnalisésSettings regarding the subject when composing a message.
+Encodage
+En-têtesConfig- > Composer- > Attachments
+Pièces jointes
+Avertir si trop de destinataires ont été spécifiés
+Avertir si un nombre de destinataires supérieur à celui -ci a été spécifié
+Pas d'enregistrement automatique
+min
+Modèle de transmission par défaut & #160;: @item: inlistbox Inline mail forwarding
+Incorporé
+Comme une pièce jointe
+Configurer l'ordre de complètement..
+Modifier les adresses récentes...
+Éditeur externe
+« & #160; %f & #160; » sera remplacé par le nom du fichier à modifier.
+Préfixes pour le sujet d'une réponse
+Reconnaître plusieurs séquences des préfixes suivants (la saisie est sensible à la casse et aux expressions rationnelles) & #160;:
+Ajouter...
+Supprimer
+Modifier...
+Saisissez un nouveau préfixe de réponse & #160;:
+Préfixes pour le sujet d'un message transmis
+Supprimer
+Saisissez un nouveau préfixe de transmission & #160;:
+Cette liste est parcourue du haut vers le bas pour chaque message envoyé pour y trouver un jeu de caractères contenant tous les caractères du message.
+& Modifier...
+Saisissez un jeu de caractères & #160;:
+& Utiliser le jeu de caractères du message d'origine pour répondre ou transmettre (si possible).
+Ce jeu de caractères n'est pas géré.
+& Utiliser un suffixe personnalisé pour le champ « & #160; Message-Id & #160; »
+Suffixe personnalisé pour le champ « & #160; Message-Id & #160; » & #160;:
+Définir des champs d'en-tête MIME personnalisés & #160;: @title: column Name of the mime header.
+Valeur@action: button Add new mime header field.
+& Nouveau@label: textbox Name of the mime header.
+Valeur & #160;:
+Nommage de la pièce jointe compatible avec Outlook
+Activez cette option pour rendre compréhensibles au programme Outlook(tm) les noms des pièces jointes contenant des caractères non anglais
+Activer la détection des pièces jointes manquantes
+Reconnaître n'importe lequel des mots clés suivants comme intention d'attacher un fichier & #160;:
+Saisissez un nouveau mot clé & #160;:
+Vous avez choisi d'encoder les noms des pièces jointes contenant des caractères non anglais d'une manière qui est comprise par Outlook(tm) et d'autres clients de messagerie qui ne gèrent pas les noms de pièces jointes encodées conformément au standard. Notez que KMail est susceptible de créer des messages ne se conformant pas au standard, mais il est possible que vos messages ne soient ultérieurement pas compris par les clients de messagerie conformes au standard & #160;; donc, à moins de n'avoir pas d'autre choix, vous ne devriez pas cocher cette option.
+Consultation
+Rédaction
+Avertissements
+Validation S/ MIME
+Modules de chiffrement
+Le fait de modifier la configuration HTML globale écrasera toutes les valeurs propres à un dossier.
+Cette option nécessite une version de « & #160; dirmngr & #160; » supérieure à 0.9.0
+aucun serveur mandataire
+(Configuration actuelle du système & #160;: %1)
+Travail en groupe
+Invitations
+Définir le dossier parent des dossiers de ressources
+
+Les dossiers de & ressources sont des sous-dossiers de & #160;:
+Les dossiers de & ressources sont dans le compte & #160;:
+Les invitations sont normalement envoyées sous forme de pièce jointe à un message. Cette option permet de placer les invitations à envoyer dans le texte du courriel & #160;; ceci est nécessaire pour envoyer des invitations et des réponses à Microsoft Outlook. Mais lorsque vous sélectionnez cette option, vous ne disposez plus du texte descriptif que les clients de messagerie peuvent analyser & #160;; et donc, pour les utilisateurs de ces applications ne comprenant pas les invitations, les messages obtenus ont une apparence très étrange. Cependant, les personnes ayant des clients de messagerie comprenant les invitations seront encore en mesure de travailler avec.
+Modifier l'identité@title: tab General identity settings.
+& Votre nom & #160;:
+Votre nom Ce champ doit comporter votre nom, comme vous voulez qu'il apparaisse dans l'en-tête du courrier électronique qui sera envoyé. Si vous le laissez vide, votre vrai nom n'apparaîtra pas, seulement l'adresse électronique.
+Organisation & #160;:
+Organisation Ce champ doit comporter le nom de votre organisation si vous voulez qu'il soit indiqué dans l'en-tête du courrier électronique envoyé. C'est sécurisant (et normal) de le laisser vide.
+Adresse électronique & #160;:
+Adresse de courrier électronique Ce champ doit comporter votre adresse électronique complète. Si vous le laissez vide, ou fournissez une mauvaise adresse, les gens ne pourront pas vous répondre.
+Chiffrement
+& Modifier...
+Votre clé de signature OpenPGP
+Choisissez la clé OpenPGP à utiliser pour signer numériquement vos messages.
+La clé OpenPGP que vous choisissez ici sera utilisée pour signer numériquement vos messages. Vous pouvez aussi utiliser des clés GnuPG. Vous pouvez laisser cette option vide, mais KMail ne sera pas en mesure de chiffrer les courriers électroniques à l'aide d'OpenPGP. Les fonctions normales de messagerie n'en seront pas affectées. Vous trouverez davantage d'informations sur les clés ici & #160;: http: / /www. gnupg. org
+Clé de signature OpenPGP & #160;:
+Votre clé de chiffrement OpenPGP
+Choisissez la clé OpenPGP utilisée pour chiffrer les messages vers vous -même et pour l'option « & #160; Attacher ma clé publique & #160; » dans l'éditeur de courriels.
+La clé OpenPGP que vous choisissez ici sera utilisée pour chiffrer les messages vers vous -même et pour la fonctionnalité « & #160; Attacher ma clé publique & #160; » dans l'éditeur de courriels. Vous pouvez aussi utiliser des clés GnuPG. Vous pouvez laisser ce champ vide, mais KMail ne sera pas en mesure de chiffrer les copies des messages sortants avec OpenPGP & #160;; les fonctions de base n'en seront pas affectées. Vous trouverez davantage d'informations sur les clés ici & #160;: http: / /www. gnupg. org
+Clé de chiffrement OpenPGP & #160;:
+Votre certificat de signature S/ MIME
+Choisissez le certificat S/ MIME à utiliser pour signer numériquement vos messages.
+Le certificat S/ MIME (X 509) que vous choisissez ici sera utilisé pour signer numériquement les messages. Vous pouvez laisser cette case vide, mais KMail ne sera pas en mesure de chiffrer les courriers électroniques. Les fonctions de base n'en seront pas affectées.
+Certificat de signature S/ MIME & #160;:
+Votre certificat de chiffrement S/ MIME
+Sélectionnez le certificat S/ MIME qui doit être utilisé lors du chiffrement vers vous -même et pour la fonctionnalité « & #160; Attacher mon certificat & #160; » dans l'éditeur.
+Le certificat S/ MIME que vous choisissez ici sera utilisé afin de chiffrer les messages envoyés à vous -même et pour la fonctionnalité « & #160; Attacher mon certificat & #160; » dans l'éditeur. Vous pouvez laisser ceci vide, mais KMail ne sera pas capable de chiffrer les copies des courriers électroniques sortants en utilisant S/ MIME. Les fonctions de base ne seront pas affectées.
+Certificat de chiffrement S/ MIME & #160;:
+Format de message chiffré préféré & #160;: @title: tab Advanced identity settings.
+Avancé@title collumn attachment name.
+Adresse de & réponse & #160;:
+Répondre à cette adresse électronique Cela fixe l'en-tête Répondre à & #160;: avec une adresse de courrier électronique différente de l'adresse fixée par De & #160;:. Ceci peut être utile si vous avez un groupe de personne travaillant ensemble avec des rôles similaires. Par exemple, vous voulez que tous les courriers électronique envoyés contiennent votre adresse de courrier électronique dans le champ De & #160;:, mais toutes les réponses soient dirigées vers une adresse électronique du groupe. Dans le doute, laissez ce champ vide.
+Adresses d'envoi en copie & #160;:
+Adresses d'envoi en copie (Blind Carbon Copy & #160; - BCC) Les adresses que vous donnez ici seront ajoutées à chaque courriel sortant envoyé avec cette identité. Elles ne seront pas visibles par les autres destinataires. Ceci sert habituellement à envoyer une copie de chaque message envoyé à un autre de vos comptes. Pour spécifier plus d'une adresse, utilisez des virgules pour séparer la liste des destinataires en BCC. En cas de doute, laissez ce champ vide.
+Dictionnaire & #160;:
+Dossier des messages envoyés & #160;:
+Dossier des & brouillons & #160;:
+Dossier des & modèles & #160;:
+& Transport spécial & #160;:
+Modèles
+& Utiliser les modèles de messages personnalisés pour cette identité
+& Copier les modèles globaux
+Signature
+Image
+Adresse électronique non valable
+Une des clés de signature OpenPGP configurées ne contient pas d'identifiant d'utilisateur avec l'adresse électronique configurée pour cette identité (%1). Ceci peut occasionner des messages d'avertissement du côté destinataire en essayant de vérifier les signatures effectuées avec cette configuration.
+Une des clés de chiffrement OpenPGP ne contient pas d'identifiant d'utilisateur avec l'adresse électronique configurée pour cette identité (%1).
+Un des certificats de signature S/ MIME configurés ne contient pas l'adresse électronique configurée pour cette identité (%1). Ceci peut occasionner des messages d'avertissement du côté destinataire en essayant de vérifier les signatures effectuées avec cette configuration.
+Un des certificats de signature S/ MIME configurés ne contient pas l'adresse électronique configurée pour cette identité (%1).
+Impossible de trouver l'adresse électronique dans les clés & #160; / certificats
+Le fichier de signature n'est pas valable
+Modifier l'identité « & #160; %1 & #160; »
+Le dossier personnalisé des courriels envoyés pour l'identité « & #160; %1 & #160; » n'existe pas (plus). De ce fait, le dossier par défaut sera utilisé.
+Le dossier personnalisé des brouillons pour l'identité « & #160; %1 & #160; » n'existe pas (plus). De ce fait, le dossier par défaut sera utilisé.
+Le dossier personnalisé des modèles pour l'identité « & #160; %1 & #160; » n'existe pas (plus). De ce fait, le dossier par défaut sera utilisé.
+Vous devez saisir un nom d'utilisateur et un mot de passe pour accéder à cette boîte aux lettres.
+Fenêtre d' autorisation
+Compte & #160;:
+Impossible de lancer le traitement pour « & #160; %1 & #160; ».
+Erreur lors de la tentative d'abonnement à %1 & #160;:
+Réception des espaces de noms
+KMail a détecté une entrée préfixée dans la configuration du compte « & #160; %1 & #160; », entrée qui est désormais obsolète avec la gestion des espaces de noms IMAP.
+La configuration de votre compte a été convertie automatiquement, mais vous devriez cependant la vérifier.
+Impossible de convertir la configuration de votre compte automatiquement, veuillez la vérifier. Unknown subject.
+inconnu
+Erreur lors de l'envoi du message
+Impossible d'envoyer le message daté du %1 de %2 avec le sujet %3 sur le serveur.
+Le dossier de destination était & #160;: %1.
+Rapport du serveur & #160;:
+Aucune information détaillée sur le quota n'est disponible.
+Le dossier est trop proche de son quota limite. (%1)
+Comme vous n'avez pas les droits d'écriture sur ce dossier, veuillez demander à son propriétaire de libérer un peu d'espace.
+Erreur
+La connexion au serveur « & #160; %1 & #160; » a été fermée ou le délai d'attente a été atteint. Elle sera de nouveau établie automatiquement si possible.
+Interruption de la connexion au compte « & #160; %1 & #160; ».
+Délai de la connexion au compte « & #160; %1 & #160; » dépassé.
+Erreur lors de la vérification du courriel du compte %1 & #160;: %2
+Erreur lors de l'envoi de l'état des messages au serveur & #160;:
+réception des dossiers
+Confirmer la réception
+Définir le transport comme
+Fixer l'adresse de réponse comme
+Définir l'identité comme étant
+Marquer commemsg status
+ImportantStatus of an item
+Non luStatus of an item
+RéponduStatus of an item
+TransmisStatus of an item
+Ancienmsg status
+SurveilléStatus of an item
+Ignoré@label: textbox Property name
+Courrier indésirableStatus of an item
+Courriel normalStatus of an item
+Action à effectuerStatus of an item
+Ajouter une étiquette
+Envoyer un accusé de réception facticeMDN type
+Ignorer
+AffichéMDN type
+Supprimémessage status
+DiffuséMDN type
+EffectuéMDN type
+RefuséMDN type
+Impossible
+Supprimer l' en-tête
+Ajouter l' en-tête
+Avec la valeur & #160;:
+Réécrire l' en-tête
+Remplacer & #160;:
+Par & #160;:
+Déplacer dans ce dossier
+Copier dans ce dossier
+Transmettre à
+L'adresse de la personne à laquelle ce message sera transféré.
+Le filtre transmettra le message à l'adresse saisie ici.
+Modèle par défaut
+Modèle de message pour la transmission
+Définir le modèle de transmission utilisé avec ce filtre.
+Transmettre à %1 avec le modèle par défaut
+Transmettre à %1 avec le modèle %2
+Rediriger à
+Exécuter la commande
+Filtrer par
+Jouer un son
+Ajouter au carnet d' adresses
+Par défaut Email sender
+DeReceiver of an email.
+À
+CC@label: listbox Blind carbon copy recipient of an email message.
+BCC@label: listbox
+Filtre KMail
+Impossible d'enregistrer les nouvelles adresses dans le carnet.
+Impossible d'enregistrer dans le carnet d'adresses & #160;: celui -ci est verrouillé.
+avec la catégorie
+dans le carnet d' adresses
+Ceci définit le carnet d'adresses favori. S'il n'est pas accessible, le filtre utilisera le carnet d'adresses par défaut.
+Pour exécuter votre recherche, tous les messages du dossier %1 doivent être téléchargés depuis le serveur. Cela risque de prendre un certain temps. Voulez -vous poursuivre votre recherche & #160;?
+Poursuivre la rechercheContinue search button.
+Télécharger les messages du serveur IMAP
+URL & #160;: %1
+Erreur lors de la recherche.
+Exécution de la précommande « & #160; %1 & #160; »
+Impossible d'exécuter la pré commande « & #160; %1 & #160; ».
+La pré commande a renvoyé le code %1 & #160;: %2
+Erreur critique & #160;: impossible de collecter les messages & #160;:
+Impossible d'ajouter le message & #160;:
+Dossiers locaux
+Ajouter un dossier favori...
+Supprimer des favoris
+Renommer ce favori...
+Ajouter ces dossiers aux favoris
+Insérer les dossiers au-dessus de %1
+Insérer les dossiers en-dessous de %1
+Ajouter un dossier favori
+Renommer ce favori@label: textbox New name of the folder.
+Ce message contient une demande d'accusé de réception. Vous pouvez ignorer cette demande ou laisser KMail envoyer une réponse normale ou une autre indiquant que l'accusé de réception est « & #160; refusé & #160; ».
+Ce message contient une demande d'accusé de réception. Il contient une procédure de traitement marquée comme « & #160; requise & #160; », mais cependant inconnue de KMail. Vous pouvez ignorer cette demande ou laisser KMail envoyer une réponse « & #160; échec & #160; ».
+Ce message contient une demande d'accusé de réception, mais cette demande concerne l'envoi de l'accusé de réception à plusieurs adresses électroniques. Vous pouvez ignorer cette demande ou laisser KMail envoyer une réponse normale ou une autre indiquant que l'accusé de réception est « & #160; refusé & #160; ».
+Ce message contient une demande d'accusé de réception, mais aucune adresse de réponse n'a été trouvé. Vous pouvez ignorer cette demande ou laisser KMail envoyer une réponse normale ou une autre indiquant que l'accusé de réception est « & #160; refusé & #160; ».
+Ce message contient une demande d'accusé de réception, mais les adresses de réponse sont différentes des adresses spécifiés par l'expéditeur. Vous pouvez ignorer cette demande ou laisser KMail envoyer une réponse normale ou une autre indiquant que l'accusé de réception est « & #160; refusé & #160; ».
+L'en-tête des options de l'accusé de réception contenait des paramètres inconnus
+Reçu & #160;:
+Pièce jointe & #160;: %1
+Cette pièce jointe a été supprimée.
+La pièce jointe « & #160; %1 & #160; » a été supprimée. message status
+Mis en attentemessage status
+EnvoyéStatus of an item
+Possède une pièce jointeStatus of an item
+Activer le rendu HTML pour ce message.
+Charger les références externes depuis Internet pour ce message.
+Travailler en ligne.
+Déchiffrer le message.
+Afficher le détail de la signature.
+Masquer le détail de la signature.
+Afficher la liste des pièces jointes.
+Masquer la liste des pièces jointes.
+Afficher la liste « & #160; À & #160; » complète
+Masquer la liste « & #160; À & #160; » complète
+Afficher la liste « & #160; CC & #160; » complète
+Masquer la liste « & #160; CC & #160; » complète
+Déplier toutes les citations.
+Réduire la citation.
+Impossible de lancer le gestionnaire de certificats. Veuillez vérifier votre installation.
+Afficher le certificat 0x%1
+Pièce jointe & #160;: %1 (non nommé)
+Afficher le journal détaillé de GnuPG pour cette opération
+Vous pouvez créer ici des modèles à utiliser lors de la rédaction de nouveaux messages, de réponses ou de transmissions. Les modèles de messages gèrent les commandes de substitutions simplement en les saisissant ou en cliquant sur Insérer une commande.
+Les modèles définis ici sont spécifiques au dossier. Ils surchargeront les modèles globaux ainsi que les modèles liés à l'identité.
+Les modèles définis ici sont spécifiques à l'identité. Ils surchargeront les modèles globaux mais peuvent être remplacés par les modèles spécifiques à un dossier.
+Les modèles définis ici sont globaux. Ils pourront être surchargés par les modèles spécifiques à l'identité ou au dossier.
+Comment cela fonctionne & #160;?
+Modèle de nouveau message par défaut
+Modèle de réponse par défautDefault reply template. %1: date of original message, %2: time of original message, %3: quoted text of original message, %4: cursor Position
+Le %1 %2, vous avez écrit & #160;: %3 %4
+Modèle de réponse à tous par défautDefault reply all template: %1: date, %2: time, %3: name of original sender, %4: quoted text of original message, %5: cursor position
+Le %1 %2, %3 a écrit & #160;: %4 %5
+Modèle de transmission par défautDefault forward template: %1: subject of original message, %2: date of original message, %3: time of original message, %4: mail address of original sender, %5: original message text
+---------- Message transmis ---------- Sujet & #160;: %1 Date & #160;: %2, %3 De & #160;: %4 %OADDRESSEESADDR %5 -------------------------------------------------------@title: column Column showing the number of unread email messages.
+Total@title: column Size of the folder.
+Recherches
+Total des messages
+Messages non lus
+Quota
+Taille de stockage
+Taille de stockage du sous-dossier
+Taille des icônes
+Afficher les infobulles@action: inmenu Always display tooltips
+Trier les éléments@action: inmenu
+Automatiquement, par la colonne actuelle@action: inmenu
+Manuellement, par glisser & #160; / déposer
+Inscription côté serveur...
+Inscription locale...
+Actualiser la liste des dossiers
+Expiration...
+Dossiers multiples
+Impossible de déplacer ou copier le dossier %1, car un dossier du même nom existe déjà.
+Impossible de déplacer ou copier le dossier %1 car il n'a pas encore été copié entièrement lui-même.
+Impossible de déplacer ou copier le dossier %1 dans un de ses sous-dossiers.
+Le déplacement des dossiers sélectionnés est impossible
+Impossible de créer le dossier %1 pour cause de permissions insuffisantes sur le serveur. Si vous pensez que vous devriez être en mesure de créer des sous-dossiers ici, demandez à votre administrateur de vous fournir les droits de le faire.
+Aller au prochain message non lu dans le dossier %1 & #160;?
+Aller au prochain message non lu
+Aller à
+Ne pas aller à
+Déplacer ici
+& Copier ici
+& Annuler
+Copier ou déplacer les messages vers %1
+Erreur lors de l'ouverture de « & #160; %1 & #160; » & #160;; ce dossier est manquant.
+Erreur lors de l'ouverture de « & #160; %1 & #160; » & #160;; soit ce n'est pas un dossier au format « & #160; maildir & #160; » valable, soit vous n'avez pas les droits d'accès suffisants.
+Impossible de synchroniser le dossier de messages (« & #160; maildir & #160; »).
+Impossible d'ajouter le message au dossier, l'espace disque est probablement faible.
+« & #160; KMFolderMaildir: :addMsg: & #160; » s'est terminé anormalement pour éviter la perte de données.
+Écriture du fichier d'index en cours
+Votre boîte « & #160; À envoyer & #160; » contient des messages qui n'ont sans doute pas été créés par KMail. Veuillez les en retirer si vous ne voulez pas que KMail les envoie.
+Liste de distribution %1
+Sélectionnez le destinataire
+Carnet d'adresses & #160;: @title: column Name of the recipient.
+Courriel@info
+- >
+Rechercher dans le service d'annuaireSearch for recipient.
+Chercher & #160;:
+Ajouter en & tant que « & #160; À & #160; »
+Ajouter en tant que « & #160; CC & #160; »
+Ajouter en tant que « & #160; BCC & #160; »
+& AnnulerAll collections containing recipients.
+Listes de distribution
+Destinataires sélectionnés
+Carnet d' adresses
+Catégories
+Adresses récentes
+Impossible d'ouvrir le dossier %1.
+Le dossier %1 est illisible.
+%1 sur %2 %3 utilisé
+Ko
+Mo
+Go
+& Envoyer l'image avec tous les messages
+Cochez cette case si vous voulez que KMail ajoute une en-tête « & #160; X-Face & #160; » aux messages écrits avec cette identité. Une « & #160; X-Face & #160; » est une petite image (48x48 pixels) en noir et blanc que certains logiciels de courriers électroniques sont capables d'afficher.
+Ceci est un aperçu de l'image sélectionnée ci-dessous.
+Cliquez avec le bouton droit sur les éléments ci-dessous pour obtenir de l'aide sur les méthodes de saisie. continuation of "obtain picture from"
+Une source externecontinuation of "obtain picture from"
+Le champ de saisie ci-dessous
+Obtenir l'image depuis & #160;:
+Sélectionner le fichier...
+Utilisez cela pour sélectionnez un fichier afin d'y créer l'image. L'image devra posséder un grand contraste et devra avoir la forme d'un carré. Un arrière-plan clair aide à améliorer le résultat.
+Définir depuis le carnet d' adresses
+Vous pouvez également utiliser une version à l'échelle de l'image que vous avez définis dans votre entrée du carnet d'adresses.
+KMail peut envoyer une petite image (48x48 pixels), de faible qualité et monochrome avec chaque message. Cela peut par exemple être une image de votre signature. Elle est affichée dans l'adresse du destinataire du client de messagerie (s'il la gère).
+Utilisez ce champ pour saisir une chaîne « & #160; X-Face & #160; » arbitraire.
+Des exemples sont disponibles sur http: / /www. xs4all. nl/ ~ace/ X-Faces/.
+Votre contact propre n'est pas défini dans le carnet d'adresses.
+Aucune image
+Aucune image définie pour votre entrée dans le carnet d'adresses.
+Le dossier que vous avez supprimé était associé au compte %1, son courriel y était placé. Les messages de ce compte sont maintenant déposés dans la boîte de réception.
+KMail
+Il semble que %1 est déjà en cours d'exécution sur un autre affichage de cette machine. L'exécution simultanée de plusieurs instances de %2 peut provoquer la perte de messages. Vous ne devriez pas démarrer %1 sans vous assurer qu'il n'est pas déjà en cours d'exécution.
+Il semble que %1 est en cours d'exécution sur un autre affichage de cette machine. L'exécution simultanée de %1 et%2 peut provoquer la perte de messages. Vous ne devriez pas démarrer %2 sans vous assurer que %1 n'est pas en cours d'exécution.
+Il semble que %1 est déjà en cours d'exécution sur %2. L'exécution simultanée de plusieurs instances de %1 peut provoquer la perte de messages. Vous ne devriez pas démarrer %1 sur cet ordinateur sans vous assurer qu'il n'est pas déjà en cours d'exécution sur %2.
+Il semble que %1 est en cours d'exécution sur un %3. L'exécution simultanée de %1 et%2 peut provoquer la perte de messages. Vous ne devriez pas démarrer %2 sans vous assurer que %1 n'est pas en cours d'exécution sur %3. Start kmail even when another instance is running.
+Démarrer %1Do not start another kmail instance.
+Quitter
+Boîte de réception
+Activer les inscriptions & #160;?
+Activer
+Ne pas activer@info
+Pour le moment, les inscriptions ne sont pas utilisées par le serveur %1. Voulez -vous activer les inscriptions & #160;? @title: window
+Enregistrer la liste de distribution@action: button
+Enregistrer la liste@label: textbox Name of the distribution list.
+Il n'y a aucun destinataire dans votre liste. Veuillez tout d'abord en sélectionner, puis réessayez. @title: window
+Nouvelle liste de distribution@label: textbox
+Veuillez saisir un nom & #160;: @info
+Une liste de distribution avec le nom %1 existe déjà. Veuillez choisir un autre nom.
+Sélectionner le carnet d'adresses dans lequel enregistrer le nouveau groupe de contacts & #160;:
+Nouvelle identité
+& Nouvelle identité & #160;:
+Avec des champs & vides
+& Utiliser les paramètres du Centre de configuration de KDE
+& Dupliquer une identité existante
+Identités existantes & #160;:
+Nouvelle entrée & #160;:
+Ajouter...
+Nouvelle valeur
+Changer les valeurs
+Propriétés du dossier de liste de diffusion
+Liste de diffusion associée
+Le dossier gère une liste de diffusion
+Détecter automatiquement
+Description de la liste de diffusion & #160;:
+Gestionnaire préféré & #160;:
+Navigateur
+Type d'adresse & #160;:
+Appeler le gestionnaire
+Poster sur la liste
+S'abonner à la liste
+Se désabonner de la liste
+Archives de la liste
+Aide de la liste
+Non disponible
+KMail n'a pas pu détecter de liste de diffusion dans ce dossier. Veuillez remplir l'adresse manuellement.
+Non disponible.
+Permissions (ACL)@title: tab General settings for a folder.
+Contrôle d' accès
+Maintenancetype of folder content
+Inconnu
+Boîte aux lettrestype of folder storage
+Maildirtype of folder storage
+IMAP déconnectétype of folder storage
+IMAPtype of folder storage
+sans nom
+Notifier la présence de courriel non lu ou nouveau dans ce dossier
+Si cette option est activée, vous serez alors prévenu de la présence de courriel non lu ou nouveau dans ce dossier. De plus, le déplacement entre dossiers contenant des courriels non lus s'arrêtera à celui -ci. Décochez cette option si vous ne voulez pas être notifié de la présence de courrier électronique non lu ou nouveau, et que ce dossier soit passé automatiquement dans la navigation des messages non lus. Cette option est notamment utile pour ignorer le dossier du courrier indésirable.
+Inclure ce dossier dans la vérification du courriel
+Si cette option est activée, ce dossier sera inclus dans la vérification des nouveaux courriels. Décochez cette option si vous voulez ignorer ce dossier lors de la vérification.
+Conserver les réponses dans ce dossier
+Cochez cette option si vous voulez que les réponses que vous écrivez aux courriels dans ce dossier soient mises dans le même dossier après envoi, au lieu du dossier configuré des messages envoyés.
+Masquer ce dossier dans la fenêtre de sélection des dossiers. @info: whatsthis
+Cochez cette option si vous ne voulez pas que ce dossier soit affiché dans la fenêtre de sélection des dossiers, telle que Aller au dossier.
+Utiliser l'identité par & défaut
+Identité de l'expéditeur & #160;:
+Sélectionnez l'identité à utiliser lors de l'écriture d'un courriel ou d'une réponse depuis ce dossier. Cela signifie que si vous êtes par exemple dans un de vos dossiers de travail, KMail vous permet d'utiliser automatiquement une adresse électronique, une signature et des clés de chiffrement et de signature correspondantes. Les identités peuvent être configurées dans la fenêtre de configuration principale (« & #160; Configuration & #160; / Configurer KMail & #160; »).
+Contenu du dossier & #160;:
+Générer des alarmes activées et libres & #160; / & occupées pour & #160;:
+Personne
+Administrateurs de ce dossier
+Tous les lecteurs de ce dossier
+Ce paramètre définit où les utilisateurs partageant ce dossier devrait obtenir les périodes « & #160; occupé & #160; » dans leur listes de « & #160; libre & #160; / occupé & #160; » et devrait voir les alarmes pour les évènements ou tâches dans ce dossier. Ce paramètre s'applique pour les dossiers de calendrier et de tâches uniquement. (pour les tâches, ce paramètre est uniquement utilisé pour les alarmes). Exemple de cas d'utilisation & #160;: si le chef partage un dossier avec sa secrétaire, seul le chef devrait être marqué comme occupé pour ces rendez-vous, donc il doit choisir « & #160; Administrateurs & #160; », alors que sa secrétaire n'a aucun droit d'administration sur le dossier. D'un autre côté, si un groupe de travail partage un calendrier pour les rendez-vous du groupe, tous les lecteurs des dossiers devraient être marqué comme occupé pendant les rendez-vous. Un dossier de société avec des évènements facultatifs devrait utiliser « & #160; Personne & #160; » tant que l'on ne sait pas qui viendra à ces évènements.
+Ce paramètre vous permet de désactiver les alarmes des dossiers partagés par d'autres.
+Bloquer les alarmes activées et & libres localement
+Partager l'état non lu avec tous les utilisateurs
+Si cette option est activée, l'état non lu des messages de ce dossier sera le même pour tous les utilisateurs y accédant. En cas de désactivation (par défaut), chaque utilisateur aura son propre état non lu.
+Vous avez configurer ce dossier pour contenir les informations de travail en groupe et l'option de configuration générale pour cacher les dossiers de travail en groupe est activée. Cela signifie que ce dossier va disparaître une fois la fenêtre de configuration fermée. Si vous souhaitez supprimer le dossier à nouveau, vous devrez alors désactiver temporairement le masquage des dossiers de travail en groupe afin de le voir.
+Utiliser des icônes personnaliséesIcon used for folders with no unread messages.
+& Normal & #160;: Icon used for folders which do have unread messages.
+Non lu & #160;:
+Afficher la colonne de l'expéditeur & #160; / destinataire dans la liste des messages
+Afficher la colonne & #160;: @item: inlistbox Show default value.
+Par défaut@action: inmenu Foreground color setting
+ExpéditeurDescription of Type Receiver
+DestinataireDescription of Type Size
+Utiliser l'agrégation par défaut
+Agrégat
+Utiliser le thème par défaut
+Thème
+& Utiliser les modèles de messages personnalisés dans ce dossier
+Fichiers@label: textbox Folder content type (eg. Mail)
+Contenus & #160;:
+Type de dossier & #160;: folder size
+Taille & #160;:
+Index & #160;:
+Rafraîchir le cache local IMAP
+Messages
+Total des messages & #160;:
+Messages non lus & #160;: compaction status
+Compression & #160;:
+Compresser maintenantFile size in bytes
+%1 & #160; o
+%1 (%2)My Calendar
+Possiblecompaction status
+Possible, mais peu sûrecompaction status
+Non requise@info
+La compression du dossier %1 n'est pas sûre. Cette action peut provoquer la corruption d'un index ou d'une boîte aux lettres. Veuillez vous assurer que vous possédez une sauvegarde récente de vos messages. @title
+Voulez -vous vraiment compresser le dossier & #160;? @action: button
+Compresser le dossier
+Erreur lors du listage du dossier %1 & #160;:
+& Le serveur gère les extensions « & #160; Sieve & #160; »
+& Réutiliser le nom d'hôte et la configuration de la connexion
+& Port de contrôle & #160;:
+URL secondaire & #160;:
+M e s s a g e H T M L
+M e s s a g e n o n H T M L
+M e s s a g e s i m p l e
+Cliquez pour basculer de la version HTML au texte simple.
+Créer un nouveau sous-dossier dans le dossier actuellement sélectionné
+Vous pouvez saisir ici le texte pour filtrer la liste des dossiers.
+L'index du dossier « & #160; %2 & #160; » semble périmé. Pour empêcher la corruption des messages, l'index sera régénéré. Il en résultera que les messages supprimés peuvent réapparaître et les drapeaux d'état être perdus. Veuillez lire l'entrée correspondante de la section FAQ du manuel de KMail pour des informations sur la manière d'empêcher ce problème de survenir à nouveau.
+Index périmé
+Le dossier « & #160; %1 & #160; » a été modifié. Reconstitution de l'index.
+Opération annulée par l'utilisateur.
+Impossible d'archiver le dossier « & #160; %1 & #160; ».
+Échec de l'archivage.
+Impossible de finaliser le fichier d'archive.
+Archivage terminé
+L'archivage du dossier « & #160; %1 & #160; » s'est terminé correctement. L'archive a été écrite dans le dossier « & #160; %2 & #160; ».
+Le fichier d'archive a une taille de %1.
+Archivage terminé.
+Impossible d'accéder à un message du dossier « & #160; %1 & #160; ».
+Erreur interne lors de l'accès à un message du dossier « & #160; %1 & #160; ».
+Impossible d'écrire un message dans le dossier d'archive « & #160; %1 & #160; ».
+Échec du téléchargement d'un message dans le dossier « & #160; %1 & #160; ».
+Échec du téléchargement d'un message dans le dossier actuel.
+Archivage du dossier « & #160; %1 & #160; »
+Impossible d'ouvrir le dossier « & #160; %1 & #160; ».
+Impossible de créer la structure du dossier « & #160; %1 & #160; » dans le fichier d'archive.
+Impossible de sauvegarder les messages du dossier « & #160; %1 & #160; », le fichier d'index est corrompu.
+Impossible d'ouvrir l'archive en écriture.
+Archivage@title: column Column containing message subjects
+Télécharger tous les messages maintenant@action: button
+Télécharger tous les messages plus tard@action: button
+Supprimer tous les messages@info: tooltip
+Télécharger maintenant@info: tooltip
+Télécharger plus tard@info: tooltip
+Supprimer
+Filtre POP@info
+Messages à filtrer trouvés sur le compte POP & #160;: %1 La taille des messages affichés dépasse la taille maximale que vous avez définie pour ce compte. Vous pouvez décider de ce que vous allez en faire en cliquant sur le bouton approprié. @title: group
+Messages dont la taille dépasse@title: group
+Messages filtrés & #160;: aucun@option: check
+Afficher les messages susceptibles d'être filtrés et marqués « & #160; à télécharger & #160; » ou « & #160; à supprimer & #160; » @option: check
+Afficher les messages susceptibles d'être filtrés@title: group
+Règle des messages filtrés & #160;: %1@item: intext
+Configurer les notifications qui seront envoyées pour les congés & #160;:
+& Activation des notifications pour les congés
+& Renvoyer une notification seulement après & #160;:
+Envoyer les réponses à ces adresses & #160;:
+Ne pas envoyer de réponses d'absence à des messages non sollicités
+Réagir uniquement aux courriels venant du domaine
+Envoi des données du message
+Opération serveur
+Dossier source & #160;: %1 - Dossier de destination & #160;: %2
+Téléchargement des données du message
+Message avec sujet & #160;:
+Erreur lors de la réception des messages depuis le serveur.
+Erreur lors de la réception d'informations sur la structure d'un message.
+Échec de l'envoi des données du message.
+Données du message envoyées.
+Erreur lors de la copie des messages.
+Évaluation des règles de filtrage & #160;:
+Les règles de filtrage correspondent.
+Application du filtre & #160;: %1
+Problème de transmission.
+Préparation de la transmission depuis « & #160; %1 & #160; »...
+Impossible d'ouvrir le dossier %1.
+Transmission annulée.
+Déplacement du message %1 sur %2 depuis « & #160; %3 & #160; ».
+Avec un modèle personnalisé
+Répondre avec un modèle personnalisé
+Répondre à tous avec un modèle personnalisé
+(aucun modèle personnalisé)
+Veuillez sélectionner le fichier de clé Chiasmus à utiliser & #160;:
+Arguments supplémentaires pour Chiasmus & #160;: Message- >
+Universel
+Répondre
+Répondre à tousTemplate type for forwarding messages.
+Transmission
+Destinataires supplémentaires du message
+Destinataires supplémentaires ayant une copie du message
+Lors de l'utilisation de ce modèle pour la transmission, les destinataires par défaut sont ceux définis ici. Cette liste d'adresses électroniques est séparée par des virgules.
+Lors de l'utilisation de ce modèle pour la transmission, les destinataires par défaut d'une copie du courrier sont ceux définis ici Cette liste d'adresses électroniques est séparée par des virgules.
+Vous pouvez ajouter, modifier et supprimer ici des modèles de messages personnalisés à utiliser lors de la rédaction d'un message de réponse ou à transmettre. Créez le modèle personnalisé en utilisant le menu contextuel de la souris ou la barre de menu. Vous pouvez également affecter un raccourci clavier à un modèle pour gagner votre temps. Les modèles de messages gèrent les commandes de substitutions en les saisissant ou en cliquant sur le menu Insérer une commande. Il existe quatre types de modèles personnalisés utilisés pour & #160;: Répondre, Répondre à tous, Transmettre, et Universel pour toutes ces opérations. Vous ne pouvez cependant pas affecter de raccourci clavier aux modèles Universels. Message- >
+Déplier tous les groupes
+Réduire tous les groupes@info: tooltip
+Ouvrir un nouvel onglet@info: tooltip
+Fermer l'onglet courant
+Afficher la recherche rapideshown in the context menu when right-clicking on a folder
+Ouvrir dans un nouvel ongletshortcut for expanding the header of a group in the message list
+Déplier l'en-tête du groupeshortcut for collapsing the header of a group in the message list
+Réduire l'en-tête du groupeshortcut
+Activer l'onglet suivantshortcut
+Activer l'onglet précédent
+Masquer le nom de la colonne dans l' en-tête
+Thème par défaut
+Agrégat par défaut
+Ordre de tri par défaut@title: tab Empty messagelist
+VidePersonal namespace
+Fermer l'onglet@action: inmenu
+Fermer tous les autres ongletsdisplayed as subject when the subject of a mail is empty
+La désinscription locale à des dossiers supprimera toutes les informations locales de ces dossiers. Ceux -ci ne seront pas modifiés sur le serveur. Cliquez maintenant sur annuler si vous souhaitez que les modifications locales apparaissent sur le serveur, puis effectuez une vérification du courriel. @title: window
+Les modifications locales seront perdues à la désinscription@info
+Pour le moment, les inscriptions ne sont pas utilisées pour le compte %1. Voulez -vous activer les inscriptions locales & #160;?
+Pour des raisons de sécurité, la purge a été désactivée pour « & #160; %1 & #160; ».
+Dossier « & #160; %1 & #160; » purgé avec succès.
+Erreur lors de la purge de « & #160; %1 & #160; ». Purge annulée.
+Rediriger le message
+Sélectionner les adresses destinataires vers lesquels rediriger & #160;:
+Utiliser la fenêtre de sélection d' adresses
+Ce bouton ouvre une fenêtre séparée dans laquelle vous pouvez sélectionner les destinataires de toutes les adresses disponibles.
+Envoyer & maintenant
+Envoyer plus & tard
+Vous ne pouvez pas rediriger un message sans adresse.
+Adresse de redirection vide@label: listbox General group for often used snippets in mail.
+Fragment %1
+Ajouter un groupe
+Voulez -vous vraiment supprimer ce groupe et tous ses fragments & #160;?
+& Appliquer
+Modifier le fragment
+Modifier le groupe
+Modifier le & groupe...
+& Coller
+& Modifier...
+Fragments de texte
+& Ajouter un fragment...
+Ajouter un groupe...
+Veuillez saisir la valeur de %1 & #160;:
+Saisissez les valeurs des variables
+Saisissez les valeurs de remplacement pour %1 & #160;:
+Définir comme valeur par & défaut
+Activer cette option pour définir la valeur saisie ici comme valeur par défaut pour cette variable
+Si vous activez cette option, la valeur saisie ici sera enregistrée. Si vous utilisez la même variable ultérieurement, y compris dans un autre fragment, cette valeur sera proposée par défaut.
+Le destinataire de cette invitation ne correspond pas à l'une de vos identités. Veuillez sélectionner le transport à utiliser pour envoyer votre réponse.
+L'identité trouvée dans le destinataire de cette invitation ne possède pas de transport configuré. Veuillez sélectionner le transport à utiliser pour envoyer votre réponse.
+Sélection du transport
+Réponse & #160;: Not able to attend.
+Refusé & #160;: %1Unsure if it is possible to attend.
+Essai & #160;: %1Accepted the invitation.
+Accepté & #160;: %1
+Aucune de vos identités ne correspond au destinataire de ce message, veuillez sélectionner l'adresse qui vous correspond ou l'une de vos identités dans la liste suivante & #160;:
+Plusieurs de vos identités correspondent au destinataire de ce message. Veuillez sélectionner votre adresse dans la liste suivante & #160;:
+Choisir une adresse électronique
+Voulez -vous vraiment purger les messages expirés & #160;?
+« & #160; %1 & #160; » ne semble pas être un dossier. Veuillez déplacer le fichier de cet emplacement.
+Les permissions sur le dossier « & #160; %1 & #160; » sont incorrectes. Veuillez vérifier que vous pouvez afficher et modifier le contenu de ce dossier.
+KMail n'a pas pu créer le dossier « & #160; %1 & #160; ». Veuillez vérifier que vous pouvez afficher et modifier le contenu du dossier « & #160; %2 & #160; ».
+Un dossier du même nom a été supprimé depuis la dernière vérification du courriel. Vous devez tout d'abord le vérifier à nouveau avant de recréer un dossier du même nom.
+Impossible de créer le dossier
+Impossible de créer le fichier « & #160; %1 & #160; » dans « & #160; %2 & #160; ». KMail ne peut pas démarrer sans cette opération.
+Nouvelle & fenêtre
+Démarrage... message encoding type
+Aucun (texte 7 bits)message encoding type
+Aucun (texte 8 bits)message encoding type
+Quoted Printablemessage encoding type
+Base 64
+Propriétés de la pièce jointe
+Le type MIME du fichier. Vous n'avez normalement pas à modifier ce réglage, car le type MIME du fichier est détecté automatiquement. Mais il peut arriver que « & #160; %1 & #160; » n'arrive pas à déterminer automatiquement le type. C'est ici que vous pouvez y remédier.
+La taille de l'élément & #160;: parfois « & #160; %1 & #160; » ne peut fournir qu'une estimation de la taille, car le calcul exact prendrait trop de temps. Lorsque c'est le cas, cela sera mis en évidence par l'ajout de « & #160; (estimée) & #160; » à la suite de la taille affichée. file name of the attachment.
+Le nom de fichier de l'élément. Il s'agit par défaut du nom du fichier que vous mettez en pièce jointe, mais ce n'est pas une obligation. Ce nom est utilisé par le logiciel de messagerie du destinataire lors de l'enregistrement sur disque de la pièce jointe.
+& Description & #160;:
+Une description de l'élément. Il s'agit seulement d'une description informelle, un peu comme le sujet du message lui-même. La plupart des logiciels de messagerie afficheront cette description dans l'aperçu du message, à côté de l'icône de la pièce jointe.
+Encodage & #160;:
+L'encodage pour l'envoi de l'élément. Vous n'avez normalement pas à modifier ce réglage, car « & #160; %1 & #160; » utilisera par défaut un encodage correct, dépendant du type MIME. Mais parfois, vous pourrez réduire significativement la taille du message résultant, par exemple si un document PostScript ne contient aucune donnée binaire. Dans ce cas, choisir « & #160; quoted-printable & #160; » plutôt que « & #160; base64 & #160; » pourra économiser jusqu'à 25 & #160;% sur la taille du message.
+Suggérer un affichage automatique
+Cochez cette option si vous voulez suggérer à votre destinataire d'afficher l'élément automatiquement au lieu de le laisser l'afficher par icône. Techniquement cela est réalisé en définissant l'en-tête Content-Disposition comme « & #160; inline & #160; » plutôt que « & #160; attachment & #160; ».
+& Signer cet élément
+Cochez cette option si vous souhaitez que cet élément du message soit signé & #160;: la signature sera générée avec la clé que vous avez associée à l'identité actuellement sélectionnée.
+Chiffrer cet élément
+Si vous cochez cette option, l'élément sera chiffré. Il sera chiffré pour le destinataire de ce message. %1: a filesize incl. unit (e. g. "1.3 KB")
+%1 (estimée)
+Racine & #160;:
+Utilisation & #160;:
+Sélectionner une police
+Sélectionner une taillename used for a virgin filter
+inconnu
+(correspond à au moins un des critères suivants)
+(correspond à tous les critères suivants)
+partie interne
+partie du corps
+Contenu du modèle
+Raccourci clavier du modèle
+Type de modèle
+& Fichier@title: menu for new-message and new-from-template
+& Édition
+& Affichage
+& Aller
+Dossier
+& Message
+Réponse spéciale
+& Outils
+& Configuration
+& Aide
+Barre principale
+& Options
+& Joindre
+Barre d'outils HTML@title: menu New message, folder or new window.
+Matthieu Robin, Gilles Caulier, Joëlle Cornavin, Thibaut Cousin, Gérard Delafond, François-Xavier Duranceau, Jean-Marc Duval, Nicolas TernisienEMAIL OF TRANSLATORS
+kde@macolu. org, caulier. gilles@free. fr, jcornavi@kde-france. org, cousin@kde. org, gerard@delafond. org, duranceau@kde. org, shadowcatcher@free. fr, nicolas. ternisien@gmail. com
+Signature
+Signer & automatiquement les messages
+Quand cette option est activée, tous les messages que vous enverrez seront signés par défaut. Bien sûr, il est toujours possible de désactiver la signature individuellement pour chaque message.
+Chiffrement
+Lors du chiffrement des courriels, toujours utiliser le & certificat de ma propre identité
+Lorsque cette option est activée, le message & #160; / & #160; fichier n'est pas seulement chiffré avec la clé publique du destinataire, mais également avec votre clé. Ceci vous permet de déchiffrer le message & #160; / & #160; fichier par la suite. Il s'agit généralement d'une bonne idée.
+Afficher le texte signé & #160; / & #160; chiffré après l' édition
+Lorsque cette option est activée, le texte signé & #160; / & #160; chiffré est affiché dans une fenêtre séparée, ce qui vous permet de savoir à quoi il ressemble avant de l'envoyer. Cela vous permet de vérifier que votre système de chiffrement fonctionne.
+Enregistrer les messages envoyés chiffrés
+Vérifier les messages chiffrés qui sont enregistrés
+Enregistrer les messages chiffrés Quand cette case est cochée, les messages envoyés sont enregistrés chiffrés comme ils ont été envoyés. Ce n'est pas recommandé, car vous ne pourrez plus lire les messages si le certificat expire. Cependant, il peut y avoir des politiques de sécurité dans votre société qui nécessitent d'activer cette option. En cas de doute, vérifiez avec l'administrateur de votre système.
+Toujours afficher les clés de chiffrement
+Si cette option est activée, l'application vous affichera toujours la liste des clés publiques, vous permettant de choisir celle que vous voulez utiliser pour le chiffrement. Si l'option est désactivée, la fenêtre ne sera affichée que lorsque plusieurs clés peuvent être utilisées ou, au contraire, qu'aucune clé n'a été trouvée.
+Chiffrer automatiquement les messages si possible
+Quand cette option est activée, tout message que vous enverrez sera chiffré si cela est possible et désiré. Bien sûr, il est toujours possible de désactiver le chiffrement automatique pour chaque message individuellement.
+Ne & jamais signer & #160; / & #160; chiffrer lors de l'enregistrement d'un brouillon@title: tab General settings
+& Nom du compte & #160;:
+Nom affiché dans la liste des comptes
+Nom du compte & #160;: ce champ définit le nom affiché dans la liste des comptes de KMail.
+& Serveur de courriers entrant & #160;:
+Adresse du serveur de courriers
+L'adresse du serveur de courriers, par exemple « & #160; mail. votre-fournisseur-d-acces. org & #160; ». Vous pouvez obtenir cette adresse auprès de votre fournisseur d'accès.
+& Port & #160;:
+Port de communication avec le serveur de courriers
+Port & #160;: ce champ définit le port de communication avec le serveur de courriers. Cette option n'est à modifier que lorsque votre fournisseur propose un port non standard.
+Votre fournisseur d'accès à Internet vous a donné un nom d'utilisateur nécessaire pour vous authentifier sur leurs serveurs. C'est habituellement la première partie de votre adresse de courrier électronique (la partie avant @).
+& Utilisateur & #160;:
+Le nom d'utilisateur vous identifiant auprès du serveur de courriers
+& Mot de passe & #160;:
+Mot de passe pour accéder au serveur de courriers
+Le mot de passe que vous a donné votre fournisseur de courriers électroniques.
+Enregistrer le mot de passe ou le demander à chaque vérification du courrier
+Cochez cette option pour que KMail conserve le mot de passe. Si KWallet est disponible, le mot de passe conservé sera en sécurité. Cependant, s'il n'est pas disponible, le mot de passe sera conservé dans le fichier de configuration de KMail. Il y est stocké dans un format brouillé, mais ne devrait pas être considéré comme protégé d'une tentative de déchiffrement si l'accès au fichier de configuration est obtenu.
+Conserver le mot de passe IMAP
+Inclure ce compte lors de l'utilisation du bouton dans la barre d' outils
+Inclure dans la & vérification manuelle du courriel
+Si cette option est active, KMail vérifie les nouveaux courriers toutes les x minutes
+Activer la vérification régulière du courriel
+Intervalle de & vérification & #160;: @title: tab
+Configuration IMAP
+Purger automatiquement les dossiers (efface réellement les messages supprimés)
+Afficher les dossiers cachés
+Afficher uniquement les inscriptions aux dossiers côté serveur
+Afficher uniquement les dossiers enregistrés & localement
+Activez cette option pour charger les pièces jointes de façon non automatique quand vous sélectionnez le courrier électronique, mais seulement au moment de cliquer sur la pièce jointe. Ainsi, même les messages volumineux s'afficheront instantanément.
+Charger les pièces jointes à la demande
+La vérification des sous-dossiers n'a lieu que dans les dossiers ouverts (développés) dans l'arborescence. Utilisez cette option s'il y a un grand nombre de dossiers sur le serveur.
+Ne lister que les dossiers ouverts
+Dossier de la corbeille & #160;:
+Utiliser l'identité par défaut pour ce compte
+Sélectionnez l'identité KMail pour ce compte
+Identité & #160;:
+Vous pouvez voir ici les différents espaces de noms gérés par votre serveur IMAP. Chaque espace de noms représente un préfixe séparant les groupes de dossiers. Ils permettent, par exemple, à KMail d'afficher vos dossiers personnels et vos dossiers partagés au sein d'un même compte.
+Espaces de noms & #160;:
+Recharger les espaces de noms depuis le serveur. Cette action écrasera toutes les modifications effectuées.
+...
+Les espaces de noms personnels incluent vos dossiers personnels. Personal namespaces for imap account.
+Personnel & #160;:
+Ces espaces de noms incluent les dossiers des autres utilisateurs.
+Autres utilisateurs & #160;:
+Ces espaces de noms incluent les dossiers partagés.
+Partagé & #160;:
+Sécurité
+Chiffrement
+& Aucun
+Utiliser & SSL pour sécuriser les téléchargements
+Utiliser & TLS pour sécuriser les téléchargements
+Méthode d' identification
+Texte en clair
+& LOGIN
+& PLAIN
+CRAM-MD5
+DIGEST-MD5
+& NTLM
+& GSSAPI
+Anonyme
+Vérifier ce & que le serveur peut gérer
+Cocher pour être averti lors des tentatives d'envoi de messages non signés.
+Avertir lors d'une tentative d'envoi de messages non signés Si cette case est cochée, vous serez averti quand vous essayerez d'envoyer des parties ou le message complet non signé. Il est recommandé de laisser cette option activée pour une intégrité maximale.
+Avertir lorsqu'on essaye d'envoyer des messages non signés
+Avertir quand vous essayez d'envoyer des messages non chiffrés.
+Avertir quand vous essayez d'envoyer des messages non chiffrés Si cette case est cochée, vous serez averti quand vous essayerez d'envoyer des parties ou des messages entiers non chiffrés. Il est recommandé de laisser cette option activée pour une sécurité maximale.
+Avertir lorsqu'on essaye d'envoyer des messages non chiffrés
+Cochez pour être averti si l'adresse n'est pas dans le certificat
+Avertir si l'adresse électronique du destinataire n'est pas dans le certificat Si cette option est activée, un avertissement est lancé si l'adresse électronique du destinataire n'est pas contenue dans le certificat utilisé pour le chiffrement. Il est recommandé de laisser cette option activée pour une sécurité maximale.
+Avertir si l'adresse électronique du destinataire n'est pas dans le certificat
+Avertir lorsqu'un certificat ou une clé est sur le point d'expirer (configurez les seuils ci-dessous)
+Pour la signature
+Pour le chiffrement
+Déterminer le nombre de jours ici
+Avertir si le certificat de signature expire Cette option vous permet de choisir le nombre minimal de jours pendant lesquels le certificat de signature doit être valable sans lancer d'avertissement. Le réglage recommandé pour SPHINX est 14 jours.
+Avertir si le certificat de chiffrement expire Avec cette option, vous pouvez choisir le nombre minimal de jours pendant lequel le certificat de chiffrement doit être valable sans lancer d'avertissement. Le réglage SPHINX recommandé est 14 jours.
+Avertir si un certificat dans la chaîne expire Sélectionner le nombre minimum de jours pendant lesquels tous les certificats dans la chaîne de certificats doivent être valables sans lancer d'avertissement. Le réglage recommandé par SPHINX est 14 jours.
+Avertir si le certificat issu d'une autorité de certification expire Choisir le nombre minimum de jours pendant lequel le certificat d'une autorité de certification doit être valable sans lancer d'avertissement. Le réglage SPHINX recommandé est 14 jours.
+Avertir si le certificat racine expire Cette option vous permet de choisir le nombre minimum de jours pendant lesquels le certificat racine doit être valable sans lancer d'avertissement. Le réglage SPHINX recommandé est 14 jours.
+Pour les certificats racines & #160;:
+Pour les certificats du tiers de confiance & #160;:
+Pour les certificats et clés de l'utilisateur final & #160;:
+Réactiver tous les avertissements « & #160; Ne plus demander & #160; »
+Type de compte & #160;: POP
+Adresse du serveur de courriers POP3
+L'adresse du serveur de courriers POP3, par exemple « & #160; mail. votre-fournisseur-d-acces. org & #160; ». Vous pouvez obtenir cette adresse auprès de votre fournisseur d'accès.
+Mot de passe & #160;: le mot de passe que vous a donné votre fournisseur de courriers électroniques.
+Cochez cette option pour que KMail conserve le mot de passe. Si KWallet est disponible, le mot de passe conservé sera en sécurité. Cependant, s'il n'est pas disponible, le mot de passe sera enregistré dans le fichier de configuration de KMail. Il y est stocké dans un format brouillé, mais ne devrait pas être considéré comme protégé d'une tentative de déchiffrement si l'accès au fichier de configuration est obtenu.
+Conserver le mot de passe POP
+Inclure dans la vérification manuelle du courriel
+Intervalle de & vérification & #160;: @title: tab
+Configuration POP
+Si cette option est activée, le message n'est pas supprimé du serveur de courriers
+KMail peut conserver une copie des courriels et laisser le message original sur le serveur.
+Laisser sur le serveur les messages reçus
+Le message original est supprimé du serveur après x jours
+Laisser les messages sur le serveur pendantNumber of days that the message will be left on the server.
+Laisser uniquement les x messages plus récents sur le serveur
+KMail conserve uniquement les x messages les plus récents sur le serveur et supprime les plus anciens.
+Conserver uniquement le dernier
+messages
+Conserver les messages les plus récents dans le quota et supprimer les plus anciens
+Si cette option est active, les messages les plus récents sont conservés jusqu'à l'atteinte du quota, engendrant alors la suppression des plus anciens courriers.
+Conserver seulement les
+Mo
+Si vous choisissez cette option, les filtres POP seront utilisés pour décider quoi faire des messages. Vous pouvez alors choisir de les télécharger, de les supprimer ou de les laisser sur le serveur.
+& Filtrer les messages s'ils sont plus grands que
+Dossier de destination & #160;:
+Précommande & #160;:
+Définir le dossier dans lequel les nouveaux messages de ce compte sont déposés
+Utiliser les canaux de communication pour accélérer les téléchargements
+NTLM
+& APOP
+Ajouter une nouvelle identité
+Modifier l'identité sélectionnée
+Renommer l'identité sélectionnée
+& Renommer
+Supprimer l'identité sélectionnée
+Définir cette identité par défaut
+Définir par & défaut
+Messages HTML
+AVERTISSEMENT & #160;: l'utilisation du HTML dans les messages rend votre système plus vulnérable aux problèmes de sécurité présents et à venir. Plus d'informations à propos des messages HTML... Plus d'informations à propos des références externes...
+Les courriers électroniques sont parfois envoyés sous deux formats. Cette option vous permet de décider lequel vous voulez afficher par défaut & #160;: la version HTML ou la version texte brut. L'affichage de la version HTML améliore le rendu du message mais pose des problèmes de sécurité. L'affichage de la version texte brut fait perdre une bonne partie de la mise en page mais rend impossible l'exploitation des défauts de sécurité de l'afficheur HTML (Konqueror). L'option ci-dessous protège d'une mauvaise utilisation (courante) des messages écrits en HTML, mais elle ne peut pas protéger contre des problèmes inconnus au moment de la conception de cette version de KMail. Il est donc recommandé de ne pas préférer le HTML au texte brut/ Remarque & #160;: vous pouvez régler ce paramètre indépendamment pour chaque dossier depuis le menu Dossier dans la fenêtre principale de KMail.
+Préférer le HTML au texte simple
+Certaines publicités envoyées par courrier électronique sont écrites en HTML et contiennent par exemple des liens vers des images permettant aux expéditeurs de savoir si vous avez lu leurs publicités (« & #160; web bugs & #160; »). Il n'y aucune bonne raison de télécharger des images depuis le web de cette façon, puisque l'expéditeur peut toujours attacher les images en pièces jointes directement dans le message. Afin de vous protéger contre cet abus, cette option n'est pas activée par défaut. Cependant, si vous voulez par exemple afficher les images non incluses en pièces jointes dans les messages écrits en HTML, vous pouvez cocher cette option, mais vous devez être conscient des problèmes que cela peut poser.
+Autoriser le téléchargement des références d' Internet
+Messages chiffrés
+Déchiffrer automatiquement les messages à l' affichage
+Accusés de réception
+Politique d'envoi & #160;:
+Politique de gestion des accusés de réception Les accusés de réception sont généralement appelés des notifications de lecture. L'auteur du message demande un accusé de réception au destinataire. Celui -ci génère une réponse qu'il renvoie à l'expéditeur pour lui dire qu'il a lu le message. Les principaux types d'accusés de réception sont affiché (tel que lorsque le message est lu), supprimé et diffusé (comme lorsque le message est redirigé). Les options suivantes sont disponibles pour contrôler l'envoi des accusés de réception dans KMail & #160;: Ignorer & #160;: ignore toutes les demande d'accusés de réception. Aucun accusé ne sera envoyé automatiquement (option recommandée) & #160;; Demander & #160;: envoie un accusé de réception seulement après avoir demandé la permission à l'utilisateur. Ainsi, vous pouvez envoyer des accusés de réception uniquement pour les messages que vous avez sélectionnés dans un dossier & #160;; Refuser & #160;: toujours envoyer une notification du type refusé. Ceci n'est pas le meilleur choix. L'auteur du message saura que vous avez reçu son courriel, mais ne pourra pas savoir ce que vous avez exactement fait avec, c'est-à-dire l'avoir lu ou l'avoir supprimé & #160;; Toujours envoyer & #160;: toujours envoyer un accusé de réception. Cela permet à l'auteur du message de savoir que vous avez reçu son courriel, et que vous l'avez lu ou supprimé. Cette option n'est pas recommandable, mais elle peut avoir un sens lorsque vous travaillez en relation avec de la clientèle ou des partenaires dans votre travail.
+Demander
+Refuser
+Toujours envoyer
+Citer le message original & #160;:
+Pas du tout
+Message complet
+Uniquement les en-têtes
+Ne pas envoyer d'accusés de réception en réponse à des messages chiffrés
+AVERTISSEMENT & #160;: En envoyant toujours les accusés de réception, vous limitez votre vie privée. Plus d'informations à propos des accusés de réception...
+Pièces jointes contenant un certificat et une clé
+Importer automatiquement les clés et certificatsName of the custom template.
+À & #160;: @info
+CC & #160;: Universal custom template type.
+& Type de modèle & #160;:
+Ajouter un fragment
+Groupe & #160;:
+& Fragment & #160;:
+& Raccourci clavier & #160;:
+Ajouter@title: window
+Configuration des modèles@title Message template
+Répondre à l'expéditeur@title Message template
+Répondre à tous & #160; / Répondre à la liste@title Message template
+Message transmis@label: textbox Prefix for quoted message lines
+Marque de citation & #160;: @info: whatsthis
+Les jokers suivants sont gérés dans l'indicateur de citation & #160;: %f & #160;: initiales de l'expéditeur%% & #160;: symbole de pourcentage %_ & #160;: espace
+Si cette option est sélectionnée, les certificats S/ MIME sont validés à l'aide des listes de révocation de certificats (CRL).
+Valider les certificats à l'aide des listes de révocation de certificats
+Si cette option est sélectionnée, les certificats S/ MIME sont validés en ligne en utilisant le protocole de vérification en ligne de l'état des certificats (OCSP). Saisissez ci-dessous l'URL du serveur OCSP.
+Valider les certificats en ligne (OCSP)
+Validation des certificats en ligne
+URL du serveur OCSP & #160;:
+Signature du serveur OCSP & #160;:
+Saisissez ici l'adresse du serveur pour la validation en ligne des certificats (OCSP). Elle commence habituellement par « & #160; http: / / & #160; ».
+Ignorer les URL de services de certificats
+Par défaut, GnuPG utilise le fichier « & #160; ~/. gnupg/ policies. txt & #160; » pour vérifier si une politique de certificat est autorisée. Si cette option est cochée, les politiques ne sont pas vérifiées.
+Ne pas vérifier les politiques des certificats
+SI cette option est cochée, les listes de révocation de certificats ne sont jamais utilisées pour valider les certificats S/ MIME.
+Ne jamais consulter de liste de révocation de certificats
+Si cette option est cochée, les certificats émetteurs manquants sont téléchargés lorsque c'est nécessaire (ceci s'applique aux deux méthodes de validation, CRL et OCSP)
+Télécharger les certificats émetteurs manquants
+Requêtes HTTP
+Désactiver complètement l'utilisation du protocole HTTP pour S/ MIME.
+Ne jamais effectuer de requêtes HTTP
+Lors de la recherche de l'emplacement d'une liste de révocation de certificats (« & #160; CRL & #160; »), le certificat à tester contient toujours des points de distribution de CRL (« & #160; DP & #160; »), qui représentent des URL permettant d'accéder à l'adresse. La première entrée « & #160; DP & #160; » trouvée est utilisée. Avec cette option, l'ensemble des entrées utilisant un modèle HTTP est ignoré lors de la recherche d'un « & #160; DP & #160; » convenable.
+Ignorer les points HTTP de distribution de liste de révocation de certificats
+Si cette option est sélectionnée, le serveur mandataire HTTP affiché à droite (provenant de la variable d'environnement « & #160; http_proxy) sera utilisé pour toutes les requêtes HTTP.
+Utiliser le serveur mandataire HTTP du système & #160;:
+Utiliser ce serveur mandataire (proxy) pour les requêtes HTTP & #160;:
+Saisissez ici l'emplacement de votre serveur mandataire HTTP, qui sera utilisé pour toutes les requêtes HTTP relatives à S/ MIME. La syntaxe est « & #160; machine: port & #160; », comme par exemple « & #160; monproxy. nulpart. com:3128 & #160; ».
+Requêtes LDAP
+Désactiver complètement l'utilisation du protocole LDAP pour S/ MIME.
+Ne jamais effectuer de requêtes LDAP
+Lors de la recherche de l'emplacement d'une liste de révocation de certificats (« & #160; CRL & #160; »), le certificat à tester contient toujours des points de distribution de CRL (« & #160; DP & #160; »), qui représentent des URL permettant d'accéder à l'adresse. La première entrée « & #160; DP & #160; » trouvée est utilisée. Avec cette option, l'ensemble des entrées utilisant un modèle LDAP est ignoré lors de la recherche d'un « & #160; DP & #160; » convenable.
+Ignorer les points LDAP de distribution de liste de révocation de certificats
+Hôte primaire pour les requêtes LDAP & #160;:
+La saisie d'un serveur LDAP ici permettra de lui envoyer toutes les requêtes LDAP en premier. En effet, ce paramètre est prioritaire à tout nom de machine ou numéro de port d'une URL LDAP, et il sera également utilisé si ces informations sont absentes de l'URL. Les autres serveurs LDAP seront uniquement utilisés dans le cas où la connexion au serveur mandataire (proxy) échoue. La syntaxe est « & #160; machine & #160; » ou « & #160; machine: port & #160; ». Si le port est omis, le 389 (port LDAP par défaut) sera utilisé.
+Type de compte & #160;: compte local
+Emplacement du fichier & #160;:
+Choisir...
+Méthode de verrouillage
+Fichier de & verrouillage de Procmail & #160;:
+Outil & Mutt dotlock
+Mutt dotlock privilégié
+& FCNTL
+Aucun (utiliser avec prudence)
+Inclure dans la vérification manuelle du courriel
+Dossier de destination & #160;:
+& Précommande
+Options du dossier de ressource & IMAP
+Cette option active le stockage IMAP pour les applications Kontact
+Activer les fonctionnalités des ressources IMAP
+Sélectionnez le format à utiliser pour stocker le contenu des dossiers du travail en groupe.
+& Format utilisé pour les dossiers du travail en groupe & #160;:
+Kolab1 déconseillé (iCal/ vCard)
+Kolab2 (XML)
+Définir la langue des noms de dossiers
+& Langue pour les dossiers du travail en groupe & #160;: @item: inlistbox Adjective, language
+Anglais@item: inlistbox Adjective, language
+Allemand@item: inlistbox Adjective, language
+Français@item: inlistbox Adjective, language
+Hollandais
+Lorsque cette option est cochée, les dossiers de ressources IMAP ne sont pas visibles.
+Cacher les dossiers du travail en groupe
+Lorsque cette option est activée, les dossiers normaux de courriels ne seront pas visibles si ce compte est configuré en travail collaboratif.
+Afficher & uniquement les dossiers de travail collaboratif pour ce compte
+Synchroniser les changements de groupe de travail des dossiers IMAP déconnectés immédiatement à la mise en ligne.
+& Synchroniser les changements de groupe de travail immédiatement
+Comptes de réception (ajoutez au moins un compte & #160;!) & #160;:
+Supprimer
+Relever le courriel au démarrage
+Notification d'arrivée de nouveaux messages
+Cloche
+Utiliser l'indicateur de message
+Afficher pour chaque dossier le nombre de messages récemment arrivés
+Notification détaillée de l'arrivée de nouveaux messages
+Autres Actions...
+Type de compte & #160;: « & #160; Maildir & #160; »
+Emplacement du dossier & #160;:
+Inclure dans la vérification & manuelle du courriel
+& Précommande & #160;:
+Compatibilité avec Groupware et options héritées
+Activer cette option pour rendre compréhensible au programme Outlook(tm) vos réponses aux invitations
+& Supprimer les en-têtes « & #160; From & #160;: & #160; » & #160; / « & #160; To & #160;: & #160; » en réponse aux invitations
+Activez cette option pour rendre compréhensible au programme Outlook(tm) vos réponses aux invitations
+Envoyer les & invitations dans le corps du message
+Microsoft Outlook, utilisé en combinaison avec le serveur Microsoft Exchange, a des problèmes pour analyser les standards des courriels de travail collaboratif. En activant cette option, vous enverrez des invitations que Microsoft Exchange pourra comprendre.
+& Nommage des invitations compatible avec Exchange
+Envoyer des réponses aux invitations que Microsoft Outlook est capable de comprendre.
+Réponses aux invitations compatibles avec Outlook
+Lorsque ceci est activé, l'utilisateur ne voit pas l'éditeur de courriel. Les courriers électroniques d'invitations sont envoyés automatiquement.
+Envoi d'invitation & automatique
+Options
+Supprimer les courriels d'invitations après qu'une réponse ait été envoyéeCorresponds to Folder- > Move All Messages to Trash
+Confirmation lors du déplacement de tous les messages dans la corbeille
+Ne pas expirer les messages importantsto be continued with "do not loop", "loop in current folder", and "loop in all folders"
+& Lors de la recherche de messages non lus & #160;: what's this help
+Ne pas boucler
+Boucler dans le dossier courant
+Boucler dans tous les dossiers
+Boucler dans tous les dossiers marquésto be continued with "jump to first new message", "jump to first unread or new message", and "jump to last selected message"
+Lors de l'entrée dans un dossier & #160;:
+Aller au premier nouveau message
+Aller au premier message non lu ou nouveau
+Aller au dernier message sélectionné
+Marquer le message sélectionné comme étant lu après
+sec
+& Demander l'action à effectuer après avoir déposé des messages vers un autre dossierto be continued with "flat files" and "directories", resp.
+Par défaut, les dossiers de stockage des & messages sur le disque sont & #160;: what's this help
+Ceci permet de choisir le format par défaut des boîtes à lettres locales & #160;: mbox & #160;: les dossiers de messages de KMail sont représentés chacun par un seul fichier. Les messages sont séparés les uns des autres dans un tel fichier par une ligne commençant par « & #160; From & #160; ». Cela économise l'espace disque mais peut s'avérer plus fragile, en particulier lorsque vous déplacez des messages d'un dossier à un autre. maildir & #160;: les dossiers de messages de KMail sont représentés par de vrais dossiers sur le disque. Chaque message est stocké dans un fichier indépendant. Ce n'est pas très économique en espace disque mais est plus fiable, par exemple lorsque vous déplacez des messages d'un dossier à un autre.
+Fichiers plats (format « & #160; mbox & #160; »)
+Dossiers (format « & #160; maildir & #160; »)
+Ouvrir ce dossier au & démarrage & #160;:
+Vider la corbeille en quittant le programme
+Unités de & quotas & #160;:
+Cette action permet d'éviter à l'expiration automatique des anciens messages de supprimer (ou déplacer vers un dossier archive) les messages importants ou marqués comme à effectuer.
+Envoyer les messages en attente lors de la vérification du courriel
+Sélectionnez si vous souhaitez que KMail envoie les messages de la boîte d'envoi lors de toutes les vérifications de nouveaux messages, uniquement lors des vérifications manuelles, ou si vous ne voulez pas qu'ils soient envoyés automatiquement.
+Déplacer automatiquement les courriels non synchronisés des dossiers ayant des droits d'accès insuffisants
+S'il existe de nouveaux messages dans un dossier, n'ayant pas encore été envoyés au serveur, et que vous n'avez pas les droits suffisants pour effectuer l'envoi, alors ils seront déplacés vers un dossier « & #160; perdus et trouvés & #160; ».
+Autoriser les drapeaux locaux dans les dossiers en lecture seule
+Ce paramètre permet aux administrateurs de définir une valeur minimale entre deux vérifications de courriel. L'utilisateur ne pourra pas définir une valeur inférieure à celle précisée ici.
+Le dernier dossier sélectionné dans la fenêtre de sélection des dossiers.
+Ne pas employer le paramètre « & #160; umask & #160; » de l'utilisateur et conserver le mode « & #160; lecture & #160; / écriture pour le propriétaire uniquement & #160; ».
+Politique d'affichage de l'icône dans la boîte à miniatures
+Quitter l'application lorsque la fenêtre principale est fermée, même si l'icône dans la boîte à miniatures est active.
+Détailler la notification d'arrivée de nouveaux messages
+Si cette option est cochée, la notification affiche le nombre de nouveaux messages pour chaque dossier. Sinon, elle vous indique simplement que du courriel est arrivé.
+Utiliser l'indicateur de message
+Si cette option est activée et qu'un indicateur de messages est installé sur le bureau, l'indicateur affichera alors les dossiers contenant des messages non lus.
+& Nom de l'éditeur & #160;:
+Utiliser un éditeur de message externe
+Le seuil d'avertissement utilisateur d'un dossier proche de la limite de son quota.
+Le séparateur de noms de fichiers pour les fichiers maildir « & #160; uniq: info & #160; » - consultez la spécification maildir originale sur « & #160; http: / /cr. yp. to/ proto/ maildir. html & #160; » Le paramètre par défaut dépend du système d'exploitation actuel. Windows & #160;: « & #160;! & #160; », les autres & #160;; « & #160;: & #160; ».
+Activer les fonctionnalités pour le travail en groupe
+Inverser les champs expéditeur et destinataire lors des réponses aux réponses
+L'implantation du standard iCalendar dans Microsoft Outlook souffre d'imperfections auxquelles cette option tente de pallier. Si certains utilisateurs de ce logiciel ne peuvent pas lire vos réponses, essayez d'activer cette option.
+Envoyer les invitations dans le corps du message
+L'implantation du standard iCalendar dans Microsoft Outlook souffre d'imperfections auxquelles cette option tente de pallier. Si certains utilisateurs de ce logiciel ne peuvent pas lire vos invitations, essayez d'activer cette option.
+Nommage des invitations compatible avec Exchange
+Microsoft Outlook, utilisé en combinaison avec le serveur Microsoft Exchange, a des problèmes pour analyser les standards des courriels de travail collaboratif. En activant cette option, vous enverrez des invitations de travail collaboratif que Microsoft Exchange pourra comprendre.
+Lors de la réponse aux invitations, utiliser une réponse que Microsoft Outlook est capable de comprendre.
+Envoi d'invitation automatique
+Lorsque cette option est cochée, vous ne verrez plus l'éditeur du courriel. À la place, tous les courriers électroniques d'invitations sont envoyés automatiquement. Si vous souhaitez consulter le courriel avant de l'envoyer, vous pouvez décocher cette option. Cependant, soyez conscient que le texte dans l'éditeur utilise la syntaxe iCalendar, et que vous ne devriez pas essayer de le retoucher à la main.
+Lorsque cette option est activée, les courriels d'invitations auxquels vous avez répondus seront déplacés dans le dossier corbeille, une fois la réponse envoyée correctement.
+L'activation de cette option permet d'enregistrer les entrées des applications Kontact (KOrganizer, KAddressBook et KNotes). Si vous activez cette fonction, il faut également que les applications utilisent la ressource IMAP. Cela s'effectue dans la configuration système de KDE.
+L'affichage des dossiers contenant les ressources IMAP est souvent sans intérêt. Si vous souhaitez tout de même les voir, vous pouvez le définir ici.
+Si le compte utilisé pour stocker des informations de travail collaboratif n'est pas affecté à la gestion classique de courriels, sélectionnez cette option pour que KMail n'affiche que les dossiers de travail collaboratif qu'il contient. Cette option est utile si vous gérer votre courriel normal par un compte IMAP en ligne additionnel.
+Choisissez le format de stockage des dossiers de travail en groupe. Le format par défaut est d'utiliser les standards « & #160; ical & #160; » (pour les dossiers de calendrier) et « & #160; vcard & #160; » (pour les dossiers de carnet d'adresses). Ce format permet de rendre disponibles toutes les possibilités de Kontact. Le format XML de Kolab utilise un schéma personnalisé qui correspond plus précisément à celui utilisé dans Outlook. Ce format permet une compatibilité accrue avec Outlook, lors de l'utilisation d'un serveur Kolab ou d'une solution compatible.
+Ceci permet de choisir le dossier parent des dossiers des ressources IMAP. Par défaut, le serveur Kolab choisit la boîte de réception IMAP.
+L'identifiant du compte contenant les dossiers des ressources IMAP.
+Si vous voulez définir le nom des dossiers IMAP dans votre langue, vous pouvez choisir parmi les langues disponibles. Notez que seule la compatibilité avec Microsoft Outlook justifie cette option. Cependant, c'est une mauvaise idée de l'activer, car il sera alors impossible de changer la langue. N'utilisez donc cette option que si vous n'avez pas le choix.
+Filtrer uniquement les courriels venant des boîtes de réception IMAP déconnectées.
+Filtrer également les nouveaux courriels venant des dossier de travail collaboratif.
+Synchroniser les changements de travail en groupe dans les dossiers DIMAP immédiatement après la mise en ligne.
+Ceci permet d'afficher ou non l'introduction de KMail.
+Nombre de connexions maximales par serveur
+Ceci peut être utilisé pour limiter le nombre de connexions par serveur lors de la vérification de nouveaux messages. Par défaut, le nombre de connexions est illimité (0).
+Afficher le champ de recherche rapide
+Masquer la boîte locale si elle est inutilisée
+Transmettre par défaut dans le corps du message.
+Autoriser le caractère point-virgule (« & #160;; & #160; ») comme séparateur pour la rédaction de messages.
+Utiliser le jeu de caractères du message d'origine pour, si possible, répondre ou transmettre.
+Ajouter automatiquement la signature
+Se souvenir de cette identité, de telle manière qu'elle sera utilisée également dans les futurs éditeurs de courriels.
+Se souvenir de ce dossier pour les éléments envoyés, de façon à ce qu'il soit également utilisé dans les futurs éditeurs de courriels.
+Se souvenir de cet agent de transport de courriel, de telle manière qu'il sera utilisé également dans les futures fenêtres d'édition.
+Césure automatique à la colonne & #160;:
+Utiliser une police à largeur fixe
+Avertir si le nombre de destinataires dépasse
+Si le nombre de destinataires dépasse cette valeur, KMail vous avertira et demandera une confirmation avant d'envoyer le courriel. Cet avertissement peut être désactivé.
+Activez cette option pour rendre compréhensibles à Outlook(tm) les noms des pièces jointes contenant des caractères non anglais.
+Notifications de réponse automatique au & message
+Activez cette option si vous voulez que KMail demande un accusé de réception (MDN) pour chaque message que vous envoyez. Le choix de cette option affecte tous les messages. Vous pouvez activer ou désactiver individuellement les accusés de réception dans l'éditeur de courriels en utilisant le menu « & #160; Options & #160; / Accusés de réception & #160; ».
+Utiliser les adresses récentes pour l' auto-complètement
+Désactivez cette option si vous ne souhaitez pas que les adresses récentes apparaissent dans la liste d'adresses suggérées dans le composeur.
+Intervalle d'enregistrement automatique & #160;:
+Une copie de sauvegarde du texte présent dans l'éditeur de courriels peut être créée à intervalles réguliers. L'intervalle utilisé pour créer les sauvegardes est défini ici. Vous pouvez désactiver la sauvegarde automatique en lui affectant la valeur & #160; 0.
+Insérer la signature avant le texte cité
+Ajouter un séparateur à la signature
+Remplacer les préfixes reconnus par « & #160; Re & #160;: & #160; »
+Remplacer les préfixes reconnus par « & #160; Fwd & #160;: & #160; »
+& Utiliser les citations élégantes
+Nombre maximal de lignes dans l'éditeur de destinataires.
+Liste des types de parties de messages permettant d'enlever les courriels transmis dans le contenu d'un autre message.
+Afficher le gestionnaire de fragments de texte et le panneau d'insertion dans l'éditeur.
+La taille maximale en Mo que les pièces jointes peuvent avoir (-1 pour aucun limite).
+Afficher le journal détaillé de GnuPG même après les opérations de chiffrement qui se sont déroulées correctement.
+Affichage du panneau d'aperçu des messages
+Ne pas afficher de panneau d'aperçu des messages
+Afficher un panneau d'aperçu des messages en dessous de la liste des messages
+Afficher un panneau d'aperçu des messages à côté de la liste des messages
+Longue liste de dossiers
+Liste de dossiers courte
+Sélectionner le style d'affichage des entêtes
+Combien d'entêtes doivent être affichés
+Certains courriers électroniques, et plus particulièrement ceux générés automatiquement, ne précisent pas l'encodage de caractères permettant de les afficher convenablement. Dans ce cas, un encodage de caractères spécifique sera utilisé, et vous pouvez le configurer ici. Choisissez l'encodage de caractères généralement utilisé dans votre partie du monde. L'encodage du système sera utilisé par défaut.
+Le changement de ce champ à l'option « & #160; Auto & #160; » forcera l'utilisation de l'encodage précisé pour tous les courriels, quel que soit celui qu'ils préconisent.
+Remplacer les smileys par des émoticônes
+Activez cette option si vous souhaitez que les smileys comme « & #160;: -) & #160; » apparaissent dans les messages comme des émoticônes (de petites images).
+Afficher les marques « & #160; Déplier & #160; / Réduire & #160; » pour les citations
+Activer cette option pour afficher les différents niveaux de citations. Désactivez -la pour les cacher.
+Niveau de réduction automatique & #160;:
+Réduire la taille de la police pour les citations
+Activer cette option pour afficher les citations dans une police plus petite.
+Afficher le client de messagerie dans les en-têtes décoratifs
+Activer cette option pour afficher des lignes comportant le « & #160; X-Mailer & #160; » et le client de messagerie dans les en-têtes décoratifs.
+Autoriser la suppression des pièces jointes des courriels existants.
+Autoriser la modification des pièces jointes des courriels existants.
+Toujours déchiffrer les messages à l'affichage, ou demander avant chaque déchiffrage
+Emplacement de l'affichage de la structure du message
+Au-dessus du panneau de message
+Au-dessous du panneau de message
+Affichage de la structure du message
+Ne jamais afficher
+Toujours afficher
+Afficher la barre d'état HTML
+Afficher l'état de courrier indésirable dans les en-têtes décoratifs
+Nombre d'adresses à afficher avant la fermeture
+Manière d'afficher les pièces jointes
+Envoyer les accusés de réception avec un expéditeur vide
+Envoyer les accusés de réception avec un expéditeur vide. Certains serveurs peuvent être configurés pour refuser ce genre de messages. Si vous avez des problèmes pour envoyer les accusés de réception, décochez cette option.
+Modèle pour les nouveaux messages
+Modèle de message pour la réponse
+Modèle de message pour la réponse à tous
+Modèle de message pour la transmission
+Marques de citation
+Autoriser la modification de la configuration des réponses « & #160; Pas au bureau & #160; » par l'utilisateur.
+Autoriser les utilisateurs à envoyer des scripts Sieve « & #160; Pas au bureau & #160; », mais leur interdire le changement de la configuration, comme le domaine demandant une réaction et le sélecteur de réaction contre les courriers indésirables.
+Autoriser l'envoi des réponses « & #160; Pas au bureau & #160; » aux courriels de ce domaine uniquement.
+Autoriser l'envoi des réponses « & #160; Pas au bureau & #160; » aux courriers indésirables.
+Vérifier s'il existe toujours une réponse « & #160; Pas au bureau & #160; » active au démarrage de KMail.
+Afficher des infobulles pour les messages et les en-têtes des groupes
+Activer cette option pour afficher des infobulles lorsque vous survolez à la souris un message de la liste.
+Masquer la barre d'onglets si un seul onglet est ouvert
+Lorsque cette option est activée, la barre d'onglets ne s'affichera que lorsqu'au moins deux onglets sont ouverts. Si cette option n'est pas cochée, la barre sera toujours affichée. Vous pouvez toujours ouvrir un dossier dans un nouvel onglet en cliquant dessus avec le bouton central de la souris, même si la barre est masquée.
+Text de message cité
+Texte du message tel que
+Identifiant du message
+Date au format court
+Date en anglais
+Jour de la semaine
+Heure
+Heure au format long
+Heure en anglais
+Adresse du destinataire
+Nom complet du destinataire
+Prénom du destinataire
+Nom du destinataire
+Adresse de la personne en copie
+Nom complet de la personne en copie
+Prénom de la personne en copie
+Nom de la personne en copie
+Adresse de l' expéditeur
+Nom complet de l' expéditeur
+Prénom de l' expéditeur
+Nom de l' expéditeur
+Adresses de tous les destinatairesTemplate value for subject of the message
+En-têtes citées
+En-têtes telles que
+Contenu de l' en-tête
+Nom complet de l'expéditeurTemplate subject command.
+Transmettre le corps du message original et insérer le résultat comme citation
+Transmettre le corps du message original et insérer le résultat tel que
+Transmettre le message original avec ses en-têtes et insérer le résultat tel que
+Transmettre le corps du message actuel et insérer le résultat tel que
+Transmettre le corps du message actuel et remplacer par le résultatInserts user signature, also known as footer, into message
+Insérer le contenu d'un fichierAll characters, up to and including the next newline, are discarded without performing any macro expansion
+Ne rien faire jusqu'à la prochaine ligne
+Commentaire du modèle
+Aucune opération
+Effacer le message généré
+Activer le débogage
+Désactiver le débogage
+& Insérer une commande
+Insérer une commande
+Message original
+Message actuel
+Exécuter avec des programmes externesMiscellaneous template commands menu
+Divers
+L'index de la boîte « & #160; %1 & #160; » correspond à une version inconnue de KMail (%2). Il est possible de le recréer à partir de votre boîte aux lettres, mais certaines informations, comme l'état des messages, peuvent être perdues. Voulez -vous recréer l'index de votre boîte à lettres & #160;?
+Recréer
+Ne pas recréer
+L'index de la boîte « & #160; %1 & #160; » est corrompu et va maintenant être actualisé, mais certaines informations, comme l'état des messages, seront perdues.
+Dépannage du cache IMAP
+Dépannage du cache IMAP. Si vous avez des problèmes en synchronisant un dossier IMAP, vous devez d'abord essayer de reconstruire le fichier index. Cela peut prendre un certain temps mais ne causera aucun problème. Si cela n'est pas suffisant vous pouvez essayer de rafraîchir le cache IMAP. Si vous effectuez cette opération, vous perdrez tous vos changements sur les dossiers et sous-dossiers locaux.
+Reconstruire l'index@label: listbox Scope used when rebuilding index.
+Niveau & #160;:
+Dossier courant uniquement
+Dossier courant et ses sous-dossiers
+Tous les dossiers de ce compte
+Rafraîchir le & cache
+Impossible de lire le fichier de cache des identifiants UID pour le dossier « & #160; %1 & #160; ». Il y a probablement un problème de permissions sur le disque, ou ce fichier est corrompu.
+Impossible d'écrire dans le fichier de cache des identifiants UID pour le dossier « & #160; %1 & #160; ». Il y a probablement un problème de permissions dans le système de fichiers.
+Vous devez resynchroniser vos données avec le serveur avant de renommer des dossiers IMAP.
+Pas de compte configuré pour ce dossier. Veuillez essayer de lancer une synchronisation avant cela.
+Voulez -vous vraiment rafraîchir le cache IMAP du dossier %1 et tous ses sous-dossiers & #160;? Cette opération supprimera toutes le modifications que vous avez faites en local aux dossiers.
+L'index de ce dossier a été recréé.
+Le dossier « & #160; %1 & #160; » n'était pas prêt pour une synchronisation (état & #160;: « & #160; %2 & #160; »). Voulez -vous réinitialiser l'état de dossier et relancer une synchronisation & #160;?
+Réinitialisation et synchronisation
+Synchronisation
+Connexion à %1
+Vérification des permissions
+Renommage du dossier
+Réception de la liste des dossiers
+Erreur lors de la réception de la liste des dossiers
+Réception des sous-dossiers
+Suppression des dossiers du serveur
+Réception de la liste des messages
+Aucun message à supprimer...
+Purger les messages supprimés
+Réception des nouveaux messages
+Aucun nouveau message sur le serveur
+Gestion des vérifications d' annotations
+Réception des annotations
+Détermination des annotations
+Détermination des permissions
+Réception des permissions
+Réception des informations de quota
+Actualiser le cache des fichiers
+Synchronisation terminée
+Envoi des messages au serveur
+Vos droits d'accès au dossier %1 ont été restreint, il ne vous est plus possible d'y ajouter des messages.
+Droits d'accès révoqués
+Aucun message à envoyer au serveur
+Envoi de l'état des messages au serveur
+Création des sous-dossiers sur le serveur
+Il semble que les courriels sur le serveur dans le dossier %1 ont été supprimés. Voulez -vous les supprimer localement également & #160;? Identifiants UID & #160;: %2
+Suppression des messages effacés sur le serveur
+Vérification de la validité du dossier
+Échec intéressant de l'affichage du contenu du dossier.
+Réception des dossiers de l'espace de noms « & #160; %1 & #160; »
+Il semble que le dossier %1 a été supprimé. Voulez -vous le supprimer du serveur & #160;?
+Annulé
+Le serveur IMAP « & #160; %1 & #160; » ne gère pas les annotations IMAP. Le stockage XML ne peut donc pas être utilisé sur ce serveur & #160;; veuillez configurer KMail différemment.
+Le serveur IMAP « & #160; %1 & #160; » ne gère pas les annotations. Le stockage XML ne peut donc pas être utilisé sur ce serveur & #160;; veuillez configurer KMail différemment.
+Erreur lors de la détermination de l'annotation & #160;:
+perdus+trouvés
+Il existe de nouveaux messages dans le dossier %1 n'ayant pas encore été envoyés au serveur, mais soit ce dossier a déjà été supprimé du serveur, soit vous n'avez pas les droits d'accès suffisants permettant d'envoyer ces messages. Les messages affectés vont maintenant être déplacés vers %2 pour éviter des pertes de données.
+Droits d'accès insuffisants
+Il existe, dans ce dossier (%1), de nouveaux messages n'ayant pas encore été envoyés au serveur, mais il semble que vous n'ayez pas les droits suffisants pour les envoyer. Veuillez contacter votre administrateur pour qu'il autorise votre compte à envoyer de nouveaux messages, ou déplacez -les hors de ce dossier. Voulez -vous déplacer ces messages dans un autre dossier maintenant & #160;?
+Déplacer
+Ne pas déplacer
+L'URL source est mal formulée
+Message d'erreur du module d'entrée & #160; / sortie
+Votre serveur POP3 (compte & #160;: %1) ne gère pas la commande « & #160; UIDL & #160; ». Cette commande est nécessaire pour déterminer de façon fiable quels messages situés sur le serveur ont déjà été lus. L'option permettant de laisser des messages sur le serveur ne fonctionnera donc pas correctement.
+Réception du message %1 sur %2 (%3 sur %4 & #160; ko) pour « & #160; %5@%6 & #160; » (%7 & #160; ko restent sur le serveur).
+Réception du message %1 sur %2 (%3 sur %4 & #160; ko) pour « & #160; %5@%6 & #160; ».
+Impossible de terminer l'opération LIST.
+Erreur lors de la vérification du courriel du compte %1 & #160;: %2
+Votre serveur POP3 (compte & #160;: %1) ne gère pas la commande TOP. Il n'est pas donc pas possible de recevoir uniquement les en-têtes des messages volumineux avant de les télécharger. %1: identity name. Used in the config dialog, section Identity, to indicate the default identity
+%1 (par défaut)
+Nom de l' identité
+Adresse électronique
+Coller & avec des marques de citation
+Ajouter des marques de citation
+Supprimer les marques de citation
+Ajouter une image & incorporée
+Ajouter comme & pièce jointe
+Nom de la pièce jointe & #160;:
+Ajouter comme & texte@label: listbox Recipient of an email message.
+Type de destinataire non défini @label: listbox
+Sélectionnez le type de destinataire@action: button
+Enregistrer la liste... @info: tooltip
+Enregistrer les destinataires comme une liste de distribution@action: button Open recipient selection dialog.
+Sélectionner... @info: tooltip
+Sélectionnez les destinataires depuis le carnet d'adresses@info: status No recipients selected
+Aucun destinataire@info: status Number of recipients selected
+À & #160;: %1@info: tooltip %1 list of emails
+CC & #160;: %1@info: tooltip %1 list of emails
+BCC & #160;: %1@info: status
+%1 entrées conservées sur les %2 existantes dans la liste de destinataires.
+Mainteneur
+Auteur originel
+Ancien mainteneur
+Ancien co-mainteneur
+Développeur principal
+Ancien développeur principal
+Documentation
+Notifier l'arrivée de nouveaux messages dans la boîte à miniatures
+Gestion de PGP version 6 et autres perfectionnements pour la prise en charge du chiffrement
+Gestion originale du chiffrement Gestion de PGP version 2 et version 5
+Gestion de GnuPG
+Nouvelle liste de message et nouvelle arborescence
+Gestion des antivirus
+Règles de filtrage POP
+Tests d'utilisations et améliorations
+Coordinateur des projets Ägypten et Kroupware
+Amélioration de la gestion du HTML
+Bêta testeur de la gestion de PGP 6
+Estampille temporelle pour les messages ayant l'état « & #160; transmission terminée & #160; »
+Clés de chiffrement multiples par adresses
+Le client de messagerie de KDE
+(c) 1997-2009, les développeurs de KMail
+Demande de certificat de signature
+Veuillez créer un certificat à partir de la pièce jointe et le renvoyer à l'expéditeur.
+KMail est maintenant en mode déconnecté, les tâches réseaux sont suspendues
+KMail est maintenant en mode en ligne, les tâches réseaux reprennent
+KMail est pour le moment en mode hors ligne. Que voulez -vous faire & #160;?
+En ligne & #160; / Hors ligne
+Vous n'avez pas la permission de lire ou d'écrire dans votre dossier « & #160; Boîte de réception & #160; ».
+Boîte d' envoi
+Vous n'avez pas la permission de lire ou d'écrire dans votre dossier « & #160; À envoyer & #160; ».
+Messages envoyés
+Vous n'avez pas la permission de lire ou d'écrire dans votre dossier « & #160; Envoyés & #160; ».
+Corbeille
+Vous n'avez pas la permission de lire ou d'écrire dans votre dossier « & #160; Corbeille & #160; ».
+Brouillons
+Vous n'avez pas la permission de lire ou d'écrire dans votre dossier « & #160; Brouillons & #160; ».
+Modèles
+Vous n'avez pas la permission de lire ou d'écrire dans le dossier des modèles. %1-%3 is the application name, %4-%7 are folder path
+Le dossier %4 existe. %1 utilise maintenant le dossier %5 pour ses messages. %2 peut déplacer le contenu de %6 dans ce dossier à votre place, bien que cela remplacera les fichiers ayant le même nom dans %7. Voulez -vous que %3 déplace les fichiers de courriel maintenant & #160;? %1-%3 is the application name, %4-%6 are folder path
+Le dossier %4 existe. %1 utilise maintenant le dossier %5 pour ses messages. %2 peut déplacer le contenu de %6 dans ce dossier à votre place. Voulez -vous que %3 déplace les fichiers de courriel maintenant & #160;?
+Migrer les fichiers de courriel & #160;?
+Le fichier « & #160; %1 & #160; » existe. Voulez -vous le remplacer & #160;?
+Enregistrer dans un fichier
+& Remplacer
+KMail a rencontré une erreur fatale et va se terminer maintenant
+KMail a eu un problème critique et va se terminer. Le problème est & #160;: %1
+Voulez -vous vraiment vider les corbeilles de tous les comptes & #160;?
+Accusé de réception du message
+L'envoi « & #160; refusé & #160; »
+& Ignorer
+& EnvoyerView- >
+& En-têtes
+Choisir le style d'affichage des en-têtes de messagesView- > headers- >
+En-têtes d' entreprise
+Afficher la liste des en-têtes dans un style entrepriseView- > headers- >
+En-têtes & fantaisie
+Afficher la liste des en-têtes en format décoratifView- > headers- >
+En-têtes & courts
+Afficher une brève liste d'en-têtes de messagesView- > headers- >
+En-têtes & standards
+Afficher la liste des en-têtes de messages au format standardView- > headers- >
+En-têtes & longs
+Afficher la liste des en-têtes de messages au format longView- > headers- >
+& Tous les en-têtes
+Afficher tous les types d'en-têtes des messagesView- >
+& Pièces jointes
+Choix du style d'affichage des pièces jointesView- > attachments- >
+En & icônes
+Afficher toutes les pièces jointes en icônes. Cliquez pour les voir. View- > attachments- >
+Élégantes
+Afficher les pièces jointes comme suggéré par l'expéditeur. View- > attachments- >
+& Dans le corps du message
+Afficher toutes les pièces jointes dans le corps du message (si possible)View- > attachments- >
+& Cachées
+Ne pas afficher les pièces jointes dans l'afficheur de messages
+Utiliser l' encodage
+Nouveau message à...
+Répondre à...
+Transmettre à...
+Ouvrir dans le carnet d' adresses
+Sélectionner tout le texte
+Copier l'adresse du lien
+Ouvrir l' URL
+Marquer ce lien
+Enregistrer le lien sous...
+Afficher la structure du message
+Remonter dans le message
+Descendre dans le message
+Remonter dans le message (plus)
+Descendre dans le message (plus)
+Basculer vers l'affichage HTML
+Basculer entre l'affichage HTML et le texte simple
+Le client de messagerie du bureau KDE.
+Réception du contenu du dossier Veuillez patienter... nbsp;
+Hors ligne KMail est actuellement en mode hors ligne. Cliquez ici pour être à nouveau en ligne... nbsp; %1: KMail version; %2: help: / / URL; %3: homepage URL; %4: generated list of new features; %5: First-time user text (only shown on first start); %6: generated list of important changes; --- end of comment ---
+Bienvenue dans KMail %1 KMail est le client de messagerie électronique du bureau KDE. Il est conçu pour respecter les standards de messagerie d'Internet, comme « & #160; MIME & #160; », « & #160; SMTP & #160; », « & #160; POP3 & #160; » et « & #160; IMAP & #160; ». KMail dispose de nombreuses fonctionnalités décrites dans sa documentation Son site Internet fournit des informations complémentaires sur les nouvelles versions %6 %4 %5 Nous espérons que vous apprécierez KMail. Merci, & #160; & #160; L'équipe de KMail.
+Voici quelques unes des nouvelles fonctionnalités de cette version de KMail (en comparaison avec KMail %1, faisant partie de KDE %2) & #160;:
+Prenez un moment pour configurer KMail dans le menu « & #160; Configuration & #160; » -gt; « & #160; Configurer KMail & #160; ». Vous devez créer au moins une identité principale et une boîte à lettres (constituée d'un compte d'envoi et d'un compte de réception).
+Changements importants (par rapport à KMail %1) & #160;:
+%1
+(partie corps)
+Impossible d'envoyer l'accusé de réception.
+Aller à
+Enregistrer sous...
+Déchiffrer avec Chiasmus...
+Afficher les pièces jointes & #160;: %1
+La suppression de cette pièce jointe peut rendre non valable la signature numérique de ce message.
+La modification de cette pièce jointe peut rendre non valable la signature numérique de ce message.
+Modifier
+Pièces jointes & #160;:
+Patientez
+Adresse copiée dans le presse-papiers.
+URL copiée dans le presse-papiers. @info
+Le fichier %1 existe déjà. Voulez -vous le remplacer & #160;?
+Message en texte simple
+Le message a été supprimé lors de son enregistrement. Il ne sera pas enregistré.
+Ouvrir un message
+Le fichier ne contient pas de message.
+Le fichier contient plusieurs messages. Seul le premier est affiché.
+Voulez -vous vraiment transmettre les messages sélectionnés en tant que pièce jointe dans un seul message (sous la même forme qu'une réduction MIME), ou en tant que messages individuels & #160;?
+Envoyer le condensé
+Envoyer individuellement
+Ceci est un condensé MIME retransmis. Le contenu du message est dans les pièces jointes.
+Espace disque libre insuffisant & #160;?
+Corruption du cache IMAP détectée dans le dossier %1. Annulation de la copie des messages.
+Déplacement des messages
+Suppression des messages
+Ouverture de l'URL... @info
+Voulez -vous vraiment exécuter la commande %1 & #160;?
+Exécuter
+Aucune pièce jointe à enregistrer n'a été trouvée.
+Enregistrer les pièces jointes sousfilename for an unnamed attachment
+pièce_jointe.1
+Enregistrer la pièce jointe sousfilename for the %1-th unnamed attachment
+pièce_jointe. %1
+Un fichier nommé %1 existe déjà. Voulez -vous l'écraser & #160;?
+Le fichier existe déjà.
+Écraser
+Tout écraser
+La partie %1 du message est chiffrée. Voulez -vous conserver le chiffrage lors de l'enregistrement & #160;?
+KMail & #160; - Question
+Conserver le chiffrement
+Ne pas conserver
+La partie %1 du message est signée. Voulez -vous conserver la signature en enregistrant & #160;?
+Conserver la signature1 = file name, 2 = error string
+Impossible d'écrire le fichier %1%2
+Erreur d'enregistrement de la pièce jointe
+De & #160;: %1 Pour & #160;: %2 Sujet & #160;: %3
+Courriel & #160;: %1
+& Identité & #160;:
+& Dictionnaire & #160;:
+Dossier des messages & envoyés & #160;:
+& Transport du courriel & #160;: sender address field
+& De & #160;:
+& Répondre à & #160;: @label: textbox Subject of email.
+& Sujet & #160;: @option: check Sticky identity.
+Permanent
+Échec de l'enregistrement automatique du message comme %1. Raison & #160;: %2
+Échec de l'enregistrement automatique
+& Envoyer le courriel
+Envoyer le courriel via
+Envoyer
+Envoyer plus tard via
+Placer en attente d' envoi
+Enregistrer comme & brouillon
+Enregistrer comme modèle
+& Insérer un fichier...
+& Insérer un fichier récent
+& Nouvel éditeur
+Nouvelle fenêtre principale
+Sélectionner les & destinataires...
+Enregistrer la liste de & distribution...
+Coller comme & pièce jointe
+Supprimer les espaces@action: inmenu Mark the email as urgent.
+& Urgent
+Accusé de & réception
+Utiliser l' encodage
+Retour à la ligne
+& Fragments
+Correction orthographique & automatique
+Détection automatique
+Formatage (HTML)
+HTML
+Tous les champs
+& Identité
+& Dictionnaire
+Dossier des messages envoyés
+& Transport du courriel
+De
+& Répondre à@action: inmenu Show the subject in the composer window.
+& Sujet
+Ajouter la signature
+Ajouter la signature
+Insérer la signature à la position du curseur
+Joindre une clé publique...
+Joindre ma & clé publique
+& Joindre un fichier...
+& Joindre
+& Supprimer la pièce jointe
+& Enregistrer la pièce jointe sous...
+Propriétés de la pièce jointe
+Vérificateur orthographique...
+Vérification orthographique
+Chiffrer le message avec Chiasmus...
+& Chiffrer le message
+& Signer le message
+& Format de message chiffré
+Réinitialiser les paramètres des polices
+Réinitialiser la police
+Configurer KMail...
+Vérification de l'orthographe & #160;: %1
+Colonne & #160;: %1 Shows the linenumber of the cursor position.
+Ligne & #160;: %1
+Enregistrer de nouveau comme modèle
+Enregistrer comme brouillon
+Enregistrer de nouveau ce message dans le dossier des modèles. Il pourra alors être utilisé plus tard.
+Enregistrer ce message dans le dossier des brouillons. Il pourra alors être modifié et envoyé plus tard.
+Voulez -vous enregistrer le message pour plus tard ou le détruire & #160;?
+Fermer l' éditeur
+Le message que vous avez composé fait référence à un fichier joint, mais vous n'avez rien joint. Voulez -vous joindre un fichier à votre message & #160;?
+Rappel de fichier joint
+Envoyer tel quel
+KMail ne peut pas trouver l'emplacement de la pièce jointe (%1). Vous devez spécifier un emplacement complet pour ajouter un fichier comme pièce jointe.
+Votre administrateur n'autorise pas les pièces jointes supérieures à %1 Mo.
+Joindre un fichier
+Une erreur est survenue lors de l'exportation de la clé depuis le module & #160;: %1
+Échec de l'exportation de la clé
+Exportation de la clé...
+Clé OpenPGP 0x%1
+Joindre la clé publique OpenPGP
+Choisissez la clé publique à joindre au message. to view
+Modifier avec...
+Ajouter une pièce jointe...
+Impossible pour KMail de compresser le fichier.
+Le fichier compressé possède une taille plus importante que l'original. Voulez -vous conserver le fichier original & #160;? Do not compress
+Conserver
+Impossible pour KMail de décompresser le fichier. @info
+Impossible pour KMail de créer le fichier temporaire %1. Il n'est donc pas possible de modifier cette pièce jointe.
+Enregistrer la pièce jointe sous
+Insérer le texte du presse-papiers comme pièce jointe
+Vous avez demandé à ce que les messages soient chiffrés pour vous -même, mais l'identité sélectionnée ne possède pas de clé de chiffrement (OpenPGP ou S/ MIME). Veuillez sélectionner la ou les clés à utiliser dans la configuration de l'identité.
+Clé de chiffrement non définie
+Pour pouvoir signer ce message, vous devez d'abord définir la clé (OpenPGP ou S/ MIME) à utiliser. Vous pouvez la définir pour l'identité actuelle dans la configuration des identités.
+Clé de signature non définie
+KMail est actuellement en mode hors ligne. Votre message sera donc conservé dans la boîte d'envoi en attendant la prochaine mise en ligne.
+Vous devez saisir votre adresse électronique dans le champ « & #160; From & #160;: & #160; ». Définissez également votre adresse de courrier électronique pour pour les identités, de façon à ne plus avoir à le faire pour chaque message.
+Vous devez spécifier au moins un destinataire, soit dans le champ « & #160; À & #160;: & #160; », soit en CC, soit en BCC.
+Aucun destinataire saisi. Voulez -vous tout de même envoyer le message & #160;?
+Aucun destinataire spécifié
+Vous n'avez pas saisi de sujet. Voulez -vous envoyer le message quand même & #160;?
+Aucun sujet spécifié
+& Envoyer tel quel
+& Spécifier le sujet
+& Conserver le marquage, ne pas signer & #160; / & #160; chiffrer
+Conserver le marquage, ne pas chiffrer
+& Conserver le marquage, ne pas signer
+Signer & #160; / & #160; Chiffrer le message & #160;?
+Chiffrer (supprimer le marquage)
+Signer (supprimer le marquage)
+La signature et/ ou le chiffrement intégré des messages HTML n'est pas possible & #160;; voulez -vous supprimer votre marquage & #160;?
+Signer & #160; / & #160; Chiffrer le message & #160;?
+Le dossier des brouillons et modèles personnalisés pour l'identité « & #160; %1 & #160; » n'existe pas (plus). De ce fait, les dossiers par défaut seront utilisés.
+Envoi du message...
+Envoyer la confirmation
+Vous tentez d'envoyer ce message à plus de %1 destinataires. Voulez -vous tout de même envoyer ce courrier électronique & #160;?
+Trop de destinataires
+& Modifier les destinataires
+Désactiver le mode HTML occasionnera la perte de la mise en page. Voulez -vous vraiment continuer & #160;?
+Perdre la mise en page & #160;?
+Perdre la mise en page
+Vérification de l'orthographe activée
+Vérification de l'orthographe désactivée
+Veuillez tout d'abord configurer un module de cryptographie pour utiliser le chiffrement Chiasmus. Vous pouvez effectuer ceci dans l'onglet « & #160; Modules de cryptographie & #160; » de la fenêtre « & #160; Sécurité & #160; » dans la configuration.
+Il semble que « & #160; libkleopatra & #160; » a été compilée sans la gestion de Chiasmus. Vous devriez recompiler « & #160; libkleopatra & #160; » avec l'option « & #160; --enable-chiasmus & #160; ».
+Aucun module Chiasmus configuré
+Aucune clé Chiasmus trouvée
+Sélection de la clé de chiffrement Chiasmus
+Le message sera signé
+Le message ne sera pas signé
+Le message sera chiffré
+Le message ne sera pas chiffré
+Voici la liste des filtres existants. Ils sont traités de haut en bas. Cliquez sur n'importe lequel d'entre eux pour le modifier à l'aide des boutons situés dans moitié droite de la boîte de dialogue.
+Cliquez sur ce bouton pour créer un nouveau filtre. Le filtre sera inséré juste avant celui qui est sélectionné, mais cela peut être modifié après coup. Si vous avez cliqué sur ce bouton accidentellement, vous pouvez annuler cette action en cliquant sur le bouton Supprimer.
+Cliquez sur ce bouton pour copier un filtre. Si vous avez cliqué sur ce bouton accidentellement, vous pouvez annuler cette action en cliquant sur le bouton Supprimer.
+Cliquez sur ce bouton pour supprimer le filtre sélectionné dans la liste ci-dessus. Il est impossible de retrouver un filtre après l'avoir supprimé, mais si vous quittez cette boîte de dialogue en cliquant sur Annuler toutes les actions que vous venez de faire ne seront pas prises en compte.
+Cliquez sur ce bouton pour monter le filtre sélectionné d'un cran dans la liste. Cela est souvent utile, car l'ordre dans lequel les filtres sont affichés est aussi celui dans lequel ils sont appliqués & #160;: celui tout en haut en premier, et ainsi de suite. Si vous avez cliqué sur ce bouton par erreur, vous pouvez revenir à la situation précédente en cliquant sur le bouton Descendre.
+Cliquez sur ce bouton pour descendre le filtre sélectionné d'un cran dans la liste. Cela est souvent utile, car l'ordre dans lequel les filtres sont affichés est aussi celui dans lequel ils sont appliqués & #160;: celui tout en haut en premier, et ainsi de suite. Si vous avez cliqué sur ce bouton par erreur, vous pouvez revenir à la situation précédente en cliquant sur le bouton Monter.
+Cliquez sur ce bouton pour renommer le filtre actuellement sélectionné. Les filtres sont nommés automatiquement s'ils commencent par « & #160; lt; & #160; ». Si vous avez renommé un filtre par erreur et souhaitez une attribution de nom automatique, cliquez sur ce bouton, puis appuyez sur Effacer et enfin sur Valider dans la boîte de dialogue apparaissant.
+Cochez cette option pour forcer la fenêtre de confirmation à apparaître. Cela est utile si vous avez défini des règles qui marquent des messages pour qu'ils soient téléchargés « & #160; plus tard & #160; ». Sans la possibilité de forcer la fenêtre de confirmation à apparaître, ces messages ne pourraient plus jamais être téléchargés si aucun autre message volumineux n'est en attente sur le serveur, ou si vous vouliez modifier les règles de marquage des messages.
+Règles de filtrage POP3
+Règles de filtrage
+Importer...
+Exporter...
+Filtres disponiblesGeneral mail filter settings.
+Critères de filtrage
+Action du filtre
+Options globales
+Toujours afficher les messages « & #160; à télécharger plus tard & #160; » dans la fenêtre de confirmation
+Actions du filtre
+Options avancées
+Appliquer ce filtre aux nouveaux messages & #160;:
+de tous les comptes
+de tous sauf les comptes IMAP
+uniquement des comptes sélectionnés
+Nom du compte
+Appliquer ce filtre & avant d'envoyer les messages
+Le filtre sera déclenché avant que le message soit envoyé et affectera donc la copie locale et le message envoyé. Ceci est nécessaire lorsque la copie du destinataire doit aussi être modifiée.
+Appliquer ce filtre aux messages & envoyés
+Le filtre sera déclenché après que le message soit envoyé et n'affectera que la copie locale de ce message. Si la copie du destinataire doit également être modifiée, veuillez utiliser « & #160; & #160; Appliquer ce filtre avant l'envoi de messages & #160; ».
+Appliquer ce filtre sur & filtrage manuel
+Si ce filtre est applicable, ne pas poursuivre
+Ajouter ce filtre au menu « & #160; Appliquer les filtres & #160; »
+Raccourci clavier & #160;:
+Ajouter en plus ce filtre à la barre d' outils
+Icône pour ce filtre & #160;: Move selected filter up.
+MonterMove selected filter down.
+Descendre
+Renommer... @action: button in filter list manipulator
+Au moins un filtre pointe vers un dossier situé sur un compte IMAP en ligne. Le ou les filtres concernés ne seront appliqués que manuellement et lors du filtrage des nouveaux messages arrivant sur les comptes IMAP.
+Les filtres suivants ne sont pas valables (par exemple, ils ne contiennent pas d'action ou de règle de recherche). Voulez -vous abandonner ou modifier ces filtres & #160;?
+Abandonner
+Les filtres suivants n'ont pas été enregistrés car ils ne sont pas valables (par exemple, ils ne contiennent pas d'action ou de règle de recherche).
+Renommer un filtre
+Renommer le filtre « & #160; %1 & #160; » en & #160;: (laisser blanc pour un nommage automatique)
+Veuillez choisir une action.
+Télécharger le message
+Télécharger le message plus tard
+Supprimer le message du serveur
+L'importation de l'archive « & #160; %1 & #160; » dans le dossier « & #160; %2 & #160; » a été effectuée avec succès.
+Importation terminée.
+Échec de l'importation de l'archive dans le dossier « & #160; %1 & #160; ».
+Échec d'importation de l'archive.
+Impossible de créer le sous-dossier du dossier « & #160; %1 & #160; ».
+Importation du dossier « & #160; %1 & #160; »
+Impossible d'ajouter un message dans le dossier « & #160; %1 & #160; ».
+Sous-dossier inattendu nommé « & #160; %1 & #160; ».
+Le fichier « & #160; %1 & #160; » ne semble pas correspondre à une archive valable.
+Impossible d'ouvrir l'archive « & #160; %1 & #160; »
+Importation de l' archive
+Modifier...
+Affichage de cartes de visites « & #160; VCard & #160; »
+& Importer
+Carte suivante
+Carte & précédente
+Impossible d'analyser la carte de visite au format « & #160; VCard & #160; ».
+Sélection du dossier
+Dossier « & #160; %1 & #160; » inconnu
+Veuillez choisir un dossier
+Propriétés d'expiration du courriel
+Purger les messages lus aprèsExpire messages after %1
+Purger les messages non lus expirés après
+Déplacer les messages expirés vers & #160;:
+Supprimer définitivement les messages expirés
+Remarque & #160;: l'action d'expiration s'appliquera immédiatement après avoir confirmé ces paramètres.
+Veuillez sélectionner le dossier dans lequel placer les messages expirés.
+Aucun dossier sélectionné
+Ce type de compte n'est pas pris en charge.
+Configuration du compte
+Type de compte & #160;: IMAP déconnecté
+Type de compte & #160;: IMAP
+FiltragePlaceholder for the case that there is no folder.
+aucun
+Le serveur ne semble pas gérer les numéros de messages uniques, mais c'est une exigence pour laisser les messages sur le serveur. Comme certains serveurs n'annoncent pas correctement leurs capacités, vous avez encore la possibilité d'activer la fonction prévue pour laisser les messages reçus sur le serveur.
+Le serveur ne semble pas gérer la réception des en-têtes de messages, mais c'est une exigence pour filtrer les messages sur le serveur. Comme certains serveurs n'annoncent pas correctement leurs capacités, vous avez encore la possibilité d'activer le filtrage des messages sur le serveur.
+Veuillez noter que cette fonctionnalité peut perturber certains serveurs POP3 ne gérant pas les canaux de communication et leur faire envoyer des messages endommagés. Ceci est configurable car certains serveurs gèrent les canaux de communication sans l'annoncer. Pour savoir si votre serveur POP3 l'annonce, cliquez sur le bouton « & #160; Vérifier ce que le serveur peut gérer & #160; » situé en bas de l'onglet « & #160; Sécurité & #160; » cette fenêtre. Si votre serveur ne prétend pas le gérer, mais que vous voulez plus de rapidité, vous devrez faire vous -même des tests en vous envoyant des courriers électroniques groupés et en les réceptionnant.
+Veuillez d'abord indiquer un serveur et un port dans l'onglet « & #160; Général & #160; ».
+Le serveur ne semble pas gérer le mécanisme de pipeline & #160;; par conséquent, cette option a été désactivée. Comme certains serveurs n'annoncent pas correctement leurs capacités, vous avez la possibilité d'activer le mécanisme de pipeline. Veuillez noter cependant que cette fonctionnalité peut amener certains serveurs POP ne prenant pas en charge le mécanisme de pipeline à envoyer des messages corrompus. Donc, avant d'utiliser cette fonctionnalité avec un courriel important, testez -la d'abord en vous envoyant un grand nombre de messages tests que vous téléchargerez tous en une fois depuis le serveur POP.
+Le serveur ne semble pas gérer les numéros de messages uniques, mais c'est une exigence pour laisser les messages sur le serveur & #160;; par conséquent, cette option a été désactivée. Comme certains serveurs n'annoncent pas correctement leurs capacités, vous avez encore la possibilité d'activer la fonction prévue pour laisser les messages reçus sur le serveur.
+Le serveur ne semble pas gérer la réception des en-têtes de messages, mais c'est une exigence pour filtrer les messages sur le serveur & #160;; par conséquent, cette option a été désactivée. Comme certains serveurs n'annoncent pas correctement leurs capacités, vous avez encore la possibilité d'activer le filtrage des messages sur le serveur.
+Choisir l' emplacement
+Seuls les fichiers locaux peuvent être actuellement traités.
+Téléchargement des espaces de noms... Empty namespace string.
+PersonnelNamespace accessible for others.
+Autres utilisateurs
+Partagé
+Modifier l'espace de noms « & #160; %1 & #160; »
+Assistant de gestion du courrier indésirable
+Assistant de gestion des antivirus
+Bienvenue dans l'assistant de gestion du courrier indésirable de KMail
+Bienvenue dans l'assistant antivirus de KMail
+Options pour peaufiner la gestion du courrier indésirable
+Options pour peaufiner la gestion des virus
+Résumé des modifications que cet assistant va effectuer
+Gestion des virus
+Gestion du courrier indésirable
+Gestion des courriels incertains
+Classer comme message non sollicité
+Classer comme sollicité
+Recherche de %1...
+Recherche des outils de détection du courrier indésirable terminée.
+Recherche d'outils antivirus terminée.
+Aucun outil de détection du courrier indésirable n'a été trouvé. Veuillez installer votre logiciel de détection, et relancer cet assistant.
+Recherche terminée. Aucun outil antivirus trouvé.
+Les messages considérés comme non sollicités sont marqués comme lus. Ils sont déplacés dans le dossier nommé %1.
+Les messages considérés comme non sollicités sont marqués comme lus. Ils ne sont pas non plus déplacés dans un dossier précis.
+Les messages considérés comme non sollicités ne sont pas marqués comme lus. Ils sont cependant déplacés dans le dossier nommé %1.
+Les messages considérés comme non sollicités ne sont pas marqués comme lus. Ils ne sont pas non plus déplacés dans un dossier précis.
+Le dossier des messages répertoriés comme non sûrs (probablement non sollicités) est %1.
+L'assistant va créer les filtres suivants & #160;: %1
+L'assistant va remplacer les filtres suivants & #160;: %1
+L'assistant va rechercher les outils de détection du courriel indésirable, puis configurer KMail pour les utiliser.
+Vous trouverez ici de l'aide pour configurer les règles de filtrage de KMail afin d'utiliser les outils courants d'élimination des messages non sollicités. L'assistant peut détecter les outils installés sur votre ordinateur et créer les règles de filtrage pour classer les messages à l'aide de ces outils et séparer ceux considérés comme des virus. Dans tous les cas, l'assistant ne prend en compte aucune règle de filtrage existante & #160;: il ajoute toujours les nouvelles règles. Avertissement & #160;: KMail étant bloqué pendant la détection des messages contenant des virus, vous risquez d'être confronté à des problèmes de répondant avec KMail car les opérations visant à supprimer les virus prennent, en général, beaucoup de temps & #160;; vous devrez peut-être envisager la suppression des règles de filtrage créées par l'assistant pour revenir au comportement antérieur.
+Veuillez sélectionner les outils de détection, puis passez à la page suivante.
+& Marquer les messages non sollicités comme lus
+Marquer le courrier indésirable comme lu.
+Déplacer le courrier indésirable vers & #160;:
+Le dossier par défaut du courrier indésirable est la corbeille, mais vous pouvez cependant modifier cela dans la vue ci-dessous.
+Déplacer le courriel & probablement non sollicité vers & #160;:
+Le dossier par défaut est la boîte de réception, mais vous pouvez cependant modifier cela dans la vue ci-dessous. Remarquez que tous les outils ne gèrent pas le classement du courrier indésirable. Si vous n'avez pas sélectionné d'outil en mesure d'effectuer ce traitement, cette sélection est facultative.
+Vérifier les messages à l'aide des outils antivirus
+Laissez les outils antivirus vérifier vos messages. L'assistant créera les outils appropriés. Les messages sont habituellement marqués par les outils, afin que les filtres suivants puissent y réagir et, par exemple, déplacer les messages infectés par un virus dans un dossier spécial.
+Déplacer les messages détectés comme infectés vers le dossier indiqué
+Un filtre pour détecter les messages classés comme étant infectés par un virus et pour déplacer ces messages dans un dossier prédéfini est créé. Le dossier par défaut est le dossier Corbeille, mais vous pouvez changer ce comportement dans l'affichage des dossiers.
+Marquer également les messages détectés en tant qu'infectés comme lus
+Marquez les messages qui ont été classés en tant qu'infectés par un virus comme lus, et déplacez -les dans le dossier indiqué.
+Importer une archive
+& Dossier & #160;:
+Fichier d'archive & #160;:
+Veuillez sélectionner l'archive qui doit être importée.
+Aucun fichier d'archive sélectionné
+Veuillez sélectionner le dossier dans lequel l'archive doit être importée.
+Aucun dossier de destination sélectionné@info: status
+Vérification du compte & #160;: %1@info: status Number of emails retrieved.
+terminée
+Compte « & #160; %1 & #160; »
+Le compte « & #160; %1 & #160; » n'a pas de boîte aux lettres associée. La vérification est annulée. Vérifiez la configuration de votre compte.
+Vérification des nouveaux messages sur le compte « & #160; %1 & #160; »
+Compte POP
+Compte IMAP
+Vous devez ajouter un compte dans la partie réseau de la configuration pour pouvoir recevoir des messages. %1: name; %2: number appended to it to make it uniqueamong a list of names
+%1 #%2Message- >
+& Répondre
+Répondre & à l'auteur...
+Répondre sans & citer le texte...
+Créer une tâche & #160; / un rappel...
+Créer une tâche
+Permet de créer une tâche ou un rappel dans l'agenda avec ce message
+Cette option démarre l'éditeur de tâches de KOrganizer avec les valeurs par défaut trouvées dans le message sélectionné. Vous pouvez ensuite modifier cette tâche avant de l'enregistrer dans votre agenda.
+Marquer le message
+Marquer comme & lu
+Marquer les messages courants comme lus
+Marquer comme & nouveau
+Marquer les messages sélectionnés comme nouveaux
+Marquer comme non lu
+Marquer les messages courants comme non lus
+Marquer comme & important
+Retirer la marque « & #160; important & #160; »
+Marquer comme & action à effectuer
+Retirer la marque « & #160; action à effectuer & #160; »
+Modifier le message@action: inmenu Message- > Forward- >
+& Rediriger... Message- >
+& Liste de diffusion
+Ouvrir le message dans l'archive de la liste
+Envoyer un nouveau message
+Aller à l' archive
+Demander de l' aide
+Contacter le propriétaire
+Se désabonner de la liste
+Courriel
+Web%1 is a 'Contact Owner 'or simlar action. %2 is a protocol normally web or email though could be irc/ ftp or other url variant
+Impossible d'ajouter le message dans la boîte d' envoi
+Problème critique & #160;: impossible de traiter les messages (plus d'espace libre & #160;?). Le message problématique a été placé dans la boîte des messages envoyés.
+Le déplacement du message envoyé « & #160; %1 & #160; » de « & #160; À envoyer & #160; » vers « & #160; Messages envoyés & #160; » a échoué. Les raisons possibles sont un manque d'espace disque ou de droit d'écriture. Veuillez corriger le problème et déplacer le message à la main.
+Il n'est pas possible d'envoyer des messages sans spécifier l'adresse de l'expéditeur. Veuillez définir l'adresse électronique de l'identité « & #160; %1 & #160; » dans la section « & #160; Identités & #160; » de la fenêtre de configuration et réessayez.
+%1 & #160; / & #160; %2 messages de la file d'attente ont été envoyés correctement.
+Erreur critique & #160;: impossible d'exécuter les filtres avant d'envoyer le message (espace libre manquant & #160;?)
+Envoi des messages
+Initialisation du processus d'émission...
+Le transport « & #160; %1 & #160; » n'est pas valable.
+Échec de l' envoi
+Vous souhaitez envoyer tous les messages de la file en utilisant un transport non sécurisé, voulez -vous toujours continuer & #160;?
+Envoyer non chiffré%3: subject of message
+Envoi du message %1 sur %2 & #160;: %3
+Échec de l'envoi de (certains) messages en attente.
+Envoi annulé & #160;: %1 Le message restera dans votre dossier « & #160; À envoyer & #160; » jusqu'à ce que le problème soit corrigé (par exemple une adresse non valable) ou que vous le supprimiez de ce dossier. Le protocole de transport suivant a été utilisé & #160;: %2
+Envoi des messages annulé.
+Échec de l'envoi & #160;: %1 Le message restera dans votre dossier « & #160; À envoyer & #160; » jusqu'à ce que le problème soit corrigé (par exemple une adresse non valable) ou que vous le supprimiez de ce dossier. Le protocole de transport suivant a été utilisé & #160;: %2 Voulez -vous continuer à envoyer les messages restants & #160;?
+Poursuivre l' envoi
+& Poursuivre l' envoi
+& Annuler l' envoi
+Échec de l'envoi & #160;: %1 Le message restera dans votre dossier « & #160; À envoyer & #160; » jusqu'à ce que le problème soit corrigé (par exemple une adresse non valable) ou que vous le supprimiez de ce dossier. Le protocole de transport suivant a été utilisé & #160;: %2Start of the filename for a mail archive file
+Archive
+Dossier d' archive
+Format & #160;:
+Archive ZIP compressée (« & #160;. zip & #160; »)
+Archive TAR non compressée (« & #160;. tar & #160; »)
+Archive TAR compressée par BZ2 (« & #160;. tar. bz2 & #160; »)
+Archive TAR compressée par GZ (« & #160;. tar. gz & #160; »)
+& Supprimer les dossiers une fois l'archivage terminé.
+Choisissez le dossier à archiver.
+Aucun dossier sélectionné
+Sélectionner les filtres
+Importer des filtres
+Impossible de lire le fichier sélectionné. Les droits d'accès sont sûrement insuffisants.
+Exporter les filtrescalendar|tasks|contacts=%2 belonging to %1
+%2 de %1folder name (folder storage name)
+Mes %1
+KMail va maintenant créer les dossiers de travail en groupe nécessaires comme sous-dossiers de « & #160; %1 & #160; » & #160;; si vous ne souhaitez pas obtenir cette fonctionnalité, annulez simplement cette action et la ressource IMAP sera désactivée.
+%1 & #160;: aucun dossier trouvé, il sera donc créé
+%1 & #160;: dossier « & #160; %2 & #160; » trouvé, il sera donc défini comme dossier principal de travail collaboratif
+KMail a trouvé les dossiers de travail collaboratif suivants dans « & #160; %1 & #160; » et doit effectuer les opérations suivantes & #160;: %2 Si vous ne souhaitez pas les effectuer, annulez cette opération, et la ressource IMAP sera désactivée.
+Dossiers standards de travail en groupe
+Dossier par défaut%1 is one of the messages with context 'type of folder content '
+Il existe plusieurs dossiers du type « & #160; %1 & #160; » par défaut, veuillez en sélectionner un & #160;:
+Vous n'avez pas la permission de lire ou d'écrire dans votre dossier « & #160; %1 & #160; ».
+Message complet
+Corps du message
+Partout dans l' en-tête
+Tous les destinataires
+Taille en octets
+Âge en jours
+État du message
+Étiquette de messageSubject of an email.
+Critère de recherche
+Doit correspondre à & tous les critères suivants
+Doit correspondre à au & moins un des critères suivants
+Impossible de purger les messages expirés du dossier & #160; %1 & #160;: impossible de trouver le dossier de destination %2
+Échec de la suppression d'un ancien message du dossier %1.
+Échec du déplacement d'un ancien message du dossier %1 vers le dossier %2.
+La suppression d'un ancien message du dossier %1 a été annulée.
+Le déplacement d'un ancien message du dossier %1 vers le dossier %2 a été annulé.
+Impossible d'ouvrir le fichier « & #160; %1 & #160; » & #160;: %2
+Erreur interne. SVP copier le résultat et envoyer un rapport de bogue.
+Impossible de synchroniser le fichier index %1 & #160;: %2
+Impossible d'ajouter un message dans le dossier & #160;:
+Impossible d'ajouter un message dans le dossier (pas d'espace disque libre restant & #160;?)
+Je suis absent de mon bureau jusqu'au %1. En cas d'urgence, veuillez contacter Mme remplaçante E-mail & #160;: adresse électronique de la remplaçante Téléphone & #160;: +49 711 1111 11 Fax & #160;: +49 711 1111 12 Merci d'avance, -- vos nom et adresse ici
+La liste des extensions « & #160; Sieve & #160; » prises en charge par votre ne serveur ne contient pas « & #160; en congés & #160; ».. Sans cette extension, KMail ne peut pas installer les réponses pour les absences. Veuillez contacter l'administrateur de votre système.
+Configurer les réponses pour les absences du bureau
+Une personne (probablement vous) a changé le script de traitement des congés sur le serveur. KMail ne peut pas déterminer les paramètres pour les réponses automatiques aux messages. Les valeurs par défaut seront utilisés.
+La réponse « & #160; Pas au bureau & #160; » est toujours active. Voulez -vous la modifier & #160;?
+La réponse « & #160; Pas au bureau & #160; » est toujours active
+Définir le sujet du message
+Envoyer une copie carbone à « & #160; adresse & #160; »
+Envoyer une copie carbone cachée à « & #160; adresse & #160; »
+Ajouter un « & #160; en-tête & #160; » au message
+Lire le corps du message dans « & #160; fichier & #160; ».
+Définir le corps du message
+Ajouter une pièce jointe au message. Cette opération peut être effectuée plusieurs fois.
+Ne vérifier que les nouveaux messages
+N'ouvrir qu'une fenêtre d' édition
+Afficher le message indiqué.
+Envoyer le courrier électronique à l'adresse désirée avec le fichier pointé par l'URL comme pièce jointe.
+Suppression du dossier
+Erreur lors de la suppression d'un dossier.
+Dossier de destination & #160;: %1@info: status Number of folders for which update is completed.
+vérification
+Erreur lors de l'interrogation de l'état du serveur.
+Réception de l'état des messages
+Réception des messages
+Erreur lors du listage du contenu du dossier %1.
+Erreur lors de la réception des messages
+Erreur lors de la création d'un dossier.
+actualisation de compte des messages
+Erreur lors de la réception des informations du dossier.
+Vous pouvez afficher les messages précédents ou suivants en utilisant les flèches de gauche et de droite.
+Vous pouvez créer rapidement des filtres sur l'expéditeur, le destinataire, le sujet et les listes de diffusions avec « & #160; Message & #160; / Créer un filtre & #160; »
+Vous pouvez vous débarrasser du « & #160; [nom de liste de diffusion] & #160; » ajouté au sujet de certaines listes en utilisant l'action de filtrage Réécrire l'en-tête. Utilisez simplement Réécrire l'en-tête « Sujet » remplacer « \\s*[nom de la liste\\]\\s* »... par « »
+Vous pouvez associer des listes de diffusion avec des dossiers dans la fenêtre Dossier & #160; / & #160; Gestion des listes de diffusion.... Vous pouvez alors utiliser Message & #160; / & #160; Nouveau message à la liste de diffusion... pour ouvrir l'éditeur avec l'adresse de la liste de diffusion prédéfinie. Vous pouvez également cliquer avec le bouton central de la souris sur le dossier.
+Vous pouvez assigner des icônes personnalisées à chaque dossier individuellement. Pour plus d'informations, consultez le menu Dossier & #160; / & #160; Propriétés...
+KMail peut afficher une barre colorée indiquant le type de message (texte simple, HTML, OpenPGP) actuellement affiché. Cela contre les tentatives d'imiter une vérification réussie de signature en envoyant un mail HTML imitant le cadre d'état de signature de KMail.
+Vous pouvez filtrer sur n'importe quel en-tête simplement en donnant son nom dans le premier champ d'édition d'une règle de recherche.
+Vous pouvez filtrer les messages HTML seulement avec la règle « Type de contenu » contient « text/ html ».
+Lorsque vous répondez a un message, l'ensemble du texte que vous avez sélectionné dans celui -ci est utilisé pour la réponse. Si rien n'est sélectionné, le message complet est utilisé. Cette fonctionnalité fonctionne avec le texte des pièces jointes lorsqu'elles sont affichées dans le corps du message. Cette fonctionnalité est disponible avec toutes les options permettant de répondre aux messages sauf l'option Répondre sans citer le texte. Contributeur & #160;: David F. Newman
+Raccourci clavier du dossier %1
+Sélectionnez le raccourci clavier de ce dossier
+Pour choisir une touche ou une combinaison de touches qui sélectionne le dossier courant, cliquez sur le bouton ci-dessous, puis appuyez sur la ou les touches que vous souhaitez associer au dossier.
+Une erreur critique est survenue. Arrêt du traitement.
+Un problème est apparu en appliquant cette action.
+Trop d'actions de filtrage dans la règle %1.
+Action de filtrage %1 inconnue dans la règle %2. Elle sera ignorée.
+Échec d'importation de vCard
+Impossible d'accéder à %1.
+Échec de l'exécution de la précommande.
+Impossible d'ouvrir le fichier & #160;:
+Problème de transmission & #160;: impossible de verrouiller « & #160; %1 & #160; ».
+Impossible de supprimer le message de la boîte aux lettres %1 & #160;: %2
+Impossible d'insérer le contenu du fichier « & #160; %1 & #160; » & #160;: %2
+Échec de la transmission à la commande %1.
+Gestion des scripts Sieve
+Scripts disponibles
+Aucune URL Sieve configurée
+Impossible d'obtenir la liste des scripts
+Supprimer le script
+Modifier le script...
+Désactiver le script
+Nouveau script & #160;...
+Voulez -vous vraiment supprimer le script « & #160; %1 & #160; » du serveur & #160;?
+Confirmation de la suppression du script Sieve
+Nouveau script Sieve
+Veuillez spécifier le nom du nouveau script Sieve & #160;:
+Modifier le script Sieve
+Script Sieve envoyé avec succès.
+Envoi du script Sieve
+Un fichier nommé « & #160; %1 & #160; » existe déjà. Voulez -vous l'écraser & #160;?
+Écraser le fichier & #160;?
+La liste de distribution « & #160; %1 & #160; » est vide et ne peut pas être utilisée.
+Ouvrir le carnet d' adresses
+Choisir un fichier son
+Le fichier existe déjà.
+Écraser
+& Annuler
+par expéditeur
+par destinataire
+intelligemment par expéditeur & #160; / destinataire
+par sujet
+par taille
+par l'état « & #160; action à effectuer & #160; »
+Nouveau & #160; / non lu
+CroissantSort order for mail groups
+DécroissantUnknown date
+par expéditeur & #160; / destinataire
+par expéditeur
+par destinataireSort order for mail groups
+Expéditeur & #160; / destinataire, liste simple
+Pièce jointe
+Nouveau & #160; / non lu
+Pourriel & #160; / Courriel
+Vu & #160; / Ignoré
+Liste d' étiquettes
+Message
+État
+Supprimer l' agrégation
+Personnaliser les thèmes
+Nouveau thème
+Supprimer le thème
+Thème sans nom
+Nouvelle colonne
+Aujourd'hui
+PrêtDescription of Type Subject
+Icône « & #160; Pièce jointe & #160; »
+Icône « & #160; Action à effectuer & #160; »
+Icône « & #160; Important & #160; »
+Icône d'état de signature
+Date maximaleDescription for an Unknown Type
+Ne jamais afficher
+Ouvrir la recherche complète
+N'importe quel état@action: inmenu Status of a message
+Configurer...
+Ordre de tri des messages
+Direction de tri des messages
+Déplier les groupes récents
+Message le plus haut
+Le message le plus récent
+Ne jamais déplier les fils de discussion
+Déplier les fils de discussion contenant de nouveaux messages
+Déplier les fils de discussion contenant des messages non lus
+Déplier les fils de discussion contenant des messages non lus ou importants
+Toujours déplier les fils de discussion
+Groupes, fils de discussion et tris
+Fils de discussion & #160;:
+Origine des fils de discussion & #160;:
+Un clic sur une en-tête trie les messages
+Colonne sans nom
+Groupe de messages
+Étiquette exemple 1
+Adoucir@action: inmenu Font setting
+Police@action: inmenu Foreground color setting
+CacherKeep a empty space in the list if the mail does not have the attribute, e. g. Important mark on a non important mail
+En-tête de groupe@action: inmenu Group header background color setting
+Automatique@action: inmenu Group header background color setting
+Propriétés de la colonne
+Ajouter une colonne...
+Supprimer une colonne
+Ajouter une nouvelle colonne
+En-tête & #160;:
+Taille des icônes@title: tab General options of a view mode
+Description & #160;:
+Afficher les colonnes par défaut
+Pas du toutReceiver of the emial
+Fils de discussion ayant des messages datés du %1@info: tooltip Formats to something like 'Messages sent on 2008-12-21 '
+Messages envoyés le %1@info: tooltip Formats to something like 'Messages received on 2008-12-21 '
+Messages envoyés %1@info: tooltip Formats to something like 'Messages received Yesterday '
+Messages reçus %1
+Messages envoyés à « & #160; %1 & #160; »
+Messages envoyés par « & #160; %1 & #160; »
+Messages reçus par « & #160; %1 & #160; »
+Date (ordre d'arrivée)Number of unsent messages
+aucun non envoyéNumber of unread messages
+aucun non luNumber of unread messages
+aucun message%1 = n messages, m unread.
+De
+Relever le courriel
+Filtrer par état
+Afficher les colonnes
+Insérer le résultat de la commande
+Mon %1 (%2)
+Propriétés des colonnes... @info
+& Sélection... Number of days the signature certificate should be valid without issuing a warning.
+Exporter en HTML...
+Exporter les messages sélectionnés dans un fichier HTML
+Tri des messages & #160;:
+Direction du tri des messages & #160;:

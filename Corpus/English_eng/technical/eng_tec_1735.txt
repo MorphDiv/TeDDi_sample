@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,76 +15,28 @@
 # sample_type:	whole
 # comments:	NA
 
-CreateUnoListener Function [Run-time]
-/text/sbasic/shared/03132000.xhp
+DateValue Function [Run-time]
+/text/sbasic/shared/03030102.xhp
 Sun Microsystems, Inc.
-converted from old format - fpe dedr: fixed #i31078#
-CreateUnoListener function
-CreateUnoListener Function [Run-time]
-Creates a Listener instance.
-Many Uno interfaces let you register listeners on a special listener interface.
-This allows you to listen for specific events and call up the appropriate listener method.
-The CreateUnoListener function waits for the called listener interface and then passes the interface an object that the interface supports.
-This object is then passed to the method to register the listener.
+converted from old format - fpe
+DateValue function
+DateValue Function [Run-time]
+Returns a date value from a date string.
+The date string is a complete date in a single numerical value.
+You can also use this serial number to determine the difference between two dates.
 Syntax:
-oListener = CreateUnoListener( Prefixname, ListenerInterfaceName )
+DateValue [(date)]
+Return value:
+Date
+Parameters:
+Date:
+String expression that contains the date that you want to calculate.
+The date can be specified in almost any format.
+You can use this function to convert a date that occurs between 1st December 1582 and 31st December 9999 into a single integer value.
+You can then use this value to calculate the difference between two dates.
+If the date argument lies outside the acceptable range, $[officename] Basic returns an error message.
+In contrast to the DateSerial function that passes years, months and days as separate numerical values, the DateValue function passes the date using the format &quot; month.[,]day.[,]year &quot; .
 Example:
-The following example is based on a Basic library object.
-Dim oListener
-oListener = CreateUnoListener( &quot; ContListener_ &quot; , &quot; com.sun.star.container.XContainerListener &quot; )
-The CreateUnoListener method requires two parameters.
-The first is a prefix and is explained in detail below.
-The second parameter is the fully qualified name of the Listener interface that you want to use.
-The Listener must then be added to the Broadcaster Object.
-This is done by calling the appropriate method for adding a Listener.
-These methods always follow the pattern &quot; addFooListener &quot; , where &quot; Foo &quot; is the Listener Interface Type, without the 'X'.
-In this example, the addContainerListener method is called to register the XContainerListener:
-Dim oLib
-oLib = BasicLibraries.Library1 ' Library1 must exist!
-oLib.addContainerListener( oListener ) ' Register the listener
-The Listener is now registered.
-When an event occurs, the corresponding Listener calls the appropriate method from the com.sun.star.container.XContainerListener Interface.
-The prefix calls registered Listeners from Basic-subroutines.
-The Basic run-time system searches for Basic-subroutines or functions that have the name &quot; PrefixListenerMethode &quot; and calls them when found.
-Otherwise, a run-time error occurs.
-In this example, the Listener-Interface uses the following methods:
-disposing:
-Listener base interface (com.sun.star.lang.XEventListener): base interface for all Listener Interfaces
-elementInserted:
-Method of the com.sun.star.container.XContainerListener interface
-elementRemoved:
-Method of the com.sun.star.container.XContainerListener interface
-elementReplaced:
-Method of the com.sun.star.container.XContainerListener interface
-In this example, the prefix is ContListener_.
-The following subroutines must therefore be implemented in Basic:
-ContListener_disposing
-ContListener_elementInserted
-ContListener_elementRemoved
-ContListener_elementReplaced
-An event structure type that contains information about an event exists for every Listener type.
-When a Listener method is called, an instance of this event is passed to the method as a parameter.
-Basic Listener methods can also call these event objects, so long as the appropriate parameter is passed in the Sub declaration.
-For example:
-Sub ContListener_disposing( oEvent )
-MsgBox &quot; disposing &quot;
-MsgBox oEvent.Dbg_Properties
-End Sub
-Sub ContListener_elementInserted( oEvent )
-MsgBox &quot; elementInserted &quot;
-MsgBox oEvent.Dbg_Properties
-End Sub
-Sub ContListener_elementRemoved( oEvent )
-MsgBox &quot; elementRemoved &quot;
-MsgBox oEvent.Dbg_Properties
-End Sub
-Sub ContListener_elementReplaced( oEvent )
-MsgBox &quot; elementReplaced &quot;
-MsgBox oEvent.Dbg_Properties
-End Sub
-You do not need to include the parameter of an event object if the object is not used:
-' Minimal implementation of Sub disposing
-Sub ContListener_disposing
-End Sub
-always
-be implemented to avoid Basic run-time errors.
+Sub ExampleDateValue
+msgbox DateValue( &quot; 12/02/1997 &quot; )
+end sub

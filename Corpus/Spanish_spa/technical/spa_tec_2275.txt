@@ -1,6 +1,6 @@
 # language_name_wals:	Spanish
 # language_name_glotto:	Spanish
-# ISO_6393:	spa
+# iso639_3:	spa
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,14 +15,30 @@
 # sample_type:	whole
 # comments:	NA
 
-Columnas
-Puede dividir la página en varias columnas, de igual ancho, con un espacio controlado por el usuario entre ambas columnas.
-Esta característica sólo está disponible en documentos orientados a texto.
-Si está trabajando en la distribución de la página de un documento, puede tener varias columnas usando un marco diferente para cada columna.
-Esto le mostrará un cuadro de diálogo.
-Clic sobre la pestaña etiquetada Columnas.
-Esto cambiará el cuadro de diálogo.
-Ahora puede seleccionar el número de columnas en la caja denominada Columnas, y el espaciado entre columnas en el cuadro de texto llamado Espaciado de columnas:.
-La caja de vista preliminar le muestra qué aspecto tiene su página.
-Clic sobre Aceptar cuando haya terminado.
-Clic sobre Cancelar para abortar los cambios.
+kppp y los asuntos de seguridad
+Esta sección está mayormente indicada para los administradores (root) con importantes demandas en seguridad, o símplemente a quién tenga un interés técnido.
+No es necesario leerlo si únicamente utiliza Linux a nivel doméstico, aunque siempre puede aprender algo.
+Restricción de acceso a kppp
+Un administrador de sistema puede querer restringir el acceso a según quién utilice kppp.
+Hay dos maneras de acometer esto.
+Restricción de acceso con permisos de grupo
+Cree un nuevo grupo (quizá llamado dialout o similar), y ponga a todos los usuarios a los que se les permita usar kppp en ese grupo.
+Después teclee en la línea de comandos:
+Esto asume que KDE está instalado en / opt / kde / y que el nuevo grupo se llama dialout.
+Restricción de acceso por el método de kppp
+Antes de hacer nada, kppp comprueba si hay un archivo llamado / etc / kppp.allow.
+Si dicho archivo existe, sólo les estará permitido llamar a los usuarios nombrados en el mismo.
+El archivo debe ser legible (pero por supuesto NO escribible).
+Sólo se reconocen los nombres de usuario, así que no se pueden utilizar identificadores de usuario (UID) en este archivo.
+Este es un pequeño ejemplo:
+En el ejemplo anterior, sólo los usuarios fred, karl y daisy pueden efectuar llamadas, así como cualquier usuario con un UID de 0 (de modo que no hay que incluir a root específicamente).
+¿kppp tiene el bit SUID activo? ¿Qué pasa con la seguridad?
+Es virtualmente imposible escribir un sistema de llamadas telefónicos sin el bit SUID que sea al mismo tiempo fiable y sencillo de utilizar para los usuarios poco expertos. kppp aborda los problemas de seguridad con la siguiente estrategia.
+Inmediatamente después de iniciarse, kppp se divide.
+El proceso maestro, que se ocupa de todas las operaciones del entorno gráfico (como la interacción con el usuario), abandona el estado SUID tras la división, y se ejecuta con privilegios de usuario normal.
+El proceso esclavo mantiene sus privilegios, y es el responsable de todas las acciones que necesitan privilegios de root.
+Para mantener esta parte segura, aquí no se utiliza ninguna llamada a las bibliotecas de KDE o Qt, sólo se hacen llamadas a bibliotecas sencillas.
+El código fuente de este proceso es corto (unas 500 líneas) y está muy bien documentados, así que es fácil buscar agujeros de seguridad.
+Los procesos maestro y esclavo se comunican a través del IPC estándar de UNIX.
+Un agradecimiento especial a Harri Porten por escribir este excelente segmento de código.
+Se pensaba que era imposible, pero el lo resolvió en una semana.

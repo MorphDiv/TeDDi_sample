@@ -1,6 +1,6 @@
 # language_name_wals:	Russian
 # language_name_glotto:	Russian
-# ISO_6393:	rus
+# iso639_3:	rus
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,37 +15,38 @@
 # sample_type:	whole
 # comments:	NA
 
-Функция Left [время выполнения]
-/text/sbasic/shared/03120303.xhp
+Инструкция Reset [время выполнения]
+/text/sbasic/shared/03020104.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-функция Left
-Функция Left [время выполнения]
-Возвращает число крайних левых символов, указанных в строке.
+инструкция Reset
+Инструкция Reset [время выполнения]
+Закрывает все открытые файлы и записывает содержимое всех файловых буферов на жесткий диск.
 Синтаксис:
-Left (Текст As String, n As Long)
-Возвращаемое значение:
-String
-Параметры:
-Текст
-.
-Любая строка, из которой нужно получить крайние левые символы.
-n:
-Целое число, которое указывает количество символов, возвращаемых функцией.
-Если
-n
-= 0, возвращается строка нулевой длины.
-Максимально допустимое значение — 65535.
-В следующем примере дата в формате ГГГГ.ММ.ДД преобразуется в формат ММ/ДД/ГГГГ.
+Reset
 Пример:
-Sub ExampleUSDate
-Dim sInput As String
-Dim sUS_date As String
-sInput = InputBox( &quot; Пожалуйста, введите дату в международном формате ГГГГ-ММ-ДД &quot; )
-sUS_date = Mid(sInput, 6, 2)
-sUS_date = sUS_date & &quot; / &quot;
-sUS_date = sUS_date & Right(sInput, 2)
-sUS_date = sUS_date & &quot; / &quot;
-sUS_date = sUS_date & Left(sInput, 4)
-MsgBox sUS_date
+Sub ExampleReset
+On Error Goto ErrorHandler
+Dim iNumber As Integer
+Dim iCount As Integer
+Dim sLine As String
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; Это новая строка текста &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+For iCount = 1 to 5
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+rem
+end if
+Next iCount
+Close #iNumber
+Exit Sub
+ErrorHandler:
+Reset
+MsgBox &quot; Все файлы будут закрыты &quot; ,0, &quot; Ошибка &quot;
 End Sub

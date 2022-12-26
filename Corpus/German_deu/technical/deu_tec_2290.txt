@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,11 +15,180 @@
 # sample_type:	whole
 # comments:	NA
 
-Module f\xFCr den externen Druckbefehl (z.B. bei Netscape)
-Mit diesem Modul k\xF6nnen Sie den Druckbefehl genau angeben (z.B. bei Netscape).
-Zu diesem Zweck wird dem Druckdialog eine Zeile hinzugef\xFCgt, die sich bearbeiten l\xE4sst.
-Das Modul kann auf viele verschiedene Arten genutzt werden, z.B. mit einem selbst gemachten Druckprogramm.
-\xDCberblick der verf\xFCgbaren Funktionen
-Druckereinstellungen: nicht unterst\xFCtzt
-Druckauftragseinstellungen: nicht unterst\xFCtzt
-Druckeinstellungen: elementare Kontrollm\xF6glichkeiten, die von Ihren Kenntnissen \xFCber den Druckbefehl abh\xE4ngen
+Das Handbuch zu ksysv
+Dieses Handbuch beschreibt den KDE System V Init Editor ksysv.
+Einf\xFChrung
+Willkommen zum KDE System V init Editor, eher bekannt (und im folgenden auch so benannt) als ksysv.
+Dieser Abschnitt f\xFChrt ein paar Konzepte ein und beschreibt, was Sie mit ksysv tun k\xF6nnen.
+Eine kurze Beschreibung von System V init
+Die System V init entwickelt sich rasch zum Standard f\xFCr die Kontrolle von Programmstarts beim Hochfahren des Systems in der Linux Welt.
+Und zwar deshalb, weil sie leichter zu benutzen, m\xE4chtiger und zugleich flexibler ist als die traditionelle BSD -init.
+Die init-Bin\xE4rdatei liegt unter /sbin und nicht unter /etc.
+Dies ist deshalb wichtig, weil vielleicht jemand versuchen k\xF6nnte, eine Maschine auf System V init umzustellen, ohne eine Neuinstallation und Neuformatierung vorzunehmen.
+Der Linux Kernel sieht zuerst unter /etc nach einer init-Datei.
+Deshalb m\xFCssen Sie sichergehen, da\xDF die alte init von dort entfernt wurde, falls es dort eine gab.
+init.d /
+rc0.d /
+rc1.d /
+rc2.d /
+rc3.d /
+rc4.d /
+rc5.d /
+rc6.d
+rc.local sollte seinerseits unter /etc/rc.d liegen, wenn Sie es ben\xF6tigen.
+Die meisten Systeme besitzen diese Datei, auch wenn es eigentlich nicht viel Verwendung daf\xFCr gibt.
+Sie k\xF6nnen ebenfalls ein rc.serial in /etc/rc.d anlegen, wenn Sie beim Hochfahren etwas ausf\xFChren lassen wollen, was mit dem seriellen Anschlu\xDF zu tun hat.
+der Kernel sucht an verschiedenen Stellen nach dem Programm init und startet die erste, die er findet;
+init startet /etc/rc.d/rc.sysinit.
+rc.sysinit tut eine Menge notwendiger Dinge und startet dann rc.serial (wenn es existiert);
+init startet rc.local
+init startet alle Skripte f\xFCr das voreingestellte Runlevel.
+Aber wie startet es nun all die richtigen Skripte?
+Sie werden bemerken, das sich in diesem Verzeichnis keine richtigen Dateien befinden.
+Stattdessen ist jeder Eintrag hier eine Verkn\xFCpfung zu einem der Skripte im Verzeichnis init.d.
+Wie startet und stoppt init eigentlich Systemdienste?
+Ganz einfach:
+Jedes der Skripte ist so geschrieben, da\xDF es ein Argument wie start und stop akzeptiert.
+Sie k\xF6nnen diese Skripte tats\xE4chlich von Hand auf der Kommandozeile folgenderma\xDFen starten:
+Dies w\xFCrde den httpd-Server anhalten.
+Init liest einfach den Namen, und wenn der ein K bei sich hat, dann ruft sie das Skript mit einem stop -Argument auf.
+Wenn er ein S mit sich f\xFChrt, dann l\xE4\xDFt init das Skript mit einem start -Argument laufen.
+Warum all diese Runlevel?
+Grundlagen der Bildschirmabl\xE4ufe
+Hier lernen Sie die Benutzung von ksysv.
+Sie sollte nicht sehr schwierig sein, weil das Programm so benutzerfreundlich wie m\xF6glich angelegt wurde.
+Maus
+Die Verwendung von ksysv mit einer Maus oder einem anderen Zeigeger\xE4t ist einfach, um nicht zu sagen trivial:
+Ziehen Sie einfach einen Eintrag aus dem Bereich der Verf\xFCgbaren Systemdienste auf eins der sechs Runlevel, um es auf diesem Level zu starten (bzw. zu stoppen).
+Sie k\xF6nnen Skripte auch zwischen Runleveln verschieben oder die Position innerhalb eines Levels ver\xE4ndern, indem sie es woanders hin ziehen.
+Dabei wird der Eintrag von seinem urspr\xFCnglichen Runlevel (oder seiner Position) entfernt.
+Dies geschieht nur dann nicht, wenn sie einen Eintrag aus dem Bereich der Verf\xFCgbaren Systemdienste herausziehen.
+Beachten Sie:
+Eintr\xE4ge werden verschoben, wenn Sie diese in einen neuen Bereich ziehen.
+Um sie lediglich auf eine neues Runlevel zu kopieren, m\xFCssen Sie ausdr\xFCcklich Kopieren aus dem Men\xFC Bearbeiten oder aus dem Kontextmen\xFC w\xE4hlen und in den Zielbereich Einf\xFCgen -- sogar dann, wenn derselbe Eintrag bereits zuvor im Zielbereich der Aktion existiert hat.
+Die Sortiernummer eines Eintrags kann manchmal nicht berechnet werden.
+In so einem Fall m\xFCssen Sie die Sortiernummern der umgebenden Eintr\xE4ge bearbeiten, bevor Sie nochmals versuchen k\xF6nnen, den Systemdienst einzuf\xFCgen.
+Beachten Sie:
+Sortiernummern k\xF6nnen von 00 bis 99 reichen, nicht h\xF6her.
+Sie k\xF6nnen Eintr\xE4ge l\xF6schen, indem Sie sie in den Papierkorb ziehen.
+Beachten Sie:
+Gegenw\xE4rtig gibt es keine M\xF6glichkeit, Eintr\xE4ge wiederherzustellen, die in den Papierkorb geworfen wurden.
+Seien Sie also vorsichtig.
+Tastatur
+Sie k\xF6nnen die Tabulator -Taste benutzen, um die verschiedenen Arbeitsbereiche zu aktivieren (Verf\xFCgbare Systemdienste, Runlevel 1 Start, Runlevel 1 Stop etc.) sowie die Cursor-Tasten, um eine Auswahl ober- oder unterhalb der bisherigen zu treffen.
+Um die Sortiernummer oder den Namen eines Eintrags manuell zu \xE4ndern, dr\xFCcken Sie die Eingabe -Taste, um den Eigenschaften-Dialog zu \xF6ffnen.
+Benutzen Sie die Tabulator -Taste, um zwischen verschiedenen Feldern zu wechseln.
+Schlie\xDFen Sie den Dialog durch erneutes Dr\xFCcken der Eingabe -Taste, um die \xC4nderungen zu akzeptieren, oder dr\xFCcken Sie Esc, um die \xC4nderungen zu verwerfen.
+Die Men\xFC-Eintr\xE4ge
+Es folgt eine Punkt-f\xFCr-Punkt-Erl\xE4uterung der Men\xFCs von ksysv.
+Das Men\xFC Datei
+Wegen der Gefahr des Datenverlusts bitten alle Eintr\xE4ge im Men\xFC Datei um Best\xE4tigung, bevor sie ihre Arbeit tun.
+Datei Zuletzt gespeicherte Konfiguration...
+Alle durchgef\xFChrten \xC4nderungen verwerfen und die letzte gespeicherte Konfiguration aufrufen.
+Eine gespeicherte Konfiguration laden.
+Macht Ihre \xC4nderungen dauerhaft wirksam.
+Es werden keine Sicherungsdateien angelegt.
+Seien Sie also vorsichtig.
+Datei Speichern unter...
+Eine Kopie der neuen Konfiguration speichern.
+Speichert den Ablauf der durchgef\xFChrten \xC4nderungen.
+Die Logdatei ausdrucken.
+Beendet ksysv.
+Das Men\xFC Bearbeiten
+Macht die letzte nicht gespeicherte \xC4nderung r\xFCckg\xE4ngig.
+Letzte r\xFCckg\xE4ngig gemachte Aktion wieder herstellen.
+Schneidet den gerade ausgew\xE4hlten Systemdienst aus und kopiert den Eintrag in die Zwischenablage.
+Kopiert den gerade ausgew\xE4hlten Systemdienst in die Zwischenablage ohne ihn zu l\xF6schen.
+F\xFCgt den Inhalt der Zwischenablage an der aktuellen Cursorposition ein.
+Bearbeiten Eigenschaften
+\xD6ffnet den Dialog Eigenschaften f\xFCr den gerade ausgew\xE4hlten Systemdienst.
+Das Men\xFC Werkzeuge
+Werkzeuge Systemdienst starten...
+Startet den angew\xE4hlten Systemdienst.
+Werkzeuge Systemdienst anhalten...
+Den angew\xE4hlten Systemdienst anhalten.
+Werkzeuge Systemdienst neu starten...
+Den angew\xE4hlten Systemdienst neu starten.
+Werkzeuge Systemdienst bearbeiten...
+Dem angew\xE4hlten Systemdienst bearbeiten.
+Das Men\xFC Einstellungen
+Einstellungen Werkzugleiste anzeigen
+Anzeige der Werkzeugleiste ein- und ausschalten.
+Einstellungen Statusleiste anzeigen
+Anzeige der Statusleiste ein- und ausschalten.
+Einstellungen Logdatei anzeigen
+Schaltet die Anzeige der Logdatei in einem extra Fenster ein oder aus (alle Vorg\xE4nge, Fehlermeldungen, usw. werden in einer Logdatei gespeichert).
+Einstellungen Einstellungen speichern
+Alle bisher erw\xE4hnten Einstellungen gelten nur bis zum n\xE4chsten Systemstart, es sei denn, Sie w\xE4hlen diesen Men\xFCpunkt.
+Dies gilt einschlie\xDFlich der Fenstergr\xF6\xDFe und -aufteilung.
+Einstellungen Tastenzuordnungen vornehmen...
+Die Zuordnungen von Tastendr\xFCcken zu Aktionen ver\xE4ndern.
+Einstellungen Werkzeugleisten einrichten...
+Die Werkzeugleisten nach Ihren W\xFCnschen anpassen.
+Einstellungen SysV-Init Editor einrichten...
+Das Verhalten von ksysv anpassen.
+Das Men\xFC Hilfe
+F1 Hilfe Inhalt...
+Startet das Hilfe-System von KDE mit der ksysv -Hilfe (diesem Dokument).
+\xC4ndert den Mauscursor zu einer Kombination von Zeiger und Fragezeichen.
+Das Klicken auf ein Element innerhalb von ksysv \xF6ffnet ein Hilfefenster, das die Funktion des Elementes beschreibt (wenn es denn Hilfe f\xFCr das bestimmte Element gibt).
+Hilfe Berichten Sie Probleme oder W\xFCnsche...
+\xD6ffnet den Dialog f\xFCr Problemberichte, in dem man Fehler und W\xFCnsche berichten kann.
+Zeigt Versions- und Autoreninformationen an.
+Hilfe \xDCber KDE
+Zeigt Versionsinformation und Grunds\xE4tzliches zu KDE an.
+Konfiguration
+G\xFCltige Abschnitte der Konfigurationsdateien
+Abschnitte und Schl\xFCsselwerte der Konfigurationsdateien, die vom Programm erkannt werden, sowie ihre Voreinstellungen:
+[Path Settings]
+[Colors]
+[Geometry]
+[Andere Einstellungen]
+Fragen und Antworten
+Ich habe mit den Standard-Runleveln herumexperimentiert, und jetzt startet die Maschine best\xE4ndig neu.
+Was kann ich tun?
+Geben Sie am LILO -Prompt linux single ein und dr\xFCcken Sie die Eingabe -Taste, um im Einzelnutzer-Modus zu starten.
+Dann bearbeiten Sie die Datei /etc/inittab und \xE4ndern das standardm\xE4\xDFige Runlevel auf einen vern\xFCnftigen Wert (3 sollte normalerweise in Ordnung sein).
+Meine Maschine h\xE4ngt kurz nach dem Neustart.
+Bitte schauen Sie bei Frage 1 nach!
+Ich habe einige Systemdienste mit ksysv zur Ausf\xFChrung unter Runlevel X vorgesehen, aber sie werden nicht ausgef\xFChrt.
+Wenn Sie SuSE oder Delix (DLD) benutzen, dann m\xFCssen Sie zus\xE4tzliche Dateien in /etc bearbeiten, die nur in diesen Distributionen vorhanden sind.
+Bitte lesen Sie die Details im Handbuch der Distribution nach.
+Die Art, wie Systemdienste in diesen Distributionen gestartet werden, vereinfacht die Konfiguration f\xFCr die propriet\xE4ren Einrichtungsprogramme dieser Distributionen, entspricht aber leider keinem Standard.
+Die Autoren von ksysv planen eine Erweiterung des Programms f\xFCr diesen Ansatz.
+Falls Sie eine andere Distributon verwenden:
+\xDCberpr\xFCfen Sie bitte, ob alle Konfigurationsdateien vorhanden sind, die vom jeweiligen Systemdienst ben\xF6tigt werden (und auch, ob sie sich im richtigen Verzeichnis befinden).
+Manche D\xE4monen (wie z.B.
+Apache bzw. httpd) gehen einfach stumm \xFCber Bord, wenn ihre Konfigurationsdateien nicht vorhanden oder falsch eingerichtet sind.
+Standardbedeutung der Runlevel
+Red Hat
+Runlevel 0:
+Halt (f\xE4hrt die Maschine runter)
+Runlevel 1:
+Einzelbenutzermodus
+Runlevel 2:
+Konsolenmodus, ohne NFS.
+Runlevel 3:
+Konsolenmodus mit allen Netzdiensten.
+Runlevel 4:
+Nicht verwendet.
+Runlevel 5:
+Mehrbenutzer-Modus -- mit X11 und vollem Netzwerk
+Runlevel 6:
+Neustart
+Lizenz
+ksysv Copyright (c) 1997-1998 Peter Putzer
+Peter Putzer, putzer@kde.org - Entwickler
+Handbuch:
+Peter Putzer, putzer@kde.org
+Eric Bischoff, ebisch@cybercable.tm.fr - Bearbeiter
+\xDCbersetzer:
+Thomas Diehl th.diehl@gmx.net
+\xDCbersetzer:
+Volker Dose vpdose@cpmgut.toppoint.de
+Installation
+ksysv ist Teil des KDE -Projekts http://www.kde.org /.
+ksysv k\xF6nnen Sie im kdeadmin-Paket finden auf ftp://ftp.kde.org/pub/kde /, der Haupt- FTP -Site des KDE -Projekts.
+Um ksysv auf Ihrem System zu kompilieren und zu installieren, schreiben Sie das Folgende in das Hauptverzeichnis in der ksysv -Distribution:
+Da ksysv autoconf und automake benutzt, sollte es dabei keine Schwierigkeiten geben.
+Sollten dennoch Probleme auftauchen, wenden Sie sich bitte an die KDE -Mailinglisten.

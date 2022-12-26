@@ -1,6 +1,6 @@
 # language_name_wals:	Mandarin
 # language_name_glotto:	Mandarin Chinese
-# ISO_6393:	cmn
+# iso639_3:	cmn
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,20 +15,59 @@
 # sample_type:	whole
 # comments:	NA
 
-GetSolarVersion 函数 [运行时]
-/text/sbasic/shared/03131000.xhp
-Sun Microsystems, Inc.
-converted from old format - fpe
-GetSolarVersion 函数
-GetSolarVersion 函数 [运行时]
-返回当前 $[officename] 版本的内部版本号。
+MkDir 语句 [运行时]
+/text/sbasic/shared/03020411.xhp
+MkDir; 语句
+MkDir 语句 [运行时]
+在数据媒体中创建新目录。
 语法：
-s = GetSolarVersion
-返回值：
-字符串
+MkDir Text As String
+参数：
+Text：
+用于指定要创建目录的名称和路径的任意字符串表达式。您也可以使用
+URL 表示法
+。
+如果不能确定路径，则在当前目录下创建指定的目录。
 示例：
-Sub ExampleGetSolarVersion
-Dim sSep As String
-sSep = GetSolarVersion
-MsgBox sSep,64, &quot; Version number of the solar technology &quot;
-End Sub
+Sub ExampleFileIO
+' 有关文件组织的函数示例
+Const sFile1 as String = &quot; file://c|/autoexec.bat &quot;
+Const sDir1 as String = &quot; file://c|/Temp &quot;
+Const sSubDir1 as String = &quot; Test &quot;
+Const sFile2 as String = &quot; Copied.tmp &quot;
+Const sFile3 as String = &quot; Renamed.tmp &quot;
+Dim sFile as String
+sFile = sDir1 + &quot; / &quot; + sSubDir1
+ChDir( sDir1 )
+If Dir(sSubDir1,16)= &quot; &quot; then ' 测试目录是否存在？
+MkDir sSubDir1
+MsgBox sFile,0, &quot; 创建目录 &quot;
+End If
+sFile = sFile + &quot; / &quot; + sFile2
+FileCopy sFile1 , sFile
+MsgBox fSysURL(CurDir()),0, &quot; 当前目录 &quot;
+MsgBox sFile & Chr(13) & FileDateTime( sFile ),0, &quot; Creation time &quot;
+MsgBox sFile & Chr(13) & FileLen( sFile ),0, &quot; 文件长度 &quot;
+MsgBox sFile & Chr(13) & GetAttr( sFile ),0, &quot; 文件属性 &quot;
+Name sFile as sDir1 + &quot; / &quot; + sSubDir1 + &quot; / &quot; + sFile3
+' 在同一个目录中重命名
+sFile = sDir1 + &quot; / &quot; + sSubDir1 + &quot; / &quot; + sFile3
+SetAttr( sFile, 0 ) ' 删除所有属性
+MsgBox sFile & Chr(13) & GetAttr( sFile ),0, &quot; 新文件属性 &quot;
+Kill sFile
+RmDir sDir1 + &quot; / &quot; + sSubDir1
+end sub
+' 将系统路径转换为 URL
+Function fSysURL( fSysFp as String ) as String
+Dim iPos As String
+iPos = 1
+iPos = Instr(iPos,fSysFp, getPathSeparator())
+do while iPos > 0
+mid( fSysFp, iPos , 1, &quot; / &quot; )
+iPos = Instr(iPos+1,fSysFp, getPathSeparator())
+loop
+' DOS 中的冒号
+iPos = Instr(1,fSysFp, &quot; : &quot; )
+if iPos > 0 then mid( fSysFp, iPos , 1, &quot; | &quot; )
+fSysURL = &quot; file:// &quot; & fSysFp
+End Function

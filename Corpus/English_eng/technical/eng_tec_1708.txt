@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,38 +15,46 @@
 # sample_type:	whole
 # comments:	NA
 
-Right Function [Run-time]
-/text/sbasic/shared/03120307.xhp
+Line Input # Statement [Run-time]
+/text/sbasic/shared/03020203.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-Right function
-Right Function [Run-time]
-Returns the rightmost &quot; n &quot; characters of a string expression.
-Left Function
-.
+Line Input statement
+mw changed index entry
+Line Input # Statement [Run-time]
+Reads strings from a sequential file into a variable.
 Syntax:
-Right (Text As String, n As Long)
-Return value:
-String
+Line Input #FileNumber As Integer, Var As String
 Parameters:
-Text:
-Any string expression that you want to return the rightmost characters of.
-n:
-Numerical expression that defines the number of characters that you want to return.
-If
-n
-= 0, a zero-length string is returned.
-The maximum allowed value is 65535.
-The following example converts a date in YYYY-MM-DD format to the US date format (MM/DD/YYYY).
+FileNumber:
+Number of the file that contains the data that you want to read.
+The file must have been opened in advance with the Open statement using the key word INPUT.
+var:
+The name of the variable that stores the result.
+Line Input#
+statement, you can read strings from an open file into a variable.
+String variables are read line-by-line up to the first carriage return (Asc=13) or linefeed (Asc=10).
+Line end marks are not included in the resulting string.
 Example:
-Sub ExampleUSDate
-Dim sInput As String
-Dim sUS_date As String
-sInput = InputBox( &quot; Please input a date in the international format 'YYYY-MM-DD' &quot; )
-sUS_date = Mid(sInput, 6, 2)
-sUS_date = sUS_date & &quot; / &quot;
-sUS_date = sUS_date & Right(sInput, 2)
-sUS_date = sUS_date & &quot; / &quot;
-sUS_date = sUS_date & Left(sInput, 4)
-MsgBox sUS_date
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; This is a line of text &quot;
+Print #iNumber, &quot; This is another line of text &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
 End Sub

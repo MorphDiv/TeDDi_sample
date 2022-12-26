@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,86 +15,64 @@
 # sample_type:	whole
 # comments:	NA
 
-Konfigurieren von kppp f\xFCr R\xFCckrufverbindungen
-UNIX oder Linux R\xFCckruf-Server
-Dieser Abschnitt ist eine Einf\xFChrung in den Ablauf beim Aufbau einer UNIX (Linux )-R\xFCckrufverbindung und wie kppp eingestellt werden kann, um eine Verbindung mit einem UNIX R\xFCckruf-Server, speziell mit einen Skript-basierten Linux R\xFCckruf-Server, zu erstellen.
-Einf\xFChrung in R\xFCckrufverbindungen
-Es gibt verschiedene Gr\xFCnde f\xFCr die Benutzung von R\xFCckrufverbindungen.
-Einige davon sind:
-Die Sicherheit Ihres lokalen Netzwerkes erh\xF6hen.
-Die Kosten von auswertigen Mitarbeitern senken.
-Telefonkosten kontrollieren, die als Gesch\xE4ftsausgaben deklariert wurden.
-Machen Sie sich Sorgen, dass jemand Ihren Einwahl-Server anw\xE4hlt und versucht ein Passwort zu entschl\xFCsseln?
-Warum betreiben Sie dann \xFCberhaupt einen Firewall f\xFCr Ihre Internetverbindungen?
-R\xFCckrufverbindungs-Software fragt normalerweise nach Ihrem Namen und unterbricht dann die Verbindung.
-Dann ruft sie Sie zur\xFCck, meistens unter einer Nummer die auf dem Server in einer Datenbank gespeichert ist.Der Client nimmt den Anruf an und f\xE4hrt mit dem Verbindungsaufbau fort, als wenn nichts gewesen w\xE4re.
-Der Server fragt Sie nun nach Ihrem Benutzernamen und Passwort, wohlwissend das Sie die Person sind, deren Namen bei der ersten Einwahl angegeben wurde.
-Die Verbindung wird normal aufgebaut und pppd wird gestartet.
-Die Frage ist, wie sage ich dem Client er soll den Anruf annehmen, wenn der Server zur\xFCckruft?
-Brauchen Sie dazu einProgramm wie mgetty?
-Die Antwort ist Nein!
-Sie brauchen kein speziellesClient-Programm.Allgemein gesagt, k\xF6nnen alle Clients f\xFCr R\xFCckrufverbindungen benutzt werden.
-Sie k\xF6nnen sogar ein gew\xF6hnliches Terminalprogramm wie minicom dazu benutzen, eine Verbindung zu einem R\xFCckruf-Server aufzubauen.
-Das einzige was Sie tun m\xFCssen ist Ihrem Modem zu sagen AutoAnswer den Anruf, wenn ein RING aufgetreten ist durch das Modem.
-Dieses erreichen Sie durch den folgenden Modem-Befehl:
-Dieser Befehl sagt dem Modem, nimm ab nach einem RING.
-Das hei\xDFt, Ihr Modem nimmt einen Anruf nach einem RING an.
-Erinnern Sie sich, dies passiert ohne Mitwirkung einer Software auf Ihrem Rechner.
-Wie viele andere W\xE4hlprogramme auch, pr\xFCft Kppp ob die Verbindung vom Server beendet wurde und beendet dann die Verbindung, wenn ein NO CARRIER registriert wurde.
-Und das ist das n\xE4chste Problem:
-NO CARRIER wird auch registriert, wenn der R\xFCckruf-Server auflegt, nachdem er wei\xDF unter welcher Nummer er zur\xFCckrufen soll.
-Manche Server benutzen daf\xFCr ein spezielles Anmeldeprogramm.
-Wie k\xF6nnen Sie dieses Problem l\xF6sen?
-Sagen Sie Ihrem Modem, dass es die ganze Zeit eine offene Leitung zeigen soll (was kein Problem bereitet, wenn der Client auflegt), indem Sie das Modemkommando benutzen:
-Wenn Sie das testen wollen, k\xF6nnen Sie zuerst ein normales Terminalprogramm wie minicom benutzen und Ihren R\xFCckruf-Server anrufen.
-Die kppp Einstellungen
-Jetzt, wo Sie die Theorie in Aktion gesehen haben, wie m\xFCssen Sie kppp einstellen, um damit zu einem R\xFCckruf-Server zu verbinden?
-Die folgende Prozedur ist sehr einfach.
-Zuerst m\xFCssen Sie Ihrem Modem mitteilen, dass es Anrufe annehmen soll und die Leitung nicht schlie\xDFt, wenn der R\xFCckruf-Server auflegt, um zur\xFCckzurufen.
-Beide Einstellungen k\xF6nnen Sie auf der Modem Karte der kppp Konfiguration vornehmen durch hinzuf\xFCgen von AT&C0S0=1DT zu der Option W\xE4hl String.
-Alle anderen Einstellungen f\xFCr kppp k\xF6nnen Sie belassen.
-Falls Sie auf Probleme beim Modem Initialisieren und Zur\xFCcksetzen treffen, lesen Sie im Abschnitt Problembeseitigung nach.
-Machen Sie sich jetzt ein paar Gedanken \xFCber Ihren Server.
-Denken Sie daran, dass Windows und UNIX -Betriebssysteme unterschiedlicher Meinung sind, wie Zeilenenden in Textdateien (und Anmeldeprozeduren) aussehen: einfaches CR oder CR/LF oder LF.
-Falls Sie eine Verbindung zu einem Macintosh-Server aufbauen wollen, benutzen Sie CR als Zeilenende.
-Der n\xE4chste Abschnitt beschreibt die Einstellung von kppp auf der Basis eines Linux R\xFCckruf-Pakets (siehe unten), das eine gew\xF6hnliche Anmeldeprozedur (kein PAP oder sonstiges) benutzt.
-Setzen Sie die Art der Authentifizierung auf der W\xE4hlen Karte der Zugangseinstellung auf Script-basiert
-Nun m\xFCssen Sie das Login-Skript schreiben.
-Sie k\xF6nnen es auf der Login Script Karte des Zugangsbeschreibungs- Dialoges finden.
-In diesem Beispiel braucht der Benutzer Benutzer xyz das folgende Skript, um zu Hause zur\xFCckgerufen zu werden (der R\xFCckruf-Server hat eine Tabelle mit Namen und Nummern, so dass Sie Ihre Telefonnummer aus Sicherheitsgr\xFCnden \xFCber einen Alias ausw\xE4hlen m\xFCssen).
-F\xFCr jede Zeile w\xE4hlen Sie das Kriterium von der Auswahlliste auf der linken Seite des Dialoges aus und schreiben in die Textbox auf der rechten Seite.
-W\xE4hlen Sie Hinzuf\xFCgen um die einzelnen Zeilen zum Script hinzuzuf\xFCgen.
-Sie k\xF6nnen die Option Einf\xFCgen benutzen, um eine Zeile inmitten des Scripts einzuf\xFCgen und L\xF6schen, um eine Zeile zu l\xF6schen, falls Sie einen Fehler gemacht haben.
-Das Skript k\xF6nnte etwa folgenderma\xDFen aussehen (ohne die Kommentare, beginnend mit #):
-Nachdem die Anmeldeaufforderung erscheint, sendet der Benutzer seinen Benutzernamen und wartet auf die Liste mit verf\xFCgbaren Verbindungen.
-Dann teilt er dem Server mit, unter welcher Nummer er zur\xFCckgerufen werden will. kppp kann daf\xFCr einen Dialog \xF6ffnen, falls sich Ihr Aufenthaltsort oft \xE4ndert (z.B. wenn Sie ein Vertreter sind und von Hotel zu H otel reisen).
-Danach erwartet der Server Ihren Benutzernamen und die Passworteingabe.
-In der Zwischenzeit h\xE4ngt der Server auf und ruft den Benutzer zur\xFCck. kppp wartet auf die Eingabeaufforderung und startet dann ein kurzes Skript (hier genannt start_ppp), welches den pppd auf dem Server startet.
-Das start_ppp Skript k\xF6nnte etwa folgenderma\xDFen aussehen:
-Nat\xFCrlich geht die Konfiguration eines PPP -Servers etwas \xFCber die Intention dieses Kapitel hinaus.
-F\xFCr mehr Informationen lesen Sie die pppd -Manpage.
-Eine sehr gute Beschreibung eines R\xFCckruf-Servers k\xF6nnen sie unter http://ap-dec717c.physik.uni-karlsruhe.de/~mh/callback finden.
-Alle anderen Einstellungen (z.B. pppd Konfiguration oder IP-Einstellungen) sind die gleichen wie sonst auch.
-Denken Sie daran, dass keine spezielle Software n\xF6tig ist, um den R\xFCckruf anzunehmen.
-Hinweis:
-Kppp R\xFCckruf und andere Programme wie mgetty oder andere faxgetty k\xF6nnen auf die gleiche serielle Schnittstelle zugreifen.
-Dabei gibt es beim Einw\xE4hlen keine Probleme, da Kppp eine Sperrdatei erzeugt, die anderen getty-Programmen anzeigt, dass gerade ein anderes Programm die Leitung benutzt.
-Problembeseitigung
-Es gibt ein paar bekannte Probleme mit kppp im R\xFCckruf-Modus:
-Da Sie das Modem mit AutoAnswer initialisieren, m\xFCssen Sie es nach dem Verbindungsabbruch zur\xFCcksetzen.
-Wenn Sie das nicht tun, wird das Modem alle Anrufe f\xFCr Sie annehmen.
-kppp hat leichte Problem, wenn die Modemschnittstelle mit einem anderen Programm wie mgetty gemeinsam benutzt wird.
-Wenn mgetty die gleiche Schnittstelle benutzt, kann kppp das Modem nicht korrekt initialisieren.
-kppp kann w\xE4hrend einer Skript-basierten Verbindung nach einer Benutzereingabe fragen.
-Leider fragt kppp Sie auch nach dem Benutzernamen, wenn der Server zum zweiten Mal den Benutzernamen wissen will.
-Wenn Sie das abstellen wollen, m\xFCssen Sie Ihren Benutzernamen direkt in das Login-Skript schreiben (nicht sehr sch\xF6n, aber es hilft).
-Serversoftware im Internet
-Linux R\xFCckruf-Server Softwarepakete sind \xFCberall im Internet erh\xE4ltlich.
-Nat\xFCrlich geh\xF6rt auch das sehr bekannte und leistungsf\xE4hige mgetty dazu, mit dem man auch R\xFCckrufverbindungen erstellen kann.
-Eine Beschreibung, wie man mgetty daf\xFCr konfigurieren muss, gibt es unter http://www.dyer.demon.co.uk/slug/tipscrip.htm betreut von Colin McKinnon, colin@wew.co.uk.
-Aber es ist auch ein fertig benutzbares Paket f\xFCr Linux R\xFCckruf-Server unter http://www.icce.rug.nl/docs/programs/callback/callback.html erh\xE4ltlich.
-Dieses Paket wird betreut von Frank B.
-Brokken frank@icce.rug.nl .Weil das Paket nicht so leicht einzustellen ist,habe ich eine kurze Einleitung daf\xFCr geschrieben unter http://ap-dec717c.physik.uni-karlsruhe.de/~mh/callback / Schauen Sie dort ebenfalls nach, wenn Sie eine weitergehende allgemeine Einf\xFChrung in R\xFCckrufverbindungen wollen.
-Windows NT RAS R\xFCckrufverbindungen
-Windows NT benutzt einen v\xF6llig verschiedenen Ansatz als der hier beschriebene (wie \xFCblich).
-NT ben\xF6tigt eine Erweiterung des PPP Protokolls namens CBCP (Call Back Control Protocol). pppd unterst\xFCtzt dieses Protokoll, aber Sie m\xFCssen pppd dazu neu kompilieren.
+Tastenk\xFCrzel
+Einf\xFChrung
+Da verschiedene Menschen verschiedene Vorlieben bez\xFCglich Tastenkombinationen haben, bietet KDE die volle Anpassungsm\xF6glichkeit von sogenannten Tastenzuordnungen.
+Eine Tastenzuordnung ist eine Verbindung einer Aktion mit einer Taste oder einer Tastenkombination.
+Benutzung
+Im Kontrollmodul f\xFCr die Tastenzuordnungen werden Sie eine Liste von Tastenschemas, eine Liste von Tastenzuordnungen des gegenw\xE4rtig ausgew\xE4hlten Schemas, und einen Bereich, in dem Sie die momentan gew\xE4hlte Tastenzuordnung anpassen k\xF6nnen.
+Sie werden auch einen Reiter f\xFCr Globale Tastenkombinationen und einen f\xFCr Anwendungs-Tastenkombinationen sehen.
+Allgemeine Tastenk\xFCrzel
+Allgemeine Tastenk\xFCrzel und Tastenk\xFCrzel f\xFCr Einzelprogramme arbeiten nach dem gleichen Prinzip.
+In einem gewissen Sinne sind Tastenk\xFCrzel f\xFCr Einzelprogramme auch global.
+Der einzige Unterschied ist:
+Allgemeine Tastenk\xFCrzel sind K\xFCrzel f\xFCr Aktionen, die auch dann sinnvoll sind, wenn keine Anwendung ge\xF6ffnet ist.
+Die Tastenk\xFCrzel beziehen sich \xFCblicherweise auf Aktionen wie das Wechseln der Arbeitsfl\xE4che, das Ver\xE4ndern von Fenstern usw.
+Tastenk\xFCrzel f\xFCr Einzelprogramme beziehen sich auf Aktionen, die in Anwendungen verf\xFCgbar sind, wie Speichern, Drucken, Kopieren usw.
+Bitte beachten Sie, dass Tastenkombinationen f\xFCr Einzelprogramme die hierkonfiguriert werden, nur die Standard-Aktionen sind,die man oft in Anwendungen vorfindet.
+Die meisten Anwendungen werden zus\xE4tzlichihre eigenen Aktionen definieren, f\xFCr welche Sie die Tastenzuordnungen mit Hilfedes Tastenzuordnungen-Dialogs der jeweiligen Anwendung benutzen m\xFCssen.
+Tastenk\xFCrzel konfigurieren
+Tastenzuordnungen zu konfigurieren ist ziemlich einfach.
+In der Mitte des Kontrollmoduls f\xFCr die Tastenzuordnungen, werden Sie eine Liste verf\xFCgbarer Aktionen finden.
+Wenn eine Tastenzuordnung f\xFCr eine Aktion konfiguriert ist, werden Sie diese genau neben dieser finden.
+W\xE4hlen Sie einfach die Aktion aus, die Sie konfigurieren wollen.
+Nachdem Sie eine Aktion ausgew\xE4hlt haben, werden Sie bemerken, dass die meisten der Bedienelemente unter der Aktionsliste aktiviert sind.
+Sie k\xF6nnen dort Tastenkombinationen oder sogar gar keine Tastenkombination f\xFCr die gew\xE4hlte Aktion einstellen.
+Keine Taste: die ausgew\xE4hlte Aktion wird keiner Taste zugeordnet.
+Standard-Taste: die ausgew\xE4hlte Aktion wird mit dem KDE -Standardwert verbunden.
+Dies ist eine gute Wahl f\xFCr die meisten Aktionen, da KDE mit vern\xFCnftigen Tastenzuordnungen ausgeliefert wird, die wohl \xFCberdacht wurden.
+Benutzerdefinierte Taste: wenn diese Option aktiviert ist, k\xF6nnen Sie eine Tastenkombination f\xFCr die ausgew\xE4hlte Aktion erstellen.
+W\xE4hlen Sie einfach Zusatztasten (d.h.
+Shift, &Strg; oder Alt) und dann eine Taste: klicken Sie einfach auf das Tastensymbol und dr\xFCcken Sie danach die Taste, die Sie dieser Tastenkombination zuordnen wollen.
+Wie bei allen Kontrollmodulen werden Ihre \xC4nderungen nicht wirksam, bis Sie OK oder Anwenden anklicken.
+Klicken Sie auf Abbrechen, um alle \xC4nderungen zu verwerfen.
+Schemas konfigurieren
+Ein Tastenzuordnungs-Schema ist eine Sammlung an Tastenzuordnungen, auf die Sie unter der jeweiligen Bezeichnung zugreifen k\xF6nnen.
+KDE wird mit einem vordefinierten Tastenzuordnungs-Schema namens KDE-Voreinstellung f\xFCr drei Modifikationstasten ausgeliefert.
+Zus\xE4tzlich zu diesem Schema werden Sie immer ein Schema namens Aktuelles Schema sehen, welches f\xFCr die Sammlung an Tastenzuordnungen steht, welche Sie momentan benutzen (d.h. nicht die momentanen Einstellungen, die Sie gerade ver\xE4ndern, sondern die Einstellungen, mit denen Sie bis jetzt gearbeitet haben).
+Wenn Sie sich das erste Mal an den Einstellungen f\xFCr die Tastenzuordnungen versuchen, brauchen Sie keine Angst zu haben, die Standard-Tastenzuordnungen zu ver\xE4ndern:
+KDE l\xE4sst Sie die Standard-Einstellungen nicht \xFCberschreiben, wodurch Sie immer auf den Auslieferungszustand zur\xFCckschalten k\xF6nnen.
+Indem Sie Aktuelles Schema ausw\xE4hlen, k\xF6nnen Sie auf die Sammlung an Tastenzuordnungen zur\xFCckschalten, mit denen Sie bis jetzt gearbeitet haben.
+Seien Sie jedoch vorsichtig, wenn Sie ein Schema ausw\xE4hlen, ohne die \xC4nderungen an den momentanen Tastenzuordnungen gesichert zu haben, die Sie beibehalten wollen.
+Wenn Sie mit einer Sammlung an Tastenzuordnungen zufrieden sind, die Sie erstellt haben, k\xF6nnen Sie sie in ein eigenes Schema abspeichern, sodass Sie weiterhin mit den Zuordnungen experimentieren k\xF6nnen und dennoch die M\xF6glichkeit haben, zu einem bestimmten Schema zur\xFCckzukehren.
+Sie k\xF6nnen dies immer tun, indem Sie auf den Hinzuf\xFCgen klicken.
+Sie werden nach einem Namen gefragt, worauf ein neues Schema in der Liste der Tasten-Schemas erscheint.
+Sie k\xF6nnen Ihre eigenen Schemas entfernen, indem Sie ein Schema ausw\xE4hlen und auf den Entfernen -Knopf klicken.
+Klicken Sie auf den Speichern -Knopf um alle \xC4nderungen zu sichern, die Sie am gegenw\xE4rtigen Schema vorgenommen haben.
+Beachten Sie, dass Sie das KDE Standard oder das Aktuelle Schema weder entfernen, noch \xC4nderungen an diesen speichern k\xF6nnen.
+Wenn Sie Ihre \xC4nderungen speichern wollen, w\xE4hrend ein schreibgesch\xFCtztes Schema ausgew\xE4ht ist, m\xFCssen Sie immer zuerst ein neues Schema hinzuf\xFCgen!
+Wenn Sie eines unserer eigenen Schemas ausw\xE4hlen, weil Sie \xC4nderungen daran speichern wollen, wird das Kontrollmodul zu den Tastenzuordnungen dieses Schemas wechseln und Ihre bisherigen \xC4nderungen verwerfen.
+Sondertasten
+Verschiedene Tasten bieten unterschiedliche Kombinationen von Sondertasten.
+Bei einer Mac -Tastatur findet man keine &Strg;-Taste, sondern eine Optionstaste stattdessen.
+Hier kann man sehen, \xFCber welche Sondertasten die aktuelle Tastatur verf\xFCgt.
+Falls man die Macintosh-Tastatur aktiviert, \xE4ndert sich die Liste der verf\xFCgbaren Sondertasten.
+Falls man die Mac -Tastatur aktiviert hat, kann man weiterhin festlegen, ob man die Sondertasten wie in Mac OS verwenden m\xF6chte, um das Verhalten von KDE mehr an das Mac -OS anzugleichen.
+Schlie\xDFlich kann man im Abschnitt X-Sondertasten-Zuordnung beeinflussen, was bei einem Tastendruck an den X-Server gesendet wird.
+Ein \xFCbliches Beispiel ist, die selten verwendete Hochstelltaste als zus\xE4tzliche &Strg;-Taste umzudefinieren.
+Das ist n\xFCtzlich, falls man als Schreibkraft arbeitet, da die Hochstelltaste auf einer Standardtastatur wesentlich g\xFCnstiger liegt als jede der &Strg;-Tasten.
+Abschnittsautor
+Dieser Abschnitt wurde geschrieben von:
+Jost Schenck jost@schenck.de
+Deutsche \xDCbersetzung:
+J\xFCrgen Nagel JuergenNagel@web.de

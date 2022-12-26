@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,35 +15,464 @@
 # sample_type:	whole
 # comments:	NA
 
-Printer
-/text/swriter/01/04070300.xhp
-Sun Microsystems, Inc.
-UFI: fixed bug #i27718# plus another wrong label
-Printer
-Set the print options for the envelope.
-Consult the documentation that came with your printer for setting up the printer for envelopes.
-Depending on the printer model, envelopes may have to be placed left, right, in the middle, and either face up or face down.
-Horizontal left
-Feeds the envelope horizontally from the left edge of the printer tray.
-Horizontal centre
-Feeds the envelope horizontally from the centre of the printer tray.
-Horizontal right
-Feeds the envelope horizontally from the right edge of the printer tray.
-Vertical left
-Feeds the envelope vertically from the left edge of the printer tray.
-Vertical centre
-Feeds the envelope vertically from the centre of the printer tray.
-Vertical right
-Feeds the envelope vertically from the right edge of the printer tray.
-Print from top
-Feeds the envelope with the print side face up in the printer tray.
-Print from bottom
-Feeds the envelope with the print side face down in the printer tray.
-Shift right
-Enter the amount to shift the print area to the right.
-Shift down
-Enter the amount to shift the print area down.
-Current printer
-Displays the name of the current printer.
-Set-up
-Opens the Print Set-up dialogue box, in which you can define additional printer settings, such as paper format and orientation.
+Information Functions
+/text/scalc/01/04060104.xhp
+information functions
+Function Wizard; information
+functions; information functions
+Information Functions
+Information
+functions.
+The data in the following table serves as the basis for some of the examples in the function descriptions:
+C
+D
+2
+value
+value
+3
+-5
+-3
+4
+-2
+0
+5
+-1
+1
+6
+0
+3
+7
+2
+4
+8
+4
+6
+9
+6
+8
+INFO function
+INFO
+Returns specific information about the current working environment.
+The function receives a single text argument and returns data depending on that parameter.
+Syntax:
+INFO( &quot; Type &quot; )
+Type
+and the return values of the INFO function.
+Value for &quot; Type &quot;
+Return value
+&quot; osversion &quot;
+Always &quot; Windows (32-bit) NT 5.01 &quot; , for compatibility reasons
+&quot; system &quot;
+&quot; release &quot;
+The product release identifier, for example &quot; 300m25(Build:9876) &quot;
+&quot; numfile &quot;
+Always 1, for compatibility reasons
+&quot; recalc &quot;
+Current formula recalculation mode, either &quot; Automatic &quot; or &quot; Manual &quot; (localised into %PRODUCTNAME language)
+Type
+parameter, but %PRODUCTNAME Calc will only accept the US English values.
+Example:
+=INFO( &quot; release &quot; )
+returns the product release number of the %PRODUCTNAME in use.
+=INFO(D5)
+with cell
+D5
+containing a text string
+system
+returns the operating system type.
+CURRENT function
+CURRENT
+This function returns the result to date of evaluating the formula of which it is a part (in other words the result as far as that evaluation has got).
+Its main use is together with the STYLE() function to apply selected styles to a cell depending on the cell contents.
+Syntax:
+CURRENT()
+Example:
+=1+2+CURRENT()
+The example returns 6.
+The formula is calculated from left to right as:
+1 + 2 equals 3, giving the result to date when CURRENT() is encountered; CURRENT() therefore yields 3, which is added to the original 3 to give 6.
+=A2+B2+STYLE(IF(CURRENT() > 10;”Red”;”Default”))
+STYLE
+function for more explanation.
+= &quot; choo &quot; & CURRENT()
+choochoo
+.
+FORMULA function
+formula cells;displaying formulae in other cells
+displaying;formulae at any position
+mw added &quot; formula cells; &quot; and &quot; displaying; &quot;
+FORMULA
+Displays the formula of a formula cell as a text string.
+Syntax:
+FORMULA(reference)
+Reference
+is a reference to a cell containing a formula.
+An invalid reference or a reference to a cell with no formula results in the error value #N/A.
+Example:
+=SUM(1; 2; 3)
+then
+=FORMULA(A8)
+returns the text
+=SUM(1; 2; 3)
+.
+ISREF function
+references;testing cell contents
+cell contents;testing for references
+mw added &quot; references; &quot; and &quot; cell contents; &quot;
+ISREF
+Tests if the argument is a reference.
+Returns TRUE if the argument is a reference, returns FALSE otherwise.
+When given a reference this function does not examine the value being referenced.
+Syntax:
+ISREF(Value)
+Value
+is the value to be tested to determine whether it is a reference.
+Example:
+=ISREF(C5)
+returns the result TRUE because C5 is a valid reference.
+=ISREF( &quot; abcdef &quot; )
+returns always FALSE because a text can never be a reference.
+=ISREF(4)
+returns FALSE.
+=ISREF(INDIRECT( &quot; A6 &quot; ))
+returns TRUE, because INDIRECT is a function that returns a reference.
+=ISREF(ADDRESS(1; 1; 2; &quot; Sheet2 &quot; ))
+returns FALSE, because ADDRESS is a function that returns a text, although it looks like a reference.
+ISERR function
+error codes;controlling
+mw added &quot; error codes, &quot;
+ISERR
+Returns TRUE if the value refers to any error value except #N/A, FALSE otherwise.
+You can use this function to control error values in certain cells.
+Syntax:
+ISERR(Value)
+Value
+is any value or expression which is tested to determine whether an error value not equal to
+#N/A
+is present.
+Example:
+=ISERR(C8)
+where cell C8 contains
+=1/0
+returns TRUE, because 1/0 is an error.
+=ISERR(C9)
+where cell C9 contains
+=NA()
+returns FALSE, because ISERR() ignores the
+#N/A
+error.
+ISERROR function
+recognising;general errors
+mw added &quot; recognizing; &quot;
+ISERROR
+#N/A
+error value.
+Syntax:
+ISERROR(Value)
+Value
+is, or refers to, the value to be tested to determine whether it is an error value.
+ISERROR() returns TRUE if there is an error and FALSE if not.
+Example:
+=ISERROR(C8)
+where cell C8 contains
+=1/0
+returns TRUE, because 1/0 is an error.
+=ISERROR(C9)
+where cell C9 contains
+=NA()
+returns TRUE.
+ISFORMULA function
+recognising formula cells
+formula cells;recognising
+mw inserted &quot; recognizing... &quot; and &quot; formula cells; &quot;
+ISFORMULA
+Returns TRUE if a cell is a formula cell.
+Syntax:
+ISFORMULA(Reference)
+Reference
+indicates the reference to a cell in which a test will be performed to determine if it contains a formula.
+Example:
+=ISFORMULA(C4)
+returns FALSE if the cell C4 contains the number
+5
+.
+ISEVEN_ADD function
+ISEVEN_ADD
+Tests for even numbers.
+Returns 1 (TRUE) if the number returns a whole number when divided by 2.
+Syntax:
+ISEVEN_ADD(Number)
+Number
+is the number to be tested.
+Example:
+=ISEVEN_ADD(5)
+returns 0.
+=ISEVEN_ADD(A1)
+returns 1 if cell A1 contains the number
+2
+.
+ISNONTEXT function
+cell contents;no text
+mw added &quot; cell contents; &quot;
+ISNONTEXT
+Tests if the cell contents are text or numbers and returns FALSE if the contents are text.
+If an error occurs, the function returns TRUE.
+Syntax:
+ISNONTEXT(Value)
+Value
+is any value or expression where a test is performed to determine whether it is a text or numbers or a Boolean value.
+Example:
+=ISNONTEXT(D2)
+returns FALSE if cell D2 contains the text
+abcdef
+.
+=ISNONTEXT(D9)
+returns TRUE if cell D9 contains the number
+8
+.
+ISBLANK function
+blank cell contents
+empty cells; recognising
+mw added &quot; blank... &quot; and &quot; empty cells; &quot;
+ISBLANK
+Returns TRUE if the reference to a cell is blank.
+This function is used to determine if the cell is empty.
+A cell with a formula inside is not empty.
+Syntax:
+ISBLANK(Value)
+Value
+is the content to be tested.
+Example:
+=ISBLANK(D2)
+returns FALSE as a result.
+ISLOGICAL function
+number formats;logical
+logical number formats
+mw added &quot; number formats; &quot; and &quot; logical... &quot;
+ISLOGICAL
+Returns TRUE if the cell contains a logical number format.
+The function is used in order to check for both TRUE and FALSE values in certain cells.
+If an error occurs, the function returns FALSE.
+Syntax:
+ISLOGICAL(Value)
+Value
+is a logical value (TRUE or FALSE) and returns FALSE otherwise.
+Example:
+=ISLOGICAL(99)
+returns FALSE as 99 is a number, not a logical value.
+=ISLOGICAL(ISNA(D4))
+returns TRUE whatever the contents of cell D4, because ISNA() returns a logical value.
+ISNA function
+#N/A error;recognising
+mw added &quot; #N/A ... &quot;
+ISNA
+#N/A
+(value not available) error value.
+If an error occurs, the function returns FALSE.
+Syntax:
+ISNA(Value)
+Value
+is the value or expression to be tested.
+Example:
+=ISNA(D3)
+returns FALSE.
+ISTEXT function
+cell contents;text
+ISTEXT
+Returns TRUE if the cell content is text.
+If an error occurs, the function returns FALSE.
+Syntax:
+ISTEXT(Value)
+Value
+is a value, number, Boolean value, or an error value to be tested.
+Example:
+=ISTEXT(D9)
+returns TRUE if cell D9 contains the text
+abcdef
+.
+=ISTEXT(C3)
+returns FALSE if cell C3 contains the number
+3
+.
+ISODD_ADD function
+ISODD_ADD
+Returns TRUE (1) if the number does not return a whole number when divided by 2.
+Syntax:
+ISODD_ADD(Number)
+Number
+is the number to be tested.
+Example:
+=ISODD_ADD(5)
+returns 1.
+ISNUMBER function
+cell contents;numbers
+mw added &quot; cell contents; &quot;
+ISNUMBER
+Returns TRUE if the value is a number.
+Syntax:
+ISNUMBER(Value)
+Value
+is any expression to be tested to determine whether it is a number or text.
+Example:
+=ISNUMBER(C3)
+returns TRUE if the cell C3 contains the number
+4
+.
+=ISNUMBER(C2)
+returns FALSE if the cell C2 contains the text
+abcdef
+.
+N function
+N
+#NA
+).
+#NA
+, the function returns the error value.
+Syntax:
+N(Value)
+Value
+is the parameter to be converted into a number.
+N() returns the numerical value if it can.
+It returns the logical values TRUE and FALSE as 1 and 0 respectively.
+It returns text and errors as 0.
+Example:
+=N(123)
+returns 123
+=N(TRUE)
+returns 1
+=N(FALSE)
+returns 0
+=N( &quot; abc &quot; )
+returns 0
+#DIV/0!
+NA function
+#N/A error;assigning to a cell
+mw added &quot; #N/A error; &quot;
+NA
+Returns the error value #N/A.
+Syntax:
+NA()
+Example:
+=NA()
+converts the contents of the cell into #N/A.
+TYPE function
+TYPE
+Returns the type of value.
+Syntax:
+TYPE(Value)
+Value
+is a specific value for which the data type is determined.
+Value 1 = number, value 2 = text, value 4 = Boolean value, value 8 = formula, value 16 = error value.
+Example (see example table above)
+=TYPE(C2)
+returns 2 as a result.
+=TYPE(D9)
+returns 1 as a result.
+CELL function
+cell information
+information on cells
+mw added two entries
+CELL
+Returns information on address, formatting or contents of a cell.
+Syntax:
+CELL( &quot; InfoType &quot; ; Reference)
+InfoType
+is the character string that specifies the type of information.
+The character string is always in English.
+Upper or lower case is optional.
+InfoType
+Meaning
+COL
+Returns the number of the referenced column.
+=CELL( &quot; COL &quot; ; D2)
+returns 4.
+ROW
+Returns the number of the referenced row.
+=CELL( &quot; ROW &quot; ; D2)
+returns 2.
+SHEET
+Returns the number of the referenced sheet.
+=CELL( &quot; Sheet &quot; ; Sheet3.D2)
+returns 3.
+ADDRESS
+Returns the absolute address of the referenced cell.
+=CELL( &quot; ADDRESS &quot; ; D2)
+returns $D$2.
+=CELL( &quot; ADDRESS &quot; ; Sheet3.D2)
+returns $Sheet3.$D$2.
+=CELL( &quot; ADDRESS &quot; ; 'X:\dr est.sxc'#$Sheet1.D2)
+returns
+'file:///X:/dr/test.sxc'#$Sheet1.$D$2
+.
+FILENAME
+Returns the file name and the sheet number of the referenced cell.
+=CELL( &quot; FILENAME &quot; ; D2)
+returns
+'file:///X:/dr/own.sxc'#$Sheet1
+, if the formula in the current document X:\dr\own.sxc is located in Sheet1.
+=CELL( &quot; FILENAME &quot; ; 'X:\dr est.sxc'#$Sheet1.D2)
+returns
+'file:///X:/dr/test.sxc'#$Sheet1
+.
+COORD
+Returns the complete cell address in Lotus(TM) notation.
+=CELL( &quot; COORD &quot; ; D2)
+returns $A:$D$2.
+=CELL( &quot; COORD &quot; ; Sheet3.D2)
+returns $C:$D$2.
+CONTENTS
+Returns the content of the referenced cell, without any formatting.
+TYPE
+Returns the type of cell content.
+b = blank. empty cell
+l = label.
+Text, result of a formula as text
+v = value.
+Value, result of a formula as a number
+WIDTH
+Returns the width of the referenced column.
+The unit is the number of zeros (0) that fit into the column in the default text with the default size.
+PREFIX
+Returns the alignment of the referenced cell.
+' = align left or left-justified
+&quot; = align right
+^ = centred
+\ = repeating (currently inactive)
+PROTECT
+Returns the status of the cell protection for the cell.
+1 = cell is protected
+0 = cell is not protected
+FORMAT
+Returns a character string that indicates the number format.
+, = number with thousands separator
+F = number without thousands separator
+C = currency format
+S = exponential representation, for example, 1.234+E56
+P = percentage
+In the above formats, the number of decimal places after the decimal separator is given as a number.
+Example: the number format #,##0.0 returns ,1 and the number format 00.000% returns P3
+D1 = MMM-D-YY, MM-D-YY and similar formats
+D2 = DD-MM
+D3 = MM-YY
+D4 = DD-MM-YYYY HH:MM:SS
+D5 = MM-DD
+D6 = HH:MM:SS AM/PM
+D7 = HH:MM AM/PM
+D8 = HH:MM:SS
+D9 = HH:MM
+G = All other formats
+- (Minus) at the end = negative numbers are formatted in colour
+() (brackets) at the end = there is an opening bracket in the format code
+COLOUR
+Returns 1, if negative values have been formatted in colour, otherwise 0.
+PARENTHESES
+Returns 1 if the format code contains an opening bracket (, otherwise 0.
+Reference
+(list of options) is the position of the cell to be examined.
+If
+Reference
+is a range, the cell moves to the top left of the range.
+If
+Reference
+is omitted, $[officename] Calc uses the position of the cell in which this formula is located.
+Microsoft Excel uses the reference of the cell in which the cursor is positioned.

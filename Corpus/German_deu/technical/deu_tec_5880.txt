@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,4 +15,33 @@
 # sample_type:	whole
 # comments:	NA
 
-Keine laufenden Programme
+Modem Tricks & Hinweise
+Dieser Abschnitt soll den schwierigen Einstieg in die (nicht so) hohe Kunst der Modemeinstellung bieten. Die Befehle hier sind alle Hayes-AT-Standard, aber nicht alle Modems sind gleich, so dass Ihre Vorgangsweise unterschiedlich sein kann.
+Modemsitzungen
+Eine Modemsitzung gibt Ihnen die Möglichkeit, direkt mit dem Modem zu interagieren. Sie geben Befehle ein und es antwortet. Um eine Modemsitzung zu erhalten, wenn keine Verbindung aktiv ist, gehen Sie in den Einstellungen/Modem/Terminal -Dialog. Das öffnet ein Fenster zur interaktiven Konfiguration des Modems. Versuchen Sie, ATZ einzugeben (das setzt Ihr Modem zurück). Sie sollten eine OK -Antwort erhalten. Benutzen Sie Datei/Beenden, um die Sitzung zu beenden.
+Modemprofile
+Ein Grund, weshalb Sie dem Modem direkt Befehle senden möchten, könnte sein, dass Sie mehrere Modemeinstellungen haben, die Sie behalten und nicht für jede Verbindung eingeben möchten. Ein guter Weg, dies zu tun, führt über Modemprofile. Modems können mehrere gespeicherte Profile haben, nummeriert mit 0,1,... ATamp;V kann zur genutzt werden, um alle anzusehen. Das Standardprofil ist üblicherweise 0 (das kann über ATamp;Y geändert werden). Das derzeit verwendete Profil wird aktives Profil genannt.
+Wenn Sie eine Einstellung ändern, wird das aktive Profil verändert. Der ATZ -Befehl veranlasst das Modem, das Standardprofil zu laden und alle Ihre Änderungen zu verwerfen. Um Änderungen zu speichern, laden Sie das Profil, das Sie ändern möchten über ATZ n (wobei n die Profilnummer ist). Machen Sie die gewünschten Änderungen, dann speichern Sie sie mit ATamp;W n. Damit & kppp; das von Ihnen gewünschte Profil nutzt, ändern Sie den Initialisierungs-String (Einstellungen/Modem/Modembefehle/Init-String). Zum Beispiel bewirkt ATZ1, dass & kppp; das Modem zurücksetzt und das gespeicherte Profil 1 lädt.
+Falls Sie Ihr Modem auf einen bekannten Urzustand zurücksetzen möchten, benutzen Sie ATamp;Famp;W, um das aktive Profil auf die Fabrikeinstellungen zu setzen, und diese im Standardprofil zu sichern.
+Beispiele von Profiländerungen finden Sie im nächsten Abschnitt.
+Das Modem zum Auflegen bewegen
+Manchmal könnte & kppp; Schwierigkeiten beim Auflegen des Modem haben. Das ist vermutlich die Folge eines Unterschieds zwischen den Einstellungen von & kppp; und denen des Modems. Ein Standardmodem nutzt zwei Methoden, um sich zum Auflegen zu entscheiden: Befehl und DTR. Die Befehlsmethode besteht aus dem Senden einer Abbruchsequenz an das Modem, das es in den Befehlsmodus versetzt, und dann dem Senden des Auflegen-Befehls (ATH).
+Außerhalb von & kppp;, wenn Sie das pppd -Paket manuell konfigurieren, ist es oft hilfreich die Befehlsmethode zu nutzen, so dass Sie eine Terminalsitzung verlassen können, und dann pppd starten, ohne das Modem auflegen zu lassen. In den meisten anderen Situationen wird die DTR -Methode bevorzugt, weil sie einfacher ist.
+DTR (ATamp;Dn )-Methode
+Die DTR -Methode lässt das Modem immer dann auflegen, wenn & kppp; es nicht mehr nutzt. Wenn Sie eine Modemsitzung starten und den Zustand über ATamp;V abfragen, und unter den angezeigten Einstellungen für das aktive Profil ist auch amp;D0, dann ist die DTR -auflegen-Methode abgeschaltet. Um DTR einzuschalten, benutzen Sie Terminal, um eine Modemsitzung zu starten. Dann:
+ATZ # Standardprofil wählen ATamp;D2 # Auflegen nach DTR-auflegen ATamp;W # Als Standardprofil speichern
+Wie die DTR -Methode funktioniert
+Jedesmal wenn die Data Terminal Ready (DTR )-Leitung der seriellen Verbindung zwischen dem Computer und dem Modem Spannung führt, legt das Modem auf. Wenn & kppp; die serielle Schnittstelle öffnet, wird dir DTR -Leitung auf niedrige Spannung gesetzt, und bei einem externen Modem können Sie das DTR (oder TR )-Lämpchen angehen sehen, wenn das passiert. Wenn das TR -Lämpchen ausgeht (weil & kppp; die serielle Schnittstelle geschlossen hat, oder Schlimmeres!), legt das Modem auf.
+Befehlsmethode
+Der andere Weg, ein Modem auflegen zu lassen, wenn man verbunden ist (mit ATamp;D n, wobei n nicht 2 ist), ist, das Modem den Befehl annehmen zu lassen, wenn eine Sitzung läuft. Um es richtig auflegen zu lassen, starten Sie eine Modemsitzung und stellen Sie die Guardzeit auf ein kleines Intervall ein, wie folgt:
+ATZ ATS12=5 ATamp;W
+Dann benutzen Sie den Einstellungen/Modem/Modembefehle/Guard-Zeit -Regler, um den Wert aus Register (S12) auf (5) einzustellen. Das Modem sollte dann richtig auflegen.
+Wie die Befehlsmethode funktioniert
+Wenn das lokale Modem mit einem entfernten Modem verbunden ist, ist es im connect -Zustand, in dem es alle empfangenen Zeichen, ohne sie auszuwerten, an das entfernte Modem weitergibt. Damit das Modem Befehle für sich selbst annimmt, muss man das Modem in den Befehlszustand versetzen. Der Abbruchcode macht dies.
+Der Abbruchcode ist definiert als drei Zeitintervalle, deren Länge durch S12 definiert wird (in fünfzigstel Sekunden).
+Ruhe (muss mindestens S12 /50 Sekunden dauern)
+Abbruchzeichen (definiert durch Register S2, Standard ist +) drei Mal wiederholt (weniger als S12 /50 Sekunden zwischen jedem)
+Sobald das Modem im Befehlsmodus ist, können Sie ihm Befehle senden. Um es auflegen zu lassen, senden Sie ATH. Die Abbruchcodes und die Auflegenfolge, die & kppp; nutzt, werden im Einstellungen/Modem/Modembefehle -Dialog angezeigt. Diese sollten zu Ihrem Modem passen.
+Tonwahl beschleunigen
+Falls Sie Tonwahl nutzen können, kann die Zeit, die zum Wählen benötigt wird, mit dem S11 -Register verändert werden. Es gibt die Dauer (in hundertstel Sekunden) an, um einen Ton während der Wahl zu senden. Der Standard ist üblicherweise 95 (fast eine Sekunde). Wie schnell Sie wählen können, hängt von den Geräten Ihrer Telefongesellschaft ab. Die minimale Dauer ist 50, fast doppelt so schnell, und diese Geschwindigkeit funktioniert häufig.
+ATZ # Standardprofil auswählen ATS11=50 # schnellstmögliche Anwahl; erwenden Sie eine größere Zahl, falls es nicht funktioniert. ATamp;W # Als Standardprofil speichern

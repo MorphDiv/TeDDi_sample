@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,82 +15,229 @@
 # sample_type:	whole
 # comments:	NA
 
-Éric Bischoff
-Maren Pakura maren@kde.org Deutsche Übersetzung
-05.05.2006 0.05.01
-KDE
-KTuberling
-Technische Referenz (in englisch)
-Technische Referenz (in englisch)
-& ktuberling; offers a gentle and rewarding introduction to & kde; customization and programming. The application can be extended. For example, without any coding, new playgrounds can be added by changing the graphics files. By adding appropriate sound files, translators can change the sounds to their native tongue!
-If you extend or add to the game please consider sending your additions to the developer Albert Astals Cid for inclusion in future releases.
-For Artists
-To create a new KTuberling playground you have to:
-Draw the playground in a SVG file, there you have to:
-Name the place where items can dragged background.
-Name each of the draggable items with an unique name.
-Create a .theme file, it has to follow this schema:
-& lt;playground gameboard= "yourSVGFile" name= "theDesktopFile" gt; & lt;object name= "itemName" sound= "soundName" scale= "someValue" /gt;......... & lt;/playgroundgt;
-yourSVGFile is the name of the svg file that has the drawing.
-theDesktopFile is the name of the desktop file that has the name of the theme.
-For each object you need a & lt;objectgt; entry. itemName is the unique name you used on the SVG file, soundName is the sound name that will be played when dragging it, see sound themes howto for more information.
-scale is optional and someValue is the scale factor that will be used when drawing this object outside the warehouse, if not specified is 1.
-Create a .desktop file, it has to follow this schema
-[KTuberlingTheme] Name= themeName
-themeName is the name that identifies the theme, will be shown in the Playground menu.
-If you are adding the theme to KTuberling SVN, add .svg .theme .desktop files to FILES section of the CMakeLists.txt in the pics / directory
-If you want to install it for yourself, place .svg .theme .desktop files in ` kde4-config --prefix`/share/apps/ktuberling/pics
-For Translators
-Besides the usual .po files mechanism for translating program labels and prompts, the sounds can be localized too.
-To create a new KTuberling sound theme you have to:
-Record the sounds in OGG Vorbis rc3 file format.
-Create a yourLanguageTwoLetterCode .soundtheme file, it has to follow this schema:
-& lt;language code= "yourLanguageTwoLetterCode" gt; & lt;sound name= "soundName" file= "relativePath" /gt;......... & lt;/languagegt;
-yourLanguageTwoLetterCode is your language two letter code, for example gl for Galician.
-For each sound a & lt;soundgt; entry. soundName should match with the soundName specified in the playground theme (see themes HOWTO). relativePath should be the relative path you are going to install the file with this sound to, typically it will be someUniquePath/soundName.format (someUniquePath can be your language two letter code for example).
-If you are adding the sound theme to KTuberling SVN:
-Add the sound files and the .soundtheme files to the data/kdegames/ktuberling directory of your language translations.
-On that very same dir you need a CMakeLists.txt describing how to install the files, typically it will be.
-FILE(GLOB datafiles *.ogg) install( FILES ${datafiles} DESTINATION ${DATA_INSTALL_DIR}/ktuberling/sounds / yourLanguageTwoLetterCode) install( FILES yourLanguageTwoLetterCode .soundtheme DESTINATION ${DATA_INSTALL_DIR}/ktuberling/sounds /)
-If you want to install it for yourself:
-Place yourLanguageTwoLetterCode .soundtheme file in ` kde4-config --prefix`/share/apps/ktuberling/sounds
-Place yourSoundFiles in ` kde4-config --prefix`/share/apps/ktuberling/sounds/someUniquePath
-Information on how to work with the translation mechanisms in & kde; is available in The & kde; Translation HOWTO.
-For Programmers
-& ktuberling; isn't really difficult to extend for programmers.
-C++ classes
-TopLevel
-Top-level window and basic program management
-PlayGround
-Description of one of the game levels
-ToDraw
-Description of one of the graphical objects to be drawn
-SoundFactory
-Description of one of the languages and its sounds
-Action
-One of the user's manipulation in the undo/redo stack
-The size and shape of the playground and the number of objects can be changed. New playgrounds can be added. Only two image files need to be created for each playground: a gameboard and a mask. A maximum of 8 playgrounds is allowed, out of which only 3 are currently used.
-Six images are used in & ktuberling;: potato-game.png, potato-mask.png, penguin-game.png, penguin-mask.png, aquarium-game.png and aquarium-mask.png. The standard location for these files is the folder $KDEDIR/share/apps/ktuberling/pics /.
-The first type of images, *-game.png holds the playground and the objects that the user selects. This is the graphic that the user sees when playing the game.
-The second type of images, *-mask.png, contains only masks of the objects. The masks are used to delimit the borders of the objects and, in some cases, give the object some transparency (for example, the spectacles). It is mandatory to put the objects at the same position in the gameboard file as in the mask file.
-In the same folder, a file named layout.xml. ($KDEDIR/share/apps/ktuberling/pics/layout.xml) tells which images to use and links them to menu entries. It also contains the position parameters of the playground and the objects in the gameboard and in the masks. It assigns the sounds to objects and places the objects in groups. It finally declares languages as sets of translated sounds. It follows standard & XML; syntax (see details below).
-Still in the same folder, a file named layout.i18n ($KDEDIR/share/apps/ktuberling/pics/layout.xml) recapitulates the strings in layout.xml that can be translated:
-The menu entries that allow to choose the playground and the language
-The names of the categories of objects
-One folder above, a file named ktuberlingui.rc ($KDEDIR/share/apps/ktuberling/ktuberlingui.rc) is a second & XML; file describing the menus of & ktuberling;. It should contain one lt;actiongt; tag per playground and language. The symbolic name of the action in this file should be identical to the symbolic name of the action in layout.xml.
-If the various translators can record their voice to a .wav file, they can store that file to the language-specific subfolder of the sounds folder. The name of the sound is then assigned to a file in the layout.xml file. For example, if destination language is Italian, translators can record their voice in .wav files located in $KDEDIR/share/apps/ktuberling/sounds/it. Then they can assign the sound named hat to the filename it/cappello.wav.
-In a future release, & ktuberling; will use OGG Vorbis rc3 file format for sounds. At that moment, it will be possible to convert the WAV files to OGG Vorbis rc3 through the following command line:
-$oggenc -q 10 -o sound.ogg sound.wav
-.tuberling files structure
-A .tuberling file holds all the necessary data to redraw a tuberling. It can be edited with an ordinary text editor.
-The first line holds the number of the playground.
-On all other lines, there is one graphical object per line, in the order that is used to draw them. Each line contains 5 numbers: the identifier of the object, and the rectangle where it should be drawn (left, top, right, bottom). The numbers are separated by whitespaces.
-Structure of the layout file (layout.xml)
-The top-level tag is unique and is named lt;ktuberlinggt;. It contains several lt;playgroundgt; tags, one per playground, and several lt;languagegt; tags, one per language.
-The lt;playgroundgt; tag has two attributes: gameboard and masks. These attributes give the name of the files holding the pictures. The lt;playgroundgt; tag also contains one lt;menuitemgt; tag, one lt;editableareagt; tag, several lt;categorygt; tags, and several lt;objectgt; tags.
-The lt;menuitemgt; tag describes the action identifier of the menu item allowing to select position of the area where you can drop objects, and the label of this menu item. This action identifier should be identical to the one in ktuberlingui.rc.
-The lt;editableareagt; tag describes the position of the area where you can drop objects, and the name of the sound associated with it.
-The lt;categorygt; tag describes the position and the label of a text describing a group of objects. For example, it can describe the position and the text of the group of goodies.
-The lt;objectgt; tag describes the position (in the gameboard and in the masks) of an object, as well as the name of the sound associated with it.
-The lt;languagegt; tag has one attribute: code This attribute give the code of the locale for that language. The lt;languagegt; tag also contains one lt;menuitemgt; tag and several lt;soundgt; tags.
-The lower level tags are not explained here, since their meaning is quite straightforward. If you modify layout.xml, don't forget to modify layout.i18n and ktuberlingui.rc accordingly.
+Code
+KDevelop-4-Projektdateien
+Die integrierte Entwicklungsumgebung KDevelop
+KDevelop
+%1 (mit KDevPlatform %2)
+Copyright 1999-2009, Die KDevelop-Entwickler
+Andreas Pakulat
+Betreuer, Architektur, VCS-Unterstützung, Unterstützung für Projektverwaltung, QMake-Projektmanager
+Alexander Dymo
+Architektur, Sublime UI, Ruby-Unterstützung
+David Nolden
+Definition-Use-Chain, C++-Unterstützung, Code-Navigation, Code-Vervollständigung, Programmierhilfen, Refaktorisierung
+Aleix Pol Gonzalez
+CMake-, Run- und Kross-Unterstützung
+Vladimir Prus
+GDB-Integration
+Hamish Rodda
+Text-Editor-Integration, Definition-Use-Chain
+Amilcar do Carmo Lucas
+Betreuung der Webseite, API-Dokumentation, Patches für Doxygen und Autoprojekt
+Matt Rogers
+Cédric Pasteur
+Unterstützung für AStyle und Einrückungen
+Evgeniy Ivanov
+Verteilte Versionskontrollsysteme, Git, Mercurial
+Robert Gruber
+Schnipsel-Komponente, Debugger und Verbesserung der Bedienbarkeit
+Dukju Ahn
+Unterstützung für Subversion, Custom-Make-Verwaltung, allgemeine Verbesserungen
+Harald Fernengel
+Portierung auf Qt 3, Patches, Valgrind, Unterstützung für Diff und Perforce
+Roberto Raggi
+C++-Parser
+Die KWrite-Autoren
+Kate-Editor-Komponente
+Nokia Corporation/Qt Software
+Designer-Code
+Beitragende früherer Versionen:
+Die KHTML-Autoren
+Komponente für HTML-Dokumentation
+Bernd Gehrmann
+Ursprüngliche Idee, grundlegende Architektur, ein Großteil des ursprünglichen Quelltextes
+Caleb Tennis
+KTabBar, Fehlerkorrekturen
+Richard Dale
+Unterstützung für Java und Objective-C
+John Birch
+Debugger-Oberfläche
+Sandy Meier
+PHP-Unterstützung, Kontextmenüs
+Kurt Granroth
+KDE-Anwendungsvorlagen
+Ian Reinhart Geiser
+Komponente für Dist, Bash-Unterstützung, Anwendungsvorlagen
+Matthias Hoelzer-Kluepfel
+Verschiedene Komponenten, htdig-Indizierung
+Victor Roeder
+Unterstützung bei der Automake-Verwaltung und der persistenten Klassenspeicherung
+Simon Hausmann
+Unterstützung für die Infrastruktur von KParts
+Oliver Kellogg
+Ada-Unterstützung
+Jakob Simon-Gaarde
+QMake-Projektverwaltung
+Falk Brettschneider
+MDI-Modi, QEditor, Fehlerkorrekturen
+Mario Scalas
+PartExplorer, Überarbeitung des CvsPart, Patches, Fehlerkorrekturen
+Jens Dagerbo
+Komponenten Ersetzen und Lesezeichen, Dateiliste und CTags2, allgemeine Verbesserungen und Patches
+Julian Rockey
+Filecreate-Part und sonstiger Krimskrams
+Ajay Guleria
+Unterstützung für ClearCase
+Marek Janukowicz
+Unterstützung für Ruby
+Robert Moniot
+Fortran-Dokumentation
+Ka-Ping Yee
+Hilfsprogramm für Python-Dokumentation
+Dimitri van Heesch
+Doxygen-Assistent
+Hugo Varotto
+Dateiauswahl-Komponente
+Matt Newell
+Daniel Engelschalt
+C++-Autovervollständigung, persistenter Klassenspeicher
+Stephane Ancelot
+Patches
+Jens Zurheide
+Luc Willems
+Hilfe bei der Perl-Unterstützung
+Marcel Turino
+Index-Ansicht für die Dokumentation
+Yann Hodique
+Tobias Gläßer
+Dokumentationssuche, QMake-Projektverwaltung, Verbesserungen der Bedienbarkeit, Fehlerkorrekturen...
+Andreas Koepfle
+Patches zum QMake-Projektmanager
+Sascha Cunz
+Aufräumen des Quellcodes und Fehlerkorrekturen für qEditor, Automake und vieles andere.
+Zoran Karavla
+Künstlerische Beiträge für die Ruby-Unterstützung
+Zu ladende Dateien
+Adresse des zu öffnenden Projekts
+Zu ladende Dateien
+@title:menu
+Sitzungen
+%1 kann nicht geöffnet werden@title:menu
+Sitzungen@title:menu
+& Projekt
+& Ausführen@title:menu
+& Navigation@title:menu
+@title:menu
+& Datei@title:menu
+& Bearbeiten@title:menu
+Bearbeiten@title:menu
+& Fenster@title:menu
+Einstellungen
+Haupt-WerkzeugleisteNAME OF TRANSLATORS
+Martin Piskernig, Ralf Funken, Stefan Winter, Stephan Johach, Frederik Schwarzer, Arndt BraunEMAIL OF TRANSLATORS
+,,kickdown@online.de, hunsum@gmx.de, schwarzerf@gmail.com, arndtbraun@googlemail.com
+Profile@title:menu
+& Ansicht@title:menu
+Extras
+Version %1
+Definition-Use-Chain, C++-Unterstützung
+GUI wird gestartet
+Datei@title:menu
+Bearbeiten
+Ansicht
+Projekt
+Ausführen
+Abbrechen
+Umbenennen
+Klasse erstellen
+Neuer Name:
+Umbenennen
+Klasse
+KCachegrind
+Make-Prozess fehlgeschlagen
+Ausgabe: %1
+Rekursiver Make-Aufruf ist fehlgeschlagen
+Rekursiver Make-Aufruf ist ungültig
+Ausgabe: %1
+Funktionsmakro
+Makro
+Prozess löst Zeitüberschreitung aus.Headers included into this header
+EingebundenCount of files this header was included into
+Eingebunden von
+Deklarationen:
+Aus der Datei kann nicht gelesen werden.
+Datei kann nicht geöffnet werden.
+& Ausführbare Datei:
+& Ausführbare Datei:
+Ordner %1
+Includes
+Include-Pfad
+& Ausführbare Datei:
+C++-Unterstützung
+Dateien
+& Neue Klasse erstellen
+Ordner für Erstellen
+Fertig
+Makro-Fehler
+Format
+Zeichen
+Division durch null
+Ungültige EIngabe: %1
+& Erstellen
+& Erstellen
+Kommentar
+Hinzufügen
+für
+Valgrind kann nicht gestartet werden
+Make-Programmdatei:
+Testname
+Profil
+Testname
+Make-Programmdatei:
+Valgrind kann nicht gestartet werden
+Valgrind kann nicht gestartet werden
+Es ist ein unbekannter Fehler aufgetreten.
+xTest
+Testname
+Neuer QTest
+Klassenname:
+Suche
+In Dateien suchen
+Grep: %1
+Kann temporäre Datei für die Suche nicht anlegen.
+In Dateien suchen
+Prozess kann nicht gestartet werden.
+Prozess abgestürzt.
+Prozess löst Zeitüberschreitung aus.
+Unbekannter Prozessfehler.
+In & Dateien suchen...
+In mehreren Dateien nach Ausdrücken suchenNo Version Control Support chosen
+Keines
+Neues Projekt erstellenPage for general configuration options
+AllgemeinPage for version control options
+Versionskontrolle
+Projekt-Assistent
+& Neues Projekt...
+Erstellt ein neues Projekt aus einer Vorlage
+Bestehendes Projekt & importieren...
+Bestehendes Projekt importieren
+DVCS-Archiv kann nicht initialisiert werden
+Dateien können nicht zum DVCS-Archiv hinzufügt werden
+Projekt kann nicht importiert werden
+Importiertes Projekt kann nicht ausgecheckt werden
+Projekt kann nicht importiert werden
+Neues Projekt kann nicht erstellt werden
+Die Datei %1 kann nicht angelegt werden.
+Bitte wählen Sie einen bestehenden Ordner.
+Bitte wählen Sie einen Projektnamen.
+Projekt-Import-Fehler
+Temoräre Datei für das Hochladen kann nicht erstellt werden.
+Ungültiger Ort
+Leerer Projektname
+Ungültiger Projektname
+Ungültige Projektvorlage
+Projektvorlagen
+Dokument-Ansicht
+Liste der geöffneten Dateien
+Dokumente

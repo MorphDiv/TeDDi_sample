@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,47 +15,86 @@
 # sample_type:	whole
 # comments:	NA
 
-Hilfeindex
+aRts Application Programming Interfaces
+\xDCberblick
+aRts is not only a piece of software, it also provides a variety of APIs for a variety of purposes.
+In this section, I will try to describe the "big picture", a brief glance what those APIs are supposed to do, and how they interact.
+There is one important distinction to make: most of the APIs are language and location independant because they are specified as mcopidl.
+That is, you can basically use the services they offer from any language, implement them in any language, and you will not have to care whether you are talking to local or remote objects.
+Here is a list of these first:
+core.idl
+Basic definitions that form the core of the MCOP functionality, such as the protocol itself, definitions of the object, the trader, the flow system and so on.
+artsflow.idl
+These contain the flow system you will use for connecting audio streams, the definition of Arts::SynthModule which is the base for any interface that has streams, and finally a few useful audio objects
+kmedia2.idl
+Here, an object that can play a media, Arts::PlayObject gets defined.
+Media players such as the KDE media player noatun will be able to play any media for which a PlayObject can be found.
+So it makes sense to implement PlayObjects for various formats (such as mp3, mpg video, midi, wav,...) on that base, and there are a lot already.
+soundserver.idl
+Here, an interface for the system wide sound server artsd is defined.
+The interface is called Arts::SoundServer, which implements functionality like accepting streams from the network, playing samples, creating custom other aRts objects and so on.
+Network transparency is implied due to the use of MCOP (as for everything else here).
+artsbuilder.idl
+This module defines basic flow graph functionality, that is, combining simpler objects to more complex ones, by defining a graph of them.
+It defines the basic interface Arts::StructureDesc, Arts::ModuleDesc and Arts::PortDesc which contain a description of a structure, module, and port.
+There is also a way to get a "living network of objects" out of these connection and value descriptions, using a factory.
+artsmidi.idl
+This module defines basic midi functionality, like objects that produce midi events, what is a midi event, an Arts::MidiManager to connect the producers and consumers of midi events, and so on.
+As always network transparency implied.
+artsmodules.idl
+Here are various additional filters, oscillators, effects, delays and so on, everything required for real useful signal processing, and to build complex instruments and effects out of these basic building blocks.
+artsgui.idl
+This cares about visual objects.
+It defines the basic type Arts::Widget from which all GUI modules derive.
+This will produce toolkit independency, and... visual GUI editing, and serializable GUIs.
+Also, as the GUI elements have normal attributes, their values can be straight forward connected to some signal processing modules. (I.e. the value of a slider to the cutoff of a filter).
+As always: network transparent.
+Where possible, aRts itself is implemented using IDL.
+On the other hand, there are some language specific APIs, using either plain C++ or plain C.
+It is usually wise to use IDL interfaces where possible, and the other APIs where necessary.
+Here is a list of language specific APIs:
+KNotify, KAudioPlayer (included in libkdecore)
+These are convenience KDE APIs for the simple and common common case, where you just want to play a sample.
+The APIs are plain C++, Qt/KDE optimized, and as easy as it can get.
+libartsc
+Plain C interface for the sound server.
+Very useful for porting legacy applications.
+libmcop
+Here all magic for MCOP happens.
+The library contains the basic things you need to know for writing a simple MCOP application, the dispatcher, timers, iomanagement, but also the internals to make the MCOP protocol itself work.
+libartsflow
+Besides the implementation of artsflow.idl, some useful utilities like sampling rate conversion.
+libqiomanager
+Integration of MCOP into the Qt event loop, when you write Qt applications using MCOP.
+knotify
+kaudioplayer
+libkmid
+kmedia2
+sound server
+artsflow
+C API
 Einleitung
-KDE 2.0 wird mit einer umfangreichen Dokumentation f\xFCr Anwendungen und Komponenten ausgeliefert.
-Es ist nat\xFCrlich m\xF6glich, die einzelnen Hilfedokumente zu durchbl\xE4ttern, bis man die gew\xFCnschte Information findet.
-Das kann aber sehr zeitaufw\xE4ndig sein.
-Um diese Aufgabe zu vereinfachen, enth\xE4lt KDE eine Volltextsuche mit einem Programm namens ht://dig.
-Es funktioniert \xE4hnlich wie Suchmaschinen im Internet, einige der Internetsuchmaschinen basieren sogar auf diesem Programm.
-Zur Benutzung klickt man im KDE Hilfezentrum auf "Suchen", tippt das gesuchte Wort ein und klickt auf den Knopf Suchen.
-Bevor das Programm ht://dig verwendet werden kann, muss es zun\xE4chst auf dem System installiert sein und KDE muss f\xFCr die Verwendung von ht://dig konfiguriert werden.
-Dieses Modul hilft bei der Konfiguration.
-Wenn ht://dig nicht installiert ist und nicht mit dem Betriebssystem ausgeliefert wurde, m\xFCssen sie ht://dig selbst besorgen.
-Auf der ht://dig Homepage findet man Informationen zum Herunterladen und installieren.
-Benutzung
-Zwei wichtige Informationen muss KDE zur Verwendung der Volltextsuchmaschine haben:
-wo sich die ht://dig -Programme, die KDE f\xFCr die Suche verwendet, befinden
-wo gescuht werden soll
-Die ht://dig -Programme
-Drei Programme von ht://dig werden von KDE ben\xF6tigt: htdig, htsearch und htmerge.
-F\xFCr jedes dieser Programme muss der vollst\xE4ndige Pfadname angegeben werden, also zum Beispiel: /usr/bin/htdig.
-Wo sich diese Programm befinden h\xE4ngt vom Betriebssystem und der Distribution ab.
-Wahrscheinliche Pl\xE4tze sind:
-f\xFCr htdig und htmerge das Verzeichnis /usr/bin / oder ein Verzeichnis wie /usr/local/www/htdig/bin /.
-f\xFCr htsearch oft ein Unterverzeichnis names cgi-bin, also zum Beispiel /usr/local/httpd/cgi-bin /.
-Man kann auch zum Beispiel den Befehl whereis htdig in einem Konsolenfenster eingeben, um die Position des Programms htdig zu bestimmen.
-Der Befehl whereis sucht die Zeichenkette in den Standardpfaden f\xFCr ausf\xFChrbare Dateien.
-Da sich aber Verzeichnisse wie cgi-bin oft nicht in den Standardpfaden befinden, k\xF6nnen nicht alle Befehle so gefunden werden.
-Bereich und Suchpfade
-In diesem Abschnitt kann man festlegen, welche Bereich der Dokumentation indiziert, also f\xFCr die Suchmaschine verf\xFCgbar gemacht, werden sollen.
-In der Gruppe Bereich k\xF6nnen einige typische Ressourcen ausgew\xE4hlt werden, also die KDE Hilfedateien und die Dateien, die von den Befehlen man und info verwendet werden.
-Anmerkung: einige davon k\xF6nnen noch deaktiviert sein, weil die Unterst\xFCtzung daf\xFCr noch nicht programmiert worden ist.
-Wenn man eigene Hilfedateien hat, die auf diesem Wege verf\xFCgbar gemacht werden sollen, so ist das auch m\xF6glich.
-Zum Beispiel hat man eine HTML -Referenz unter /home/jdoe/docs/selfhtml installiert.
-Indem man diesen Pfad zur Liste Zus\xE4tzliche Suchpfade hinzuf\xFCgt, macht man sie in der Volltextsuche verf\xFCgbar.
-Dazu klickt man auf Hinzuf\xFCgen und ein Dialog erscheint, mit dessen Hilfe das zus\xE4tzliche Verzeichnis ausgew\xE4hlt werden kann.
-Man w\xE4hlt /home/jdoe/docs/selfhtml und klickt auf OK.
-Um einen zus\xE4tzlichen Suchpfad zu entfernen, w\xE4hlt man ihn aus und klickt auf L\xF6schen.
-Die \xC4nderungen f\xFCr den Bereich und die zus\xE4tzlichen Suchpfade wirken sich erst aus, wenn man durch klicken auf Stichwortverzeichnis erstellen einen neuen Index erstellt hat.
-Spracheinstellungen
-Man kann die gew\xFCnschte Sprache f\xFCr die Hilfedateien im Listenfeld Spracheinstellungen festlegen.
-Abschnittsautor
-Der Abschnitt wurde geschrieben von:
-Jost Schenck jost@schenck.de
-Kleinere Aktualisierungen von:
-Mike McBride mpmcbride7@yahoo.com
+The aRts C API was designed to make it easy to writing and port plain C applications to the aRts sound server.
+It provides streaming functionality (sending sample streams to artsd), either blocking or non-blocking.
+For most applications you simply remove the few system calls that deal with your audio device and replace them with the appropriate aRts calls.
+I did two ports as a proof of concept: mpg123 and quake.
+You can get the patches from here.
+Feel free to submit your own patches to the maintainer of aRts or of multimedia software packages so that they can integrate aRts support into their code.
+Quick Walkthrough
+Sending audio to the sound server with the API is very simple:
+include the header file using #include <artsc.h>
+initialize the API with arts_init()
+create a stream with arts_play_stream()
+configure specific parameters with arts_stream_set()
+write sampling data to the stream with arts_write()
+close the stream with arts_close_stream()
+free the API with arts_free()
+Here is a small example program that illustrates this:
+Compiling and Linking: artsc-config
+To easily compile and link programs using the aRts C API, the artsc-config utility is provided which knows which libraries you need to link and where the includes are.
+It is called using
+to find out the libraries and
+to find out additional C compiler flags.
+The example above could have been compiled using the command line:
+Library Reference
+[TODO: generate the documentation for artsc.h using kdoc]

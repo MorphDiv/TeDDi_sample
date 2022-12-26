@@ -1,6 +1,6 @@
 # language_name_wals:	Spanish
 # language_name_glotto:	Spanish
-# ISO_6393:	spa
+# iso639_3:	spa
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,27 +15,43 @@
 # sample_type:	whole
 # comments:	NA
 
-Función UCase [Ejecución]
-/text/sbasic/shared/03120310.xhp
+Función Eof [Ejecución]
+/text/sbasic/shared/03020301.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-UCase;función
-Función UCase [Ejecución]
-Convierte los caracteres en minúsculas de una cadena en mayúsculas.
-Función LCase
-Sintaxis
-:
-UCase (Texto As String)
-Valor de retorno
-:
-Cadena
+función Eof
+Función Eof [Runtime]
+Determina si el puntero de archivo ha llegado al final de éste.
+Sintaxis:
+Eof (ExpresiónEntero As Integer)
+Valor de retorno:
+Lógico
 Parámetros:
-Texto:
-Cualquier expresión de cadena que se desee convertir.
+ExpresiónEntero:
+Cualquier expresión de entero que produzca el número de un archivo abierto.
+EOF se utiliza para evitar errores al intentar obtener datos más allá del final de un archivo.
+Cuando se utiliza la instrucción Input o Get para leer de un archivo, el puntero de archivo se avanza según el número de bytes leídos.
+Cuando se llega al final del archivo, EOF devuelve el valor &quot; True &quot; (-1).
 Ejemplo:
-Sub EjemploLUCase
-Dim sVar As String
-sVar = &quot; Las Vegas &quot;
-Print LCase(sVar) REM devuelve &quot; las vegas &quot;
-Print UCase(sVar) REM devuelve &quot; LAS VEGAS &quot;
+Sub EjemploTrabajoConArchivo
+Dim iNumero As Integer
+Dim sLinea As String
+Dim aArchivo As String
+Dim sMensaje as String
+aArchivo = &quot; c:\data.txt &quot;
+iNumero = Freefile
+Open aArchivo For Output As #iNumero
+Print #iNumero, &quot; Primera línea de texto &quot;
+Print #iNumero, &quot; Otra línea de texto &quot;
+Close #iNumero
+iNumero = Freefile
+Open aArchivo For Input As iNumero
+While not eof(iNumero)
+Line Input #iNumero, sLinea
+If sLinea < > &quot; &quot; then
+sMensaje = sMensaje & sLinea & chr(13)
+end if
+wend
+Close #iNumero
+Msgbox sMensaje
 End Sub

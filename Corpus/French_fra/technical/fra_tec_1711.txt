@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,27 +15,42 @@
 # sample_type:	whole
 # comments:	NA
 
-Fonction UCase [Exécution]
-/text/sbasic/shared/03120310.xhp
+Fonction Eof [Exécution]
+/text/sbasic/shared/03020301.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-UCase, fonction
-Fonction UCase [Exécution]
-Convertit les minuscules d'une chaîne de caractères en majuscules.
-Fonction LCase.
-Syntaxe
-:
-UCase (Text As String)
-Valeur de retour
-:
-Chaîne de caractères
-Paramètres :
-Text :
-expression au format chaîne de caractères à convertir.
+Eof, fonction
+Fonction Eof [Exécution]
+Détermine si le pointeur de fichier a atteint la fin d'un fichier.
+Syntaxe :
+Eof (intexpression As Integer)
+Valeur de retour :
+Logique (Bool)
+Paramètre :
+Intexpression : expression au format nombre entier dont l'évaluation donne le numéro d'un fichier ouvert.
+Servez-vous de la fonction EOF pour éviter de produire des erreurs dues à des tentatives de saisie au-delà de la fin d'un fichier.
+Lorsque vous utilisez l'instruction Input ou Get pour lire dans un fichier, le pointeur de fichier avance en fonction du nombre d'octets lus.
+Une fois la fin du fichier atteinte, la fonction EOF renvoie la valeur &quot; True &quot; (-1).
 Exemple :
-Sub ExampleLUCase
-Dim sVar As String
-sVar = &quot; Las Vegas &quot;
-Print LCase(sVar) REM Renvoie &quot; las vegas &quot;
-Print UCase(sVar) REM Renvoie &quot; LAS VEGAS &quot;
-end Sub
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; Première ligne de texte &quot;
+Print #iNumber, &quot; Autre ligne de texte &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
+End Sub

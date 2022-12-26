@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,36 +15,38 @@
 # sample_type:	whole
 # comments:	NA
 
-Fonction Left [Exécution]
-/text/sbasic/shared/03120303.xhp
+Instruction Reset [Exécution]
+/text/sbasic/shared/03020104.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-Left, fonction
-Fonction Left [Exécution]
-Renvoie le nombre spécifié de caractères se situant le plus à gauche dans une expression au format chaîne de caractères.
+Reset, instruction
+Instruction Reset [Exécution]
+Ferme tous les fichiers ouverts et écrit sur le disque dur le contenu de toutes les mémoires tampon des fichiers.
 Syntaxe :
-Left (Text As String, n As Long)
-Valeur de retour :
-Chaîne de caractères
-Paramètres :
-Text :
-toute expression au format chaîne de caractères dans laquelle les caractères se situant le plus à gauche sont à renvoyer.
-n :
-expression numérique spécifiant le nombre de caractères à renvoyer.
-Si
-n
-= 0, une chaîne de caractères de longueur zéro est renvoyée.
-La valeur maximale autorisée est 65 535.
-L'exemple suivant convertit une date au format AAAA.MM.JJ en une date au format MM/JJ/AAAA.
+Reset
 Exemple :
-Sub ExampleUSDate
-Dim sInput As String
-Dim sUS_date As String
-sInput = InputBox( &quot; Insérez une date au format international 'AAAA-MM-JJ' &quot; )
-sUS_date = Mid(sInput, 6, 2)
-sUS_date = sUS_date & &quot; / &quot;
-sUS_date = sUS_date & Right(sInput, 2)
-sUS_date = sUS_date & &quot; / &quot;
-sUS_date = sUS_date & Left(sInput, 4)
-MsgBox sUS_date
+Sub ExampleReset
+On Error Goto ErrorHandler
+Dim iNumber As Integer
+Dim iCount As Integer
+Dim sLine As String
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; Ceci est une nouvelle ligne de texte. &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+For iCount = 1 to 5
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+rem
+end if
+Next iCount
+Close #iNumber
+Exit Sub
+ErrorHandler:
+Reset
+MsgBox &quot; Tous les fichiers seront fermés &quot; ,0, &quot; Erreur &quot;
 End Sub

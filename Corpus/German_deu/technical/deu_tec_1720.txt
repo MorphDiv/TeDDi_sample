@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,35 +15,60 @@
 # sample_type:	whole
 # comments:	NA
 
-StrComp-Funktion [Laufzeit]
-/text/sbasic/shared/03120403.xhp
+Dir-Funktion [Laufzeit]
+/text/sbasic/shared/03020404.xhp
 Sun Microsystems, Inc.
-converted from old format - fpe
-StrComp-Funktion
-StrComp-Funktion [Laufzeit]
-Vergleicht zwei Zeichenketten und liefert einen ganzzahligen Wert, der das Ergebnis des Vergleichs darstellt.
+converted from old format - fpe; bug fix: i29276
+Dir-Funktion
+Dir-Funktion [Laufzeit]
+Gibt den Namen einer Datei, den Namen eines Verzeichnisses oder die Namen aller Dateien und Verzeichnisse auf einem Laufwerk oder in einem Verzeichnis zurück, auf die der angegebene Suchpfad zutrifft.
 Syntax:
-StrComp (Text1 As String, Text2 As String[, Vergleich])
+Dir [(Text As String) [, Attrib As Integer]]
 Rückgabewert:
-Integer
+String
 Parameter:
-Text1:
-Ein beliebiger Zeichenkettenausdruck
-Text2:
-Ein beliebiger Zeichenkettenausdruck
-Vergleich:
-Dieser optionale Parameter legt die Vergleichsmethode fest.
-Bei Vergleich = 1 wird beim Zeichenkettenvergleich zwischen Groß- und Kleinbuchstaben unterschieden.
-Bei Vergleich = 0 wird nicht zwischen Groß- und Kleinbuchstaben unterschieden.
-Rückgabewert:
-Wenn Text1 < Text2, dann liefert die Funktion -1
-Wenn Text1 = Text2, dann liefert die Funktion 0
-Wenn Text1 > Text2, dann liefert die Funktion 1
+Text:
+Ein beliebiger Zeichenkettenausdruck, der den Suchpfad, das Verzeichnis oder die Datei angibt.
+Dieses Argument kann nur beim ersten Aufruf der Dir-Funktion angegeben werden.
+Falls gewünscht, können Sie den Pfad in
+URL-Notation
+eingeben.
+Attrib:
+Ein beliebiger Integer-Ausdruck, der die Dateiattribute als Bitmuster angibt.
+Die Dir-Funktion gibt nur Dateien oder Verzeichnisse zurück, auf die die angegebenen Attribute zutreffen.
+Durch Addieren der Attributwerte können Sie mehrere Attribute kombinieren:
+0 :
+Normale Dateien.
+16 :
+Nur Verzeichnisnamen werden zurückgeliefert.
+Verwenden Sie dieses Attribut, um die Existenz einer Datei oder eines Verzeichnisses zu überprüfen oder um alle Dateien und Ordner in einem bestimmten Verzeichnis zu bestimmen.
+Um das Vorhandensein einer Datei zu überprüfen, geben Sie den vollständigen Pfad und Namen der Datei ein.
+Existiert der Datei- bzw.
+Verzeichnisname nicht, so gibt die Dir-Funktion eine leere Zeichenkette ( &quot; &quot; ) zurück.
+Um eine Liste aller Dateien in einem bestimmten Verzeichnis zu erstellen, gehen Sie wie folgt vor:
+Beim ersten Aufruf der Dir-Funktion geben Sie den vollständigen Suchpfad für die Dateien an, so z.
+B. &quot; D:\Dateien\*.sxw &quot; .
+Wenn der Pfad korrekt ist und mindestens eine Datei gefunden wird, gibt die Dir-Funktion den Namen der ersten Datei zurück, auf die der Suchpfad zutrifft.
+Um weitere Dateinamen für diesen Suchpfad zurückzugeben, rufen Sie Dir erneut auf, ohne jedoch irgendwelche Argumente anzugeben.
+Wenn Sie nur Verzeichnisse ermitteln möchten, nehmen Sie den Attributparameter zu Hilfe.
+Das gleiche gilt, wenn Sie den Namen eines Volumes (z.
+B. eine Festplattenpartition) ermitteln möchten.
 Beispiel:
-Sub ExampleStrComp
-Dim iVar As Single
-Dim sVar As String
-iVar = 123.123
-sVar = Str$(iVar)
-Msgbox strcomp(sVar , Str$(iVar),1)
-end sub
+Sub ExampleDir
+REM zeigt alle Dateien und die Verzeichnisse
+Dim sPath As String
+Dim sDir as String, sValue as String
+sDir= &quot; Verzeichnisse: &quot;
+sPath = CurDir
+sValue = Dir$(sPath + getPathSeparator + &quot; * &quot; ,16)
+Do
+If sValue < > &quot; . &quot; and sValue < > &quot; .. &quot; Then
+if (GetAttr( sPath + getPathSeparator + sValue) AND 16) > 0 then
+REM hier die Verzeichnisse holen
+sDir = sDir & chr(13) & sValue
+End If
+End If
+sValue = Dir$
+Loop Until sValue = &quot; &quot;
+MsgBox sDir,0,sPath
+End sub

@@ -1,6 +1,6 @@
 # language_name_wals:	Mandarin
 # language_name_glotto:	Mandarin Chinese
-# ISO_6393:	cmn
+# iso639_3:	cmn
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,27 +15,41 @@
 # sample_type:	whole
 # comments:	NA
 
-UCase 函数 [运行时]
-/text/sbasic/shared/03120310.xhp
+Eof 函数 [运行时]
+/text/sbasic/shared/03020301.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-UCase 函数
-UCase 函数 [运行时]
-将字符串中的小写字符转换成大写字符。
-LCase 函数
-语法
-：
-UCase (Text As String)
-返回值
-：
-字符串
+Eof; 函数
+Eof 函数 [运行时]
+确定文件指针是否到达文件结尾。
+语法：
+Eof (intexpression As Integer)
+返回值类型：
+布尔
 参数：
-Text：
-要转换的任意字符串表达式。
+Intexpression
+：用于计算打开文件的编号的任意整数表达式。
+使用 EOF 函数，可以避免在输入时超过文件结尾的错误。当您使用 Input 或 Get 语句读取文件时，文件指针按照所读取的字节数向前移动。到达文件结尾时，EOF 返回 &quot; True &quot; (-1)。
 示例：
-Sub ExampleLUCase
-Dim sVar As String
-sVar = &quot; Las Vegas &quot;
-Print LCase(sVar) REM 返回“las vegas”
-Print UCase(sVar) REM 返回“LAS VEGAS”
-end Sub
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; First line of text &quot;
+Print #iNumber, &quot; Another line of text &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
+End Sub

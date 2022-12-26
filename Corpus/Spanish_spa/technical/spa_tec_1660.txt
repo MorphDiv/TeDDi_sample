@@ -1,6 +1,6 @@
 # language_name_wals:	Spanish
 # language_name_glotto:	Spanish
-# ISO_6393:	spa
+# iso639_3:	spa
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,92 +15,90 @@
 # sample_type:	whole
 # comments:	NA
 
-Instrucción Dim [Ejecución]
-/text/sbasic/shared/03102100.xhp
+Ejemplos de programación de campos de control en el Editor de diálogos
+/text/sbasic/guide/sample_code.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-Dim;instrucción
-matrices;dimensionamiento
-dimensionamiento;matrices
-Instrucción Dim [Ejecución]
-Declara una variable o una matriz.
-Si las variables están separadas por comas (por ejemplo, DIM sPar1, sPar2, sPar3 AS STRING), sólo pueden definirse variables variantes.
-Use una línea de definición separada para cada variable.
-DIM sPar1 AS STRING
-DIM sPar2 AS STRING
-DIM sPar3 AS STRING
-Dim declara variables locales dentro de subrutinas.
-Las variables globales se declaran con la instrucción PUBLIC o PRIVATE.
-Sintaxis:
-[ReDim]Dim NombreVar [(inicio To final)] [As TipoVar][, NombreVar2 [(inicio To final)] [As TipoVar][,...]]
-Parámetros:
-NombreVar:
-Cualquier nombre de variable o de matriz.
-Inicio, Final:
-Valores numéricos o constantes que definen el número de elementos (NúmeroElementos=(final-inicio)+1) y el rango del índice.
-Inicio y Final pueden ser expresiones numéricas si se aplica ReDim a nivel de prodecimiento.
-TipoVar:
-Palabra clave que declara el tipo de datos de una variable.
-Palabra clave:
-Tipo de variable
-Lógico:
-Variable lógica (True, False)
-Moneda:
-Variable de moneda (Moneda con 4 posiciones decimales)
-Fecha:
-Variable de fecha
-Doble:
-Variable de precisión doble y coma flotante (1,79769313486232 x 10E308 - 4,94065645841247 x 10E-324)
-Entero:
-Variable entera (-32768 - 32767)
-Largo:
-Variable larga (-2.147.483.648 -2.147.483.647)
-Objeto:
-Variable de objeto (Nota: esta variable sólo puede definirse a partir de este momento con la instrucción Set).
-Simple:
-Variable de precisión simple y coma flotante (3,402823 x 10E308 -1,401298 x 10E-45).
-Cadena:
-Variable de cadena que se compone de un máximo de 64.000 caracteres ASCII.
-[Variante]:
-Tipo de variable variante (contiene todos los tipos, especificada por definición).
-Si no se especifica ninguna palabra clave, las variables se definen automáticamente como de tipo variante, a menos que se use una instrucción desde DefBool a DefVar.
-En $[officename] Basic no es necesario declarar variables explícitamente.
-Sin embargo, es necesario declarar las matrices antes de poder usarlas.
-Puede declarar una variable con la instrucción Dim, usando comas para separar múltiples declaraciones.
-Para declarar un tipo de variable, escriba un carácter de declaración de tipo seguido del nombre o use la palabra clave correspondiente.
-$[officename] Basic admite matrices de una o varias dimensiones, definidas por un tipo de variable especificado, que resultan útiles si el programa contiene listas o tablas que se desea editar.
-La ventaja de las matrices es que es posible acceder a elementos individuales utilizando índices, los cuales pueden formularse como expresiones o variables numéricas.
-Las matrices se declaran con la instrucción Dim.
-Existen dos métodos para definir el rango de índices:
-DIM texto(20) as String REM 21 elementos numerados del 0 al 20
-DIM texto(5 to 25) as String REM 21 elementos numerados del 5 al 25
-DIM texto(-15 to 5) as String REM 21 elementos (incluido el 0)
-REM numerados del -15 al 5
-Campos de datos bidimensionales
-DIM texto(20,2) as String REM 63 elementos; del 0 al 20 en el nivel 1, de 0 al 20 en el nivel 2 y de 0 al 20 en el nivel 3.
-Puede declarar un tipo de matriz como dinámica si una instrucción ReDim define el número de dimensiones en la subrutina o la función que contenga la matriz.
-Normalmente las dimensiones de la matriz sólo se pueden definir una vez y posteriormente ya no pueden modificarse.
-Dentro de una subrutina las matrices pueden declararse con ReDim.
-Las dimensiones sólo pueden definirse con expresiones numéricas.
-Ello asegura que los campos no superen la magnitud necesaria.
-Ejemplo:
-Sub EjemploDim1
-Dim sVar As String
-Dim iVar As Integer
-sVar = &quot; Star Office &quot;
+ejemplos de programación;campos de control en el editor de diálogo
+Ejemplos de programación de campos de control en el Editor de diálogos
+diálogo
+llamado &quot; Dialog1 &quot; .
+Utilice las herramientas de la barra
+Cuadro de herramientas
+del editor de diálogos para crear el diálogo y agregar los controles siguientes: una
+casilla de verificación
+denominada &quot; Casillaverificación1 &quot; , un
+campo de etiqueta
+denominado &quot; Etiqueta1 &quot; , un
+botón
+denominado &quot; Botóncomando1 &quot; y un
+cuadro de lista
+denominado &quot; Cuadrolista1 &quot; .
+Utilice siempre el mismo patrón de mayúsculas y minúsculas cuando adjunte un campo de control a una variable de objeto.
+Función global para cargar diálogos
+Function LoadDialog(NombreLib as String, NombreDiálogo as String, Opcional oLibContainer)
+Dim oLib as Object
+Dim oLibDialog as Object
+Dim oRuntimeDialog as Object
+If IsMissing(oLibContainer ) then
+oLibContainer = DialogLibraries
+End If
+oLibContainer.LoadLibrary(NombLib)
+oLib = oLibContainer.GetByName(NombLib)
+oLibDialog = oLib.GetByName(NombreDiálogo)
+oRuntimeDialog = CreateUnoDialog(oLibDialog)
+LoadDialog() = oRuntimeDialog
+End Function
+Mostrar un diálogo
+rem definición global de variables
+Dim oDialog1 AS Object
+Sub StartDialog1
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+oDialog1.Execute()
+end sub
+Leer o editar propiedades de los campos de control en el programa
+Sub Sample1
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM obtener modelo de diálogo
+oDialog1Model = oDialog1.Model
+REM mostrar texto de Label1
+oLabel1 = oDialog1.GetControl( &quot; Label1 &quot; )
+MsgBox oLabel1.Text
+REM establecer texto nuevo para el campo de control Label1
+oLabel1.Text = &quot; New Files &quot;
+REM mostrar propiedades de modelo para el campo de control CheckBox1
+oCheckBox1Model = oDialog1Model.CheckBox1
+MsgBox oCheckBox1Model.Dbg_Properties
+REM establecer estado nuevo para CheckBox1 para modelo del campo de control
+oCheckBox1Model.State = 1
+REM mostrar propiedades de modelo para el campo de control CommandButton1
+oCMD1Model = oDialog1Model.CommandButton1
+MsgBox oCMD1Model.Dbg_Properties
+REM mostrar propiedades del campo de control CommandButton1
+oCMD1 = oDialog1.GetControl( &quot; CommandButton1 &quot; )
+MsgBox oCMD1.Dbg_Properties
+REM ejecutar diálogo
+oDialog1.Execute()
 End Sub
-Sub EjemploDim2
-REM Campo de datos bidimensional
-Dim stexto(20,2) as String
-Const sDim as String = &quot; Dimensión: &quot;
-for i = 0 to 20
-for ii = 0 to 2
-stexto(i,ii) = str(i) & sDim & str(ii)
-next ii
-next i
-for i = 0 to 20
-for ii = 0 to 2
-msgbox stexto(i,ii)
-next ii
-next i
+Añadir una entrada a un cuadro de lista
+Sub AddEntry
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM añade una entrada nueva al cuadro de lista
+oDialog1Model = oDialog1.Model
+oListBox = oDialog1.GetControl( &quot; ListBox1 &quot; )
+dim iContador as Integer
+iContador = oListbox.ItemCount
+oListbox.additem( &quot; New Item &quot; & iCount,0)
+end sub
+Eliminar una entrada de un cuadro de lista
+Sub EliminarEntrada
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM eliminar la primera entrada del cuadro de lista
+oDialog1Model = oDialog1.Model
+oListBox = oDialog1.GetControl( &quot; ListBox1 &quot; )
+oListbox.removeitems(0,1)
 End Sub

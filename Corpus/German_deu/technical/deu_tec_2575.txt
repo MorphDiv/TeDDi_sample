@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,86 +15,28 @@
 # sample_type:	whole
 # comments:	NA
 
-aRts Application Programming Interfaces
-\xDCberblick
-aRts is not only a piece of software, it also provides a variety of APIs for a variety of purposes.
-In this section, I will try to describe the "big picture", a brief glance what those APIs are supposed to do, and how they interact.
-There is one important distinction to make: most of the APIs are language and location independant because they are specified as mcopidl.
-That is, you can basically use the services they offer from any language, implement them in any language, and you will not have to care whether you are talking to local or remote objects.
-Here is a list of these first:
-core.idl
-Basic definitions that form the core of the MCOP functionality, such as the protocol itself, definitions of the object, the trader, the flow system and so on.
-artsflow.idl
-These contain the flow system you will use for connecting audio streams, the definition of Arts::SynthModule which is the base for any interface that has streams, and finally a few useful audio objects
-kmedia2.idl
-Here, an object that can play a media, Arts::PlayObject gets defined.
-Media players such as the KDE media player noatun will be able to play any media for which a PlayObject can be found.
-So it makes sense to implement PlayObjects for various formats (such as mp3, mpg video, midi, wav,...) on that base, and there are a lot already.
-soundserver.idl
-Here, an interface for the system wide sound server artsd is defined.
-The interface is called Arts::SoundServer, which implements functionality like accepting streams from the network, playing samples, creating custom other aRts objects and so on.
-Network transparency is implied due to the use of MCOP (as for everything else here).
-artsbuilder.idl
-This module defines basic flow graph functionality, that is, combining simpler objects to more complex ones, by defining a graph of them.
-It defines the basic interface Arts::StructureDesc, Arts::ModuleDesc and Arts::PortDesc which contain a description of a structure, module, and port.
-There is also a way to get a "living network of objects" out of these connection and value descriptions, using a factory.
-artsmidi.idl
-This module defines basic midi functionality, like objects that produce midi events, what is a midi event, an Arts::MidiManager to connect the producers and consumers of midi events, and so on.
-As always network transparency implied.
-artsmodules.idl
-Here are various additional filters, oscillators, effects, delays and so on, everything required for real useful signal processing, and to build complex instruments and effects out of these basic building blocks.
-artsgui.idl
-This cares about visual objects.
-It defines the basic type Arts::Widget from which all GUI modules derive.
-This will produce toolkit independency, and... visual GUI editing, and serializable GUIs.
-Also, as the GUI elements have normal attributes, their values can be straight forward connected to some signal processing modules. (I.e. the value of a slider to the cutoff of a filter).
-As always: network transparent.
-Where possible, aRts itself is implemented using IDL.
-On the other hand, there are some language specific APIs, using either plain C++ or plain C.
-It is usually wise to use IDL interfaces where possible, and the other APIs where necessary.
-Here is a list of language specific APIs:
-KNotify, KAudioPlayer (included in libkdecore)
-These are convenience KDE APIs for the simple and common common case, where you just want to play a sample.
-The APIs are plain C++, Qt/KDE optimized, and as easy as it can get.
-libartsc
-Plain C interface for the sound server.
-Very useful for porting legacy applications.
-libmcop
-Here all magic for MCOP happens.
-The library contains the basic things you need to know for writing a simple MCOP application, the dispatcher, timers, iomanagement, but also the internals to make the MCOP protocol itself work.
-libartsflow
-Besides the implementation of artsflow.idl, some useful utilities like sampling rate conversion.
-libqiomanager
-Integration of MCOP into the Qt event loop, when you write Qt applications using MCOP.
-knotify
-kaudioplayer
-libkmid
-kmedia2
-sound server
-artsflow
-C API
+Energiekontrolle f\xFCr Laptops
+Die Laptop-Module setzen die korrekte Installation der APM-Module voraus.
+Weitere Informationen finden Sie unter Laptop-Informationen.
 Einleitung
-The aRts C API was designed to make it easy to writing and port plain C applications to the aRts sound server.
-It provides streaming functionality (sending sample streams to artsd), either blocking or non-blocking.
-For most applications you simply remove the few system calls that deal with your audio device and replace them with the appropriate aRts calls.
-I did two ports as a proof of concept: mpg123 and quake.
-You can get the patches from here.
-Feel free to submit your own patches to the maintainer of aRts or of multimedia software packages so that they can integrate aRts support into their code.
-Quick Walkthrough
-Sending audio to the sound server with the API is very simple:
-include the header file using #include <artsc.h>
-initialize the API with arts_init()
-create a stream with arts_play_stream()
-configure specific parameters with arts_stream_set()
-write sampling data to the stream with arts_write()
-close the stream with arts_close_stream()
-free the API with arts_free()
-Here is a small example program that illustrates this:
-Compiling and Linking: artsc-config
-To easily compile and link programs using the aRts C API, the artsc-config utility is provided which knows which libraries you need to link and where the includes are.
-It is called using
-to find out the libraries and
-to find out additional C compiler flags.
-The example above could have been compiled using the command line:
-Library Reference
-[TODO: generate the documentation for artsc.h using kdoc]
+Diese Karteikarte erm\xF6glicht einige Einstellungen zu dem Aussetzen- bzw.
+Bereitschafts-Modus des APM.
+Die Einstellungen \xE4hneln den KDE -Bildschirmschonern.
+Es ist m\xF6glich, verschiedene Wartezeiten und Aktionen einzustellen f\xFCr Netz- und Batteriebetrieb.
+Diese Einstellungen sind als Erweiterung der KDE -Bildschirmschoner gedacht.
+Sie k\xF6nnen beispielsweise die Aussetzen-/Bereitschafts-Modi ausschalten, falls ihr Laptop mit dem Netz verbunden ist, und eine besonders kurze Wartezeit f\xFCr den Aussetz-Modus, falls ihr Laptop im Batteriebetrieb arbeitet.
+Der Bereitschafts-Modus funktioniert unterschiedlich bei verschiedenen Laptops - einige Computer scheinen nicht im Bereitschafts-Modus zu bleiben sondern st\xE4ndig zwischen Bereitschaft und Normalbetrieb umzuschalten.
+Benutzung
+Dieser Bereich kontrolliert die automatische Stromabschaltung ihres Laptops.
+Er arbeitet \xE4hnlich wie ein besonderer Bildschirmschoner.
+Sie k\xF6nnen unterschiedliche Wartezeiten und Aktionen einstellen, je nachdem ob ihr Computer gerade im Netz- oder Batteriebetrieb arbeitet.
+Sowohl f\xFCr Netzbetrieb als auch Batteriebetrieb sollten Sie eine der folgenden Optionen ausw\xE4hlen:
+Bereitschaft - Schaltet ihren Laptop in den Bereitschafts-Modus.
+Aussetzen - Schaltet ihren Laptop in den Aussetzen-Modus.
+Aus - Die Stromsparschaltung ist ausgeschaltet.
+Darunter befindet sich das Textfeld Wartezeit.
+Stellen Sie die Wartezeit in Minuten ein, bevor die automatische Stromabschaltung ihres Laptops aktiv wird.
+Mitwirkende
+Dokumentation von Paul Campbell paul@taniwha.com
+Konvertierung in das Docbook-Format von Mike McBride mpmcbride7@yahoo.com
+Deutsche \xDCbersetzung von Frank Sch\xFCtte F.Schuette@t-online.de

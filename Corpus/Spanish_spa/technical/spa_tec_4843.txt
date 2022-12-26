@@ -1,6 +1,6 @@
 # language_name_wals:	Spanish
 # language_name_glotto:	Spanish
-# ISO_6393:	spa
+# iso639_3:	spa
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,105 +15,72 @@
 # sample_type:	whole
 # comments:	NA
 
-Guía de estilo de la ventana de charla de & kopete;
-Referencia de estilo de la ventana de charla de & kopete;
-Desde & kopete; 0.12 estamos utilizando el formato Adium para nuestro estilo de ventana de charla. El formato del tema se basa en plantillas HTML y CSS. Es sencillo de crear y desarrollar, ya que solo es necesario un conocimiento de HTML y CSS. Además, los estilos pueden tener variantes (definidas como archivos CSS) que añaden un valor de personalización:).
-Guía de referencia.
-El formato Adium está formado por una estructura de directorio, plantillas HTML, archivos CSS y palabras clave que se reemplazan cada vez que se procesa la plantilla. La conversación final es una página XHTML en la que los mensajes se añaden con operaciones DOM. El elemento central es un elemento div llamado Chat. Antes y después de este elemento div se encuentra la cabecera y el pie de la plantilla. Los mensajes son hijos del elemento div Chat.
-Estructura del directorio
-Un estilo debe respetar esta estructura de directorio. El código de & kopete; está pensado alrededor de esta estructura de directorio. Cuando se guarda un estilo, se guarda el directorio styleName. La estructura del directorio es una estructura de un paquete de Mac OS X para aquellos que estén familiarizados con este sistema operativo. También debe respetar las mayúsculas que se muestran aquí, ya que un sistema UNIX es sensible a mayúsculas y minúsculas.
-styleName\\ (puede tener. adiumMessageStyle como sufijo, porque en Mac OS X es un paquete) Contents\\ Info. plist Resources\\ main. css Header. html Footer. html Status. html Incoming\\ (y saliente\\) Content. html NextContent. html (para mensajes consecutivos) Context. html (para mensajes del historial) NextContext. html Action. html Variants\\ *. css
-Acerca de & lt; div id="insert"gt; lt; /divgt;
-Este es un elemento div especial utilizado internamente. Es el lugar en el que se indica dónde insertar el siguiente mensaje. Si es un mensaje nuevo se elimina y el mensaje nuevo toma su lugar. Pero si es un mensaje consecutivo, el elemento div se reemplaza con el contenido del nuevo mensaje. Este elemento especial div se requiere en las plantillas Content, Context, NextContent, NextContext, todo ello sin perjuicio de que se pueda colocar en las plantillas Action y Status.
-Plantillas HTML.
-Descripción de la plantilla.
-Header. html (Requerido)
-Utilice la plantilla Header para mostrar una bonita cabecera a la conversación. Esta plantilla se inserta antes del elemento div Chat. Sino lo utiliza, deje un archivo vacío.
-Footer. html (Requerido)
-Es más o menos lo mismo que la cabecera, pero para el pie de una conversación. Esta plantilla se inserta después del elemento div Chat. Si no lo utiliza, deje un archivo vacío.
-Status. html (Requerido)
-Esta plantilla se utiliza para mostrar un mensaje interno. Los mensajes internos como el cambio de estado, mensajes de Kopete (ej: entrada de un archivo transferido). Cuando el estilo no proporciona una plantilla de Acción, se utiliza para mostrar un mensaje de Acción.
-Incoming/ Content. html
-Outgoing/ Content. html (Requerido)
-La plantilla Content es el corazón del mensaje. Piense en ella como en un bloque en el que se incluyen los mensaje. Asegúrese de que está preparado para recibir mensajes consecutivos, no lo diseñe para mostrar un solo mensaje. Los mensajes consecutivos se insertarán en el elemento div insert.
-Incoming/ NextContent. html
-Outgoing/ NextContent. html (Requerido)
-La plantilla NextContent es un fragmento de mensaje para mensajes consecutivos. Se insertará en el bloque principal del mensaje. La plantilla HTML debería contener lo mínimo para mostrar un mensaje.
-Incoming/ Action. html
-Outgoing/ Action. html (Opcional) (Extensión de & kopete;)
-Esta plantilla es una extensión de & kopete; para el formato Adium. Está disponible tanto para la entrada (Incoming) como para la salida (Outgoing). Los mensajes de Acción (Action) son mensajes especiales indicar que se está realizando una acción. Ejemplo: « estoy instalando & kopete; » debería mostrarse como « DarkShock está instalando & kopete; ».
-Incoming/ Context. html
-Incoming/ NextContext. html
-Outgoing/ Context. html
-Outgoing/ NextContext. html (Opcional)
-Estas plantillas no se utilizan en Kopete. En Adium, se utilizan para mostrar el historial. Es más o menos lo mismo que Content y NextContent pero con algunas diferencias que las distinguen de los mensajes normales.
-Acerca de los estilos CSS y sus variantes
-La plantilla HTML se utiliza para describir como está creada la estructura. Pero todo el estilo se describe en los archivos CSS. main. css es el estilo principal, y las variantes son alteraciones del estilo principal. Ejemplos de variantes son colores diferentes, no mostrar la foto del usuario. Tanto main. css como las variantes se importan en la página final XHTML.
-- main. css
-Éste es el principal archivo CSS que es común para todas las variantes. Este archivo debería contener toda la descripción principal del estilo.
--Variantes
-Las variantes son archivos CSS situados en el directorio Variants/. Cada variante es un archivo CSS que incluye el main. css y realiza la alteración del estilo principal.
-Estilos de depuración
-Aquí encontraremos dos consejos para probar un estilo mientras se crea.
--Guardar una conversación de muestra.
-En la ventana de charla, puede guardar una conversación. Es una copia de la página XHTML interna mostrada. Utilícela en Konqueror para probar sus archivos CSS.
--Desactive la caché del estilo.
-Una pequeña configuración activa o desactiva la caché del estilo. Cuando se activa, se recarga las plantillas HTML cada vez que se pide el estilo. Añada las siguientes líneas a su kopeterc. Es muy práctico cuando se está probando un estilo en & kopete;.
-[KopeteStyleDebug] disableStyleCache=true
-Referencia de palabras clave
-Las palabras clave son como los hoyos que hay que rellenar con detallas. En cada nuevo mensaje, se reemplazan con el valor correcto que corresponde a su contexto. Para soportar completamente todas las características de Kopete, añadimos algunas extensiones de palabras clave de Adium. Algunas palabras clave también están disponibles en algún contexto.
-Lista de palabras clave para las plantillas de cabecera y de pie.
-Estas palabras clave se procesan al principio de la charla.
-%chatName%
-El nombre de la sensión de charla actual. En una sesión típica, muestra el nombre del contacto y su estado. Para IRC, muestra el tema de un canal.
-%sourceName%
-%destinationName%
-Son el nombre de los contactos para una sesión de charla. %sourceName% es su nombre. %destinationName% es el nombre del contacto con el que está charlando. Se prefiere %chatName% a los anteriores, porque pueden dar lugar a confusión en un grupo de charla y en el IRC.
-%incomingIconPath%
-%outgoingIconPath%
-Son las imágenes/ fotos/ avatares de los contactos para una sesión de chat. Incoming representa la foto del contacto y Outgoing representa la propia foto. Si no hay fotos disponibles, se utiliza la imagen buddy_icon. png que se encuentra en el directorio Incoming u Outgoing.
-%timeOpened%
-%timeOpened{X}%
-Es la hora en la que comienza la sesión de charla. %timeOpened% utiliza el formato de hora predeterminado local. Si desea utilizar un formato de hora específico, utilice %timeOpened{X}% donde X es una cadena que contiene el formato de la hora. Los parámetros de hora son los mismos que para la función strftime de glibc. Consulte man strftime para obtener la lista de los parámetros disponibles.
-Lista de palabras clave para las plantillas Content, NextContent, Context, NextContext, Action
-Estas palabras clave se procesan para cada mensaje.
-%userIconPath%
-Son las imágenes/ fotos/ avatares de los contactos asociados con el mensaje. Si no hay fotos disponibles, se utiliza la imagen buddy_icon. png que se encuentra en el directorio Incoming y Outgoing dependiendo de la dirección del mensaje.
-%senderScreenName%
-Este es el ID de contacto del contacto asociado con el mensaje. Ejemplos: yo@hotmail. com, 45566576, JuanFernández.
-%sender%
-Es el nombre del contacto asociado con el mensaje. Utiliza el nombre que se muestra en MetaContact como una fuente.
-%service%
-Muestra el nombre del servicio asociado con el mensaje. Ejemplos: Jabber, Yahoo, MSN.
-%textbackgroundcolor{X}%
-En & kopete;, esta palabra clave se utiliza para representar el color de fondo resaltado. Ignora los parámetros en las llaves y solo se utiliza como %textbackgroundcolor{}.
-%senderStatusIcon% (extensión de & kopete;)
-Muestra el icono de estado del contacto asociado con el mensaje. Es una ruta de archivo.
-%senderColor%
-%senderColor{N}% (extensión de & kopete;)
-Genera un color enviado por el id del contacto. Puede utilizarse para mostrar un color diferente para el apodo del contacto.
-%senderColor{N}% donde N es un número positivo. Si N es mayor de 100, representa un color más claro que el color del contacto. Si N es igual a 150 es un color con un 50% más de brillo. Si N es inferior a 100 es un color oscuro. Práctico para tener un fondo coloreado de forma diferente para cada contacto.
-p. message {color: inherit; border-color: inherit;}
-La lista de palabras clave comunes para mensajes y Status. html
-%message%
-El propio mensaje. Es un fragmento HTML.
-%time%
-%time{X}%
-La hora en la que se recibió el mensaje. %time% utiliza el formato de hora local predeterminado. Si desea utilizar un formato de hora específico, utilice %time{X}% donde X es una cadena que contiene el formato de la hora. Los parámetros de hora son los mismos que para la función strftime de glibc. Consulte man strftime para obtener la lista de los parámetros disponibles.
-%messageDirection% (extensión de & kopete;)
-Representa la dirección del mensaje, si el mensaje debe mostrarse de derecha a izquierda o de izquierda a derecha. El valor puede ser « rtl » o « ltr ». Consulte guía de dirección de mensaje para averiguar cómo utilizar esta palabra clave correctamente.
-Guía de estilo de la ventana de charla de & kopete;
-La guía de estilo de la ventana de charla de & kopete; es un conjunto de cosas que su estilo de ventana de charla puede soportar para integrarse con Kopete.
-Soporte de resaltado
-Su estilo debe mostrar el resaltado. En Kopete y Adium, el %textbackgroundcolor{}% se reemplaza con el color de resaltado. Añada este atributo de estilo: background-color: %textbackgroundcolor{}% al elemento HTML que muestra el mensaje.
-Se requieren las plantillas de mensajes consecutivos.
-Esta guía es para la gente que está reescribiendo antiguos estilos XSL al nuevo formato. Todos los estilos deben proporcionar una plantilla para mensajes consecutivos. Ahora es la característica predeterminada.
-Utilizar codificación UTF-8.
-El propio título lo dice. Debe guardar sus archivos en UTF-8.
-Incluya Contents/ Info. plist para interoperar con Adium.
-El archivo Contents/ Info. plist todavía no se utiliza en Kopete. Pero si desea que su estilo sea compatible con Adium, debe incluir este archivo. Veamos un ejemplo de archivo básico. Las cadenas se encierran con « $».
-<! [CDATA[< ?xml version="1.0" encoding="UTF-8"? > < !DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd" > CFBundleDevelopmentRegion English CFBundleGetInfoString $Your style full name$ CFBundleIdentifier $Your style ID in the form: com.adiumx.smooth.operator.style$ CFBundleInfoDictionaryVersion 1.0 CFBundleName $Your style name here$ CFBundlePackageType AdIM MessageViewVersion 3]] >
-Incluya buddy_icon. png.
-Debe colocar un archivo llamado buddy_icon. png en Incoming y Outgoing. Estas imágenes se utilizarán cuando el contacto no tenga foto.
-Soporte los idiomas de derecha a izquierda con la palabra clave %messageDirection%.
-%messageDirection% está presente para aquellos idiomas a nivel mundial que se escriban de derecha a izquierda. Define la dirección del mensaje, puede ser « rtl » (derecha a izquierda) o « ltr » (izquierda a derecha). Añada este atributo de estilo al elemento HTML que muestra el mensaje: dirección: %messageDirection%. La vista previa del estilo en la configuración del aspecto incluye un marca derecha a izquierda si su estilo lo muestra correctamente. Debería comenzar la cadena por la derecha.
+Crear nuevo rompecabezas
+Crear rompecabezas
+Crear un nuevo rompecabezas con la información dada y guardarlo en mi colección
+Archivo de imagen:
+Tipo de rompecabezas:
+Nombre del rompecabezas: Like in: This is an optional comment.
+Comentario opcional:
+Nombre del autor de la imagen:
+Opciones básicas de corte
+Información del rompecabezas
+Opciones avanzadas de corte
+El rompecabezas no puede ser creado: el complemento de corte no puede ser cargado.
+El rompecabezas no puede ser creado: el archivo que ha seleccionado no es una imagen.
+El rompecabezas no puede ser creado: falló el corte debido a problemas indeterminados. The application's name
+Palapeli
+El juego de rompecabezas de KDE
+© 2009, Stefan Majewsky
+Stefan Majewsky
+URL del archivo de rompecabezas (se abrirá si -i no es dado)
+Importar el archivo de rompecabezas dado a la colección local (no hace nada si no se proporciona un archivo de rompecabezas)
+Si la opción -i/ --import es especificada, la ventana principal no se mostrará luego de importar el rompecabezas dado. Filter for a file dialog
+*. puzzle|rompecabezas de Palapeli (*. puzzle)
+Mi colección
+[Sin nombre]Puzzle description, %2 = name string, %1 = piece count
+por %1
+Usted ha finalizado el rompecabezas la última vez. ¿Desea reiniciarlo ahora?
+¡Estupendo! Ha finalizado el rompecabezas.
+Bloquear el área de tablero del rompecabezas
+Su progreso es guardado automáticamente mientras juega. used as caption for a dialog that explains the autosave feature
+Guardado automático
+Crear & nuevo rompecabezas...
+Crear un nuevo rompecabezas usando un archivo de imagen de su disco
+& Importar desde archivo...
+Importar un nuevo rompecabezas desde un archivo a su colección
+& Exportar a archivo...
+Exportar el rompecabezas seleccionado desde su colección hacia un archivo
+Eliminar
+Eliminar el rompecabezas seleccionado de su colección
+& Reiniciar rompecabezas...
+Eliminar el progreso guardado
+No hay un rompecabezas cargado
+Ha finalizado el rompecabezas. Progress display
+%1% finalizado
+Mostrar barra de estado del tablero del rompecabezas
+Tablero del rompecabezas
+Preferencias generalescommand line message
+Error: no se ha dado un archivo de rompecabezas.
+El archivo de rompecabezas dado está dañado.
+El archivo de rompecabezas no puede ser importado a la colección local.
+Importando rompecabezas "%1" a su colecciónThe application's name
+libpala-puzzlebuilder
+Constructor automático para los rompecabezas de Palapelidescription for a command line switch
+Archivo de configuracióndescription for a command line switch
+Archivo de salida
+Conteo de piezas
+Relación de aspecto de las piezasNAME OF TRANSLATORS
+Ignacio PoggiEMAIL OF TRANSLATORS
+ignaciop.3@gmail. com
+Barra de herramientas de las acciones de la colección
+Barra de herramientas del tablero del rompecabezas
+Precisión del corte (en proporción al tamaño de las piezas).
+La imagen de fondo a usar para la vista.
+Si se muestra la barra de estado en el tablero del rompecabezas. (No es una barra de estado real, pero la posición y la funcionalidad son similares.)
+Si arrastrando con el botón izquierdo del ratón se mueve el punto de vista.
+Fondo:
+Precisión del quiebre:
+Arrastrar con el el botón izquierdo del ratón mueve el punto de vista.
+Conteo de piezas en dirección horizontal
+Conteo de piezas en dirección vertical

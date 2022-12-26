@@ -1,6 +1,6 @@
 # language_name_wals:	Japanese
 # language_name_glotto:	Japanese
-# ISO_6393:	jpn
+# iso639_3:	jpn
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,33 +15,44 @@
 # sample_type:	whole
 # comments:	NA
 
-StrComp 関数 [実行時]
-/text/sbasic/shared/03120403.xhp
+Dir 関数 [実行時]
+/text/sbasic/shared/03020404.xhp
 Sun Microsystems, Inc.
-converted from old format - fpe
-StrComp 関数
-StrComp 関数 [関数]
-2 つの文字列を比較して、その結果を示す数値を返します。
+converted from old format - fpe; bug fix: i29276
+Dir 関数
+Dir 関数 [実行時]
+個々のファイルやディレクトリの名前および、指定した検索パスに該当するドライブやディレクトリの中にある、すべてのファイルおよびディレクトリの名前を返します。
 構文:
-StrComp (Text1 As String, Text2 As String[, Compare])
+Dir [(Text As String) [, Attrib As Integer]]
 戻り値:
-整数
+文字列
 パラメータ:
-Text1:
-任意の文字列表式。
-Text2:
-任意の文字列表式。
-Compare:
-比較モードを指定する数値表式 (省略可)。Compare に 1 を指定すると、大文字と小文字を区別した比較が行われます。Compare に 0 を指定すると、大文字と小文字を区別せずに比較が行われます。
-戻り値
-Text1 < Text2 の場合、関数の戻り値には -1 が返されます。
-Text1 = Text2 の場合、関数の戻り値には 0 が返されます。
-Text1 > Text2 の場合、関数の戻り値には 1 が返されます。
+URL 指定
+を用いることもできます。
+Attrib:
+ファイル属性の指定ビットを示す整数表式。Dir 関数は、指定した属性に該当するファイルやディレクトリドライブのみを返します。こうした属性指定は、該当する値を加算することで、複数の指定を組み合わせることが可能です。
+0 : 通常のファイル。
+16 : ディレクトリの名前のみを返す。
+この属性指定は、特定のファイルやディレクトリが存在するかをチェックしたい場合や、1 つのディレクトリ中にあるすべてのファイルとフォルダ名を確認する場合などに使用します。
+特定のファイルが存在するかをチェックするには、該当ファイルの絶対パスとファイル名を指定します。該当するファイルやディレクトリが存在しなかった場合、Dir 関数は文字長ゼロの空白文字列 ( &quot; &quot; ) を返します。
+指定ディレクトリ中にあるすべてのファイル名を取得するには、下記の手順で操作します。Dir 関数の初回呼び出し時に、検索パスを「D:\Files\*.sxw」のような完全な形で指定します。パスの指定に間違いが無く、該当するファイルが 1 つでも検索された場合、Dir 関数は検索パス上で最初に検出したファイル名を返します。検索パス上に存在する2番目以降のファイル名を得るには、引数を指定せずに Dir 関数を再度呼び出します。
+ディレクトリ名のみを取得したい場合は、属性指定用のパラメータを使います。ボリューム名を取得する場合も同様です (たとえばハードディスクのパーティションなど)。
 例:
-Sub ExampleStrComp
-Dim iVar As Single
-Dim sVar As String
-iVar = 123.123
-sVar = Str$(iVar)
-Msgbox strcomp(sVar , Str$(iVar),1)
-end sub
+Sub ExampleDir
+REM すべてのファイルとディレクトリの表示
+Dim sPath As String
+Dim sDir as String, sValue as String
+sDir= &quot; Directories: &quot;
+sPath = CurDir
+sValue = Dir$(sPath + getPathSeparator + &quot; * &quot; ,16)
+Do
+If sValue < > &quot; . &quot; and sValue < > &quot; .. &quot; Then
+if (GetAttr( sPath + getPathSeparator + sValue) AND 16) > 0 then
+REM ディレクトリの取得
+sDir = sDir & chr(13) & sValue
+End If
+End If
+SValue = Dir$
+Loop Until sValue = &quot; &quot;
+MsgBox sDir,0,sPath
+End sub

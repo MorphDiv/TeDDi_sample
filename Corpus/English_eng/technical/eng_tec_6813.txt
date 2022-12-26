@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -8,107 +8,40 @@
 # genre_narrow:	NA
 # writing_system:	Latn
 # special_characters:	NA
-# short_description:	GNOME
-# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/en.zip
-# copyright_short:	http://opus.nlpl.eu/GNOME.php
-# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
 # sample_type:	whole
 # comments:	NA
 
-GNOME Nibbles
-Control a worm in its quest to eat bonuses and become longer. Outmaneuver enemy worms while eating doughnuts and ice cream to increase your length. Each worm has ten lives and loses one by running into a wall, another worm, or itself. The enemy worms are after the same bonuses that you are, so be careful: if they become too large, you won't have much room for movement.
-The adventure progresses through 26 maps of increasing difficulty. The early levels are mostly open with a few walls, but later on, cramped spaces and teleporters make things more interesting.
-Play on your own against up to five enemy worms, or share your keyboard to play with a friend.
-Nibbles
-Guide a worm around a maze
-game;snake;board;
-Number of human players
-Number of human players.
-Number of AI players
-Number of AI players.
-Game speed
-Game speed (1=fast, 4=slow).
-Enable fake bonuses
-Enable fake bonuses.
-Play levels in random order
-Play levels in random order.
-Game level to start on
-Game level to start on.
-Enable sounds
-Enable sounds.
-Size of game tiles
-Size of game tiles.
-Color to use for worm
-Color to use for worm.
-Use relative movement
-Use relative movement (ie. left or right only).
-Move up
-Key to use for motion up.
-Move down
-Key to use for motion down.
-Move left
-Key to use for motion left.
-Move right
-Key to use for motion right.
-Nibbles couldn't load level file:
-%s
-
-Please check your Nibbles installation
-Level file appears to be damaged:
-%s
-
-Please check your Nibbles installation
-The shortcut you selected is already assigned.
-Unknown Command
-Time
-Score
-%1$dm %2$ds
-Date
-_Close
-Nibbles couldn't find pixmap file:
-%s
-
-Please check your Nibbles installation
-Nibbles Scores
-Speed:
-Congratulations!
-Your score is the best!
-Your score has made the top ten.
-Beginner
-Slow
-Medium
-Fast
-Beginner with Fakes
-Slow with Fakes
-Medium with Fakes
-Fast with Fakes
-A worm game for GNOME
-
-Nibbles is a part of GNOME Games.
-translator-credits
-Preferences
-Game
-Speed
-Nibbles newbie
-My second day
-Not too shabby
-Finger-twitching good
-Options
-_Play levels in random order
-_Enable fake bonuses
-E_nable sounds
-_Starting level:
-Number of _human players:
-Number of _AI players:
-Worm
-Keyboard Options
-_Use relative movement
-_Worm color:
-Red
-Green
-Blue
-Yellow
-Cyan
-Purple
-Gray
-Worm %d:
+Modem Tricks and Hints
+This section should get the fearful started on the (not so) arcane art of modem tweaking. The commands here are all Hayes AT standard, but all modems are not equal, so your mileage may vary.
+Modem Sessions
+A Modem session allows you to interact with the modem directly. You type commands, and it will respond. To obtain a modem session, when no connection is active, go into Setup, then Modem Terminal dialog. This will open a window for interactive configuration of the modem. Try typing ATZ (which resets your modem) Your should get an OK response. Use File Close to end the session.
+Modem Profiles
+One reason you might want to send the modem commands directly is if you have a set of modem configurations you want to keep, and not have to specify for every connection. A good way to do that is via modem profiles. Modems can have several stored profiles numbered 0,1,... ATamp; V can be used to view them all. The default profile is usually 0 (this can be changed via ATamp; Y.) The profile currently in use is called the active profile.
+When you change a setting, the active profile is modified. The ATZ command will have the modem load the default profile, erasing any changes you have made. To save changes, Load the profile you want to change via ATZ n (where n is the profile number). Make the changes you want, then save it with ATamp; W n. To have kppp use the profile you want, change the modem initialization string (Setup Modem Modem Commands Initialization String.) For example ATZ1 will have the kppp reset the modem and use stored profile #1.
+If you want reset you modem to get back to some known starting point, use ATamp; Famp; W to set the active profile to the factory defaults, and store those settings as the default profile.
+Examples of profile changes are in the next section
+Getting the modem to hang up
+Sometimes you may find that & kppp; has difficulties hanging up the modem. This is likely the result of a mismatch between & kppp; settings and those of the modem. A standard modem uses two methods to decide to hangup: Command, and DTR. The Command method involves sending an escape sequence to the modem, which puts it in command mode, then issuing the hangup command (ATH).
+Outside of & kppp;, when configuring the pppd package manually, it's often helpful to use the command method, so that one can exit a terminal session, and then start pppd without having the modem hangup. In most other situations, the DTR method is preferred, as it is simpler.
+DTR (ATamp; Dn) method
+The DTR method will have the modem hangup whenever & kppp; stops using the modem. If you obtain a modem session, and query the state via ATamp; V, and you can see among the displayed settings for the active profile a amp; D0, then the DTR hangup method is disabled. To enable the DTR method, use the Terminal button to get a modem session, then:
+ATZ # reset to default profile ATamp; D2 # Set to hang up on DTR drop ATamp; W # Write to default profile
+How the DTR method works
+Whenever the Data Terminal Ready (DTR) line on the serial line between the host computer and the modem goes high, the modem hangs up. When & kppp; opens the serial port, the DTR line is pulled low, on an external modem, you can see the DTR (or TR) light come on when this happens. When the TR light goes out (because & kppp; has closed the serial port, or something worse!), the modem will hangup.
+Command method
+The other way to have a modem hang up when connected (used when ATamp; D n where n is not 2) is to have the modem accept the command when a session is in progress. To have it hang up properly, get a modem session, and set the guard time to a short interval like so:
+ATZ ATS12=5 ATamp; W
+Then use the Guard Time slider in the Modem commands section to match the register (S12 to this value 5. The modem should then hangup properly.
+How the Command Method Works
+When the local modem is connected to a remote modem, it is in the connect state, where it passes all characters it receives to the remote modem without interpretation. To have the modem accept the characters as commands for itself, one must put the modem into the command state. The escape code does this.
+The escape code is defined as being three intervals of time whose length is defined by S12 in fiftieths of a second.
+Quiet (must last more than S12 / 50 seconds)
+Escape character (defined by the register S2, the default is +), repeated three times (less than S12 / 50 seconds between each.
+Once the modem is in the command state, you can send it commands. To have it hang up, send the command ATH. The escape codes and the hangup string used by & kppp; are shown in the Modem Commands dialog. These should match your modem.
+Make Tone dialing faster
+If you can use tone dialing, the amount of time it takes to dial can be changed using the S11 register. It gives the duration (in 100hundreds of a second) to send each tone while dialing. The default is usually 95 (almost a second.) How fast you can dial depends on the phone company's switching equipment which handles your line. The minimum duration is 50, almost twice as fast, and that speed often works.
+ATZ # reset to default profile ATS11=50 # fastest possible dialing, use a higher number if it does n't work ATamp; W # write to default profile

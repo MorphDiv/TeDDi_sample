@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,31 +15,54 @@
 # sample_type:	whole
 # comments:	NA
 
-LTrim Function [Run-time]
-/text/sbasic/shared/03120305.xhp
+Get Statement [Run-time]
+/text/sbasic/shared/03020201.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-LTrim function
-LTrim Function [Run-time]
-Removes all leading spaces at the start of a string expression.
+Get statement
+Get Statement [Run-time]
+Reads a record from a relative file, or a sequence of bytes from a binary file, into a variable.
+PUT
+Statement
 Syntax:
-LTrim (Text As String)
-Return value:
-String
+Get [#] FileNumber As Integer, [Position], Variable
 Parameters:
-Text:
-Any string expression.
-Use this function to remove spaces at the beginning of a string expression.
+FileNumber:
+An integer expression that determines the file number.
+Position:
+For files opened in Random mode,
+Position
+is the number of the record that you want to read.
+Position
+is the byte position in the file where the reading starts.
+Position
+is omitted, the current position or the current data record of the file is used.
+Variable:
+Name of the variable to be read.
+With the exception of object variables, you can use any variable type.
 Example:
-Sub ExampleSpaces
-Dim sText2 As String,sText As String,sOut As String
-sText2 = &quot; < *Blackpool* > &quot;
-sOut = &quot; ' &quot; +sText2 + &quot; ' &quot; + Chr(13)
-sText = Ltrim(sText2) REM sText = &quot; < *Blackpool* > &quot;
-sOut = sOut + &quot; ' &quot; +sText + &quot; ' &quot; + Chr(13)
-sText = Rtrim(sText2) REM sText = &quot; < *Blackpool* > &quot;
-sOut = sOut + &quot; ' &quot; + sText + &quot; ' &quot; + Chr(13)
-sText = Trim(sText2) REM sText = &quot; < *Blackpool* > &quot;
-sOut = sOut + &quot; ' &quot; + sText + &quot; ' &quot;
-MsgBox sOut
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM Must be a variant
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM Position at beginning
+Put #iNumber,, &quot; This is the first line of text &quot; REM Fill line with text
+Put #iNumber,, &quot; This is the second line of text &quot;
+Put #iNumber,, &quot; This is the third line of text &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; This is a new text &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; This is the text in record 20 &quot;
+Print Lof(#iNumber)
+Close #iNumber
 end sub

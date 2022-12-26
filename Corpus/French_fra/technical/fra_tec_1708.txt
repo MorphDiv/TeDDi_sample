@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,38 +15,46 @@
 # sample_type:	whole
 # comments:	NA
 
-Fonction Right [Exécution]
-/text/sbasic/shared/03120307.xhp
+Instruction Line Input # [Exécution]
+/text/sbasic/shared/03020203.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-Right, fonction
-Fonction Right [Exécution]
-Renvoie les &quot; n &quot; caractères le plus à droite d'une expression au format chaîne de caractères.
-Fonction Left
-.
+Line, instruction
+mw changed index entry
+Instruction Line Input # [Exécution]
+Lit des chaînes de caractères dans un fichier séquentiel et les insère dans une variable.
 Syntaxe :
-Right (Text As String, n As Long)
-Valeur de retour :
-Chaîne de caractères
+Line Input #FileNumber As Integer, Var As String
 Paramètres :
-Text :
-expression au format chaîne de caractères dont les caractères le plus à droite sont à renvoyer.
-n :
-expression numérique définissant le nombre de caractères à renvoyer.
-Si
-n
-= 0, une chaîne de caractères de longueur zéro est renvoyée.
-La valeur maximale autorisée est 65 535.
-L'exemple suivant convertit une date au format AAAA-MM-JJ en une date au format américain (MM/JJ/AAAA).
+FileNumber:
+numéro du fichier contenant les données à  lire.
+Le fichier doit avoir été ouvert auparavant avec l'instruction Open à  l'aide du mot-clé INPUT.
+var :
+nom de la variable contenant le résultat.
+Line Input#
+permet de lire des chaînes à partir d'un fichier ouvert et d'assigner ces chaînes à une variable.
+Les variables de chaîne de caractères sont lues ligne par ligne jusqu'à la première occurrence d'un retour chariot (Asc=13) ou d'un retour à la ligne (Asc=10).
+Les repères d'extrémité de ligne ne sont pas inclus dans la chaîne de caractères obtenue.
 Exemple :
-Sub ExampleUSDate
-Dim sInput As String
-Dim sUS_date As String
-sInput = InputBox( &quot; Insérez une date au format international 'AAAA-MM-JJ' &quot; )
-sUS_date = Mid(sInput, 6, 2)
-sUS_date = sUS_date & &quot; / &quot;
-sUS_date = sUS_date & Right(sInput, 2)
-sUS_date = sUS_date & &quot; / &quot;
-sUS_date = sUS_date & Left(sInput, 4)
-MsgBox sUS_date
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; Ceci est une ligne de texte. &quot;
+Print #iNumber, &quot; Ceci est une autre ligne de texte. &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
 End Sub

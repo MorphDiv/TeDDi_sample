@@ -1,6 +1,6 @@
 # language_name_wals:	Russian
 # language_name_glotto:	Russian
-# ISO_6393:	rus
+# iso639_3:	rus
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,28 +15,44 @@
 # sample_type:	whole
 # comments:	NA
 
-Функция UCase [время выполнения]
-/text/sbasic/shared/03120310.xhp
+Функция Eof [время выполнения]
+/text/sbasic/shared/03020301.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-функция UCase
-Функция UCase [время выполнения]
-Преобразует строчные символы в строке в заглавные.
-Функция LCase
-Синтаксис
-:
-UCase (Текст As String)
-Возвращаемое значение
-:
-String
+функция Eof
+Функция Eof [время выполнения]
+Определяет, достиг ли указатель конца файла.
+Синтаксис:
+Eof (intexpression As Integer)
+Возвращаемое значение:
+Boolean
 Параметры:
-Текст
+Цел_выражение
 .
-Любое строковое выражение, подлежащее преобразованию.
+Любое целое выражение, определяющее номер открытого файла.
+Используйте EOF, чтобы избежать ошибок при попытке получить данные за концом файла.
+При использовании инструкции Input или Get для считывания из файла указатель позиции в файле продвигается на количество считанных байтов.
+Если конец файла достигнут, EOF возвращает значение &quot; True &quot; (-1).
 Пример:
-Sub ExampleLUCase
-Dim sVar As String
-sVar = &quot; Архангельск &quot;
-Print LCase(sVar) REM возвращает &quot; архангельск &quot;
-Print UCase(sVar) REM возвращает &quot; АРХАНГЕЛЬСК &quot;
-end Sub
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; Первая строка текста &quot;
+Print #iNumber, &quot; Еще одна строка текста &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
+End Sub

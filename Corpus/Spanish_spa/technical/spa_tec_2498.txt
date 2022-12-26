@@ -1,6 +1,6 @@
 # language_name_wals:	Spanish
 # language_name_glotto:	Spanish
-# ISO_6393:	spa
+# iso639_3:	spa
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,14 +15,58 @@
 # sample_type:	whole
 # comments:	NA
 
-gopher
-gopher comenzó como un servicio de información distribuida para el campus de la universidad de Minnesota.
-Gopher permite al usuario acceder a información en servidores Gopher ejecutandose en máquinas de Internet.
-Gopher es un servicio de información de navegación por Internet que utiliza un interfaz tipo menú.
-Los usuarios seleccionan información de los menús, que pueden resultar ser otros menús, o mostrar un archivo de texto.
-Un elemento puede residir en el servidor Gopher al que usted se dirigió o puede estar en otro servidor Gopher (u otra máquina).
-Gopher puede establecer un tunel desde un Gopher a otro sin que el usuario sepa que ha cambiado de servidor y / o de máquina.
-Gopher mantiene oculta la localización exacta de las máquinas, manteniendo la ilusión de un sólo conjunto de menús interconectados.
-Gopher permite al usuario registrar la ubicación de un elemento en un marcador, de modo que los usuarios siguiendo ese marcador acceden directamente hasta un elemento particular sin buscar por el menú del sistema.
-Los menús de Gopher no son estándar en el sentido de que cada servidor los configura individualmente.
-Fuente: http: / /tlc.nlm.nih.gov / resources / tutorials / internetdistlrn / gophrdef.htm
+audiocd
+Le permite tratar CD s de audio como un sistema de archivos real, donde las pistas están representadas como archivos, y cuando se copian desde el directorio son extraidas digitalmente desde el CD.
+Así se asegura una copia perfecta de los datos audio.
+Para ver como funciona este slave, inserte un CD de audio en su CD-ROM e introduzca audiocd: / en Konqueror.
+Al cabo de unos segundos verá una lista de pistas y algunos directorios.
+Los CD s de audio realmente no tienen directorios, pero el slave audiocd los porporciona como algo conveniente.
+Si mira dentro de estos directorios verá que todos ellos contienen el mismo número de pistas.
+Si está conectado a Internet, algunos directorios tendrán los títulos de las pistas actuales mostradas como nombres de archivos.
+La razón de la existencia de estos directorios separados es para asegurar que usted pueda elegir el formato en el que desea escuchar (o copiar) las pistas en el CD.
+Si arrastra una pista desde el directorio Ogg Vorbis y lo suelta en otra ventana de Konqueror abierta en su directorio personal, debería ver un cuadro de progresión que muestra que la pista está siendo extraida desde el CD y guardada en un archivo.
+Advierta que Ogg Vorbis es un formato comprimido, de modo que el archivo en su directorio principal aparecerá bastante más pequeño que si hubiera copiado los datos brutos.
+El mecanismo trás esta operación es bastante simple.
+Cuando se solicita al slave audiocd que descargue una pista desde el directorio Ogg Vorbis, comienza a extraer datos digitales de audio desde el CD.
+A medida que envia los datos a su directorio personal, estos se codifican en formato Ogg Vorbis (los datos audio de un CD audio no son un formato particular, simplemente son datos binarios en bruto.)
+También podría intenter arrastrar un archivo con extensión .wav y soltarlo en el reproductor de medios de KDE, Noatun.
+En este caso, el proceso bajo el escenario es similar, excepto que en lugar de codificar los datos en formato Ogg Vorbis, se guarda, tras una conversión muy sencilla desde datos binarios brutos (que es lo que representan los archivos .cda en el directorio superior), en formato RIFF WAV, que es un formato no comprimido reconocido por la mayor parte de los reproductores multimedia.
+Noatun debería reproducir sin problemas los archivos .wav, pero si observa algún problema, debería intentar utilizar la opción paranoia_level, que se explica más abajo.
+Opciones
+device
+Normalmente, el slave tratará de encontrar un dispositivo CD con un CD audio en su interior, pero si fallara o dispone de más de un dispositivo CD, intente esta opción.
+Advierta que el diálogo de configuración le permite fijar una valor predeterminado para esta opción.
+paranoia_level
+Fija la cantidad de errores detectados y corregidos usados al extraer los datos.
+Nivel 0
+Sin detección o corrección.
+Sólo útil si dispone de un dispositivo de CD s perfecto (lo que es improbable).
+Nivel 1
+Activar la comprobación y correción básica de errores
+Nivel 2
+Predeterminado.
+Especifica que sólo se aceptará una extracción perfecta.
+El nivel 2 tiene una desventaja.
+La extracción puede ser muy lenta, de modo que la reproducción digital en tiempo real puede no funcionar correctamente.
+Si usted dispone de un dispositivo de CD s de buena calidad (más caro no es equivalente a mejor) probablemente no experimentará una extracción muy lenta, pero un dispositivo malo puede tardar días (!) en la extracción de datos audio desde un CD.
+use_cddb
+Especifica que los nombres de las pistas de los CD s insertados se buscarán en la base de datos de los CD s en Internet.
+Los CD s audio no tienen nombres de pistas, pero la base de datos de CD s en Internet es un sistema inteligente que utiliza un identificador especial único generado por el número y longitud de las pistas en cada CD para hacer una referencia cruzada con la lista de pistas.
+Las listas de las pistas son un esfuerzo de la comunidad de Internet y están disponibles para todos.
+Puede enviar sus propias listas de pistas usando Kscd, el reproductor KDE de CD s.
+Esta opción está activada por omisión.
+Si su conexión a Internet no está bien configurada, puede que las pistas de su CD no aparezcan.
+cddb_server
+Configure la conexión del servidor de la base de datos de CD s de Internet.
+Por omisión, esta es freedb.freedb.org:888, que signifca el servidor freedb.freedb.org escuchando en el puerto 888.
+Ejemplos
+audiocd: / ?device= / dev / scd0?paranoia_level=0&use_cddb=0
+Ofrece una lista de las pistas en el CD audio insertado en / dev / scd0, que en Linux especifica el primer dispositivo CD-ROM SCSI.
+Si copia las pistas desde el CD, la extracción digital se realizará sin correción o detección de errores.
+No se contactará con ninguna base de datos de CD s en Internet.
+Preguntas frecuentes
+Obtengo El archivo o directorio / no existe. ¿Cómo arreglo esto?
+Tengo un CD dentro de mi unidad
+Si no la ve, asegurese de que tiene permiso para acceder al dispositivo de CD s.
+Si está utilizando emulación SCSI (lo que es posible si dispone de un escritor IDE de CD s) asegurese de que dispone de permisos en el dispositivo genérico SCSI, que probablemente es / dev / sg0, / dev / sg1, etc..
+Si esto no funciona, intente introducir audiocd: / ?device= / dev / sg0 (o similar) para indicar a kio_audiocd cual es su dispositivo de CD-ROM.

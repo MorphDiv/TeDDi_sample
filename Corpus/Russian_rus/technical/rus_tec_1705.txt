@@ -1,6 +1,6 @@
 # language_name_wals:	Russian
 # language_name_glotto:	Russian
-# ISO_6393:	rus
+# iso639_3:	rus
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,26 +15,62 @@
 # sample_type:	whole
 # comments:	NA
 
-Функция LCase [время выполнения]
-/text/sbasic/shared/03120302.xhp
+Инструкция Open [время выполнения]
+/text/sbasic/shared/03020103.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-функция LCase
-Функция LCase [время выполнения]
-Преобразует все заглавные буквы в строке в строчные.
-UCase
+инструкция Open
+Инструкция Open [время выполнения]
+Открывает канал данных.
 Синтаксис:
-LCase (Текст As String)
-Возвращаемое значение:
-String
+Open ИмяФайла As String [For Режим] [Access Режим_ввода/вывода] [Защита] As [#]НомерФайла As Integer [Len = ДлинаБД]
 Параметры:
-Текст
+Имя файла:
+имя и путь к файлу, который требуется открыть.
+При попытке открытия несуществующего файла (Access = Read) выдается сообщение об ошибке.
+При попытке записи в несуществующий файл (Access = Write) создается новый файл.
+Режим:
+ключевое слово, указывающее файловый режим.
+Допустимые значения:
+Append (добавление к концу существующего файла), Binary (данные могут быть доступны побайтно с помощью инструкций Get и Put), Input (открытие канала данных для чтения), Output (открытие канала данных для записи) и Random (редактирование файлов с произвольным доступом).
+Режим_ввода/вывода
 .
-Любое строковое выражение, подлежащее преобразованию.
+Ключевое слово, которое определяет тип доступа.
+Допустимые значения:
+Read (только для чтения), Write (только для записи), Read Write (и то, и другое).
+Защита
+.
+Ключевое слово, которое определяет статус безопасности файла после открытия.
+Допустимые значения:
+Shared (файл может быть открыт другими приложениями), Lock Read (файл защищен от чтения), Lock Write (файл защищен от записи), Lock Read Write (доступ к файлу запрещен).
+НомерФайла
+.
+Любое целое число от 0 до 511, указывающее номер свободного канала данных, который может быть использован для доступа к файлу посредством различных команд.
+Номер файла должен определяться непосредственно перед инструкцией Open с помощью функции FreeFile.
+ДлинаЗаписи:
+устанавливает длину записи для файлов с произвольным доступом.
+Файл должен быть открыт инструкцией Open, перед тем как содержимое этого файла может быть изменено.
+При попытке открыть файл, который уже открыт, появится сообщение об ошибке.
 Пример:
-Sub ExampleLUCase
-Dim sVar As String
-sVar = &quot; Петербург &quot;
-Print LCase(sVar) REM Возвращает &quot; петербург &quot;
-Print UCase(sVar) REM Возвращает &quot; ПЕТЕРБУРГ &quot;
-end Sub
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; Это строка текста &quot;
+Print #iNumber, &quot; Это еще одна строка текста &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
+End Sub

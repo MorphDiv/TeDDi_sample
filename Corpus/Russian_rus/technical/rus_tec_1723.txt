@@ -1,6 +1,6 @@
 # language_name_wals:	Russian
 # language_name_glotto:	Russian
-# ISO_6393:	rus
+# iso639_3:	rus
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,9 +15,48 @@
 # sample_type:	whole
 # comments:	NA
 
-Другие команды
-/text/sbasic/shared/03130000.xhp
+Функция FileAttr [время выполнения]
+/text/sbasic/shared/03020405.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-Другие команды
-Здесь представлен список функций и инструкций, не включенных в другие категории.
+функция FileAttr
+Функция FileAttr [время выполнения]
+Возвращает режим доступа или номер доступа к файлу, открытому инструкцией Open.
+Номер доступа к файлу зависит от операционной системы (OSH = Operating System Handle).
+Если используется 32-разрядная операционная система, то для определения номера доступа к файлу использовать функцию FileAttr нельзя.
+Open
+Синтаксис:
+FileAttr (Номер_файла As Integer, Атрибут As Integer)
+Возвращаемое значение:
+Integer
+Параметры:
+Номер_файла
+.
+Номер файла, открытого инструкцией Open.
+Атрибут
+.
+Целое выражение, указывающее, какого типа сведения о файле требуется получить.
+Возможны следующие значения.
+1.
+Функция FileAttr указывает режим доступа для данного файла.
+2.
+Функция FileAttr возвращает номер доступа к файлу операционной системы.
+Если для параметра &quot; Атрибут &quot; указывается значение 1, могут быть возвращены следующие значения:
+1 - INPUT (файл открыт для записи)
+2 - OUTPUT (файл открыт для чтения)
+4 - RANDOM (файл открыт для произвольного доступа)
+8 - APPEND (файл открыт для добавления)
+32 - BINARY (файл открыт в двоичном режиме).
+Пример:
+Sub ExampleFileAttr
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; Это строка текста &quot;
+MsgBox FileAttr(#iNumber, 1 ),0, &quot; Режим доступа &quot;
+MsgBox FileAttr(#iNumber, 2 ),0, &quot; Атрибут файла &quot;
+Close #iNumber
+End Sub

@@ -1,6 +1,6 @@
 # language_name_wals:	Japanese
 # language_name_glotto:	Japanese
-# ISO_6393:	jpn
+# iso639_3:	jpn
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,31 +15,51 @@
 # sample_type:	whole
 # comments:	NA
 
-LTrim 関数[実行時]
-/text/sbasic/shared/03120305.xhp
+Get ステートメント [実行時]
+/text/sbasic/shared/03020201.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-LTrim 関数
-LTrim 関数 [実行時]
-文字列表式の先頭部にあるスペース記号を、すべて削除します。
+Get ステートメント
+Get ステートメント[実行時]
+相対編成ファイルのレコードないし、バイナリファイルのバイトシーケンスを読み取って、変数に代入します。
+PUT
+ステートメント
 構文:
-LTrim (Text As String)
-戻り値:
-文字列
+Get [#] FileNumber As Integer, [Position], Variable
 パラメータ:
-Text:
-処理をする文字列表現。
-この関数は、文字列表式の先頭部にあるスペース記号を削除します。
+FileNumber:ファイル番号を指定する整数表式。
+Position:
+Random モードでオープンしたファイルの場合、読み取るレコードの番号を、この
+Position
+に指定します。
+Position
+に指定します。
+Position
+の指定を省略すると、ファイルの現在の位置ないし現在のデータレコードが使用されます。
+Variable:データを読み込む変数の名前。この変数には、オブジェクト変数を除いた、任意の変数型を使用できます。
 例:
-Sub ExampleSpaces
-Dim sText2 As String,sText As String,sOut As String
-sText2 = &quot; < *Las Vegas* > &quot;
-sOut = &quot; ' &quot; +sText2 + &quot; ' &quot; + Chr(13)
-sText = Ltrim(sText2) REM sText = &quot; < *Las Vegas* > &quot;
-sOut = sOut + &quot; ' &quot; +sText + &quot; ' &quot; + Chr(13)
-sText = Rtrim(sText2) REM sText = &quot; < *Las Vegas* > &quot;
-sOut = sOut + &quot; ' &quot; +sText + &quot; ' &quot; + Chr(13)
-sText = Trim(sText2) REM sText = &quot; < *Las Vegas* > &quot;
-sOut = sOut + &quot; ' &quot; + sText + &quot; ' &quot;
-MsgBox sOut
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM バリアント型変数が必要
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM 開始位置
+Put #iNumber,, &quot; ここはテキストの始めの行です。 &quot; REM テキストで行を埋める
+Put #iNumber,, &quot; This is the second line of text &quot;
+Put #iNumber,, &quot; This is the third line of text &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; This is a new text &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; This is the text in record 20 &quot;
+Print Lof(#iNumber)
+Close #iNumber
 end sub

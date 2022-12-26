@@ -1,6 +1,6 @@
 # language_name_wals:	Spanish
 # language_name_glotto:	Spanish
-# ISO_6393:	spa
+# iso639_3:	spa
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,45 +15,46 @@
 # sample_type:	whole
 # comments:	NA
 
-Operadores de comparación [Ejecución]
-/text/sbasic/shared/03110100.xhp
-Sun Microsystems, Inc.
-converted from old format - fpe
-operadores de comparación;%PRODUCTNAME Basic
-operadores;comparaciones
-Operadores de comparación [Ejecución]
-Los operadores de comparación comparan dos expresiones.
-El resultado se devuelve como expresión lógica que determina si la comparación es cierta (-1) o falsa (0).
+Instrucción Print [Ejecución]
+/text/sbasic/shared/03010103.xhp
+Print;instrucción
+Instrucción Print [Runtime]
+Saca las cadenas o expresiones numericas especificadas a un diálogo o a un archivo.
 Sintaxis:
-Resultado = Expresión1 { = | < | > | < = | > = } Expresión2
+Print [#FileName,] Expresión1[{;|,} [Spc(Número As Integer);] [Tab(pos As Integer);] [Expresión2[...]]
 Parámetros:
-Resultado:
-Expresión lógica que especifica el resultado de la comparación (cierto o falso)
-Expresión1, Expresión2:
-Cualquier valor numérico o cadena que se desee comparar.
-Operadores de comparación
-= :
-Igual a
-< :
-Menor que
-> :
-Mayor que
-< = :
-Menor o igual que
-> = :
-Mayor o igual que
-< > :
-Distinto de
+FileName:
+Cualquier expresión numérica que contenga el numero de archivo que sea fijada por la instrucción Open del archivo respectivo.
+Expresión
+:
+Cualquier expresión numérica o de cadena que imprimir.
+Si hay varias expresiones, pueden separarse con caracteres de punto y coma.
+Si se separan con una coma, las expresiones se sangran hasta la siguiente posición de tabulación.
+Las posiciones de tabulación no pueden ajustarse.
+Número
+:
+Cantidad de espacios que insertará la función
+Spc
+.
+Pos
+:
+Los espacios se insertan hasta la posición especificada.
+Si aparece un carácter de punto y coma o una coma tras la última expresión que imprimir, $[officename] Basic almacena el texto en una memoria intermedia interna y continúa la ejecución del programa sin imprimir.
+Cuando se encuentra otra instrucción Print sin un carácter de punto y coma o una coma al final, se imprime todo el texto en una operación.
+Las expresiones numéricas positivas se imprimen precedidas por un espacio.
+Las expresiones negativas se imprimen precedidas por un signo menos.
+Si se excede un rango determinado para valores de coma flotante, la expresión numérica respectiva se imprime en notación exponencial.
+Si la expresión que imprimir excede una longitud determinada, la pantalla la ajustará automáticamente hasta la línea siguiente.
+Spc
+para insertar un número determinado de espacios.
 Ejemplo:
-Sub EjemploDistinto
-DIM sArchivo As String
-DIM sRaiz As String REM ' Directorio raíz para entrada y salida de archivo
-sRaiz = &quot; c:\ &quot;
-sArchivo = Dir$( sRaiz ,22)
-If sArchivo < > &quot; &quot; Then
-Do
-MsgBox sArchivo
-sArchivo = Dir$
-Loop Until sArchivo = &quot; &quot;
-End If
-End sub
+Sub EjemploPrint
+Print &quot; ABC &quot;
+Print &quot; ABC &quot; , &quot; 123 &quot;
+i = FreeFile()
+&quot; C:\Temp.txt &quot;
+&quot; ~/temp.txt &quot;
+For Output As i
+Print #i, &quot; ABC &quot;
+Close #i
+End Sub

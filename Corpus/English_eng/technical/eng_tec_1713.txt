@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,23 +15,45 @@
 # sample_type:	whole
 # comments:	NA
 
-ConvertToURL Function [Run-time]
-/text/sbasic/shared/03120312.xhp
+Lof Function [Run-time]
+/text/sbasic/shared/03020303.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-ConvertToURL function
-ConvertToURL Function [Run-time]
-Converts a system file name to a file URL.
+Lof function
+Lof Function [Run-time]
+Returns the size of an open file in bytes.
 Syntax:
-ConvertToURL(filename)
+Lof (FileNumber)
 Return value:
-String
+Long
 Parameters:
-Filename:
-A file name as string.
+FileNumber:
+A numerical expression that contains the file number that is specified in the Open statement.
+FileLen
+function.
 Example:
-systemFile$ = &quot; c:\folder\mytext.txt &quot;
-url$ = ConvertToURL( systemFile$ )
-print url$
-systemFileAgain$ = ConvertFromURL( url$ )
-print systemFileAgain$
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM must be a Variant
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM Position at start
+Put #iNumber,, &quot; This is the first line of text &quot; REM Fill with text
+Put #iNumber,, &quot; This is the second line of text &quot;
+Put #iNumber,, &quot; This is the third line of text &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; This is a new line of text &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; This is the text in record 20 &quot;
+Print Lof(#iNumber)
+Close #iNumber
+end sub

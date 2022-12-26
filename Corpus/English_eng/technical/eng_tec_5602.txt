@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,143 +15,244 @@
 # sample_type:	whole
 # comments:	NA
 
-Introduction to Databases
-What Is a Database?
-You can define a database as a collection of data on one topic. It is organised in a way allowing to easily browse the information, make changes or add new items.
-Look at this diagram for one of the above examples: a simple phone book.
-A diagram of a phone number database
-A diagram of a phone number database
-The above picture shows a set of two contacts each of which is presented on a separate card. It appears that such a card can constitute a single row in a table:
-Contacts table
-Name
-Tel No.
-Joan
-699 23 43 12
-Adam
-711 19 77 21
-Terms and definitions: A single data which constitutes a part of a greater collection can be called a row or more professionally a record. The collection is normally called a table. Moreover, the most natural name for the table is one describing the data it offers/ stores which is Contacts. Furthermore, each row in the table consists of columns often also called fields. In the table Contacts there are two columns (fields): Name and Tel No..
-For simple uses a single table can make up a database. Many people consider these two equivalent. As you will see, for real databases we usually need more than one table.
-To sum up, you have already got a simple database with one table Contacts.
-Database and Spreadsheet
-It is very likely that you have already used spreadsheet applications like KSpread, OpenOffice. org Calc or Microsoft Excel. If so, you will probably wonder: since both spreadsheets and databases have tables, why should I use the latter?
-While comparing spreadsheets and databases you may encounter the following issues which you will later see in greater detail:
-Referential data integrity
-Data redundancy
-Data integrity and validity
-Limiting data view
-Performance and capacity
-Convenient data entry
-Reports
-Programming
-Multiuse
-Security
-How Is a Database Different From a Spreadsheet?
-Gradually exceeding the capacity of a mobile phone, expand your table Contacts adding a column (field) Address. Add more telephone numbers (office, home) for each person and add surnames to names. To make it simpler we assume the following:
-the table is limited to two people (obviously, there could be hundreds and thousands of them in a real database)
-there are no two persons with the same name and surname
-Contacts table
-Name and surname
-Tel
+Thread %1
+ID
+Function
+Source
+Disabled
+Pending (add)
+Pending (clear)
+Pending (modify)
+Active
+Code
+Gdb command sent when debugger is not running. The command was: %1
+Internal error
+Invalid debugger command %1
+Invalid debugger command
+Invalid gdb replyThe'stopped 'packet does not include the'reason' field.
+The gdb reply is: invalid
+Invalid gdb reply
+Exited on signal %1
+Program received signal %1 (%2)
+Received signal
+gdb message: %1
+Warning
+Running program
+GDB cannot use the tty* or pty* devices. Check the settings on / dev/ tty* and / dev/ pty* As root you may need to "chmod ug+rw" tty* and pty* devices and/ or add the user to the tty group using "usermod -G tty username".
+Application does not existThe application you are trying to debug, %1 does not exist. Check that you have specified the right application in the debugger configuration.
+Application does not exist
+Could not run application '%1 '. The application does not have the executable bit set. Try rebuilding the project, or change permissions manually.
+Could not run application
+Debugger errorDebugger reported the following error: %1
+Debugger error
+Debugger state: %1
+Current command class: '%1 'Current command text: '%2' Current command original text: '%3 '
+Debugger status
+Machine code displayA machine code view into your running executable with the current instruction highlighted. You can step instruction by instruction using the debuggers toolbar buttons of "step over" instruction and "step into" instruction.
+Disassemble View
 Address
-Joan Smith
-Western Gate 1, Warsaw
-Adam Willson
-London, Frogs Drive 5
-110 98 98 00
-Western Gate 1
-Smith Joan
-312 43 42 22
-Warsaw, Western Gate 1
-ADAM Willson
-231 83 02 04
-Frogs Drive 5, London
-Such a table can be made both in a spreadsheet and in a database. Using a spreadsheet is very easy, of course. What problems do we encounter at this stage?
-Referential data integrity
-Suppose you are using a spreadsheet and you need to change the address of at least one person. You have a small problem: you often have to change the address in many rows. For example, Joan takes three rows. A real problem will arise if you forget to change one of the rows - the address assigned to this person will be ambiguous, hence your data loses integrity.
-Moreover there is no simple way of deleting a chosen person from the table since you have to remember about deleting all rows related to him or her.
-Data redundancy
-This is directly connected to the previous problem. In fields Name and surname and Address the same data is entered many times. This is typical of a spreadsheets' ineffective way of storing data because the database grows unnecessarily, thus requiring more computer resources (larger size of data and slower access).
-How can you solve these problems with a database? You can split information into smaller chunks by creating an additional table Persons with only two columns: Name and surname and Address:
-Persons table
-Each row in the table Persons corresponds to a single person. Table Contacts is from now on a relation to the table Persons.
-Data integrity and validity
-Note the way data is entered in the fields Name and surname and Address. People entering data can be fallible, sometimes even negligent. In our sample data we have both different sequence of entering name and surname (Joan Smith and Smith Joan; Adam and ADAM) and many more ways of entering the same address. Surely you can think of many other ways.
-The above problem shows that & eg; when searching the telephone number of a person whose address is "Western Gate 1, Warsaw" you will not get a full result. You will get only one row instead of three. Moreover You will also not find all the telephone numbers searching for the value "Joan Smith" in the field Name and surname, because "Smith Joan" will not fit to "Joan Smith".
-How can you solve these problems using a database? You can do this by changing the design of the table Persons by:
-Dividing data in the field Name and surname into two separate fields: Name and Surname.
-Dividing data in the field Address into three separate fields: Street, House number and City.
-Guaranteeing data correctness: by ensuring that no fields are empty, & eg; you must always enter house number.
-A modified table looks something like this:
-Persons table
-Name
-Surname
-Street
-House number
-City
-Smith
-Western Gate
-1
-Warsaw
-Willson
-Frogs Drive
-5
-London
-Conditions
-required field
-Thanks to introducing the condition required field we can be sure that the entered data is complete. In case of other tables you may of course allow omitting certain fields while entering data.
-Limiting data view
-A spreadsheet displays all rows and columns of the table which is bothersome in case of very large data sheets. You may of course filter and sort rows in spreadsheets, however you must be extra careful while doing so. Spreadsheet users are in risk of forgetting that their data view has been filtered what can lead to mistakes. For example, while calculating sums you may think you have 100 rows of data while in fact there are 20 rows more hidden.
-If you want to work on a small subset of data, & eg; to send it for others to edit, you can copy and paste it to another spreadsheet and after editing paste the changed data back to the main spreadsheet. Such "manual" editing may cause data loss or incorrect calculations.
-To limit the data view database applications offer queries, forms and reports.
-A very practical way of limiting is the following extended version of the previously described table Persons:
-Income
-2300
-1900
-Let's assume that the newly introduced column Income contains confidential data. How can you share & eg; contact details of the persons with your coworkers but without revealing their income? It is possible if you share only a query and not the whole table. The query could select all columns except for the column Income. In database world such a query is often known as a view.
-Performance and capacity
-Your computer is probably quite fast, however you will easily see that it does n't help with slow, large spreadsheets. Their low efficiency is first of all due to lack of indexes accelerating the process of data search (databases do offer them). Moreover if you use things like system clipboard, even copying data may become troublesome with time.
-Spreadsheets containing large data sets may take ages to open. A spreadsheet loads lots of data to the computer's memory while opening. Most of the data loaded are probably useless/ unnecessary for you at the moment. Databases unlike spreadsheets load data from computer storage only when needed.
-In most cases you will not have to worry how the database stores its data. This means that unlike spreadsheets, databases do not care about:
-The sequence of rows since you can order the rows according to your needs. Moreover, you can view the same data in many views with different orders.
-The same goes for columns (fields) of the table.
-Together with Limiting data view described in the previous paragraph these qualities constitute the advantage of databases.
-Data entry
-The latest editions of applications for creating spreadsheets enable you to design data-entry forms. Such forms are most useful if your data cannot be conveniently displayed in tabular view, & eg; if the text occupies too many rows or if all the columns do not fit on the screen.
-In this case the very way the spreadsheet works is problematic. Fields for data entry are placed loosely within the spreadsheet and very often are not secure against the user's (intentional or accidental) intervention.
-Reports
-Databases enable grouping, limiting and summing up data in a form of a report. Spreadsheets are usually printed in a form of small tables without fully automatic control over page divisions and the layout of fields.
-Programming
-Applications for creating databases often contain full programming languages. Newer spreadsheets have this capability too, however calculations come down to modifying the spreadsheet's fields and simple data copying, regardless of the relevance and integrity rules mentioned in previous paragraphs.
-Data processing within a spreadsheet is usually done via a graphical user's interface which may slow down the data processing speed. Databases are capable of working in background, outside of graphical interfaces.
-Multiuse
-It is hard to imagine a multiuse of one spreadsheet. Even if it is technically possible in the case of the latest applications, it requires a lot of discipline, attention and knowledge from the users, and these cannot be guaranteed.
-A classical way to sharing data saved in a spreadsheet with other person is to send a file as a whole (usually using e-mail) or providing a spreadsheet file in a computer network. This way of work is ineffective for larger groups of people - data that could be needed in a particular time may be currently locked by another person.
-On the other hand, databases have been designed mainly with multiuser access in mind. Even for the simplest version locking at a particular table row's level is possible, which enables easy sharing of table data.
-Security
-Securing a spreadsheet or its particular sections with a password is only symbolic activity. After providing a spreadsheet file in a computer network, every person being able to copy the file can try to break the password. It is sometimes not so hard as the password is stored in the same file as the spreadsheet.
-Features for edit locking or copy locking of a spreadsheet (or its part) is equally easy to break.
-Databases (except these saved in a file instead of a server) do not need to be available in a single file. You're accessing them using a computer network, usually by providing a user name and a password. You are gaining access only to these areas (tables, forms or even selected rows and columns) which were assigned to you by setting appropriate access rights.
-Access rights can affect ability of data editing or only data reading. If any data is not available to you, it will not be even sent to your computer, so there is no possibility of making a copy of the data in such easy way as in case of spreadsheet files.
-Database Design
-Database design needs careful planning. Note that Contacts table redesign proposed in section 1.2 can generate problems when the table is filled with data. For example, renaming a field is a simple task, but splitting the Address field into separate fields requires careful and tedious work.
-To avoid such situations, rethink your database project before you create it in your computer, and before you and others will start to use it. Thus, by investing some time initially, you will most probably save your time on everyday use.
-Who Needs a Database?
-Stick to spreadsheets if:
-Your needs are limited and your data will never grow to large volumes (can you actually forecast that now?)
-You are unable to acquire the methodology of database construction. You may however consider either outsourcing this task to someone else or using simpler tools.
-You use complicated spreadsheets and you lack time or money to switch to databases. Think or ask someone whether this does not lead down a blind alley. Do n't count on magical tools that would change your spreadsheet (regardless how well made) into a database.
-Consider using databases if:
-Your data collection expands every week.
-You often create new spreadsheets, copy within these and you feel that this work is getting more and more tedious. In this case the effort of switching to databases easily pays off.
-You create reports and statements for which the table view of a spreadsheet is not suitable. You can then consider switch to using a database with form views.
-Database Creation Software
-So far you have learnt the general characteristics of databases without going into much detail about specific applications for designing them.
-The first databases were built together with large mainframe computers in the 60s, & eg; IBM System/ 360. Those were not the days of PCs, therefore these databases required a highly specialized personnel. Although the old computers' hardware was unreliable, they were immeasurably slower and had less storage capacity, one feature of databases still remains most attractive: the data access by many users through a network.
-In the 70s scientists formed the theory of relational databases (terms like: table, record, column (field) and relationality and many others). On the basis of this theory IBM DB2 and Oracle databases were created, which have been developed and used till today. In the late 70s the first PCs were constructed. Their users could (gradually) utilize many types of applications, including those for database construction.
-When it comes to large databases in companies, the situation has n't changed: they still require powerful computers or computer complexes called clusters. This goes, however, beyond the topic of this manual.
-In the area of "accessible" databases with graphic user interface for PCs you can choose from the following:
-DBase - a tool for databases operation for DOS popular in the 80s. Files in DBase format are still used in some specific cases due to their simplicity.
-FoxPro - an application similar to DBase (early 90s). After being taken over by Microsoft, graphic user interfaces were introduced and therefore it is used for creating databases on PCs. This product is still offered, though seems a bit obsolete.
-Microsoft Access - an application for databases (data and graphic interface design) with many simplifications, therefore suitable for beginners, designed in the late 80s, based on 16-Bit Architecture. This product is offered and widely used till today, especially by small companies, where efficiency and multiuser requirements are not very demanding.
-FileMaker - popular application similar to MS Access in simplicity, operating on Windows and Macintosh platforms, offered since 1985.
-kexi; - a multiplatform application (Unix/ Linux, Windows, Mac OS X) designed in 2003, developed according to OpenSource principles, part of the global K Desktop Environment project, & ie; graphic environment for Unix/ Linux systems. A significant contributor to & kexi; 's development is the OpenOffice Poland company.
+Offset
+Instruction
+Frame stackOften referred to as the "call stack", this is a list showing which function is currently active and what called each function to get to this point in your program. By clicking on an item you can see the values in any of the previous calling functions.
+Could not locate the debugging shell '%1 '.
+Debugging Shell Not Found
+The debugger component encountered an internal error while processing a reply from gdb. Please submit a bug report.
+The exception is: %1 The MI response is: %2
+Internal debugger error
+Process exited
+Could not start debugger. Could not run '%1 '. Make sure that the path name is specified correctly.
+Could not start debugger
+Process did not start
+Debugger Breakpoints
+Breakpoint listDisplays a list of breakpoints with their current status. Clicking on a breakpoint item allows you to change the breakpoint and will take you to the source in the editor window.
+New
+Data write
+Data read
+Show text
+Edit
+Disable
+Delete
+Disable all
+Enable all
+Delete all
+Data write breakpoint Expression: %1 Address: 0x%2 Old value: %3 New value: %4
+Enable
+GDB Output
+GDB outputShows all gdb commands being executed. You can also issue any other gdb command while debugging.
+& GDB cmd:
+Pause execution of the app to enter gdb commands.
+Show Internal Commands
+Controls if commands issued internally by KDevelop will be shown or not. This option will affect only future commands, it will not add or remove already issued commands from the view.
+Copy All
+Watches
+Recent
+Attach to Process
+Debugger Variables
+& Evaluate
+& Watch
+Variable treeThe variable tree allows you to see the values of local variables and arbitrary expressions. Local variables are displayed automatically and are updated as you step through your program. For each expression you enter, you can either evaluate it once, or "watch" it (make it auto-updated). Expressions that are not auto-updated can be updated manually from the context menu. Expressions can be renamed to more descriptive names by clicking on the name column. To change the value of a variable or an expression, click on the value.
+Expression entryType in expression to evaluate.
+Evaluate the expression.
+Evaluate the expression and auto-update the value when stepping.
+Recent Expressions
+Remove All
+Re-evaluate All
+Format
+Natural
+Hexadecimal
+Decimal
+Character
+Binary
+Remember Value
+Remove Watch Variable
+Watch Variable
+Re-evaluate Expression
+Remove Expression
+Data write breakpoint
+Copy Value
+Invalid
+Watchpoint
+Read Watchpoint
+Debugger Configuration
+Debug arguments can be set on the Run Options page, or directly in the project manager.
+Debugger executable:
+Gdb executable
+To run the "gdb" binary from $PATH, leave this field empty. To run a custom gdb, for example, for a different architecture, enter the executable name here. You can either run gdb from $PATH, but with a different name (say, "arm-gdb"), by typing the name here, or by specifying the full path to a gdb executable.
+Run gdb in a special shell (mainly for automake projects.)
+If you want gdb to be executed by a special shell or tool insert it here. The main use-case is for Automake based projects where the application is actually only a script and libtool is needed to get it to run inside gdb.
+Debugging & shell:
+If you want gdb to be executed by a special shell or tool insert it here. The main use-case is for Automake based projects where the application is actually only a script and libtool is needed to get it to run inside gdb.
+Options
+Displaying static members makes GDB slower in producing data within KDE and Qt. It may change the "signature" of the data which QString and friends rely on, but if you need to debug into these values then check this option.
+Display static & members
+When displaying the disassembled code you can select to see the methods' mangled names. However, non-mangled names are easier to read.
+Display & demangled names
+If GDB has not seen a library that will be loaded via "dlopen" then it will refuse to set a breakpoint in that code. We can get GDB to stop on a library load and hence try to set the pending breakpoints. See the documentation for more details relating to this behavior. If you are not "dlopen"ing libs then leave this unchecked.
+Try setting & breakpoints on library loading
+Use the floating toolbar. This toolbar always stays on top of all windows so that if the app covers KDevelop you have control of the app through the small toolbar. It can also be docked into the panel. This toolbar is in addition to the toolbar in KDevelop.
+Enable floating toolbar
+This allows you to enter terminal input when your application contains terminal input code (e. g. cin, fgets, etc.). If you use terminal input in your application then check this option. Otherwise leave it unchecked.
+Enable separate terminal for application & IO
+Start Debugger With
+Framestack
+This script is intended for the actual commands needed to connect to a remotely running executable. shell sleep 5 wait for remote program to start target remote... connect to the remote debugger continue [optional] run debugging to the first breakpoint
+Remote Debugging
+& Config gdb script:
+Gdb configure script
+This script is sourced by gdb when the debugging starts.
+Run shell script:
+Script to start remote application
+This shell script is run after the Config gdb script has been sourced by gdb. When debugging remotely this script is intended to actually start the remote process. [It is expected that the debug executable can be reached on the target, maybe by downloading it as a final build step.] 1) Find a way to execute a command remotely - rsh, ssh, telnet,.... 2a) Execute "gdbserver... application" on target.... or if your executable contains the gdb stub: 2b) Execute "application" on target.
+Run & gdb script:
+Script to connect with remote application
+This script is sourced by gdb after the two preceding scripts have been executed. This script is intended for the actual commands needed to connect to a remotely running executable. shell sleep 5 wait for remote program to start; target remote... connect to the remote debugger; continue [optional] run debugging to the first breakpoint.
+Tracing Configuration
+Enable tracing Tracing is a mechanism to automatically print values of the chosen expressions and continue execution when breakpoint is hit. You can think of it as printf debugging that does not require modifying the source.
+Enable tracing
+Cancel
+Custom format string
+OK
+Custom format string Specify a C-style format string that will be used when printing the chosen expression. For example: Tracepoint 1: g = %d If custom format string is not enabled, names and values of all expressions will be printed, using "%d" as format specifier for all expressions.
+Expressions to print:
+Run
+Debugger Toolbar
+Pid
+TTY
+Stat
+Time
+Command
+Your names
+Your emails
+< Loading\.\.\. >
+Click to fetch more frames
+Start
+Amount
+Memory view
+Change memory range
+Reload
+Close this view
+Special debugger views
+Breakpoint
+temporary
+hw
+Enabled
+Type
+Status
+Location
+Condition
+Ignore Count
+Hits
+Tracing
+Frame
+GDB Support
+Support for running apps in GDB
+Breakpoints
+Variables
+Frame Stack
+Disassemble
+GDB
+& Start
+Start in debugger
+Start in debuggerStarts the debugger with the project's main executable. You may set some breakpoints before this, or you can interrupt the program while it is running, in order to get information about variables, frame stack, and so on.
+& Restart
+Restart program
+Restarts applicationRestarts applications from the beginning.
+Stop
+Stop debugger
+Stop debuggerKills the executable and exits the debugger.
+Interrupt
+Interrupt application
+Interrupt applicationInterrupts the debugged process or current GDB command.
+Run to & Cursor
+Run to cursor
+Run to cursorContinues execution until the cursor position is reached.
+Set Execution Position to Cursor
+Jump to cursor
+Set Execution Position Set the execution pointer to the current cursor position.
+Step & Over
+Step over the next line
+Step overExecutes one line of source in the current source file. If the source line is a call to a function the whole function is executed and the app will stop at the line following the function call.
+Step over Instruction
+Step over instruction
+Step over instructionSteps over the next assembly instruction.
+Step & Into
+Step into the next statement
+Step intoExecutes exactly one line of source. If the source line is a call to a function then execution will stop after the function has been entered.
+Step into Instruction
+Step into instruction
+Step into instructionSteps into the next assembly instruction.
+Step Out
+Steps out of the current function
+Step outExecutes the application until the currently executing function is completed. The debugger will then display the line after the original call to that function. If program execution is in the outermost frame (i. e. in main()) then this operation has no effect.
+Viewers
+Debugger viewers
+Debugger viewersVarious information about application being executed. There are 4 views available: MemoryDisassembleRegistersLibraries
+Examine Core File...
+Examine core file
+Examine core fileThis loads a core file, which is typically created after the application has crashed, e. g. with a segmentation fault. The core file contains an image of the program memory at the time it crashed, allowing you to do a post-mortem analysis.
+Attach to process
+Attach to processAttaches the debugger to a running process.
+Toggle Breakpoint
+Toggle breakpoint
+Toggle breakpointToggles the breakpoint at the current line in editor.
+Debug in & KDevelop
+Evaluate: %1
+Evaluate expressionShows the value of the expression under the cursor.
+Watch: %1
+Watch expressionAdds an expression under the cursor to the Variables/ Watch list.
+GDB exited abnormallyThis is likely a bug in GDB. Examine the gdb output window and then stop the debugger.
+GDB exited abnormally
+Choose a core file to examine...
+Examining core file %1
+Choose a process to attach to...
+Attaching to process %1
+Debugger
+Debugger stopped
+Runs the program in the debugger.
+Start in debugger Starts the debugger with the project's main executable. You may set some breakpoints before this, or you can interrupt the program while it is running, in order to get information about variables, frame stack, and so on.
+& Continue
+Continues the application execution
+Continue application execution Continues the execution of your application in the debugger. This only takes effect when the application has been halted by the debugger (i. e. a breakpoint has been activated or the interrupt was pressed.)
+Variable
+Value
+kdevelop: Debug application console

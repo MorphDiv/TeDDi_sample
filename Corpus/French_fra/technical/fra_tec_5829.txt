@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,191 +15,17 @@
 # sample_type:	whole
 # comments:	NA
 
-Foire aux questions
-Qu'est -ce qu'amarok; & #160;?
-Qu'est -ce qu'amarok; & #160;?
-& amarok; est un lecteur audio pour les systèmes Unix (par exemple Linux). Pour de plus amples informations, vous pouvez consulter la liste de ses fonctionnalités (en) et la galerie de captures d'écran.
-Installation
-Puis -je utiliser & amarok; sans KDE & #160;?
-& amarok; n'a besoin que des KDElibs, et rien d'autre de KDE. Donc il vous faut les KDElibs installées correctement (y compris tous les fichiers binaires qui vont avec, puisqu'amarok; a besoin de certains d'entre eux pour trouver les modules externes et pour le module externe de script). Nous avons écrit un article pour compiler les KDElibs (en), qui pourrait vous être utile.
-Pour que certaines fonctionnalités fonctionnent correctement, comme l'OSD, il faut que votre interface graphique respecte les standards appropriés de freedesktop. org. Par exemple, tout ira bien sous GNOME, alors que vous aurez quelques problèmes sous fluxbox. Nous nous sommes engagés à maintenir & amarok; sur toutes les plates-formes. Nous utilisons les KDElibs et Qt parce qu'ils offrent un excellent environnement de développement.
-Dépannage
-& amarok; plante pendant la construction de la collection, toujours au même point. Que se passe -t-il & #160;?
-Il est probable qu'un des fichiers de votre collection déclenche un bogue dans la librairie TagLib, et fasse planter & amarok;. Vous pouvez identifier ce fichier en regardant dans ~/. kde/ share/ apps/ amarok/ collection_scan. log. Vous pouvez rapporter ce bogue à la librairie TagLib sur bugs. kde. org et joindre le fichier qui cause l'erreur. Vous pouvez ensuite retirer le fichier de votre collection.
-& amarok; plante à chaque fois que je joue une certaine piste, qu'est -ce qui ne vas pas & #160;?
-Cela signifie en général que la librairie TagLib plante alors qu'elle lit les balises de ce fichier. Rapportez ce bogue de la TagLib sur bugs. kde. org.
-& amarok; plante souvent, que puis -je faire & #160;?
-Mettez à jour ALSA-libs et ALSA-utils, ou utilisez OSS, ou émulez OSS.
-Si vous utilisez MySQL comme base de données, essayez SQLite, le code d'amarok; pour SQLite est plus mûr.
-Essayez un autre moteur audio.
-Vérifiez que toutes les bibliothèques qu'amarok; utilise ont été compilées avec la même version de GCC qui a compilé & amarok;. Lorsque & amarok; est compilé avec GCC 3.4. x et lié avec TagLib compilée avec GCC 3.3. x, l'édition des balises peut faire planter & amarok;.
-Si vous utilisez KDE avec artsd, essayez de désactiver l'option « & #160; Suspendre automatiquement si inactif pendant & #160; », ou au moins n'utilisez pas une valeur d'une seconde puisque cela interférera à chaque fois qu'amarok; changera de piste.
-Sinon, envoyez -nous les logs quand le courrier électronique apparaît (vous verrez). Si & amarok; plante souvent, le bogue sera corrigé si vous nous envoyez un bon log. Voir la section suivante pour savoir comment obtenir un bon log.
-Comment obtenir les logs après un plantage & #160;?
-Allez voir le Comment déboguer (en).
-& amarok; ne se sert pas des balises qui sont dans mes fichiers & #160;!
-Si Konqueror ou d'autres applications affichent des albums, titres, artistes ou genre différents de ceux qu'amarok; réceptionne lorsqu'il crée votre collection, il est possible qu'il lise les informations iD3v1 au lieu des ID3v2. Cela peut être dû à vos paramètres d'encodage & #160;: allez dans Configuration Configurer & amarok; et trouvez la section encodage du panneau Paramètres. Déchochez toutes les boîtes jusqu'à « & #160; Ne pas décoder comme latin1 & #160; », puis rebalayez votre librairie pour prendre en compte les balises ID3v2.
-& amarok; n'affiche pas mes balises en utf-8 correctement & #160;!
-C'est parce que la plupart des applications mettent des données en utf8 dans les tags ID3v2 mais ne spécifient pas l'encodage comme unicode. Ce script Perl corrige cela.
-#! /usr/ bin/ perl die "File $ARGV[0] n'existe pas" unless -f $ARGV[0]; use MP3: :Mplib; my $mp3 = MP3: :Mplib- > new($ARGV[0]); my $v2tag = $mp3- > get_v2tag; print "Erreur a l'écriture des balises de $ARGV[0]\" unless $mp3- > set_v2tag($v2tag, amp; UTF8);
-Ce script nécessite le module MP3: :Mplib de Perl, qui peut être installé par la commande Perl -MCPAN -e 'install MP3: :Mplib '
-Pourquoi est -ce que mon icône dans la barre d'état a toujours l'air activé & #160;?
-Les boutons de la barre d'état (aléatoire & #160; / répéter & #160; / ajouter) ont toujours l'air actifs sous KDE 3.4.0. C'est un bogue connu. Les effets des icônes sont parfois oubliés. Pour corriger ceci, allez dans le Centre de configuration de KDE, dans Apparence Icônes Avancés, et définissez l'état désactivé comme « & #160; griser & #160; » et « & #160; semi-transparent & #160; ». Remarquez que parfois il vous faudra cliquer sur l'icône trois fois avant que cette modification soit pris en compte.
-Pourquoi est -ce qu'amarok; se plaint à propos de symboles non définis puis refuse de démarrer & #160;?
-Si vous obtenez cette erreur & #160;: « & #160; amarokapp: symbol lookup error: amarokapp: undefined symbol: _ZN11KSystemTray9setPixmapERK7QPixmap & #160; », alors vérifiez que amarokapp utilise la bonne version de qt (grâce à la commande & #160;: « & #160; ldd ` which amarokapp ` | grep qt & #160; »).
-Pour corriger cela, il se peut que vous ayez à désinstaller toute version de libqt avec laquelle & amarok; entre en conflit, et/ ou à modifier / etc/ ld. so. conf pour qu'il utilise la bonne version en priorité.
-Utilisation générale
-Ou puis -je trouver de l'aide sur l'utilisation d'amarok; & #160;?
-Il y a plusieurs possibilités. La plupart du temps, les problèmes que vous avez avec votre installation initiale d'amarok; seront mieux traités par des experts de votre distribution Unix ou Linux. Vous pouvez aussi chercher de l'aide sur le forum d'amarok; ou sur le canal IRC sur irc. freenode. net, canal #amarok.
-Bugzilla n'est pas un endroit où chercher de l'aide. Veuillez saisir un bogue si vous voulez sérieusement aider à corriger un bogue d'amarok;.
-Quand j'ai lancé & amarok;, j'ai vu une liste de lecture vide. Comment puis -je obtenir mes morceaux de musique à partir d'ici & #160;?
-C'est simple. Utilisez le navigateur sur le côté gauche pour naviguer vers le dossier désiré. Ensuite tirez les fichiers vers la liste de lecture située sur la droite.
-Où se trouve l'onglet « & #160; Dossiers personnels & #160; » & #160;?
-Afin d'éviter des incohérences au niveau de l'interface, l'onglet « & #160; Dossiers personnels & #160; » a été remplacé par l'outil « & #160; Statistiques & #160; », disponible dans le menu Outils Statistiques.
-Est -il possible de choisir le type d'informations que le navigateur « & #160; Contexte & #160; » montre & #160;?
-Oui, effectuez un clique-droit n'importe-où dans le navigateur « & #160; Contexte & #160; » pour effectuer ces modifications.
-Pourquoi les étoiles et les nombres dans le navigateur « & #160; Contexte & #160; » ne sont pas synchronisés & #160;?
-La signification des ces symboles a changé dans Amarok 1.4 « & #160; Fast Forward & #160; » & #160;: les étoiles représentent le score défini par l'utilisateur tandis que les nombres affichent un score calculé automatiquement.
-Il ne se passe rien quand je clique sur les étoiles dans le navigateur « & #160; Contextuel & #160; ». Comment puis -je attribuer un score à une chanson & #160;?
-Pour attribuer un score, il vous faut la colonne « & #160; Score & #160; » dans la liste de lecture. Effectuez un clic droit sur la barre de titre de la liste de lecture et choisissez Afficher la colonne Score. Cliquez n'importe où dans la colonne « & #160; Score & #160; » pour attribuer une score au morceau. Avec Amarok en arrière-plan, vous pouvez également utilier le raccourci [Win]+[1-5] pour attribuer rapidement un score à une chanson alors qu'Amarok fonctionne en tache de fond.
-Comment puis -je supprimer des pistes de la liste de lecture & #160;?
-Sélectionnez les fichiers que vous voulez supprimer, et appuyez sur la touche Supprimer sur votre clavier. Ou effectuez un clic droit sur la sélection et choisissez Supprimer la sélection depuis le menu qui apparaîtra.
-Comment puis -je charger une liste de lecture & #160;?
-Tirez et lâchez le fichier liste de lecture dans la liste de lecture, comme vous l'auriez fait avec n'importe quel autre fichier. C'est simple & #160;!
-Comment puis -je enregistrer la liste de lecture actuelle & #160;?
-Le bouton Enregistrer la liste de lecture est à côté du bouton Ajouter un fichier sur la barre d'outils de la liste de lecture. Cliquez dessus & #160;!
-Il n'y a pas de visualisations dans la fenêtre de visualisations.
-Vous n'avez probablement pas installé xmms-config, reconfigurez et recompilez après avoir installé le paquetage xmms-devel approprié. Vous pouvez aussi installer la dernière version de libvisual, qui a quelques afficheurs très agréables.
-Où est la balance & #160;?
-La Fenêtre de l'égaliseur peut être trouvée dans le menu du bouton droit de la souris. Vous pouvez aussi le trouver dans la Barre de menus en sélectionnant Outils Égaliseur.
-Lecture
-Quelles sorte de média & amarok; gère -t-il & #160;?
-Aucun. Oui, c'est vrai & #160;! Aucun & #160;! Nous avons une approche du moteur assez spéciale, la question devrait être posée comme cela & #160;: « & #160; Quels formats sont gérés par GStreamer/ xine/ aRts/ NMM/ MAS/ KDEmm & #160;? & #160; » Comme vous pouvez le devinez il gère à peu près tous les formats audio que vous pouvez imaginer. GStreamer peut même décoder du texte et les PNG & #160;!
-Pour plus d'informations, allez voir la comparaison des moteurs audio (en).
-Pourquoi & amarok; ne peut -il pas jouer des MP3 & #160;?
-Il le peut & #160;! Vous utilisez sans doute Fedora & #160; / RedHat, il ne fournissent pas de décodeurs MP3 par défaut (à cause des problèmes de brevets). Solution & #160;: Alt-F2, gg: redhat mp3 kde, ENTER
-& amarok; ne joue pas les MP3 sous SUSE Linux 9.3, que puis -je faire & #160;?
-Ouvrez « & #160; YaST Online Update & #160; » et installez le correctif multimédia 1. Voila, & amarok; joue les MP3.
-Avec le moteur GStreamer, j'ai une utilisation du processeur de 100 & #160;% lors de la lecture. Comment puis -je régler ce problème & #160;?
-Quand vous utilisez le moteur GStreamer avec alsasink, AmaroK demande au périphérique de proposer un mixeur. Le mixage permet à plusieurs applications d'accéder au périphérique en même temps, et de jouer du son simultanément. Cela peut être effectué en utilisant une carte son proposant le mixage matériel (ex. SBLive), ou en utilisant le module « & #160; dmix & #160; » pour alsa, qui propose un mixage logiciel. Voyez Setting up Dmix for ALSA (en).
-Après l'installation vous devez spécifier « & #160; dmix & #160; » comme périphérique son dans la fenêtre de configuration du moteur.
-Je ne peux lire aucun fichier avec & amarok;, pourquoi & #160;?
-Vous devez tester l'interface son via la ligne de commande & #160;:
-artsplay foobar. mp3 gst-launch filesrc location=/ home/ foo/ bar. mp3 & #160;! spider & #160;! audioscale & #160;! audioconvert & #160;! alsasink xine-check
-La sortie de ces commandes devrait vous aider à identifier la source du problème et à le régler. Remarquez que vous pouvez avoir besoin d'utiliser un sink différent pour tester GStreamer (par exemple osssink).
-& amarok; peut -il envoyer directement des données à OSS & #160; / ALSA & #160;?
-Il le fait déjà & #160;! N'oubliez pas que le média doit d'abord être décodé & #160;! Vous ne pouvez pas transmettre directement un MP3 à ALSA, tout ce que vous obtiendriez serait un long silence pesant. GStreamer est le meilleur choix pour la plupart des gens voulant une solution de décodage utilisant peu le processeur, il lit le fichier, le décode et fournit les données PCM à ALSA. Exactement comme XMMS.
-Mais XMMS peut fournir les données directement à ALSA & #160;!
-Mais il décode d'abord & #160;! GStreamer peut fournir les données directement à ALSA aussi & #160;! Comme le peut xine & #160;!
-Puis -je faire quelque chose pour améliorer les problèmes de qualité sonore & #160;?
-Vous pouvez utiliser soit le moteur GStreamer (il est super & #160;!), ou bien aRts. Ouvrez le Centre de configuration Son Système de sons. Activez Exécuter avec la priorité la plus haute, et augmentez la taille du Tampon audio (attention, voir la FAQ suivante & #160;!). Vous devriez aussi vous assurer que votre artswrapper est comme ce qui suit & #160;:
-su chmod a+rsx / emplacement/ de/ kde/ bin/ artswrapper killall -9 artsd
-Avec KDE 3.2. x il y a des problèmes avec le codec KDEMultimédia qui peut causer des lectures distordues, reportez vous à ce rapport de bogue. Essayez d'augmenter la taille du tampon audio dans votre fichier de configuration alsa. asoundrc, cela pourrait vous aider grandement.
-L'utilisation du processeur est haute, y a -t-il quelque chose à faire pour la réduire & #160;?
-Vous pouvez ne pas utiliser le moteur aRts, utiliser les moteurs GStreamer ou xine, ou réduire l'utilisation du processeur en installant KDEMultimédia pour utiliser des codecs aRts plus rapides (par exemple libarts_mpeglib. so, etc.)
-Les analyseurs d'amarok; sont passifs & #160;!
-Vous utilisez probablement le moteur aRts. Utilisez soit un autre moteur (le moteur Xine a été sérieusement amélioré pour donner une synchronisation d'analyseur parfaite), ou réduisez la taille de votre tampon aRts dans Centre de configuration Son Système de sons. Plus petit sera le tampon, plus réactifs seront les visualisations. Oui c'est un bogue, veuillez nous aider à le corriger & #160;!
-J'ai installé GStreamer, mais lorsque j'essaye de changer vers le moteur GStreamer, & amarok; plante. Que faire & #160;?
-Après avoir installé GStreamer, vous devez enregistrer ses composants, lancer « & #160; gst-register & #160; » (parfois suffixé avec le numéro de version, soit gst-register-0.8) devrait enregistrer les composants GStreamer.
-J'ai lancé gst-register mais j'ai des problèmes avec GStreamer, que puis -je faire & #160;?
-Vous pouvez essayer la FAQ de GStreamer. Si rien ne fonctionne, vous pouvez vous reporter à des gens ayant de bonnes connaissances sur le canal IRC #GStreamer.
-& amarok; me dit que le moteur GStreamer ne peut pas jouer les MP3, alors que j'ai copié & #160; / installé le module externe mad & #160;!
-Essayez cela (assurez -vous qu'amarok; n'est pas lancé) & #160;: - Téléchargez, compilez et installez le package ffmpeg - Lancer gst-register (il se peut que vous ayez besoin de le lancer deux fois, en tant superutilisateur et en tant que votre utilisateur habituel) - Allez dans le dossier des modules externes de GStreamer (vous pouvez le trouver grâce à gst-config & #160; / gstreamer-config) - Supprimez les fichiers ffmpeg (ou déplacez -les ailleurs) - Lancez gst-register à nouveau - Lancez & amarok;.
-Développement
-Comment puis -je obtenir la version cvs & #160; / svn d'amarok; & #160;?
-Comment obtenir et compiler & amarok; à partir de SVN.
-J'ai trouvé un bogue & #160; / j'ai une idée pour & amarok; & #160;!
-Veuillez le rapporter à http: / /bugs. kde. org, si vous avez une liste de suggestions & #160; / souhaits, il peut être mieux de les envoyer à notre liste de lecture & #160;: amarok-devel@lists. sourceforge. net.
-Acceptez vous les correctifs & #160;?
-Avec joie & #160;! Votre meilleure façon d'agir est de nous faire savoir ce que vous voulez faire pour que nous puissions en discuter, mais ne vous inquiétez pas si nous n'avons pas encore intégré votre correctif & #160;! La discussion est surtout faite pour vous aider à corriger mieux & amarok;. Puis vous pouvez soit soumettre le patch à la liste de lecture, ou le commiter si vous avez un accès svn. Malgré tout, veuillez nous le faire savoir avant de commiter les nouvelles fonctionnalités sur le svn & #160;! Si c'est une résolution de bogues alors allez -y, c'est l'open source après tout & #160;!
-Pourquoi avez -vous choisi le nom & amarok; & #160;?
-& amarok; est un album du compositeur Britannique Mike Oldfield. Je l'aime beaucoup, et j'ai pensé que le nom avait une bonne sonorité. De plus, il contient le très important K & #160;!
-Est -ce & amarok;, AmaroK ou Amarok & #160;?
-C'est amarok; & #160;! Mais nous comprenons que ce n'est pas très conventionnel & #160;!!
-Trucs et astuces
-Comment utiliser & amarok; comme un réveil & #160;?
-En fait, grâce à la magie de DCOP vous le pouvez déjà. Mettez simplement une alerte dans votre programme calendrier préféré et demandez -lui de lancer la commande suivante & #160;: dcop amarok player play
-Cette commande demandera à & amarok; de lancer la lecture. Assurez -vous qu'amarok; est déjà lancé avant d'aller vous coucher, et vous devriez vous réveiller avec la mélodie du morceau que vous avez arrêté avant d'aller vous coucher.
-Comment savoir ce qu'amarok; joue actuellement, quand je suis sur un autre ordinateur & #160;?
-Si vous avez mis en place proprement un environnement ssh, vous pouvez l'utiliser pour obtenir l'information. La commande suivante retournera la chaîne en cours de lecture & #160;: ssh -i ~/. ssh/ id_rsa yourip dcop --user yourusername amarok player nowPlaying
-Assurez -vous que vous avez remplacé votreip par votre IP et votrenomd'utilisateur par votre nom d'utilisateur. Notez aussi que cela suppose que votre identification puisse être trouvée dans le fichier ~/. ssh/ id_rsa.
-Quelles sortes de choses la fenêtre du lecteur peut -elle effectuer & #160;?
-Les analyseurs du lecteur & amarok; peuvent être détachés de la fenêtre de lecture. En appuyant sur la touche d de votre clavier, l'analyseur actuel s'ouvrira dans une fenêtre indépendante et redimensionnable.
-Quelles sortes de choses la fenêtre de la liste de lecture peut -elle effectuer & #160;?
-Conservez la touche contrôle enfoncée tout en cliquant avec le bouton droit de la souris fera lire à & amarok; les pistes dans l'ordre où vous les avez cliquées. Appuyer sur la touche Entrée après avoir effectué une recherche dans la liste de lecture jouera le premier élément de la recherche et effacera la recherche.
-Je vois que la fenêtre de lecture et la fenêtre de la liste de lecture ont des astuces super, et l'icône de la barre des tâches & #160;?
-Si vous laissez votre souris sur l'icône, vous verrez un menu contextuel sympathique avec des informations sur la piste en cours. Cliquer avec le bouton central de la souris sur l'icône joue ou met en pause la piste courante. Faire tourner la molette de la souris change le volume. Conservez la touche majuscule tout en faisant tourner la molette de la souris fais chercher dans la piste courante. Conserver Ctrl enfoncée tout en faisant tourner la molette de la souris fais défiler parmi les pistes de la liste de lecture. Glisser & #160; / déposer des objets sur l'icône ouvre un petit menu qui vous permet de choisir parmi trois options & #160;: ajouter à la liste de lecture, ajouter et jouer maintenant, ou mettre en file d'attente. L'icône est aussi un indicateur de la position dans la piste.
-Ou puis -je trouver les paramètres pour & amarok; & #160;?
-~/. kde/ share/ apps/ amarok ~/. kde/ share/ config/ amarokrc
-Comment désactiver une section navigateur dans & amarok; & #160;?
-En cliquant avec le & BDS; sur n'importe quel titre du navigateur, une liste des navigateurs visibles s'affiche. Vous pouvez utiliser cette liste pour désactiver & #160; / réactiver tous les navigateurs disponibles.
-Questions générales
-Comment puis -je utiliser une base de données MySQL externe avec & amarok; & #160;?
-Voyez le HowTo pour MySQL (en).
-Mon dossier $HOME (maison) se trouve sur un NFS. Après le démarrage, & amarok; n'arrive pas à me construire ma collection, et affiche beaucoup de « & #160; database error & #160; » sur la console. Que puis -je faire & #160;?
-La base de données interne SQLite qu'amarok; utilise par défaut ne fonctionne pas avec NFS. Vous devez soit créer un lien de ~/. kde/ share/ apps/ amarok vers un disque local, soit utiliser MySQL.
-Comment puis -je extraire/ encoder des CD audio avec & amarok; & #160;?
-Insérez votre disque, faites Engager Lire un CD audio. Le navigateur de fichiers va apparaître et afficher plusieurs dossiers. Pour faire une extraction normale, allez dans le dossier « & #160; wav & #160; », sélectionnez quelques pistes, et déposez -les dans le dossier désiré dans une fenêtre de votre navigateur de fichiers. Pour un encodage automatique, allez plutôt dans le dossier « & #160; mp3 & #160; » ou « & #160; ogg & #160; ».
-Pour extraire des CD audio, il faut que le AudioCD KIO-slave soit installé. Il fait partie de KDE-Multimédia.
-Comment sont déterminés les scores des pistes & #160;?
-& amarok; assigne un score (un nombre compris entre 1 et 100) à une chanson en se basant sur le nombre d'écoutes, et sur le fait que vous passiez la piste avant la fin ou non. Chaque fois qu'une piste se termine, son score est modifié. Le code de modification du score se trouve dans collectiondb. cpp. Pour la version 1.2.2, c'était à la ligne 1181, mais vous pouvez le trouver en cherchant « & #160; CollectionDB: :addSongPercentage & #160; ». Pour définir le score d'une piste lorsqu'elle est jouée pour la première fois, & amarok; utilise la formule suivante & #160;: ((50 + pourcentage) & #160; / 2).
-Ceci définit le score à un nombre entre 25 et 75, selon la durée pendant laquelle la piste a été jouée. Par exemple, si vous passez la chanson après que 25 & #160;% en a été joués, le score sera de & #160;: (50+25)/ 2, soit 37.5. Les scores sont affichés comme des entiers, donc ce chiffre est arrondi avant d'être affiché. Le score est conservé en interne comme un nombre à virgule, cependant, lorsqu'une piste a été jouée plusieurs fois, il peut être impossible de modifier son score de plus d'un point par lecture (voyez ci-dessous). Lors de la définition d'un score pour une piste qui a déjà été jouée, le calcul est un peu plus complexe. Dans les sources, c'est & #160;: ((values[2]. toDouble() * values. first(). toInt()) + percentage) & #160; / (values. first(). toInt() + 1).
-En remplaçant les valeurs par celles de cette ligne & #160;:
-QStringList values = query( QString( "SELECT playcounter, createdate, percentage FROM statistics" "WHERE url = '%1 ';"). arg( escapeString( url)));
-Nous avons & #160;: score = ((statistics_percentage. toDouble() * PlayCounter. toInt()) + percentage) & #160; / (PlayCounter. toInt() + 1);
-En gros, ceci ajuste le score précédent (statistics_percentage) par un montant qui diminue selon le nombre de fois ou la piste a été écoutée. Plus une piste est jouée, moins le score évoluera au fur et à mesure des lectures.
-Comment puis -je modifier le score d'une piste manuellement & #160;?
-Vous pouvez modifier le score manuellement en faisant un clic-droit sur les titres des colonnes de la liste de lecture, et en choisissant « & #160; score & #160; ». Vous pouvez alors modifier le score comme n'importe quel autre attribut de la piste, en faisant un clic-droit dessus, et en sélectionnant « & #160; Éditer la balise score & #160; » ou en appuyant sur F2. Vous pouvez aussi modifier le score dans la boîte de dialogue « & #160; Modifier les informations du morceau & #160; », que vous pouvez faire apparaître à partir du menu obtenu par un clic-droit sur une piste de la liste de lecture.
-Pourquoi est -ce qu'amarok; ne fait -il pas partie de KDE-Multimédia & #160;?
-Les développeurs ne veulent pas qu'on leur dise quand ils doivent sortir une nouvelle version (c'est-à-dire que les paquetages de KDE à proprement parler ont des dates de sortie à respecter qui ne vont pas avec le développement rapide d'amarok;).
-Comment puis -je empêcher l'icône d'amarok; de clignoter dans la boîte à miniatures & #160;?
-C'est une nouvelle fonctionnalité qui a été ajoutée, et que certains utilisateurs peuvent trouver distrayante. Il vous suffit de décocher la case « & #160; Animer l'icône de la boîte à miniatures lors de la lecture & #160; », dans les options générales.
-Comment puis -je afficher & #160; / enlever l'analyseur de la fenêtre de lecture & #160;?
-L'analyseur fait partie de la barre d'outils de la liste de lecture, sélectionnez Configuration Configurer les barres d'outils. Ajouter & #160; / retirer l'analyseur des actions courantes. Appuyez sur Ok.
-Comment puis -je modifier le thème du navigateur de contexte & #160;?
-Téléchargez un thème ou créez le vôtre. Installez -le par Configurer & amarok;... Apparence Style du navigateur de contexte, cliquez sur « & #160; Installer un nouveau style & #160; ».
-Quels problèmes légaux ont entraîné le remplacement de l'icône « & #160; Blue Wolf & #160; » & #160;?
-L'icône était trop similaire au logo de Warp Graphics (elfquest. com), nous avons donc dû la remplacer pour éviter les problèmes.
-Je n'ai pas de visualisations. Ou puis -je en obtenir & #160;?
-Installez la dernière version de libvisual.
-Comment puis -je ajouter mes flux préférés à & amarok; & #160;?
-Premièrement, chargez le flux dans la liste de lecture. Il y a plusieurs moyens de faire cela. Vous pouvez simplement cliquer sur une URL de liste de lecture par flux dans Konqueror, & amarok; ouvrira alors automatiquement le flux. Par exemple, sur shoutcast. com, cliquez sur le bouton « & #160; Tune In & #160; ». Vous pouvez aussi utiliser la fonctionnalité « & #160; Ajouter un média & #160; » pour charger un flux. Une fois le flux chargé, vous pouvez l'enregistrer en faisant un clic droit sur « & #160; liste de lecture & #160; » dans le navigateur de listes de lecture, sélectionnez alors « & #160; Enregistrer & #160; », et donnez -lui un nom qui a du sens. Le flux sera alors ajouté au navigateur de listes de lecture pour de futures références.
-La barre latérale de Konqueror
-Qu'est -ce que la barre latérale de Konqueror & #160;?
-La barre latérale de Konqueror vous permet de surveiller & #160; / contrôler & amarok; tout en naviguant avec Konqueror. Pour la voir, lancez Konqueror, appuyez sur F9 pour voir la barre latérale, cliquez sur le bouton préférences (celui tout en haut), et dans le menu qui s'affiche, choisir Nouveau Barre latérale d'amarok;.
-Audioscrobbler
-Qu'est -ce qu'Audioscrobbler & #160;?
-Audioscrobbler est un service gratuit qui envoie des informations sur les pistes jouées à un serveur indépendant. L'inscription au service est gratuite, et vous demande seulement de choisir un nom d'utilisateur et un mot de passe qui ne sont pas vraiment utilisés. Audioscrobbler est utilisé par & amarok;.
-Je ne veux pas qu'amarok; envoie des informations à Audioscrobbler & #160;!
-Décochez la case « & #160; envoyer les pistes que je joue & #160; » pour empêcher de demander à Audioscrobbler de suggérer des pistes.
-Comment puis -je trouver le groupe Audioscrobbler d'amarok; & #160;?
-Le groupe Audioscrobbler d'amarok; se trouve ici.
-Questions générales sur les moteurs & #160; / la lecture
-Quel moteur devrais -je utiliser & #160;?
-Veuillez vous référer à la comparaison des moteurs audio.
-Quelle version d'ALSA devrais -je utiliser & #160;?
-Si vous utilisez la sortie ALSA, vous devriez utiliser la dernière version disponible & #160;! Les vieilles versions d'ALSA ont causé beaucoup de plantages, et beaucoup de rapports de crash mal attribués.
-J'ai installé GStreamer/ xine/ etc., mais le moteur ne s'affiche pas. Que se passe -t-il & #160;?
-& amarok; a probablement été compilé avant que vous ayez installé Xine et & #160; / ou GStreamer, donc le script. / configure ne les a pas inclus dans la liste de moteurs à construire. Il vous faudra probablement reconstruire & amarok;.
-Mais j'ai reconstruit & amarok; après avoir installé GStreamer et & #160; / ou Xine, mais le moteur ne se montre toujours pas & #160;! Que se passe -t-il & #160;?
-Vous utilisez probablement une distribution qui crée les paquetages des librairies de développement séparément des librairies elles-mêmes. Donc, même si GStreamer est installé, & amarok; ne peut construire le moteur car GStreamer-devel n'est pas installé. Le même problême existe pour Xine, il vous faut installer xine-devel si votre distribution sépare les paquetages de cette façon. N'oubliez pas de reconstruire & amarok; après avoir installé les paquetages de développement.
-Le moteur GStreamer
-Pourquoi y a -t-il toujours un blanc alors que j'ai activé le fondu & #160;?
-Assurez -vous que gst-ffmpeg n'est pas installé. Installez le module externe mad.
-J'obtiens l'erreur & #160;: « & #160; GStreamer-CRITICAL **: Factory for ` adder 'has no type. & #160; ». Comment arranger cela & #160;?
-Votre GStreamer a été construit avec le « & #160; Prelinking & #160; », ce qui n'est pas compatible avec GStreamer. Vous devez le reconstruire sans cette option. merlin-tc conseille & #160;: En supplément, n'utilisez aucun ldflag quand vous construisez GStreamer.
-Vous obtenez une erreur « & #160; Il n'y a pas d'élément pour prendre en charge le type MIME audio/ mp4 & #160; » alors que vous avez le module externe gstreamer-faad installé.
-Pour jouer correctement les fichiers mp4a avec GStreamer, vous devez avoir installé gstreamer-quicktime en supplément de gstreamer-faad.
-Vous obtenez l'erreur & #160;: « & #160; Il n'y a pas d'élément pour prendre en charge le flux audio/ mpeg & #160; »
-Vous essayez de lire un flux MP3 sans que le module externe mad de GStreamer soit installé. Installez le module externe mad de GStreamer et lancez « & #160; gst-register & #160; » en tant que superutilisateur avant de relancer & amarok;.
-J'ai une deuxième carte son et j'utilise ALSA. Comment puis -je dire à & amarok; d'utiliser celle -ci au lieu de celle par défaut & #160;?
-Dans Configuration Configurer & amarok; Moteurs, cochez la case « & #160; périphérique & #160; » et remplissez le champ. Typiquement, c'est hw:0 pour la carte par défaut, et hw:1 pour la seconde carte son.
-Le moteur Xine
-Comment puis -je modifier la sortie sonore & #160;?
-Si vous utilisez ALSA, vous pouvez envoyer la sortie à un périphérique particulier avec Xine. Définissez un fichier ~/. asoundrc (utilisateur seulement) ou un / etc/ asound. conf (pour tout le système) qui crée un alias à votre périphérique audio. Mettez alors l'alias dans le champ « & #160; Périphérique utilisé pour la sortie audio & #160; » dans l'onglet de configuration du moteur Xine. Une alternative consiste à directement saisir le périphérique ALSA (hw:0 ou hw:1 et ainsi de suite). Si vous décidez d'utiliser cette dernière méthode, sachez que le routage par alsa-lib du plugtruc (plughw:0,0 ou plughw:1,0 et ainsi de suite) correspondant d'ALSA est largement préféré.
-Voici un exemple de ~/. asoundrc pour une machine qui a une carte son intégrée Intel AC97 codec, et un périphérique de son par USB.
-pcm. intel8x0 {type plug slave. pcm "hw:0"} ctl. intel8x0 {type hw card 0} pcm. usb-audio {type plug slave. pcm "hw:1"} ctl. usb-audio {type hw card 1}
-À présent, saisissez usb-audio dans l'écran de configuration de xine-engine et la sortie devrait aller au périphérique audio USB (avec alsa-lib qui prends en charge correctement les conversions des taux d'échantillons, les canaux, et ainsi de suite).
-Pour utiliser un périphérique virtuel dmix, assurez -vous que la boîte « & #160; la carte son peut mmaper & #160; » est cochée.
-Le moteur aRts
-Désolé, le moteur aRts n'est plus maintenu, mais n'hésitez pas à le corriger vous -même & #160;! Vous pourriez être le nouveau mainteneur de ce moteur & #160;! Nous aurions désespérément besoin de quelqu'un à ce poste & #160;!
+Barre d' outils
+Actions disponibles & #160;:
+Actions sélectionnées & #160;:
+Filtre & #160;:
+Saisissez un filtre de noms pour limiter le nombre de fichiers affichés.
+Signets
+Dossier de documents actuel
+Options
+Synchroniser automatiquement avec le document actuel
+Explorateur de systèmes de fichiers
+Naviguer dans le système de fichiers
+Paramètres de l'explorateur de système de fichiersNAME OF TRANSLATORS
+Joëlle CornavinEMAIL OF TRANSLATORS
+jcornavin@laposte. net

@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -8,12 +8,1822 @@
 # genre_narrow:	NA
 # writing_system:	Latn
 # special_characters:	NA
-# short_description:	Ubuntu
-# source:	https://object.pouta.csc.fi/OPUS-Ubuntu/v14.10/raw/en.zip
-# copyright_short:	http://opus.nlpl.eu/Ubuntu.php
-# copyright_long:	http://opus.nlpl.eu/Ubuntu.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
 # sample_type:	whole
 # comments:	NA
 
-URL used to get information about the IP
-URL of a service that can be contacted and returns an XML file containing location information about the requestor's IP address.
+Gnome Display Manager Reference Manual
+0.0
+2007-01
+GDM is the GNOME Display Manager, a graphical login program.
+Martin
+K.
+Petersen
+mkp@mkp.net
+George
+Lebl
+jirka@5z.com
+Brian
+Cameron
+Brian.Cameron@Sun.COM
+Bill
+Haneman
+Bill.Haneman@Sun.COM
+1998
+1999
+Martin K. Petersen
+2001
+2003
+2004
+George Lebl
+Red Hat, Inc.
+Sun Microsystems, Inc.
+Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License (GFDL), Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. You can find a copy of the GFDL at this
+This manual is part of a collection of GNOME manuals distributed under the GFDL. If you want to distribute this manual separately from the collection, you can do so by adding a copy of the license to the manual, as described in section 6 of the license.
+Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and the members of the GNOME Documentation Project are made aware of those trademarks, then the names are in capital letters or initial capital letters.
+DOCUMENT IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, WITHOUT LIMITATION, WARRANTIES THAT THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS FREE OF DEFECTS MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE OR NON-INFRINGING. THE ENTIRE RISK AS TO THE QUALITY, ACCURACY, AND PERFORMANCE OF THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS WITH YOU. SHOULD ANY DOCUMENT OR MODIFIED VERSION PROVE DEFECTIVE IN ANY RESPECT, YOU (NOT THE INITIAL WRITER, AUTHOR OR ANY CONTRIBUTOR) ASSUME THE COST OF ANY NECESSARY SERVICING, REPAIR OR CORRECTION. THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS LICENSE. NO USE OF ANY DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS AUTHORIZED HEREUNDER EXCEPT UNDER THIS DISCLAIMER; AND
+UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY, WHETHER IN TORT (INCLUDING NEGLIGENCE), CONTRACT, OR OTHERWISE, SHALL THE AUTHOR, INITIAL WRITER, ANY CONTRIBUTOR, OR ANY DISTRIBUTOR OF THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT, OR ANY SUPPLIER OF ANY OF SUCH PARTIES, BE LIABLE TO ANY PERSON FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY CHARACTER INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF GOODWILL, WORK STOPPAGE, COMPUTER FAILURE OR MALFUNCTION, OR ANY AND ALL OTHER DAMAGES OR LOSSES ARISING OUT OF OR RELATING TO USE OF THE DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT, EVEN IF SUCH PARTY SHALL HAVE BEEN INFORMED OF THE POSSIBILITY OF SUCH DAMAGES.
+DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT ARE PROVIDED UNDER THE TERMS OF THE GNU FREE DOCUMENTATION LICENSE WITH THE FURTHER UNDERSTANDING THAT:
+This manual describes version 2.20.0 of the GNOME Display Manager. It was last updated on 09/17/2007.
+Terms and Conventions Used in This Manual
+Chooser - A program used to select a remote host for managing a display remotely on the attached display (
+Configurator - The configuration application (
+GDM - Gnome Display Manager. Used to describe the software package as a whole. Sometimes also referred to as GDM2.
+gdm - The Gnome Display Manager daemon (
+Greeter - The graphical login window (
+GTK+ Greeter - The standard login window (
+PAM - Pluggable Authentication Mechanism
+Themed Greeter - The themable login window (
+XDMCP - X Display Manage Protocol
+Paths that start with a word in angle brackets are relative to the installation prefix. I.e.
+Overview
+Introduction
+The Gnome Display Manager (GDM) is a display manager that implements all significant features required for managing attached and remote displays. GDM was written from scratch and does not contain any XDM / X Consortium code.
+Note that GDM is highly configurable, and many configuration settings can affect security. Issues to be aware of are highlighted in this document and in the GDM Configuration files.
+For further information about GDM, see the
+Interface Stability
+The key/value pairs defined in the GDM configuration files and the location of these files are considered "stable" interfaces should only change in ways that are backwards compatible. Note that this includes functionality like the GDM scripts (Init, PreSession, PostSession, PostLogin, XKeepsCrashing, etc.); directory locations (ServAuthDir, etc.), system applications (SoundProgram), etc. Some configuration values depend on OS interfaces may need to be modified to work on a given OS. Typical examples are HaltCommand, RebootCommand, CustomCommands, SuspendCommand, StandardXServer, Xnest, SoundProgram, and the "command" value for each
+Command-line interfaces for GDM programs installed to
+As of the GDM 2.15 development series, some one-dash arguments are no longer supported. This includes the "-xdmaddress", "-clientaddress", and "-connectionType" arguments used by
+If issues are discovered that break compatibility, please file a bug with an "urgent" priority.
+The GDM Daemon
+The GDM daemon is responsible for managing displays on the system. This includes authenticating users, starting the user session, and terminating the user session. GDM is configurable and the ways it can be configured are described in the "Configuring GDM" section of this document. The
+The GDM daemon supports a UNIX domain socket protocol which can be used to control aspects of its behavior and to query information. This protocol is described in the "Controlling GDM" section of this document.
+GDM can be asked to manage a display a number of ways. Attached displays are always managed when GDM starts and will be restarted when a user's session is finished. Remote displays can be requested via XDMCP, flexible displays via the
+When the GDM daemon is asked to manage a display, it will fork an X server process, then run the
+The login GUI dialog screen allows the user to select which session they wish to start and which language they wish to use. Sessions are defined by files that end in the .desktop extension and more information about these files can be found in the "Configuration" section. The user enters their name and password and if these successfully authenticate, GDM will start the requested session for the user. It is possible to configure GDM to avoid the authentication process by turning on the Automatic or Timed Login features in the GDM configuration. The login GUI can also be configured to provide additional features to the user, such as the Face Browser; the ability to halt, restart, or suspend the system; and/or edit the login configuration (after entering the root password).
+GDM, by default, will use Pluggable Authentication Modules (PAM) for authentication, but can also support regular crypt and shadow passwords on legacy systems. After authenticating a user, the daemon runs the
+Note that, by default, GDM uses the "gdm" service name for normal login and the "gdm-autologin" service name for automatic login. The
+For those looking at the code, the gdm_verify_user function in
+Different Display Types
+GDM supports three different display types: attached displays, flexible displays, and XDMCP remote displays. The "X Server Definitions" subsection of the "Configuration" section explains how the X server is configured for different displays.
+Attached (also known as local or static) displays are always started by the daemon, and when they die or are killed, they are restarted. GDM can run as many of these as needed. GDM can also manage displays on which it does not manage a GUI login, thus GDM can be used for supporting X terminals. The "Attached DISPLAY Configuration" subsection of the "Configuration" section describes how attached displays are defined.
+Flexible (also known as on-demand) displays are only available to users logged on the console. Starting a flexible display will lock the current user session and will show a new login screen over the current running session. If at least one flexible display is already running, and the user requests another, then a dialog will display showing existing flexible displays. The user can choose to switch back to a previous display or start a new flexible display. If the user switches back to a previous display, they will need to enter the password in the lock screen program to return to their session. The GDM configuration file specifies the maximum number of flexible displays allowed on the system.
+Flexible displays may be started by running the
+The
+Nested displays are available to users even if not logged in on the console. Nested displays launch a login screen in a window in the user's current session. This can be useful if the user has more than one account on a machine and wishes to login to the other account without disrupting their current session. Nested displays may be started by running the
+The
+The last display type is the XDMCP remote displays which are described in the next section. Remote hosts can connect to GDM and present the login screen if this is enabled. Some things are different for remote sessions. For example, the Actions menu which allows you to shut down, restart, suspend, or configure GDM are not shown.
+XDMCP
+The GDM daemon can be configured to listen for and manage X Display Manage Protocol (XDMCP) requests from remote displays. By default XDMCP support is turned off, but can be enabled if desired. If GDM is built with TCP Wrapper support, then the daemon will only grant access to hosts specified in the GDM service section in the TCP Wrappers configuration file.
+GDM includes several measures making it more resistant to denial of service attacks on the XDMCP service. A lot of the protocol parameters, handshaking timeouts etc. can be fine tuned. The defaults should work for most systems, however. Do not change them unless you know what you are doing.
+GDM listens to UDP port 177 and will respond to QUERY and BROADCAST_QUERY requests by sending a WILLING packet to the originator.
+GDM can also be configured to honor INDIRECT queries and present a host chooser to the remote display. GDM will remember the user's choice and forward subsequent requests to the chosen manager. GDM also supports an extension to the protocol which will make it forget the redirection once the user's connection succeeds. This extension is only supported if both daemons are GDM. It is transparent and will be ignored by XDM or other daemons that implement XDMCP.
+If XDMCP seems to not be working, make sure that all machines are specified in
+Refer to the "Security" section for information about security concerns when using XDMCP.
+Securing Remote Connection Through SSH
+As explained in the "Security" section, XDMCP does not use any kind of encryption and as such is inherently insecure. As XDMCP uses UDP as a network transport layer, it is not possible to simply secure it through an SSH tunnel.
+To remedy this problem, GDM can be configured at compilation-time with the option --enable-secureremote, in which case GDM proposes as a built-in session a session called "Secure Remote Connection". Starting such a session allows the user to enter the name or the address of the host on which to connect; provided the said host runs an SSH server, the user then gets connected to the server on which the default X session is started and displayed on the local host.
+Using this session allows a much more secure network connection and only necessitates to have an SSH server running on the remote host.
+The GTK+ Greeter
+The GTK+ Greeter is the default graphical user interface that is presented to the user. The greeter contains a menu at the top, an optional face browser, an optional logo and a text entry widget. This greeter has full accessibility support, and should be used by users with accessibility needs.
+The text entry field is used for entering logins, passwords, passphrases etc.
+The menu bar in the top of the greeter enables the user to select the requested session type/desktop environment, select an appropriate locale/language, halt/restart/suspend the computer, configure GDM (given the user knows the root password), change the GTK+ theme, or start an XDMCP chooser.
+The greeter can optionally display a logo in the login window. The image must be in a format readable to the gdk-pixbuf library (GIF, JPG, PNG, TIFF, XPM and possibly others), and it must be readable to the GDM user. See the
+The Themed Greeter
+The Themed Greeter is a greeter interface that takes up the whole screen and is very themable. Themes can be selected and new themes can be installed by the configuration application or by setting the
+The look and feel of this greeter is really controlled by the theme and so the user interface elements that are present may be different. The only thing that must always be present is the text entry field as described above in the GTK+ Greeter. The theme can include buttons that allow the user to select an appropriate locale/language, halt/restart/suspend the computer, configure GDM (given the user knows the root password), or start an XDMCP chooser.
+You can always get a menu of available actions by pressing the F10 key. This can be useful if the theme doesn't provide certain buttons when you wish to do some action allowed by the GDM configuration.
+The GDM Face Browser
+GDM supports a face browser which will display a list of users who can login and an icon for each user. Starting with version 2.18.1 the
+By default, the face browser is disabled since revealing usernames on the login screen is not appropriate on many systems for security reasons. Also GDM requires some setup to specify which users should be visible. Setup can be done on the "Users" tab in
+The icons used by GDM can be installed globally by the sysadmin or can be located in the users' home directories. If installed globally they should be in the
+Users may run the
+GDM will first look for the user's face image in
+If a user has no defined face image, GDM will use the "stock_person" icon defined in the current GTK+ theme. If no such image is defined, it will fallback to the image specified in the
+Please note that loading and scaling face icons located in user home directories can be a very time-consuming task. Since it not practical to load images over NIS or NFS, GDM does not attempt to load face images from remote home directories. Furthermore, GDM will give up loading face images after 5 seconds of activity and will only display the users whose pictures it has gotten so far. The
+To control the users who get displayed in the face browser, there are a number of configuration options that can be used. If the
+When the browser is turned on, valid usernames on the computer are inherently exposed to a potential intruder. This may be a bad idea if you do not know who can get to a login screen. This is especially true if you run XDMCP (turned off by default).
+Logging
+GDM itself will use syslog to log errors or status. It can also log debugging information, which can be useful for tracking down problems if GDM is not working properly. This can be enabled in the configuration file.
+Output from the various X servers is stored in the GDM log directory, which is configurable, but is usually
+The output from the user session is redirected to
+You can suppress the 10 second warning by returning code 66 from the
+The session output is piped through the GDM daemon and so the
+Note that some distributors seem to override the
+Note that if the session is a failsafe session, or if GDM can't open this file for some reason, then a fallback file will be created in the
+If you run a system with quotas set, it would be good to delete the
+Accessing Files
+In general GDM is very reluctant regarding reading/writing of user files (such as the
+All operations on user files are done with the effective user id of the user. If the sanity check fails on the user's
+Finally, the sysadmin can specify the maximum file size GDM should accept, and, if the face browser is enabled, a tunable maximum icon size is also enforced. On large systems it is still advised to turn off the face browser for performance reasons. Looking up icons in home directories, scaling and rendering face icons can take a long time.
+GDM Performance
+To speed performance it is possible to build GDM so that it will preload libraries when GDM first displays a greeter program. This has been shown to speed first time login since these libraries can be loaded into memory while the user types in their username and password.
+To use this feature, configure GDM with the
+Security
+PAM
+GDM uses PAM for login authentication, though if your machine does not support PAM you can build GDM to work with the password database and the crypt library function.
+PAM stands for Pluggable Authentication Module, and is used by most programs that request authentication on your computer. It allows the administrator to configure different authentication behavior for different programs.
+Some GDM features (like turning on automatic login) may require that you update your PAM configuration. PAM configuration has different, but similar, interfaces on different operating systems, so check your pam.d or pam.conf man page for details. Be sure that you read the PAM documentation (e.g. pam.d/pam.conf man page) and are comfortable with the security implications of any changes you intend to make to your configuration.
+If there is no entry for GDM in your system's PAM configuration file, then features like automatic login may not work. Not having an entry will cause GDM to use default behavior, conservative settings are recommended and probably shipped with your distribution.
+If you wish to make GDM work with other types of authentication mechanisms (such as a SmartCard), then you should implement this by using a PAM service module for the desired authentication type rather than by trying to modify the GDM code directly. Refer to the PAM documentation on your system. This issue has been discussed on the
+For example, an effective way to implement such an exotic authentication mechanism would be to have a daemon running on the server listening to the authentication device (e.g. USB key, fingerprint reader, etc.). When the device announces that it has received input, then the daemon can set the
+utmp/wtmp
+GDM generates utmp and wtmp User Accounting Database entries upon session login and logout. The utmp database contains user access and accounting information that is accessed by commands such as
+GDM 2.18 and earlier would run the X server
+When doing utmp processing, GDM supports configurability on how the ut_line value is set. Programs that access the database assume that this value is an actual device, so GDM will set the device as follows. If the display is attached and has an associated Virtual Terminal (VT) device, then this device will be used. Otherwise, if an attached display in the
+GDM also supports the
+The GDM User
+For security reasons a dedicated user and group id are required for proper operation! The need to be able to write Xauth files is why user "nobody" is not appropriate for gdm.
+The GDM daemon normally runs as root, as does the slave. However GDM should also have a dedicated user id and a group id which it uses for its graphical interfaces such as
+This userid is used to run the GDM GUI programs required for login. All functionality that requires root authority is done by the GDM daemon process. This design ensures that if the GUI programs are somehow exploited, only the dedicated user privileges are available.
+It should however be noted that the GDM user and group have some privileges that make them somewhat dangerous. For one, they have access to the X server authorization directory. It must be able to read and write Xauth keys to
+The danger is that someone who gains the GDM user/group privileges can then connect to any session. So you should not, under any circumstances, make this some user/group which may be easy to get access to, such as the user
+Distributions and system administrators using GDM are expected to setup the dedicated user properly. It is recommended that this userid be configured to disallow login and to not have a default shell. Distributions and system administrators should set up the filesystem to ensure that the GDM user does not have read or write access to sensitive files.
+X Server Authentication Scheme
+The X server authorization directory (the
+GDM by default doesn't trust the X server authorization directory and treats it in the same way as the temporary directory with respect to creating files. This way someone breaking the GDM user cannot mount attacks by creating links in this directory. Similarly the X server log directory is treated safely, but that directory should really be owned and writable only by root.
+GDM only supports the MIT-MAGIC-COOKIE-1 X server authentication scheme. Normally little is gained from the other schemes, and no effort has been made to implement them so far. Be especially careful about using XDMCP because the X server authentication cookie goes over the wire as clear text. If snooping is possible, then an attacker could simply snoop your authentication password as you log in, regardless of the authentication scheme being used. If snooping is possible and undesirable, then you should use ssh for tunneling an X connection rather then using XDMCP. You could think of XDMCP as a sort of graphical telnet, having the same security issues.
+On the upside, GDM's random number generation is very conservative and GDM goes to extraordinary measures to truly get a 128 bit random number, using hardware random number generators (if available), plus the current time (in microsecond precision), a 20 byte array of pseudorandom numbers, process pid's, and other random information (possibly using
+Firewall Security
+Even though GDM tries to outsmart potential attackers trying to take advantage of XDMCP, it is still advised that you block the XDMCP port (normally UDP port 177) on your firewall unless you really need it. GDM guards against DoS (Denial of Service) attacks, but the X protocol is still inherently insecure and should only be used in controlled environments. Also each remote connection takes up lots of resources, so it is much easier to DoS via XDMCP then a webserver.
+It is also wise to block all of the X Server ports. These are TCP ports 6000 + the display number of course) on your firewall. Note that GDM will use display numbers 20 and higher for flexible on-demand servers.
+X is not a very safe protocol for leaving on the net, and XDMCP is even less safe.
+GDM Security With NFS
+Note that NFS traffic really goes "over the wire" and thus can be snooped. When accessing the user's X authorization file (
+XDMCP Security
+Even though your display is protected by cookies, XEvents and thus keystrokes typed when entering passwords will still go over the wire in clear text. It is trivial to capture these.
+XDMCP is primarily useful for running thin clients such as in terminal labs. Those thin clients will only ever need the network to access the server, and so it seems like the best security policy to have those thin clients on a separate network that cannot be accessed by the outside world, and can only connect to the server. The only point from which you need to access outside is the server.
+The above sections "X Server Authentication Scheme" and "Firewall Security" also contain important information about using XDMCP securely. The next section also discusses how to set up XDMCP access control.
+To workaround the inherent insecurity of XDMCP, gdm proposes a default built-in session that uses SSH to encrypt the remote connection. See the section "Securing remote connection through SSH" above.
+XDMCP Access Control
+XDMCP access control is done using TCP wrappers. It is possible to compile GDM without TCP wrappers however, so you should test your configuration and verify that they work.
+You should use the daemon name
+gdm: .evil.domain
+to
+gdm: .your.domain
+to your
+RBAC (Role Based Access Control)
+If GDM is compiled with RBAC support, then the
+Support for ConsoleKit
+GDM includes support for publishing user login information with the user and login session accounting framework known as ConsoleKit. ConsoleKit is able to keep track of all the users currently logged in. In this respect, it can be used as a replacement for the utmp or utmpx files that are available on most Unix-like operating systems.
+When GDM is about to create a new login process for a user it will call a privileged method of ConsoleKit in order to open a new session for this user. At this time GDM also provides ConsoleKit with information about this user session such as: the user ID, the X11 Display name that will be associated with the session, the host-name from which the session originates (useful in the case of an XDMCP session), whether or not this session is attached, etc. As the entity that initiates the user process, GDM is in a unique position know and to be trusted to provide these bits of information about the user session. The use of this privileged method is restricted by the use of D-Bus system message bus security policy.
+In the case where a user with an existing session and has authenticated at GDM and requests to resume that existing session GDM calls a privileged method of ConsoleKit to unlock that session. The exact details of what happens when the session receives this unlock signal is undefined and session-specific. However, most sessions will unlock a screensaver in response.
+When the user chooses to log out, or if GDM or the session quit unexpectedly the user session will be unregistered from ConsoleKit.
+If support for ConsoleKit is not desired it can be disabled at build time using the "--with-console-kit=no" option when running configure.
+Using gdmsetup To Configure GDM
+The
+The
+Local Tab
+The Local tab is used for controlling the appearance of GDM for attached (also known as local or static) displays. Attached displays are non-XDMCP remote connections, for example. The choices available in this tab depend on the setting of the "Style" combobox. This combobox is used to determine whether the "Plain" or "Themed" greeter GUI is used. The differences between these greeter programs are explained in the "Overview" section of this document.
+If the "Style" choice is "Plain", then GDM will use the
+If the "Style" choice is "Plain with face browser", then the
+If the "Style" choice is "Themed", then the
+If the "Style" choice is "Themed with face browser", then the
+Regardless of the "Style" choice, the user may also select whether the Actions menu is visible (greeter/SystemMenu), whether the Actions menu includes the choice to start
+Remote Tab
+The Remote tab controls the appearance of the GDM for users logging in via XDMCP. By default XDMCP is disabled, and users should be comfortable with the XDMCP-related sections of the Security section of this document before enabling it. This tab includes a "Style" combobox which can be used to turn on XDMCP and control the appearance of GDM for remote users (gui/RemoteGreeter and xdmcp/Enable). The user may specify to use either the same greeter as used on the Local tab, or the other Greeter program. If the Face Browser setting is true on the Local tab, then it will also be true for the Remote tab. If the Face Browser setting is false on the Local tab, then it will also be false for the Remote tab. It is recommended that the "Plain" GUI be used for remote connections since it is more lightweight and tends to have better performance across a network.
+If Remote login is enabled, then the welcome message for remote DISPLAYs may be specified (greeter/DefaultRemoteWelcome and greeter/RemoteWelcome). This welcome message is separate from the one shown for attached displays defined in the Local tab and can have a different value. The welcome message may contain the character sequences described in the "Text Node" subsection of the "Themed Greeter" section of this manual. These character sequences allow the welcome message to contain things like the display or host name.
+If the "Style" choice is "Same as Local" and the local selection is "Plain" or "Plain with face browser", then the user may select whether background images should be displayed for remote logins (greeter/BackgroundRemoteOnlyColor).
+If the "Style" choice is enabled and set to a different value than the Local tab, then the user has the same configuration choices as found on the Local tab except that the System Menu choices are not available since this is never available for remote logins for security purposes.
+If Remote login is enabled, there is a "Configure XDMCP" button which displays a dialog allowing the user to set XDMCP configuration, including whether indirect requests are honored (xdmcp/HonorIndirect), UDP port (xdmcp/Port), maximum pending requests (xdmcp/MaxPending), maximum pending indirect requests (xmdcp/MaxPendingIndirect), maximum remote sessions (xdmcp/MaxSessions), maximum wait time (xdmcp/MaxWait), maximum indirect wait time (xdmcp/MaxWaitIndirect), displays per host (xdmcp/DisplaysPerHost), and ping interval (xdmcp/PingIntervalSeconds). The default settings are standard settings and should only be changed by someone who understands the ramifications of the change.
+Accessibility Tab
+The Accessibility tab is used to turn on Accessibility features in GDM. "Enable accessible login" (daemon/AddGtkModules and daemon/GtkModulesList) turns on GDM's gesture listeners which are explained in the "Accessibility" section of this document. There is also a checkbox to allow users to change the theme when using the Plain greeter (gui/AllowGtkThemeChange). This feature allows GDM users to switch the theme to the HighContrast or LowContrast themes if needed. The user may also select whether GDM should play a sound when the login screen is ready, when login is successful and when login has failed. File chooser buttons are used to select the sound file to be played, and the "Play" button can be used to sample the sound.
+Security Tab
+The Security tab allows the user to turn on Automatic and Timed login, which user is logged in via an automatic or timed login, and the timed login delay (daemon/AutomaticLoginEnable, daemon/AutomaticLogin, daemon/TimedLoginEnable, daemon/TimedLogin, and daemon/TimedLoginDelay). If automatic login is turned on, then the specified user will immediately log in on reboot without GDM asking for username/password. If the user logs out of their session, GDM will start and ask for username and password to log back in. If TimedLogin is turned on, then GDM will log into the specified user after a specified number of seconds. The user may enable Timed Login for remote (XDMCP) connections by checking the "Allow remote timed logins" checkbox.
+On this tab, the user may select whether the system administrator user can log in, and whether the system administrator user can log in via remote (XDMCP) connections (security/AllowRoot and security/AllowRemoteRoot). The user may turn on GDM debug (debug/Enable) which causes debug messages to be sent to the system log. Debug should only be used when diagnosing a problem and not be left on when not needed. The "Deny TCP connections to X server" choice will disable X forwarding if selected (security/DisallowTCP). A login retry delay (security/RetryDelay) can be set to cause GDM to wait a number of seconds after a failed login.
+The "Configure X Server" button can be used to specify how GDM manages each display. The "Servers" combobox shows what server definitions are available (Standard, Terminal, and Chooser by default). Refer to the "X Server Definitions" section of the "Configuration" section for more information about how to create new Server Definitions.
+For any server type, the user may modify the "Server Name" (server/name), the "Command" (server/command) to be used to launch the X server, whether the server type will "Launch" (server/chooser) the greeter or chooser GUI after starting the X server, whether GDM handles this type (normally only set to false when logging into a Terminal session type), and whether the session type supports "Flexible" (server/flexible) sessions.
+The "Servers To Start" section shows what server type is displayed for each display on the machine. Users may click on the "Add/Modify" button to add a new display to the list or to modify a selected display. This simply corresponds each physical display with the Server Definition to be used for managing that display. The "Remove" button may be used to remove a display from the list.
+Users Tab
+The Users tab controls which users appear in the Face Browser. If the "Include all users from /etc/password" checkbox is selected, then all users (with a userid above greeter/MinimalUID and not in the Exclude list) are displayed. If this checkbox is not selected, then users must be added to the "Include" list. Users in the "Exclude" list are never displayed. The "Add" and "Remove" buttons are used to add a new user to the list or remove a selected user from the list. The "Apply User Changes" button must be pressed after the "Include" and "Exclude" lists have been modified. The left and right arrow buttons between the "Include" and "Exclude" lists can be used to move a selected user from one list to the other.
+Configuration
+GDM has powerful configuration management. System default configuration is stored in the GDM System Defaults Configuration File and user changes to the default configuration are stored in the GDM Custom Configuration File. This allows sysadmins to store the GDM System Defaults Configuration File on a shared filesystem, so a single file can be used to control configuration for multiple machines. GDM also supports per-display configuration for GUI-related keys.
+The
+Aside from the GDM System Defaults Configuration File, the other GDM configuration files are located, by default, in the
+Listing of the config directory contents:
+custom.conf
+locale.alias
+Xsession
+XKeepsCrashing
+modules/
+Init/
+PostLogin/
+PreSession/
+PostSession/
+
+
+
+Accessibility modules are configured in the
+Files describing available GDM session follow the freedesktop.org desktop file specification. The
+A session can be disabled (if it was installed in
+GDM uses the optional key
+The Script Directories
+In this section we will explain the
+When the X server has been successfully started, GDM will try to run the script called
+It is up to the sysadmin to decide whether clients started by the Init script should be killed before starting the user session. This is controlled with the
+When the user has been successfully authenticated GDM tries the scripts in the
+After the user session has been setup from the GDM side of things, GDM will run the scripts in the
+After this the base
+This script should really load the user's profile and generally do all the voodoo that is needed to launch a session. Since many systems reset the language selections done by GDM, GDM will also set the
+When the user terminates his session, the
+Note that the
+Except for the
+Neither of the
+The Configuration Files - GDM System Defaults Configuration File and GDM Custom Configuraiton File
+GDM uses two configuration files: the GDM System Defaults Configuration File (
+Both configuration files are divided into sections each containing variables that define the behavior for a specific part of the GDM suite. Refer to the comments in the GDM System Defaults Configuration File for additional information about each configuration setting.
+GDM also supports per-display configuration for parameters in the "gui", "greeter" sections of the configuration file Also the security/PamStack key may be customized per-display. Per-display configuration is specified by creating a file named
+To change configuration by hand, edit the GDM Custom Configuration File or per-display configuration file and make sure the keyname=value pair you want is included in the appropriate section. For example, to change the value for the "Greeter" key in the "daemon" section, make sure the daemon section of the GDM Custom Configuration File or per-display configuration file includes the "[daemon]" section followed by the key and value change desired. As in this example:
+[daemon]
+Greeter=/usr/lib/gdmgreeter
+The
+The GDM daemon
+Previous to GDM 2.13.0.4 only the
+Distributions should edit the GDM System Defaults Configuration File to establish default configuration values, so that they are preserved as defaults and not modified by users modifying the GDM Custom Configuration File. Note that distributions may modify the GDM System Defaults Configuration File on update to improve usability, security, etc. So any changes made to this file may be lost.
+The GDM System Defaults Configuration File and the GDM Custom Configuration File follow the standard
+The following configuration keys are supported in GDM:
+Daemon Configuration
+[daemon]
+AddGtkModules
+AddGtkModules=false
+If true, then enables
+If true, then the registry daemon
+Usually this is used for accessibility modules. The modules which are loaded are specified with the
+AllowLogoutActions
+AllowLogoutActions=HALT;REBOOT;SHUTDOWN;SUSPEND;CUSTOM_CMD
+Specify which actions are supported by the QUERY_LOGOUT_ACTION, SET_LOGOUT_ACTION, and SET_SAFE_LOGOUT_ACTION
+AlwaysLoginCurrentSession
+AlwaysLoginCurrentSession=true
+If true, then when the user logs in and already has an existing session, then they are connected to that session rather than starting a new session. This only works for sessions running on VTs (Virtual Terminals) started with gdmflexiserver, and not with XDMCP. Note that VTs are not supported on all operating systems.
+AutomaticLoginEnable
+AutomaticLoginEnable=false
+If the user given in AutomaticLogin should be logged in upon first bootup. No password will be asked. This is useful for single user workstations where console security is not an issue and also could be useful for public terminals. Refer also to
+AutomaticLogin
+AutomaticLogin=
+This user should be automatically logged in on first bootup. AutomaticLoginEnable must be true and this must be a valid user for this to happen. "root" can never be autologged in however and gdm will just refuse to do it even if you set it up.
+The following control chars are recognized within the specified name:
+%% — the `%' character
+%d — display's name
+%h — display's hostname
+Alternatively, the name may end with a vertical bar |, the pipe symbol. The name is then used as a application to execute which returns the desired username on standard output. If an empty or otherwise invalid username is returned, automatic login is not performed. This feature is typically used when several remote displays are used as internet kiosks, with a specific user to automatically login for each display.
+BaseXsession
+BaseXsession=lt;etcgt;/gdm/Xsession
+This is the base X session file. When a user logs in, this script will be run with the selected session as the first argument. The selected session will be the
+If you wish to use the same script for several different display managers, and wish to have some of the script run only for GDM, then you can check the presence of the
+This script should take care of doing the "login" for the user and so it should source the
+Chooser
+Chooser=lt;bingt;/gdmchooser
+Full path and name of the chooser executable followed by optional arguments.
+Configurator
+Configurator=lt;bingt;/gdmsetup --disable-sound --disable-crash-dialog
+The pathname to the configurator binary. If the greeter
+ConsoleCannotHandle
+ConsoleCannotHandle=am,ar,az,bn,el,fa,gu,hi,ja,ko,ml,mr,pa,ta,zh
+These are the languages that the console cannot handle because of font issues. Here we mean the text console, not X. This is only used when there are errors to report and we cannot start X.
+ConsoleNotify
+ConsoleNotify=true
+If false, gdm will not display a message dialog on the console when an error happens.
+DefaultPath
+DefaultPath=defaultpath (value set by configure)
+Specifies the path which will be set in the user's session. This value will be overridden with the value from
+DefaultSession
+DefaultSession=gnome.desktop
+The session that is used by default if the user does not have a saved preference and has picked 'Last' from the list of sessions. Note that 'Last' need not be displayed, see the
+DisplayInitDir
+DisplayInitDir=lt;etcgt;/gdm/Init
+Directory containing the display init scripts. See the ``The Script Directories'' section for more info.
+DisplayLastLogin
+DisplayLastLogin=true
+If true then the last login information is printed to the user before being prompted for password. While this gives away some info on what users are on a system, it on the other hand should give the user an idea of when they logged in and if it doesn't seem kosher to them, they can just abort the login and contact the sysadmin (avoids running malicious startup scripts). This was added in version 2.5.90.0.
+This is for making GDM conformant to CSC-STD-002-85, although that is purely theoretical now. Someone should read that spec and ensure that this actually conforms (in addition to other places in GDM). See
+DoubleLoginWarning
+DoubleLoginWarning=true
+If true, GDM will warn the user if they are already logged in on another virtual terminal. On systems where GDM supports checking the X virtual terminals, GDM will let the user switch to the previous login virtual terminal instead of logging in.
+DynamicXServers
+DynamicXServers=false
+If true, the GDM daemon will honor requests to manage displays via the
+FailsafeXServer
+FailsafeXServer=
+An X command line in case we can't start the normal X server. should probably be some sort of a script that runs an appropriate low resolution X server that will just work. This is tried before the
+FirstVT
+FirstVT=7
+On systems where GDM supports automatic VT (virtual terminal) allocation, this is the first vt to try. Usually standard text logins are run on the lower vts. See also
+FlexibleXServers
+FlexibleXServers=5
+The maximum number of allowed flexible displays. These are displays that can be run using the
+FlexiReapDelayMinutes
+FlexiReapDelayMinutes=5
+After how many minutes of inactivity at the login screen should a flexi display be reaped. This is only in effect before a user logs in. Also it does not affect nested displays (refer to the
+Greeter
+Greeter=lt;bingt;/gdmlogin
+Full path and name of the greeter executable followed by optional arguments. This is the greeter used for all displays except for the XDMCP remote displays. See also
+Group
+Group=gdm
+The group name under which
+GtkModulesList
+GtkModulesList=module-1:module-2:...
+A colon separated list of Gtk+ modules that
+HaltCommand
+HaltCommand=lt;sbingt;/shutdown -h now
+Full path and arguments to command to be executed when user selects "Shut Down" from the Actions menu. This can be a ';' separated list of commands to try. If a value is missing, the shut down command is not available. Note that the default for this value is not empty, so to disable "Shut Down" it must be set to an empty value.
+KillInitClients
+KillInitClients=true
+Determines whether GDM should kill X clients started by the init scripts when the user logs in.
+LogDir
+LogDir=lt;vargt;/log/gdm
+Directory containing the log files for the individual displays. By default this is the same as the ServAuthDir.
+PreFetchProgram
+PreFetchProgram=command
+Program to be run by the GDM greeter/login program when the initial screen is displayed. The purpose is to provide a hook where files which will be used after login can be preloaded to speed performance for the user. The program will be called once only, the first time a greeter is displayed. The gdmprefetch command may be used. This utility will load any libraries passed in on the command line, or if the argument starts with a "@" character, it will process the file assuming it is an ASCII file containing a list of libraries, one per line, and load each library in the file.
+PostLoginScriptDir
+PostLoginScriptDir=lt;etcgt;/gdm/PostLogin
+Directory containing the scripts run right after the user logs in, but before any session setup is done. See the ``The Script Directories'' section for more info.
+PostSessionScriptDir
+PostSessionScriptDir=lt;etcgt;/gdm/PostSession
+Directory containing the scripts run after the user logs out. See the ``The Script Directories'' section for more info.
+PreSessionScriptDir
+PreSessionScriptDir=lt;etcgt;/gdm/PreSession
+Directory containing the scripts run before the user logs in. See the ``The Script Directories'' section for more info.
+RBACSystemCommandKeys
+Support RBAC (Role Based Access Control) for system commands (Shutdown, Reboot, Suspend, etc.). This feature is only functional if GDM is compiled with RBAC support. Specify the RBAC key used to determine if the user has permission to use the action via the QUERY_LOGOUT_ACTION, SET_LOGOUT_ACTION, and SET_SAFE_LOGOUT_ACTION
+RebootCommand
+RebootCommand=lt;sbingt;/shutdown -r now
+Full path and optional arguments to the command to be executed when user selects Restart from the Actions menu. This can be a ';' separated list of commands to try. If missing, the restart command is not available. Note that the default for this value is not empty so to disable restart you must set this explicitly to an empty value.
+RemoteGreeter
+RemoteGreeter=lt;bingt;/gdmlogin
+Full path and name of the greeter executable followed by optional arguments. This is used for all remote XDMCP sessions. It is useful to have the less graphically demanding greeter here if you use the Themed Greeter for your main greeter. See also the
+RootPath
+RootPath=defaultpath (value set by configure)
+Specifies the path which will be set in the root's session and the {Init,PostLogin,PreSession,PostSession} scripts executed by GDM. This value will be overridden with the value from
+ServAuthDir
+ServAuthDir=lt;vargt;/gdm
+Directory containing the X authentication files for the individual displays. Should be owned by
+SessionDesktopDir
+SessionDesktopDir=lt;etcgt;/X11/sessions/:lt;etcgt;/dm/Sessions/:lt;sharegt;/xsessions/
+Directory containing the
+SoundProgram
+&lt;bingt;/play
+&lt;bingt;/audioplay
+SoundProgram=
+Application to use when playing a sound. Currently used for playing the login sound, see the
+StandardXServer
+StandardXServer=/dir/to/X (value assigned by configuration file)
+Full path and arguments to the standard X server command. This is used when gdm cannot find any other definition, and it's used as the default and failsafe fallback in a number of places. This should be able to run some sort of X server.
+SuspendCommand
+SuspendCommand=
+Full path and arguments to command to be executed when user selects Suspend from the Actions menu. If empty there is no such menu item. Note that the default for this value is not empty so to disable suspend you must set this explicitly to an empty value.
+SystemCommandsInMenu
+SuspendCommand=HALT;REBOOT;SHUTDOWN;SUSPEND;CUSTOM_CMD
+Specify which system commands are available in the greeter menu. Valid values are HALT, REBOOT, SHUTDOWN, SUSPEND, and CUSTOM_CMD and these should be separated by semicolons. This can be useful if you want to disable some options in the menu, but still have them available to authenticated users via the SET_LOGOUT_ACTION or SET_SAFE_LOGOUT_ACTION
+TimedLoginEnable
+TimedLoginEnable=false
+If the user given in
+TimedLogin
+TimedLogin=
+This is the user that should be logged in after a specified number of seconds of inactivity. This can never be "root" and gdm will refuse to log in root this way. The same features as for
+TimedLoginDelay
+TimedLoginDelay=30
+Delay in seconds before the
+User
+User=gdm
+The username under which
+UserAuthDir
+UserAuthDir=
+The directory where user's
+If you do not use the tilde expansion, then the filename created will be random, like in
+Normally if this is the user's home directory GDM will still refuse to put cookies there if it thinks it is NFS (by testing root-squashing). This can be changed by setting
+UserAuthFBDir
+UserAuthFBDir=/tmp
+If GDM fails to update the user's
+UserAuthFile
+UserAuthFile=.Xauthority
+Name of the file used for storing user cookies.
+VTAllocation
+VTAllocation=true
+On systems where GDM supports automatic VT (virtual terminal) allocation (currently Linux and FreeBSD only), you can have GDM automatically append the vt argument to the X server executable. This way races that come up from each X server managing it's own vt allocation can be avoided. See also
+XKeepsCrashing
+XKeepsCrashing=lt;etcgt;/gdm/XKeepsCrashing
+A script to run in case X keeps crashing. This is for running An X configuration or whatever else to make the X configuration work. See the script that came with the distribution for an example. The distributed
+In case
+Xnest
+Xnest=lt;bingt;/X11/Xephyr -audit 0
+The full path and arguments to the nested X server command, which can be Xephyr, Xnest, or similar program. This command is used for starting nested displays allowing the user to start new login screens in a nested window. Xephyr is recommended since it works best and better supports modern X server extensions. Therefore GDM will set the default configuration to use Xephyr if available. If Xephyr is not available, then Xnest will be used if it is available.
+XnestUnscaledFontPath
+XnestUnscaledFontPath=true
+Set to true if the nested X server command program supports the ":unscaled" suffix in the FontPath (passed to nested X server command via the -fp argument). Some Xnest (e.g. Xsun Xnest) programs do not, and it is necessary to set this to false for such nested X server commands to work with GDM. Refer to the
+Security Options
+[security]
+AllowRoot
+AllowRoot=true
+Allow root (privileged user) to log in through GDM. Set this to false if you want to disallow such logins.
+On systems that support PAM, this parameter is not as useful as you can use PAM to do the same thing, and in fact do even more. However it is still followed, so you should probably leave it true for PAM systems.
+AllowRemoteRoot
+AllowRemoteRoot=false
+Allow root (privileged user) to log in remotely through GDM. This value should be set to true to allow such logins. Remote logins are any logins that come in through the XDMCP.
+On systems that support PAM, this parameter is not as useful since you can use PAM to do the same thing, and do even more.
+This value will be overridden and set to false if the
+AllowRemoteAutoLogin
+AllowRemoteAutoLogin=false
+Allow the timed login feature to work for remote displays. In other words, remote connections via XDMCP will be allowed to log into the "TimedLogin" user after the delay defined by
+Note that this can make a system quite insecure, and thus is off by default.
+CheckDirOwner
+CheckDirOwner=true
+By default GDM checks the ownership of the home directories before writing to them, this prevents security issues in case of bad setup. However in some instances home directories will be owned by a different user and in this case it is necessary to turn this option on. You will also most likely have to turn the
+SupportAutomount
+SupportAutomount=false
+By default GDM checks the ownership of the home directories before writing to them, this prevents security issues in case of bad setup. However, when home directories are managed by automounter, they are often not mounted before they are accessed. This option works around subtleties of Linux automounter.
+DisallowTCP
+DisallowTCP=true
+If true, then always append
+NeverPlaceCookiesOnNFS
+NeverPlaceCookiesOnNFS=true
+Normally if this is true (which is by default), GDM will not place cookies into the user's home directory if this directory is on NFS. Well, GDM will consider any filesystem with root-squashing an NFS filesystem. Sometimes however the remote file system can have root squashing and be safe (perhaps by using encryption). In this case set this to 'false'. Note that this option appeared in version 2.4.4.4 and is ignored in previous versions.
+PasswordRequired
+PasswordRequired=false
+If true, this will cause PAM_DISALLOW_NULL_AUTHTOK to be passed as a flag to pam_authenticate and pam_acct_mgmt, disallowing NULL password. This setting will only take effect if PAM is being used by GDM. This value will be overridden with the value from
+RelaxPermissions
+RelaxPermissions=0
+By default GDM ignores files and directories writable to other users than the owner.
+Changing the value of RelaxPermissions makes it possible to alter this behavior:
+0 - Paranoia option. Only accepts user owned files and directories.
+1 - Allow group writable files and directories.
+2 - Allow world writable files and directories.
+RetryDelay
+RetryDelay=1
+The number of seconds GDM should wait before reactivating the entry field after a failed login.
+UserMaxFile
+UserMaxFile=65536
+GDM will refuse to read/write files bigger than this number (specified in bytes).
+In addition to the size check GDM is extremely picky about accessing files in user directories. It will not follow symlinks and can optionally refuse to read files and directories writable by other than the owner. See the
+UtmpLineAttached
+UtmpLineAttached=/dev/console (or /dev/dtlocal on Solaris)
+When doing Utmp processing for attached displays, GDM sets the ut_line to the device associated with the Virtual Terminal (VT) if it is being used. Otherwise, it will use the value specified with the display in the
+UtmpLineRemote
+UtmpLineRemote= (or /dev/dtremote on Solaris)
+When doing Utmp processing, GDM sets the ut_line to this value for remote displays. The value can contain "%d" which is translated to the DISPLAY value or "%h" which is translated to the hostname. This value must begin with
+UtmpPseudoDevice
+PseudoDevice=false (or true on Solaris)
+If the device associated with a display does not exist, then GDM will create a symlink to
+XDCMP Support
+[xdmcp]
+DisplaysPerHost
+DisplaysPerHost=1
+To prevent attackers from filling up the pending queue, GDM will only allow one connection for each remote computer. If you want to provide display services to computers with more than one screen, you should increase the
+Note that the number of attached DISPLAYS allowed is not limited. Only remote connections via XDMCP are limited by this configuration option.
+Enable
+Enable=false
+Setting this to true enables XDMCP support allowing remote displays/X terminals to be managed by GDM.
+
+If GDM is compiled to support it, access from remote displays can be controlled using the TCP Wrappers library. The service name is
+You should add
+Please note that XDMCP is not a particularly secure protocol and that it is a good idea to block UDP port 177 on your firewall unless you really need it.
+EnableProxy
+EnableProxy=false
+Setting this to true enables support for running XDMCP sessions on a local proxy X server. This may improve the performance of XDMCP sessions, especially on high latency networks, as many X protocol operations can be completed without going over the network.
+Note, however, that this mode will significantly increase the burden on the machine hosting the XDMCP sessions
+See the
+HonorIndirect
+HonorIndirect=true
+Enables XDMCP INDIRECT choosing (i.e. remote execution of
+MaxPending
+MaxPending=4
+To avoid denial of service attacks, GDM has fixed size queue of pending connections. Only MaxPending displays can start at the same time.
+Please note that this parameter does *not* limit the number of remote displays which can be managed. It only limits the number of displays initiating a connection simultaneously.
+MaxPendingIndirect
+MaxPendingIndirect=4
+GDM will only provide
+MaxSessions
+MaxSessions=16
+Determines the maximum number of remote display connections which will be managed simultaneously. I.e. the total number of remote displays that can use your host.
+MaxWait
+MaxWait=30
+When GDM is ready to manage a display an ACCEPT packet is sent to it containing a unique session id which will be used in future XDMCP conversations.
+GDM will then place the session id in the pending queue waiting for the display to respond with a MANAGE request.
+If no response is received within MaxWait seconds, GDM will declare the display dead and erase it from the pending queue freeing up the slot for other displays.
+MaxWaitIndirect
+MaxWaitIndirect=30
+The MaxWaitIndirect parameter determines the maximum number of seconds between the time where a user chooses a host and the subsequent indirect query where the user is connected to the host. When the timeout is exceeded, the information about the chosen host is forgotten and the indirect slot freed up for other displays. The information may be forgotten earlier if there are more hosts trying to send indirect queries then
+Port
+Port=177
+The UDP port number
+PingIntervalSeconds
+PingIntervalSeconds=15
+Interval in which to ping the X server in seconds. If the X server doesn't return before the next time we ping it, the connection is stopped and the session ended. This is a combination of the XDM PingInterval and PingTimeout, but in seconds.
+Note that GDM in the past used to have a
+ProxyReconnect
+FlexiProxyReconnect=
+Setting this option enables experimental support for session migration with XDMCP sessions. This enables users to disconnect from their session and later reconnect to that same session, possibly from a different terminal.
+In order to use this feature, you must have a nested X server available which supports disconnecting from its parent X server and reconnecting to another X server. Currently, the Distributed Multihead X (DMX) server supports this feature to some extent and other projects like NoMachine NX are busy implementing it.
+This option should be set to the path of a command which will handle reconnecting the XDMCP proxy to another backend display. A sample implementation for use with DMX is supplied.
+ProxyXServer
+ProxyXServer=
+The X server command line for a XDMCP proxy. Any nested X server like Xnest, Xephyr or Xdmx should work fairly well.
+Willing
+Willing=lt;etcgt;/gdm/Xwilling
+When the machine sends a WILLING packet back after a QUERY it sends a string that gives the current status of this server. The default message is the system ID, but it is possible to create a script that displays customized message. If this script doesn't exist or this key is empty the default message is sent. If this script succeeds and produces some output, the first line of it's output is sent (and only the first line). It runs at most once every 3 seconds to prevent possible denial of service by flooding the machine with QUERY packets.
+Common GUI Configuration Options
+[gui]
+AllowGtkThemeChange
+AllowGtkThemeChange=true
+If to allow changing the GTK+ (widget) theme from the greeter. Currently this only affects the standard greeter as the graphical greeter does not yet have this ability. The theme will stay in effect on this display until changed and will affect all the other windows that are put up by GDM. Supported since 2.5.90.2.
+GtkRC
+GtkRC=
+Path to a
+GtkTheme
+GtkTheme=Default
+A name of an installed theme to use by default. It will be used in the greeter, chooser and all other GUI windows put up by GDM. Supported since 2.5.90.2.
+GtkThemesToAllow
+GtkThemesToAllow=all
+Comma separated list of themes to allow. These must be the names of the themes installed in the standard locations for GTK+ themes. You can also specify 'all' to allow all installed themes. This is related to the
+MaxIconWidth
+MaxIconWidth=128
+Specifies the maximum icon width (in pixels) that the face browser will display. Icons larger than this will be scaled. This also affects icons in the XDMCP chooser.
+MaxIconHeight
+MaxIconHeight=128
+Specifies the maximum icon height (in pixels) that the face browser will display. Icons larger than this will be scaled. This also affects icons in the XDMCP chooser.
+Greeter Configuration
+[greeter]
+BackgroundColor
+BackgroundColor=#76848F
+If the BackgroundType is 2, use this color in the background of the greeter. Also use it as the back of transparent images set on the background and if the BackgroundRemoteOnlyColor is set and this is a remote display. This only affects the GTK+ Greeter.
+BackgroundProgramInitialDelay
+BackgroundProgramInitialDelay=30
+The background application will be started after at least that many seconds of inactivity.
+RestartBackgroundProgram
+RestartBackgroundProgram=true
+If set the background application will be restarted when it has exited, after the delay described below has elapsed. This option can be useful when you wish to run a screen saver application when no user is using the computer.
+BackgroundProgramRestartDelay
+BackgroundProgramRestartDelay=30
+The background application will be restarted after at least that many seconds of inactivity.
+BackgroundImage
+BackgroundImage=somefile.png
+If the BackgroundType is 1, then display this file as the background in the greeter. This only affects the GTK+ Greeter.
+BackgroundProgram
+BackgroundProgram=lt;bingt;/xeyes
+If set this command will be run in the background while the login window is being displayed. Note that not all applications will run this way, since GDM does not usually have a home directory. You could set up home directory for the GDM user if you wish to run applications which require it. This only affects the GTK+ Greeter.
+BackgroundRemoteOnlyColor
+BackgroundRemoteOnlyColor=true
+On remote displays only set the color background. This is to make network load lighter. The
+BackgroundScaleToFit
+BackgroundScaleToFit=true
+Scale background image to fit the screen. This only affects the GTK+ Greeter.
+BackgroundType
+BackgroundType=2
+The type of background to set. 0 is none, 1 is image and color, 2 is color and 3 is image. This only affects the GTK+ Greeter.
+Browser
+Browser=true
+Set to true to enable the face browser. See the ``The GTK+ Greeter'' section for more information on the face browser. This option only works for the GTK+ Greeter. For the Themed Greeter, the face browser is enabled by choosing a theme which includes a face browser
+ChooserButton
+ChooserButton=true
+If true, add a chooser button to the Actions menu that will restart the current X server with a chooser. XDMCP does not need to be enabled on the local computer for this to work.
+ConfigAvailable
+ConfigAvailable=false
+If true, allows the configurator to be run from the greeter. Note that the user will need to type in the root password before the configurator will be started. This is set to false by default for additional security. See the
+DefaultFace
+DefaultFace=lt;sharegt;/pixmaps/nophoto.png
+If a user has no defined face image, GDM will use the "stock_person" icon defined in the current GTK+ theme. If no such image is defined, the image specified by
+Include
+Include=
+Comma separated list of users to be included in the face browser and in the
+Exclude
+Exclude=bin,daemon,adm,lp,sync,shutdown,halt,mail,...
+Comma separated list of users to be excluded from the face browser and from the
+IncludeAll
+IncludeAll=false
+By default, an empty include list means display no users. By setting IncludeAll to true, the password file will be scanned and all users will be displayed aside from users excluded via the Exclude setting and user ID's less than MinimalUID. Scanning the password file can be slow on systems with large numbers of users and this feature should not be used in such environments. See also
+GlobalFaceDir
+GlobalFaceDir=lt;sharegt;/pixmaps/faces/
+Systemwide directory for face files. The sysadmin can place icons for users here without touching their homedirs. Faces are named after their users' logins.
+I.e.
+The face images must be stored in gdk-pixbuf supported formats and they must be readable for the GDM user.
+A user's own icon file will always take precedence over the sysadmin provided one.
+GraphicalTheme
+GraphicalTheme=circles
+The graphical theme that the Themed Greeter should use. it should refer to a directory in the theme directory set by
+GraphicalThemes
+GraphicalThemes=circles
+The graphical themes that the Themed Greeter should use is the Mode is set on Random Themes. This is a "/:" delimited list. It should refer to a directory in the theme directory set by
+GraphicalThemeRand
+GraphicalThemeRand=false
+Whether the graphical greeter will use Only One Theme or Random Theme mode. Only One Theme mode uses themes listed by
+GraphicalThemeDir
+GraphicalThemeDir=lt;sharegt;/gdm/themes/
+The directory where themes for the Themed Greeter are installed.
+GraphicalThemedColor
+GraphicalThemedColor=#76848F
+Use this color in the background of the Themed Greeter. This only affects the Themed Greeter.
+InfoMsgFile
+InfoMsgFile=/path/to/infofile
+If present and /path/to/infofile specifies an existing and readable text file (e.g. &lt;etcgt;/infomsg.txt) the contents of the file will be displayed in a modal dialog box before the user is allowed to login. This works both with the standard and the themable greeters.
+InfoMsgFont
+InfoMsgFont=fontspec
+If present and InfoMsgFile (see above) is used, this specifies the font to use when displaying the contents of the InfoMsgFile text file. For example fontspec could be Sans 24 to get a sans serif font of size 24 points. This works both with the standard and the themable greeters.
+LocaleFile
+LocaleFile=lt;etcgt;/gdm/locale.alias
+File in format similar to the GNU locale format with entries for all supported languages on the system. The format is described above or in a comment inside that file.
+LockPosition
+LockPosition=true
+If true the position of the login window of the GTK+ Greeter cannot be changed even if the title bar is turned on.
+Logo
+Logo=lt;sharegt;/pixmaps/gnome-logo-large.png
+Image file to display in the logo box. The file must be in a gdk-pixbuf supported format and it must be readable by the GDM user. If no file is specified the logo feature is disabled. This only affects the GTK+ Greeter.
+ChooserButtonLogo
+ChooserButtonLogo=lt;sharegt;/pixmaps/gnome-logo-large.png
+Image file to display in the file chooser button in
+MinimalUID
+MinimalUID=100
+The minimal UID that GDM should consider a user. All users with a lower UID will be excluded from the face browser. See also
+PositionX
+PositionX=200
+The horizontal position of the login window of the GTK+ Greeter.
+PositionY
+PositionY=100
+The vertical position of the login window of the GTK+ Greeter.
+Quiver
+Quiver=true
+Controls whether
+DefaultRemoteWelcome
+DefaultRemoteWelcome=true
+If set to true, the value "Welcome to %n" is used for the
+RemoteWelcome
+RemoteWelcome=Welcome to %n
+Controls which text to display next to the logo image in the greeter for remote XDMCP sessions. The same expansion is done here as in the
+RunBackgroundProgramAlways
+RunBackgroundProgramAlways=false
+If this is true then the background application is run always, otherwise it is only run when the
+SetPosition
+SetPosition=true
+If true the position of the login window of the GTK+ Greeter is determined by
+ShowGnomeFailsafeSession
+ShowGnomeFailsafeSession=true
+Should the greeter show the Gnome Failsafe session in th sessions list.
+ShowLastSession
+ShowLastSession=true
+Should the greeter show the 'Last' session in the session list. If this is off, then GDM is in the so called 'switchdesk' mode which for example Red Hat uses. That is, the users can't pick the last session and will just then get the default session (see
+ShowXtermFailsafeSession
+ShowXtermFailsafeSession=true
+Should the greeter show the Xterm Failsafe session in the sessions list.
+SoundOnLogin
+SoundOnLogin=true
+If true, the greeter will play a sound or beep when it is ready for a login. See also the
+SoundOnLoginSuccess
+SoundOnLoginSuccess=true
+If true, the greeter will play a sound after a successful login attempt. See also the
+SoundOnLoginFailure
+SoundOnLoginFailure=true
+If true, the greeter will play a sound after a failed login attempt. See also the
+SoundOnLoginFile
+SoundOnLoginFile=/path/to/sound.wav
+The file that will be played using the specified sound application (by default that is
+SoundOnLoginSuccessFile
+SoundOnLoginSuccessFile=/path/to/sound.wav
+The file that will be played using the specified sound application (by default that is
+SoundOnLoginFailureFile
+SoundOnLoginFailureFile=/path/to/sound.wav
+The file that will be played using the specified sound application (by default that is
+SystemMenu
+SystemMenu=true
+Turns the Actions menu (which used to be called System menu) on or off. If this is off then one of the actions will be available anywhere. These actions include Shutdown, Restart, Configure, XDMCP chooser and such. All of those can however be turned off individually. Shutdown, Restart and Suspend can be turned off by just setting the corresponding keys to empty. Note that the actions menu is only shown on attached displays. It would not be safe or even desirable on remote logins, so you do not have to worry about remote users having these privileges.
+Note that if this is off none of the actions will be available even if a theme for a graphical greeter mistakenly shows them. Also note that sometimes a graphical theme may not show all the available actions as buttons and you may have to press F10 to see the menu.
+TitleBar
+TitleBar=true
+Display the title bar in the greeter. This only affects the GTK+ Greeter.
+Use24Clock
+Use24Clock=auto
+Select the use of 24 hour clock. Some locales do not support 12 hour format (like Finnish, that is
+Possible values are "auto" (default), "true", and "false". If this is set to "auto" or left empty, then time format is chosen from locale settings. Locale settings are based on the language in use, thus it is changed by setting environment variables LANGUAGE (GNU extension), LANG, LC_MESSAGES or LC_ALL in the GDM's runtime environment. Priorities between the mentioned environment variables can be found from your system's C library manual.
+UseCirclesInEntry
+UseCirclesInEntry=false
+Use circles instead of asterisks in the password entry. This may not work with all fonts however.
+UseInvisibleInEntry
+UseInvisibleInEntry=false
+Do not show any visual feedback is the password entry. This is the standard in console and xdm. Settings this option discards the
+DefaultWelcome
+DefaultWelcome=true
+If set to true, the value "Welcome" is used for the
+Welcome
+Welcome=Welcome
+Controls which text to display next to the logo image in the standard greeter. The following control chars are supported:
+%d — display's hostname
+%h — Fully qualified hostname
+%m — machine (processor type)
+%n — Nodename (i.e. hostname without .domain)
+%r — release (OS version)
+%s — sysname (i.e. OS)
+This string is only used for attached displays. For remote XDMCP displays we use
+In the Themed Greeter the location of this text depends on the theme. Unless the theme uses the stock welcome string somewhere this string will not be displayed at all.
+XineramaScreen
+XineramaScreen=0
+If the Xinerama extension is active the login window will be centered on this physical screen (use 0 for the first screen, 1 for the second...).
+XDCMP Chooser Options
+[chooser]
+AllowAdd
+AllowAdd=true
+If true, allow the user to add arbitrary hosts to the chooser. This way the user could connect to any host that responds to XDMCP queries from the chooser.
+Broadcast
+Broadcast=true
+If true, the chooser will broadcast a query to the local network and collect responses. This way the chooser will always show all available managers on the network. If you need to add some hosts not local to this network, or if you don't want to use a broadcast, you can list them explicitly in the
+Multicast
+Multicast=true
+If true and IPv6 is enabled, the chooser will send a multicast query to the local network and collect responses from the hosts who have joined multicast group. If you don't want to send a multicast, you can specify IPv6 address in the
+MulticastAddr
+MulticastAddr=ff02::1
+This is the Link-local Multicast address and is hardcoded here.
+DefaultHostImage
+DefaultHostImage=lt;sharegt;/pixmaps/nohost.png
+File name for the default host icon. This image will be displayed if no icon is specified for a given host. The file must be in a gdk-pixbuf supported format and it must be readable for the GDM user.
+HostImageDir
+HostImageDir=lt;sharegt;/hosts
+Repository for host icon files. The sysadmin can place icons for remote hosts here and they will appear in
+The file name must match the fully qualified name (FQDN) for the host. The icons must be stored in gdk-pixbuf supported formats and they must be readable to the GDM user.
+Hosts
+Hosts=host1,host2
+The hosts which should be listed in the chooser. The chooser will only list them if they respond. This is done in addition to broadcast (if
+ScanTime
+ScanTime=4
+Specifies how many seconds the chooser should wait for replies to its BROADCAST_QUERY. Really this is only the time in which we expect a reply. We will still add hosts to the list even if they reply after this time.
+Debug Configuration
+[debug]
+Setting to true sends debug ouput to the syslog. This can be useful for tracking down problems with GDM. This output tends to be verbose so should not be turned on for general use.
+Gestures
+Gestures=false
+Setting to true sends debug ouput concerning the accessibility gesture listeners to the syslog. This can be useful for tracking down problems with them not working properly. This output tends to be verbose so should not be turned on for general use.
+Custom Commands
+You can create up to 10 different commands. Gaps between command numbers are allowed and their relative positioning within the section and with respect to each other is not important as long as they conform to the permitted range of [0-9].
+[customcommand]
+CustomCommand[0-9]
+CustomCommand[0-9]=
+Full path and arguments to command to be executed when user selects
+CustomCommandIsPersistent[0-9]
+CustomCommandIsPersistent[0-9]=
+Specifies if
+CustomCommandLabel[0-9]
+CustomCommandLabel[0-9]=
+Specifies the stock label that will be displayed on the
+CustomCommandLRLabel[0-9]
+CustomCommandLRLabel[0-9]=
+Specifies the stock label that will be displayed on the
+CustomCommandNoRestart[0-9]
+CustomCommandNoRestart[0-9]=
+Specifies if gdm will be stopped/restarted once
+CustomCommandText[0-9]
+CustomCommandText[0-9]=
+Specifies the message that will be displayed on the warning dialog box once
+CustomCommandTooltip[0-9]
+CustomCommandTooltip[0-9]=
+Specifies the message that will be displayed on tooltips for
+X Server Definitions
+GDM needs to be provided with information about each X servers that will be used. You can have as many different definitions as you wish, each identified with a unique name. The name
+Servers are defined by sections named
+[server-Standard]
+name
+name=Standard server
+The name that will be displayed to the user.
+command
+command=/path/to/X
+The command to execute, with full path to the binary of the X server, and any extra arguments needed. Normally it is not necessary to add a
+flexible
+flexible=true
+Indicates if this server is available as a choice when a user wishes to run a flexible, on demand server.
+handled
+handled=true
+Indicates that GDM should run the login window on this server and allow a user to log in. If set to false, then GDM will just run this server and wait for it to terminate. This can be useful to run an X terminal using GDM. When this is done you should normally also add
+chooser
+chooser=false
+Indicates that GDM should instead of a login window run a chooser on this window and allow the user to choose which server to log into.
+priority
+priority=0
+Indicates that the X server should be started at a different process priority. Values can be any integer value accepted by the setpriority C library function (normally between -20 and 20) with 0 being the default. For highly interactive applications, -5 yields good responsiveness. The default value is 0 and the setpriority function is not called if the value is 0.
+Attached DISPLAY Configuration
+The attached (also known as local or static) display configuration specifies what displays should be always managed by GDM. GDM will restart the X server on the display if it dies, for example. There may be as many attached displays that are managed as you wish. Typically each display is associated with a real display. On a typical single-display machine this section would only contain one key
+The GUI configuration program allows users to edit the attached display configuration defined in the GDM configuration files and allows the user to add or delete entries. Like normal configuration options, the
+[servers]
+&lt;display numbergt;
+0=Standard [device=/dev/foo]
+The key cooresponds to the DISPLAY to be managed, so that key
+The first word of the value corresponds to a X server definition in the "X Server Definitions" section of the configuration file. For example, the following entry means that DISPLAY
+[servers]
+0=Standard
+The first word of the value can also be set to the string "inactive" to indicate that this DISPLAY should not be managed. This can be used in the GDM Custom Configuration File to turn off a DISPLAY that is defined in the GDM System Defaults Configuration File.
+The optional device argument is used to specify the device that is associated with the DISPLAY. When using Virtual Terminals (VT), this value is ignored and GDM will use the correct device name associated with the VT. If not using VT, then GDM will use the value specified by this optional argument. If the device argument is not defined, then GDM will use the default setting for attached displays defined in the
+Per User Configuration
+There are some per user configuration settings that control how GDM behaves. GDM is picky about the file ownership and permissions of the user files it will access, and will ignore files if they are not owned by the user or files that have group/world write permission. It will also ignore the user if the user's $HOME directory is not owned by the user or if the user's $HOME directory has group/world write permission. files must also be smaller than the
+First there is the
+The
+[Desktop]
+Session=gnome
+Language=cs_CZ.UTF-8
+Normally GDM will write this file when the user logs in for the first time, and rewrite it if the user chooses to change their default values on a subsequent login.
+If the GDM Face Browser is turned on, then the file
+Face images can also be placed in the global face directory, which is specified by the
+Controlling GDM
+You can control GDM behavior during runtime in several different ways. You can either run certain commands, or you can talk to GDM using either a unix socket protocol, or a FIFO protocol.
+Commands
+To stop GDM, you can either send the TERM signal to the main daemon or run the
+The
+The FIFO protocol
+GDM also provides a FIFO called
+Full and up to date documentation of the commands and their use is contained in the GDM source tree in the file
+Socket Protocol
+GDM provides a unix domain socket for communication at
+gdmflexiserver accepts the following commands with the --command option:
+ADD_DYNAMIC_DISPLAY
+ALL_SERVERS
+ATTACHED_SERVERS
+AUTH_LOCAL
+CLOSE
+FLEXI_XNEST
+FLEXI_XNEST_USER
+FLEXI_XSERVER
+FLEXI_XSERVER_USER
+GET_CONFIG
+GET_CONFIG_FILE
+GET_CUSTOM_CONFIG_FILE
+GET_SERVER_LIST
+GET_SERVER_DETAILS
+GREETERPIDS
+QUERY_LOGOUT_ACTION
+QUERY_CUSTOM_CMD_LABELS
+QUERY_CUSTOM_CMD_NO_RESTART_STATUS
+QUERY_VT
+RELEASE_DYNAMIC_DISPLAYS
+REMOVE_DYNAMIC_DISPLAY
+SERVER_BUSY
+SET_LOGOUT_ACTION
+SET_SAFE_LOGOUT_ACTION
+SET_VT
+UPDATE_CONFIG
+VERSION
+These are described in detail below, including required arguments, response format, and return codes.
+ADD_DYNAMIC_DISPLAY
+ADD_DYNAMIC_DISPLAY: Create a new server definition that will
+ run on the specified display leaving, it
+ in DISPLAY_CONFIG state.
+Supported since: 2.8.0.0
+Arguments: &lt;display to run ongt;=lt;servergt;
+ Where &lt;servergt; is either a configuration named in the
+ GDM configuration or a literal command name.
+Answers:
+ OK &lt;displaygt;
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 2 = Existing display
+ 3 = No server string
+ 4 = Display startup failure
+ 100 = Not authenticated
+ 200 = Dynamic Displays not allowed
+ 999 = Unknown error
+ALL_SERVERS
+ALL_SERVERS: List all displays, including console, remote, xnest.
+ This can, for example, be useful to figure out if
+ the display you are on is managed by the gdm daemon,
+ by seeing if it is in the list. It is also somewhat
+ like the 'w' command but for graphical sessions.
+Supported since: 2.4.2.96
+Arguments: None
+Answers:
+ OK &lt;servergt;;lt;servergt;;...
+
+ &lt;servergt; is &lt;displaygt;,lt;logged in usergt;
+
+ &lt;logged in usergt; can be empty in case no one logged in yet
+
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 200 = Too many messages
+ 999 = Unknown error
+ATTACHED_SERVERS
+ATTACHED_SERVERS: List all attached displays. Doesn't list XDMCP
+ and xnest non-attached displays.
+Note: This command used to be named CONSOLE_SERVERS,
+ which is still recognized for backwards
+ compatibility. The optional pattern argument
+ is supported as of version 2.8.0.0.
+Supported since: 2.2.4.0
+Arguments: &lt;patterngt; (optional)
+ With no argument, all attached displays are returned. The optional
+ &lt;patterngt; is a string that may contain glob characters '*', '?', and
+ '[]'. Only displays that match the pattern will be returned.
+Answers:
+ OK &lt;servergt;;lt;servergt;;...
+
+ &lt;servergt; is &lt;displaygt;,lt;logged in usergt;,lt;vt or xnest
+ displaygt;
+
+ &lt;logged in usergt; can be empty in case no one logged
+ in yet, and &lt;vtgt; can be -1 if it's not known or not
+ supported (on non-Linux for example). If the display is an
+ xnest display and is a console one (that is, it is an xnest
+ inside another console display) it is listed and instead of
+ vt, it lists the parent display in standard form.
+
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 200 = Too many messages
+ 999 = Unknown error
+AUTH_LOCAL
+AUTH_LOCAL: Setup this connection as authenticated for
+ FLEXI_SERVER. Because all full blown
+ (non-nested) displays can be started only from
+ users logged into attached displays, and here GDM
+ assumes only users logged in from GDM. They must
+ pass the xauth MIT-MAGIC-COOKIE-1 that they were
+ passed before the connection is authenticated.
+Note: The AUTH LOCAL command requires the
+ --authenticate option, although only
+ FLEXI XSERVER uses this currently.
+Note: Since 2.6.0.6 you can also use a global
+ &lt;ServAuthDirgt;/.cookie, which works for all
+ authentication except for SET_LOGOUT_ACTION and
+ QUERY_LOGOUT_ACTION and SET_SAFE_LOGOUT_ACTION
+ which require a logged in display.
+Supported since: 2.2.4.0
+Arguments: &lt;xauth cookiegt;
+ &lt;xauth cookiegt; is in hex form with no 0x prefix
+Answers:
+ OK
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 100 = Not authenticated
+ 200 = Too many messages
+ 999 = Unknown error
+CLOSE
+CLOSE: Close sockets connection
+Supported since: 2.2.4.0
+Arguments: None
+Answers: None
+FLEXI_XNEST
+FLEXI_XNEXT: Start a new flexible nested display.
+Note: Supported on older version from 2.2.4.0, later
+ 2.2.4.2, but since 2.3.90.4 you must supply 4
+ arguments or ERROR 100 will be returned. This
+ will start the nested X server command using
+ the XAUTHORITY file supplied and as the uid
+ same as the owner of that file (and same as
+ you supply). You must also supply the cookie as
+ the third argument for this display, to prove
+ that you indeed are this user. Also this file
+ must be readable ONLY by this user, that is
+ have a mode of 0600. If this all is not met,
+ ERROR 100 is returned.
+Note: The cookie should be the MIT-MAGIC-COOKIE-1,
+ the first one GDM can find in the XAUTHORITY
+ file for this display. If that's not what you
+ use you should generate one first. The cookie
+ should be in hex form.
+Supported since: 2.3.90.4
+Arguments: &lt;display to run ongt; &lt;uid of requesting usergt;
+ &lt;xauth cookie for the displaygt; &lt;xauth filegt;
+Answers:
+ OK &lt;displaygt;
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 1 = No more flexi servers
+ 2 = Startup errors
+ 3 = X failed
+ 4 = X too busy
+ 5 = Xnest can't connect
+ 6 = No server binary
+ 100 = Not authenticated
+ 200 = Too many messages
+ 999 = Unknown error
+FLEXI_XNEST_USER
+FLEXI_XNEST_USER: Start a new flexible nested display and
+ initialize the greeter with the given username.
+Note: This is a variant of the FLEXI_XNEST command.
+Note: The cookie should be the MIT-MAGIC-COOKIE-1,
+ the first one GDM can find in the XAUTHORITY
+ file for this display. If that's not what you
+ use you should generate one first. The cookie
+ should be in hex form.
+Supported since: 2.17.7
+Arguments: &lt;usernamegt; &lt;display to run ongt; &lt;uid of requesting
+ usergt; &lt;xauth cookie for the displaygt; &lt;xauth filegt;
+Answers:
+ OK &lt;displaygt;
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 1 = No more flexi servers
+ 2 = Startup errors
+ 3 = X failed
+ 4 = X too busy
+ 5 = Xnest can't connect
+ 6 = No server binary
+ 100 = Not authenticated
+ 200 = Too many messages
+ 999 = Unknown error
+FLEXI_XSERVER
+FLEXI_XSERVER: Start a new X flexible display. Only supported on
+ connection that passed AUTH_LOCAL
+Supported since: 2.2.4.0
+Arguments: &lt;xserver typegt;
+ If no arguments, starts the standard X server
+Answers:
+ OK &lt;displaygt;
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 1 = No more flexi servers
+ 2 = Startup errors
+ 3 = X failed
+ 4 = X too busy
+ 6 = No server binary
+ 100 = Not authenticated
+ 200 = Too many messages
+ 999 = Unknown error
+FLEXI_XSERVER_USER
+FLEXI_XSERVER_USER: Start a new X flexible display and initialize the
+ greeter with the given username. Only supported on
+ connection that passed AUTH_LOCAL
+Supported since: 2.17.7 
+Arguments: &lt;usernamegt; &lt;xserver typegt;
+ If no server type specified, starts the standard X server
+Answers:
+ OK &lt;displaygt;
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 1 = No more flexi servers
+ 2 = Startup errors
+ 3 = X failed
+ 4 = X too busy
+ 6 = No server binary
+ 100 = Not authenticated
+ 200 = Too many messages
+ 999 = Unknown error
+GET_CONFIG
+GET_CONFIG: Get configuration value for key. Useful so
+ that other applications can request configuration
+ information from GDM. Any key defined as GDM_KEY_*
+ in gdm-daemon-config-keys.h is supported. Starting with version
+ 2.13.0.2, translated keys (such as
+ "greeter/GdmWelcome[cs]" are supported via GET_CONFIG.
+ Also starting with version 2.13.0.2 it is no longer necessary to
+ include the default value (i.e. you can use key
+ "greeter/IncludeAll" instead of having to use
+ "greeter/IncludeAll=false". 
+Supported since: 2.6.0.9
+Arguments: &lt;keygt;
+Answers:
+ OK &lt;valuegt;
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 50 = Unsupported key
+ 200 = Too many messages
+ 999 = Unknown error
+GET_CONFIG_FILE
+GET_CONFIG_FILE: Get config file location being used by
+ the daemon. If the GDM daemon was started
+ with the --config option, it will return
+ the value passed in via the argument.
+Supported since: 2.8.0.2
+Arguments: None
+Answers:
+ OK &lt;full path to GDM configuration filegt;
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 200 = Too many messages
+ 999 = Unknown error
+GET_CUSTOM_CONFIG_FILE
+GET_CUSTOM_CONFIG_FILE: Get custom config file location being
+ used by the daemon.
+Supported since: 2.14.0.0
+Arguments: None
+Answers:
+ OK &lt;full path to GDM custom configuration filegt;
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 1 = File not found
+ 200 = Too many messages
+ 999 = Unknown error
+GET_SERVER_DETAILS
+GET_SERVER_DETAILS: Get detail information for a specific server.
+Supported since: 2.13.0.4
+Arguments: &lt;servergt; &lt;keygt;
+ Key values include:
+ NAME - Returns the server name
+ COMMAND - Returns the server command
+ FLEXIBLE - Returns "true" if flexible, "false"
+ otherwise
+ CHOOSABLE - Returns "true" if choosable, "false"
+ otherwise
+ HANDLED - Returns "true" if handled, "false"
+ otherwise
+ CHOOSER - Returns "true" if chooser, "false"
+ otherwise
+ PRIORITY - Returns process priority
+Answers:
+ OK &lt;valuegt;
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 1 = Server not found
+ 2 = Key not valid
+ 50 = Unsupported key
+ 200 = Too many messages
+ 999 = Unknown error
+GET_SERVER_LIST
+GET_SERVER_LIST: Get a list of the server sections from
+ the configuration file.
+Supported since: 2.13.0.4
+Arguments: None
+Answers:
+ OK &lt;valuegt;;lt;valuegt;;...
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 1 = No servers found
+ 200 = Too many messages
+ 999 = Unknown error
+GREETERPIDS
+GREETERPIDS: List all greeter pids so that one can send HUP
+ to them for config rereading. Of course one
+ must be root to do that.
+Supported since: 2.3.90.2
+Arguments: None
+Answers:
+ OK &lt;pidgt;;lt;pidgt;;...
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 200 = Too many messages
+ 999 = Unknown error
+QUERY_LOGOUT_ACTION
+QUERY_LOGOUT_ACTION: Query which logout actions are possible
+ Only supported on connections that passed
+ AUTH_LOCAL.
+Supported since: 2.5.90.0
+Answers:
+ OK &lt;actiongt;;lt;actiongt;;...
+ Where action is one of HALT, REBOOT, SUSPEND or CUSTOM_CMD[0-9].
+ An empty list can also be returned if no action is possible.
+ A '!' is appended to an action if it was already set with
+ SET_LOGOUT_ACTION or SET_SAFE_LOGOUT_ACTION. Note that
+ SET_LOGOUT_ACTION has precedence over
+ SET_SAFE_LOGOUT_ACTION.
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 100 = Not authenticated
+ 200 = Too many messages
+ 999 = Unknown error
+QUERY_CUSTOM_CMD_LABELS
+QUERY_CUSTOM_CMD_LABELS: Query labels belonging to exported custom
+ commands Only supported on connections that
+ passed AUTH_LOCAL.
+ Supported since: 2.5.90.0
+ Answers:
+ OK &lt;label1gt;;lt;label2gt;;...
+ Where labelX is one of the labels belonging to CUSTOM_CMDX
+ (where X in [0,GDM_CUSTOM_COMMAND_MAX)). An empty list can
+ also be returned if none of the custom commands are exported
+ outside login manager (no CustomCommandIsPersistent options
+ are set to true). 
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 100 = Not authenticated
+ 200 = Too many messages
+ 999 = Unknown error
+QUERY_CUSTOM_CMD_NO_RESTART_STATUS
+QUERY_CUSTOM_CMD_NO_RESTART_STATUS: Query NoRestart config options
+ for each of custom commands Only
+ supported on connections that
+ passed AUTH_LOCAL.
+Supported since: 2.5.90.0
+Answers:
+ OK &lt;statusgt;
+ Where each bit of the status represents NoRestart value for
+ each of the custom commands.
+ bit on (1): NoRestart = true, 
+ bit off (0): NoRestart = false.
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 100 = Not authenticated
+ 200 = Too many messages
+ 999 = Unknown error
+QUERY_VT
+QUERY_VT: Ask the daemon about which VT we are currently on.
+ This is useful for logins which don't own
+ /dev/console but are still console logins. Only
+ supported on Linux currently, other places will
+ just get ERROR 8. This is also the way to query
+ if VT support is available in the daemon in the
+ first place. Only supported on connections that
+ passed AUTH_LOCAL.
+Supported since: 2.5.90.0
+Arguments: None
+Answers:
+ OK &lt;vt numbergt;
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 8 = Virtual terminals not supported
+ 100 = Not authenticated
+ 200 = Too many messages
+ 999 = Unknown error
+RELEASE_DYNAMIC_DISPLAYS
+RELEASE_DYNAMIC_DISPLAYS: Release dynamic displays currently in 
+ DISPLAY_CONFIG state
+Supported since: 2.8.0.0
+Arguments: &lt;display to releasegt;
+Answers:
+ OK &lt;displaygt;
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 1 = Bad display number
+ 100 = Not authenticated
+ 200 = Dynamic Displays not allowed
+ 999 = Unknown error
+REMOVE_DYNAMIC_DISPLAY
+REMOVE_DYNAMIC_DISPLAY: Remove a dynamic display, killing the server
+ and purging the display configuration
+Supported since: 2.8.0.0
+Arguments: &lt;display to removegt;
+Answers:
+ OK &lt;displaygt;
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 1 = Bad display number
+ 100 = Not authenticated
+ 200 = Dynamic Displays not allowed
+ 999 = Unknown error
+SERVER_BUSY
+SERVER_BUSY: Returns true if half or more of the daemon's sockets
+ are busy, false otherwise. Used by slave programs
+ which want to ensure they do not overwhelm the 
+ sever.
+Supported since: 2.13.0.8
+Arguments: None
+Answers:
+ OK &lt;valuegt;
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 200 = Too many messages
+ 999 = Unknown error
+SET_LOGOUT_ACTION
+SET_LOGOUT_ACTION: Tell the daemon to halt/restart/suspend after
+ slave process exits. Only supported on
+ connections that passed AUTH_LOCAL.
+Supported since: 2.5.90.0
+Arguments: &lt;actiongt;
+ NONE Set exit action to 'none'
+ HALT Set exit action to 'halt'
+ REBOOT Set exit action to 'reboot'
+ SUSPEND Set exit action to 'suspend'
+ CUSTOM_CMD[0-9] Set exit action to 'custom command [0-9]'
+Answers:
+ OK
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 7 = Unknown logout action, or not available
+ 100 = Not authenticated
+ 200 = Too many messages
+ 999 = Unknown error
+SET_SAFE_LOGOUT_ACTION
+SET_SAFE_LOGOUT_ACTION: Tell the daemon to halt/restart/suspend
+ after everybody logs out. If only one
+ person logs out, then this is obviously
+ the same as the SET_LOGOUT_ACTION. Note
+ that SET_LOGOUT_ACTION has precedence
+ over SET_SAFE_LOGOUT_ACTION if it is set
+ to something other then NONE. If no one
+ is logged in, then the action takes effect
+ effect immediately. Only supported on
+ connections that passed AUTH_LOCAL.
+Supported since: 2.5.90.0
+Arguments: &lt;actiongt;
+ NONE Set exit action to 'none'
+ HALT Set exit action to 'halt'
+ REBOOT Set exit action to 'reboot'
+ SUSPEND Set exit action to 'suspend'
+ CUSTOM_CMD[0-9] Set exit action to 'custom command [0-9]'
+Answers:
+ OK
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 7 = Unknown logout action, or not available
+ 100 = Not authenticated
+ 200 = Too many messages
+ 999 = Unknown error
+SET_VT
+SET_VT: Change to the specified virtual terminal.
+ This is useful for logins which don't own /dev/console
+ but are still console logins. Only supported on Linux
+ currently, other places will just get ERROR 8.
+ Only supported on connections that passed AUTH_LOCAL.
+Supported since: 2.5.90.0
+Arguments: &lt;vtgt;
+Answers:
+ OK
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 8 = Virtual terminals not supported
+ 9 = Invalid virtual terminal number
+ 100 = Not authenticated
+ 200 = Too many messages
+ 999 = Unknown error
+UPDATE_CONFIG
+UPDATE_CONFIG: Tell the daemon to re-read a key from the 
+ GDM configuration file. Any user can request
+ that values are re-read but the daemon will
+ only do so if the file has been modified
+ since GDM first read the file. Only users
+ who can change the GDM configuration file
+ (normally writable only by the root user) can
+ actually modify the GDM configuration. This
+ command is useful to cause the GDM to update
+ itself to recognize a change made to the GDM
+ configuration file by the root user.
+
+ Starting with version 2.13.0.0, all GDM keys are
+ supported except for the following:
+
+ daemon/PidFile
+ daemon/ConsoleNotify
+ daemon/User
+ daemon/Group
+ daemon/LogDir
+ daemon/ServAuthDir
+ daemon/UserAuthDir
+ daemon/UserAuthFile
+ daemon/UserAuthFBDir
+
+ GDM also supports the following Psuedokeys:
+
+ xdmcp/PARAMETERS (2.3.90.2) updates the following:
+ xdmcp/MaxPending
+ xdmcp/MaxSessions
+ xdmcp/MaxWait
+ xdmcp/DisplaysPerHost
+ xdmcp/HonorIndirect
+ xdmcp/MaxPendingIndirect
+ xdmcp/MaxWaitIndirect
+ xdmcp/PingIntervalSeconds (only affects new connections)
+
+ xservers/PARAMETERS (2.13.0.4) updates the following:
+ all [server-foo] sections.
+
+ Supported keys for previous versions of GDM:
+
+ security/AllowRoot (2.3.90.2)
+ security/AllowRemoteRoot (2.3.90.2)
+ security/AllowRemoteAutoLogin (2.3.90.2)
+ security/RetryDelay (2.3.90.2)
+ security/DisallowTCP (2.4.2.0)
+ daemon/Greeter (2.3.90.2)
+ daemon/RemoteGreeter (2.3.90.2)
+ xdmcp/Enable (2.3.90.2)
+ xdmcp/Port (2.3.90.2)
+ daemon/TimedLogin (2.3.90.3)
+ daemon/TimedLoginEnable (2.3.90.3)
+ daemon/TimedLoginDelay (2.3.90.3)
+ greeter/SystemMenu (2.3.90.3)
+ greeter/ConfigAvailable (2.3.90.3)
+ greeter/ChooserButton (2.4.2.0)
+ greeter/SoundOnLoginFile (2.5.90.0)
+ daemon/AddGtkModules (2.5.90.0)
+ daemon/GtkModulesList (2.5.90.0)
+Supported since: 2.3.90.2
+Arguments: &lt;keygt;
+ &lt;keygt; is just the base part of the key such as
+ "security/AllowRemoteRoot"
+Answers:
+ OK
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 0 = Not implemented
+ 50 = Unsupported key
+ 200 = Too many messages
+ 999 = Unknown error
+VERSION
+VERSION: Query GDM version
+Supported since: 2.2.4.0
+Arguments: None
+Answers:
+ GDM &lt;gdm versiongt;
+ ERROR &lt;err numbergt; &lt;english error descriptiongt;
+ 200 = Too many messages
+ 999 = Unknown error
+GDM Commands
+GDM User Commands
+The GDM package provides the following different commands in
+
+The
+
+-x, --xnest=STRING
+Nested X server command line, default is defined by the
+-o, --xnest-extra-options=OPTIONS
+Extra options for nested X server, default is no options.
+-n, --no-query
+Just run nested X server, no query (no chooser)
+-d, --direct
+Do direct query instead of indirect (chooser)
+-B, --broadcast
+Run broadcast instead of indirect (chooser)
+-b, --background
+Run in background
+--no-gdm-check
+Don't check for running GDM
+
+The
+Starting a flexible X display will normally lock the current session with a screensaver and will redisplay the GDM login screen so a second user can log in. This feature is only available on systems that support virtual terminals and have them enabled. This feature is useful if you are logged in as user A, and user B wants to log in quickly but user A does not wish to log out. The X server takes care of the virtual terminal switching so it works transparently. If there is more than one running display defined with flexible=true, then the user is shown a dialog that displays the currently running sessions. The user can then pick which session to continue and will normally have to enter the password to unlock the screen.
+Nested displays works on systems that do not support virtual terminals. This option starts a flexible display in a window in the current session. This does not lock the current session, so is not as secure as a flexible server started via virtual terminals.
+The
+In addition to the following options,
+-c, --command=COMMAND
+Send the specified protocol command to GDM
+-n, --xnest
+Start a flexible X display in Nested mode
+-l, --no-lock
+Do not lock current screen
+-d, --debug
+Turns on debugging output which gets sent to syslog. Same as turning on debug in the configuration file.
+-a, --authenticate
+Authenticate before running --command
+-s, --startnew
+Starts a new flexible display without displaying a dialog asking the user if they wish to continue any existing sessions.
+
+
+This program is designed to manage multiple simultaneous requests and tries to avoid flooding the daemon with requests. If the sockets connection is busy, it will sleep and retry a certain number of times that can be tuned with the -s and -t options.
+-a display=server
+Add a new display configuration, leaving it in the DISPLAY_CONFIG state. For example,
+The display will not actually be started until the display is released by calling
+-r
+Release (run) all displays waiting in the DISPLAY_CONFIG state.
+-d display
+Delete a display, killing the X server and purging the display configuration. For example, "-d 3".
+-l [pattern]
+List displays via the ATTACHED_SERVERS
+-v
+Verbose mode. Prints diagnostic messages. to GDM.
+-b
+Background mode. Fork child to do the work and return immediately.
+-t RETRY
+If the daemon socket is busy,
+-s SLEEP
+If the daemon socket is busy,
+
+Allows the user to select an image that will be used as the user's photo by GDM's face browser, if enabled by GDM. The selected file is stored as
+
+
+GDM Root User Commands
+The GDM package provides the following different commands in
+
+The
+--help
+Gives a brief overview of the command line options.
+--nodaemon
+If this option is specified, then GDM does not fork into the background when run. You can also use a single-dash version, "-nodaemon" for compatibility with other display managers.
+--no-console
+Tell the daemon that it should not run anything on the console. This means that none of the attached servers from the
+--config=CONFIGFILE
+Specify an alternative configuration file.
+--preserve-ld-vars
+When clearing the environment internally, preserve all variables starting with LD_. This is mostly for debugging purposes.
+--version
+Print the version of the GDM daemon.
+--wait-for-go
+If started with this option, gdm will init, but only start the first attached display and then wait for a GO message in the fifo protocol. No greeter will be shown until the GO message is sent. Also flexiserver requests will be denied and XDMCP will not be started until GO is given. This is useful for initialization scripts which wish to start X early, but where you don't yet want the user to start logging in. So the script would send the GO to the fifo once it is ready and GDM will then continue. This functionality was added in version 2.5.90.0.
+
+
+
+
+
+
+
+
+GDM Internal Commands
+The GDM package provides the following different commands in
+
+The
+
+The
+--xdmaddress=SOCKET
+Socket for XDM communication.
+--clientaddress=ADDRESS
+Client address to return in response to XDM. This option is for running gdmchooser with XDM, and is not used within GDM.
+--connectionType=TYPE
+Connection type to return in response to XDM. This option is for running gdmchooser with XDM, and is not used within GDM.
+gdm-ssh-session
+The
+Themed Greeter
+This section describes the creation of themes for the Themed Greeter. For examples including screenshots, see the standard installed themes and the themes from
+Theme Overview
+GDM Themes can be created by creating an XML file that follows the specification in gui/greeter/greeter.dtd. Theme files are stored in the directory
+[GdmGreeterTheme]
+Encoding=UTF-8
+Greeter=circles.xml
+Name=Circles
+Description=Theme with blue circles
+Author=Bond, James Bond
+Copyright=(c) 2002 Bond, James Bond
+Screenshot=screenshot.png
+The Name, Description, Author and Copyright fields can be translated just like the other
+Once a theme is installed, it can be tested with the
+gdmthemetester xdmcp circles
+When developing a theme, make sure to test all the environments, and make sure to test how the caps lock warning looks by pressing the caps lock key. Running
+Once a theme has been fully tested, then make a tarball that contains the directory as it would be insatlled to the
+Detailed Description of Theme XML format
+greeter tag
+The GDM theme format is specified in XML format contained within a &lt;greetergt; tag. You may specify a GTK+ theme to be used with this theme by using the gtk-theme element in the greeter tag as in the following example.
+&lt;?xml version="1.0" encoding="UTF-8"?gt;
+&lt;!DOCTYPE greeter SYSTEM "greeter.dtd"gt;
+&lt;greeter gtk-theme="Crux"gt;
+[...]
+&lt;/greetergt;
+Contained within the greeter tag can be the nodes described in the next sections of this document. Some of these nodes are containers (box nodes, rect item nodes) which can be used to organize how to display the nodes that the user sees and interacts with (such as button, pixmap and entry item nodes).
+Box Nodes
+Box nodes are container nodes for item nodes. Box nodes are specified as follows:
+If the box is homogeneous then the children are allocated equal amount of space.
+The "min-width" must be specified in pixels. Obviously there is also a corresponding "min-height" property as well.
+Fixed Nodes
+Fixed is a container that has its children scattered about laid out with precise coordinates. The size of this container is the biggest rectangle that contains all the children. Fixed has no extra properties and so you just use:
+The "toplevel" node is really just like a fixed node.
+Item Nodes
+A GDM Theme is created by specifying a hierarchy of item and box nodes. Item nodes can have the following value for "type":
+button
+A button field. This field uses a GTK+ button. It is also possible to make a "rect" item act like a button by setting its button element to true. However it is better to use GTK+ buttons in GDM themes since these are accessible to users with disabilities. Also, GTK+ buttons can be themed. This feature is supported in GDM 2.14.6 and later.
+entry
+Text entry field.
+label
+A text label. Must have a "text" node to specify the text.
+list
+A face browser widget. Only useful if the face browser is enabled via the configuration.
+pixmap
+An pixmap image in a format that gdk-pixbuf supports like PNG, JPEG, Tiff, etc...)
+rect
+Rectangle.
+svg
+Scaled Vector Graphic image.
+For example:
+Entry items can have id values as follows:
+user-pw-entry
+Entry field for userid and password entry. This is the field used for responses for the PAM/GDM questions (Username, Password, etc..).
+List items by default display as lists, but the combo="true" attribute can be used to specify combo box style (combo style supported since GDM 2.16.2). Some predefined lists may be included in a theme by using the following id values. Customized lists may also be defined, which are explained below.
+session
+A list of available sessions, which allows the user to pick the session to use. Supported since GDM 2.16.2.
+language
+A list of available languages, which allows the user to pick the language to use. Supported since GDM 2.16.2.
+userlist
+A Face Browser list, so that users can pick their username by clicking on this instead of typing. This obviously exposes the usernames to viewers of the login screen, and is not recommended for users who feel that this reduces security. The face browser does not support combo box style.
+userlist-rect
+This id can be specified for the &lt;rectgt; object containing the userlist and if the userlist is empty then this rectangle will not be shown. This allows the theme to define something like an area with a different color and/or alpha to surround the userlist, but only if there are users to display. Supported since 2.16.2.
+Furthermore, you can have an arbitrary id (I'd recommend starting the id with 'custom' not to conflict with future additions to this spec) and ask extra information of the user. See the section 'Custom Widgetry'
+Label items can have id values as follows:
+clock
+Label that displays the date and time.
+pam-prompt
+Label that displays the PAM prompt. This is the prompt that PAM uses to ask for username, password, etc...
+pam-error
+Label that displayst PAM/GDM error messages. Such as when user can't log in.
+pam-error-logo
+An image that will be displayed only when a pam-error message is being displayed. This is useful for displaying an "Attention" icon, for example. This feature is supported in GDM 2.14.6 and later.
+pam-message
+Label that displays the PAM message. These are messages that PAM/GDM gives about state of the account, help about the prompts and other information.
+timed-label
+Label that displays timed login information.
+Rectangles can have id values as follows:
+caps-lock-warning
+Displays an icon that shows if the CAPS LOCK key is depressed. This rectangle will be hidden/shown appropriately
+If an item is of type rect, the item can be a button. Buttons must also include a "button" value as follows:
+Possible values for button ids are as follows.
+chooser_button
+Runs the XDMCP chooser.
+config_button
+Runs the GDM configuration application.
+custom_cmd_button[0-9]
+Runs the
+disconnect_button
+Disconnect from remote session.
+language_button
+Displays the language selection dialog.
+halt_button
+Halt (shuts down) the system.
+reboot_button
+Restart the system.
+session_button
+List and select from available sessions.
+suspend_button
+Suspend the system.
+system_button
+Perform halt/restart/suspend/etc. options (if allowed by GDM configuration). Also allows user to run configurator if user enters root password (again if allowed by GDM configuration). This is usually now labeled Actions, and referred to as the Actions menu.
+By default, the GDM login screen will disappear after authentication. This can result in flicker between the login screen and the session. The "background" property allows users to specify what elements of the theme are the background image. When used, this will cause GDM to remove all non-background items from the display and render the remaining "background" items to the root window. This can be used to create a smooth transition between the login screen and the session. For example, if the GDM theme and the session use the same background, then this will make the background apear seamless.
+Item nodes may specify a "background" property which can be set to "true" or "false" (not setting this property is equivalent to "false"), as follows:
+&lt;item type="rect" background="true"gt;
+ &lt;normal file="background.svg"/gt;
+ &lt;pos x="0" y="0" width="100%" height="-75"/gt;
+&lt;/itemgt;
+If no item node has "background" property set, then the background is not modified when greeter exits.
+To use a different background for login transition than the one used for login, the theme should specify two item nodes (which could contain pixmaps or svg images, for example). The item which corresponds to the greeter background should not have the "background" property while the item which corresponds to the transition background should have the "background" property. For instance :
+&lt;?xml version="1.0" encoding="UTF-8"?gt;
+&lt;!DOCTYPE greeter SYSTEM "greeter.dtd"gt;
+ &lt;greetergt;
+
+ &lt;item type="rect" background="true"gt;
+ &lt;normal file="background_for_login.svg"/gt;
+ &lt;pos x="0" y="0" width="100%" height="100%"/gt;
+ &lt;/itemgt;
+ &lt;item type="rect"gt;
+ &lt;normal file="background_for_greeter.svg"/gt;
+ &lt;pos x="0" y="0" width="100%" height="100%"/gt;
+ &lt;/itemgt;
+[...]
+&lt;/greetergt;
+Position Node
+Each item can specify its position and size via the "pos" node. For example:
+Both position and size can be given in percent and it will be taken as the percentage of the size of the current container. For toplevel items it's the percentage of the whole screen.
+For x and y, you can also specify a negative position which means position from the right or bottom edge. But this only applies with absolute coordinates. With percentage you can specify negative position and it will be still from the same edge.
+The position also specifies the anchor of the item, this can be "n" "ne" "e" "se" "s" "sw" "w" and "nw" or "center" which stand for the different edges/corners or "center" for center. For example:
+If the item contains a box, you can specify width and height to be "box" to mean that they are supposed to be the width and height of the box, that is the items in the box plus the padding.
+If the item contains an SVG image, you can specify width and height to be "scale" to mean that the SVG image should be scaled to fit the requested area.
+You can also specify an "expand" property to either be "true" or false. If true then the child will be expanded in the box as much as possible (that is it will be given more space if available).
+There are two extra properties you can specify (as of 2.4.4.3) for labels (and labels only). The first is "max-width" which will specify the maximum width of the label in pixels. And the second is "max-screen-percent-width" which specifies the maximum percentage of the screen width that the label can occupy. By default no label will occupy more then 90% of the screen by width. An example may be:
+Show Node
+Some items may only display in certain modes, like when doing a remote display. Multiple values can be specified and must be separated with commas. The following values are possible:
+
+
+
+
+
+
+For example:
+You can also specify the "type" value to indicate that certain items should only be displayed if the type is true. Valid values include the following:
+
+
+
+
+
+
+
+
+For example:
+Alternatively, you can specify a "min-screen-width" or "min-screen-height" value to indicate that certain items should only be displayed if the screen resolution is the at least the given required size.
+For example:
+Note that if SystemMenu is off then the halt, restart, suspend, chooser and config choices will not be shown, so this is a global toggle for them all. See some of the standard themes for how the show modes are used.
+Normal/Active/Prelight Nodes
+Depending on the item type (except for userlist - refer to Color node below), it can specify its color, font, or image via the following tags:
+
+
+
+When item is "rect" (alpha can be omitted and defaults to 0.0):
+When item is "label"
+When the item type is "pixmap" or "SVG", then the normal, active, and prelight tags specify the images to use as follows:
+Note that relative pathnames are assumed to be in the same directory as the theme
+Note that alternative image file can be specified using the altfile[n] property. GDM will use the last valid image filename specified. For example:
+Face Browser Icon/Label Color Nodes
+If the item type is of userlist, then the background color for the icon and label can be set separately via the the following tag:
+&lt;color iconcolor="#dddddd" labelcolor="#ffffff"/gt;
+Text Node
+Text tags are used by labels. They can be used to display localized text as follows (if the "xml:lang" attribute is omitted, the C locale is assumed):
+You can include pango markup in the text nodes for labels, however you must encode it. So for example to have the label of "foolt;supgt;barlt;/supgt;", you must type:
+Text nodes can contain the following special character sequences which will be translated as follows:
+%% - A literal % character
+%c - Clock time. Only labels with the "clock" id will update automatically every second. Other labels will contain a static timestamp.
+%d - Display name (DISPLAY environment variable)
+%h - Hostname (gethostname output)
+%m - Machine name (uname.machine output)
+%n - Node name (uname.nodename output)
+%o - Domain name (getdomainname output)
+%r - Release name (uname.release output)
+%s - System name (uname.sysname output)
+%t - Current timed delay value from configuration file (0 if off) followed by the word "seconds" if value is greater than 1 or the word "second" if the value is 1. This character sequence is intended to be only used internally to display the "timed-label" message, which is automatically updated every second.
+%u - Timed username value from configuration file (empty if off) This character sequence is intended to be only used internally to display the "timed-label" message, which is automatically updated every second.
+\
+ - Carriage return
+_ - An underscore causes the following character to be underlined. If it precedes a % character sequence, the string that replaces the character sequence is underlined.
+Stock node
+Certain common localized labels can be specified via the stock tags. The "text" tag is ignored if the "stock" tag is used. You should really use the stock labels rather then just putting all the translations into the themes. This gives faster load times and likely better translations. The following values are valid:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+For example:
+Custom Widgetry
+Currently there is one item which is customizable and this is the list item. If you need to ask the user extra things, such as to pick from a list of places to log into, or set of custom login sessions you can setup the list item and add listitem children that describe the choices. Each listitem must have an id and a text child. The choice will be recorded in the file
+For example suppose we are on display :0,
+&lt;item type="list" id="custom-config"gt;
+&lt;pos anchor="nw" x="1" y="1" height="200" width="100"gt;
+&lt;listitem id="foo"gt;
+&lt;textgt;Foolt;/textgt;
+&lt;/listitemgt;
+&lt;listitem id="bar"gt;
+&lt;textgt;Barlt;/textgt;
+&lt;/listitemgt;
+&lt;/itemgt;
+Then if the user chooses 'Foo' then
+Accessibility
+GDM supports "Accessible Login", allowing users to log into their desktop session even if they cannot easily use the screen, mouse, or keyboard in the usual way. Accessible Technology (AT) programs such as
+Accessibility is enabled by specifying the "GTK+ Greeter" in the "Local" tab for the console display and specifying the "GTK+ Greeter" in the "Remote" tab for remote displays. Or you can modify the
+The GDM greeter programs support the ability to launch AT's at login time via configurable "gestures". These gestures can be defined to be standard keyboard hotkeys, switch device event, or mouse motion events. When using the "GTK+ Greeter", the user may also change the visual appearance of the login UI. For example, to use a higher-contrast color scheme for better visibility.
+Note that
+Accessibility Configuration
+In order to enable Accessible Login, the system administrator must make some changes to the default login configuration by manually modifying three human-readable configuration files, stored in the GDM Custom Configuration File, AccessKeyMouseEvents File, and AccessDwellMouseEvents File. The AccessKeyMouseEvents and AccessDwellMouseEvents contain reasonable default gestures for launching
+Accessibile Theming
+If using the "GTK+ Greeter" users can easily switch the color and contrast scheme of the dialog. To do this, ensure the
+GtkThemesToAllow=HighContrast,HighContrastInverse
+If using the "Themed Greeter" there may be suitable GDM themes available that provide needed color and contrast schemes, but these are not yet shipped with the GDM program. Some distributions may ship such themes. There is not yet any mechanism to switch between themes in the "Themed Greeter", so if an accessible theme is required by one user, then all users would need to use the same theme.
+AT Program Support
+To enable user to launch AT such as the
+GtkModulesList=gail:atk-bridge:/usr/lib/gtk-2.0/modules/libdwellmouselistener:/usr/lib/gtk-2.0/modules/libkeymouselistener
+This causes all GDM GUI programs to be run with the appropriate GTK modules for launching AT programs. The use of assistive technologies and the atk-bridge module requires the registry daemon,
+System administrators may wish to load only the minimum subset of these modules which is required to support their user base. The "libkeymouselistener" provides hotkey and switch gesture support while the "libdwellmouselistener" provides mouse motion gesture support. If your user base only requires one or the other, it is only necessary to include the gesture listener that is needed. Also, some AT programs may not require gail or atk-bridge. If you find the AT programs you need works fine without including these, then they may be omitted. Note that some AT programs work with a reduced feature set if gail and/or atk-bridge are not present. However, for general accessibility use, including all four is suitable.
+Once "keymouselistener" and/or "dwellmouselistener" have been added to the
+The AccessKeyMouseEvents file controls the keymouselistener Gesture Listener and is used to define key-press, mouse button, or XInput device sequences that can be used to launch applications needed for accessibility. In order to reduce the likelihood of unintentional launch, these "gestures" may be associated with multiple switch presses and/or minimum durations. Note that the XKB extension is needed for key gestures to work, so you may need to add +xkb to your X server command line for gestures to work properly. The X server command line is specified in the GDM configuration file in the
+The DwellKeyMouseEvents file controls the dwellmouselistner and supports gestures that involve the motion of a pointing device such as the system mouse of an alternative pointing device such as a head pointer or trackball may also be defined. Motion gestures are defined as "crossing events" into and out of the login dialog window. If the "dwellmouselistener" gesture listener is loaded, then alternative pointing devices are temporarily "latched" to the core pointer, such that motion from alternative devices results in movement of the onscreen pointer. All gestures are specified by the same syntax; that is, there is no distinction between a "core mouse" gesture and motion from an alternate input device.
+On some operating systems, it is necessary to make sure that the GDM user is a member of the "audio" group for AT programs that require audio output (such as text-to-speech) to be functional.
+Currently GDM does not remember what accessible technology programs have been started when switching applications. So if the user switches between the login program and the chooser, for example, then it is necessary for the user to redo the gesture. Users may need to also set up their default session so that the assistive technologies required are started automatically (or have appropriate key-bindings defined to start them) after the user session has started.
+AT Troubleshooting
+There are some common issues that cause users to have problems getting the gesture listeners to work. It is recommended that people use GDM version 2.18.0 or later for best results.
+Some older X servers have a bug which causes detectable autorepeat to fail when XEVIE is enabled (which happens when atk-bridge is included as a GTK Module). This bug causes key gestures with a duration greater than 0 to always fail. A workaround is to simply redefine all key gestures so they have zero length duration, or upgrade your X server.
+Some versions of
+If you see an hourglass cursor when you complete a gesture but the program does not start, then this indicates that the gesture was received, but that there was a problem starting the program. Most likely the issue may be the lack of a writable gdm home directory.
+Also note that some input devices require X server configuration before GDM will recognize them.
+Accessibility Login Sound Configuration
+By default, GDM requires a media application such as "play" to be present to play sounds for successful or failed login. GDM defaults the location of this application to
+Solaris Specific Features
+Using GDM on Solaris
+GDM is not yet the default login program on Solaris. If you wish to switch to using GDM, then you need to turn off CDE login and start the GDM service. Note that turning off or disabiling CDE login will cause any running sessions to immediately exit, and any unsaved data will be lost. Only run these commands if you are sure there is no unsaved data in your running sessions. It would be best to run these commands from console login, or a Failsafe Terminal rather than from a running GUI session. The first step is to run the following command to see if CDE login is running as an SMF service.
+svcs cde-login
+If the
+svcadm disable cde-login
+If the
+/usr/dt/config/dtconfig -d
+Either reboot, or kill any running dtlogin processes.
+At this point you will be presented with a console login. Login as root, and run the following command. If on Solaris 10 the servicename is "gdm2-login", if on Solaris Nevada the servicename is "gdm".
+svcadm enable servicename
+Solaris Configuration
+On Solaris, the following configuration is recommended. This turns on IPv6 and also turns on PreFetch for performance benefit.
+Configuring GDM with the "--with-post-path=/usr/openwin/bin" on Solaris is recommended for accessing X server programs.
+Solaris /etc/logindevperm
+GDM supports /etc/logindevperm, but only on Solaris 10 and higher. Refer to the logindevperm.4 man page for more information.
+To make /etc/logindevperm functionality work on Solaris 9 or earlier you would have to hack the GDM PreSession and PostSession script to chmod the device permissions directly. In other words, if /etc/logindevperm had a listing like this:
+/dev/console 0600 /dev/sound/* # audio devices
+Then the PreSession script would need to be modified to chown /dev/console to the user:group who is logging into the console and ensure whatever permissions is specified in /etc/logindevperm (0600 for the line above). Then in the PostSession script chmod the device back to root:root and ensure 0600 this time (do not use the value in the /etc/logindevperm file). Linux uses a different mechanism for managing device permissions, so this extra scripting is not needed.
+Solaris Automatic Login
+Automatic login does not work on Solaris 10 and earlier because PAM is not configured to support this feature by default. Automatic login is a GDM feature that is not enabled by default, so you would only notice this problem if you try to make use of it. Turning this feature on causes your computer to login to a specified username on startup without asking for username and password. This is an insecure way to set up your computer.
+If using Solaris 10 or lower, then you need to compile the pam_allow.c code provided with the GDM release and install it to /usr/lib/security (or provide the full path in /etc/pam.conf) and ensure it is owned by uid 0 and not group or world writable.
+The following are reasonable pam.conf values for turning on automatic login in GDM. Make sure to read the PAM documentation (e.g. pam.d/pam.conf man page) and be comfortable with the security implications of any changes you intend to make to your configuration.
+gdm-autologin auth required pam_unix_cred.so.1
+ gdm-autologin auth sufficient pam_allow.so.1
+ gdm-autologin account sufficient pam_allow.so.1
+ gdm-autologin session sufficient pam_allow.so.1
+ gdm-autologin password sufficient pam_allow.so.1
+The above setup will cause no lastlog entry to be generated. If a lastlog entry is desired, then use the following for session:
+gdm-autologin session required pam_unix_session.so.1
+Solaris RBAC support for Shutdown, Reboot, and Suspend
+Starting with GDM 2.19, GDM supports RBAC (Role Based Access Control) for enabling the system commands (Shutdown, Reboot, Suspend, etc.) that appear in the greeter system menu and via the
+On Solaris GDM has the following value specified for the
+HALT:solaris.system.shutdown;REBOOT:solaris.system.shutdown
+This will cause the SHUTDOWN and REBOOT features to only be enabled for users who have RBAC authority. In other words, those users who have the "solaris.system.shutdown" authorization name specified. The GDM greeter will only display these options if the gdm user (specified in the
+Therefore, add the "solaris.system.shutdown" authorization name to the
+Note that on Solaris there are two programs that can be used to shutdown the system. These are GDM and
+If GDM is being used as the login program and the user has RBAC permissions to shutdown the machine (or RBAC support is disabled in GDM), then the GNOME panel "Shut Down.." option will use GDM to shutdown, reboot, and suspend the machine. This is a bit nicer than using
+If GDM is not being used to manage shutdown, reboot, and suspend; then the GNOME panel uses
+Other Solaris Features
+GDM supports a few features specific to Solaris, as follows:
+GDM supports Solaris Auditing if running on Solaris 10 or higher. GDM should not be used if auditing is needed and running Solaris 9 or older.
+GDM supports a security feature which causes the X server to run as the user instead of as the root user. GDM must be using PAM for this feature to be enabled, which is the normal case for Solaris. This second feature has the side-effect of causing the X server to always restart between sessions, which disables the AlwaysRestartServer configuration option.
+Solaris supports the
+Example Configurations
+Defining Custom Commands
+Suppose you want to add a custom command to the GDM menu that will give you the opportunity to boot into other operating system such as Windoze. Just add the following options into the
+Note, that besides being able to customise this option to reboot into different operating systems you can also use it to define your own custom behaviours that you wish to run from the GDM menu. Suppose you want to give users the opportunity to run system update scripts from the login screen. Add the following options into the
+Both custom commands could be defined as follows.
+There can be up to 10 custom commands numbered 0-9.
+Troubleshooting
+This section discusses helpful tips for getting GDM working. In general, if you have a problem using GDM, you can submit a bug to the "gdm" category in
+If GDM is failing to work properly, it is always a good idea to include debug information. Use the
+You should not leave debug on after collecting data. It will clutter your syslog and slow system performance.
+GDM Will Not Start
+There are a many problems that can cause GDM to fail to start, but this section will discuss a few common problems and how to approach tracking down a problem with GDM starting. Some problems will cause GDM to respond with an error message or dialog when it tries to start, but it can be difficult to track down problems when GDM fails silently.
+First make sure that the X server is configured properly. The GDM configuration file contains a command in the [server-Standard] section that is used for starting the X server. Verify that this command works on your system. Running this command from the console should start the X server. If it fails, then the problem is likely with your X server configuration. Refer to your X server error log for an idea of what the problem may be. The problem may also be that your X server requires different command-line options. If so, then modify the X server command in the GDM configuration file so that it is correct for your system.
+Another common problem is that the GDM greeter program is having trouble starting. This can happen, for example, if GDM cannot find a needed library or other resource. Try starting the X server and a terminal program, set the shell environment variable DOING_GDM_DEVELOPMENT=1 and run
+Also make sure that the
+GDM Will Not Access User Settings
+GDM saves user settings, such as your default session and default language, in the
+License
+This program is free software; you can redistribute it and/or modify it under the terms of the
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+A copy of the
+translator-credits

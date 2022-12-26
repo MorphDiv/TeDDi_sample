@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -8,436 +8,332 @@
 # genre_narrow:	NA
 # writing_system:	Latn
 # special_characters:	NA
-# short_description:	Ubuntu
-# source:	https://object.pouta.csc.fi/OPUS-Ubuntu/v14.10/raw/en.zip
-# copyright_short:	http://opus.nlpl.eu/Ubuntu.php
-# copyright_long:	http://opus.nlpl.eu/Ubuntu.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
 # sample_type:	whole
 # comments:	NA
 
-Usage: quilt [--trace[=verbose]] [--quiltrc=XX] command [-h] ...
-quilt --version
-Commands are:
-Global options:
-
---trace
- Runs the command in bash trace mode (-x). For internal debugging.
-
---quiltrc file
- Use the specified configuration file instead of ~/.quiltrc (or
- /etc/quilt.quiltrc if ~/.quiltrc does not exist). See the pdf
- documentation for details about its possible contents.
-
---version
- Print the version number and exit immediately.
-Usage: quilt add [-p patch] {file} ...\
-Add one or more files to the topmost or named patch. Files must be
-added to the patch before being modified. Files that are modified by
-patches already applied on top of the specified patch cannot be added.
-
--p patch
- Patch to add files to.
-File \\`%s' is located below \\`%s'\
-Patch %s is not in series\
-Patch %s is not applied\
-No patches applied\
-File %s is already in patch %s\
-File %s modified by patch %s\
-Cannot add symbolic link %s\
-Failed to back up file %s\
-File %s added to patch %s\
-Usage: quilt annotate {file}\
-Print an annotated listing of the specified file showing which
-patches modify which lines.
-Usage: quilt applied [patch]\
-Print a list of applied patches, or all patches up to and including the
-specified patch in the file series.
-Patch is not applied\
-Usage: quilt delete [patch | -n]\
-Remove the specified or topmost patch from the series file. If the
-patch is applied, quilt will attempt to remove it first. (Only the
-topmost patch can be removed right now.)
-
--n Delete the next patch after topmost, rather than the specified
- or topmost patch.
-No next patch\
-Patch %s is currently applied\
-Removed patch %s\
-Failed to remove patch %s\
-Usage: quilt diff [-p n] [-u|-U num|-c|-C num] [--combine patch|-z] [-R] [-P patch] [--snapshot] [--diff=utility] [--no-timestamps] [--no-index] [--sort] [--color] [file ...]\
-Produces a diff of the specified file(s) in the topmost or specified
-patch. If no files are specified, all files that are modified are
-included.
-
--p n Create a -p n style patch (-p0 or -p1 are supported).
-
--u, -U num, -c, -C num
- Create a unified diff (-u, -U) with num lines of context. Create
- a context diff (-c, -C) with num lines of context. The number of
- context lines defaults to 3.
-
---no-timestamps
- Do not include file timestamps in patch headers.
-
---no-index
- Do not output Index: lines.
-
--z Write to standard output the changes that have been made
- relative to the topmost or specified patch.
-
--R Create a reverse diff.
-
--P patch
- Create a diff for the specified patch. (Defaults to the topmost
- patch.)
-
---combine patch
- Create a combined diff for all patches between this patch and
- the patch specified with -P. A patch name of \\"-\\" is equivalent
- to specifying the first applied patch.
-
---snapshot
- Diff against snapshot (see \\`quilt snapshot -h').
-
---diff=utility
- Use the specified utility for generating the diff. The utility
- is invoked with the original and new file name as arguments.
-
---color[=always|auto|never]
- Use syntax coloring.
-
---sort Sort files by their name instead of preserving the original order.
-Options \\`-c patch', \\`--snapshot', and \\`-z' cannot be combined.\
-Cannot diff patches with -p%s, please specify -p0 or -p1 instead\
-Patch %s not applied before patch %s\
-Failed to copy files to temporary directory\
-Failed to patch temporary files\
-File %s is not being modified\
-Diff failed, aborting\
-More recent patches modify files in patch %s\
-Usage: quilt edit file ...\
-Edit the specified file(s) in \\$EDITOR (%s) after adding it (them) to
-the topmost patch.
-Usage: quilt files [-v] [-a] [-l] [--combine patch] [patch]\
-Print the list of files that the topmost or specified patch changes.
-
--a List all files in all applied patches.
-
--l Add patch name to output.
-
--v Verbose, more user friendly output.
-
---combine patch
- Create a listing for all patches between this patch and
- the topmost applied patch. A patch name of \\"-\\" is equivalent
- to specifying the first applied patch.
-Patch %s is not in series file\
-Usage: quilt fold [-p strip-level]\
-Integrate the patch read from standard input into the topmost patch:
-After making sure that all files modified are part of the topmost
-patch, the patch is applied with the specified strip level (which
-defaults to 1).
-
--p strip-level
- The number of pathname components to strip from file names
- when applying patchfile.
-File %s may be corrupted\
-Usage: quilt fork [new_name]\
-Fork the topmost patch. Forking a patch means creating a verbatim copy
-of it under a new name, and use that new name instead of the original
-one in the current series. This is useful when a patch has to be
-modified, but the original version of it should be preserved, e.g.
-because it is used in another series, or for the history. A typical
-sequence of commands would be: fork, edit, refresh.
-
-If new_name is missing, the name of the forked patch will be the current
-patch name, followed by \\"-2\\". If the patch name already ends in a
-dash-and-number, the number is further incremented (e.g., patch.diff,
-patch-2.diff, patch-3.diff).
-Patch %s exists already, please choose a new name\
-Fork of patch %s to patch %s failed\
-Fork of patch %s created as %s\
-Usage: quilt graph [--all] [--reduce] [--lines[=num]] [--edge-labels=files] [patch]\
-Generate a dot(1) directed graph showing the dependencies between
-applied patches. A patch depends on another patch if both touch the same
-file or, with the --lines option, if their modifications overlap. Unless
-otherwise specified, the graph includes all patches that the topmost
-patch depends on.
-When a patch name is specified, instead of the topmost patch, create a
-graph for the specified patch. The graph will include all other patches
-that this patch depends on, as well as all patches that depend on this
-patch.
-
---all Generate a graph including all applied patches and their
- dependencies. (Unapplied patches are not included.)
-
---reduce
- Eliminate transitive edges from the graph.
-
---lines[=num]
- Compute dependencies by looking at the lines the patches modify.
- Unless a different num is specified, two lines of context are
- included.
-
---edge-labels=files
- Label graph edges with the file names that the adjacent patches
- modify.
-
--T ps Directly produce a PostScript output file.
-Usage: quilt grep [-h|options] {pattern}\
-Grep through the source files, recursively, skipping patches and quilt
-meta-information. If no filename argument is given, the whole source
-tree is searched. Please see the grep(1) manual page for options.
-
--h Print this help. The grep -h option can be passed after a
- double-dash (--). Search expressions that start with a dash
- can be passed after a second double-dash (-- --).
-Usage: quilt header [-a|-r|-e] [--backup] [--strip-diffstat] [--strip-trailing-whitespace] [patch]\
-Print or change the header of the topmost or specified patch.
-
--a, -r, -e
- Append to (-a) or replace (-r) the exiting patch header, or
- edit (-e) the header in \\$EDITOR (%s). If none of these options is
- given, print the patch header.
- 
---strip-diffstat
- Strip diffstat output from the header.
-
---strip-trailing-whitespace
- Strip trailing whitespace at the end of lines of the header.
-
---backup
- Create a backup copy of the old version of a patch as patch~.
-Replaced header of patch %s\
-Appended text to header of patch %s\
-Usage: quilt import [-f] [-p num] [-n patch] patchfile ...\
-Import external patches.
-
--p num
- Number of directory levels to strip when applying (default=1)
-
--n patch
- Patch filename to use inside quilt. This option can only be
- used when importing a single patch.
-
--f Overwite/update existing patches.
-Option \\`-n' can only be used when importing a single patch\
-Patch %s is applied\
-Patch %s exists. Replace with -f.\
-Replacing patch %s with new version\
-Importing patch %s (stored as %s)\
-Failed to import patch %s\
-Failed to insert patch %s into file series\
-Usage: quilt mail {--mbox file|--send} [--from ...] [--to ...] [--cc ...] [--bcc ...] [--subject ...]\
-Create mail messages from all patches in the series file, and either store
-them in a mailbox file, or send them immediately. The editor is opened
-with a template for the introductory message. Please see the file
-%s for details.
-
---mbox file
- Store all messages in the specified file in mbox format. The mbox
- can later be sent using formail, for example.
-
---send
- Send the messages directly using %s.
-
---from, --subject
- The values for the From and Subject headers to use.
-
---to, --cc, --bcc
- Append a recipient to the To, Cc, or Bcc header.
-Usage: quilt new {patchname}\
-Create a new patch with the specified file name, and insert it after the
-topmost patch in the patch series file.
-Patch %s exists already\
-Failed to create patch %s\
-Patch %s is now on top\
-Usage: quilt next [patch]\
-Print the name of the next patch after the specified or topmost patch in
-the series file.
-Usage: quilt patches {file}\
-Print the list of patches that modify the specified file. (Uses a
-heuristic to determine which files are modified by unapplied patches.
-Note that this heuristic is much slower than scanning applied patches.)
-
--v Verbose, more user friendly output.
-Usage: quilt pop [-afRqv] [num|patch]\
-Remove patch(es) from the stack of applied patches. Without options,
-the topmost patch is removed. When a number is specified, remove the
-specified number of patches. When a patch name is specified, remove
-patches until the specified patch end up on top of the stack. Patch
-names may include the patches/ prefix, which means that filename
-completion can be used.
-
--a Remove all applied patches.
-
--f Force remove. The state before the patch(es) were applied will
- be restored from backup files.
-
--R Always verify if the patch removes cleanly; don't rely on
- timestamp checks.
-
--q Quiet operation.
-
--v Verbose operation.
-Patch %s does not remove cleanly (refresh it or enforce with -f)\
-Patch %s appears to be empty, removing\
-Removing patch %s\
-Patch %s needs to be refreshed first.\
-No patch removed\
-Now at patch %s\
-Usage: quilt previous [patch]\
-Print the name of the previous patch before the specified or topmost
-patch in the series file.
-Usage: quilt push [-afqv] [--leave-rejects] [num|patch]\
-Apply patch(es) from the series file. Without options, the next patch
-in the series file is applied. When a number is specified, apply the
-specified number of patches. When a patch name is specified, apply
-all patches up to and including the specified patch. Patch names may
-include the patches/ prefix, which means that filename completion can
-be used.
-
--a Apply all patches in the series file.
-
--f Force apply, even if the patch has rejects.
-
--q Quiet operation.
-
--v Verbose operation.
-
---leave-rejects
- Leave around the reject files patch produced, even if the patch
- is not actually applied.
-
---interactive
- Allow the patch utility to ask how to deal with conflicts. If
- this option is not given, the -f option will be passed to the 
- patch program.
-
---color[=always|auto|never]
- Use syntax coloring.
-Interrupted by user; patch %s was not applied.\
-Applying patch %s\
-Patch %s does not exist; applied empty patch\
-Patch %s appears to be empty; applied\
-Applied patch %s (forced; needs refresh)\
-Patch %s does not apply (enforce with -f)\
-Patch %s not found in file series\
-Patch %s is already applied\
-The topmost patch %s needs to be refreshed first.\
-File series fully applied, ends at patch %s\
-Usage: quilt refresh [-p n] [-f] [--no-timestamps] [--no-index] [--diffstat] [--sort] [--backup] [--strip-trailing-whitespace] [patch]\
-Refreshes the specified patch, or the topmost patch by default.
-Documentation that comes before the actual patch in the patch file is
-retained.
-
-It is possible to refresh patches that are not on top. If any patches
-on top of the patch to refresh modify the same files, the script aborts
-by default. Patches can still be refreshed with -f. In that case this
-script will print a warning for each shadowed file, changes by more
-recent patches will be ignored, and only changes in files that have not
-been modified by any more recent patches will end up in the specified
-patch.
-
--p n Create a -p n style patch (-p0 or -p1 supported).
-
--u, -U num, -c, -C num
- Create a unified diff (-u, -U) with num lines of context. Create
- a context diff (-c, -C) with num lines of context. The number of
- context lines defaults to 3.
-
---no-timestamps
- Do not include file timestamps in patch headers.
- 
---no-index
- Do not output Index: lines.
-
---diffstat
- Add a diffstat section to the patch header, or replace the
- existing diffstat section.
-
--f Enforce refreshing of a patch that is not on top.
-
---backup
- Create a backup copy of the old version of a patch as patch~.
-
---sort Sort files by their name instead of preserving the original order.
-
---strip-trailing-whitespace
- Strip trailing whitespace at the end of lines.
-Cannot refresh patches with -p%s, please specify -p0 or -p1 instead\
-More recent patches modify files in patch %s. Enforce refresh with -f.\
-Cannot use --strip-trailing-whitespace on a patch that has shadowed files.\
-Nothing in patch %s\
-Patch %s is unchanged\
-Refreshed patch %s\
-Usage: quilt remove [-p patch] {file} ...\
-Remove one or more files from the topmost or named patch. Files that
-are modified by patches on top of the specified patch cannot be removed.
-
--p patch
- Patch to remove files from.
-File %s is not in patch %s\
-Failed to remove file %s from patch %s\
-File %s removed from patch %s\
-Usage: quilt rename [-p patch] new_name\
-Rename the topmost or named patch.
-
--p patch
- Patch to rename.
-Patch %s exists already, please choose a different name\
-Renaming of patch %s to %s failed\
-Patch %s renamed to %s\
-Usage: quilt series [-v]\
-Print the names of all patches in the series file.
-
--v Verbose, more user friendly output.
-Usage: quilt setup [-d path-prefix] [-v] {specfile|seriesfile}\
-Initializes a source tree from an rpm spec file or a quilt series file.
-
--d optional path prefix (sub-directory).
-
--v verbose debug output.
-Directory %s exists\
-File %s exists\
-The %%prep section of %s failed; results may be incomplete\
-The -v option will show rpm's output\
-Unpacking archive %s\
-Usage: quilt snapshot [-d]\
-Take a snapshot of the current working state. After taking the snapshot,
-the tree can be modified in the usual ways, including pushing and
-popping patches. A diff against the tree at the moment of the
-snapshot can be generated with \\`quilt diff --snapshot'.
-
--d Only remove current snapshot.
-Usage: quilt top\
-Print the name of the topmost patch on the current stack of applied
-patches.
-Usage: quilt unapplied [patch]\
-Print a list of patches that are not applied, or all patches that follow
-the specified patch in the series file.
-Usage: quilt upgrade\
-Upgrade the meta-data in a working tree from an old version of quilt to the
-current version. This command is only needed when the quilt meta-data format
-has changed, and the working tree still contains old-format meta-data. In that
-case, quilt will request to run \\`quilt upgrade'.
-The quilt meta-data in %s are already in the version %s format; nothing to do\
-Converting meta-data to version %s\
-Conversion failed\
-Please remove all patches using \\`quilt pop -a' from the quilt version used to create this working tree, or remove the %s directory and apply the patches from scratch.\
-Display name '%s' contains unpaired parentheses
-Display name '%s' contains invalid characters
-Display name '%s' contains non-printable or 8-bit characters
-Delivery address '%s' is invalid
-USAGE: %s {-s|-u} section file [< replacement]
-File %s disappeared!
-Failed to rename %s to %s: %s
-The quilt meta-data in this tree has version %s, but this version of quilt can only handle meta-data formats up to and including version %s. Please pop all the patches using the version of quilt used to push them before downgrading.\
-The working tree was created by an older version of quilt. Please run 'quilt upgrade'.\
-SYNOPSIS: %s [-p num] [-n] [patch]
-%s: I'm confused.
-Warning: trailing whitespace in line %s of %s
-Warning: trailing whitespace in lines %s of %s
-Removing trailing whitespace from line %s of %s
-Removing trailing whitespace from lines %s of %s
-Renaming %s to %s: %s
+GNU Info Pages
+Traditional command line help (info)
+Manual Pages
+Traditional command line help (man)
+Applications
+Sections 1, 1p, 1g and 1t
+X11 Applications
+Section 1x
+OpenSSL Applications
+Section 1ssl
+Termcap Applications
+Section 1m
+Development
+Sections 3, 3o, and 3t
+POSIX Functions
+Section 3p
+POSIX Headers
+Section 0p
+BLT Functions
+Section 3blt
+Network Audio Sound Functions
+Section 3nas
+System V Form/Menu Functions
+Sections 3form and 3menu
+TIFF Functions
+Section 3tiff
+OpenSSL Functions
+Section 3ssl
+Readline Functions
+Section 3readline
+Curses Functions
+Sections 3ncurses and 3curses
+FORTRAN Functions
+Section 3f
+Perl Functions
+Sections 3pm and 3perl
+Qt Functions
+Section 3qt
+X11 Functions
+Sections 3x and 3X11
+System Calls
+Section 2
+Kernel Routines
+Section 9
+Hardware Devices
+Section 4
+X11 Devices
+Section 4x
+Configuration Files
+Section 5
+X11 Configuration
+Section 5x
+OpenSSL Configuration
+Section 5ssl
+Games
+Section 6
+X11 Games
+Section 6x
+Overviews
+Sections 7 and 7gcc
+X11 Overviews
+Section 7x
+OpenSSL Overviews
+Section 7ssl
+System Administration
+Sections 8 and 8l
+Desktop
+Welcome to the GNOME Help Browser
+Accessibility
+Learn more about making your system more accessible for a range of disabilities
+GNOME Applications
+Generic applications for the GNOME environment
+KDE Applications
+Generic applications for the KDE environment
+Sound & Video
+Applications related to audio and video
+Video
+TV
+Sound & Video Editing
+Sound
+Midi
+Mixers
+Sequencers
+Tuners
+Players
+Recorders
+Disc Burning
+Guides for getting involved in development
+Building
+Debuggers
+IDEs
+GUI Designers
+Profiling Tools
+Revision Control
+Translation Tools
+Education
+Applications that teach or aid in learning
+Art
+Construction
+Music
+Science
+Artificial Intelligence
+Astronomy
+Biology
+Chemistry
+Computer Science
+Data Visualization
+Economy
+Electricity
+Geography
+Geology
+Geoscience
+History
+Image Processing
+Literature
+Math
+Numerical Analysis
+Medical Software
+Physics
+Robotics
+Sports
+Parallel Computing
+Have some fun
+Action Games
+Adventure Games
+Arcade Games
+Board Games
+Blocks Games
+Card Games
+Kids Games
+Logic Games
+Role Playing Games
+Simulation Games
+Sports Games
+Strategy Games
+Amusement
+Graphics
+Applications for viewing and manipulating graphics
+2D Graphics
+Vector Graphics
+Raster Graphics
+3D Graphics
+Scanning
+OCR
+Photography
+Publishing
+Viewer
+Internet
+Guides and manuals for applications that connect to the outside world
+Dialup
+Instant Messaging
+Chat
+IRC Clients
+File Transfer
+Ham Radio
+News
+P2P
+Remote Access
+Telephony
+Video Conference
+Web Browser
+Web Development
+Office Applications
+Office applications
+Calendar
+Contact Management
+Databases
+Dictionaries
+Charting Tools
+Email Tools
+Financial Tools
+Flow Charting Tools
+PDA Communication
+Project Management Tools
+Presentation Tools
+Spreadsheet Tools
+Word Processors
+Settings
+Settings users can manipulate to make their environment more pleasant
+Desktop Settings
+Printing
+Terminal Emulator
+System
+Tools to help you manage your computer
+Emulator
+Engineering
+Package Manager
+File Tools
+File Manager
+Hardware Settings
+Filesystem
+Monitor
+Security
+Utilities
+Utilities to help you get work done
+Calculator
+Clocks
+Text Editors
+Telephony Tools
+Archiving Tools
+Compression Tools
+Electronics
+Other Documentation
+Miscellaneous Documentation
+Text Tools
+Licenses
+GTK
+Qt
+Motif
+Java
+Invalid compressed data
+Not enough memory
+The page ‘%s’ was not found in the document ‘%s’.
+The file does not exist.
+The file ‘%s’ does not exist.
+The file ‘%s’ could not be parsed because it is not a well-formed XML document.
+The file ‘%s’ could not be parsed because one or more of its included files is not a well-formed XML document.
+Unknown
+The requested page was not found in the document ‘%s’.
+Indexed
+Whether the document content has been indexed
+Document URI
+The URI which identifies the document
+No matching help pages found in “%s”.
+No matching help pages found.
+An unknown error occurred.
+All Help Documents
+The file ‘%s’ could not be parsed because it is not a well-formed info page.
+View
+A YelpView instance to control
+Bookmarks
+A YelpBookmarks implementation instance
+Enable Search
+Whether the location entry can be used as a search field
+Search...
+Clear the search text
+Bookmark this page
+Remove bookmark
+Loading
+The directory ‘%s’ does not exist.
+GtkSettings
+A GtkSettings object to get settings from
+GtkIconTheme
+A GtkIconTheme object to get icons from
+Font Adjustment
+A size adjustment to add to font sizes
+Show Text Cursor
+Show the text cursor or caret for accessible navigation
+Editor Mode
+Enable features useful to editors
+Database filename
+The filename of the sqlite database
+XSLT Stylesheet
+The location of the XSLT stylesheet
+The XSLT stylesheet ‘%s’ is either missing or not valid.
+No href attribute found on yelp:document
+Out of memory
+_Print...
+_Back
+_Forward
+_Previous Page
+_Next Page
+Yelp URI
+A YelpUri with the current location
+Loading State
+The loading state of the view
+Page ID
+The ID of the root page of the page being viewed
+Root Title
+The title of the root page of the page being viewed
+Page Title
+The title of the page being viewed
+Page Description
+The description of the page being viewed
+Page Icon
+The icon of the page being viewed
+You do not have PackageKit. Package install links require PackageKit.
+Save Image
+Save Code
+Send email to %s
+_Open Link
+Open Link in New _Window
+_Save Image As...
+_Save Video As...
+S_end Image To...
+S_end Video To...
+_Copy Text
+C_opy Code Block
+Save Code _Block As...
+Could not load a document for ‘%s’
+Could not load a document
+Document Not Found
+Page Not Found
+Cannot Read
+Unknown Error
+Search for packages containing this document.
+The URI ‘%s’ does not point to a valid page.
+The URI does not point to a valid page.
+The URI ‘%s’ could not be parsed.
+Turn on editor mode
+_Larger Text
+Increase the size of the text
+_Smaller Text
+Decrease the size of the text
+Help
+Show Text _Cursor
+_Page
+_View
+_Go
+_Bookmarks
+_New Window
+_Close
+_All Documents
+_Add Bookmark
+_Remove Bookmark
+Find in Page...
+Open Location
+Application
+A YelpApplication instance that controls this window
+Read Later
+No matches
+Get help with GNOME

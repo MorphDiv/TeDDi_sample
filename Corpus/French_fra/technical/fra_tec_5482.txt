@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,189 +15,116 @@
 # sample_type:	whole
 # comments:	NA
 
-Manuel de & kcachegrind;
-Josef Weidendorfer
-Josef. Weidendorfer@gmx. de
-Josef Weidendorfer
-& traducteurYannVerley; & traducteurLudovicGrossard; & traducteurDamienRaudeMorvan;
-Josef Weidendorfer
-& kcachegrind; est un outil de visualisation de données de profilage écrit pour l'environnement & kde;.
-KDE
-kdesdk
-Cachegrind
-Callgrind
-Valgrind
-Profilage
-Introduction
-& kappname; est un navigateur pour les données produites par des outils de profilage. Ce chapitre explique à quoi sert le profilage, comment cela fonctionne, et donne quelques exemples d'outils de profilage disponibles.
-Profilage
-Habituellement, quand on développe un programme, une des dernières étapes est d'optimiser les performances. C'est une perte de temps d'optimiser les fonctions rarement utilisées. Il est donc intéressant de savoir où votre programme passe le plus de temps.
-Pour du code séquentiel, la récupération des données statistiques des caractéristiques de l'exécution des programmes, comme par exemple le temps passé dans les fonctions ou dans les lignes de code est habituellement suffisant. C'est ce que l'on appelle le profilage. Le programme est exécuté sous le contrôle d'un outil de profilage, qui donne les résultats de l'exécution à la fin. Au contraire, pour du code parallèle, les problèmes de performance proviennent généralement de l'attente par un processeur de données d'un autre processeur. Comme ce temps d'attente ne peut habituellement être facilement attribué, il est préférable de générer ici des traces d'évènements horodatées. KCachegrind ne peut pas visualiser ce type de données.
-Après analyse des données de profilage produites, il devrait être plus facile de voir les points chauds et les goulots d'étranglement du code. Par exemple, on peut vérifier les hypothèses par rapport au nombre d'appels, et les régions identifiées du code peuvent être optimisées. Après cela, on doit valider l'optimisation effectuée avec une autre exécution profilée.
-Méthodes de profilage
-La mesure exacte du temps passé par des événements se produisant pendant l'exécution d'une région de code (par exemple, une fonction) nécessite que soit effectué un rajout de code de mesure avant et après cette région. Ce code lit le temps ou bien un compteur global d'évènement, et calcule les différences. Le code original doit ainsi être changé avant l'exécution. C'est ce que l'on appelle l'instrumentation. L'instrumentation peut être faite par le programmeur lui-même, le compilateur, ou bien par le système d'exécution. Comme les régions intéressantes sont généralement imbriquées, la surcharge due à la mesure influence toujours la mesure elle-même. Ainsi, l'instrumentation doit être effectuée sélectivement et les résultats doivent être interprétés avec précaution. Bien sûr, ceci fait que l'analyse des performances se basant sur la mesure exacte est un processus très complexe.
-La mesure exacte est possible grâce à des compteurs matériels (ce qui inclut des compteurs s'incrémentant sur un tic de temps) fournis dans les processeurs modernes et qui sont incrémentés quand un évènement se produit. Comme nous voulons attribuer des évènements à des régions de code, sans utiliser de compteurs, nous devons gérer chaque évènement en incrémentant un compteur pour la région de code courante nous-mêmes. Faire ceci au niveau logiciel n'est bien sûr pas possible. Toutefois, si on part de l'hypothèse que la distribution des évènements sur le code source est identique quand on regarde à chaque nième évènement, au lieu de chaque évènement, nous avons construit une méthode de mesure réglable par rapport à la surcharge induite. C'est ce que l'on appelle l'échantillonnage. L'échantillonnage à base de temps (NdT & #160;: Time Based Sampling ou TBS) utilise un temporisateur pour regarder régulièrement le compteur de programme, afin de créer un histogramme sur le code du programme. L'échantillonnage à base d'évènements (NdT & #160;: Event Based Sampling ou EBS) se sert des compteurs matériels des processeurs modernes et utilise un mode dans lequel le gestionnaire d'interruptions est appelé sur les valeurs basses du compteur, en générant un histogramme de la distribution d'évènements correspondante. Dans le gestionnaire, le compteur d'évènement est toujours réinitialisé au « & #160; n & #160; » de la méthode d'échantillonnage. L'avantage de l'échantillonnage est que le code n'a pas besoin d'être modifié, mais ceci reste un compromis & #160;: la supposition d'au-dessus est correcte si n est petit, mais plus n est petit, plus la surcharge du gestionnaire d'interruptions est importante.
-Il existe une autre méthode de mesure qui est de simuler ce qui arrive au niveau de l'ordinateur quand on exécute un code donné, c'est-à-dire une simulation contrôlée de code. La simulation est toujours dépendante du modèle de la machine qui est plus ou moins précis. Cependant, pour des modèles très détaillés de machine, s'approchant de la réalité, le temps de simulation peut être assez inacceptable pour une utilisation courante. L'avantage est que l'on peut insérer dans un code donné un code de mesure/ simulation aussi complexe qu'il soit sans perturber les résultats. Faire ceci directement avant l'exécution (ce que l'on appelle instrumentation dynamique), en utilisant le binaire original, est très confortable pour l'utilisateur & #160;: Aucune recompilation n'est nécessaire. Cette méthode devient utilisable quand on ne simule que quelques parties de la machine avec un modèle simple. En outre, les résultats produits par des modèles simples sont souvent plus faciles à comprendre & #160;: le problème fréquent avec le vrai matériel est que les résultats incluent des effets de chevauchement de différentes parties de la machine.
-Outils de profilage
-Le plus connu des outils de profilage est l'outil de la suite GCC, gprof & #160;: On doit compiler le programme avec l'option -pg & #160;; le lancement du programme génère un fichier gmon. out, que l'utilisateur peut lire avec gprof. L'inconvénient principal de cette méthode est l'obligation de passer par une recompilation pour préparer l'exécutable, qui doit être lié de façon statique. La méthode utilisée ici est l'instrumentation générée par le compilateur. Celle -ci mesure les arcs d'appels se produisant dans les fonctions et en accord avec des compteurs d'appels, en conjonction avec un TBS, qui donne un histogramme de distribution du temps sur le code. En utilisant les deux informations, il est possible de calculer de manière heuristique le temps d'inclusion des fonctions, c'est-à-dire le temps passé dans une fonction ainsi que toutes les fonctions qu'elle a appelées.
-Pour une mesure exacte des évènements, il existe des librairies avec des fonctions capables de lire les compteurs de performance matériels. Les plus connus sont le patch PerfCtr pour Linux et les librairies indépendantes de l'architecture PAPI et PCL. Comme toujours, une mesure exacte nécessite une instrumentation du code, comme indiqué au-dessus. D'autres utilisent les librairies elles-mêmes ou utilisent des systèmes d'instrumentation automatiques comme ADAPTOR (pour l'instrumentation de sources FORTRAN), ou encore DynaProf (injection de code par DynInst).
-& oprofile; est un outil de profilage au niveau système pour Linux utilisant l'échantillonnage.
-Dans beaucoup d'aspects, une manière agréable de profiler est d'utiliser Cachegrind ou Callgrind, qui sont des simulateurs utilisant l'environnement d'instrumentation d'exécution & valgrind;. Comme il n'y a pas besoin d'accéder aux compteurs hardware (souvent difficile avec les installations de Linux actuelles), et comme les binaires devant être profilés n'ont pas besoin d'être modifiés, ceci est une bonne alternative à d'autres outils de profilage. L'inconvénient du ralentissement dû à la simulation peut être réduit en n'effectuant la simulation que sur les parties intéressantes du programme, et peut-être seulement sur quelques itérations d'une boucle. Sans instrumentation de la mesure/ simulation, l'usage de Valgrind ne provoque qu'un ralentissement d'un facteur de 3 à 5. Et si on n'est intéressé que par l'arbre d'appels et le nombre d'appels, le simulateur du cache peut être désactivé.
-La simulation du cache est la première étape dans l'approximation des temps réels. En effet, sur les systèmes modernes, l'exécution est très sensible à l'utilisation de ce que l'on appelle des caches (zones de mémoire petites et rapides, et qui permettent d'accélérer les accès répétés aux mêmes emplacements mémoire). & cachegrind; fait cette simulation du cache en interceptant les accès mémoires. Les données produites incluent le nombre d'accès sur la mémoire des instructions / des données, les échecs des caches de niveau L1 / L2, et elle met en relation les lignes du code source avec les fonctions du programme exécuté. En combinant ces compteurs d'échecs et en utilisant des temps de latence de processeurs connus, on peut faire une estimation du temps passé.
-Callgrind est une extension de & cachegrind; qui construit l'arbre d'appels d'un programme à la volée, & cad; comment les fonctions s'appellent entre elles et combien d'évènements se produisent lors de l'exécution d'une fonction. De plus, les données de profilage devant être collectées peuvent être divisées en threads ou en contextes de chaînes d'appels. Il peut aussi fournir des données de profilage au niveau instruction afin de permettre l'annotation d'un code désassemblé.
-Visualisation
-Les outils de profilage produisent typiquement un nombre important de données. Le souhait de naviguer facilement dans l'arbre d'appels, ainsi que de passer rapidement d'un mode de tri des fonctions et d'affichage des différents types d'évènements, a motivé la création d'une application graphique pour accomplir cela.
-& kappname; est un outil de visualisation de données de profilage permettant d'accomplir ces souhaits. Il a été programmé en premier lieu pour naviguer dans les données de & cachegrind; et & calltree;. Il existe toutefois des convertisseurs permettant d'afficher les données de profilage produites par d'autres outils. Une description du format des fichiers Cachegrind/ Callgrind est donnée dans l'appendice.
-En plus d'une liste de fonctions triées en fonction des métriques des coûts inclusifs ou exclusifs, et optionnellement groupées par fichier source, librairie partagée ou classe C++, & kappname; propose des vues différentes et variées pour une fonction sélectionnée, à savoir
-une vue de l'arbre d'appel, qui montre une section de l'arbre d'appel autour de la fonction sélectionnée,
-une vue de la carte de l'arbre, qui permet de visualiser la relation entre appels imbriqués ainsi que la métrique du coût inclusif pour détecter visuellement et rapidement les fonctions à problèmes,
-les vues du code source et de l'annotation assembleur, permettant de voir les détails des coûts associés aux lignes du code source et des instructions assembleur.
-Utiliser & kcachegrind;
-Générer les données à visualiser
-Tout d'abord, il faut générer les données de performance en mesurant les aspects des caractéristiques de l'exécution d'une application. Pour cela, il faut utiliser un outil de profilage. & kcachegrind; n'inclut pas d'outil de profilage, mais est prévu pour fonctionner avec & callgrind;. En utilisant un convertisseur, il peut aussi être utilisé pour visualiser les données produites par & oprofile;. Même si l'objectif de ce manuel n'est pas de documenter le profilage avec ces outils, la prochaine section fournit des petits tutoriels afin que vous puissiez démarrer.
-& callgrind;
-& callgrind; est disponible sur http: / /kcachegrind. sf. net. Notez qu'il était précédemment nommé & calltree;, mais ce nom était trompeur.
-L'usage le plus courant est de démarrer votre application en préfixant la ligne de commande par callgrind, comme par exemple callgrind le_programme les_arguments À la fin du programme, le fichier callgrind. out. pid est généré. Ce fichier peut être chargé avec & kcachegrind;.
-Un usage plus avancé est de générer des données de profilage quand une fonction donnée de votre application est appelée. Par exemple, pour konqueror, pour n'avoir les données de profilage que pour le rendu d'une page web, vous pouvez décider de générer les données quand vous sélectionnez l'élément du menu Affichage/ Recharger. Ceci correspond à un appel à KonqMainWindow: :slotReload. Utilisez la commande callgrind --dump-before=KonqMainWindow: :slotReload konqueror Ceci va produire plusieurs fichiers de données de profilage avec un numéro additionnel séquentiel à la fin du nom du fichier. Un fichier sans un tel nombre à la fin (se terminant seulement par le PID du processus) sera aussi produit. En chargeant ce fichier dans & kcachegrind;, tous les autres fichiers seront aussi chargés, et peuvent être visualisés dans la synthèse des parties et dans la liste des parties.
-& oprofile;
-& oprofile; est disponible sur http: / /oprofile. sf. net. Suivez les instructions d'installation du site web. Veuillez vérifier toutefois si votre distribution ne le fournit pas déjà en tant que paquetage (comme dans Suse).
-Le profilage au niveau système n'est autorisé que pour l'administrateur, car toutes les actions sur le système peuvent être observées. C'est pourquoi ce qui va suivre doit être fait en tant qu'administrateur. Tout d'abord, configurez le processus de profilage, en utilisant l'interface graphique oprof_start ou l'outil en ligne de commande opcontrol. Une configuration standard devrait être le mode temps (TBS, voir introduction). Pour démarrer la mesure, lancez opcontrol -s. Ensuite lancez l'application à profiler, et après, lancez opcontrol -d. Ceci va écrire les résultats de la mesure dans des fichiers sous le dossier / var/ lib/ oprofile/ samples/. Pour pouvoir visualiser les données dans & kcachegrind;, lancez la commande suivante dans un dossier vide & #160;: opreport -gdf | op2callgrind Ceci va produire un nombre important de fichiers, un pour chaque programme qui s'exécutait sur le système. Chacun peut être chargé indépendamment dans & kcachegrind;.
-Bases de l'interface utilisateur
-Quand vous lancez & kcachegrind; avec un fichier de données de profilage en tant qu'argument, ou après en avoir chargé un avec Fichier/ Ouvrir, vous verrez une barre sur le côté contenant la liste des fonctions à gauche et, à droite de la partie principale, une aire de visualisation pour la fonction sélectionnée. L'aire de visualisation peut être configurée pour afficher plusieurs visualisations dans une seule.
-Le type d'évènement actif est important pour la visualisation & #160;: pour & callgrind;, c'est par exemple le nombre d'échecs du cache ou l'estimation du cycle & #160;; pour & oprofile;, c'est le « & #160; temps & #160; » dans le plus simple cas. Vous pouvez changer le type d'évènement par une combobox dans la barre d'outils ou dans la vue du type de l'évènement. Un premier aperçu des caractéristiques de l'exécution devrait être donné quand vous sélectionnez la fonction main dans la liste de gauche, et regardez la visualisation de l'arbre d'appels. Là vous voyez les appels se produisant dans votre programme. Notez que la vue du graphe d'appels ne montre que les fonctions avec un nombre d'évènements élevé. En double-cliquant sur une fonction dans le graphe, celui -ci change pour afficher les fonctions appelées autour de celle sélectionnée.
-Pour explorer plus profondément l'interface graphique, vous pouvez regarder, en plus de ce manuel, la section documentation du site web http: / /kcachegrind. sf. net. De plus, chaque composant de & kcachegrind; est fourni avec l'aide Qu'est -ce que c'est & #160;?.
-Concepts de base
-Ce chapitre explique quelques concepts de & kcachegrind;, et introduit les termes utilisés dans l'interface.
-Le modèle de données pour les données de profilage
-Entités de coût
-Les compteurs de coût des types d'évènement (comme les échecs du cache L2) sont attribués aux entités de coût, qui sont des éléments en relation avec le code source ou des structures de données d'un programme donné. Les entités de coût ne sont pas seulement un code simple ou des positions de données, mais aussi des tuples de position. Par exemple, un appel a une source et une cible, ou bien une adresse de données peut avoir un type de données et une position dans le code où son allocation s'est effectuée.
-Les entités de coût connues de KCachegrind sont données ci-dessous. Les positions simples & #160;: instruction. Une instruction assembleur à l'adresse spécifiée. Ligne dans le source d'une fonction. Toutes les instructions que le compilateur (par l'intermédiaire des informations de débogage) associe à une ligne donnée spécifiée par le nom du fichier source et le numéro de la ligne, et qui sont exécutées dans le contexte de quelques fonctions. Le dernier est nécessaire parce qu'une ligne source à l'intérieur d'une fonction inline peut apparaître dans le contexte de fonctions multiples. Les instructions sans association avec une ligne du code source courant sont associées à la ligne numéro 0 du fichier « & #160;??? & #160; ». Fonction. Toutes les lignes d'une fonction donnée constituent la fonction elle-même. Une fonction est spécifiée, s'ils sont disponibles, par son nom et sa position dans quelques objets binaires. La dernière est nécessaire parce que les objets binaires d'un seul programme peut avoir des fonctions avec le même nom (on peut y accéder par exemple avec dlopen/ dlsym & #160;; l'éditeur de lien dynamique résout les fonctions dans un ordre de recherche donné dans les objets binaires utilisés). Si un outil de profilage ne peut détecter le nom du symbole d'une fonction, par exemple parce que l'information de débogage n'est pas disponible, soit l'adresse de la première instruction exécutée est utilisée, soit « & #160;??? & #160; ». Objet binaire. Toutes les fonctions dont le code se situe à l'intérieur d'un objet binaire, ou bien l'exécutable principal (NdT & #160;: « & #160; main & #160; »), ou encore une librairie partagée. Fichier source. Toutes les fonctions dont la première instruction est associée à une ligne d'un fichier source donné. Classe. Les noms des symboles des fonctions sont généralement ordonnés hiérarchiquement dans des espaces de nommage, par exemple les espaces de nommage C++, ou les classes des langages orientés objet. Ainsi une classe peut contenir des fonctions d'une classe ou de classes embarquées. Partie d'un profilage. Quelques sections de temps d'une exécution de profilage, avec un identifiant de thread donné, un identifiant de processus, et la ligne de commande exécutée. Vu en tant que liste, un ensemble d'entités de coût définit souvent une autre entité de coût. Ainsi il y a une hiérarchie d'imbrication des entités de coût qui semble évidente par rapport à la description faite au-dessus.
-Tuples des positions & #160;: Appel d'une adresse d'instruction vers une fonction cible. Appel d'une ligne du source vers une fonction cible. Appel d'une fonction du source vers une fonction cible. Saut (in)conditionnel d'une source vers une instruction cible. Saut (in)conditionnel d'une source vers une ligne cible. Les sauts entre les fonctions ne sont pas autorisés, car cela est absurde dans un arbre d'appels. Ainsi, les constructions telles la gestion des exceptions et les sauts longs en C doivent être traduits pour se mettre dans la pile d'appels comme demandé.
-Types d' évènement
-Des types d'évènements arbitraires peuvent être spécifiés dans les données de profilage en leur donnant un nom. Leur coût relié à une entité de coût est un entier sur 64 bits.
-Les types d'évènement dont les coûts sont spécifiés dans le fichier de données de profilage sont appelés évènement réels. En plus, on peut spécifier des formules pour les types d'évènement calculés à partir d'évènement réels, que l'on appelle évènements hérités.
-État de la visualisation
-L'état de la visualisation de la fenêtre de KCachegrind inclut & #160;: le type d'évènement primaire et secondaire choisi pour l'affichage, le regroupement de fonction (utilisé dans la liste Profilage des fonctions et dans la coloration des entités), les parties du profilage dont les coûts doivent être inclus dans la visualisation, une entité active de coût (par exemple, une fonction sélectionnée de la barre latérale Profilage de la fonction), une entité de coût sélectionnée. Cet état influence les visualisations.
-Les visualisations sont toujours affichées pour une entité de coût, celle qui est active. Quand une visualisation donnée n'est pas appropriée pour une entité de coût, elle peut être désactivée (par exemple quand on sélectionne un objet ELF en double-cliquant dans la liste des groupes, l'annotation du code source pour un objet ELF ne veut rien dire).
-Par exemple, pour une fonction active, la liste des fonctions appelées montre toutes les fonctions appelées par la fonction active. On peut sélectionner chacune de ces fonctions sans la rendre active. Si le graphe d'appels est montré à côté, il va automatiquement sélectionner la même fonction.
-Parties de l'interface graphique
-Barres latérales
-Les barres latérales sont des fenêtres de côté qui peuvent être placées à chaque bordure de la fenêtre de KCachegrind. Elles contiennent toujours une liste d'entités de coût triées d'une manière quelconque.
-Le profil d'une fonction. Le profil d'une fonction est une liste des fonctions avec les coûts inclusifs et exclusifs, le nombre d'appels, le nom et la position des fonctions.
-Synthèse des parties
-Pile d' appels
-L'aire de visualisation, se situant généralement dans la partie droite de la fenêtre principale de KCachegrind, est constituée d'une (par défaut) ou de plusieurs vues d'onglets, rangées horizontalement ou verticalement. Chaque vue d'onglet contient plusieurs vues différentes de visualisation pour une seule entité de coût à un instant donné. Le nom de cette entité est indiqué en haut de la vue d'onglets. S'il y a plusieurs vues d'onglets, seulement une est active. Le nom de l'entité dans la vue d'onglets active est affiché en gras et détermine l'entité de coût active de la fenêtre de KCachegrind.
-Aires d'une vue d' onglets
-Chaque vue d'onglets peut contenir jusqu'à quatre aires d'affichage, nommées Haut, Droite, Gauche, Bas. Chaque aire peut contenir plusieurs vues empilées de visualisation. La vue visible d'une aire est sélectionnée par la barre d'onglets. Les barres d'onglets de l'aire en haut à droite sont en haut, les barres d'onglets de l'aire en bas à gauche sont en bas. Vous pouvez spécifier quel type de visualisation doit aller dans chaque aire en utilisant les menus contextuels des onglets.
-Visualisation synchronisée par une entité sélectionnée dans une vue des onglets
-En plus d'une entité active, chaque vue d'onglets a une entité sélectionnée. Comme la plupart des types de visualisations montre plusieurs entités avec celle qui est active centrée, vous pouvez changer l'élément sélectionné en naviguant dans une visualisation (en cliquant avec la souris ou en utilisant le clavier). Généralement, les éléments sélectionnés sont affichés en surbrillance. En changeant l'entité sélectionnée dans une des visualisations de la vue d'onglets, toutes les autres visualisations dans la vue d'onglets mettent par conséquent la nouvelle entité sélectionnée en surbrillance.
-Synchronisation entre les vues d' onglets
-Si il y a plusieurs vues d'onglets, un changement de sélection dans une des vues d'onglets mène à un changement d'activation dans la vue d'onglets suivante (à droite/ en bas). Cette sorte de lien doit permettre, par exemple, de naviguer rapidement dans les graphes d'appels.
-Dispositions
-La disposition de toutes les vues d'onglets d'une fenêtre peut être enregistrée (voir dans le menu Affichage/ Disposition des vues). Après avoir dupliqué la disposition courante (Ctrl+Plus ou menu) et changé quelques tailles ou bougé une vue de visualisation vers une autre aire de la vue d'onglets, vous pouvez rapidement commuter entre la nouvelle disposition et l'ancienne par Ctrl+Gauche/ Droite. L'ensemble des dispositions sera enregistré entre les sessions de KCachegrind pour une même commande profilée. Vous pouvez faire que l'ensemble courant des dispositions soit celui par défaut pour les nouvelles sessions de KCachegrind, ou bien revenir à l'ensemble des dispositions par défaut.
-Profilage aplati
-Le profilage aplati contient une liste de groupes et une liste de fonctions. La liste des groupes contient tous les groupes où le coût a été enregistré, en fonction du type de groupe choisi. La liste des groupes est cachée quand le regroupement est désactivé.
-La liste des fonctions contient les fonctions d'un regroupement sélectionné (ou toutes les fonctions si le regroupement est désactivé), triées par colonne, par exemple les coûts propres ou inclusifs enregistrés dedans. Le nombre de fonctions affichées dans la liste est limité, mais configurable par Configuration/ Configurer KCachegrind.
-Synthèse des parties
-Dans une exécution de profilage, plusieurs fichiers de données de profilage peuvent être produits et être chargés ensemble dans KCachegrind. La barre latérale Synthèse des parties les montre, en les triant horizontalement par date de création, les tailles de rectangle étant proportionnelles au coût enregistré dans chaque partie. Vous pouvez sélectionner une ou plusieurs parties pour obliger les coûts affichés dans les autres vues de KCachegrind à s'appliquer uniquement sur ces parties.
-Les parties sont sous-divisées autrement & #160;: il y a un mode partitionnement et un mode partage des coûts inclusifs & #160;:
-Partionnement & #160;: Vous voyez le partionnement dans des groupes pour une partie des données de profilage, en accord avec le type de groupe sélectionné. Par exemple, si les groupes objet ELF sont sélectionnés, vous verrez des rectangles colorés pour chaque objet ELF utilisé (bibliothèque partagée ou exécutable), qui auront une taille proportionnelle au coût enregistré dedans.
-Partage du coût inclusif & #160;: Un rectangle montrant le coût inclusif de la fonction active dans la partie est affiché. Celui -ci est partagé pour afficher les coûts inclusifs des fonctions appelées.
-Pile d' appels
-C'est une pile d'appels purement fictive, qui est la « & #160; plus probable & #160; ». Elle est construite en mettant au début la fonction active courante, puis en ajoutant les fonctions appelantes/ appelées avec les plus hauts coûts en haut et en bas.
-Les colonnes « & #160; coût & #160; » et « & #160; appels & #160; » montrent le coût enregistré pour tous les appels de la fonction dans la ligne au-dessus.
-Synthèse des parties
-La liste montre tous les types de coût disponibles, ceux correspondant, et le coût inclusif de la fonction active courante pour ce type d'évènement.
-En choisissant un type d'évènement dans la liste, vous changez le type des coûts montré partout dans KCachegrind par celui sélectionné.
-Listes des appels
-Ces listes montrent les appels et les fonctions appelées de la fonction active courante. « & #160; Toutes & #160; » les fonctions appelantes/ appelées signifie toutes les fonctions pouvant être accédées dans le sens des appelantes ou des appelées, même si d'autres fonctions se trouvent entre elles.
-Les vues de liste des appels inclut & #160;:
-Toutes les fonctions appelantes
-Toutes les fonctions appelées
-Cartes
-Une visualisation de la carte de l'arbre du type d'évènement primaire, en haut ou en bas de la hiérarchie d'appel. Chaque rectangle coloré représente une fonction, sa taille essaie d'être proportionnelle au coût enregistré à l'intérieur pendant que la fonction active s'exécutait (cependant, il y a des contraintes de dessin).
-Pour la carte des fonctions appelantes, le graphique montre la hiérarchie de toutes les fonctions appelant la fonction active courante & #160;; pour la carte des fonctions appelées, il montre la hiérarchie de toutes les fonctions appelées par la fonction active courante.
-Les options d'apparence sont disponibles dans le menu contextuel. Pour avoir des proportions exactes, choisissez « & #160; Cacher les bordures incorrectes & #160; ». Comme ce mode peut être très gourmand au niveau du temps, vous voudrez peut-être limiter avant le niveau maximum de dessin. « & #160; Meilleur & #160; » détermine la direction de partage pour les enfants à partir du ratio d'aspect de leur parent. « & #160; Toujours meilleur & #160; » décide de l'espace restant pour chaque enfant du même parent. « & #160; Ignorer les proportions & #160; » prend l'espace pour dessiner le nom de la fonction avant de dessiner les enfants. Notez que les proportions peuvent être fortement fausses.
-La navigation par le clavier est disponible avec les touches gauche/ droite pour parcourir les enfants du même parent, et haut/ bas pour aller au niveau au-dessus/ en dessous le plus proche. La touche Entrée active l'élément courant.
-Graphe des appels
-Cette vue montre le graphe d'appel autour de la fonction active. Le coût montré est seulement le coût enregistré pendant que la fonction active s'exécutait & #160;; c'est-à-dire le coût montré pour la fonction main() - si elle est visible - doit être le même que le coût de la fonction active, comme c'est la partie du coût inclusif de main() enregistré pendant que la fonction active s'exécutait.
-Pour les cycles, les flèches d'appels bleues indiquent que c'est un appel artificiel rajouté pour un affichage correct, même s'il ne s'est jamais produit.
-Si le graphe est plus large que l'aire du composant, un panneau d'aperçu est affiché dans un coin. Il y a des options de visualisation identiques à celles de la carte de l'arbre d'appels & #160;; la fonction sélectionnée est mise en surbrillance.
-Annotations
-Les listes source/ assembleur annoté montre les lignes du code source/ les instructions désassemblées de la fonction active courante, ainsi que le coût (propre) enregistré lors de l'exécution du code de la ligne du source/ l'instruction. S'il y a eu appel, les lignes avec les détails sur l'appel sont insérées dans le code source & #160;: le coût (inclusif) enregistré à l'intérieur de l'appel, le nombre d'appels effectués, et la destination de l'appel.
-Sélectionnez une telle ligne d'information d'appel pour activer la destination de l'appel.
-Les éléments de menus / barres d' outils
-La fenêtre principale de & kcachegrind;
-Le menu Fichier
-Ctrl; N Fichier Nouveau
-Ouvre une fenêtre de haut niveau vide dans laquelle vous pouvez charger des données de profilage. Cette action n'est pas vraiment nécessaire, car Fichier/ Ouvrir vous donnera une nouvelle fenêtre de haut niveau quand la fenêtre courante affiche déjà des données.
-Ctrl; O Fichier Ouvrir
-Affiche le dialogue d'ouverture de fichier afin que vous puissiez choisir le fichier de données de profilage à charger. S'il y a déjà des données affichées dans la fenêtre courante de haut niveau, ceci va ouvrir une nouvelle fenêtre. Si vous voulez ouvrir des données additionnelles de profilage dans la fenêtre courante, utilisez Fichier/ Ajouter.
-Le nom des fichiers de données de profilage se termine habituellement par.. -. En chargeant un fichier se terminant seulement par., les fichiers de données éventuellement présents pour cette exécution, mais avec des terminaisons additionnelles, seront aussi chargés.
-Exemple & #160;: s'il existe des fichiers de données de profilage cachegrind. out.123 et cachegrind. out.123.1, en chargeant le premier, le second sera chargé automatiquement.
-Fichier Ajouter
-Ajoute un fichier de données de profilage dans la fenêtre courante. Vous pouvez ainsi forcer le chargement de multiples fichiers de données dans la même fenêtre de haut niveau, même s'ils ne sont pas de la même exécution, comme donné par la convention de nommage des fichiers de données de profilage. Utilisez cela par exemple pour des comparaisons côte-à-côte.
-Ctrl; N Fichier Nouveau
-Recharge les données de profilage. Ceci est surtout intéressant après qu'un autre fichier de données de profilage ait été généré par l'exécution d'une application déjà chargée.
-Ctrl; Q Fichier Quitter
-Quitte & kappname;
-Questions et Réponses
-& reporting. bugs; & updating. documentation;
-À quoi sert & kcachegrind; & #160;? Je n'en ai aucune idée.
-& kcachegrind; est utile dans le stade final du développement d'un logiciel, appelé le profilage. Si vous ne développez pas d'applications, vous n'avez pas besoin de & kcachegrind;.
-Quelle est la différence entre « & #160; Incl. & #160; » et « & #160; Propre & #160; » & #160;?
-Ce sont des attributs de coût pour les fonctions en considérant certains types d'évènements. Comme les fonctions peuvent s'appeler entre elles, il paraît logique de distinguer le coût de la fonction elle-même (Coût propre) et le coût incluant toutes les fonctions appelées (Coût inclusif). « & #160; Propre & #160; » est aussi remplacé certaines fois par « & #160; Exclusif & #160; ».
-Ainsi, par exemple pour main(), vous aurez toujours un coût inclusif de presque 100%, alors que le coût propre est négligeable, le travail réel s'effectuant dans une autre fonction.
-La barre d'outils/ de menus de KCachegrind est spartiate. Est -ce normal & #160;?
-Manifestement KCachegrind est mal installé sur votre système. Il est recommandé de le compiler avec comme préfixe d'installation votre dossier de base KDE, comme par exemple configure --prefix=/ opt/ kde3; make install. Si vous choisissez un autre dossier, comme $HOME/ kde, vous devez positionner la variable d'environnement KDEDIR sur ce dossier avant de lancer KCachegrind.
-Si je double-clique sur une fonction en bas de la vue de l'arbre d'appel, il affiche le même coût pour la fonction main() que pour la fonction sélectionnée. N'est -ce pas supposé rester constant à 100% & #160;?
-Vous avez activé une fonction en dessous de main() avec moins de coût que main(). Pour chaque fonction, on ne montre de la partie du coût total de la fonction, que celle enregistrée alors que la fonction activée s'exécutait. C'est-à-dire que le coût affiché pour toute fonction ne peut jamais être plus élevé que le coût de la fonction activée.
-Entités de coût
-Entité de coût & #160;: C'est un élément abstrait relié au code source, auquel on peut attribuer des compteurs d'évènements. Les dimensions des entités de coût sont la localisation dans le code (par exemple, ligne source, fonction), la localisation dans les données (par exemple, type de la donnée accédée, donnée), la localisation dans l'exécution (par exemple, thread, processus), et les couples ou les triplets des positions mentionnées au-dessus (par exemple, appels, accès à un objet à partir d'une instruction, donnée expulsée du cache).
-Types d' évènement
-Coûts d'évènement & #160;: C'est la somme des évènements de quelques types d'évènement se produisant pendant que l'exécution est reliée à quelques entités de coût. Le coût est attribué à l'entité.
-Type d'évènement & #160;: C'est la sorte de l'évènement dont les coûts peuvent être attribués à une entité de coût. Il existe des types d'évènements réels et des types d'évènements hérités.
-Types d' évènement
-Type d'évènement hérité & #160;: C'est un type d'évènement virtuel, seulement visible dans une visualisation, et qui est défini par une formule basée sur des types d'évènements réels.
-Fichier de données de profilage & #160;: C'est un fichier contenant des données mesurées dans une expérience de profilage (ou une partie), ou produite par post-traitement d'une trace. Sa taille est généralement proportionnelle linéairement à la taille du code du programme.
-Expérience de profilage & #160;: C'est une exécution d'un programme, supervisée par un outil de profilage, qui peut produire plusieurs fichiers de données de profilage à partir de parties et/ ou de threads de l'exécution.
-Projet de profilage & #160;: C'est une configuration pour les expériences de profilage utilisée pour un programme qui doit être profilé, peut-être dans plusieurs versions. Comparer des données de profilage n'a généralement de sens qu'entre données de profilage produites dans des expériences sur un seul projet de profilage.
-Profilage
-Profilage & #160;: C'est le processus de collecte d'informations statistiques sur les caractéristiques d'un programme qui s'exécute.
-Types d' évènement
-Type d'évènement réel & #160;: C'est un type d'évènement qui peut être mesuré par un outil. Cela nécessite l'existence d'un capteur pour le type d'évènement donné.
-Trace & #160;: C'est une séquence d'évènements horodatés qui se produisent lors du traçage d'un programme qui s'exécute. Sa taille est généralement proportionnelle linéairement au temps d'exécution du programme.
-Traçage & #160;: C'est le processus de supervision d'une exécution de programme, et de sauvegarde des évènements triés par date dans un fichier de sortie, la trace.
-Remerciements et licence
-Merci à Julian Seward pour son excellent outil & valgrind;, et à Nicholas Nethercote pour le module externe & cachegrind;. & #160; Sans ces programmes, KCachegrind n'aurait jamais existé. & #160; Ils sont par ailleurs à l'origine de beaucoup d'idées pour cette & GUI;.
-Et merci pour tous les rapports de bogues et les suggestions des différents utilisateurs.
-& traducteurYannVerley; & traducteurLudovicGrossard; & traducteurDamienRaudeMorvan;
-& underFDL;
-Installation
-Comment obtenir & kcachegrind;
-& kcachegrind; fait partie du package & package; de & kde;. Pour des versions intermédiaires avec moins de support, & callgrind; et une documentation plus complète, allez voir la homepage sur http: / /kcachegrind. sf. net. Vous pourrez aussi y voir des instructions de compilation et d'installation plus complètes.
-Pré-requis
-Pour utiliser dans de bonnes conditions & kcachegrind;, vous avez besoin de & kde; 3. x. & #160; Pour générer les données de profilage, vous avez besoin de & cachegrind;, & #160; ou bien de & calltree; /callgrind;.
-Compilation et Installation
-& install. compile. documentation;
-Configuration
-Toutes les options de configuration sont soit dans la boîte de dialogue de configuration, soit dans les menus contextuels des visualisations.
-Au premier démarrage, cette aire peut être divisée en deux parties séparées horizontalement, chacune avec des visualisations différentes sélectionnables par des onglets. Pour bouger les vues de visualisation, utilisez le menu contextuel de chaque onglet, et ajustez les séparations entre les visualisations. Pour commuter rapidement entre les différentes dispositions d'une visualisation, utilisez le menu Affichage/ Disposition des vues/ Dupliquer et changez la disposition. Vous pouvez ensuite commuter les dispositions avec le menu Affichage/ Disposition des vues/ Aller à la disposition suivante (ou mieux, en utilisant les raccourcis clavier).
-Synthèse des parties
-Pile d' appels
-Aire de visualisation
-Visualisations
-Les fonctions directement appelantes
-Les fonctions directement appelées
-Fichier Ajouter
-Le menu Affichage
-Affichage Type d'évènement primaire
-(À faire)
-Affichage Type d'évènement secondaire
-Affichage Scinder
-Affichage Scinder
-Affichage Scinder
-Glossaire
-A la suite, vous trouverez une liste de termes divers.
-Partie de données de profilage (aussi incorrectement nommé & #160;: partie de trace) & #160;: Ce sont des données d'un fichier de données de profilage.
-& kappname;
+Sauvegarde achevée
+Le démarrage de la sauvegarde a échoué. Vérifiez si vous disposez ou non des droits d'accès suffisants.
+Le processus de sauvegarde s'est interrompu brutalement.
+Le temps imparti au processus a expiré.
+La sauvegarde a échoué & #160;: impossible de communiquer avec le processus de sauvegarde.
+La sauvegarde a échoué à cause d'une erreur d'écriture & #160;. vérifiez l'espace disque et les droits d'accès.
+La sauvegarde a échoué avec une erreur inconnue.
+La gravure s'est terminée avec succès
+La gravure a échoué
+Impossible de démarrer la gravure. Vérifiez si vous disposez ou non des droits d'accès suffisants.
+Le processus de gravure s'est interrompu brutalement. La saisie effectuée est -elle correcte & #160;?
+La gravure a échoué & #160;: le temps imparti a expiré.
+La gravure a échoué & #160;: impossible de communiquer avec le processus de gravure.
+La gravure a échoué à cause d'une erreur d'écriture. Vérifiez l'espace disque et les droits d'accès.
+La gravure a échoué avec une erreur inconnue.
+Erreur
+Le disque est soit monté soit en cours d'utilisation. L'application de gravure ne fonctionnera pas sur celui -ci.
+Impossible de démarrer la conversion. Vérifiez si vous disposez ou non des droits d'accès suffisants.
+Le processus de conversion s'est interrompu brutalement. La saisie effectuée est -elle correcte & #160;?
+La conversion a échoué & #160;: le temps imparti a expiré.
+La conversion a échoué & #160;: impossible de communiquer avec le processus de conversion.
+La conversion a échoué à cause d'une erreur d'écriture. Vérifiez l'espace disque et les droits d'accès.
+La conversion a échoué à cause d'une erreur inconnue.
+La copie s'est terminée avec succès
+Impossible de démarrer la copie. Vérifiez si vous disposez ou non des droits d'accès suffisants.
+Le processus de copie s'est interrompu brutalement.
+La copie a échoué & #160;: le temps imparti a expiré.
+La copie a échoué & #160;: impossible de communiquer avec le processus de copie.
+La copie a échoué à cause d'une erreur d'écriture. Vérifiez l'espace disque et les droits d'accès.
+La copie a échoué avec une erreur inconnue.
+Nouveau CD audio...
+Nouveau CD MP3...
+Nouveau CD de données...
+Nouveau CD vidéo...
+Nouveau DVD de données...
+Nouveau DVD vidéo...
+Nouveau CD en mode mixte...
+Extraire au format mp3...
+Extraire au format ogg...
+Extraire au format wav...
+Éjecter le disque
+Déposer des fichiers
+Erreur.
+Annulé
+Succès
+Gravure...
+Formatage...
+Lecture...
+Conversion...
+Général
+Occupé...
+Déposez les fichiers & #160;!
+Aucun disque n'a été trouvé
+Fermer le projet actif
+Créer
+Graver
+Sauvegarder
+Extraire
+Formater
+DiscBurner
+Lequel & #160;?
+Le dossier contient surtout des données audio.
+CD audio
+CD MP3
+CD de données
+Aucun périphérique n'a été trouvé
+Pas de disque
+Aucun disque n'a été détecté. Essayer à nouveau & #160;?
+« & #160; Créez & #160; » un nouveau projet d'abord ou insérez un disque vierge pour graver un fichier image.
+Voulez -vous réellement créer « & #160;. bin & #160; » & #160;?
+Les CD audio ne sont pas des systèmes de fichiers ISO. Ils sont habituellement extraits (« & #160; rippés & #160; ») en « & #160;. ogg/. mp3 & #160; ». Voulez -vous continuer à créer les fichiers « & #160;. bin/. toc & #160; » & #160;? [POUR LES UTILISATEURS EXPÉRIMENTÉS]
+Disque déjà vierge
+Le disque semble être déjà être vierge. Voulez -vous le formater néanmoins & #160;?
+Création de la sauvegarde... %1 & #160;% achevé
+Mise en cache des données
+Finalisation du média
+Projet audio & #160;: %1 Piste & #160; %2 & #160;: %3 & #160;%
+%1 & #160;%
+Effacement du disque
+%1 & #160;: %2 & #160;%
+Écraser & #160;?
+Il existe déjà un projet de CD audio ouvert. Démarrer un nouveau projet & #160;?
+Oui
+Non
+Double-cliquez pour changer l'étiquette du disque
+Il existe déjà un projet de CD MP3 ouvert. Démarrer un nouveau projet & #160;?
+Il existe déjà un projet de CD de données ouvert. Démarrer un nouveau projet & #160;?
+Il existe déjà un projet de DVD de données ouvert. Démarrer un nouveau projet & #160;?
+Il ne reste pas assez d'espace pour
+Veuillez insérer un disque vierge.
+Le disque est soit monté soit en cours d'utilisation. discburner ne le formatera pas.
+Le formatage est terminé
+Le formatage a échoué. Vérifiez que vous disposez des droits d'accès suffisants et que « & #160; wodim & #160; » est installé.
+Le formatage s'est interrompu brutalement. La saisie effectuée est -elle correcte & #160;? Le binaire « & #160; wodim & #160; » & #160; fonctionne -t-il & #160;?
+Le formatage a échoué & #160;: le temps imparti a expiré.
+Le formatage a échoué & #160;: impossible de communiquer avec wodim.
+Le formatage a échoué à cause d'une erreur d'écriture. Vérifiez l'espace disque et les droits d'accès.
+Le formatage a échoué avec une erreur inconnue.
+Configurer DiscBurner
+Comportement
+Vitesse de gravure & #160;:
+Auto
+Personnalisé & #160;:
+x
+Apparence
+Afficher l'étiquette de la cible
+Extraction terminée
+Impossible de démarrer l'extraction. Vérifiez si vous disposez ou non des droits d'accès suffisants.
+Le processus d'extraction s'est interrompu brutalement.
+L'extraction a échoué & #160;: le délai imparti a expiré.
+L'extraction a échoué & #160;: impossible de communiquer avec le processus d'extraction.
+L'extraction a échoué à cause d'une erreur d'écriture. Vérifiez l'espace disque et les droits d'accès.
+L'extraction a échoué à cause d'une erreur inconnue.

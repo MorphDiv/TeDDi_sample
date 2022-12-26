@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,31 +15,53 @@
 # sample_type:	whole
 # comments:	NA
 
-LTrim-Funktion [Laufzeit]
-/text/sbasic/shared/03120305.xhp
+Get-Anweisung [Laufzeit]
+/text/sbasic/shared/03020201.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-LTrim-Funktion
-LTrim-Funktion [Laufzeit]
-Löscht vorangestellte Leerzeichen am Anfang eines Zeichenkettenausdrucks.
+Get-Anweisung
+Get-Anweisung [Laufzeit]
+Liest einen Datensatz aus einer relativen Datei oder eine Folge von Bytes aus einer binären Datei in eine Variable ein.
+PUT
+-Anweisung
 Syntax:
-LTrim (Text As String)
-Rückgabewert:
-String
+Get [#] FileNumber As Integer, [Position], Variable
 Parameter:
-Text:
-Ein beliebiger Zeichenkettenausdruck.
-Verwenden Sie diese Funktion, um vorangestellte Leerzeichen am Anfang eines Zeichenkettenausdrucks zu löschen.
+FileNumber :
+Beliebiger Integer-Ausdruck, der die Dateinummer bestimmt.
+Position:
+Bei im Random-Modus geöffneten Dateien ist
+Position
+die Nummer des Datensatzes, den Sie lesen möchten.
+Position
+die Byteposition innerhalb der Datei, an der mit dem Lesevorgang begonnen wird.
+Wird position nicht angegeben, so gilt die aktuelle Position bzw. der aktuelle Datensatz der Datei.
+Variable:
+Name der zu lesenden Variablen.
+Mit der Ausnahme von Objektvariablen können Sie jeden Variablentyp verwenden.
 Beispiel:
-Sub ExampleSpaces
-Dim sText2 as String,sText as String,sOut as String
-sText2 = &quot; < *Las Vegas* > &quot;
-sOut = &quot; ' &quot; +sText2 + &quot; ' &quot; + Chr(13)
-sText = Ltrim(sText2) REM sText = &quot; < *Las Vegas* > &quot;
-sOut = sOut + &quot; ' &quot; +sText + &quot; ' &quot; + Chr(13)
-sText = Rtrim(sText2) REM sText = &quot; < *Las Vegas* > &quot;
-sOut = sOut + &quot; ' &quot; + sText + &quot; ' &quot; + Chr(13)
-sText = Trim(sText2) REM sText = &quot; < *Las Vegas* > &quot;
-sOut = sOut + &quot; ' &quot; + sText + &quot; ' &quot;
-MsgBox sOut
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM muß Variant sein
+Dim aFile As String
+aFile = &quot; c:\daten.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM auf Anfang positionieren
+Put #iNumber,, &quot; Das ist die 1.Zeile Text &quot; REM Zeile mit Text füllen
+Put #iNumber,, &quot; Das ist die 2.Zeile Text &quot;
+Put #iNumber,, &quot; Das ist die 3.Zeile Text &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; Das ist ein neuer Text &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; Das ist Text in Datensatz 20 &quot;
+Print Lof(#iNumber)
+Close #iNumber
 end sub

@@ -1,6 +1,6 @@
 # language_name_wals:	Russian
 # language_name_glotto:	Russian
-# ISO_6393:	rus
+# iso639_3:	rus
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,59 +15,56 @@
 # sample_type:	whole
 # comments:	NA
 
-Инструкция RSet [время выполнения]
-/text/sbasic/shared/03120308.xhp
+Инструкция Put [время выполнения]
+/text/sbasic/shared/03020204.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-инструкция RSet
-Инструкция RSet [время выполнения]
-Выравнивает строку в строковой переменной по правому краю или копирует переменную определенного пользователем типа в другую переменную.
+инструкция Put
+Инструкция Put [время выполнения]
+Выполняет запись в файл с произвольным доступом или записывает последовательность байтов в бинарный файл.
+Get
+.
 Синтаксис:
-RSet Текст As String = Текст или RSet Переменная1 = Переменная2
+Put [#] НомерФайла As Integer, [позиция], Переменная
 Параметры:
-Текст
+НомерФайла
 .
-Любая строковая переменная.
-Текст
+Выражение из целых чисел, определяющее номер файла, в который необходимо произвести запись.
+Позиция
 .
-Строка, которую нужно выровнять в строковой переменной по правому краю.
-Переменная1
+Для файлов с произвольным доступом номер требуемой записи.
+Для бинарных файлов (бинарный доступ) — байт, с которого необходимо начать запись.
+Переменная
 .
-Переменная определенного пользователем типа, в которую нужно копировать.
-Переменная2
-.
-Переменная определенного пользователем типа, из которой нужно копировать.
-RSet
-выравнивает эту строку вправо внутри строковой переменной.
-Любые остающиеся позиции в строковой переменной заменяются пробелами.
-Если данная строка длиннее, чем строковая переменная, символы, превышающие ее длину, отсекаются, а внутри строковой переменной выравниваются вправо только остающиеся символы.
-RSet
-может использоваться также для копирования переменных определенного пользователем типа в переменные другого типа.
-RSet
-и
-LSet
-для изменения выравнивания строки по левому и правому краю.
+Имя переменной для записи в файл.
+Len
+инструкции
+Open
+, то пространство от конца новых записанных данных до следующей записи заполняется данными, уже существующими в этом файле.
+Для бинарных файлов: содержимое переменных записывается в указанную позицию, а указатель позиции в файле устанавливается после последнего записанного байта без какого-либо пространства между записями.
 Пример:
-Sub ExampleRLSet
-Dim sVar as string
-Dim sExpr as string
-sVar = String(40, &quot; * &quot; )
-sExpr = &quot; АБВ &quot;
-REM Выравнивание &quot; АБВ &quot; в строке ссылки длиной 40 символов по правому краю
-REM Замена звездочек пробелами
-RSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-sVar = String(5, &quot; * &quot; )
-sExpr = &quot; 123457896 &quot;
-RSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-sVar = String(40, &quot; * &quot; )
-sExpr = &quot; АБВ &quot;
-REM Выравнивание &quot; АБВ &quot; в строке ссылки длиной 40 символов по левому краю
-LSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-sVar = String(5, &quot; * &quot; )
-sExpr = &quot; 123456789 &quot;
-LSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-End Sub
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM Должен быть типа Variant
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM Позиция, с которой необходимо начать запись
+Put #iNumber,, &quot; Это первая строка текста &quot; REM Заполнение строки текстом
+Put #iNumber,, &quot; Это вторая строка текста &quot;
+Put #iNumber,, &quot; Это третья строка текста &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; Это новый текст &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; Это текст в записи 20 &quot;
+Print Lof(#iNumber)
+Close #iNumber
+еnd sub

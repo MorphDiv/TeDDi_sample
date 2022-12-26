@@ -1,6 +1,6 @@
 # language_name_wals:	Spanish
 # language_name_glotto:	Spanish
-# ISO_6393:	spa
+# iso639_3:	spa
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,16 +15,42 @@
 # sample_type:	whole
 # comments:	NA
 
-Función CreateUnoStruct [Ejecución]
-/text/sbasic/shared/03131500.xhp
+Instrucción SetAttr [Ejecución]
+/text/sbasic/shared/03020414.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-CreateUnoStruct;función
-Función CreateUnoStruct [Ejecución]
-Crea un ejemplo de estructura de tipo Uno.
-Use la estructura siguiente para la instrucción:
-Dim oStruct as new com.sun.star.beans.Property
+SetAttr;instrucción
+Instrucción SetAttr [Ejecución]
+Configura la información de atributo de un archivo especificado.
 Sintaxis:
-oStruct = CreateUnoStruct( nombre de tipo Uno )
+SetAttr NombreArchivo As String, Atributo As Integer
+Parámetros:
+SetAttr
+busca el archivo en el directorio actual.
+También se puede usar la
+notación URL
+.
+Atributo:
+Patrón de bits que define los atributos que se desea activar o desactivar:
+Valor
+0 :
+Archivos normales.
+1 :
+Archivos de sólo lectura.
+32 :
+El archivo se cambió desde la última copia de seguridad (bit Archive).
+Puede establecer varios atributos combinando los valores respectivos con una instrucción OR lógica.
 Ejemplo:
-oStruct = CreateUnoStruct( &quot; com.sun.star.beans.Property &quot; )
+Sub EjemploSetGetAttr
+On Error Goto ManejadorError REM Define destino para manejar errores
+If Dir( &quot; C: est &quot; ,16)= &quot; &quot; Then MkDir &quot; C: est &quot;
+If Dir( &quot; C: est\autoexec.sav &quot; )= &quot; &quot; THEN Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: est\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; ,0
+Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: emp\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; 0,1
+print GetAttr( &quot; c: est\autoexec.sav &quot; )
+end
+ManejadorError:
+Print Error
+end
+end sub

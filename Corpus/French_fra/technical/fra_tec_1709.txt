@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,55 +15,53 @@
 # sample_type:	whole
 # comments:	NA
 
-Instruction RSet [Exécution]
-/text/sbasic/shared/03120308.xhp
+Instruction Put [Exécution]
+/text/sbasic/shared/03020204.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-RSet, instruction
-Instruction RSet [Exécution]
-Aligne à droite une chaîne de caractères dans une variable de chaîne de caractères, ou copie un type de variable défini par l'utilisateur dans un autre.
+Put, instruction
+Instruction Put [Exécution]
+Écrit un enregistrement dans un fichier relatif ou une séquence d'octets dans un fichier binaire.
+Get
 Syntaxe :
-RSet Text As String = Text ou RSet Variable1 = Variable2
+Put [#] FileNumber As Integer, [position], Variable
 Paramètres :
-Text :
-variable de chaîne de caractères.
-Text
-: chaîne de caractères à aligner à droite dans la variable de chaîne de caractères.
-Variable1 :
-variable définie par l'utilisateur et constituant la cible de la variable copiée.
-Variable2 :
-variable définie par l'utilisateur à copier dans une autre variable.
-RSet
-aligne la chaîne à droite dans la variable.
-Tous les caractères restants sont remplacés par des espaces.
-Si la chaîne de caractères est plus longue que la variable de chaîne de caractères, les caractères en excès sont tronqués, et seuls les caractères restants sont alignés à droite dans la variable.
-instruction RSet
-permet également d'affecter des variables d'un type défini par l'utilisateur à un autre.
-RSet
-et
-LSet
-permettent de modifier les alignements à droite et à gauche des caractères d'une chaîne.
+FileNumber :
+expression au format nombre entier définissant le fichier de destination de l'écriture.
+Position :
+pour les fichiers relatifs (ouverts par accès Random), numéro de l'enregistrement à écrire.
+Pour les fichiers binaires (accès Binary), position de l'octet auquel l'écriture doit commencer, dans le fichier.
+Variable :
+nom de la variable à écrire dans le fichier.
+Len
+de l'instruction
+Open
+, l'espace entre la fin de l'enregistrement récemment écrit et le prochain enregistrement est complété par des données existantes provenant du fichier en cours d'écriture.
+Remarque concernant les fichiers binaires : le contenu des variables est écrit à la position spécifiée et le pointeur de fichier est inséré immédiatement après le dernier octet.
+Aucun espace n'est laissé entre les enregistrements.
 Exemple :
-Sub ExampleRLSet
-Dim sVar as string
-Dim sExpr as string
-sVar = String(40, &quot; * &quot; )
-sExpr = &quot; SBX &quot;
-REM Aligner à droite &quot; SBX &quot; dans une chaîne de 40 caractères
-REM Remplacer les astérisques par des espaces
-RSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-sVar = String(5, &quot; * &quot; )
-sExpr = &quot; 123457896 &quot;
-RSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-sVar = String(40, &quot; * &quot; )
-sExpr = &quot; SBX &quot;
-REM Aligner à gauche &quot; SBX &quot; dans une chaîne de 40 caractères
-LSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-sVar = String(5, &quot; * &quot; )
-sExpr = &quot; 123456789 &quot;
-LSet sVar = sExpr
-Print &quot; > &quot; ; sVar; &quot; < &quot;
-End Sub
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM Doit être un type de variant
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM Position du début de l'écriture
+Put #iNumber,, &quot; Ceci est la première ligne de texte &quot; REM Remplir la ligne avec du texte
+Put #iNumber,, &quot; Ceci est la seconde ligne de texte. &quot;
+Put #iNumber,, &quot; Ceci est la troisième ligne de texte. &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; Ceci est un nouveau texte. &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; Ceci est le texte de l'enregistrement 20. &quot;
+Print Lof(#iNumber)
+Close #iNumber
+end sub

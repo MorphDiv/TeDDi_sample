@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,9 +15,106 @@
 # sample_type:	whole
 # comments:	NA
 
-Bildschirmschoner einrichten
-Im angegebenen X-Fenster starten
-Im X-Hauptfenster starten (root XWindow)
-Bildschirmschoner im Demo-Modus startenNAME OF TRANSLATORS
-Thomas ReitelbachEMAIL OF TRANSLATORS
-tr@erdfunkstelle.de
+Stilrichtlinie für das Chatfenster von & kopete;
+Stilreferenz für das Chatfenster von & kopete;
+Ab Version 0.12 verwendet & kopete; das Adium -Format für den Stil des Chatfensters. Das Designformat basiert auf HTML -Vorlagen und CSS. Damit sind Design einfacher zu erstellen und weiterzuentwickeln, nur Kenntnisse von HTML und CSS sind erforderlich. Damit sind außerden auch Varianten für Stile möglich, sie werden als CSS -Dateien definiert und erlauben eine leichtere Anpassung.
+Stilreferenz
+Das Adium-Format besteht aus einer Ordnerstruktur, HTML -Vorlagen, CSS -Dateien und Schlüsselwörten, die bei der Verarbeitung der Vorlagen durch Werte ersetzt werden. Das endgültige Ergebnis ist eine XHTML -Datei, in der die Nachrichten mit DOM -Operationen eingefügt werden. Der wichtigste Bestandteil ist ein div-Element namens Chat. Vor und nach diesem Element werden Vorlagen für die Kopf- und Fusszeilen eingefügt. Nachrichten sind untergeordnete Teile des div-Elements.
+Ordnerstruktur
+Ein Stil muss diese Ordnerstruktur einhalten, das wird von & kopete; vorausgesetzt. Ein Stil muss im Ordner styleName gespeichert werden. Die Ordnerstruktur entspricht einem Anwendungsverzeichnis (Bundle) in Mac OS X. Da in einem UNIX -System zwischen Groß- und Kleinschreibung unterschieden wird, das ist hier zu beachten.
+styleName\\ (.adiumMessageStyle darf angehängt werden, das es in Mac OS X ein Anwendungsverzeichnis / Bundle ist) Contents\\ Info.plist Resources\\ main.css Header.html Footer.html Status.html Incoming\\ (and Outgoing\\) Content.html NextContent.html (für aufeinanderfolgende Nachrichten) Context.html (for message history) NextContext.html Action.html Variants\\ *.css
+Über & lt;div id= insert gt;lt;/divgt;
+Die ist ein besonderes intern verwendetes div-Element. Es dient als Platzhalter, um anzuzeigen, wo die nächste Nachricht eingefügt wird. Bei einer neuen Nachricht wird dies Element entfernt und durch die neue Nachricht ersetzt. Bei einer aufeinanderfolgenden Nachricht wird das div-Element durch den Inhalt der neuen Nachricht ersetzt. Dieses besondere div-Element muss in Content-, Context-, NextContent- und NextContext-Vorlagen enthalten sein, es sollte auch in Action- und Status-Vorlagen eingefügt werden.
+HTML-Vorlagen.
+Beschreibung der Vorlagen.
+Header.html (erforderlich)
+Wird zur Anzeige einer Kopfzeile für die Unterhaltung verwendet. Diese Vorlage wird vor dem div-Element Chat eingefügt und kann bei Bedarf auch durch eine leere Datei ersetzt werden.
+Footer.html (erforderlich)
+Wird zur Anzeige einer Fusszeile für die Unterhaltung verwendet. Diese Vorlage wird nach dem div-Element Chat eingefügt und kann bei Bedarf auch durch eine leere Datei ersetzt werden.
+Status.html (erforderlich)
+Diese Vorlage wird zur Anzeige einer internen Nachricht verwendet, wie zum Beispiel eine Statusänderung oder eine Nachricht von Kopete & eg; eingehende Dateiübertragung. Wenn der Stil keine Action-Vorlage enthält, wird diese Vorlage auch für Action-Meldungen verwendet.
+Incoming/Content.html
+Outgoing/Content.html (erforderlich)
+Die Content-Vorlagen beeinhalten die eigentliche Nachricht. Diese Vorlagen müssen fortlaufende Nachrichten aufnehmen können und nicht nur zur Anzeige einer einzelnen Nachricht entworfen worden sein. Aufeinanderfolgende Nachrichten werden am div-Element eingefügt.
+Incoming/NextContent.html
+Outgoing/NextContent.html (erforderlich)
+Die Vorlage NextContent ist ein Nachrichten-Fragment für fortlaufemde Nachrichten und wird in den Hauptblock für die Nachrichten eingefügt. Diese HTML-Vorlage sollte nur das enthalten, was für die Anzeige nötig ist.
+Incoming/Action.html
+Outgoing/Action.html (wahlweise) (Erweiterung von & kopete;)
+Diese Vorlage ist eine Erweiterung von & kopete; für das Adium-Format. Diese Vorlage ist für die ein- und ausgehende Richtung verfügbar. Action-Nachrichten werden verwendet, um über Aktionen des Benuzters zu informieren. Beispiel :„ /me installiert & kopete ;“ wird als„ DarkShock installiert & kopete ;“ angezeigt.
+Incoming/Context.html
+Incoming/NextContext.html
+Outgoing/Context.html
+Outgoing/NextContext.html (wahlweise)
+Diese Vorlagen werden in Kopete nicht verwendet. In Adium wird damit der Verlauf angezeigt. Diese Vorlagen unterscheiden sich nur geringfügig von den Vorlagen für Content und NextContent.
+Über CSS-Stile und Varianten
+HTML-Vorlagen werden zur Beschreibung einer Struktur verwendet, der Stil selbst wird in CSS -Dateien beschrieben. Der Hauptil ist main.css, Varianten werden davon abgeleitet. Beispiele für Varianten sind geänderte Farben oder keine Anzeige eines Benutzerfotos. main.css und die Varianten werden in die endgültige XHTML -Datei eingebunden.
+- main.css
+Dies ist die Haupt- CSS -Datei, die in allen Varianten benutzt wird. Diese Datei sollte alle wichtigen Beschreibungen für Ihren Stil enthalten.
+-Variants
+Varianten sind CSS -Dateien im Ordner Variants /. Jede Variante ist eine einzelne CSS -Datei, die die Datei main.css enthalten und den Hauptstil verändern.
+Fehlersuche in Stilen
+Zwei Tipps zur Fehlersuche für Stile, die Sie neu erstellen:
+- Speichern Sie eine Unterhaltung.
+Im Chatfenster können Sie eine Unterhaltung speichern. Das ist eine Kopie der angezeigten XHTML-Seite. Bennutzen Sie diese Seite, um Ihre CSS -Dateien in Konqueror zu überprüfen.
+- Deaktivieren Sie den Zwischenspeicher für Stile.
+Zur Abschaltung des Zwischenspeicher für Stile gibt es einen Einstellungsparameter. Ist der Zwischenspeicher abgeschaltet, wird bei jeder Anforderung die HTML-Vorlage neu eingelesen, das ist erleichert das Testen eines Stiles in & kopete;. Fügen Sie folgende Zeilen in die Datei kopeterc ein:
+[KopeteStyleDebug] disableStyleCache=true
+Referenz der Schlüsselworte
+Schlüsselworte sind Platzhalter, die in jeder neuen Nachricht durch einen Wert passend zum Kontext ersetzt werden. Um alle Fähigkeiten von Kopete zu unterstützen, ist das Adium-Format um einige Schlüsselworte erweitert worden. Außerdem sind einige Schlüsselworte nur in bestimmten Kontexten zulässig.
+Schlüsselwortliste für Header- und Footer-Vorlagen.
+Diese Schlüsselworte werden am Beginn des Chats verarbeitet.
+%chatName%
+Dies ist der Name der aktuellen Chat-Sitzung. Üblicherweise wird der Name des Kontakts und sein Status hier angezeigt. Im IRC ist dies das Thema des Kanals.
+%sourceName%
+%destinationName%
+Zeigt den Namen des Kontakts in einer Chat-Sitzung an. %sourceName% wird durch Ihren Namen ersetzt, %destinationName% durch den Namen des Chat-Partners. Verwenden Sie besser %chatName% anstatt %sourceName% oder %destinationName%, das ist in einem Chat mit mehreren Personen oder im IRC eindeutig.
+%incomingIconPath%
+%outgoingIconPath%
+Das Bild, Foto oder der Atavar für den Kontakt einer Chatsitzung. Für die eingehende Richtung ist dies das Foto des Kontakts und für die ausgehende Richtung Ihr eigenes Foto. Sind diese Fotos nicht vorhanden, wird je nach Richtung der Nachricht das Bild aus der Datei buddy_icon.png im Ordner Incoming oder Outgoing benutzt.
+%timeOpened%
+%timeOpened{X}%
+Zeit und Datum, an dem die Chatsitzung begonnen hat, dabei wird in %timeOpened% das lokal eingestellte Datumsformat verwendet. Ein abweichendes Format kann mit %timeOpened{X}% mit X als Zeichenkette für das Datumsformat eingestellt. Es werden die gleichen Parameter wie in der glibc-Function strftime verwendet. Mit man strftime auf der Konsole wird eine Liste aller verfügbaren Parameter angezeigt.
+Schlüsselwortliste für Content-, NextContent-, Context-, NextContext- und Action-Vorlagen.
+Diese Schlüsselworte werden für jede Nachricht verarbeitet.
+%userIconPath%
+Das Bild, Foto oder der Atavar für den Kontakt der Nachricht. Ist diese Foto nicht vorhanden, wird je nach Richtung der Nachricht das Bild aus der Datei buddy_icon.png im Ordner Incoming oder Outgoing benutzt.
+%senderScreenName%
+Dies ist die ID des Kontaktes der Nachricht, zum Beipiel ich@hotmail.com, 45566576, MaxMustermann.
+%sender%
+Dies ist die Name des Kontaktes der Nachricht und wird aus dem Anzeigenamen des Metakontacts gelesen.
+%service%
+Zeigt den Namen des Dienstes der Nachricht an, zum Beispiel Jabber, Yahoo oder MSN.
+%textbackgroundcolor{X}%
+In & kopete; wird dieses Schlüsselwort für die Hintergrundfarbe von Hervorhebungen benutzt. Verwenden Sie keine Parameter innerhalb der Klammern, verwenden Sie nur die Form %textbackgroundcolor{}.
+%senderStatusIcon% (kopete;-Erweiterung)
+Zeigt das Statussymbol des Kontakts der Nachricht. Dieser Wert enthält den Pfad zu einer Datei.
+%senderColor%
+%senderColor{N}% (kopete;-Erweiterung)
+Erstellt eine Farbe aus der Kontakt-ID des Senders. Damit können unterschiedliche Farben für die Anzeige der Spitznamen der Kontakte benutzt werden.
+In %senderColor{N}% ist N eine positive ganze Zahl. Ist N größer 100, wird die Farbe für den Kontakt aufgehellt, mit N= 150 um 50%. Werte von N kleiner 100 dunkeln die Farbe ab. Damit können die Hintergrundfarben für jeden Kontakt unterschiedlich eingestellt werden.
+Sollen diese Farben nur in einer Variante, aber nicht im Hauptstil verwendet werden, gibt es folgende Lösung für diese Problem: < ![CDATA[...]] > Geben Sie Farben für das Element p.message in der Datei main.css an und in der Variante stellen Sie folgendes ein:
+p.message {color:inherit; border-color:inherit;}
+Schlüsselwortliste für Nachrichten und Status.html
+%message%
+Die eigentliche Nachricht, ein HTML-Fragment.
+%time%
+%time{X}%
+Zeit und Datum, an dem die Nachricht empfangen wurde, dabei wird in %time% das lokal eingestellte Datumsformat verwendet. Ein abweichendes Format kann mit %time{X}% mit X als Zeichenkette für das Datumsformat eingestellt werden. Es werden die gleichen Parameter wie in der glibc-Function strftime verwendet. Mit man strftime auf der Konsole wird eine Liste aller verfügbaren Parmeter angezeigt.
+%messageDirection% (kopete;-Erweiterung)
+Bestimt die Schreibrichtung der Nachricht. Zulässige Werte sind entweder„ rtl“ oder„ ltr“. Weitere Informationen zu richtigen Anwendung dieses Schlüsselwortes finden Sie im Abschnitt Schreibrichtung.
+Stilrichtlinie für das Chatfenster von & kopete;
+Die Stilrichtlinien für das Chatfenster von & kopete; ist ein Satz von Regeln, die Ihr Chatfensterstil einhalten muss, um kompatibel zu Kopete sein.
+Unterstützung für Hervorhebungen
+Ihr Stil muss Hervorhebungen anzeigen. In Kopete und Adium wird %textbackgroundcolor{}% durch die Farbe für Hervorhebungen ersetzt. Fügen Sie das Stilattribut background-color: %textbackgroundcolor{}% zum HTML-Element hinzu, das die Meldungen anzeigt.
+Vorlagen für aufeinanderfolgende Nachrichten sind erforderlich.
+Dies ist ein Hinweis für das Überarbeiten von alten XSL-Stilen in das neue Format. Alle Stile müssen eine Vorlage für aufeinanderfolgende Nachrichten enthalten, dies ist jetzt die Standardeinstellung.
+UTF-8 -Kodierung verwenden.
+Ihre Dateien müssen in der Kodierung UTF-8 gespeichert werden.
+Verwenden Sie Contents/Info.plist für die Kompatibilität mit Adium
+Die Datei Contents/Info.plist wird zurzeit noch nicht in Kopete benutzt. Damit der Stil aber kompatibel zu Adium bleibt, sollte die Datei vorhanden sein. Ein einfaches Beispiel für diese Datei, alle Texte zwischen den Zeichen„ $“ sind durch passende Werte zu ersetzen:
+< ![CDATA[ < ?xml version="1.0 "encoding="UTF-8"? > < !DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd" > CFBundleDevelopmentRegion English CFBundleGetInfoString $Der vollständige Name Ihres Stils$ CFBundleIdentifier $Die ID des Stils im Format: com.adiumx.smooth.operator.style$ CFBundleInfoDictionaryVersion 1.0 CFBundleName $Name Ihres Stils$ CFBundlePackageType AdIM MessageViewVersion 3]] >
+Unterstützung für buddy_icon.png
+In den Ordnern Incoming und Outgoing muss eine Datei namens buddy_icon.png vorhanden sein. Diese Bilder werden verwendet, wenn für den Kontakt kein Foto vorhanden ist.
+Unterstützung für Sprachen mit der Schreibrichtung von rechts nach links mit dem Schlüsselwort %messageDirection%.
+Das Schlüsselwort %messageDirection% ist für Sprachen mit Schreibrichtung von rechts nach links vorgesehen. Mit„ rtl“ wird von rechts nach links und mit„ ltr“ wird von links nach rechts geschrieben. Dieses Stilattribut wird zum HTML-Element hinzugefügt, das die Nachrichten anzeigt: direction: %messageDirection%. In der Einstellung des Erscheinungsbildes wird für die Stilvorschau die angegebene Schreibrichtung überprüft und entsprechend angezeigt.

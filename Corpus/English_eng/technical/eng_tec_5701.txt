@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,177 +15,38 @@
 # sample_type:	whole
 # comments:	NA
 
-Scripting & kmplot;
-A new feature in & kde; 3.4 is that you can write scripts for & kmplot; using & DBus; in & kde; 4. For example, if you want to define a new function f(x)=2sin x+3cos x, set its line width to 20 and then draw it, you type in a console:
-qdbus org. kde. kmplot-PID / parser org. kde. kmplot. Parser. addFunction "f(x)=2sin x+3cos x" "" As a result, the new function's id number will be returned, or -1 if the function could not be defined.
-qdbus org. kde. kmplot-PID / parser org. kde. kmplot. Parser. setFunctionFLineWidth ID 20 This command sets the function with the id number ID the line width to 20.
-qdbus org. kde. kmplot-PID / view org. kde. kmplot. View. drawPlot This command repaints the window so that the function get visible.
-A list of the available functions:
-/ kmplot org. kde. kmplot. KmPlot. fileOpen url
-Load the file url.
-/ maindlg org. kde. kmplot. MainDlg. isModified
-Returns true if any changes are done.
-/ maindlg org. kde. kmplot. MainDlg. checkModified
-If there are any unsaved changes, a dialog appears to save, discard or cancel the plots.
-/ maindlg org. kde. kmplot. MainDlg. editAxes
-Opens the coordinate system edit dialog.
-/ maindlg org. kde. kmplot. MainDlg. toggleShowSlider
-Shows/ hides parameter slider window.
-/ maindlg org. kde. kmplot. MainDlg. slotSave
-Saves the functions (opens the save dialog if it is a new file).
-/ maindlg org. kde. kmplot. MainDlg. slotSaveas
-The same as choosing File Save As in the menu.
-/ maindlg org. kde. kmplot. MainDlg. slotPrint
-Opens the print dialog.
-/ maindlg org. kde. kmplot. MainDlg. slotResetView
-The same as choosing View Reset View in the menu.
-/ maindlg org. kde. kmplot. MainDlg. slotExport
-Opens the export dialog.
-/ maindlg org. kde. kmplot. MainDlg. slotSettings
-Opens the settings dialog.
-/ maindlg org. kde. kmplot. MainDlg. slotNames
-Shows the predefined math functions in the handbook.
-/ maindlg org. kde. kmplot. MainDlg. findMinimumValue
-The same as choosing Tools Minimum Value... in the menu.
-/ maindlg org. kde. kmplot. MainDlg. findMaximumValue
-The same as choosing Tools Maximum Value... in the menu.
-/ maindlg org. kde. kmplot. MainDlg. graphArea
-The same as choosing Tools Plot Area in the menu.
-/ maindlg org. kde. kmplot. MainDlg. calculator
-The same as choosing Tools Calculator in the menu.
-/ parser org. kde. kmplot. Parser. addFunction f_str0 f_fstr1
-Adds a new function with the expressions f_str0 and f_str1. If the expression does not contain a function name, it will be auto-generated. The id number of the new function is returned, or -1 if the function could not be defined.
-/ parser org. kde. kmplot. Parser. removeFunction id
-Removes the function with the id number id. If the function could not be deleted, false is returned, otherwise true.
-/ parser org. kde. kmplot. Parser. setFunctionExpression id eq f_str
-Sets the expression for the function with the id number id to f_str. Returns true if it succeed, otherwise false.
-/ parser org. kde. kmplot. Parser. countFunctions
-Returns the number of functions (parametric functions are calculated as two).
-/ parser org. kde. kmplot. Parser. listFunctionNames
-Returns a list with all functions.
-/ parser org. kde. kmplot. Parser. fnameToID f_str
-Returns the id number of f_str or -1 if the function name f_str was not found.
-/ parser org. kde. kmplot. Parser. functionFVisible id
-Returns true if the function with the ID id is visible, otherwise false.
-/ parser org. kde. kmplot. Parser. functionF1Visible id
-Returns true if the first derivative of the function with the ID id is visible, otherwise false.
-/ parser org. kde. kmplot. Parser. functionF2Visible id
-Returns true if the second derivative of the function with the ID id is visible, otherwise false.
-/ parser org. kde. kmplot. Parser. functionIntVisible id
-Returns true if the integral of the function with the ID id is visible, otherwise false.
-/ parser org. kde. kmplot. Parser. setFunctionFVisible id visible
-Shows the function with the ID id if visible is true. If visible is false, the function will be hidden. True is returned if the function exists, otherwise false
-/ parser org. kde. kmplot. Parser. setFunctionF1Visible id visible
-Shows the first derivative of the function with the ID id if visible is true. If visible is false, the function will be hidden. True is returned if the function exists, otherwise false.
-/ parser org. kde. kmplot. Parser. setFunctionF2Visible id visible
-Shows the second derivative of the function with the ID id if visible is true. If visible is false, the function will be hidden. True is returned if the function exists, otherwise false.
-/ parser org. kde. kmplot. Parser. setFunctionIntVisible id visible
-Shows the integral of the function with the ID id if visible is true. If visible is false, the function will be hidden. True is returned if the function exists, otherwise false.
-/ parser org. kde. kmplot. Parser. functionStr id eq
-Returns the function expression of the function with the ID id. If the function not exists, an empty string is returned instead.
-/ parser org. kde. kmplot. Parser. functionFLineWidth id
-Returns the line width of the function with the ID id. If the function not exists, 0 is returned.
-/ parser org. kde. kmplot. Parser. functionF1LineWidth id
-Returns the line width of the first derivative of the function with the ID id. If the function not exists, 0 is returned.
-/ parser org. kde. kmplot. Parser. functionF2LineWidth id
-/ parser org. kde. kmplot. Parser. functionIntLineWidth id
-Returns the line width of the integral of the function with the ID id. If the function not exists, 0 is returned.
-/ parser org. kde. kmplot. Parser. setFunctionFLineWidth id linewidth
-Sets the line width of the function with the ID id to linewidth. True is returned if the function exists, otherwise false.
-/ parser org. kde. kmplot. Parser. setFunctionF1LineWidth id linewidth
-Sets the line width of the first derivative of the function with the ID id to linewidth. True is returned if the function exists, otherwise false.
-/ parser org. kde. kmplot. Parser. setFunctionF2LineWidth id linewidth
-Sets the line width of the second derivative of the function with the ID id to linewidth. True is returned if the function exists, otherwise false.
-/ parser org. kde. kmplot. Parser. setFunctionIntLineWidth id linewidth
-Sets the line width of the integral of the function with the ID id to linewidth. True is returned if the function exists, otherwise false.
-/ parser org. kde. kmplot. Parser. functionParameterList id
-Returns a list with all the parameter values for the function with the ID id.
-/ parser org. kde. kmplot. Parser. functionAddParameter id new_parameter
-Adds the parameter value new_parameter to the function with the ID id. True is returned if the operation succeed, otherwise false.
-/ parser org. kde. kmplot. Parser. functionRemoveParameter id remove_parameter
-Removes the parameter value remove_parameter from the function with the ID id. True is returned if the operation succeed, otherwise false.
-/ parser org. kde. kmplot. Parser. functionMinValue id
-Returns the minimum plot range value of the function with the ID id. If the function not exists or if the minimum value is not defined, an empty string is returned.
-/ parser org. kde. kmplot. Parser. functionMaxValue id
-Returns the maximum plot range value of the function with the ID id. If the function not exists or if the maximum value is not defined, an empty string is returned.
-/ parser org. kde. kmplot. Parser. setFunctionMinValue id min
-Sets the minimum plot range value of the function with the ID id to min. True is returned if the function exists and the expression is valid, otherwise false.
-/ parser org. kde. kmplot. Parser. setFunctionMaxValue id max
-Sets the maximum plot range value of the function with the ID id to max. True is returned if the function exists and the expression is valid, otherwise false.
-/ parser org. kde. kmplot. Parser. functionStartXValue id
-Returns the initial x point for the integral of the function with the ID id. If the function not exists or if the x-point-expression is not defined, an empty string is returned.
-/ parser org. kde. kmplot. Parser. functionStartYValue id
-Returns the initial y point for the integral of the function with the ID id. If the function not exists or if the y-point-expression is not defined, an empty string is returned.
-/ parser org. kde. kmplot. Parser. setFunctionStartValue id x y
-Sets the initial x and y point for the integral of the function with the ID id to x and y. True is returned if the function exists and the expression is valid, otherwise false.
-/ view org. kde. kmplot. View. stopDrawing
-If & kmplot; currently is drawing a function, the procedure will stop.
-/ view org. kde. kmplot. View. drawPlot
-Redraws all functions.
-KmPlotShell fileOpen & url
-MainDlg isModified
-MainDlg editColors
-Opens the color edit dialog.
-MainDlg editAxes
-MainDlg editScaling
-Opens the scaling edit dialog.
-MainDlg editFonts
-Opens the fonts edit dialog.
-MainDlg editConstants
-Opens the constants edit dialog.
-MainDlg newFunction
-Opens the new function plot dialog.
-MainDlg newParametric
-Opens the new parametric plot dialog.
-MainDlg newPolar
-Opens the new polar plot dialog.
-MainDlg toggleShowSlider1
-Shows/ hides parameter slider window number 2.
-MainDlg toggleShowSlider2
-Shows/ hides parameter slider window number 3.
-MainDlg toggleShowSlider3
-Shows/ hides parameter slider window number 4.
-MainDlg slotSave
-MainDlg slotSaveas
-MainDlg slotEditPlots
-Opens the edit plots dialog.
-MainDlg slotPrint
-MainDlg slotExport
-MainDlg slotSettings
-MainDlg slotNames
-MainDlg slotCoord1
-Coordinate System I.
-MainDlg slotCoord2
-Coordinate System II.
-MainDlg slotCoord3
-Coordinate System III.
-MainDlg getYValue
-The same as choosing Tools Get y-Value... in the menu.
-MainDlg graphArea
-Parser addFunction f_str
-Parser delfkt id
-Parser fnameToId f_str
-Parser id x
-Calculates the value x for the function with the ID id or returns 0.0 if id does not exist.
-Parser functionStr id
-Parser functionFColor id
-Returns the color of the function with the ID id.
-Parser functionF1Color id
-Returns the color of the first derivative of the function with the ID id.
-Parser functionF2Color id
-Returns the color of the second derivative of the function with the ID id.
-Parser functionIntColor id
-Returns the color of the integral of the function with the ID id.
-Parser setFunctionFColor color id
-Sets the color of the function with the ID id to color. True is returned if the function exists, otherwise false.
-Parser setFunctionF1Color color id
-Sets the color of the first derivative of the function with the ID id to color. True is returned if the function exists, otherwise false.
-Parser setFunctionF2Color color id
-Sets the color of the second derivative of the function with the ID id to color. True is returned if the function exists, otherwise false.
-Parser setFunctionIntColor color id
-Sets the color of the integral of the function with the ID id to color. True is returned if the function exists, otherwise false.
-Parser setFunctionStartYValue max id
-Sets the initial y point for the integral of the function with the ID id to y. True is returned if the function exists and the expression is valid, otherwise false.
-View stopDrawing
-View drawPlot
-The same as choosing Tools Area Under Graph... in the menu.
+Classes
+Functions
+Project
+Quick Open
+Quickly open resources such as files, classes and methods.
+& Quick Open
+Quick Open & File
+Quick Open & Class
+Quick Open & Function
+Jump to Declaration
+Jump to Definition
+Embedded Quick Open
+Next Function
+Previous Function
+Outline
+Includes
+Includers
+Currently Open
+Files
+Navigate
+Quick Open Toolbar
+Search:
+Quick Open...
+Open
+Cancel
+& Scopes:
+& Items:
+Your names
+Your emails
+Not parsed yet
+none
+Not available any more: %1
+Not available any more
+Return:
+File:

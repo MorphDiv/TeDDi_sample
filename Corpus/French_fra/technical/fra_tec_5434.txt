@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,7 +15,34 @@
 # sample_type:	whole
 # comments:	NA
 
-Un exemple de modèle pour gérer votre comptabilité de coûts téléphoniques.
-Si vous ne trouvez pas de règle pour votre région, vous allez devoir en écrire une en suivant l'exemple suivant. N'ayez pas peur, c'est très simple.
-N'oubliez pas de soumettre vos nouvelles règles au mainteneur de & kppp;. Vous pouvez vérifier la bonne syntaxe d'un nouveau fichier de règles grâce à l'option de ligne de commande -r fichier_de_règle de & kppp;, et vous devez installer ce fichier dans ${KDEDIR}/ share/ apps/ kppp/ Rules ou dans ${HOME}/. kde/ share/ apps/ kppp/ Rules avant que ne vous puissiez le choisir dans cette fenêtre.
-################################################################ # # Avertissement/ Licence # Ce modèle est (c) Mario Weilguni & lt; mweilguni@kde. orggt; # Il est sous la même licence que le kppp package, # qui est une partie de # ################################################################ # # Ceci est un exemple d'ensemble de règles pour kppp. Vous # pouvez l'utiliser comme modèle lorsque vous devez créer # votre propre règle. Si tel est le cas, supprimez tous les commentaires # et insérez les vôtres. Cela vous permettra de vérifier vos réglages # plus facilement. # # S'il vous plaît, signez le fichier de tarification avec vos noms et # adresse email. Je pourrais alors vous contacter en cas de besoin. # # NOTE: les règles de cette règle n'ont pas de sens propre. Elles ne # sont là qu'à titre d'exemple. # # A PROPOS DES NOMS DE FICHIERS: # Lorsque vous créez votre propre ensemble de règles, utilisez "_" # dans les noms de fichiers plutôt que des espaces et # utilisez ". rst comme extension # i. e." Appels urbains autrichiens "# -- > le fichier doit être sauvegardé ainsi:" Autriche_appels_urbains. rst "# # Merci, Bernd Wuebben # wuebben@math. cornell. edu / wuebben@kde. org ################################################################ ################################################################ # # NOM DE L'ENSEMBLE DE REGLES. Cela est nécessaire pour des raisons # de comptabilité. # ################################################################ name=default ################################################################ # unité monétaire ################################################################ # Définit le Schilling autrichien (ATS) comme étant le symbole monétaire # par défaut (non requis nécessairement, le symbole par défaut # étant le" $") currency_symbol=ATS # Définit la position du symbole de l'unité monétaire # (non requis nécessairement, la position par défaut étant à" right ", # à droite) currency_position=right # Définit le nombre de chiffres significatifs. # (non requis nécessairement, par défaut:" 2 "currency_digits=2 ################################################################ # Paramètres de connexion ################################################################ # NOTE: les règles sont appliquées du haut vers le bas - la # DERNIÈRE règle correspondante est utilisée pour # le calcul des coûts. # Cela se charge à chaque fois que vous vous connectez. Si # vous ne payez pas à la connexion, utilisez" 0 "ici ou # mettez la ligne en commentaire. per_connection=0.0 # Coût minimal par connexion. Si le coût d'un appel # téléphonique est inférieur à cette valeur, cette valeur # est utilisée à la place. minimum_costs=0.0 # Vous payez 0,74 pour les 180 premières secondes (3 minutes). # Pas de problème. # Que vous soyez connecté pour 1 ou 180 secondes. # Cette règle va être prioritaire sur tout autre règle # durant les 180 premières secondes, tout particulièrement. # sur la règle par défaut. # Jetez un coup d'oeil à costgraphs. gif dans le répertoire des # documents de kppp pour une illustration graphique flat_init_costs=(0.74,180) # Ceci est la règle par défaut. Elle est utilisée lorsqu'aucune # autre règle ne s'applique. #" 0.1 ", le premier composant est le prix d'une #" unit"(unité) et "72" représente la durée en secondes # Ainsi, la règle suivante signifie: "Chaque 72 secondes 0,1 # ATS est ajouté à la facture" default=(0.1, 72) # # Règles plus compliquées: # # "Du lundi au dimanche, de 12h00 à 23h59, le prix est de # 0.2 chaque 72 secondes" on () between () use (0.2, 2) # Identique à la règle ci-dessus on (monday.. sunday) between () use (0.2, 2) # Identique à la règle ci-dessus. Vous devez utiliser une notation sur # 24 heures sans quoi la comptabilité ne fonctionnera pas correctement. # (Exemple: écrire 15h00 pour 3 pm) on (monday.. sunday) between (0:00..23:59) use (0.2, 2) # S'applique le vendredi, samedi, dimanche et lundi de 8h00 à 01h00 on (friday.. monday) between (8:00..13:00) use(0.3,72) # ATTENTION: on(monday.. friday) between (21:00..5:00) use (0.4,2) # n'inclut pas le samedi entre 0h00 et 05h00. Elle fonctionne du lundi# au vendredi. # Ne s'applique qu'à une date particulière (Noël) on (12/ 25) between () use (0.3,72) # S'applique à des intervalles tout au long de la semaine on (12/ 25..12/ 27, 12/ 31, 07/ 04, monday) between () use (0.4, 72) # Utilisez celle -ci pour Pâques on (easter) between () use (0.3,72) # Celle -ci pour Pâques + 50 jours (lundi de Pentecôte) on (easter+50) between () use (0.3,72) on (thursday) between (20:00..21:52) use (8.2, 1) # Les règles "on()" ci-dessus ne sont fonction que de l'heure. Vous pouvez également # créer une règle qui dépend du nombre de secondes que vousavez passées connecté. # Pour cela, spécifiez un troisième paramètre à "use()". # Par exemple, disons que le taux normal en soirée est de 0.20 par minute # et qu'il baisse de 20% après une heure de connexion Cela peut être modélisé # ainsi: on () between (19:30..08:00) use (0.20, 60) on () between (19:30..08:00) use (0.16, 60, 3600) # Notez que pour ces règles, comme pour les autres règles, # l'ordre d'apparition a une importance.
+Connexions sortantes
+Si aucune règle n'est définie & #160;:
+Autorise le domaine
+N'autorise pas le domaine
+Toujours demander
+Définir les règles...
+Connexions entrantes
+Accès accordés sur cet ordinateur & #160;:
+Supprimer
+Règles existantes
+Modifier
+Ajouter
+Supprimer
+Domaines
+Règle
+Utilisateurs
+Tous les utilisateurs
+roophie
+rob
+blabla
+Ajouter une règle & #160;: NAME OF TRANSLATORS
+Anne-Marie MahfoufEMAIL OF TRANSLATORS
+annma@kde. org
+Définir les règles pour les plasmoïdes distants
+(c) 2009 Rob Scheepmaker
+Rob Scheepmaker
+Mainteneur
+Dario Freddi
+Développeur
+Riccardo Iaconelli
+Concepteur d' interface

@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,225 +15,211 @@
 # sample_type:	whole
 # comments:	NA
 
-Creating themes for the & kdm; greeter
-This section describes the creation of themes for the themed greeter. For examples including screenshots, see the installed standard themes and the themes from the theme website.
-Theme Overview
-& kdm; themes can be created by creating an XML file that follows the specification in $KDEDIR / share/ apps/ doc/ kdm/ greeter. dtd. Theme files are stored in the directory $KDEDIR / share/ apps/ kdm/ themes/ theme_name. The theme directory should contain a file called KdmGreeterTheme. desktop which has similar format to other. desktop files and looks like:
-[KdmGreeterTheme] Greeter=circles. xml Name=Circles Description=Theme with blue circles Author=Bond, James Bond Copyright=(c) 2002 Bond, James Bond Screenshot=screenshot. png
-The Name, Description, Author and Copyright fields can be translated just like in other. desktop files. All the files that are mentioned should be in the theme directory itself. The Screenshot field points to a file which should be a 200x150 screenshot of the theme in action (it is OK not to have one, but it makes it nicer for the user). The Greeter entry points to an XML file that contains the description of the theme.
-Once a theme has been fully tested, make a tarball that contains the directory as it would be installed to the $KDEDIR / share/ apps/ kdm/ themes directory. This is the standard format for distributing & kdm; themes.
-Detailed Description of Theme XML format
-Toplevel Node
-& kdm; themes are XML files with the & lt; greetergt; tag at their root. The toplevel node is an item node of type rect with an implicit fixed layout.
-& lt; ?xml version="1.0 "encoding="UTF-8"? gt; & lt; !DOCTYPE greeter SYSTEM "greeter. dtd"gt; & lt; greetergt; [...] & lt; /greetergt;
-Contained within the greeter tag can be the nodes described in the next sections of this document. Some of these nodes are containers (layout nodes, item nodes) which can contain other nodes again.
-Item Nodes
-A & kdm; theme is created by specifying a hierarchy of item and layout nodes. Item nodes can have the following value for the type attribute:
-button
-A button field. This field uses a Qt button.
-It is also possible to make any other item act like a button by setting its button attribute to true. However, it is better to use Qt buttons in & kdm; themes since these are accessible to users with disabilities.
-entry
-An input widget like a line edit or combo box. Note that this is merely a placeholder for Qt widgets.
-label
-A text label. Must contain either a text node or a stock node to specify the text.
-list
-A face browser widget.
-pixmap
-A raster image in a format that Qt supports, & eg; PNG, JPEG, Tiff, etc.
-rect
-A plain rectangle.
-svg
-A vector image in SVG format.
-For example: & lt; item type=quot; labelquot; gt; An item that acts as a button:
-& lt; item type=quot; rectquot; id=quot; disconnect_buttonquot; button=quot; truequot; gt;.
-By default, the & kdm; login screen will disappear after authentication. This can result in flicker between the login screen and the session. The background attribute allows users to specify what elements of the theme are the background image. When used, this will cause & kdm; to remove all non-background items from the display and render the remaining background items to the root window. This can be used to create a smooth transition between the login screen and the session: & lt; item type=quot; rectquot; background=quot; truequot; gt; & lt; normal file="background. svg"/ gt; & lt; pos x=quot; 0quot; y=quot; 0quot; width=quot; 100%quot; height=quot; -75quot; /gt; & lt; /itemgt; To use a different background for login transition than the one used for login, the theme should specify two item nodes (which could contain pixmaps or svg images, for example). The item which corresponds to the greeter background should not have the background property while the item which corresponds to the transition background should have the background property. For instance:
-& lt; ?xml version="1.0 "encoding=quot; UTF-8quot; ?gt; & lt; !DOCTYPE greeter SYSTEM & quot; greeter. dtdquot; gt; & lt; greetergt; & lt; item type=quot; rectquot; background=quot; truequot; gt; & lt; normal file="background_for_login. svg" element="background"/ gt; & lt; pos x=quot; 0quot; y=quot; 0quot; width=quot; 100%quot; height=quot; 100%quot; /gt; & lt; /itemgt; & lt; item type=quot; rectquot; gt; & lt; normal file="background_for_greeter. svg"/ gt; & lt; pos x=quot; 0quot; y=quot; 0quot; width=quot; 100%quot; height=quot; 100%quot; /gt; & lt; /itemgt; [...] & lt; /greetergt;
-In multi-screen setups, themes may also specify the look of other screens than the one the greeter is on - but typically only background items will appear there. To specify which screen(s) an item should appear on, the screen attribute can be used with the value being one of greeter, other or all, meaning the screen the greeter is on, all screens the greeter is not on and all screens, resp.
-Each item can be given a name via the id attribute. Certain ids are recognized by & kdm; to give those items a special function:
-button items and items with the button=quot; truequot; attribute.
-Buttons typically trigger certain actions. Addionally, & kdm; will hide buttons whose actions are not available for some reason.
-Id
-Action
-chooser_button
-Runs the XDMCP chooser.
-disconnect_button
-Disconnect from remote session.
-session_button
-Open the session type selection menu.
-system_button
-Open a catch-all menu with various options and actions, depending on the configuration.
-label items
-& kdm; will show/ hide these labels and set their text depending on the state of the login dialog.
-Function
-pam-error
-This displays the Login failed. message.
-Widget embedding items
-& kdm; will embed particular Qt widgets into these items.
-user-entry
-Entry field for username entry.
-pw-entry
-Entry field for password entry.
-domain-entry
-Some conversation plugins use this field to query a domain name. If this field is present, the related enclosing items should have show nodes with the type plugin-domain-entry.
-talker
-This item should be of type rect. It represents the hot area of the greeter: it contains the label and entry items which concern the authentication process. If a given conversation plugin cannot match the existing items with its needs, it tries to embed a complex widget with an own layout into this item, thus completely overriding the theme's talker. Strictily speaking, & kdm; themes do not need to provide own talker designs at all, as all & kdm; authentication plugins are able make use of the talker item.
-userlist
-This item must be of type list. If the user list feature is enabled, & kdm; will embed the user list widget here. Otherwise, this item is hidden.
-xconsole
-This item should be of type rect. If the built-in xconsole feature is compiled in and enabled, & kdm; will embed the console log widget here. Otherwise, this item is hidden.
-Other items
-& kdm; will show/ hide these items depending on the configuration and the current state of the greeter. & kdm; does not impose type requirements on them, but they usually lend themselves to a particular type.
-Shown only when...
-timed-label
-... timed login is in progress.
-caps-lock-warning
-... Caps Lock is active.
-xauth-warning
-... the & X-Server; requires no X authorization to connect.
-userlist-rect
-... the user list is enabled. By nesting the userlist item into this one, it is possible to create something like a frame around the list and have it shown only when the user list itself if shown.
-xconsole-rect
-... the built-in xconsole is enabled. Analogous to userlist-rect.
-Layout Container Nodes
-Layout nodes appear inside item nodes and contain item nodes again. The type of the layout node determines the arrangement of its child nodes. An item node can contain one layout node of each type.
-Box Nodes
-Box nodes automatically arrange their children in a row. They are specified as follows: & lt; box orientation=quot; alignment quot; min-width=quot; num quot; min-height=quot; num quot; xpadding=quot; num quot; ypadding=quot; num quot; spacing=quot; num quot; homogeneous=quot; bool quot; gt; Where num means number of pixels and bool means either true or false. The alignment value can be either horizontal or vertical. If you leave any attribute off, it will default to zero for numbers, false for bools and vertical for the orientation.
-The spacing is the distance between neighboring child items. The padding is the box 'outer margin. If the box is homogeneous, the same amount of space is allocated to each child item.
-Fixed Nodes
-Fixed is a container that has its children laid out at precise coordinates. The size of this container is the smallest rectangle that contains all the children. Fixed has no extra attributes and so you just use: & lt; fixedgt; Then you put other items with proper position nodes inside it.
-Position Nodes
-Each item can specify its position and size via the pos node. For example:
-& lt; pos x=quot; 0quot; y=quot; 4quot; width=quot; 100%quot; height=quot; 100%quot; /gt;
-If the size is not specified, it will be the item's natural size, called the size hint. Note that not all items have a useful size hint.
-Both position and size can be given in percent and will be calculated relative to the size of the enclosing container in this case. For toplevel items it is the percentage of the whole screen. By appending circumflexes (^) to the size specification it is possible to modify it to be relative to the size of the enclosing item's enclosing item and so on.
-If the item contains a box, width and height can be specified to be box to mean that they are supposed to be the width and height of the box, that is the items in the box plus the padding.
-One of width and height can be specified to be scale to mean that it should be scaled according to the other dimension's scale relative to its size hint. Use this to preserve the aspect ratio of scaled images automatically.
-If the expand attribute is specified and true, this item will be expanded in the enclosing box as much as possible (that is it will be given more space if available).
-If width or height is a plain number, a negative value represents an offset from the enclosing container's size. Note that it is possible to specify a positive offset by writing two minus signs.
-In either case it is possible to constrain the final size with the min-width, min-height, max-width and max-height attributes which can be specified in the same ways as width and height.
-If x or y is a plain number, a negative value represents an offset from the right resp. bottom edge, unlike the default which is the left resp. top edge.
-It is also possible to specify which point within the item the position refers to. This is called the anchor and can be either c for center or one of n, ne, e, se, s, sw, w and nw which stand for the different edges/ corners corresponding the directions on a topographical map. The default is nw, which is the upper left corner. For example:
-& lt; pos x=quot; 10%quot; y=quot; 50%quot; anchor=quot; wquot; width=quot; 80%quot; height=quot; 95quot; /gt;
-Show Nodes
-You can specify the type attribute to indicate that certain items should only be displayed if the type is set. Prefixing the type with an exclamation mark (!) reverses the condition. Valid values include the following:
-Type
-Display if...
-chooser
-switching to remote login is permitted.
-halt and reboot
-system shutdown is permitted.
-system
-no condition (always set in & kdm;).
-plugin- entry-name
-the conversation plugin provides a corresponding input field.
-For example:
-& lt; show type=quot; chooserquot; /gt;
-Alternatively, you can specify a min-screen-width or min-screen-height value to indicate that certain items should be displayed only if the screen resolution is the at least the specified size. For example:
-& lt; show min-screen-height=quot; 768quot; /gt;
-Normal/ Active/ Prelight Nodes
-The look of most item types can be parametrized via the following tags:
-normal
-Normal state.
-prelight
-When the mouse is hovering over the item.
-active
-When a mouse button is clicked on the item.
-The exact set of available attributes depends on the item type:
-rect
-& lt; normal color=quot; #000000quot; alpha=quot; 0.0quot; /gt;
-Either of the attributes may be omitted, in which case the default is used (the example represents the defaults). alpha is a floating point number between zero (transparent) and one (opaque). color is a hashmark followed by a six-digit hex number; the format is # rrggbb. Alternatively, color may be specified as an eight-digit hex number, in which case the first two digits are the alpha value.
-label
-& lt; normal color=quot; #ffffffquot; alpha=quot; 1.0quot; font=quot; Sans 14quot; /gt;
-alpha and color are specified like in rect items.
-font follows the format family-list nbsp; style-options nbsp; size. Each part is optional.
-family-list is a comma-separated list of font families like helvetica, monospace, etc.
-style-options is a space-delimited list of keywords from the categories style, weight and stretch; from each category at most one. The style can be normal, italic or oblique. Weight can be ultra-light, light, medium, semi-bold, bold, ultra-bold or heavy. Allowable stretches comprise ultra-condensed, extra-condensed, condensed, semi-condensed, normal, semi-expanded, expanded, extra-expanded and ultra-expanded.
-size is either a floating point number representing the size in points (1/ 72 inch) or an integer followed by px representing the size in pixels. Point sizes are preferable, as they are independent from the display resolution.
-If either attribute is left out, the values from the style node are used. If this yields no window-text color specification, white is used. The default font is the one configured in & kdmrc;.
-pixmap
-svg
-& lt; normal file=quot; picture. pngquot; tint=quot; #ddddddquot; alpha=quot; 1.0quot; /gt;
-file specifies the file containing the image. Relative pathnames are relative to the theme's directory.
-element specifies the element id of a SVG file. If empty, the whole SVG image will be rendered.
-For pixmap nodes, & kdm; first tries to open a file that matches basename - width x height. extension based on the specified file name, so the best-quality image for a given resolution can be used.
-scalemode specifies how to adjust the size of images which do not match the element's size. free (the default) means to simply scale the image to the right size, possibly distorting its aspect ratio. The other two modes maintain the image's aspect ratio: fit means to zoom the image to the maximal size which fits into the element's geometry. The image will be centered. The remaining area will not be painted by this element, so it should be placed on top of a solid-filled rect. crop means to zoom the image to the minimal size which completely fills the element's geometry. The image will be clipped symmetrically.
-tint and alpha form a color specification like in rect items. Each pixel of the image is multiplied with this color component-wise.
-Widget Style Nodes
-This tag makes it possible to change the appearance of labels and Qt widgets embedded into the theme, e. g., line edits, buttons or the user list. The style settings are inherited by child items, but can be overridden individually. The defaults are taken from & kdmrc;.
-The font attribute defines the font for all widgets. For widgets with an input function it can be overridden with the edit-font attribute. Fonts are specified the same way as in normal/ active/ prelight nodes.
-Usually, the theming engine tries hard to remove any frames from Qt widgets, so they melt into the theme seamlessly. In cases where this is not desired, the frame attribute can be set to true.
-It is possible to specify almost the entire palette for the widgets as documented at Trolltech's site. Attribute names are composed from a scope, a color role and a suffix. Possible scopes are - in order of increasing precedence - all- for all color groups, no scope for the active and inactive color groups and active-, inactive- and disabled- for the respective color group. Supported color roles are window, window-text, base, alternate-base, text, bright-text, highlight, highlighted-text, button and button-text. The suffix can be -color or -alpha with the respective meaning as in normal/ active/ prelight nodes.
-Example:
-& lt; style edit-font=quot; Comic 16quot; text-color=quot; #ddddddquot; frame=quot; truequot; /gt;
-Face Browser Color Nodes
-Color nodes permit overriding the background color of the items in the face browser. labelcolor and altlabelcolor are essentially equivalent to all-base-color resp. all-alternate-base-color in style nodes. If only labelcolor is specified, alternating item backgrounds are disabled.
-& lt; color labelcolor=quot; #80ffffffquot; altlabelcolor=quot; #80f0f0f0quot; /gt;
-Text Nodes
-Text tags are used by labels. They can be used to display localized text as follows (if the xml: lang attribute is omitted, the POSIX locale is assumed):
-& lt; text xml: lang=quot; frquot; gt; Optionlt; /textgt;
-Text nodes can contain the following special character sequences which will be translated as follows:
-Sequence
-Expansion
-%%
-A literal% character
-%c
-Wall clock time and date
-%d
-Display name (DISPLAY environment variable)
-%h
-Hostname (gethostname output)
-%m
-Machine name (machine part of uname output)
-%n
-Node name (nodename part of uname output)
-%o
-Domain name (getdomainname output)
-%r
-Release name (release part of uname output)
-%s
-System name (sysname part of uname output)
-%t
-Remaining number of seconds until timed login is performed, plus the appropriate i18n plural form of second
-%u
-Username for timed login
-_
-Causes the following character to be an accelerator
-%t and %u are intended to be used only internally to display the timed-label message, which is automatically updated every second.
-Stock Nodes
-Certain common localized labels can be specified via the stock tags. The text tag is ignored if the stock tag is used. You really should use the stock labels rather than just putting all the translations into the themes. This yields faster load times and likely better translations. The following values are valid:
-Caps Lock is enabled
-chooser
-XDMCP Choose_r
-quit
-_Quit
-disconnect
-Disconn_ect
-halt
-Power o_ff
-language
-Lan_guage
-login
-_Login
-session
-Session _Type
-reboot
-Re_boot
-system
-_Menu
-User %u will login in %t
-domain-label
-_Domain:
-username-label
-_Username:
-password-label
-_Password:
-welcome-label
-Welcome to %h
-& lt; stock type=quot; welcome-labelquot; /gt;
-Buddy Nodes
-Items which do not directly cause an action can be assigned a buddy. The buddy is given input focus when the item is activated (clicked or a label's accelerator pressed).
-The buddy is referenced by id with the idref attribute. Obviously, it must be given an id. Example:
-& lt; item type=quot; labelquot; gt; & lt; stock type=quot; username-labelquot; /gt; & lt; buddy idref=quot; user-entryquot; /gt; [...] & lt; /itemgt; [...] & lt; item type=quot; entryquot; id=quot; user-entryquot; gt; [...] & lt; /itemgt;
-You can specify the type attribute to indicate that certain items should only be displayed if the type is set. Prefixing the type with an exclamation mark (!) reverses the condition. Valid values include the following: Type Display if... chooser switching to remote login is permitted. halt and reboot system shutdown is permitted. system no condition (always set in & kdm;). plugin- entry-name the conversation plugin provides a corresponding input field. For example:
-chooser
-system
+You are about to reset all shortcuts to their default values.
+Reset to defaults
+Current Component
+All Components
+Import Scheme...
+Export Scheme...
+Set All Shortcuts to None
+Remove Component
+Your current changes will be lost if you load another scheme before saving this one
+Load Shortcut Scheme
+Load
+This file (%1) does not exist. You can only select local files.
+Message: %1 Error: %2
+Failed to contact the KDE global shortcuts daemon
+Component '%1 'is currently active. Only global shortcuts currently not active will be removed from the list. All global shortcuts will reregister themselves with their defaults when they are next started.
+Remove component
+Are you sure you want to remove the registered shortcuts for component '%1 '? The component and shortcuts will reregister themselves with their default settings when they are next started.
+Select the Components to Export
+Components
+KDE component:
+File
+Select Shortcut Scheme
+Select one of the standard KDE shortcut schemes
+& Standard scheme:
+Select a shortcut scheme file
+& Path:
+Shortcuts:
+& Key Scheme
+Click here to add a new key bindings scheme. You will be prompted for a name.
+Click here to remove the selected key bindings scheme. You cannot remove the standard system-wide schemes'Current scheme 'and'KDE default'.
+Keyboard Shortcuts Using shortcuts you can configure certain actions to be triggered when you press a key or a combination of keys, e. g. Ctrl+C is normally bound to'Copy '. KDE allows you to store more than one'scheme' of shortcuts, so you might want to experiment a little setting up your own scheme, although you can still change back to the KDE defaults. In the'Global Shortcuts' tab you can configure non-application-specific bindings, like how to switch desktops or maximize a window; in the'Application Shortcuts' tab you will find bindings typically used in applications, such as copy and paste.
+Key Bindings Using key bindings you can configure certain actions to be triggered when you press a key or a combination of keys, e. g. Ctrl+C is normally bound to'Copy '. KDE allows you to store more than one'scheme' of key bindings, so you might want to experiment a little setting up your own scheme while you can still change back to the KDE defaults. In the tab'Global Shortcuts' you can configure non-application specific bindings like how to switch desktops or maximize a window. In the tab'Application Shortcuts' you will find bindings typically used in applications, such as copy and paste.
+New scheme
+& Save...
+& Global Shortcuts
+Shortcut Sequences
+Application Shortcuts
+User-Defined Scheme
+Win
+This scheme requires the "%1" modifier key, which is not available on your keyboard layout. Do you wish to view it anyway?
+Save Key Scheme
+Enter a name for the key scheme:
+A key scheme with the name '%1 'already exists; do you want to overwrite it?
+Overwrite
+Command
+Shortcut
+Alternate
+System
+Navigation
+Walk Through Windows
+Walk Through Windows (Reverse)
+Walk Through Desktops
+Walk Through Desktops (Reverse)
+Walk Through Desktop List
+Walk Through Desktop List (Reverse)
+Windows
+Window Operations Menu
+Close Window
+Maximize Window
+Maximize Window Vertically
+Maximize Window Horizontally
+Minimize Window
+Shade Window
+Move Window
+Resize Window
+Raise Window
+Lower Window
+Toggle Window Raise/ Lower
+Make Window Fullscreen
+Hide Window Border
+Keep Window Above Others
+Keep Window Below Others
+Activate Window Demanding Attention
+Setup Window Shortcut
+Pack Window to the Right
+Pack Window to the Left
+Pack Window Up
+Pack Window Down
+Pack Grow Window Horizontally
+Pack Grow Window Vertically
+Pack Shrink Window Horizontally
+Pack Shrink Window Vertically
+Window & Desktop
+Keep Window on All Desktops
+Window to Desktop 1
+Window to Desktop 2
+Window to Desktop 3
+Window to Desktop 4
+Window to Desktop 5
+Window to Desktop 6
+Window to Desktop 7
+Window to Desktop 8
+Window to Desktop 9
+Window to Desktop 10
+Window to Desktop 11
+Window to Desktop 12
+Window to Desktop 13
+Window to Desktop 14
+Window to Desktop 15
+Window to Desktop 16
+Window to Desktop 17
+Window to Desktop 18
+Window to Desktop 19
+Window to Desktop 20
+Window to Next Desktop
+Window to Previous Desktop
+Window One Desktop to the Right
+Window One Desktop to the Left
+Window One Desktop Up
+Window One Desktop Down
+Window to Screen 0
+Window to Screen 1
+Window to Screen 2
+Window to Screen 3
+Window to Screen 4
+Window to Screen 5
+Window to Screen 6
+Window to Screen 7
+Window to Next Screen
+Desktop Switching
+Switch to Desktop 1
+Switch to Desktop 2
+Switch to Desktop 3
+Switch to Desktop 4
+Switch to Desktop 5
+Switch to Desktop 6
+Switch to Desktop 7
+Switch to Desktop 8
+Switch to Desktop 9
+Switch to Desktop 10
+Switch to Desktop 11
+Switch to Desktop 12
+Switch to Desktop 13
+Switch to Desktop 14
+Switch to Desktop 15
+Switch to Desktop 16
+Switch to Desktop 17
+Switch to Desktop 18
+Switch to Desktop 19
+Switch to Desktop 20
+Switch to Next Desktop
+Switch to Previous Desktop
+Switch One Desktop to the Right
+Switch One Desktop to the Left
+Switch One Desktop Up
+Switch One Desktop Down
+Switch to Screen 0
+Switch to Screen 1
+Switch to Screen 2
+Switch to Screen 3
+Switch to Screen 4
+Switch to Screen 5
+Switch to Screen 6
+Switch to Screen 7
+Switch to Next Screen
+Mouse Emulation
+Kill Window
+Window Screenshot to Clipboard
+Desktop Screenshot to Clipboard
+Block Global Shortcuts
+Switch to Next Keyboard Layout
+Keyboard
+Click here to remove the selected key bindings scheme. You can not remove the standard system wide schemes, 'Current scheme 'and'KDE default'.
+Panel
+Popup Launch Menu
+Toggle Showing Desktop
+Next Taskbar Entry
+Previous Taskbar Entry
+Clipboard
+Show Klipper Popup-Menu
+Manually Invoke Action on Current Clipboard
+Enable/ Disable Clipboard Actions
+Desktop
+Run Command
+Show Taskmanager
+Show Window List
+Switch User
+Lock Session
+Log Out
+Log Out Without Confirmation
+Halt without Confirmation
+Reboot without Confirmation
+KDE Modifiers
+Modifier
+X11-Mod
+Ctrl
+Macintosh keyboard
+MacOS-style modifier usage
+Checking this box will change your X Modifier Mapping to better reflect the standard MacOS modifier key usage. It allows you to use Command+C for Copy, for instance, instead of the PC standard of Ctrl+C. Command will be used for application and console commands, Option as a command modifier and for navigating menus and dialogs, and Control for window manager commands.
+X Modifier Mapping
+Option
+Control
+Key %1
+None
+You can only activate this option if your X keyboard layout has the'Super 'or'Meta' keys properly configured as modifier keys.
+Command Shortcuts
+Modifier Keys
+Command Shortcuts Using key bindings you can configure applications and commands to be triggered when you press a key or a combination of keys.
+Below is a list of known commands which you may assign keyboard shortcuts to. To edit, add or remove entries from this list use the KDE menu editor.
+This is a list of all the desktop applications and commands currently defined on this system. Click to select a command to assign a keyboard shortcut to. Complete management of these entries can be done via the menu editor program.
+Shortcut for Selected Command
+& None
+The selected command will not be associated with any key.
+Custom
+If this option is selected you can create a customized key binding for the selected command using the button to the right.
+Use this button to choose a new shortcut key. Once you click it, you can press the key-combination which you would like to be assigned to the currently selected command.
+The KDE menu editor (kmenuedit) could not be launched. Perhaps it is not installed or not in your path.
+Application Missing

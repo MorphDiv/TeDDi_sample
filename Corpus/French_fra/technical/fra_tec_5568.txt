@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,68 +15,63 @@
 # sample_type:	whole
 # comments:	NA
 
-Manuel de & kdesu;
-& Geert. Jansen; & Geert. Jansen. mail;
-& traducteurYvesDessertine; & relecteurGerardDelafond;
-& Geert. Jansen;
-& kdesu; est une interface graphique pour la commande & UNIX; su.
-KDE
-su
-password
-root
-Introduction
-Bienvenue sur & kdesu; & #160;! & kdesu; est une interface graphique dans l'environnement de bureau KDE pour la commande & UNIX; su. Il vous permet de lancer un programme au nom d'un autre utilisateur, dès lors que vous pouvez fournir le mot de passe de cet utilisateur. & kdesu; ne dispose d'aucun privilège particulier, il utilise la commande su du système.
-& kdesu; dispose d'une fonction supplémentaire & #160;: il peut se souvenir des mots de passe pour vous. Si vous utilisez cette fonction, il vous suffit de saisir le mot de passe une seule fois pour chaque commande. Consultez pour de plus amples informations et pour une analyse des questions de sécurité afférentes.
-Ce programme est prévu pour être lancé depuis la ligne de commande ou depuis un fichier. desktop. Bien qu'il demande le mot de passe superutilisateur à travers une boîte de dialogue graphique, je le considère plus comme une ligne de commande connectée à une interface graphique que comme un véritable programme graphique.
-Utiliser & kdesu;
-L'utilisation de & kdesu; est simple. La syntaxe est la suivante & #160;:
-kdesu -c -d -f fichier -i nom de l'icône -n -p priorité -r -s -t -u user --nonewdcop commande arg1 arg2
-kdesu options génériques & kde; options génériques & Qt;
-Les options de la ligne de commande sont expliquées ci-dessous.
--c programe
-Ceci spécifie le programme à lancer en tant que superutilisateur. Il doit être passé comme un seul argument. Ainsi, par exemple, si vous voulez lancer un nouveau gestionnaire de fichiers, vous saisirez la commande & #160;: kdesu -c kfm -sw
--d
-N'affiche pas à commande à exécuter dans la boîte de dialogue.
--f fichier
-Cette option permet une utilisation efficace de & kdesu; dans les fichiers. desktop. Elle dit à & kdesu; d'examiner le fichier spécifié par l'argument fichier. Si ce fichier est accessible en écriture par l'utilisateur courant, & kdesu; exécutera la commande pour le compte de l'utilisateur courant. Si ce n'est pas le cas, la commande sera exécutée pour le compte de l'utilisateur user (par défaut root).
-fichier est évalué comme suit & #160;: si fichier commence par un /, il est considéré comme un nom de fichier absolu. Autrement, il est considéré comme étant le nom d'un fichier de configuration global de & kde;. Par exemple, pour configurer le gestionnaire d'affichage & kdm;, vous pouvez utiliser kdesu -c kdmconfig -f kdmrc
--f nom de l' icône
-Spécifie l'icône à utiliser dans la boîte de dialogue de mot de passe. Spécifiez juste le nom, sans l'extension.
-Par exemple, pour exécuter kfmclient et afficher l'icône de & konqueror; dans la boîte de dialogue du mot de passe & #160;:
-kdesu -i konqueror kfmclient
--n
-Ne conserve pas le mot de passe. Ceci désactive la case à cocher conserver le mot de passe dans la boîte de dialogue correspondante.
--p priorité
-Règle la valeur de la priorité. La priorité est un nombre arbitraire entre 0 et 100, où 100 signifie la priorité la plus haute, et 0 la plus basse. La valeur par défaut est 50.
--r
-Utilise l'ordonnancement temps réel.
--s
-Arrête le démon (daemon) kdesu. Consulter.
--t
-Active la sortie sur le terminal. Ceci désactive la conservation des mots de passe. Cette option sert principalement pour le débogage & #160;; si vous voulez lancer une application en mode console, utilisez plutôt le su standard.
--u user
-Alors que l'utilisation la plus courante de & kdesu; est d'exécuter une commande en superutilisateur, vous pouvez indiquer n'importe quel nom d'utilisateur et le mot de passe approprié.
-Fonctionnement interne
-Authentification X
-Le programme que vous exécutez va fonctionner sous l'identité du superutilisateur et n'aura généralement pas accès à votre affichage Xwindow. & kdesu; contourne ce problème en ajoutant un cookie d'authentification pour votre affichage dans un fichier temporaire nommé. Xauthority. Après la fin de la commande, ce fichier sera supprimé.
-Si vous ne voulez pas utiliser de cookies X, vous devrez vous débrouiller par vos propres moyens. & kdesu; le détectera et n'ajoutera pas de cookie, mais il vous faudra vous assurer que le superutilisateur est autorisé à accéder à votre affichage Xwindow.
-Interface avec su
-& kdesu; utilise la commande su du système pour acquérir ses privilèges. Dans cette section, j'explique en détail ce fonctionnement.
-Du fait que certaines implantations de su (comme celle de & RedHat;) ne veulent pas lire le mot de passe depuis stdin, & kdesu; crée une paire pty & #160; / & #160; tty et exécute su avec ses entrées-sorties standards connectées à tty.
-Pour exécuter la commande choisie par l'utilisateur, au lieu d'un shell interactif, & kdesu; utilise l'argument -c avec su. Cet argument est compris par tous les shells que je connais, donc le programme devrait être portable. su passe cet argument -c au shell de l'utilisateur, et le shell exécute le programme. Exemple de commande su root -c le_programme.
-Plutôt que d'exécuter directement la commande avec su, & kdesu; exécute un petit morceau de programme nommé kdesu_stub. Exécuté pour le compte de l'utilisateur cible, il demande quelques informations à & kdesu; à travers le canal pty & #160; / & #160; tty (qui correspond à son stdin et à son stdout) et exécute le programme de l'utilisateur. L'information qui est transmise comprend & #160;: l'affichage X, le cookie d'authentification X (le cas échéant), le PATH et la commande à lancer. La raison pour laquelle un petit programme intermédiaire est utilisé, c'est que le cookie X est une information privée et que, pour cette raison, il ne peut pas être passé sur la ligne de commande.
-Vérification du mot de passe
-& kdesu; vérifie le mot de passe que vous donnez et envoie un message d'erreur s'il n'est pas correct. La vérification passe par un programme de test & #160;: / bin/ true. Si le test réussit, le mot de passe est considéré comme étant correct.
-Conservation du mot de passe
-Pour votre confort, & kdesu; comprend une fonction de conservation du mot de passe. Si vous vous intéressez aux questions de sécurité, vous devriez lire ce paragraphe.
-Le fait de permettre à & kdesu; de se souvenir des mots de passe ouvre une (petite) brèche de sécurité dans votre système. Évidemment, & kdesu; n'autorise personne d'autre que vous -même (votre user id) à utiliser ces mots de passe, mais, si on n'y prend pas garde, ceci descend le niveau de sécurité du superutilisateur à celui d'un utilisateur normal (vous). Un hacker qui prendrait possession de votre compte pourrait ainsi obtenir l'accès superutilisateur. & kdesu; essaye d'éviter cela. La technique qu'il utilise pour cela est, au moins de mon point de vue, raisonnablement sûre et elle est exposée ci-dessous.
-& kdesu; utilise un daemon, nommé kdesud. Ce daemon attend des commandes dans un socket & UNIX; placé dans / tmp. Le mode de ce socket est 0600, ainsi seul votre utilisateur peut s'y connecter. Si la conservation des mots de passe est activée, & kdesu; exécute les commandes par l'intermédiaire de ce daemon. Il écrit la commande et le mot de passe superutilisateur dans ce socket, puis le daemon exécute la commande su comme décrit précédemment. Ensuite, la commande et le mot de passe ne sont pas détruits. Au lieu de cela, ils sont conservés pour une durée déterminée. Il s'agit de la durée spécifiée dans le module de contrôle. Si une autre requête pour la même commande intervient pendant cette période, le client ne vous demandera pas de fournir de nouveau le mot de passe. Pour empêcher les hackers qui prendraient le contrôle de votre compte de voler les mots de passe au daemon (par exemple en lui attachant un débogueur), le daemon est installé set-group-id nogroup. Ceci devrait interdire à tous les utilisateurs normaux (y compris vous) de récupérer les mots de passe dans le processus kdesud. Par ailleurs, le daemon fixe la variable d'environnement DISPLAY à la valeur qu'elle avait quand il a été lancé. Ainsi, la seule chose que puisse faire un hacker est d'exécuter une application sur votre écran.
-Un point faible dans ce schéma est que le programme que vous exécutez n'a peut être pas été écrit avec un grand souci de sécurité (comme c'est le cas pour les programmes setuid root). Ceci signifie que ce programme pourrait avoir des débordements de tampons ("buffer overruns") ou d'autres faiblesses qu'un hacker pourrait utiliser.
-La conservation des mots de passe est donc le fruit d'un compromis entre confort et sécurité. Je vous incite à y réfléchir et à décider par vous -même si vous souhaitez vous en servir ou pas.
-Auteur
-& kdesu;
-Copyright 2000 & Geert. Jansen;
-& kdesu; est écrit par & Geert. Jansen;. Il est par certains aspects basé sur le & kdesu; de Pietro Iglio, version 0.3. Pietro et moi nous sommes mis d'accord pour que je me charge de la maintenance de ce programme à l'avenir.
-L'auteur peut être joint par courrier électronique à & Geert. Jansen. mail;. Merci de me signaler tous les bugs que vous pourriez rencontrer afin que je les résolve. Si vous avez une suggestion, n'hésitez pas à m'en faire part.
-Traduction française par & YvesDessertine;. Relecture par & GerardDelafond;.
-& underFDL; & underArtisticLicense;
+°
+Faire tourner
+Découper X
+Découper Y
+%
+Échelle X
+Échelle Y
+Conserver la proportion
+Redémarrer les transformations
+X & #160;:
+Y & #160;:
+Insérer ce nombre de guides verticaux, à intervalles réguliers.
+Vertical
+Insérer ce nombre de guide horizontaux, à intervalles réguliers.
+Horizontal
+Supprimer les guides précédents.
+Insérer un guide aux angles verticaux
+Insérer un guide aux angles horizontaux
+Créer
+Orientation & #160;:
+Position & #160;:
+Ajouter
+Supprimer
+Forme de liaison
+Type & #160;:
+Relier les formes
+Standard
+Amener à l' avant
+& Augmenter
+& Diminuer
+Envoyer à l' arrière
+Aligner à gauche
+Centrer horizontalement
+Aligner à droite
+Aligner en haut
+Centrer verticalement
+Aligner en bas
+Rassembler
+Séparer
+Cliquer et faire glisser pour déplacer la ligne de guidage.
+Un clic gauche fait tourner autour du centre, un clic droit autour de la position sélectionnée.
+Cliquer et faire glisser pour détacher la sélection.
+Cliquer et faire glisser pour redimensionner la sélection.
+Cliquer et faire glisser pour déplacer la sélection.
+Cliquer et faire glisser pour redimensionner la sélection. Le clic du milieu permet de fixer la position importante.
+Rassembler les formes.
+Séparer les formes
+Organiser
+Géométrie
+Aimantation
+Outil par défaut
+Échelle
+Redimensionner
+Appuyer sur Alt pour tenir la position x ou y.
+Appuyer sur Ctrl pour redimensionner depuis le centre.
+Appuyer sur Alt pour faire tourner de 45 degrés.
+Découper
+Modifier les lignes de guidage
+Outil par défaut
+Modifier les lignes de guidage

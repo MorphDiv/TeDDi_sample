@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,27 +15,374 @@
 # sample_type:	whole
 # comments:	NA
 
-& kommander; Basics
-Tamara King
-tik@acm. org
-Eric Laffoon
-sequitur@kde. org
-ROLES_OF_TRANSLATORS
-Concepts
-& kommander; was originally designed around a simple concept that has proven somewhat revolutionary among visual design tools. Typically these tools allow you to create dialogs and possibly mainwindow interfaces. Of course a mainwindow interface is the main program window which typically has menus, toolbars, statusbar and the application area. Dialogs are child windows which typically do n't have menus and are so named because their purpose is to have a dialog or exchange information between you and the main application. The elements on a dialog are called widgets and you hook your program into these widgets. & kommander; is different because it is inherently nonprogrammatic here. It uses the concept of associating text with the widgets on the dialog. Initially this was called Associated Text but now it is called kommander; Text. Widgets on & kommander; dialogs can include the content of other widgets by reference and a widget can reference its own content by use of a Special that looks like this, @widgetText. Specials are commands with special meaning in & kommander;. So if you created a dialog with two LineEditwidgets and named the first FirstName and the second LastName you could create a button and set its & kommander; Text to My name is @FirstName @LastName. You would need to set @widgetText in the first and last name widgets. Remember? We need to tell & kommander; to reference the text in them. You could run this from a Konsole and it would output the string for you. So it would reference the first name like so: @FirstName - > get the widget named FirstName(@FirstName) - > @widgetText - > get the contents of the LineEdit widget. So in this case @FirstName returns Eric: @FirstName - > @widgetText - > Eric.
-That is the simple core of & kommander;. What you can do with this is where it gets interesting. First of all it is worth noting that compared to the normal approach of a language based tool & kommander; does not need programming statements to define these operations. This makes & kommander; quick for developers. For end users it's much simpler than learning language constructs. For everyone it means you can focus on your task instead of having your reference material eternally at hand. Initially when people are exposed to a tool like & kommander; the first question is Where could I find a use for this cool tool? As it turns out, manipulating strings is used just about anywhere you look.
-So what can & kommander; do? Here is the list distilled to the base operations. & kommander; can:
-Pass strings to the calling program via stdout.
-Call executable programs.
-Use & DCOP; to interact with & kde; programs
-If you're not a programmer you may want that in laymans terms. In number one, if you launch & kommander; from a console then the console is the calling program. There is a parent child relationship there. Sending a message to console is done with the standard output (stdout) of the child program, so named because there is also error output. This is interesting because some programs, like & quantaplus;, use stdout to receive information from programs they launch. So & kommander; dialogs can output their text strings directly into & quantaplus; 's editor if they are called from & quantaplus;. This means & kommander; dialogs can be useful extentions to programs.
-The second case is calling an executable. Any program that runs on your system is an executable. Even a script program is run by the script's interpreter so technically it's executed too. & kommander; can run commands just like the console even if you run it from the menu. So for instance if you wanted it to open & GIMP; you would have a button derive the string gimp and put it in a special like so: @exec(gimp). Just like that you will see & GIMP; open when using this. You could also exec ls -l too but you would only see the output if you were running from a console.
-The third case is very interesting indeed. & DCOP; is short for & kde; 's D esktop CO mmunication P rotocol and it is very powerful. Go ahead and run the kdcop program and have a look around. You'll quickly see that any & kde; application that is built to standards has things happening in & DCOP; and the well designed ones have a lot going on. With & DCOP; you can query information of all sorts as well as set widget values and more. There is a section on using & DCOP; in this manual. & kommander; can send & DCOP; to any & kde; program as well as be controlled by & DCOP;. In fact you can send & DCOP; from the command line to any & kde; program. So what's the big deal? The deal is, if you want to do any volume of commands you begin to realized that command line & DCOP; is adequate for short commands, but it can cause delays for instance being called from a loop several hundred times. This is why & kommander; has a @dcop special, because this is roughly 1000 times faster. Because & kommander; can send and receive & DCOP;, & DCOP; can be used to script & kommander;. That is why we also have a local & DCOP; special, @ldcop, that allows you to type a lot less to issue a command.
-Is that all the core concepts in & kommander;? No, but it should help you to make sense of how it works so that what is covered does not look like a foreign language to you. There are a few more. Signals and slots are how & kommander; handles events. An event in a program basically means something happened like a widget was created or had its text changed. These changes emit signals and you can connect those signals to a receiving slot which will then do something when the event happens. One use of this in & kommander; is the sibling of & kommander; Text, Population Text. Population Text will populate a widget when called. Just like & kommander; Text, Population Text can contain text strings or scripts.
-That should give you the base concepts to begin using & kommander;. We try to keep the number of Specials low and we use & DCOP; a lot. The idea is that we want to keep the power of & kommander; as consistent and streamlined as possible. You will find that you can incorporate any scripting language into & kommander; where ever you need to and even multiple scripting languages in a dialog. The rest of the information in this document assumes you are familiar with the concepts and terms presented here. The examples and tutorials are also very useful to understanding what can be done with & kommander;.
-& editor;
-The Executor
-The executor, called kmdr-executor, runs & kommander; scripts. It loads. kmdr files and dynamically produces a fully functional dialog.
-Executor for Programmers
-C++ developers can easily use the KmdrDialogInstance class in their C++ programs so that the execution functionality is embedded in the their application obsoleting the need for running the external executor program. For standard dialog the dialog creation overhead is minimal but the creation of the & kde; application may delay the dialog for around a second.
-Creating a Dialog
+KBackgammon
+FIBS
+GNU Backgammon (Experimental)
+FIBS Home
+Backgammon Rules
+& Play offline
+With a friend
+Advanced AI
+Expert AI
+& Play online
+& FIBS
+Double Cube
+& Backgammon on the Web
+Command:
+This area contains the status messages for the game. Most of these messages are sent to you from the current engine.
+This is the command line. You can type special commands related to the current engine in here. Most relevant commands are also available through the menus.
+This is the button bar tool bar. It gives you easy access to game related commands. You can drag the bar to a different location within the window.
+This is the status bar. It shows you the currently selected engine in the left corner.
+KBackgammon settings
+General settings
+General
+Messages
+Timer
+Autosave
+After you finished your moves, they have to be sent to the engine. You can either do that manually (in which case you should not enable this feature), or you can specify an amount of time that has to pass before the move is committed. If you undo a move during the timeout, the timeout will be reset and restarted once you finish the move. This is very useful if you would like to review the result of your move.
+Enable timeout
+Move timeout in seconds:
+Check the box to enable all the messages that you have previously disabled by choosing the "Do not show this message again" option.
+Reenable all messages
+Check the box to automatically save all window positions on program exit. They will be restored at next start.
+Save settings on exit
+You can enable the menubar again with the right mouse button menu of the board.
+Information
+Backgammon board
+Board
+Colors
+Short Moves
+Options
+Background
+Color 1
+Color 2
+& Disable short moves. Only drag and drop will move.
+& Single clicks with the left mouse button will move a checker the shortest possible distance.
+Double clicks with the left mouse button will move a checker the shortest possible distance.
+Show pip count in title bar
+& Board
+& Font
+Set Cube Values
+Set the face value of the cube and select who should be able to double. Note that a face value of 1 automatically allows both players to double.
+Lower Player
+Upper Player
+Open Cube
+Set Dice Values
+Set the face values of the selected dice. The other player's dice will be cleared and it will be the dice's owner's turn.
+This is the bar of the backgammon board. Checkers that have been kicked from the board are put on the bar and remain there until they can be put back on the board. Checkers can be moved by dragging them to their destination or by using the'short move 'feature. If the cube has not been doubled yet and if it can be used, its face shows 64 and if the cube can be doubled, double clicking it will do so.
+This is a regular field of the backgammon board. Checkers can be placed on this field and if the current state of the game and the dice permit this, they can be moved by dragging them to their destination or by using the'short move 'feature.
+This part of the backgammon board is the home. Depending on the direction of the game, one of the homes contains the dice and the other one contains checkers that have been moved off the board. Checkers can never be moved away from the home. If this home contains the dice and the current state of the game permits this, double clicking on the dice will roll them. Moreover, the cube might be placed on the home bar and if it can be doubled, double clicking it will do so.
+%1:
+%1 user
+Kibitz to watchers and players
+Whisper to watchers only
+Chat Window
+This is the chat window. The text in this window is colored depending on whether it is directed at you personally, shouted to the general FIBS population, has been said by you, or is of general interest. If you select the name of a player, the context contains entries specifically geared towards that player.
+Info On
+Talk To
+Use Dialog
+1 Point Match
+3 Point Match
+5 Point Match
+7 Point Match
+9 Point Match
+Unlimited
+Resume
+Gag
+Ungag
+Clear Gag List
+Clear
+Silent
+Select users to be removed from the gag list.
+Select all the users you want to remove from the gag list and then click OK. Afterwards you will again hear what they shout.
+& Gag List
+Talk to %1
+%1 tells you: %2
+%1 shouts: %2
+%1 whispers: %2
+%1 kibitzes: %2
+%1 tell %2: %3
+%1 shout: %2
+%1 whisper: %2
+%1 kibitz: %2
+User %1 left a message at %2: %3
+Your message for %1 has been delivered.
+Your message for %1 has been saved.
+You say to yourself:
+Info on %1
+Invite %1
+Gag %1
+Ungag %1
+The gag list is now empty.
+You will not hear what %1 says and shouts.
+You will again hear what %1 says and shouts.
+You will not hear what people shout.
+You will hear what people shout.
+FIBS backgammon engine
+FIBS Engine
+Automatic Messages
+Show copy of personal messages in main window
+Automatically request player info on invitation
+Usually, all messages sent directly to you by other players are displayed only in the chat window. Check this box if you would like to get a copy of these messages in the main window.
+Check this box if you would like to receive information on players that invite you to games.
+Start match:
+Win match:
+Lose match:
+If you want to send a standard greeting to your opponent whenever you start a new match, check this box and write the message into the entry field.
+If you want to send a standard message to your opponent whenever you won a match, check this box and write the message into the entry field.
+If you want to send a standard message to your opponent whenever you lost a match, check this box and write the message into the entry field.
+& Local
+Server
+Other
+Server name:
+Server port:
+User name:
+Password:
+Enter here the host name of FIBS. With almost absolute certainty this should be "fibs. com". If you leave this blank, you will be asked again at connection time.
+Enter here the port number of FIBS. With almost absolute certainty this should be "4321". If you leave this blank, you will be asked again at connection time.
+Enter your login on FIBS here. If you do not have a login yet, you should first create an account using the corresponding menu entry. If you leave this blank, you will be asked again at connection time.
+Enter your password on FIBS here. If you do not have a login yet, you should first create an account using the corresponding menu entry. If you leave this blank, you will be asked again at connection time. The password will not be visible.
+Keep connections alive
+Usually, FIBS drops the connection after one hour of inactivity. When you check this box, %1 will try to keep the connection alive, even if you are not actually playing or chatting. Use this with caution if you do not have flat-rate Internet access.
+& Connection
+& Buddy List
+%1 (R)
+%1 (experience %2, rating %3) wants to resume a saved match with you. If you want to play, use the corresponding menu entry to join (or type'join %4 ').
+%1 wants to resume a saved match with you
+%1 (U)
+%1 (experience %2, rating %3) wants to play an unlimited match with you. If you want to play, use the corresponding menu entry to join (or type'join %4 ').
+%1 has invited you to an unlimited match
+%1 (%2)
+%1 (experience %2, rating %3) wants to play a %4 point match with you. If you want to play, use the corresponding menu entry to join (or type'join %5 ').
+%1 has invited you for a %2 point match
+Still connected. Log out first?
+Log Out
+Stay Connected
+Away message
+Please type the message that should be displayed to other users while you are away.
+Looking up %1
+Connecting to %1
+Error, connection has been refused.
+Error, nonexistent host or name server down.
+Error, reading data from socket.
+Error, remote host closed connection.
+Error, socket timeout exceeded.
+Network error
+Connected
+Disconnected.
+Server name
+Enter the name of the server you want to connect to. This should almost always be "fibs. com".
+Server port
+Enter the port number on the server. It should almost always be "4321".
+Enter the login you would like to use on the server %1. The login may not contain spaces or colons. If the login you choose is not available, you'll later be given the opportunity to pick another one.
+Enter your login on the server %1. If you do not have a login, you should create one using the corresponding menu option.
+Login
+The login may not contain spaces or colons!
+Enter the password you would like to use with the login %1 on the server %2. It may not contain colons.
+Enter the password for the login %1 on the server %2.
+Connection Password
+The password may not contain colons or spaces!
+There was a problem with your login and password. You can reenter your login and password and try to reconnect.
+Wrong Login/ Password
+Reconnect
+%1, last logged in from %2 at %3.
+The moreboards toggle has been set.
+The notify toggle has been set.
+The report toggle has been set.
+The selected login is already in use. Please select another one.
+The login may not contain spaces or colons.
+Your account has been created. Your new login is %1. To fully activate this account, the connection will now be closed - once reconnected, you can start playing backgammon on FIBS.
+%1 (%2) vs. %3 (%4) - game over
+%1 (%2) vs. %3 (%4) - unlimited match
+%1 (%2) vs. %3 (%4) - %5 point match
+Please make your move
+(or use the corresponding menu entry to join the match)
+It is your turn to roll the dice or double the cube
+(or use the corresponding menu entry to leave or continue the match)
+(or use the corresponding menu entry to accept or reject the offer)
+Sorry, you lost the game.
+Congratulations, you won the game!
+You should never set the'boardstyle 'variable by hand! It is vital for proper functioning of this program that it remains set to 3. It has been reset for you.
+& Response
+& Join
+& Commands
+& Options
+& Connect
+New Account
+& Disconnect
+& Invite...
+Away
+Back
+Ready to Play
+Show Rating Computations
+Greedy Bearoffs
+Ask for Doubles
+Accept
+Reject
+Join
+Leave
+& Player List
+& Chat
+Player
+Opponent
+Watches
+Status
+Rating
+Exp.
+Idle
+Time
+Host name
+Client
+Email
+B
+A
+R
+This window contains the player list. It shows all players that are currently logged into FIBS. Use the right mouse button to get a context menu with helpful information and commands.
+Invite
+Info
+Talk
+Look
+Watch
+Unwatch
+Blind
+Update
+2 Point Match
+4 Point Match
+6 Point Match
+Column Selection
+Select all the columns that you would like to be shown in the player list.
+& Playerlist
+Email to %1
+Look at %1
+Watch %1
+Update %1
+Unblind %1
+Blind %1
+Player List - %1 - %2/ %3
+Invite Players
+& Invite
+& Resume
+& Unlimited
+Type the name of the player you want to invite in the first entry field and select the desired match length in the spin box.
+gnubg doubles the cube to %1.
+gnubg doubles
+& Accept
+Redouble
+& Reject
+Please roll or double.
+Please roll.
+You roll %1 and %2.
+Please move 1 piece.
+Please move %1 pieces.
+gnubg rolls %1 and %2.
+gnubg cannot move.
+%1 vs. %2
+A game is currently in progress. Starting a new one will terminate it.
+Start New Game
+Continue Old Game
+Starting a new game.
+GNU backgammon engine
+GNU Engine
+& Restart GNU Backgammon
+Could not start the GNU Backgammon process. Make sure the program is in your PATH and is called "gnubg". Make sure that your copy is at least version 0.10
+The GNU Backgammon process (%1) has exited with code %1
+Local Games
+Offer Network Games
+Join Network Games
+& Types
+& Names...
+Type the port number on which you want to listen to connections. The number should be between 1024 and 65535.
+Port Number
+Now waiting for incoming connections on port %1.
+Failed to offer connections on port %1.
+Type the name of the server you want to connect to:
+Server Name
+Type the port number on %1 you want to connect to. The number should be between 1024 and 65535.
+Now connected to %1: %2.
+Failed to connect to %1: %2.
+Player %1 (%2) has joined the game.
+creating player. virtual=%1
+one
+two
+Player %1 has changed the name to %2.
+Player Name
+Type the name of the first player:
+Type the name of the second player:
+Players are %1 and %2
+& New Game...
+& Swap Colors
+& Edit Mode
+KBackgammon engine
+KBackgammon Engine
+Names
+First player:
+Second player:
+Computer
+Check for the computer to play
+Match to:
+Enter the name of the first player.
+Enter the name of the second player.
+& Player Names
+South
+North
+%1 rolls %2, %3 rolls %4.
+%1 makes the first move.
+Please enter the nickname of the player whose home is in the lower half of the board:
+Please enter the nickname of the player whose home is in the upper half of the board:
+Player name
+%1 wins the game. Congratulations!
+Score: %1 to %2 of %3
+%1 wins the match!
+%1, please roll or double.
+It is not your turn to roll!
+Game over!
+%1, you cannot move.
+%1 rolls %2, %3, and moves %4.
+%1 has doubled. %2, do you accept the double?
+Doubling
+Score: %1 to %2
+%1 has accepted the double. The game continues.
+In the middle of a game. Really quit?
+Text commands are not yet working. The command '%1 'has been ignored.
+%1 vs. %2 - Edit Mode
+A Backgammon program for KDE
+This is a graphical backgammon program. It supports backgammon games with other players, games against computer engines like GNU bg and even on-line games on the'First Internet Backgammon Server '.
+(C) 1999-2001 Jens Hoefkens
+Jens Hoefkens
+Author
+Bo Thorsen
+Initial anti-aliasing of the board
+Daren Sawkey
+author of KBackgammon computer opponent
+Current maintainer
+& Game
+& Move
+& Command
+& Help
+Main Toolbar
+Command Toolbar
+Your names
+Your emails
+Game Type
+Events
+Event notification of %1 is configured as part of the system-wide notification process. Click here, and you will be able to configure system sounds, etc.
+Print %1
+Click here to configure the event notification
+This is experimental code which currently requires a specially patched version of GNU Backgammon.
+You tell %1: %2
+You shout: %1
+You whisper: %1
+You kibitz: %1
+A game is currently in progress. Starting a new one will terminate it.
+Hide Rating Computations
+& Engine
+Open Board
+GnuBackgammon
+You wo n't hear what %1 says and shouts.
+Next Generation (Experimental)
+Here you can configure general settings of %1
+Here you can configure the backgammon board
+Here you can configure the FIBS backgammon engine
+Here you can configure the GNU backgammon engine
+Offline Engine
+Use this to configure the Offline engine

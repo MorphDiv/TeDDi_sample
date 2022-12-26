@@ -1,6 +1,6 @@
 # language_name_wals:	English
 # language_name_glotto:	English
-# ISO_6393:	eng
+# iso639_3:	eng
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,92 +15,42 @@
 # sample_type:	whole
 # comments:	NA
 
-Format Function [Run-time]
-/text/sbasic/shared/03120301.xhp
+FreeFile Function[Run-time]
+/text/sbasic/shared/03020102.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-Format function
-Format Function [Run-time]
-Converts a number to a string and then formats it according to the format that you specify.
+FreeFile function
+FreeFile Function[Run-time]
+Returns the next available file number for opening a file.
+Use this function to open a file using a file number that is not already in use by a currently open file.
 Syntax:
-Format (Number [, Format As String])
+FreeFile
 Return value:
-String
+Integer
 Parameters:
-Number:
-Numerical expression that you want to convert to a formatted string.
-Format:
-String that specifies the format code for the number.
-If
-Format
-is omitted, the Format function works like the
-Str
-function.
-Formatting Codes
-The following list describes the codes that you can use for formatting a number:
-0:
-If
-Number
-has a digit at the position of the 0 in the format code, the digit is displayed, otherwise a zero is displayed.
-Number
-has fewer digits than the number of zeros in the format code, (on either side of the decimal), leading or trailing zeros are displayed.
-If the number has more digits to the left of the decimal separator than the number of zeros in the format code, the additional digits are displayed without formatting.
-Format
-code.
-#:
-If
-Number
-contains a digit at the position of the # placeholder in the
-Format
-code, the digit is displayed, otherwise nothing is displayed at this position.
-This symbol works like the 0, except that leading or trailing zeros are not displayed if there are more # characters in the format code than digits in the number.
-Only the relevant digits of the number are displayed.
-.:
-The decimal placeholder determines the number of decimal places to the left and right of the decimal separator.
-If the format code contains only # placeholders to the left of this symbol, numbers less than 1 begin with a decimal separator.
-To always display a leading zero with fractional numbers, use 0 as a placeholder for the first digit to the left of the decimal separator.
-%:
-Multiplies the number by 100 and inserts the percent sign (%) where the number appears in the format code.
-E- E+ e- e+ :
-If the format code contains at least one digit placeholder (0 or #) to the right of the symbol E-, E+, e-, or e+, the number is formatted in the scientific or exponential format.
-The letter E or e is inserted between the number and the exponent.
-The number of placeholders for digits to the right of the symbol determines the number of digits in the exponent.
-If the exponent is negative, a minus sign is displayed directly before an exponent with E-, E+, e-, e+.
-If the exponent is positive, a plus sign is only displayed before exponents with E+ or e+.
-The thousands delimiter is displayed if the format code contains the delimiter enclosed by digit placeholders (0 or #).
-The use of a period as a decimal or thousands separator is dependent on the regional setting.
-When you enter a number directly in Basic source code, always use a period as decimal delimiter.
-The actual character displayed as a decimal separator depends on the number format in your system settings.
-- + $ ( ) space:
-A plus (+), minus (-), dollar ($), space, or brackets entered directly in the format code is displayed as a literal character.
-To display characters other than the ones listed here, you must precede it by a backslash (\), or enclose it in quotation marks ( &quot; &quot; ).
-\ :
-The backslash displays the next character in the format code.
-Characters in the format code that have a special meaning can only be displayed as literal characters if they are preceded by a backslash.
-The backslash itself is not displayed, unless you enter a double backslash (\\) in the format code.
-Characters that must be preceded by a backslash in the format code in order to be displayed as literal characters are date- and time-formatting characters (a, c, d, h, m, n, p, q, s, t, w, y, /, :), numeric-formatting characters (#, 0, %, E, e, comma, period) and string-formatting characters (@, & , < , > , !).
-You can also use the following predefined number formats.
-Except for &quot; General Number &quot; , all of the predefined format codes return the number as a decimal number with two decimal places.
-If you use predefined formats, the name of the format must be enclosed in quotation marks.
-Predefined format
-General Number:
-Numbers are displayed as entered.
-Currency:
-Inserts a dollar sign in front of the number and encloses negative numbers in parentheses (round brackets).
-Fixed:
-Displays at least one digit in front of the decimal separator.
-Standard:
-Displays numbers with a thousands separator.
-Percent:
-Multiplies the number by 100 and appends a percent sign to the number.
-Scientific:
-Displays numbers in scientific format (for example, 1.00E+03 for 1000).
-A format code can be divided into three sections that are separated by semicolons.
-The first part defines the format for positive values, the second part for negative values and the third part for zero.
-If you only specify one format code, it applies to all numbers.
+This function can only be used immediately before an Open statement.
+FreeFile returns the next available file number, but does not reserve it.
 Example:
-Sub ExampleFormat
-MsgBox Format(6328.2, &quot; ##,##0.00 &quot; )
-REM always use a period as decimal delimiter when you enter numbers in Basic source code.
-REM displays for example 6,328.20 in English locale, 6.328,20 in German locale.
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+sMsg = &quot; &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; First line of text &quot;
+Print #iNumber, &quot; Another line of text &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As #iNumber
+While not eof(#iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
 End Sub

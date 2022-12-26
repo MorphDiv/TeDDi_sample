@@ -1,6 +1,6 @@
 # language_name_wals:	French
 # language_name_glotto:	French
-# ISO_6393:	fra
+# iso639_3:	fra
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,31 +15,51 @@
 # sample_type:	whole
 # comments:	NA
 
-Fonction LTrim [Exécution]
-/text/sbasic/shared/03120305.xhp
+Instruction Get [Exécution]
+/text/sbasic/shared/03020201.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-LTrim, fonction
-Fonction LTrim [Exécution]
-Supprime tous les espaces à gauche au début d'une expression au format chaîne de caractères.
+Get, instruction
+Instruction Get [Exécution]
+Lit un enregistrement dans un fichier relatif, ou une séquence d'octets dans un fichier binaire, et l'insère dans une variable.
+PUT
 Syntaxe :
-LTrim (Text As String)
-Valeur de retour :
-Chaîne de caractères
+Get [#] FileNumber As Integer, [Position], Variable
 Paramètres :
-Text :
-toute expression au format chaîne de caractères.
-Utilisez cette fonction pour supprimer des espaces au début d'une expression au format chaîne de caractères.
+FileNumber : expression au format nombre entier déterminant le numéro de fichier.
+Position :
+pour les fichiers ouverts en mode Random,
+Position
+est le numéro de l'enregistrement à lire.
+Position
+indique la position octale du début de la lecture dans le fichier.
+Position
+n'est pas spécifié, la position actuelle ou l'enregistrement de données actif du fichier est utilisé.
+Variable : nom de la variable à lire.
+Vous pouvez utiliser tout type de variable sauf les variables d'objets.
 Exemple :
-Sub ExampleSpaces
-Dim sText2 As String,sText As String,sOut As String
-sText2 = &quot; < *Las Vegas* > &quot;
-sOut = &quot; ' &quot; +sText2 + &quot; ' &quot; + Chr(13)
-sText = Ltrim(sText2) REM sText = &quot; < *Las Vegas* > &quot;
-sOut = sOut + &quot; ' &quot; +sText + &quot; ' &quot; + Chr(13)
-sText = Rtrim(sText2) REM sText = &quot; < *Las Vegas* > &quot;
-sOut = sOut + &quot; ' &quot; +sText + &quot; ' &quot; + Chr(13)
-sText = Trim(sText2) REM sText = &quot; < *Las Vegas* > &quot;
-sOut = sOut + &quot; ' &quot; + sText + &quot; ' &quot;
-MsgBox sOut
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM Doit être un variant
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM Position au début
+Put #iNumber,, &quot; Ceci est la première ligne de texte. &quot; REM Remplir la ligne avec du texte
+Put #iNumber,, &quot; Ceci est la seconde ligne de texte. &quot;
+Put #iNumber,, &quot; Ceci est la troisième ligne de texte. &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; Ceci est un nouveau texte. &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; Ceci est le texte de l'enregistrement 20. &quot;
+Print Lof(#iNumber)
+Close #iNumber
 end sub

@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,16 +15,42 @@
 # sample_type:	whole
 # comments:	NA
 
-CreateUnoStruct-Funktion [Laufzeit]
-/text/sbasic/shared/03131500.xhp
+SetAttr-Anweisung [Laufzeit]
+/text/sbasic/shared/03020414.xhp
 Sun Microsystems, Inc.
 converted from old format - fpe
-CreateUnoStruct-Funktion
-CreateUnoStruct-Funktion [Laufzeit]
-Erstellt eine Instanz eines Uno-Strukturtyps.
-Zu bevorzugen ist jedoch eine Anweisung nach folgendem Muster:
-Dim oStruct as new com.sun.star.beans.Property
+SetAttr-Anweisung
+SetAttr-Anweisung [Laufzeit]
+Setzt die Dateiattribute der angegebenen Datei.
 Syntax:
-oStruct = CreateUnoStruct( Uno_Typname )
+SetAttr Dateiname As String, Attribute As Integer
+Parameter:
+SetAttr
+im aktuellen Verzeichnis nach der Datei.
+Sie können auch die
+URL-Notation
+verwenden.
+Attribute:
+Bitmuster, das die zu setzenden bzw. zu entfernenden Attribute definiert:
+Wert
+0 :
+Normale Dateien.
+1 :
+Nur-Lese-Dateien (Read-Only).
+32 :
+Datei hat sich nach dem letzten Back-Up geändert (Archive-Bit).
+Sie können mehrere Attribute gleichzeitig setzen, indem Sie die entsprechenden Bits der Attribute mit einer logischen ODER-Verknüpfung zusammenfassen.
 Beispiel:
-oStruct = CreateUnoStruct( &quot; com.sun.star.beans.Property &quot; )
+Sub ExampleSetGetAttr
+On Error Goto ErrorHandler REM Sprungziel für Fehlerbehandlung definieren
+If Dir( &quot; C: est &quot; ,16)= &quot; &quot; Then MkDir &quot; C: est &quot;
+If Dir( &quot; C: est\autoexec.sav &quot; )= &quot; &quot; THEN Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: est\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; ,0
+Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: est\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; ,1
+print GetAttr( &quot; c: est\autoexec.sav &quot; )
+end
+ErrorHandler:
+Print Error
+end
+end sub

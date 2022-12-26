@@ -1,6 +1,6 @@
 # language_name_wals:	German
 # language_name_glotto:	German
-# ISO_6393:	deu
+# iso639_3:	deu
 # year_composed:	NA
 # year_published:	NA
 # mode:	written
@@ -15,74 +15,33 @@
 # sample_type:	whole
 # comments:	NA
 
-PAP und CHAP
-Seit Version 0.9.1 unterst\xFCtzt kppp die verbreitetste Authentifizierung PAP direkt.
-PAP mit kppp
-Es gibt zwei unterschiedliche Methoden, PAP zu nutzen.
-Authentifizierung auf Seiten des Clients
-Diese Variante wird von vielen kommerziellen ISP genutzt.
-Grunds\xE4tzlich bedeutet das, dass Sie (oder Ihr Computer) sich selbst beim PPP -Server des ISP s authentifizieren m\xFCssen.
-Der PPP -Server darf sich nicht selbst auf Ihrem Computer authentifizieren, und normalerweise ist das auch nicht notwendig, da Sie wissen, mit welchem Computer Sie verbunden sind (da die Verbindung von Ihnen selbst hergestellt wurde).
-Falls Ihr ISP Ihnen nur einen Benutzernamen und ein Passwort gibt, und Ihnen sagt, PAP -Authentifizierung zu benutzen, m\xFCssen Sie diese Variante nehmen.
-Zwei-Wege-Authentifizierung
-Gleich wie oben, aber Ihr Computer fordert den PPP-Server des ISP auf, sich selbst zu authentifizieren.
-Um eine Verbindung aufzubauen, m\xFCssen Sie die Authentifizierungs-Methode Skript-basiert und nicht PAP w\xE4hlen, und m\xFCssen dann Sie die Datei /etc/ppp/pap-secrets manuell bearbeiten.
-Obwohl Kppp keine eingebaute Unterst\xFCtzung f\xFCr diese Variante bietet, ist es einfach, eine Verbindung mit dieser Variante von PAP mit Kppp aufzubauen.
-Die Einzelheiten sind im n\xE4chsten Abschnitt 'PAP und CHAP mit Kppp' nachzulesen.
-Vorbereitung von kppp f\xFCr PAP
-Stellen Sie sicher, dass /etc/ppp/options (und /.ppprc, falls Sie eine solche Datei haben) keinen der folgenden Parameter enth\xE4lt:
-+pap
--pap
-papcrypt
-+chap
-+chap
-+ua
-remotename
-Es ist sehr unwahrscheinlich, dass einer dieser Parameter bereits dort steht, aber nur zur Sicherheit.
-kppp starten
-Klicken Sie auf Einstellungen
-W\xE4hlen Sie den Zugang, f\xFCr den Sie PAP nutzen m\xF6chten, und klicken Sie auf Bearbeiten
-Klicken Sie auf die Karteikarte W\xE4hlen
-W\xE4hlen Sie nun PAP im Listenfeld Authentifizierung.
-Falls Sie das Passwort nicht bei jeder Einwahl erneut eingeben m\xF6chten, w\xE4hlen Sie Passwort speichern.
-Damit wird das Passwort gespeichert.
-Stellen Sie sicher, dass niemand anderes als Sie Zugriff auf den Zugang hat, sonst hat diese Person Zugriff auf Ihr Passwort.
-Das war's.
-Schlie\xDFen Sie die Dialoge, geben Sie den Benutzernamen und das Passwort, die Sie von Ihrem ISP erhalten haben, an und klicken Sie auf Verbinden.
-Eine alternative Methode zur Verwendung von PAP und CHAP mit kppp.
-Das Folgende basiert auf einer E-Mail von Keith Brown kbrown@pdg.net und beschreibt, wie man kppp mit einem PAP - oder CHAP -Zugang zum Laufen bringt.
-Falls Ihr ISP Ihnen gerade eine Benutzerkennung und ein Passwort f\xFCr einen Zugang gegeben hat, k\xF6nnen Sie wahrscheinlich diesen Abschnitt \xFCberspringen und nur den vorherigen Abschnitt lesen.
-PAP scheint auf den ersten Blick wesentlich komplizierter, als es in Wirklichkeit ist.
-Der Server (die Maschine, mit der Sie sich verbinden) sagt dem Client (ihrer Maschine), sich per PAP zu authentifizieren.
-Der Client (pppd) sucht in einer bestimmten Datei nach einem Eintrag, der f\xFCr diese Verbindung passende Server- und Clientnamen enth\xE4lt und schickt das dort gefundene Passwort.
-Das war's!
-Und so kann man das machen.
-Ich nehme eine pppd -Version von 2.2.0 an und eine Standardinstallation der Konfigurationsdateien unter /etc/ppp.
-Nun die Anleitung:
-Ich nehme mindestens Verison 2.2.x von pppd und eine Standard-Installation der Konfigurationsdateien in /etc/ppp an.
-Angenommen man besitzt einen Internet-Zugang mit glob.net, Benutzername userbaz und Passwort geheim
-Als erstes m\xFCssen alle diese Informationen in eine Datei namens /etc/ppp/pap-secrets eingetragen werden.
-Das Format eines Eintrages lautet:
-Daher w\xFCrde man folgende Zeile an die Datei /etc/ppp/pap-secrets anh\xE4ngen und speichern:
-Man kann jeden Namen f\xFCr den Server nehmen, solange man den gleichen Namen bei den pppd -Argumenten angigt, wie man sp\xE4ter sehen wird.
-Hier wurde das mit glob abgek\xFCrzt.
-Dieser Name ist nur dazu da, um das richtige Passwort zu finden.
-Als n\xE4chstes muss die Verbindung in kppp eingerichtet werden.
-Die grundlegenden Einstellungen entsprechen denen f\xFCr jede andere Verbindung, daher werden hier keine Einzelheiten genannt.
-Man sollte allerdings darauf achten, dass die Datei /etc/ppp/options keine Eintr\xE4ge enth\xE4lt.
-Ein Einwahlskript sollte ebenfalls nicht existieren.
-Im Einrichtungsdialog von kppp gibt es unten auf der Karteikarte W\xE4hlen den Knopf pppd-Argumente bearbeiten....
-Dieser zeigt einen Bearbeitungsdialog an.
-Hier kann man Werte eingeben, die an pppd als Befehlszeilenparameter \xFCbergeben werden.
-Bei Parametern mit mehreren Werten m\xFCssen diese getrennt in der richtigen Reihenfolge eingetragen werden.
-Man kann beliebige Parameter hinzuf\xFCgen.
-Dann f\xFCgt man die Parameter hinzu, die pppd f\xFCr die PAP -Authentifizierung ben\xF6tigt.
-Im Beispiel f\xFCgt man user, userbaz, remotename und glob in dieser Reihenfolge hinzu.
-Der Parameter user gibt an, welchen Benutzernamen pppd verwenden soll.
-Dieser wird in der Datei pap-secrets gesucht und dann zum Server geschickt.
-Der Parameter remotename wird von pppd verwendet, um den passenden Eintrag in pap-secrets zu finden, daher kann er beliebig sein, muss nur mit dem Eintrag in der Datei pap-secrets \xFCbereinstimmen.
-Das ist auch schon alles.
-Sie sollten jetzt in der Lage sein, Ihre eigene Verbindung zu einem Server mit PAP-Authentifizierung einzustellen.
-CHAP ist nur wenig anders.
-Schlagen Sie im Linux Network Administrators 'Guide f\xFCr das Dateiformat von chap-secrets und den zu benutzenden pppd -Parametern nach.
-Der Rest sollte einfach sein, aber Ihr pers\xF6nliches Vorgehen, sie wissen schon.
+Konsole
+In diesem Modul kann man die Grundeinstellungen f\xFCr Konsole, das KDE Terminalprogramm festlegen.
+Man kann leicht neue Einstellungsschemata (Darstellungsdateien) f\xFCr Konsole erstellen.
+Das Modul enth\xE4lt mehrere Karteikarten Allgemein, Farbschema, Sitzung und Schreib-D\xE4mon.
+Allgemein
+Auf dieser Seite wird die funktionsweise von Konsole beeinflusst.
+Folgende Einstellm\xF6glichkeiten sind vorhanden:
+Konsole als Standard-Terminal verwenden
+Wenn Sie KDE veranlassen m\xF6chten, ein anderes Terminalprogramm als Standard-Terminal zu verwenden, entfernen Sie die Markierung in diesem Ankreuzfeld und tippen Sie den gew\xFCnschten Programmnamen (wterm, rxvt, usw.) in das Textfeld unterhalb ein.
+Gr\xF6\xDFenver\xE4nderungen des Fensters in Extrafeld anzeigen
+Standardm\xE4\xDFig zeigt Konsole die Fenstergr\xF6\xDFe (in Zeichen) bei einer Gr\xF6\xDFen\xE4nderung an.
+Damit wird die Einstellung auf eine bestimmte Gr\xF6\xDFe erleichtert.
+Entmarkieren Sie dieses Ankreuzfeld, um diese Funktion abzuschalten.
+Rahmen anzeigen
+Zeigt einen inneren Rahmen um das Innere des Konsole -Fensters.
+Wenn diese Options markiert ist, erscheint eine Warnung, wenn Sie versuchen ein Fenster von Konsole mit mehreren Sitzungen zu schlie\xDFen.
+Blinkender Cursor
+Falls man Schwierigkeiten hat, den Cursor im Konsole -Fenster zu finden, kann das Blinken das Auffinden erleichtern.
+Zeilenabstand
+\xC4ndert den Abstand zwischen Textzeilen.
+Die folgenden Zeichen bei Doppelklicks als Teil eines Wortes behandeln
+Standardm\xE4\xDFig wird unter UNIX durch Doppelklicken ein ganzes Wort ausgew\xE4hlt.
+Was ein Rechner unter einem Wort versteht, kann mit diesem Eingabefeld beeinflusst werden.
+Tippen Sie hier die Zeichen ein, die als Teil eines Wortes betrachtet werden sollen.
+F\xFCgt man z.B. das Symbol @ hinzu, kann man mit einem Doppelklick eine komplette E-Mail-Adresse ausw\xE4hlen.
+Farbschema
+Auf der Seite Farbschema k\xF6nnen Sie einfach Darstellungsschemata erstellen, ver\xE4ndern und speichern.
+Diese Schemata enthalten Einstellungen zu Text- und Hintergrundfarbe, Transparenz und Hintergrundbildern.
+Autor des Abschnitts
+Jonathan Singer jsinger@leeta.net
