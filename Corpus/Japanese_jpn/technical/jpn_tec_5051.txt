@@ -1,0 +1,27 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+If your function accepts arguments passed by reference that you intend to modify, you need to take some precautions.
+What we didn't say yet is that under the circumstances presented so far, you don't have write access to any zval containers designating function parameters that have been passed to you. Of course, you can change any zval containers that you created within your function, but you mustn't change any zval s that refer to Zend-internal data!
+We've only discussed the so-called *_ex() API so far. You may have noticed that the API functions we've used are called zend_get_parameters_ex() instead of zend_get_parameters(), convert_to_long_ex() instead of convert_to_long(), etc. The *_ex() functions form the so-called new "extended" Zend API. They give a minor speed increase over the old API, but as a tradeoff are only meant for providing read-only access.
+Because Zend works internally with references, different variables may reference the same value. Write access to a zval container requires this container to contain an isolated value, meaning a value that's not referenced by any other containers. If a zval container were referenced by other containers and you changed the referenced zval, you would automatically change the contents of the other containers referencing this zval (because they'd simply point to the changed value and thus change their own value as well).
+zend_get_parameters_ex() doesn't care about this situation, but simply returns a pointer to the desired zval containers, whether they consist of references or not. Its corresponding function in the traditional API, zend_get_parameters(), immediately checks for referenced values. If it finds a reference, it creates a new, isolated zval container; copies the referenced data into this newly allocated space; and then returns a pointer to the new, isolated value.
+This action is called zval separation (or pval separation). Because the *_ex() API doesn't perform zval separation, it's considerably faster, while at the same time disabling write access.
+To change parameters, however, write access is required. Zend deals with this situation in a special way: Whenever a parameter to a function is passed by reference, it performs automatic zval separation. This means that whenever you're calling a function like this in PHP, Zend will automatically ensure that $parameter is being passed as an isolated value, rendering it to a write-safe state:
+But this is not the case with regular parameters! All other parameters that are not passed by reference are in a read-only state.
+This requires you to make sure that you're really working with a reference - otherwise you might produce unwanted results. To check for a parameter being passed by reference, you can use the macro PZVAL_IS_REF. This macro accepts a zval* to check if it is a reference or not. Examples are given in in 例32-3.
+例 32-3Testing for referenced parameter passing.

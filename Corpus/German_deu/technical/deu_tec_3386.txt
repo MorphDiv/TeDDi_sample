@@ -1,0 +1,42 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+imap_getmailboxes() liefert ein Array zurück, das für jedes gefundene Postfach ein Objekt mit de Attributen name, delimiter und attributes enthält. name enthält dabei den vollständigen Pfadnamen des Postfachs, delimiter das verwendete Trennzeichen zwischen Postfach-Ebenen, und attributes besteht aus einer Bitmaske, die einzelne Eigenschaften des Postfachs beschreibt:
+LATT_NOINFERIORS - es existieren keine weiteren Postfächer unterhalb dieses Postfachs
+LATT_NOSELECT - Dieses "Postfach" ist nur ein Behälter für weitere Postfächer.
+Es kann selbst keine Nachrichten enthalten und somit auch nicht geöffnet werden.
+LATT_MARKED - Dieses Postfach wurde markiert (nur bei UW-IMAPD).
+LATT_UNMARKED - Dieses Postfach wurde nicht markiert (nur bei UW-IMAPD).
+Namen von Postfächern, die Zeichen außerhalb des druckbaren ASCII-Bereiches enthalten, können mit Hilfe der Funktion imap_utf7_decode() dekodiert werden.
+ref sollte normalerweise nur die Spezifikation des Servers in der in imap_open() beschriebenen Form enthalten.
+Über pat kann ein Startpunkt innerhalb der Postfach-Hierachie vorgegeben werden.
+Wünschen Sie die Ausgabe aller Postfächer, so übergeben Sie als pat '*'.
+Die Zeichen '*' und '% 'haben innerhalb von pattern eine besondere Bedeutung:
+'*' - entspricht beliebig vielen Zeichen (incl. des Trennzeichens zw.
+Postfach-Namen)
+'%' - entspricht beliebig vielen Zeichen innerhalb eines Postfach-Namens
+Beispiel 1. imap_getmailboxes() Beispiel
+$mbox = imap_open ("{your.imap.host}", "username", "password", OP_HALFOPEN) | | die ("can't connect: ". imap_last_error()); $list = imap_getmailboxes ($mbox, "{your.imap.host}", "*"); if (is_array ($list)) {reset ($list); while (list ($key, $val) = each ($list)) {print "($key)"; print imap_utf7_decode ($val - name). ","; print "'". $val - delimiter."' ,"; print $val - attributes. "br \n";}} else {print "imap_getmailboxes failed:". imap_last_error(). "\n";} imap_close ($mbox);
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

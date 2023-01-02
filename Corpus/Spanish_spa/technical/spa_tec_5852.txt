@@ -1,0 +1,109 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Preguntas y respuestas
+& reporting. bugs;
+Preguntas sobre la marcación
+No puedo hacer que funcione & kppp;. & kppp; me dice que pppd ha fallado o ha caducado el tiempo de espera. ¿Qué está ocurriendo?
+¿Ha leído el manual atentamente? Estos son, una vez más, los errores más comunes:
+Pinche en el botón Detalles. & kppp; le dará un extracto de los mensajes de registro de PPP (puede no funcionar en sistema que no sea & Linux;, incluso puede fallar en algunas distribuciones de & Linux;). El registro le ayudará a rastrear los errores.
+Asegúrese de que pppd es un binario y no un guión.
+Asegúrese de que pppd tiene la marca setuid de root activada. Puede establecer ese modo ejecutando como root la orden chmod u+s pppd.
+Asegúrese de que el archivo / etc/ ppp/ options existe y de que no contiene ninguna entrada conflictiva. Si tiene dudas deje el archivo vacío.
+Asegúrese de que no utiliza la opción lock como argumento de pppd (kppp; ya se encarga del bloqueo de los dispositivos).
+Elimine la opción lock tanto de / etc/ ppp/ options como de tilde; /. ppprc.
+El uso del enlace simbólico / dev/ modem puede causar conflictos. Elimine esta fuente de problemas utilizando el dispositivo real, & ie; / dev/ cuaX o / dev/ ttySX.
+COM1 equivale a ttyS0, COM2 es ttyS1 y así.
+Asegúrese de que establece los permisos correctos. En caso de problemas quizá se mejor que primero lo ejecute como root y después, cuando todo funcione bien, trabaje con menos permisos si es que no puede ejecutar & kppp; con el modo setuid de root. Probablemente lo mejor sea crear un grupo de usuarios llamado modem.
+Puede que ejecute pppd demasiado pronto, & ie; antes de que el servidor remoto esté listo para negociar una conexión PPP. Si está utilizando un guión para el acceso, debería utilizar la terminal incluida para verificar el procedimiento de acceso. Algunos proveedores requieren que se ejecute una simple orden como Send o Send ppp para lanzar PPP. Algunos usuarios han informado que tenían la necesidad de añadir Pause 1 o Pause 2 a sus guiones para evitar conflictos de temporización.
+Si no ocurre nada, puede obtener información de depuración de los registros del sistema utilizando la orden:
+# tail / var/ log/ messages
+pppd murió - El sistema remoto requiere autentificación...
+Típico error de mensaje en el registro del sistema:
+pppd[699]: The remote system is required to authenticate itself pppd[699]: but I couldn't find any suitable secret (password) for it to use to do so. pppd[699]: (None of the available passwords would let it use an IP address.)
+Lo más que puedo decir es que hay dos causas para este problema:
+/ etc/ ppp/ options contiene la opción auth. Simplemente ponga un comentario # delante y vuelva a intentarlo.
+Su sistema ya tiene una ruta predeterminada. Tiene establecida una red local? En este caso las versiones recientes de pppd se comportarán como si auth haya sido especificado. Para evitar esto, debe añadir noauth a los argumentos de pppd en el diálogo de preferencias de kppp. Alternativamente puede desactivar la red local antes de marcar. Estaré agradecido si alguien puede darme instrucciones sobre como combinar pacíficamente las dos conexiones de red.
+pppd muere con el núcleo de Linux 2.4. x
+Típicos mensajes de error en el registro del sistema:
+pppd[1182]: pppd 2.3.11 started by user, uid 500 pppd[1182]: ioctl(PPPIOCGFLAGS): Invalid argument pppd[1182]: tcsetattr: Invalid argument pppd[1182]: Exit.
+Instale pppd 2.4.0b1 o superior. Vea Documentation/ Changes en las fuentes del kernel para más información.
+¿Por qué & kppp; me dice No puede abrir el módem?
+Esto significa que & kppp; no tiene permisos para abrir el dispositivo del módem o que ha selecciona un dispositivo de módem que no es válido. Asegúrese de que ha seleccionado el módem correcto. Una vez que esté seguro de eso, debe darle a & kppp; los permisos adecuados para que acceda al dispositivo del módem y sea capaz de modificar el archivo / etc/ resolv. conf en caso de que quiera que & kppp; configure correctamente el DNS. Si le es posible ejecute & kppp; con setuid root, ya que de esta manera quedan resueltos todos los problemas de acceso. En caso de que no pueda hacerlo, tendrá que suponer cuales son los permisos correctos que debe configurar. Para darle a & kppp; permisos setuid root, haga lo siguiente:
+% su root # chown root: root & dollar; KDEDIR/ bin/ kppp # chmod +s & dollar; KDEDIR/ bin/ kppp # exit
+¿Por qué me dice & kppp; que no puede crear un archivo de bloqueo del módem?
+Esto significa, en la mayoría de los casos, que ha instalado & kppp; sin el bit SETUID activado y que el usuario que está ejecutando & kppp; no tiene permisos de escritura en la carpeta del archivo de bloqueo, que es, de forma predeterminada, / var/ lock. Este es, por ejemplo, el caso de los sistemas & RedHat;. Compruebe el diálogo del módem para ver cual es el directorio exacto que usted ha elegido. La solución es sencilla: ejecute & kppp; con el SETUID de root activado o, si esto no es posible, deles a los usuarios normales acceso de escritura al directorio / var/ lock. También puede crear un grupo de usuarios del módem que tengan acceso al mencionado directorio.
+¿Por qué se instala & kppp; con el bit de SETUID activado?
+No hay necesidad de utilizar el bit SETUID, si tiene algún conocimiento sobre administración de sistemas & UNIX;. Basta con que cree un grupo de usuarios llamado modem, añada a ese grupo todos los usuarios a los que quiere dar acceso al módem y configure los permisos del dispositivo del módem para que ese grupo tenga acceso de lectura y escritura. Además, si quiere que la configuración DNS funcione con & kppp;, el grupo también tiene que tener permisos de lectura y escritura en el archivo / etc/ resolv. conf. Lo mismo ocurre con / etc/ ppp/ pap-secrets y / etc/ ppp/ chap-secrets si desea utilizar el soporte integrado para PAP o CHAP, respectivamente.
+El equipo de & kppp; ha hecho últimamente un gran trabajo para hacer que & kppp; funcione bien sin necesidad de tener el setuid activado. Pero la decisión sobre si lo instala y cómo lo instala es suya.
+Le recomendamos que consulte también la sección Seguridad.
+¿Qué puedo hacer cuando & kppp; se queda para y espera con el mensaje: Esperando OK?
+¿Ha cambiado la configuración de CR/ LF? Pruebe con CR, LF o CR/ LF.
+También es posible que el módem necesite algún tiempo para responder en su inicialización. Abra el diálogo Órdenes del módem y la pestaña Módem y ajuste las esperas de retardo previo y posterior. Compruebe si le funciona cuando incrementa drásticamente los valores, y después haga un ajuste más preciso.
+La conexión funciona bien, pero no puedo abrir ninguna aplicación.
+Es probable que haya seleccionado la opción Autoconfigurar el nombre de máquina y el servidor X tenga problemas para conectarse a su ordenador por este motivo. Si verdaderamente necesita esta opción (y lo más probable es que no sea así), tendrá que configurar manualmente las autorizaciones apropiadas. La orden xhost + antes de iniciar la conexión debería ser suficiente, pero tenga en cuenta los riesgos de seguridad que conlleva, ya que de esta forma cualquiera puede tener acceso a su servidor X.
+& kppp; informa de una conexión correcta, pero & konqueror; dice Máquina desconocida nombre, y & Netscape; informa de que El servidor no tiene una entrada DNS.
+Trate de llegar a otro servidor por medio de su dirección IP, & eg; ping 195.0.254.76. Si eso funciona, puede intentar lo siguiente:
+Compruebe si ha proporciona a & kppp; al menos una dirección de un servidor DNS.
+Compruebe el contenido del archivo / etc/ host. conf. Debería haber una línea que diga algo similar a order hosts, bind. La palabra clave bind advierte al sistema de resolución que incluya una petición al servidor de nombre cuando haga una búsqueda de direcciones. Si esa línea no existe, pruebe a añadirla.
+¿Cómo hago que & kppp; envíe un\ o un \\r?
+Basta con enviar una cadena vacía, como en el siguiente ejemplo:
+Send # envío de una cadena vacía Expect ID: Send soyyo Expect word: Send olvidado Expect granted Send ppp
+¿Cómo puedo hacer que & kppp; deje de informar del error: No se puede crear el archivo de bloqueo?
+Esto ocurre porque usted no tiene permisos suficientes para crear un archivo de bloqueo. Si decide utilizar un archivo de bloqueo, debe tener permiso de escritura en el directorio correspondiente (normalmente / var/ lock). Esto no será un problema si le ha dado a & kppp; permisos de setuid. Por favor, lea la sección sobre los Archivos de bloqueo.
+¿Por qué el módem hace tanto ruido al marcar?
+Pinche en el botón Configuración, después en Módem. Desde ahí puede controlar el volumen del módem con tres niveles: apagado, medio y alto. En la mayoría de los módems, los niveles medio y alto suelen ser iguales. Si esto no funciona, asegúrese de que están establecidos los valores correctos para su módem en Configuración, Módem, Órdenes del módem.
+He establecido el volumen del módem en « apagado » y he verificado las órdenes del módem, pero sigo escuchando un ruido estruendoso durante la marcación. ¿Por qué?
+Es posible que se pierda la cadena de configuración del volumen si el módem no es capaz de trabajar a la misma velocidad a la que & kppp; envía las órdenes. Incremente el valor del retardo posterior de inicio en Configuración, Módem, Órdenes del módem.
+& kppp; informa de velocidades del módem anormales, como « 115200 » o « 57600 ».
+Muchos módems informan de manera predeterminada únicamente de la velocidad del puerto serie, y no de la velocidad de la línea telefónica. Debe configurar ese tipo de módems para que informan de la verdadera velocidad añadiendo algunas órdenes en las cadenas de inicialización o de marcado. En muchos módems la orden es ATW2. Si desea añadirlo a la cadena de marcado (que normalmente comienza por ATD), la nueva cadena debe ser ATW2D.
+¿Por qué & kppp; informa de « Velocidad desconocida »?
+Los módems modernos tienen normalmente mensajes de conexión muy complejos, como CONNECT LAP. M/ V42. bis/ 115000: RX/ 31200: TX, y & kppp; no es capaz de interpretarlo correctamente. Active Mostrar registro y podrá ver la velocidad de conexión.
+Mi velocidad de conexión es lenta
+Si no está satisfecho con la velocidad del módem, asegúrese de que ha establecido la velocidad de conexión (puede comprobarlo pulsando en Configuración, Dispositivo, Velocidad de conexión) a 57600 o más. Asegúrese de que sus puertos serie admiten velocidades de conexión altas. Hay muchos sistemas antiguos, basados en i486 que no funcionan correctamente si se establece la velocidad a 115200. Si disponible de una antigua UART 8250, no funcionará. Si tiene una 16550 o 16550A debería hacerlo sin problemas.
+Además, debería consultar el manual de su módem para verificar las cadenas de inicialización que activan las velocidades de transferencia altas.
+Mi velocidad de conexión es REALMENTE baja.
+Si el flujo de datos es de sólo unos pocos bytes por segundo, debería comprobar su configuración de hardware. Si el mover el ratón acelera la transmisión, puede dar por supuesto que se trata de un problema de hardware.
+Puede obtener información sobre su puerto serie con la orden setserial -a / dev/ ttySx y comprobar si existen conflictos con las interrupciones del módem y otros dispositivos. El módulo de & kcontrol; Información también puede servirle de ayuda.
+Mi línea telefónica funciona con marcación por pulsos en vez de por tonos (o viceversa). ¿Cómo lo cambio?
+Debe modificar la cadena de marcado de su módem. Prácticamente la totalidad de los módems admiten los siguientes órdenes AT:
+ATDT
+Selecciona marcación por tonos.
+ATDP
+Selecciona marcación por pulsos.
+Preguntas sobre las tarifas telefónicas
+¿Cómo puedo escribir un archivos de tarifas telefónicas?
+Basta con que siga el archivo de tarifas TEMPLATE que se incluye con & kppp;. Debería poder encontrar una copia en $KDEDIR/ doc/ HTML/ suidioma / kppp/. Utilice la opción de línea de órdenes de & kppp; -r para comprobar la sintaxis de su archivo de tarifas propuesto.
+He escrito un archivo de tarifas telefónicas para mi zona. ¿A dónde puedo enviar para que otros puedan hacer uso del mismo?
+¿Puede contener mi archivo de tarifas unidades de tiempo fraccionadas como « (0.17, 45.5) »?
+Sí, es posible. Puede no debería utilizar unidades menores de una décima de segundo salvo que sea estrictamente necesario, ya que eso repercutirá en la carga del procesador, aunque en ordenadores modernos es posible que no llegue a notarse.
+En mi país hay otras festividades « móviles » además de Pascua.
+En ese caso, será necesario que escriba algo de código nuevo que permita el procesamiento de esa festividad. Revise el archivo ruleset. cpp y copie el ejemplo de « Pascua » (easter). Depués envíenos las modificaciones.
+Preguntas sobre los registros del sistema
+He visto un mensaje que dice Serial line is looped back. ¿Qué significa?
+La respuesta rápida: no ha iniciado el programa de PPP en el sistema.
+El registro muestra Signal 15.
+Si ve las siguientes líneas, lo más probable es que haya recibido un error de tiempo de espera de & kppp;. & kppp; ha estado esperando la activación del interfaz PPP y ha desistido después de un tiempo especificado. A pppd se le ha informado que debe apagarse, con la señal número 15, & ie; SIGTERM.
+pppd[26921]: pppd 2.3.5 started by me, uid 500 pppd[26921]: Using interface ppp0 pppd[26921]: Connect: ppp0 & lt; --gt; / dev/ ttyS0 pppd[26921]: Terminating on signal 15. pppd[26921]: Connection terminated. pppd[26921]: Exit.
+¿Qué pasa con Receive serial link is not 8-bit clean?
+El servicio PPP informa de que en todos los datos que recibe, el bit 8 tiene valor cero. En la mayoría de los casos esto significa que el servidor PPP remoto aún no está funcionando. Puede que esté llamando a un sistema de identificación que devuelve toda la información que le envía su pppd.
+¿Y can't locate module ppp-compress? ¿Qué es esto?
+¿Ve los siguientes mensajes?
+modprobe: can't locate module ppp-compress-21 modprobe: can't locate module ppp-compress-26 modprobe: can't locate module ppp-compress-24
+Basta con que añada las líneas:
+alias ppp-compress-21 bsd_comp alias ppp-compress-24 ppp_deflate alias ppp-compress-26 ppp_deflate
+al archivo / etc/ conf. modules.

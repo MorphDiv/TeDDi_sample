@@ -1,0 +1,100 @@
+# language_name_wals:	Turkish
+# language_name_glotto:	Turkish
+# iso639_3:	tur
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/tr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Kullanım Kılavuzu
+Önceki
+Bölüm 2.
+Kurulum
+Sonraki
+Sunucu-IIS / PWS
+Bu bölüm IIS (Microsoft Internet Information Server) sunucusuna özel notlar ve ipuçları içermektedir.
+PHP 'nin PWS / IIS 3, PWS 4 ya da daha yeni ve IIS 4 ya da daha yeni sürümler üzerinde çalışmasıyla ilgili bilgi vermektedir.
+Windows ve PWS / IIS 3
+Bu sunucuların konfigürasyonu için önerilen yöntem dağıtımla birlikte gelen (pws-php4cgi.reg) dosyasının kullanımıdır.
+Bu dosyayı düzenleyerek PHP 'nin uzantı ve kurulum klasörlerinin sizin sisteminizdekilerle eşdeğerde olduğundan emin olun.
+Ya da aşağıdaki adımları tek tek uygulayın.
+Uyarý
+Bu adımlar Windows registrysi yani sistem kaydı ile direk işlem yapmanızı gerektirir.
+Burada yapılacak bir hata, sisteminizi kararsız halde bırakabilir.
+Bu nedenle öncelikle sistem kaydınızın yedeğini almanızı tavsiye ederiz.
+PHP Geliştirme Takımı 'nın, kayıt sisteminizde oluşacak herhangi bir hatadan sorumlu olmayacağını bilmenizi isteriz.
+Regedit uygulamasını çalıştırın.
+HKEY_LOCAL_MACHINE / System / CurrentControlSet / Services / W3Svc / Parameters / ScriptMap a gidin.
+Düzan menüsünden New - String Value seçin.
+Php uygulamalarınız için kullanmak istediğiniz uzantıyı seçin.
+Örn: .php
+Yeni değerin üzerine tıklayın ve verişi girişi yapılan bölüme php.exe 'nin bulunduğu yolu yazın.
+Örn: c:\php\php.exe.
+Bu adımları eklemek istediğiniz her uzantı için tekrarlayın.
+Aşağıdaki adımlar web sunucu kurulumunuzu etkilemeyecek, yalnızca php uygulamalarınızın konsoldan çalıştırılabilmesini istiyorsanız uygulanacaktır. (örn. c:\myscripts est.php).
+Bu adımları atlayabilir ve PHP dosyalarınızın çift tıklandıklarında bir metin editörü tarafından açılmasını sağlayabilirsiniz.
+HKEY_CLASSES_ROOT a gidin.
+Düzün menüsünden New - Key seçin.
+Önceki bölümde seçtiğiniz uzantı ismini key değerine eşleyin.
+Örn: .php
+Yeni anahtarın üzerine gelin ve sağ bölümden "öntanımlı değer" üzerine çift tıklayın ve phpfile yazın.
+Son adımı kullanmak istediğiniz bütün uzantılar için tekrarlayın.
+Şimdi HKEY_CLASSES_ROOT altında yeni bir New - Key yaratın ve adını phpfile koyun.
+phpfile üzerine gelin ve sağ bölümden, "öntanımlı değer "in üzerine çift tıklayıp PHP Script yazın.
+phpfile anahtarının üstüne sağ tıklayın ve New - Key seçin, ve Shell olarak adlandırın.
+Shell anahtarının üstüne sağ tıklayın ve New - Key, seçin ve open olarak adlandırın.
+open anahtarının üstüne sağ tıklayın ve New - Key seçin, ve command olarak adlandırın.
+Yeni oluşan command anahtarını seçin ve sağ bölümden, "öntanımlı değer "e çift tıklayıp php.exe için yolu girin.
+Örn: c:\php\php.exe -q %1 (%1 yazmayı unutmayın).
+Regedit 'ten çıkın.
+Windows altında PWS kullanıyorsanız, sistem kaydının yeniden yüklenmesi için sistemi yeniden başlatın.
+PWS ve IIS 3 kullanıcıları şu anda tam çalışan bir sisteme sahipler.
+IIS 3 kullanıcıları uygulama haritalarını ayarlamak için Steven Genusa tarafından hazırlanmış aracı kullanabilirler.
+Windows ve PWS 4 ya da üstü
+PHP 'yi Windows altında PWS 4 ya da üstü için kurarken, iki seçeneğiniz vardır.
+Birincisi CGI çalıştırılabiliri kurulumu, ikincisi ISAPI modülü kurulumu.
+CGI kurulumu seçtiyseniz, aşağıdakileri takip edin:
+Dağıtımla birlikte gelen pws-php4cgi.reg dosyasını düzenleyip php.exe nizin yerini kendi sisteminize göre değiştirin.
+Bölü işaretlerinden kaçılabilir, örneğin: [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\w3svc\parameters\Script Map] ".php"="c:\\php\\php.exe "
+PWS yöneticisine gelin, PHP desteği eklemek istediğiniz klasörün üstüne sağ tıklayın, ve Özellikler' i seçin. 'Yürütme '(Execute) kutuğunu işaretleyin ve onaylayın.
+ISAPI modülünü seçtiyseniz, aşağıdakileri uygulayın:
+Dağıtımla birlikte gelen pws-php4cgi.reg dosyasını düzenleyip php4isapi.dll nizin yerini kendi sisteminize göre değiştirin.
+Bölü işaretlerinden kaçılmalıdır, örneğin: [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\w3svc\parameters\Script Map] ".php"="c:\\php\\sapi\\php4isapi.dll "
+PWS yöneticisine gelin, PHP desteği eklemek istediğiniz klasörün üstüne sağ tıklayın, ve Özellikler' i seçin. 'Yürütme '(Execute) kutuğunu işaretleyin ve onaylayın.
+Windows NT / 2000 / XP ve IIS 4 ya da üstü
+PHP 'yi IIS 4 ya da üstü çalışan bir NT / 2000 / XP sunucuya kurmak için, aşağıdaki komutları uygulayın.
+PHP' yi kurmak için iki seçeneğiniz var, CGI (php.exe) ya da ISAPI modülü.
+Her iki şekilde de, Microsoft Yönetim Konsolunu başlatmalısınız ('Internet Hizmet Yöneticisi 'olarak da geçer).
+Daha sonra Web sunucu bağına sağ tıklayın (büyük ihtimalle 'Öntanımlı Web Sunucusu 'olarak gözükecektir), ve 'Özellikler 'i seçin.
+CGI kurulumu istiyorsanız, aşağıdakileri uygulayın:
+'Home Klasörü', 'Sanal Klasör' ya da 'Klasör 'altında, 'Ayarlar' tuşuna tıklayın ve Uygulama Haritaları bölümüne girin.
+Ekle tuşuna tıklayın ve Çalıştırılabilir kutusuna: c:\php\php.exe (PHP'yi c:\php\ ye kurduğunuzu kabul edersek) yazın.
+Uzantılar kutusunda, PHP uygulamaları ile birlikte kullanmak istediğiniz dosya uzantılarını yazın. 'Method exclusions' bölümünü boş bırakın, ve Betik motoru kutucuğunu seçili hale getirin.
+Aynı zamanda 'dosyanın varolduğundan emin ol' kutucuğunu da işaretleyebilirsiniz - ufak bir performans kaybına karşılık, IIS (ya da PWS) uygulama dosyasının varlığını kontrol eder ve PHP 'yi çalıştırmadan önce bir çeşit doğrulama yapar.
+Bunun anlamı, kullanıcıya PHP 'nin hiçbir veri göndermediğinden yakınan CGI hatası yerine, anlamlı 404 stili hata mesajlarının gösterilecek olmasıdır.
+Kullanmak istediğiniz her dosya uzantısı için önceki adımı baştan uygulamalısınız. .php ve .phtml en sık kullanılan uzantılardır, öte yandan .php3 bazı eski uygulamalar için gerekli olabilir.
+Güvenlik ayarlarını yapın (Internet Hizmet Sunucusu üzerinden yapılır).
+NT sunucunuz NTFS dosya sistemini kullanıyorsa, php.exe dosyasının bulunduğu klasördeki I_USR_ için çalıştırma iznini verin.
+ISAPI modülünü kullanmak için, aşağıdakileri yapın:
+PHP ile HTTP Doğrulaması kullanmayacaksanız, bu adımı atlayabilirsiniz (ve atlamalısınız).
+ISAPI Süzgeçleri altından yeni bir ISAPI süzgeçi ekleyin.
+Süzgeç ismi olarak PHP verin, ve yol olarak php4isapi.dll dosyasının bulunduğu yolu girin.
+'Home Klasörü' bölümünden, 'Ayarlar 'tuşuna tıklayın.
+Uygulama Haritaları bölümüne yeni bir giriş yapın.
+Çalıştırılabilir olarak php4isapi.dll için yolu belirtin, .php yi uzantı olarak belirtin, Method exclusions bölümünü boş bırakın, ve Betik motoru kutucuğunu seçili hale getirin.
+IIS' i kapatın (NET STOP iisadmin)
+IIS' i tekrar başlatın (NET START w3svc)
+Önceki
+Baþlangýç
+Sonraki
+Servers-Caudium
+Yukarý

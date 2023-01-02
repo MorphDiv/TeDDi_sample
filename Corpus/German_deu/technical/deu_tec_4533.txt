@@ -1,0 +1,63 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+Mit der ClibPDF können Sie PDF-Dokumente mit PHP erstellen.
+Funktionalität und API der ClibPDF sind der PDFlib ähnlich.
+Diese Dokumentation sollten Sie zusammen mit dem ClibPDF-Handbuch lesen, weil letzteres diese Bibliothek viel ausführlicher erklärt.
+Die Namen vieler Funktionen in der ClibPDF, im PHP-Modul und in der PDFlib Die Namen vieler Funktionen in der ClibPDF, im PHP-Modul und in der PDFlib sind gleich.
+Außer cpdf_open() nehmen alle Funktionen die Bezeichnung des Dokuments als ihren ersten Parameter.
+Diese Bezeichnung wird gegenwärtig nicht intern verwendet, weil ClibPDF die gleichzeitige Erzeugung mehrerer PDF-Dokumente nicht unterstützt.
+Da das Ergebnis nicht vorhersehbar ist, sollten Sie es am besten nicht einmal testen.
+Die Folgen, die das in einer multi-threaded Umgebung hätte, kann ich nicht abschätzen.
+Laut ClibPDF-Autor wird sich das in einer der nächsten Versionen ändern (als dieses geschrieben wurde, war Version 1.10 aktuell).
+Verwenden Sie das pdflib-Modul, wenn Sie diese Funktionalität benötigen.
+Eine nette Eigenschaft der ClibPDF (und der PDFlib) ist die Möglichkeit, das PDF-Dokument vollständig im Speicher zu erzeugen, ohne temporäre Dateien zu verwenden.
+Sie bietet auch die Möglichkeit, Koordinaten in einer vordefinierten Längeneinheit zu übergeben.
+Dies ist eine praktische Fähigkeit, die bei Verwendung der PDFlib aber auch mit pdf_translate() simuliert werden kann.
+Eine weitere nette Eigenschaft von ClibPDF ist die Tatsache, dass jede Seite jederzeit geändert werden kann, selbst wenn schon eine neue Seite geöffnet wurde.
+Die Funktion cpdf_set_current_page() erlaubt es, die aktuelle Seite zu verlassen und mit den Änderungen einer anderen Seite fortzufahren.
+Die meisten Funktionen sind ziemlich einfach zu benutzen.
+Der schwierigste Teil ist wahrscheinlich die Erzeugung eines sehr einfachen PDF-Dokuments überhaupt.
+Das folgende Beispiel sollte für Sie eine gute Starthilfe sein.
+Es erzeugt ein Dokument mit einer Seite.
+Die Seite enthält den Umriss des Textes "Times-Roman" in 30-Punkt-Schrift.
+Der Text ist unterstrichen.
+Um die ClibPDF-Funktionen benutzen zu können, müssen Sie das ClibPDF-Paket installieren.
+Es ist zum Herunterladen erhältlich von FastIO, aber für deren kommerzielle Verwendung ist es erforderlich, dass Sie eine Lizenz erwerben.
+Für PHP wird cpdflib = 2 benötigt.
+Damit diese Funktionen zur Verfügung stehen, müssen Sie PHP mit --with-cpdflib[ =DIR] übersetzen.
+DIR ist das cpdflib-Installationsverzeichnis, standardmäßig / usr.
+Zusätzlich können Sie die jpeg - und tiff-Bibliotheken für die Verwendung durch ClibPDF angeben.
+Das erreichen Sie, indem Sie an ihre Konfigurationszeile die Optionen --with-jpeg-dir[ =DIR] --with-tiff-dir[=DIR] anfügen.
+Diese Erweiterung definiert keine Konfigurationseinstellungen in der php.ini.
+Folgende Konstanten werden von dieser Erweiterung definiert und stehen nur zur Verfügung, wenn die Erweiterung entweder statisch in PHP kompiliert oder dynamisch zur Laufzeit geladen wurde.
+Beispiel 1.
+Ein einfaches ClibPDF-Beispiel
+?php $cpdf = cpdf_open( 0); cpdf_page_init($cpdf, 1, 0, 595, 842, 1.0); cpdf_add_outline($cpdf, 0, 0, 0, 1, "Seite 1"); cpdf_begin_text($cpdf); cpdf_set_font($cpdf, "Times-Roman", 30, "WinAnsiEncoding"); cpdf_set_text_rendering($cpdf, 1); cpdf_text($cpdf, "Times Roman outlined", 50, 750); cpdf_end_text($cpdf); cpdf_moveto($cpdf, 50, 740); cpdf_lineto($cpdf, 330, 740); cpdf_stroke($cpdf); cpdf_finalize($cpdf); Header("Content-type: application / pdf"); cpdf_output_buffer($cpdf); cpdf_close($cpdf);?
+Die pdflib-Distribution enthält ein komplexeres Beispiel, das eine Reihe von Seiten mit einer Analoguhr erzeugt.
+Hier ist dieses Beispiel, das unter Verwendung der ClibPDF-Erweiterung in PHP konvertiert wurde:
+Beispiel 2. pdfclock-Beispiel der pdflib 2.0 Distribution
+
+Siehe auch die Dokumentation der PDFlib -Erweiterung.
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

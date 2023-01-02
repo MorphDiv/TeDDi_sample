@@ -1,0 +1,39 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# iso639_3:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP는 RFC-1867을 지원하는 브라우저로부터 파일을 업로드 받을 수 있는 기능이 있다. 이 기능을 사용하면 Text뿐 아니라 Binary파일도 업로드가 가능하다. 여러분은 PHP의 authetication과 파일을 다루는 함수를 사용하여, 파일이 Upload된 후에 해야 할 일을 스크립트에 반드시 정해 두어야 한다.
+PHP는 또한 Netscape Composer 와 W3C's Amaya clients를 사용할 경우 PUT-method 의 파일 업로드도 지원한다. 자세한 내용은 PUT Method Support 를 읽어보기바란다.
+파일 업로드 화면은 다음과 같은 좀 특별한 폼을 만들어 띄울 수 있다.:
+예 18-1. File Upload Form
+PHP3에서는 업로드가 완료되면 실행될 스크립트에는 다음 변수들이 설정된다. (물론 php3.ini 파일에 register_globals 가 켜져있어야 한다.) 또한 만약 track_vars 가 켜져있으면, 전역변수 $HTTP_POST_VARS 내에도 이 변수들이 설정된다. 다음 예제에 있는 변수명들은 업로드시 'userfile'이라는 필드명을 사용한 것으로 가정한다.:
+$userfile - 업로드된 파일 내용이 저장되어 있는 서버의 임시 파일명.
+$userfile_name - 업로드한 시스템에서 사용하는 파일의 원래 이름.
+$userfile_size - byte단위의 Upload된 파일의 크기.
+$userfile_type - 만약 browser가 업로드된 파일의 mime 형식을 안다면, 그 mime 형식. (예: "image/gif").
+PHP4에서는 동작이 약간 다르다. PHP4에서는 엄로드된 파일에 대한 정보를 가지고 있는 $HTTP_POST_FILES 전역 배열을 지원한다. 이 변수는 track_vars 가 켜져 있어야만 사용가능하지만, PHP 4.0.2 이후에서는 항상 켜져 있으므로 걱정할 필요는 없다.
+$HTTP_POST_FILES 의 내용은 다음과 같다. 위에 있는 예와 같이 업로드시 'userfile'이라는 필드명을 사용한 것으로 가정한다.:
+클라이언트에서의 원래 파일명
+해당 파일의 mime 타입. 브라우저가 이 타입 대한 정보를 가지고 있는 경우에만 설정된다. (예: "image/gif")
+업로드된 파일의 크기. byte 단위이다.
+업로드가 완료된후 서버에 저장된 파일의 파일명. (임시파일이다.)
+업로드된 파일은 php.ini 의 upload_tmp_dir 지시자가 특정 디렉토리를 지정하지 않으면, 기본적으로 우선 서버의 default temporary directory에 저장된다. 이 디폴트 디렉토리는 PHP가 돌아가는 컴퓨터의 환경변수 TMPDIR 을 설정하여 변경할 수 있다. 이를 PHP 스크립트 안에서 putenv() 함수를 사용하여 변경하는 것은 동작하지 않는다.
+예 18-2. Validating file uploads
+다음 예제는 PHP3 3.0.16 이상이나 PHP4 4.0.2 이상에서만 실행이 가능하다. 그리고 is_uploaded_file() 과 move_uploaded_file() 함수를 살펴보자.
+이전 버전의 PHP에서는 다음과 같은 처리하여야 한다. 가 필요하다. For earlier versions of PHP, you'll need to do something like the following.
+참고: 이 예제는 PHP4 4.0.2이후 버전에서는 동작하지 않는다. 4.0.2이후 부터는 내부적으로 처리하는 방법이 달라졌기 때문이다.
+업로드된 파일을 다루는 PHP 스크립트는 그 파일을 다루는 작업을 설정해 줄 필요가 있다. 예를들어, $file_size 변수를 사용하여 너무 작거나 큰 파일을 버릴 수도 있다. 또한 $file_type 변수를 가지고 특정한 타입에 맞지 않는 파일을 버릴 수 있다. 어떤 로직이던, 임시 디렉토리에 있는 파일을 지우거나 나중에 필요할 경우에는 다른 곳에 이동시켜야 한다.
+만약 임시 디렉토리에 있는 파일을 해당 request가 끝날 때 까지도 지우거나 이동시키지 않았다면, 이 파일은 해당 request가 종료되는 시점에서 자동으로 지워진다.

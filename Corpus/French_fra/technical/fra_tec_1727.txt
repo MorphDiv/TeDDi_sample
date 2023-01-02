@@ -1,0 +1,74 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Instruction MkDir [Exécution]
+/text/sbasic/shared/03020411.xhp
+MkDir, instruction
+Instruction MkDir [Exécution]
+Crée un nouveau répertoire sur un média de données.
+Syntaxe :
+MkDir Text As String
+Paramètres :
+Text :
+expression au format chaîne de caractères indiquant le nom et le chemin du répertoire à créer.
+Vous pouvez également utiliser la
+notation URL
+.
+Si le chemin n'est pas déterminé, le répertoire est créé dans le répertoire actif.
+Exemple :
+Sub ExampleFileIO
+' Exemple pour les fonctions d'organisation des fichiers
+Const sFile1 as String = &quot; file://c|/autoexec.bat &quot;
+Const sDir1 as String = &quot; file://c|/Temp &quot;
+Const sSubDir1 as String = &quot; Test &quot;
+Const sFile2 as String = &quot; Copied.tmp &quot;
+Const sFile3 as String = &quot; Renamed.tmp &quot;
+Dim sFile as String
+sFile = sDir1 + &quot; / &quot; + sSubDir1
+ChDir( sDir1 )
+If Dir(sSubDir1,16)= &quot; &quot; then ' Le répertoire existe-t-il ?
+MkDir sSubDir1
+MsgBox sFile,0, &quot; Créer un répertoire &quot;
+End If
+sFile = sFile + &quot; / &quot; + sFile2
+FileCopy sFile1 , sFile
+MsgBox fSysURL(CurDir()),0, &quot; Répertoire actif &quot;
+MsgBox sFile & Chr(13) & FileDateTime( sFile ),0, &quot; Date et heure de création &quot;
+MsgBox sFile & Chr(13) & FileLen( sFile ),0, &quot; Longueur du fichier &quot;
+MsgBox sFile & Chr(13) & GetAttr( sFile ),0, &quot; Attributs de fichier &quot;
+Name sFile as sDir1 + &quot; / &quot; + sSubDir1 + &quot; / &quot; + sFile3
+' Renommer dans le même répertoire
+sFile = sDir1 + &quot; / &quot; + sSubDir1 + &quot; / &quot; + sFile3
+SetAttr( sFile, 0 ) 'Supprimer tous les attributs
+MsgBox sFile & Chr(13) & GetAttr( sFile ),0, &quot; Nouveaux attributs de fichier &quot;
+Kill sFile
+RmDir sDir1 + &quot; / &quot; + sSubDir1
+end sub
+' Convertit un chemin système en URL
+Function fSysURL( fSysFp as String ) as String
+Dim iPos As String
+iPos = 1
+iPos = Instr(iPos,fSysFp, getPathSeparator())
+do while iPos > 0
+mid( fSysFp, iPos , 1, &quot; / &quot; )
+iPos = Instr(iPos+1,fSysFp, getPathSeparator())
+loop
+' Signe deux-points sous DOS
+iPos = Instr(1,fSysFp, &quot; : &quot; )
+if iPos > 0 then mid( fSysFp, iPos , 1, &quot; | &quot; )
+fSysURL = &quot; file:// &quot; & fSysFp
+End Function

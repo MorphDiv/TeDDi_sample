@@ -1,0 +1,40 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Resources are a special kind of data type in PHP. The term resources doesn't really refer to any special kind of data, but to an abstraction method for maintaining any kind of information. Resources are kept in a special resource list within Zend. Each entry in the list has a correspondending type definition that denotes the kind of resource to which it refers. Zend then internally manages all references to this resource. Access to a resource is never possible directly - only via a provided API. As soon as all references to a specific resource are lost, a corresponding shutdown function is called.
+For example, resources are used to store database links and file descriptors. The de facto standard implementation can be found in the MySQL module, but other modules such as the Oracle module also make use of resources.
+注意 In fact, a resource can be a pointer to anything you need to handle in your functions (e.g. pointer to a structure) and the user only has to pass a single resource variable to your function.
+To create a new resource you need to register a resource destruction handler for it. Since you can store any kind of data as a resource, Zend needs to know how to free this resource if its not longer needed. This works by registering your own resource destruction handler to Zend which in turn gets called by Zend whenever your resource can be freed (whether manually or automatically). Registering your resource handler within Zend returns you the resource type handle for that resource. This handle is needed whenever you want to access a resource of this type later and is most of time stored in a global static variable within your extension. There is no need to worry about thread safety here because you only register your resource handler once during module initialization.
+The Zend function to register your resource handler is defined as:
+There are two different kinds of resource destruction handlers you can pass to this function: a handler for normal resources and a handler for persistent resources. Persistent resources are for example used for database connection. When registering a resource, either of these handlers must be given. For the other handler just pass NULL.
+zend_register_list_destructors_ex() accepts the following parameters:
+The resource destruction handler (either normal or persistent resources) has the following prototype:
+Now we know how to start things, we define our own resource we want register within Zend. It is only a simple structure with two integer members:
+注意 One important thing to mention: If your resource is a rather complex structure which also contains pointers to memory you allocated during runtime you have to free them before freeing the resource itself!
+
+
+
+
+
+
+
+To actually register a new resource you use can either use the zend_register_resource() function or the ZEND_REGISTER_RESOURE() macro, both defined in zend_list.h. Although the arguments for both map 1:1 it's a good idea to always use macros to be upwards compatible:
+What is really going on when you register a new resource is it gets inserted in an internal list in Zend and the result is just stored in the given zval * container:
+注意 It is common practice that if you want to return the resource immidiately to the user you specify the return_value as the zval * container.
+Zend now keeps track of all references to this resource. As soon as all references to the resource are lost, the destructor that you previously registered for this resource is called. The nice thing about this setup is that you don't have to worry about memory leakages introduced by allocations in your module - just register all memory allocations that your calling script will refer to as resources. As soon as the script decides it doesn't need them anymore, Zend will find out and tell you.
+Now that the user got his resource, at some point he is passing it back to one of your functions. The value.lval inside the zval * container contains the key to your resource and thus can be used to fetch the resource with the following macro: ZEND_FETCH_RESOURCE:
+To force removal of a resource from the list, use the function zend_list_delete(). You can also force the reference count to increase if you know that you're creating another reference for a previously allocated value (for example, if you're automatically reusing a default database link). For this case, use the function zend_list_addref(). To search for previously allocated resource entries, use zend_list_find(). The complete API can be found in zend_list.h.

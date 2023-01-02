@@ -1,0 +1,383 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+The Hayes Modem Command Set
+Here is a description of the Hayes Command Set. Most modems follow this command set to large extent. If you lost your modem manual or never had one in the first place, this reference might come in handy. I for instance finally found out how to turn my modems speaker off: ATM0 -- Finally: Silence!
+The modem initialization string consists of a series of commands. It prepares the modem for communications, setting such features as dialing mode, waits, detection of the busy signal and many other settings. Newer modem communications programs reset the initializations string for you according to which menu options you select, which features you enable, & etc;.
+For many years Hayes modems have been the standard. As the field of modem manufactures has grown, most have adhered at least loosely to the Hayes standard. The following is a partial list of the Hayes command set. (called the AT commands). The Hayes Command Set can be divided into four groups:
+Basic Command Set
+A capital character followed by a digit. For example, M1.
+Extended Command Set
+An amp; (ampersand) and a capital character followed by a digit. This is an extension of the basic command set. For example, amp; M1. Note that M1 is different from amp; M1.
+Proprietary Command Set
+Usually started by either a backslash (\\), or a percent sign (percnt;), these commands vary widely among modem manufacturers. For that reason, only a few of these commands are listed below.
+Register Commands
+S r = n where r is the number of the register to be changed, and n is the new value that is assigned.
+A register is computerese for a specific physical location in memory. Modems have small amounts of memory onboard. This fourth set of commands is used to enter values in a particular register (memory location). The register will be storing a particular variable (alpha-numeric information) which is utilized by the modem and communication software. For example, S7=60 instructs your computer to Set register #7 to the value 60.
+Although most commands are defined by a letter-number combination (L0, L1 & etc;), the use of a zero is optional. In this example, L0 is the same as a plain L. Keep this in mind when reading the table below!
+Here are some of the most important characters that may appear in the modem initialization string. These characters normally should not be changed.
+AT
+Tells the modem that modem commands follow. This must begin each line of commands.
+Z
+Resets the modem to its default state
+, (a comma)
+makes your software pause for a second. You can use more than one, in a row. For example,,,,, tells the software to pause four seconds. (The duration of the pause is governed by the setting of register S8.)
+^M
+Sends the terminating Carriage Return character to the modem. This is a control code that most communication software translates as Carriage Return
+The Basic Hayes Command Set
+In alphabetical order:
+Basic Hayes Command Set
+Command
+Description
+Comments
+A0 or A
+Answer incoming call
+A/
+Repeat last command
+Do n't preface with AT. Enter usually aborts.
+B0 or B
+Call negotiation
+V32 Mode/ CCITT Answer Seq.
+B1
+Bell 212A Answer Seq.
+B2
+Verbose/ Quiet On Answer
+D
+Dial
+Dial the following number and then handshake in originate mode.
+P
+Pulse Dial
+T
+Touch Tone Dial
+W
+Wait for the second dial tone
+,
+Pause for the time specified in register S8 (usually 2 seconds)
+;
+Remain in command mode after dialing.
+!
+Flash switch-hook (Hang up for a half second, as in transferring a call.)
+L
+Dial last number
+E0 or E
+No Echo
+Will not echo commands to the computer
+E1
+Echo
+Will echo commands to the computer (so one can see what one types)
+H0
+Hook Status
+On hook - Hang up
+H1
+Hook status
+Off hook - phone picked up
+I0 or I
+Inquiry, Information, or Interrogation
+This command is very model specific. I0 usually returns a number or code, while higher numbers often provide much more useful information.
+L0 or L
+Speaker Loudness. Modems with volume control knobs will not have these options.
+Off or low volume
+L1
+Low Volume
+L2
+Medium Volume
+L3
+Loud or High Volume
+M0 or M
+Speaker off
+M3 is also common, but different on many brands
+M1
+Speaker on until remote carrier detected (ie; until the other modem is heard)
+M2
+Speaker is always on (data sounds are heard after CONNECT)
+N0 or N
+Handshake Speed
+Handshake only at speed in S37
+N1
+Handshake at highest speed larger than S37
+O0 or O
+Return Online
+See also X1 as dial tone detection may be active.
+O1
+Return Online after an equalizer retrain sequence
+Q0 or Q1
+Quiet Mode
+Off - Displays result codes, user sees command responses (eg; OK)
+Q1
+On - Result codes are suppressed, user does not see responses.
+S n?
+Query the contents of S-register n
+S n = r
+Store
+Store the value of r in S-register n
+V0 or V
+Verbose
+Numeric result codes
+V1
+English result codes (eg; CONNECT, BUSY, NO CARRIER & etc;)
+X0 or X
+Smartmodem
+Hayes Smartmodem 300 compatible result codes
+X1
+Usually adds connection speed to basic result codes (eg; CONNECT 1200)
+X2
+Usually adds dial tone detection (preventing blind dial, and sometimes preventing AT0)
+X3
+Usually adds busy signal detection
+X4
+Usually adds both busy signal and dial tone detection
+Z0 or Z
+Reset
+Reset modem to stored configuration. Use Z0, Z1 & etc; for multiple profiles. This is the same as amp; F for factory default on modems without NVRAM (non-volatile memory)
+The Extended Hayes Command Set
+Ampersand Commands
+amp; B0 or amp; B
+Retrain Parameters
+Disable auto retrain function
+& B1
+Enable auto retrain function
+& B2
+Enable auto retrain, but disconnect if no line improvement over the period dictated by S7
+amp; C0 or amp; C1
+Carrier detect
+Signal always on
+& C1
+Indicates remote carrier (usual preferred default)
+amp; D0 or amp; D
+Data Terminal Ready (DTR)
+Signal ignored (This is modem specific, you must see your manual for information on this one!)
+& D1
+If DTR goes from On to Off the modem goes into command mode (Some modems only)
+& D2
+Some modems hang up on DTR On to Off transition (This is the usual preferred default)
+& D3
+Hang up, reset the modem, and return to command mode upon DTR
+amp; F0 or amp; F
+Factory defaults
+Generic Hayes-compatible defaults.
+This is usually a good thing to use in your init string, since the amp; F1 - amp; F3 settings can vary among modems, and they may actually be the cause of connection problems. (Since you never know exactly what Brand X's amp; F2 really changes.)
+On the other hand, it pays to try out the other options below; many people's problems can be solved by replacing a complicated init string with a simple amp; F2 or the like. However, if you're building an init string, it's best to start with a simple amp; F, and not use the customized form of defaults.
+& F1
+Factory Defaults
+Factory Defaults tailored to an IBM PC compatible user
+& F2
+Factory defaults for a Mac w/ software handshaking
+& F3
+Factory defaults for a Mac w/ hardware handshaking
+amp; G0 or amp; G
+Guard tones
+Disable guard tones
+amp; K0 or amp; K
+Local flow control
+Disable local flow control
+& K1
+Enable RTS/ CTS hardware local flow control
+& K2
+Enable XON/ XOFF software local flow control
+& K3
+& K4
+amp; L0 or amp; L
+Dial mode
+Select dial-up mode
+amp; M0 or amp; M
+Error control mode
+Select asynchronous non- EC mode (the same as amp; Q0)
+amp; P0 or amp; P
+Pulse dialing ratio
+U. S. / Canada pulse dialing 39% make / 61% break ratio
+& P1
+U. K. / Hong Kong pulse dialing 33% make / 67% break ratio
+amp; Q0 or amp; Q
+Asynchronous non- EC more. No data buffering. ASB disabled.
+& Q5
+Select V.42 EC operation (requires flow control)
+& Q6
+Asynchronous mode with ASB (requires flow control)
+& Q8
+Select alternate EC protocol (MNP)
+& Q9
+Conditional data compression: V.42bis = yes, MNP5 = no.
+amp; S0 or amp; S
+DSR action select
+Always on (default)
+& S1
+Follows EIA specification (Active following carrier tone, and until carrier is lost.)
+amp; T0 or amp; T
+Self test
+Model specific self test on some modems
+amp; U0 or amp; U
+Trellis code modulation
+Enable V.32 TCM
+& U1
+Disable V.32 TCM
+amp; V0 or amp; V1
+View active
+(and often stored) configuration profile settings (or ATI4)
+amp; W0 or amp; W
+Store profile
+In NVRAM (amp; W0, amp; W1 etc. for multiple profiles) Some settings cannot be stored. These often do n't show on amp; V or ATI4
+amp; Y0 or amp; Y
+Select configuration loaded at power-up
+Load profile 0 (default)
+& Y1
+Load profile 1
+& Z n = x
+Soft reset and load stored profile number n
+Note that all items after the amp; Z on the command line are ignored
+Backslash and Percent Commands
+\\A0 or \\A
+Character maximum MNP block size
+64 character maximum
+\\A1
+128 character maximum
+\\A2
+192 character maximum
+\\A3
+256 character maximum
+percnt; C0 or percnt; C
+Data Compression Enable/ Disable
+Disabled
+& percnt; C1
+MNP5 enabled
+& percnt; C2
+V.42bis (BTLZ) Enabled
+& percnt; C3
+MNP5 & V.42bis (BTLZ) Enabled
+percnt; D0 or percnt; D
+Data compression
+512 BLTZ dictionary size
+& percnt; D1
+1024 BLTZ dictionary size
+& percnt; D2
+2048 BLTZ dictionary size
+& percnt; D3
+4096 BLTZ dictionary size
+percnt; E0 or percnt; E1
+Escape method
+ESCAPE DISABLED
+& percnt; E1
++++AT method (default)
+& percnt; E2
+Break AT method
+& percnt; E3
+BOTH methods enabled
+& percnt; E4
+Disable OK to +++
+& percnt; E5
+Enable OK to +++
+\\J0 or \\J
+DTE Auto Rate Adjustment
+\\J1
+DTE rate is adjusted to match carrier rate.
+\\N0 or \\N
+Connection type
+Normal connection (see below for definitions)
+\\N1
+Direction connection
+\\N2
+MNP Auto-reliable connection
+\\N3
+Auto-reliable connection
+\\N4
+V.42bis reliable link with phase detection
+\\N5
+V.42bis auto-reliable link with phase detection
+\\N6
+V.42 reliable link with phase detection
+\\N7
+V.42 auto-reliable link with phase detection
+A direct connection is a simple straight-through connection without any error connection or data compression. In this case, the computer-to-modem and modem-to-modem speeds must be identical.
+A normal connection uses flow control (either software or hardware) to buffer the data being sent or received, so that the modem can transmit data at a different rate than the computer is actually sending or receiving it. For example, a computer may send actual data at 57kbps, but using compression, the modem only actually sends 28.8kbps. This is the mode use by most modems.
+A reliable connection is a type of normal connection; if, for some reason, data compression or error correction cannot be established or maintained, the connection will hang up. (In essence, such a modem ensures that all connections are reliable, for it will hang up if the connection is n't.)
+Likewise, an auto-reliable connection is virtually the same, except that the modem will try to renegotiate the connection in order to establish a reliable connection. Again, this is the mode that most modems use.
+S-Registers
+S Registers
+Register
+Range
+Default
+Function
+S0
+0-255 rings
+1-2
+Answer on ring number. Do n't answer if 0
+S1
+0
+if S0 is greater than 0 this register counts the incoming rings.
+S2
+0-127 ASCII
+43 +
+Escape to command mode character
+& gt; 127
+no ESC
+S3
+13 CR
+Carriage return character
+S4
+10 LF
+Line feed character
+S5
+0-32, 127 ASCII
+8 BS
+Backspace character
+S6
+2-255 seconds
+2
+Dial tone wait time (blind dialing, see X n)
+S7
+1-255 seconds
+30-60
+Wait time for remote carrier
+S8
+0-255 seconds
+Comma pause time used in dialing
+S9
+1-255 1/ 10ths second
+6
+Carrier detect time required for recognition
+S10
+7-14
+Time between loss of carrier and hangup
+S11
+50-255 milliseconds
+70-95
+Duration and spacing of tones when tone dialing
+S12
+0-255 1/ 50th seconds
+50
+Guard time for pause around +++ command sequence
+S36
+Fallback options when error correction link fails:
+0 - Disconnect
+1 - Establish Direct Connection
+3 - Establish Normal Connection
+4 - Establish an MNP connection if possible, else disconnect
+5 - Establish an MNP connection if possible, else Direct Connection.
+7 - Establish an MNP connection if possible, else Normal connection
+7
+Negotiation Failure Treatment
+S37
+1 = 300 bps
+5 = 1200 bps
+6 = 2400 bps
+7 = 1200/ 75 bps (v.23 mode)
+8 = 4800 bps
+9 = 9600 bps
+10 = 12000 bps
+11 = 14400 bps
+12 = 7200 bps
+Negotiation Speed (Initial handshake)
+Many modems have dozens, even hundreds, of S registers, but only the first dozen or so are fairly standard. They are changed with a command like ATS n = N, and examined with ATS n? (eg; AT S10 =70 S1? would tell the modem not to hang up for seven seconds should it not hear the answering modem, and return the number of times the phone last rang.)

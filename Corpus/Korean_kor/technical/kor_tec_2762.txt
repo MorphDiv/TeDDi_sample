@@ -1,0 +1,23 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# iso639_3:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+If your function is meant to accept a variable number of arguments, the snippets just described are sometimes suboptimal solutions. You have to create a line calling zend_get_parameters_ex() for every possible number of arguments, which is often unsatisfying.
+For this case, you can use the function zend_get_parameters_array_ex(), which accepts the number of parameters to retrieve and an array in which to store them:
+A very clever implementation of this can be found in the code handling PHP's fsockopen() located in ext/standard/fsock.c, as shown in 예 32-1. Don't worry if you don't know all the functions used in this source yet; we'll get to them shortly.
+예 32-1. PHP's implementation of variable arguments in fsockopen().
+fsockopen() accepts two, three, four, or five parameters. After the obligatory variable declarations, the function checks for the correct range of arguments. Then it uses a fall-through mechanism in a switch() statement to deal with all arguments. The switch() statement starts with the maximum number of arguments being passed (five). After that, it automatically processes the case of four arguments being passed, then three, by omitting the otherwise obligatory break keyword in all stages. After having processed the last case, it exits the switch() statement and does the minimal argument processing needed if the function is invoked with only two arguments.
+This multiple-stage type of processing, similar to a stairway, allows convenient processing of a variable number of arguments.

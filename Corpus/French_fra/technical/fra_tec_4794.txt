@@ -1,0 +1,128 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+udm_set_agent_param() retourne TRUE en cas de succès et FALSE sinon. udm_set_agent_param() définit les paramètres de l 'agent mnoGoSearch.
+Les paramètres suivants et leurs valeurs sont disponibles:
+UDM_PARAM_PAGE_NUM - Utilisé pour choisir le numéro de groupe de résultat (les résultats sont retournés par groupe, commençant à 0, avec UDM_PARAM_PAGE_SIZE résultats par page).
+UDM_PARAM_PAGE_SIZE - Nombre de résultats affichés par page.
+UDM_PARAM_SEARCH_MODE - Mode de recherche.
+Les valeurs suivantes sont disponibles:
+UDM_MODE_ALL - recherche tous les mots; UDM_MODE_ANY - recherche l'un des mots; UDM_MODE_PHRASE - recherche une phrase; UDM_MODE_BOOL - recherche booléenne.
+Voir udm_find() pour plus de détails sur les recherches booléennes.
+UDM_PARAM_CACHE_MODE - Active / désactive le cache.
+Lorsque le cache est activé, le moteur de recherche va stocker les résultats sur le disque.
+Lorque deux requête seront similaires, il pourra retourner les résultats plus rapidement, sans recherche.
+Valeurs disponibles:
+
+UDM_PARAM_TRACK_MODE - Active le mode de suivi de requête.
+Depuis la version 3.1.2, mnoGoSearch dispose d 'un suivi de requête.
+Notez que ce suivi n'est implémenté qu'avec les versions SQL et n 'est pas disponible avec les bases de données intégrées.
+Pour utiliser ce suivi, vous devez créer des tables de suivi.
+Pour mysql, utilisez le script create / mysql / track.txt.
+Lorsque vous effectuez une recherche avec l 'interface, ces tables stockeront les mots recherchés ainsi que le nombre de mots trouvés, et la date.
+Valeurs disponibles:
+
+UDM_PARAM_PHRASE_MODE - indique si les index des bases de données utilise des phrases( paramètre "phrase "dans indexer.conf).
+Valeurs disponibles:
+
+Notez bien que si la recherche par phrase est activé (UDM_PHRASE_ENABLED), il est toujours possible de faire des recherches dans d'autres modes, (ANY, ALL, BOOL ou PHRASE).
+En version 3.1.10 de mnoGoSearch, la recherche par phrase n'est supportée que pour les modes SQL et intégré, tandis qu 'en 3.1.11, la recherche par phrase est supporté par le mode cache.
+Exemple de recherche par phrase:
+"Arizona desert" - Cette requete retourne tous les documents qui contiennent les mots "Arizona desert "comme une phrase.
+Notez que vous devez mettre des guillemets doubles autour des phrases.
+UDM_PARAM_CHARSET - Définit le jeu de caractères local.
+Valeurs disponibles:
+Tous les jeux supportés par mnoGoSearch. koi8-r, cp1251,...
+UDM_PARAM_STOPFILE - Définit le nom et le chemin du fichier de mots ignorés.
+Il y a une petite différence avec mnoGoSearch:
+Avec mnoGoSearch, si le chemin est NULL ou relatif, il est utilisé à partir de UDM_CONF_DIR, alors qu'en PHP, le module va rechercher à partir du chemin courant, c 'est-à-dire celui du script courant.
+UDM_PARAM_STOPTABLE - Charge la liste des mots ignorés depuis une table SQL.
+Vous pouvez utiliser plusieurs tables SQL.
+Cette commande n'a aucun effet si mnoGoSearch n 'a pas été compilé avec le support de base de données.
+UDM_PARAM_WEIGHT_FACTOR - Représente le poids relatif des différentes parties d 'un document.
+Actuellement, le corps, titre, mots clés, descriptions et url sont supportés.
+Pour activer cette fonctionnalité, utilisez le degré 2 de *Weight commands, dans le fichier indexer.conf.
+Imaginons que vous avez choisi les poids suivants:
+URLWeight 1
+BodyWeight 2
+TitleWeight 4
+KeywordWeight 8
+DescWeight 16
+Comme l'indexeur utiliser l 'opérateur de bits OR pour mesurer le poids des mots, il est possible que le même mot soit trouvé plusieurs fois dans le même document lors des recherches.
+Un mot qui n'apparaît qu'une fois dans le corps sera défini par 00000010 (notation binaire).
+Un mot qui apparaîtra dans plusieurs parties pourra avoir la notation 00011111.
+La valeur de ce paramètre est une chaîne de chiffres héxadécimaux, sous la forme ABCDE.
+Chaque chiffre est un facteur correspondant à un poids affecté à une partie du document.
+Por la situation décrite ci-dessus,
+est le facteur de poids 1 (URL)
+est le facteur de poids 2 (Corps)
+est le facteur de poids 4 (Titre)
+est le facteur de poids 8 (Mots clés)
+est le facteur de poids 16 (Description)
+Exemples:
+UDM_PARAM_WEIGHT_FACTOR=00001 ne recherche que dans les URL.
+UDM_PARAM_WEIGHT_FACTOR=00100 ne recherche que dans les Titres.
+UDM_PARAM_WEIGHT_FACTOR=11100 recherche dans les Titres,Mots-clés,Description mais pas dans le corps ou les URL.
+UDM_PARAM_WEIGHT_FACTOR=F9421 recherche dans:
+Description avec un poids de 15 (F hex)
+Keywords avec un poids de 9
+Title avec un poids de 4
+Body avec un poids de 2
+URL avec un poids de 1
+Si UDM_PARAM_WEIGHT_FACTOR est omis, la valeur par défaut est utilisée.
+UDM_PARAM_WORD_MATCH - Recherche des mots.
+Vous pouvez utiliser ce paramètre pour choisir le type de recherche de mots.
+Cette fonctionnalité n'est valable qu'en mode "single "et "multi", avec les bases SQL ou intégrée.
+Elle ne fonctionne pas en mode intégré, ni avec d 'autres modes, car les CRC ne supportent pas les recherches de sous-chaînes.
+Les valeurs disponibles sont:
+UDM_MATCH_BEGIN - début de mot;
+UDM_MATCH_END - fin de mot;
+UDM_MATCH_WORD - tout le mot;
+UDM_MATCH_SUBSTR - une sous-partie de mots.
+UDM_PARAM_MIN_WORD_LEN - définit les tailles extrêmes de mots.
+Tout mot plus court que la limite inférieur est ignoré.
+Notez que ce paramètre est inclusif, c'est-à-dire que si UDM_PARAM_MIN_WORD_LEN=3, un mot de 3 caractères ne sera pas ignoré, alors qu 'un mot de 2 caractères sera ignoré.
+Par défaut, la valeur est de 1.
+UDM_PARAM_ISPELL_PREFIXES - Valeurs possibles:
+UDM_PREFIXES_ENABLED et UDM_PREFIXES_DISABLED.
+Ces valeurs activent et désactivent le support des préfixes.
+Par exemple, si le mot "testé" est placé dans la requête de recherche, les mots tels que "test", "tester ", etc.. seront aussi recherchés.
+Les suffixes sont supportés par défaut.
+Les préfixes modifie généralement le sens des mots.
+Par exemple, si vous cherchez "testé", vous ne souhaitez pas trouver "protesté" ou "contesté ".
+Le support des préfixes peut cependant être utilisé pour des raisons d 'orthographe.
+Pour activer ispell, vous devez charger les données ispell avec la fonction udm_load_ispell_data().
+UDM_PARAM_CROSS_WORDS - Active ou désactive le support "CROSS_WORDS".
+Valeurs possibles:
+UDM_CROSS_WORDS_ENABLED et UDM_CROSS_WORDS_DISABLED.
+La fonctionnalité "CROSS_WORDS" vous permet d'effectuer des recherches dans les balises (entre a href="xxx "/ a), pour utiliser le nom du lien.
+Ce mode fonctionne avec les bases de données SQL et n 'est pas supporté par les modes intégrés ou le cache.
+
+CROSS_WORDS est supporté à partir de mnoGoSearch 3.1.11.
+UDM_PARAM_VARDIR - spécifie un chemin spécifique sur le disque où l'indexeur enregistre les données lorsqu 'il utilise le cache et les bases de données internes.
+Par défaut, le dossier / var de l 'installation de mnoGoSearch est utilisé.
+Ce paramètre est disponible en PHP 4.1.0 et plus récent.
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur
+mSQL

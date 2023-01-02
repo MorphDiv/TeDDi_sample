@@ -1,0 +1,26 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# iso639_3:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+참고: 이 기능은 PHP version 3.0.7 이후부터 적용된 것들이다.
+내부적으로 PHP는 연결의 상태를 다음 3가지중 하나로 설정한다.:
+
+
+
+PHP 스크립트가 일반적으로 실행되고 있을 때는 NORMAL 상태가 active된다. 만약 원격 클라이언트가 연결을 끊게되면 ABORTED 상태 flag가 켜지게 된다. 보통 클라이언트가 연결을 끊는 것은 사용자가 STOP 버튼을 눌렀을 때 일어난다. 만약 PHP가 설정한 시간 제한에 (set_time_limit() 을 보라) 걸리게 되면 TIMEOUT 상태 flag가 켜지게 된다.
+여러분은 클라이언트가 연결을 끊었을 때 스크립트가 수행을 중단할 것인가 아닌가를 결정하여야 한다. 때때로 원격 브라우저가 어떤 결과도 받아들이지 않더라도 스크립트를 끝까지 실행하는 것이 편리할 때가 많다. 기본 동작은 클라이언트가 연결을 끊으면 스크립트도 중단되는 것이다. 이 동작은 ignore_user_abort라는 php3.ini 지시자(directive)나, php3_ignore_user_abort라는 Apache의 .conf의 지시자로 설정이 가능하고, ignore_user_abort() 함수를 사용하여 설정할 수도 있다. 만약 PHP에게 사용자가 내린 중지 명령을 무시하라고 말해주지 않았다면, 사용자의 중지 신호는 여러분의 스크립트를 종료시킨다. 단, register_shutdown_function() 을 사용하여 shutdown 함수를 등록해 놓은 경우는 예외가 된다. shutdown 함수를 사용하면, 사용자가 STOP버튼을 눌렀을 때, 여러분의 스크립트는 남은 출력을 하려고 하고, PHP는 연결이 중단되었음을 인지하여 shutdown 함수를 호출하게 된다. shutdown 함수는 여러분의 스크립트가 정상적으로 종료되었을 때도 호출 된다. 만약 여기서 클라이언트의 연결 중단 때와 일반적인 종료시에 다른 동작을 원한다면 connection_aborted() 함수를 사용하면 된다. 이 함수는 연결이 중단되었다면 TRUE 를 반환한다.
+스크립트는 내장된 타이머에 의해 종료될 수 있다. 기본 timeout 시간은 30초로 되어 있다. 이것은 max_execution_time이라는 php3.ini 지시자(directive)나, 동일한 내용의 php3_max_execution_time이라는 Apache의 .conf 지시자에 의해 다르게 설정이 가능하고 set_time_limit() 함수를 사용하여 설정할 수도 있다. 설정한 시간이 경과하면 스크립트는 자동으로 중단되고, 이 스크립트는 위에 설명한 클라이언트와의 연결이 종료된 것처럼 동작한다. 따라서 shutdown 함수가 등록되어 있다면 이 함수가 실행된다. shutdown 함수내에서 이 함수가 timeout에 의해 호출된 것인가를 판단하려면 connection_timeout() 함수를 사용하면 된다. 이 함수는 timeout에 의해 shutdown 함수가 호출되었다면 TRUE 를 반환한다.
+한가지 유의할 사항은 ABORTED와 TIMEOUT 상태는 두 개가 동시에 active될 수 있다는 것이다. 이것은 PHP가 사용자 중단을 무시하도록 설정해 놓았을 때 생길 수 있다. 또 다른 경우는 사용자가 연결을 끊지는 않았지만 연결에 어떤 문제가 생겨 연결이 망가진 경우로, 이런 경우에 스크립트는 계속실행되고, 시간 제한에 걸려 스크립트의 수행이 중단되고 shutdown 함수가 호출되면, connection_timeout() 과 connection_aborted() 함수 모두 TRUE 를 반환하게 된다. 여러분은 connection_status() 함수를 사용하여 두가지 상태 모두를 검사할 수 있다. 함수는 각 상태에 대한 정보를 bit단위로 가지고 있다. 를들어 위와같이 ABORT와 TIMEOUT 두 개의 상태가 모두 active되어 있다면 이 함수는 3을 반환한다.

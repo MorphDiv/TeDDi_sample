@@ -1,0 +1,25 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# iso639_3:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+All streams are registered as resources when they are created. This ensures that they will be properly cleaned up even if there is some fatal error. All of the filesystem functions in PHP operate on streams resources - that means that your extensions can accept regular PHP file pointers as parameters to, and return streams from their functions. The streams API makes this process as painless as possible:
+
+예 43-2. How to accept a stream as a parameter
+
+예 43-3. How to return a stream from a function
+Since streams are automatically cleaned up, it's tempting to think that we can get away with being sloppy programmers and not bother to close the streams when we are done with them. Although such an approach might work, it is not a good idea for a number of reasons: streams hold locks on system resources while they are open, so leaving a file open after you have finished with it could prevent other processes from accessing it. If a script deals with a large number of files, the accumulation of the resources used, both in terms of memory and the sheer number of open files, can cause web server requests to fail. Sounds bad, doesn't it? The streams API includes some magic that helps you to keep your code clean - if a stream is not closed by your code when it should be, you will find some helpful debugging information in you web server error log.
+참고: Always use a debug build of PHP when developing an extension (--enable-debug when running configure), as a lot of effort has been made to warn you about memory and stream leaks.
+In some cases, it is useful to keep a stream open for the duration of a request, to act as a log or trace file for example. Writing the code to safely clean up such a stream is not difficult, but it's several lines of code that are not strictly needed. To save yourself the touble of writing the code, you can mark a stream as being OK for auto cleanup. What this means is that the streams API will not emit a warning when it is time to auto-cleanup a stream. To do this, you can use php_stream_auto_cleanup().

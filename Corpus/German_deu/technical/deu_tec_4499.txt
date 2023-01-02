@@ -1,0 +1,64 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Kapitel 8.
+Variablen
+Nach vorne
+Der Geltungsbereich einer Variablen ergibt sich aus dem Zusammenhang, in dem sie definiert wurde.
+Meistens besteht dieser aus einem einzigen Bereich.
+Dieser beinhaltet auch den Bereich für Dateien, die per "include" - oder "require "-Anweisung eingebunden wurden, z.B.:
+$a = 1; include "b.inc";
+Die Variable $a ist auch in der eingebundenen Datei b.inc verfügbar.
+In benutzerdefinierten Funktionen wird ein auf die Funktion beschränkter Geltungsbereich eingeführt.
+Jede in einer Funktion benutzte Variable ist zunächst auf den lokalen Bereich der Funktion beschränkt, z.B.:
+$a = 1; / / globaler Bereich function test () {echo $a; / / Referenz auf einen lokalen Variablen-Bereich} test ();
+Dieses Skript erzeugt keine Bildschirm-Ausgabe, da sich die Echo - Anweisung auf eine lokale Variable namens $a bezieht und dieser kein Wert im lokalen Bezug zugewiesen worden ist.
+Dies ist ein kleiner Unterschied zu C, wo globale Variablen auch in Funktionen vorhanden sind, es sei denn, sie werden durch eine funktionsinterne Definition überschrieben.
+Das kann zu Problemen führen, denn in PHP müssen global geltende Variablen innerhalb von Funktionen als solche definiert werden.
+Ein Beispiel:
+$a = 1; $b = 2; function Sum() {global $a, $b; $b = $a + $b;} Sum(); echo $b;
+Das obige Skript gibt "3" aus.
+Durch das Deklararieren der Variablen $a und $b innerhalb der Funktion als global, weisen alle Referenzen zu beiden Variablen auf die nun globalen Werte.
+Es gibt keine Beschränkungen bei der Anzahl an globalen Variablen, die durch eine Funktion verändert werden können.
+Eine weitere Möglichkeit besteht in der Verwendung des speziellen $GLOBALS PHP-Array.
+Das obige Beispiel kann damit auch so geschrieben werden:
+$a = 1; $b = 2; function Sum() {$GLOBALS["b"] = $GLOBALS["a"] + $GLOBALS["b"];} Sum(); echo $b;
+Das $GLOBALS -Array ist ein assoziatives Array mit dem Bezeichner der globalen Variablen als Schlüssel und dem Inhalt dieser Variablen als Wert des Array-Elements.
+Ein weiterer wichtiger Anwendungszweck von Variablen-Bereichen ist die static -Variable.
+Eine statische Variable existiert nur in einem lokalen Funktions-Bereich, der Wert geht beim Verlassen dieses Bereichs aber nicht verloren.
+Schauen sie das folgende Beispiel an:
+function test () {$a = 0; echo $a; $a++;}
+Diese Funktion ist sinnlos, da sie bei jedem Aufruf $a auf 0 setzt und "0" ausgibt.
+Die Anweisung $a++, welche den Wert erhöht, macht keinen Sinn, da der Wert von $a beim Verlassen der Funktion verloren geht.
+Um eine sinnvolle Zählfunktion zu implementieren, die ihren aktuell gesetzten Wert nicht vergisst, müssen sie die Variable $a als "static" deklarieren:
+function test() {static $a = 0; echo $a; $a++;}
+Jetzt wird bei jedem Aufruf der test( )-Funktion der aktuelle Wert von $a ausgegeben und dann um 1 erhöht.
+Static-Variablen ermöglichen auch einen Weg zum Umgang mit rekursiven Funktionen.
+Das sind Funktionen, die sich selbst aufrufen.
+Hierbei besteht die Gefahr, so genannte Endlos - Schleifen zu programmieren.
+Sie müssen also einen Weg vorsehen, diese Rekursion zu beenden.
+Die folgende einfache Funktion zählt rekursiv bis 10.
+Die statische Variable $count wird benutzt, um die Rekursion zu beenden:
+function test() {static $count = 0; $count++; echo $count; if ($count 10) {test ();} $count--;}
+Zurück
+Zum Anfang
+Nach vorne
+Vordefinierte Variablen
+Nach oben
+Variable Variablen

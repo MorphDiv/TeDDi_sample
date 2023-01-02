@@ -1,0 +1,62 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+stream_select() accepte un tableau de flôts et attend que l'un d 'entre eux change de statut.
+Cette opération est équivalente à ce que fait la fonction socket_select(), ormis le fait qu 'elle travaille sur flôts.
+Les flôts qui sont listés dans le paramètre read seront surveillés en lecture, c'est à dire si de nouveaux octets sont disponibles en lecture (pour être précis, si une lecture ne bloquera pas, ce qui inclut aussi les flôts qui sont en fin de fichier, auquel cas un appel à la fonction fread() retournera une chaîne de taille 0).
+Les flôts qui sont listés dans le paramètre write seront surveillé en écriture (pour être précis, si une écriture ne bloquera pas).
+Les flôts qui sont listés dans le paramètre except seront surveillé pour voir si une exception est levée.
+Avertissement
+Lors de la fin de la fonction, les tableaux sont modifiés pour rapporter leurs évolutions respectives.
+Vous n'êtes pas obligés de passer tous les tableaux à la fonction stream_select().
+Vous pouvez en omettre certains, en utilisant un tabeau vide ou la valeur NULL.
+N'oubliez pas que ces tableaux sont passés par référence et qu'ils seront modifiés lorsque stream_select() s 'achèvera.
+Exemple
+?php / * Preparation du tableau de fl ocirc; ts lecture * / $read = array($stream1, $stream2); if (false === ($num_changed_streams = stream_select($read, $write = NULL, $except = NULL, 0))) {/ * Gestion d'erreur * / else if ($num_changed_streams 0) {/ * Au moins un des fl ocirc;ts a eacute;volu eacute; * /}?
+
+A cause d'une limitation du Zend Engine actuel, il n'est pas possible de passer la valeur NULL directement comme paramètre d'une fonction qui s 'attend à des paramètres passés par référence.
+Au lieu de cela, il est recommandé d 'utiliser une variable temporaire, ou une expression don le membre de gauche est une variable temporaire.
+Comme ceci:
+?php stream_select( $r, $w, $e = NULL, 0);?
+Les paramètres tv_sec et tv_usec ensemle forment le délai d 'expiration.
+Ce délai est la durée maximale d'exécution de stream_select(). tv_sec peut valoir zéro, ce qui fait que stream_select() s 'achève immédiatement.
+C 'est pratique pour réaliser du polling.
+Si tv_sec est NULL (pas de délai d'expiration), stream_select() peut bloquer le script indéfiniment.
+En cas de succès, stream_select() retourne le nomre de flôts qui ont évolué, ce qui peut être zéro si le délai d'expiration a été atteint avant que les flôts n 'évoluent.
+En cas d 'erreur, la fonction retourne FALSE.
+
+Assurez vous de bien utiliser l 'opérateur === lorsque vous recherchez des erreurs.
+Comme stream_select() peut retourner 0, une comparaison effectuée à l 'aide de == la confondrait avec une erreur.
+?php if (false === stream_select($r, $w, $e = NULL, 0)) {echo "stream_select() failed\n";}?
+
+Gardez à l 'esprit que certaines implémentations de flôts doivent être gérées très prudemment.
+Voici quelques règles à suivre:
+Il faut toujours essayer d'utiliser stream_select() sans délai d 'expiration.
+Votre programme ne devrait rien faire si il ne reçoit pas de données extérieures.
+Les codes qui dépendent du délai d 'expiration ne sont généralement pas portable, et difficiles à déboguer.
+Si vous avez écrit ou lu dans un flôt qui retournés dans les tableaux de flôts, soyez bien conscient que ces flôts n 'ont peut être pas écrit ou lu la totalité des données demandées.
+Soyez préparés à être en mesure de lire un seul octet.
+Voir aussi stream_set_blocking().
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

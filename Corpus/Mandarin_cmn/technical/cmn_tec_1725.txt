@@ -1,0 +1,55 @@
+# language_name_wals:	Mandarin
+# language_name_glotto:	Mandarin Chinese
+# iso639_3:	cmn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hans
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/zh_CN.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+GetAttr 函数 [运行时]
+/text/sbasic/shared/03020409.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+GetAttr 函数
+GetAttr 函数 [运行时]
+返回一个用于表示文件类型、卷名称或目录名称的位模式。
+语法：
+GetAttr (Text As String)
+返回值类型：
+整数
+参数：
+Text：
+含有明确文件规格的任意字符串表达式。也可以使用
+URL 表示法
+。
+此函数确定指定文件的属性并返回位模式，借助位模式可以识别以下文件属性：
+值
+0：一般文件。
+1：只读文件。
+8：返回卷名称
+16：仅返回目录名称。
+32：上一次备份之后，文件已被修改（存档位）。
+如果要了解是否设置了属性字节的各个位，请使用以下查询方法：
+示例：
+Sub ExampleSetGetAttr
+On Error Goto ErrorHandler REM 定义错误处理程序的目标
+If Dir( &quot; C: est &quot; ,16)= &quot; &quot; Then MkDir &quot; C: est &quot;
+If Dir( &quot; C: est\autoexec.sav &quot; )= &quot; &quot; THEN Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: est\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; ,0
+Filecopy &quot; c:\autoexec.bat &quot; , &quot; c: est\autoexec.sav &quot;
+SetAttr &quot; c: est\autoexec.sav &quot; ,1
+print GetAttr( &quot; c: est\autoexec.sav &quot; )
+end
+ErrorHandler:
+Print Error
+end
+end sub

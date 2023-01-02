@@ -1,0 +1,156 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Marco Menardi gnu@kde. org
+ROLES_OF_TRANSLATORS
+Sharing data with & kontact; via IMAP
+Introduction
+For my small office, I was looking for a long time for a PIM solution that let me share data, so my secretary and I can share contacts, appointments and so on. Being a & kde; user, I've heard about the Kroupware project and wait its completion. But when I saw how complicated is the architecture and setup of the Kolab server 1.0 (the server side of the project), I gave up, waiting for an easier to deploy Kolab 2.0. In any case, the Kolab stuff was clearly too much for my needs. Fortunately in the & kde; wiki I've found some piece of IRC conversation where they were talking about sharing data without the Kolab infrastructure... mmm so interesting!
+For small offices and needs, you can have & kontact; use shared data without the need of installing the Kolab server or another groupware backend. It can work with just an IMAP server, that can be easily set up.
+My scenario is a server with Debian unstable and & kde; 3.4. I access & kontact; and other fabulous GNU/ Linux apps from windows using Cygwin/ X, while waiting Wine project to be able to run the last Windows programs I need (and that are not available under GNU/ Linux). I want to share contacts, events, todo, notes with my secretary.
+What is IMAP
+This definition is from the ComputerUser. com High-Tech Dictionary:
+Internet Message Access Protocol. A protocol that allows a user to perform certain electronic mail functions on a remote server rather than on a local computer. Through IMAP the user can create, delete, or rename mailboxes; get new messages; delete messages; and perform search functions on mail. A separate protocol is required for sending mail. Also called Internet Mail Access Protocol.
+So it can be considered a data storage. To use it you you need an IMAP server, such as Cyrus, Courier or UW.
+Kolab or IMAP?
+Kolab brings the ability to share data between different clients. It makes possible for your secretary to use Outlook and you use & kontact;, for instance.
+You will have a configuration interface which does user management, mail account setup, a central LDAP config data and addressbook server, spam and virus filtering, vacation scripts, free busy list handling, resource handling (rooms, cars), groups, distribution lists, automatic invitation handling, & etc;
+But that can cause initial setup troubles. For a newbie like me it means: a long long frustrating nightmare, and too much complexity to manage once working. So no, thanks, I'll go to simple IMAP.
+How to set up IMAP server Cyrus
+My choice is Cyrus, that is part of the Kolab set of software, so if l will go for Kolab in the future, at least I'm acquainted with it.
+Let's start the installation and the setup!
+Become root.
+# apt-get install cyrus21-imapd cyrus21-common cyrus21-admin cyrus21-client sasl-bin sasl2-bin Installing cyrus21-imapd... The installer asks something I've not understood about an search address... I just pressed Enter.
+The installer also created the user cyrus that is in the (automatically created) group sasl, that is the owner of all cyrus files. At the end with ps -A you can find the new processes: cyrmaster and notifyd.
+The real problem in setting up Cyrus is the authentication, just because it's not trivial and I'm a newbie, with limited knowledge about what I'm doing.
+Cyrus can use different SASL (Simple Authentication and Security Layer) mechanisms, the default being sasldb (it stores usernames and passwords in the SASL secrets file sasldb), but also getpwent, kerberos4, kerberos5, PAM, rimap, shadow and LDAP are supported.
+Since I do n't want to define users/ passwords different than the ones that access my & Linux; box I choose then shadow mechanism so Cyrus will use & Linux; passwords for authenticate.
+To do so we have to tell sasl to use saslauthd as password authentication method, and then setup saslauthd to use shadow (or getpwent) as the authentication mechanism.
+OK, let's start!
+As root, change the Linux password of cyrus user:
+# passwd cyrus
+Enter the password you like (and you will remember) we will use for this example cyrus as the cyrus administrator password.
+# vi / etc/ imapd. conf
+sasl_pwcheck_method: saslauthd instead of the default auxprop
+remove the # remark from the line:
+#admins: cyrus
+this way you can administer cyrus logging in as cyrus user (what a fantasy I have!)
+# vi / etc/ default/ saslauthd
+Uncomment the line:
+# START=yes
+(otherwise the saslauthd will not start at boot time, even if referenced in some / etc/ rcx. d!)
+and instead of MECHANISMS="pam "put MECHANISMS="shadow" this way at the boot a saslauthd -a shadow will be executed.
+Once exited from your editor, restart sasl and cyrus.
+To test IMAP:
+su cyrus $imtest -m login -p imap localhost
+You are prompted for the cyrus (user) password, so enter it.
+If the user cyrus is correctly authenticated, the following lines will appear:
+S: L01 OK User logged in Authenticated.
+To exit type. logout (ie; dot space logout)
+Now add a user named groupware and set a password for it, using your usual system tools. It should be in an unprivileged group such as nobody and does not require a login shell or a home directory.
+Now I have to create the user and an IMAP in cyrus also:
+# cyradm --user cyrus localhost after entering the password for the admin user cyrus, you get the prompt localhostgt; localhostgt; cm user. groupware localhostgt; lm lists the mailbox only just created user. groupware (\\HasNoChildren)) localhostgt; quit
+You can type help for a list of available commands.
+You can check what has happened with:
+# ls -l / var/ spool/ cyrus/ mail/ g/ user/ groupware total 12 -rw------- 1 cyrus mail 4 Oct 29 20:55 cyrus. cache -rw------- 1 cyrus mail 155 Oct 29 20:55 cyrus. header -rw------- 1 cyrus mail 76 Oct 29 20:55 cyrus. index
+Now you should be able to connect with an IMAP client as the groupware user and see the INBOX.
+In the IMAP protocol, selecting the mailbox INBOX is a magic word, a sort of alias for the above directory structure. The client sees INBOX, and the IMAP server maps it in the / var/ spool/ cyrus/ mail/... folder and file structure.
+How to setup & kontact; clients
+I connect to my GNU/ Linux office server PC (a sort of "black box" without monitor and keyboard) from 2 & Windows; 2000 PC with Cygwin/ X, using them as a X-Window server (in the near future I hope to replace both with 2 mini-itx thin clients using the LTSP). With this setup every user runs & kontact; on the same machine where Cyrus is installed and running (localhost).
+To have & kontact; work with IMAP, there are these steps to complete:
+Create an IMAP account on the Cyrus for fake groupware user (already previously done!)
+Create/ configure an IMAP account in & kmail; for login as that user
+Use kresources to make & kontact; components work with data taken from IMAP source
+Enable groupware functionality and make related subfolders of that IMAP INBOX (if not already)
+Enjoy & kontact; and shared data through Cyrus IMAP
+So login to & kde; with the first real user account you want to provide groupware functionality to.
+Let's create the IMAP account in & kmail;.
+Run & kontact; and select Mail (the & kmail; component). From the menu choose Settings Configure KMail Accounts Receiving tab, press the Add... button. You will then be prompted for the type of your email account, and select disconnected IMAP (not just IMAP). Then in the General tab enter the following data:
+Account Name: office_gwdata
+A name that will be used for the local folder that points to this IMAP account.
+Login: groupware
+The Cyrus user we have chosen as owner of all of the office data
+Password:
+The password of the groupware user.
+Host: localhost
+Remember for our example, the & kontact; client runs on the same computer as the IMAP server
+Port: 143
+The default
+Check store IMAP password so you will not be asked for it next time you run & kontact;. Check the Enable interval mail checking and set a value in minutes.
+Note that we have checked the disconnected IMAP type account. This has the effect that a copy of the groupware data is stored locally to the client (under the home folder), and it is synchronized every time the client connects. This seems very inefficient, since your data is duplicated many times (ie; if you have 10 users that use & kontact;, you have 10+1 times the data), but it is the only way to make things run fast, because at every connection & kontact; has to fetch all data and have & korganizer; and & kaddressbook; interpret it. If you use disconnected IMAP data is cached locally, and only the delta (ie; the data that has changed) is sent.
+On the other end, if your users run & korganizer; on the same PC that runs the IMAP server, it seems reasonable to use IMAP (that is called online IMAP) to save space, since transfer speed should not be an issue. But unfortunately this does not work because & kontact; does not update automatically the Calendar folder in online IMAP, so you are not updated when someone adds events (you must manually switch to & kmail; application and click on the Calendar folder). In addition, at start up when it does read Calendar folders, you may see a tremendous flicker and slow data updates.
+Now we have to tell & kontact; to use IMAP as the data source for its various components. From the & kmenu;, choose Run command, run kcmshell4 kresources. In the combo box select Contacts, then press the Add... button, and choose Addressbook on IMAP Server via KMail. Then select that new line and press Use as Standard button. Do the same for Calendar and Notes.
+Now we have to enable the & kmail; (and as a consequence, the whole & kontact;) groupware functionality:
+Choose from the menu Settings Configure KMail Misc Groupware
+Check Enable IMAP resource functionality
+Choose English as Language of the groupware folders (this is in case you already have the folders in the IMAP server created by a different program in a different language).
+Now move to Resource folder are in account and select the Inbox subfolder of the office_gwdata folder.
+Leave Hide groupware folders unchecked for now, so we can see that happens. You can return here and check it once everything is clear.
+When you press OK you are prompted with: kmail; will now create the required folders for the IMAP resource as subfolders of Inbox
+If you do not want this, press No, and the IMAP resource will be disabled. Press Yes (this happens only the first time with the first real user). You will immediately see that in the & kmail; folder tree, under office_gwdata Inbox these subfolders are created:
+Calendar
+Contacts
+Notes
+Tasks
+Journal
+if you now do a:
+# ls -l / var/ spool/ cyrus/ mail/ g/ user/ groupware/ drwx------ 2 cyrus mail 144 Oct 31 16:36 Calendar drwx------ 2 cyrus mail 144 Oct 31 16:36 Contacts drwx------ 2 cyrus mail 144 Oct 31 16:36 Journal drwx------ 2 cyrus mail 144 Oct 31 16:36 Notes drwx------ 2 cyrus mail 144 Oct 31 16:36 Tasks -rw------- 1 cyrus mail 4 Oct 31 15:28 cyrus. cache -rw------- 1 cyrus mail 155 Oct 29 20:55 cyrus. header -rw------- 1 cyrus mail 76 Oct 31 15:28 cyrus. index
+As you see, the office_gwdata Inbox is stored not local to the & kontact; current user home, but in the IMAP groupware user's folders.
+Now & kontact; is ready to work and store data there. In the calendar application, if & kmail; IMAP account was of type disconnected, the resource window should display the item Imap resource with 3 subitems, that are paths to local home files. Instead, the Contacts application does not show subitems below the Imap resource.
+You can now login to & kde; with a different username and set up his/ her & kontact; client in a very similar manner:
+Open & kontact; and in the Mail component add an IMAP account specifying as host the computer where Cyrus server runs (in my case: 192.168.1.3).
+Remember to check the Enable interval mail checking and set a value in minutes. When you confirm, you are not prompted for the subfolder creation (since they are found in the IMAP server), and you see them in the folder tree.
+Activate the groupware functionality to be able to save data in the IMAP server.
+Beware that in disconnected IMAP, data are transmitted from a client to IMAP server only when the clients connects to check for new mail. So if you have your & kontact; clients with an interval mail checking of, for instance, 5 minutes, in the worst case you have a 10 minutes delay between the event being written and its appearance to the other users.
+How to have Read Only Access
+Beware that I've been confirmed that Notes IMAP implementation in & kontact; prior to version 1.01 is broken, so this setup will not work for them, so you want to use them, you need to use the previous setup.
+In the previous setup, we have the same fake user, named groupware, that is used by all the real & kontact; users (ie; tony, rohn, amanda, & etc;) through the IMAP account with its login and password. But this way every real user has the same read/ write permissions of the others, since everyone connects as the user groupware to the IMAP server.
+To limit access to some users (typically, providing read-only access), we can use the ACL (Access Control Lists).
+Select in & kmail; a subfolder of office_gwdata inbox, for instance Calendar, and right click the mouse. Select Properties Access Control tab. Here you can enter the users you want give access to this folder and what they can do.
+Just to experiment trying to exchange events, we give All permission to the user mary
+At cyrus level (in the PC that runs IMAP server cyrus, with cyrus tools), we first need to add the user mary, so it's an IMAP recognized user, and create an IMAP folder for her.
+Then we login to GNU/ Linux as mary and enter & kontact;. As previously shown, we will setup an IMAP account in & kmail; with the same data but the one of the user (instead of the fake user groupware and its password, we will use mary and her password).
+In & kmail; folder tree, this time you will see this structure: office_gwdata user groupware Calendar and Tasks. Check the mail (File Check Mail) and you will also have an inbox folder under office_gwdata.
+Now enable & kmail; groupware functionality, and in Resource folders are subfolders of put the inbox that is subfolder of office_gwdata.
+Now you have two branches of folder under office_gwdata:
+inbox with Calendar, Contacts, Notes, Tasks and Journal, that are saved on mary IMAP folders on the IMAP server
+user, with the subfolder groupware and the subfolders to which mary has access to (in this example, Calendar and Tasks)
+& RMB; click on the user Calendar and check if it's of type Calendar (if not, set it to be), and also if user Tasks is of type Tasks.
+Now in Calendar you have two available IMAP resources to write against, so if you create a new event, you are prompted which one use (or if you left the local resources available, you have 3!).
+You have go to the lower left small window in Calendar, the one that shows available resources, and uncheck the ones that do n't point to. groupware. directory path (see the tail part of each resource path).
+Credits
+I'm a newbie, and for this howto I've only provided my time and my will. For the knowledge I have really to thank some guys in freenode channels for their competence, patience and helpfulness.
+Special thanks to:
+For the Cyrus IMAP part in #cyrus channel:
+[protagonist] Andy Morgan morgan@orst. edu
+[plixed] Okke Timm okke. timm@web. de
+For the & kontact; part in #kontact channel:
+[till] Till Adam adam@kde. org
+[dfaure] David Faure faure@kde. org
+[mdouhan] Matt Douhan matt@fruitsalad. org
+Thank a lot guys!
+Ah, and there is also me, [markit] Marco Menardi mmenaz@mail. com
+Further Reading
+Reference
+KDE: http: / /www. kde. org
+& kontact; website: http: / /www. kontact. org
+Kroupware project: http: / /www. kroupware. org
+& kde; Community Wiki: http: / /wiki. kde. org
+Wine project: http: / /www. winehq. org
+Cygwin/ X project http: / /x. cygwin. com
+LTSP project: http: / /www. ltsp. org
+Now enable & kmail; groupware functionality, and in Resource folders are subfolders of put the inbox that is subfolder of office_gwdata.

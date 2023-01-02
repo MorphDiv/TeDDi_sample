@@ -1,0 +1,59 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+このモジュールは、署名の生成および認証、そして、データのシール (暗号化)およびオープン(復号化)を行うために、 OpenSSL の関数を使用します。 OpenSSL は多くの機能を提供しますが、これらはまだこのモジュールでは サポートされていません。これらのいくつかは将来的に追加される可能 性があります。
+OpenSSL関数を使用するためには、 OpenSSL パッケージがインストールされ ていることを要します。 このモジュールでは、PHP 4.0.4pl1 は、OpenSSL = 0.9.6 を必要としま すが、PHP-4.0.5以降では、OpenSSL = 0.9.5 でも動作します。
+PHPのOpenSSLサポートを使用するには、 --with-openssl[=DIR] を指定してPHPをコンパ イルする必要があります。
+Win32ユーザへの注意 このモジュールをWindows環境で使用するには、PHP/Win32バイナリパッケー ジのDLLフォルダから libeay32.dll を使用する WindowsマシンのSYSTEM32フォルダ(例: C:\WINNT\SYSTEM32または C:\WINDOWS\SYSTEM32)にコピーする必要があります。
+加えてキー生成およびサイン認証関数を使用する計画がある場合、 システムに有効な openssl.cnf をインストールする 必要があります。PHP 4.3.0以降、Win32バイナリ配布版に openssl のサンプル設定ファイルが含まれています。 PHP 4.2.0以前を使用する場合やこのファイルがない場合、 OpenSSLのホームページ から入手す るか、PHP 4.3.0のリリース版をダウンロードし、それらに含まれる設定ファ イルを使用することができます。
+Win32ユーザへの注意 PHPは、 以下のロジックにより openssl.cnf を探します。
+環境変数 OPENSSL_CONF が設定された場合、 設定ファイルの(ファイル名を含む)パスとして使用されます。
+環境変数 SSLEAY_CONF が設定された場合、 設定ファイルの(ファイル名を含む)パスとして使用されます。
+ファイル openssl.cnf は、デフォルトの認証エリ アにあることが仮定され、openssl DLLがコンパイルされた時間で設定 されます。通常、デフォルトのファイル名が c:\usr\local\ssl\openssl.cnf であることを 意味します。
+インストール時に、設定ファイルを c:\usr\local\ssl\openssl.cnf または 他の場所にインストールし、(例えば仮想ホスト毎に)環境変数に設定ファ イルの場所を指定するかを選ぶ必要があります。 設定ファイルを必要とする関数の configargs によ り、デフォルトのパスを上書きすることが可能であることに注意して下さい。
+この拡張モジュールは設定ディレクティブを全く 定義しません。
+
+OpenSSL関数のうちごく小数のみがキーまたは証明書パラメータを必要と します。PHP 4.0.5 より以前では、openssl_get_xxx 関数のどれかによ り返されたキーまたは証明書リソースを使用する必要がありました。こ れより後のバージョンでは、次の方法のどれかを使用することが可能と なる予定です。
+証明書
+openssl_x509_read() から返された X.509リ ソース
+file://path/to/cert.pem 形式の文字列。 このファイルは、PEMエンコードの証明書である必要があります。
+PEMエンコードされた証明書の内容を含む文字列。
+公開/秘密キー
+openssl_get_publickey() または openssl_get_privatekey() から返されたキー リソース
+公開キーのみ: X.509リソース
+file://path/to/file.pem フォーマットを 有する文字列。このファイルには、PEMエンコードされた証明書/ 秘密キーが含まれている必要があります。(両方を含むことも可能 です。)
+PEMエンコードされた証明書/キーの内容を含む文字列
+秘密キーについては、 array($key, $passphrase) という構文を使用することも可能です。 ただし、$key は、file:// または上記のテキスト表現形式を使用 して指定したキー、$passphrase はその秘密キーに関するパスワー ドを有する文字列を表します。
+サイン/証明書を認証する関数をコールする際、 cainfo パラメータは、ファイルと認証済みのCA ファイルの場所を指定するファイルディレクトリ名を含む配列です。 ディレクトリが指定された場合、 openssl コマンド が使用できるような正しい形式にハッシュされたディレクトリである必 要があります。
+これらの定数は、この拡張モジュールで定義されており、 この拡張モジュールがPHP内部にコンパイルされているか実行時に動的にロー ドされるかのどちらかの場合のみ使用可能です。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+S/MIME 関数はビットフィールドを使用して指定したフラグを使用します。 このビットフィールドには、以下の値を一つ以上含むことが可能です。
+表 1PKCS7 CONSTANTS
+注意 これらの定数は、4.0.6 で追加されました。

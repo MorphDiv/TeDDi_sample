@@ -1,0 +1,144 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+Der Informix-Treiber für Informix (IDS) 7.x, SE 7.x, Universal Server (IUS) 9.x und IDS 2000 ist in "ifx.ec "und "php3_ifx.h" im Verzeichnis der Informix Erweiterung implementiert.
+Die Unterstützung für IDS 7.x ist mit der vollen Unterstützung für TEXT - und BYTE-Felder ziemlich vollständig.
+Die Unterstützung von IUS 9.x ist nur teilweise fertig: die neuen Datentypen gibt es zwar, aber die Unterstützung von SLOB - und CLOB-Datentypen ist noch in Arbeit.
+Bemerkungen zur Konfiguration:
+Sie brauchen ESQL / C, um den PHP Informix-Treiber zu kompilieren.
+ESQL / C Versionen ab 7.2x sollten genügen.
+ESQL / C ist jetzt Teil des Informix Client SDK.
+Versichern Sie sich, dass die Variable "INFORMIXDIR" gesetzt ist und dass Sie $INFORMIXDIR / bin in Ihren Pfad eingebunden haben, bevor Sie das "configure "Skript aufrufen.
+Anmerkung:
+Das Konfigurationsskript findet die Bibliotheken und Include-Verzeichnisse selbständig, wenn Sie configure mit der Option --with_informix=yes aufrufen.
+Sie können diese automatische Erkennung überschreiben, wenn Sie in der Systemumgebung "IFX_LIBDIR", "IFX_LIBS" und "IFX_INCDIR "setzen.
+Das Konfigurationsskript wird ebenso versuchen, die Version Ihres Informix Servers zu erkennen.
+Es setzt die Variable "HAVE_IFX_IUS" für eine bedingte Kompilation, falls Ihre Version = 9.00 ist.
+Das Verhalten dieser Funktionen wird von Einstellungen in der php.ini bestimmt.
+Anmerkung:
+Die Umgebungsvariablen INFORMIXDIR und INFORMIXSERVER müssen für den PHP-Treiber verfügbar sein und das INFORMIX bin-Verzeichnis muss im Pfad enthalten sein.
+Prüfen Sie diese Voraussetzungen mit einem Skript, das einen Aufruf von phpinfo() enthält, bevor Sie testen.
+Die Ausgabe von phpinfo() sollte diese Umgebungsvariablen auflisten.
+Dies ist sowohl für CGI PHP als auch Apache mod_php TRUE.
+Möglicherweise müssen Sie diese Umgebungsvariablen in Ihrem Apache Startskript setzen.
+Die Informix shared libraries sollten für den Lader ebenfalls verfügbar sein (überprüfen Sie den LD_LIBRARY_PATH oder ld.so.conf / ldconfig).
+Einige Anmerkungen zum Gebrauch von BLOBs (TEXT - und BYTE Felder):
+BLOBs werden normalerweise durch BLOB-Identifikatoren adressiert.
+Select Abfragen geben eine "blob id" für alle TEXT - und BYTE-Felder zurück.
+Sie können die Inhalte mit "string_var = ifx_get_blob($blob_id);" auslesen, falls Sie angeben, dass Sie die BLOBS in den Speicher schreiben möchten (mit "ifx_blobinfile(0) ;").
+Wenn Sie die Inhalte von BLOB-Felder lieber in eine Datei ausgeben möchten, benutzen Sie "ifx_blobinfile(1);" und mit "ifx_get_blob($blob_id); "ermitteln Sie den Dateinamen.
+Benutzen Sie normale Datei I / O-Routinen, um die Inhalte von BLOBs zu erhalten.
+Bei insert / update Abfragen müssen Sie diese "blob id's" mit der Funktion "ifx_create_blob();" selber erzeugen.
+Danach schreiben Sie die blob id' s in ein Array und ersetzen die BLOB-Felder durch ein Fragezeichen (?) im Abfragestring.
+Für die Inhalte der BLOBs, die mit der Funktion ifx_update_blob() gesetzt werden, sind Sie bei updates / inserts selber verantwortlich.
+Das Verhalten einer BLOB-Spalte kann auch zur Laufzeit durch Konfigurationsvariablen verändert werden.
+Konfigurationsvariable: ifx.textasvarchar
+Konfigurationsvariable: ifx.byteasvarchar
+Laufzeitfunktionen:
+ifx_textasvarchar( 0): benutzt bei SELECT Abfragen von TEXT-Felder die blob-id
+ifx_byteasvarchar( 0): benutzt bei SELECT Abfragen von BYTE-Felder die blob-id
+ifx_textasvarchar( 1): gibt TEXT-Felder so zurück, als wären es VARCHAR Felder, so dass Sie keine blob-id für select Abfragen brauchen.
+ifx_byteasvarchar( 1): gibt BYTE-Felder so zurück, als wären es VARCHAR Felder, so dass Sie keine blob-id für select Abfragen brauchen.
+Konfigurationsvariable: ifx.blobinfile
+Laufzeitfunktionen:
+ifx_blobinfile_mode( 0): gibt BYTE-Felder in den Speicher zurück, mit der blob-id können Sie auf den Inhalt zugreifen.
+ifx_blobinfile_mode( 1): gibt BYTE-Felder in einer Datei zurück, mit der blob-id können Sie den Dateinamen ermitteln.
+Wenn Sie ifx_text / byteasvarchar auf 1 setzen, können Sie TEXT - und BYTE-Felder in select Abfragen genauso benutzen, wie normale (allerdings sehr lange) VARCHAR-Felder.
+Da alle Zeichenketten in PHP "gezählt" werden, bleibt dies "binary safe ".
+Es bleibt Ihnen überlassen, korrekt damit umzugehen.
+Die zurückgegebenen Daten können alles mögliche enthalten, so dass Sie für die Inhalte verantwortlich sind.
+Wenn Sie ifx_blobinfile auf 1 setzen, benutzen Sie den Dateinamen, der von ifx_get_blob(..) zurückgegeben wird, um auf den Inhalt des BLOB zuzugreifen.
+Beachten Sie, dass Sie in diesem Fall FÜR DAS LÖSCHEN DER TEMPORÄREN DATEIEN, DIE VON INFORMIX ERSTELLT WERDEN VERANTWORTLLICH SIND, wenn sie ein Tupel auslesen.
+Jedes neue Tupel, das gelesen wird, erzeugt für jedes BYTE-Feld eine neue temporäre Datei.
+Der Speicherort für die temporären Dateien kann mit der Umgebungsvariablen "blobdir" beeinflusst werden, die Standardeinstellung ist "." (das aktuelle Verzeichnis).
+Etwas Ähnliches wie: putenv( blobdir=tmpblob"); erleichtert das Bereinigen der temporären Dateien, die versehentlich stehen geblieben sind (ihre Namen beginnen alle mit "blb").
+Automatisches Abschneiden von Leerzeichen bei "char" (SQLCHAR und SQLNCHAR) Daten:
+Dies kann mit einer Konfigurationsvariablen eingestellt werden
+ifx.charasvarchar: falls auf 1 gesetzt, werden abschliessende Leerzeichen automatisch abgeschnitten.
+Dies erspart den Aufruf der chop() Funktion.
+NULL -Werte:
+Wenn die Konfigurationsvariable ifx.nullformat (und die Laufzeitfunktion ifx_nullformat()) auf TRUE gesetzt sind, werden NULL -werte in Spalten als Zeichenkette NULL zurückgegeben, wenn die Variable auf FALSE gesetzt ist, werden leere Strings für NULL werte zurückgegeben.
+So können sie zwischen NULL werten und leeren Spalten unterscheiden.
+Tabelle 1.
+Informix Konfigurationsoptionen
+
+Standardwert
+Änderbar
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Hier folgt eine kurze Beschreibung der Konfigurationseinstellungen.
+Bestimmt, ob persistente Verbindungen zugelassen sind.
+Gibt die maximale Anzahl persistenter Verbindungen pro Prozess an.
+Gibt die maximale Anzahl der Verbindungen zum Informix Server pro Prozess an, einschliesslich der persistenten Verbindungen.
+Der Standardhost, zu dem verbunden wird, wenn kein Host in ifx_connect() oder ifx_pconnect() angegeben wurde.
+Diese Einstellung kann im safe mode nicht verwendet werden.
+Der Standardbenutzer, wenn kein Benutzer in ifx_connect() oder ifx_pconnect() angegeben wurde.
+Diese Einstellung kann im safe mode nicht verwendet werden.
+Das Standardpasswort, wenn kein Passwort in ifx_connect() oder ifx_pconnect() angegeben wurde.
+Diese Einstellung kann im safe mode nicht verwendet werden.
+TRUE, falls blob-Spalten in eine Datei ausgegeben werden sollen, FALSE, falls blob-Spalten in den Speicher ausgegeben werden sollen.
+Sie können diese Einstellung mit der Funktion ifx_blobinfile_mode() zur Laufzeit ändern.
+TRUE, falls text-Spalten in select Abfragen als normale Strings zurückgegeben werden sollen.
+FALSE, falls Sie blob-id Parameter benutzen wolen.
+Sie können diese Einstellung mit der Funktion ifx_textasvarchar() zur Laufzeit ändern.
+TRUE, falls BYTE-Spalten in select Abfragen als normale Strings zurückgegeben werden sollen.
+FALSE, falls Sie blob-id Parameter benutzen wolen.
+Sie können diese Einstellung mit der Funktion ifx_textasvarchar() zur Laufzeit ändern.
+TRUE, falls Sie abschliesende Leerzeichen von CHAR Spalten beim Auslesen abschneiden wollen.
+TRUE, falls der Spaltenwert NULL als Literal "NULL" zurückgegeben werden soll.
+FALSE, falls für Nullwerte leere Strigs "" zurückgegeben werden sollen.
+Sie können diese Einstellung mit der Funktion ifx_nullformat() zur Laufzeit ändern.
+Diese Erweiterung definiert keine Konstanten.
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

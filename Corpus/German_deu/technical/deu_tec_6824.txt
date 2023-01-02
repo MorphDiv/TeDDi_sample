@@ -1,0 +1,1090 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	2014
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Shaun McCance
+shaunm@gnome.org
+2008-2009
+Erstellen Sie ein mehrseitiges Dokument in nur zehn Minuten.
+Zehn-Minuten-Tour
+shaunm
+Dies ist ein Entwurf. Ich bin noch nicht wirklich zufrieden damit.
+In dieser Seite führen wir vor, wie ein einfaches mehrseitiges Mallard-Dokument erstellt wird. Wir erstellen ein Dokument für eine fiktive
+Ein Mallard-Dokument wird aus mehreren voneinander unabhängigen Seiten gebildet.
+Wir können mit der Erstellung eines Mallard-Dokuments beginnen, indem wir zunächst dessen Titelseite schreiben. Generell wird diese Titelseite eine Anleitungsseite sein, die dem Benutzer dabei hilft, durch das Dokument zu navigieren. In Mallard erhält die Titelseite jedes Dokuments den Namen
+index.page
+Dieses einfache Beispiel ist eine gültige Mallard-Anleitungsseite. Für sich allein betrachtet stellt sie selbst ein gültiges Mallard-Dokument dar, allerdings ein recht nutzloses. Wir können eine weitere Seite zum Dokument hinzufügen, indem wir eine weitere Seitendatei erstellen.
+planting.page
+Beachten Sie, dass wir das
+2009
+Komplette Spezifikation des Vokabulars von Mallard
+Sprachspezifikation
+Die Leitprinzipien hinter dem Design von Mallard.
+Prinzipien des Designs
+Prinzipien für den Leser
+Für den Leser
+Prinzipien für den Schreiber
+Für den Schreiber
+Hinzufügen
+Prinzipien für den Hacker
+Für den Hacker
+Heben Sie Bedeutsames ausreichend hervor
+Verwenden Sie ausreichend Hervorhebungen
+Stellen Sie sicher, dass der Leser nicht in einem Schwarm von Links verlorengeht
+Führen Sie den Leser
+TODO
+Zeilen und Zeilengruppen
+mal_table_tr = element tr {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Tabellenzellen
+mal_table_td = element td {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+ attribute rowspan { text } ?,
+ attribute colspan { text } ?,
+Tabellen
+mal_table = element table {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+ attribute frame {
+ "all" | "none" |
+ list { ("top" | "bottom" | "left" | "right") * }
+ } ?,
+ attribute rules {
+ "all" | "groups" | "none" |
+ list { ("rows" | "rowgroups" | "cols" | "colgroups") * }
+ } ?,
+ attribute shade {
+ "all" | "groups" | "none" |
+ list { ("rows" | "rowgroups" | "cols" | "colgroups") * }
+ } ?,
+Inhalt
+Attribute
+Beispiele
+Das
+Mallard
+Anas platyrhynchos
+56-65 cm
+900-1200 g
+Anas penelope
+45-50 cm
+680 g
+Anas crecca
+34-43 cm
+360 g
+Anas acuta
+59-76 cm
+450-1360 g
+Das
+Hinweise zum Design
+Vergleich zu HTML
+Vergleich zu DocBook
+Spalten und Spaltengruppen
+mal_table_col = element col {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *
+}
+mal_table_colgroup = element colgroup {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+
+ mal_table_col *
+}
+Teilen Sie die Seiten in logische Abschnitte, um den Leser beim schnellen Finden von Information zu unterstützen.
+Abschnitte
+mal_section = element section {
+ attribute id { xsd:ID },
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Anmerkungen
+Das
+Das
+Seiten
+namespace local = ""
+default namespace mal = "http://projectmallard.org/1.0/"
+start = mal_page
+mal_page = element page {
+ attribute id { xsd:ID },
+ attribute type { "guide" | "topic"} ?,
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Das
+Anleitungsseiten
+Im Allgemeinen bieten Anleitungsseiten einführende Inhalte, um dem Leser das Verständnis der angebotenen Themen zu erleichtern. Einführende Inhalte sollten kurz und prägnant sein.
+Themenseiten
+Themen enthalten automatisch erzeugte »Siehe auch«-Links. In
+2007-2009
+Heben Sie Platzhalter-Texte hervor, die durch den Benutzer ersetzt werden müssen.
+Variabler Text
+mal_inline_var = element var {
+Verwenden Sie das
+Das
+Das
+In
+Vergleich mit anderen Formaten
+Das
+Systemobjekte
+mal_inline_sys = element sys {
+Verwenden Sie das
+Verwenden Sie
+Der Linux-Kernel wird auf
+mal_inline_span = element span {
+Das
+Dieses
+Eingebettete Elemente
+mal_inline = {
+Weiterhin erlaubt Mallard Elemente aus externen Namensräumen, die eingebettet verwendet werden können. Weitere Informationen hierzu finden Sie in
+Elemente
+Anweisungen zur Verarbeitung eingebetteter Elemente
+Heben Sie die Ausgabe eines Computerprogramms hervor.
+Computerausgaben
+mal_inline_output = element output {
+Typische Werte für das
+output
+Standardausgabe eines laufenden Programms
+error
+Standard-Fehlermeldung eines laufenden Programms
+prompt
+Die Befehlszeile für eine interaktive Shell
+Der Befehl
+$
+ls mal_inline_output.xml
+mal_inline_output.xml
+Verwenden Sie
+ls mal_inline_computeroutput.xml
+ls: mal_inline_computerouput.xml: No such file or directory
+a
+Fügen Sie ein Bild-, Video- oder sonstiges Multimediaobjekt ein.
+Eingebettete Multimedia-Objekte
+mal_inline_media = element media {
+Drake, das Maskottchen von Mallard
+Hyperlinks
+mal_inline_link = element link {
+ ( attribute xref { text } |
+ attribute href { text } |
+ ( attribute xref { text }, attribute href { text } )
+ ),
+ attribute role { text } ?,
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Für Links innerhalb des gleichen Elements kann der Inhalt automatisch erzeugt werden.
+Verlinken zu einer anderen Seite im gleichen Element:
+Link zu einem Abschnitt der gleichen Seite:
+Link zu einem Abschnitt einer anderen Seite:
+Link zu einer externen Ressource:
+&gt;2008-2009
+Tastensequenzen
+mal_inline_keyseq = element keyseq {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute type { "combo" | "sequence" } ?,
+ attribute * - (mal:* | local:*) { text } *,
+
+ mixed {
+ (
+Das
+Drücken Sie
+Verwenden Sie verschachtelte
+Zugriffstaste
+mal_inline_key = element key {
+Verwenden Sie
+Drücken Sie
+Verwenden Sie
+Drücken Sie
+Drücken Sie die Taste
+Das
+Benutzereingabe
+mal_inline_input = element input {
+Abläufe in der Benutzeroberfläche
+mal_inline_guiseq = element guiseq {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+
+ mixed {
+Das
+Beschriftungen der Benutzeroberfläche
+mal_inline_gui = element gui {
+button
+Der Text in einem Knopf
+checkbox
+Die Beschriftung eines Ankreuzfeldes
+group
+Die Beschriftung einer Gruppe von Bedienelementen
+input
+Die Beschriftung eines Elements zur Texteingabe
+menu
+Der Name eines Menüs
+menuitem
+Der Name eines Eintrages in einem Menü
+radiobutton
+Die Beschriftung eines Radioknopfes
+tab
+Die Beschriftung eines Reiters
+Verwenden Sie
+Klicken Sie auf den
+Verwenden Sie
+Heben Sie den Namen einer Datei oder eines Ordners hervor.
+Dateinamen
+mal_inline_file = element file {
+mal_inline_em = element em {
+Code-Beispiele
+mal_inline_code = element code {
+Das
+Befehle
+mal_inline_cmd = element cmd {
+Typische Werte für das
+application/x-sh
+application/x-csh
+Verwenden Sie
+Um
+Verwenden Sie
+Heben Sie den menschenlesbaren Namen einer Anwendung oder eines Fensters hervor.
+Anwendungsnamen
+mal_inline_app = element app {
+Verwenden Sie
+Verwenden Sie <code>app<app>, um auf ein Fenster zu verweisen:
+Verwenden Sie das <Themen\-Einstellungen>-Fenster, um das Aussehen Ihrer Arbeitsumgebung anzupassen.
+mal_info_years = element years {
+ attribute * - (mal:* | local:*) { text } *,
+Das
+mal_info_title = element title {
+ attribute type { xsd:NMTOKEN },
+ attribute role { xsd:NMTOKEN } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Das
+"link"
+"sort"
+Versionsinformation
+mal_info_revision = element revision {
+ attribute version { text } ?,
+ attribute docversion { text } ?,
+ attribute pkgversion { text } ?,
+ attribute date { xsd:date } ?,
+ attribute status {
+ "stub" | "incomplete" | "draft" | "outdated" |
+ "review" | "candidate" | "final" } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Das
+Das
+"stub"
+enthält nur wenig oder kaum wirklichen Inhalt
+"incomplete"
+"draft"
+Inhalt ist vollständig, benötigt aber noch etwas Feinschliff
+"outdated"
+war bereits vollständig oder beinahe vollständig, muss aber revidiert werden, um Änderungen gerecht zu werden
+"review"
+fertig zum Gegenlesen
+"candidate"
+gegengelesen und bereit zur Endabnahme
+"final"
+Informationselemente
+Zusätzliche Informationselemente
+Zusätzliche Elemente
+Namen
+mal_info_name = element name {
+ attribute * - (mal:* | local:*) { text } *,
+Das
+mal_info_link = element link {
+ attribute type { "guide" | "topic" | "seealso" },
+ attribute xref { text },
+ attribute weight { text } ?
+}
+Stellt Informationen über die Lizensierungsbedingungen des Materials bereit.
+Lizenzinformationen
+mal_info_license = element license {
+ attribute href { text } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Das
+E-Mail-Adressen
+mal_info_email = element email {
+ attribute * - (mal:* | local:*) { text } *,
+Das
+Stellt eine Kurzbeschreibung einer Seite oder eines Abschnitts bereit.
+Seitenbeschreibungen
+mal_info_desc = element desc {
+ attribute * - (mal:* | local:*) { text } *,
+Das
+2008
+mal_info_credit = element credit {
+ attribute type { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+
+ (
+Das
+Das
+"author"
+"editor"
+"copyright"
+"maintainer"
+"collaborator"
+"translator"
+"publisher"
+Externe Namensräume
+Inhalt hinzufügen
+mal_external = element * - (mal:* | local:*) {
+ attribute * { text } *,
+ mal_anything *
+}
+mal_anything = element * {
+ attribute * { text } *,
+ mal_anything *
+}
+Externe Namensraum-Attribute
+Die Verarbeirungswerkzeuge sollten jegliche Attribute aus externen Namensräumen ignorieren, die sie nicht verstehen.
+Elemente aus externen Namensräumen
+Baumlisten
+mal_block_tree = element tree {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+lines
+GtkBin
+GtkButton
+GtkToggleButton
+GtkColorButton
+GtkFontButton
+GtkLinkButton
+GtkOptionMenu
+GtkScaleButton
+Anas
+Lophonetta
+Speculanas
+Aythya
+Netta
+Dendrocygninae (Pfeifenten)
+Titel
+mal_block_title = element title {
+Erstellen Sie eine Liste aus Begriffen und den zugehörigen Beschreibungen.
+Definitionslisten
+mal_block_terms = element terms {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+code
+example
+screen
+comment
+quote
+figure
+listing
+synopsis
+note
+Erstellen Sie einen konzeptuellen Überblick.
+mal_block_synopsis = element synopsis {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Verwenden Sie
+Beanstalk-Funktionen
+Wenden Sie diese Methoden auf ein
+void add_bean (Bean bean);
+int count_beans ();
+Wenn vorhanden, sollten der Titel und die Beschreibung in einer Weise angezeigt werden, die deren jeweiligen Rollen eindeutig klarstellt.
+Untertitel
+mal_block_subtitle = element subtitle {
+Erstellen Sie eine Liste der Schritte, die ein Benutzer zur Ausführung einer Aufgabe auszuführen hat:
+Prozeduren
+mal_block_steps = element steps {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Erstellen Sie eine einfache Schritt-für-Schritt-Anleitung, welcher der Leser folgen soll:
+Anbau magischer Bohnen
+Graben Sie ein 10 cm tiefes Loch.
+Legen Sie magische Bohnen in das Loch.
+Gießen Sie gelegentlich.
+Erstellen Sie eine Prozedur mit einer verschachtelten Liste und einer verschachtelten Prozedur:
+Führen Sie eine der folgenden Aktionen aus:
+Graben Sie ein 10 cm tiefes Loch.
+Finden Sie ein 10 cm tiefes Loch.
+Wässern Sie gelegentlich folgendermaßen:
+Füllen Sie eine Gießkanne mit Wasser.
+Gießen Sie Wasser auf die Stelle, an der die Bohnen gepflanzt wurden.
+Das
+Anstelle eines separaten
+Mallard bietet keine Entsprechung zum
+mal_block_screen = element screen {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute mime { text } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Verwenden Sie
+xsltproc -o mal_block_screen.html \\
+ --stringparam mal.cache.file `pwd`/mallard.cache \\
+ `pkg-config --variable mal2html gnome-doc-utils` mal_block_screen.html
+[rupert@gnome]
+ls foo bar
+bar
+Das
+mal_block_quote = element quote {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+epigraph
+Henry David Thoreau
+Fügen Sie eine Überschrift zum Zitat hinzu:
+Erstellen Sie einen einfachen Absatz im Text.
+Absätze
+mal_block_p = element p {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Das grundlegende Blockelement in Mallard ist das
+Das
+So erstellen Sie einen einfachen Absatz:
+Block-Elemente
+mal_block = (
+mal_block_basic = (
+mal_block_formal = (
+Listenelemente
+mal_block_lists = (
+Andere Block-ähnliche Elemente
+mal_block_note = element note {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+advanced
+bug
+important
+tip
+warning
+Fügen Sie einen Hinweis mit zusätzlichen Informationen für fortgeschrittene Leser hinzu:
+Erwähnen Sie einen bekannten Fehler, dem der Leser wahrscheinlich auch begegnen wird:
+Fügen Sie Ihren Namen und Ihre E-Mail-Adresse hinzu
+Bevor Sie irgendetwas in einen Git-Softwarebestand einspielen, stellen Sie bitte sicher, dass Sie Ihren Namen und Ihre E-Mail-Adresse hinzugefügt haben. Nur so können Ihre Einspielungen korrekt zugeordnet werden.
+git config --global user.name
+Drücken Sie
+Warnen Sie den Benutzer vor gefährlichen Operationen:
+Es gibt keine Möglichkeit, mit dem
+Multimedia-Objekte
+mal_block_media = element media {
+ attribute type { "image" | "video" | "audio" | "application" } ?,
+ attribute mime { text } ?,
+ attribute src { text },
+ attribute height { text } ?,
+ attribute width { text } ?,
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+mal_block_list = element list {
+ attribute type { xsd:NMTOKEN } ?,
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+GTK_MESSAGE_INFO
+GTK_MESSAGE_WARNING
+GTK_MESSAGE_QUESTION
+GTK_MESSAGE_ERROR
+GTK_MESSAGE_OTHER
+Meldungstypen
+Listen
+mal_block_listing = element listing {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+<![CDATA[
+Eine erste Mallard-Seite
+Abbildungen
+mal_block_figure = element figure {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Drake
+Drake ist das Maskottchen von Mallard.
+mal_block_example = element example {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+<![CDATA[
+xsltproc -o mal_block_screen.html \\
+ --stringparam mal.cache.file `pwd`/mallard.cache \\
+ `pkg-config --variable mal2html gnome-doc-utils` \\
+ mal_block_screen.html
+Blockbeschreibungen
+mal_block_desc = element desc {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Das
+<![CDATA[
+Weitere Beispiele finden Sie in den Seiten
+mal_block_comment = element comment {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Stellen Sie einen Kommentar bereit:
+Rupert
+Code-Blöcke
+mal_block_code = element code {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute mime { text } ?,
+ attribute * - (mal:* | local:*) { text } *,
+Verwenden Sie
+class BeanStalk {
+public:
+ void add_bean(Bean bean);
+ int count_beans();
+}
+Zitate
+mal_block_cite = element cite {
+ attribute style { xsd:NMTOKENS } ?,
+ attribute * - (mal:* | local:*) { text } *,
+ attribute date { text } ?,
+ attribute href { text } ?,
+mal_attr_link =
+ ( attribute xref { text } ?
+ | { attribute dref { text } ?, attribute href { text } ? }
+ )
+Automatische Links
+Themen-Links
+Anleitungs-Links
+Siehe-auch-Links
+Hinweise zur Übersetzung
+ITS-Konformität
+R007: Identifizierung von Begriffen
+R011: Unterstützung für zwei Schreibrichtungen
+Zusätzlich kann das
+R022: Verschachtelte Elemente
+[R022] Größte Sorgfalt sollten Sie beim Definieren oder Benutzen verschachtelter übersetzbarer Elemente walten lassen.
+2007
+Hinweise zur Internationalisierung
+Entdecken Sie, was Mallard bietet
+Mallard entdecken
+DocBook-Elementreferenz
+Die folgende Tabelle listet alle DocBook-Elemente auf und gibt Empfehlungen für entsprechende oder zumindest ähnliche Funktionalität in Mallard, sofern verfügbar.
+abbrev
+Keine Entsprechung in Mallard. Verwenden Sie stattdessen einfachen Text.
+abstract
+Keine Entsprechung in Mallard. Das
+accel
+ackno
+Keine Entsprechung in Mallard. Setzen Sie Danksagungen einfach in einen gewöhnlichen
+acronym
+action
+address
+Keine Entsprechung in Mallard.
+affiliation
+alt
+anchor
+Gegenwärtig keine Entsprechung in Mallard. Zukünftige Versionen könnten dies beinhalten.
+answer
+Mallard verfügt derzeit nicht über eine strukturierte Umgebung für Frage-und-Antwort-Sitzungen.
+appendix
+Keine direkte Entsprechung in Mallard. Verwenden Sie stattdessen die Elemente
+appendixinfo
+application
+Ähnlich dem
+area
+Mallard unterstützt keine Sprechblasen.
+areaset
+areaspec
+arg
+article
+articleinfo
+artpagenums
+attribution
+Ähnlich dem
+audiodata
+audioobject
+author
+authorblurb
+Keine Entsprechung in Mallard.
+authorgroup
+Keine Entsprechung in Mallard.
+authorinitials
+beginpage
+bibliocoverage
+bibliodiv
+biblioentry
+bibliography
+bibliographyinfo
+biblioid
+bibliolist
+bibliomisc
+bibliomixed
+bibliomset
+biblioref
+bibliorelation
+biblioset
+bibliosource
+blockinfo
+blockquote
+book
+bookinfo
+bridgehead
+callout
+calloutlist
+caption
+caution
+chapter
+chapterinfo
+citation
+citebiblioid
+citerefentry
+citetitle
+city
+classname
+Kein spezifisches Element in Mallard. Verwenden Sie stattdessen das Element
+classsynopsis
+classsynopsisinfo
+cmdsynopsis
+co
+Ähnlich dem
+col
+Ähnlich dem
+colgroup
+Ähnlich dem
+collab
+collabname
+colophon
+colspec
+Mallard verwendet das CALS-Tabellenmodell nicht.
+command
+Ähnlich dem
+computeroutput
+Ähnlich dem
+confdates
+confgroup
+confnum
+confsponsor
+conftitle
+constant
+Kein spezifisches Element in Mallard. Verwenden Sie stattdessen ein eingebettetes
+constraint
+constraintdef
+constructorsynopsis
+Kein spezifische Element in Mallard. Verwenden Sie stattdessen das
+contractnum
+contractsponsor
+contrib
+copyright
+coref
+corpauthor
+corpcredit
+corpname
+country
+database
+Kein spezifisches Element in Mallard. Verwenden Sie stattdessen das eingebettet
+date
+dedication
+destructorsynopsis
+edition
+editor
+email
+emphasis
+Ähnlich dem
+entry
+entrytbl
+envar
+epigrah
+equation
+errorcode
+errorname
+errortext
+errortype
+exceptionname
+fax
+fieldsynopsis
+filename
+Ähnlich dem
+firstname
+firstterm
+Kein spezifisches Element in Mallard. Verwenden Sie stattdessen das Element
+footnote
+footnoteref
+foreignphrase
+Kein spezifisches Element in Mallard. Verwenden Sie stattdessen das Element
+formalpara
+funcdef
+funcparams
+funcprototype
+funcsynopsis
+funcsynopsisinfo
+function
+glossary
+glossaryinfo
+glossdef
+glossdiv
+glossentry
+glosslist
+glosssee
+glossseealso
+glossterm
+graphic
+graphicco
+guibutton
+guiicon
+guilabel
+guimenu
+guimenuitem
+guisubmenu
+hardware
+highlights
+holder
+honorific
+html:form
+Mallard unterstützt keine Formulare.
+imagedata
+imageobject
+imageobjectco
+index
+Mallard verfügt derzeit nicht über eine strukturierte Umgebung für Indizes.
+indexdiv
+indexentry
+indexinfo
+indexterm
+informalequation
+informalexample
+Ähnlich dem
+informalfigure
+informaltable
+Ähnlich dem
+initializer
+inlineequation
+inlinegraphic
+inlinemediaobject
+interface
+interfacename
+invpartnumber
+isbn
+issn
+issuenum
+itemizedlist
+itermset
+jobtitle
+keycap
+Ähnlich dem
+keycode
+keycombo
+Ähnlich dem
+keysym
+keyword
+keywordset
+label
+legalnotice
+lhs
+lineage
+lineannotation
+link
+listitem
+literal
+literallayout
+lot
+lotentry
+manvolnum
+markup
+mathprase
+medialabel
+mediaobject
+mediaobjectco
+member
+menuchoice
+Ähnlich dem
+methodname
+methodparam
+methodsynopsis
+mml:math
+modespec
+mousebutton
+msg
+Mallard verfügt nicht über eine strukturierte Umgebung für Meldungen.
+msgaud
+msgentry
+msgexplan
+msginfo
+msglevel
+msgmain
+msgorig
+msgrel
+msgset
+msgsub
+msgtext
+nonterminal
+objectinfo
+olink
+ooclass
+ooexception
+oointerface
+option
+Kein spezifisches Element in Mallard. Verwenden Sie stattdessen das Element
+optional
+orderedlist
+orgdiv
+orgname
+otheraddr
+othercredit
+othername
+package
+pagenums
+para
+Ähnlich dem
+paramdef
+Mallard verfügt nicht über eine strukturierte Umgebung für Funktions-Prototypen.
+parameter
+part
+partinfo
+partintro
+Keine direkte Entsprechung in Mallard. Die Elemente
+personblurb
+personname
+phone
+Ähnlich dem
+pob
+postcode
+preface
+prefaceinfo
+primary
+primaryie
+printhistory
+procedure
+production
+productionrecap
+productionset
+productname
+Keine Entsprechung in Mallard, verwenden Sie hier einfachen Text.
+productnumber
+programlisting
+Ähnlich dem
+programlistingco
+Kein spezifisches Element in Mallard. Verwenden Sie stattdessen das Element
+property
+pubdate
+publisher
+publishername
+pubsnumber
+qandadiv
+qandaentry
+qandaset
+question
+refclass
+refdescriptor
+refentry
+refentryinfo
+refentrytitle
+reference
+referenceinfo
+refmeta
+refmiscinfo
+refname
+refnamediv
+refpurpose
+refsect1
+refsect1info
+refsect2
+refsect2info
+refsect3
+refsect3info
+refsection
+refsectioninfo
+refsynopsisdiv
+refsynopsisdivinfo
+releaseinfo
+Umgang mit und Verarbeitung von Mallard-Dokumenten
+Verarbeitungsdetails
+Internationalisierung und Lokalisierung
+Zusätzliches Referenzmaterial
+Mario Blättermann <mariobl\@gnome\.org>, 2009
+Dieses Werk wird unter einer
+Als besondere Ausnahme erteilen Ihnen die Urheberrechtsinhaber die Genehmigung, den in diesem Dokument enthaltenen Beispielcode ohne Einschränkung unter den Bedingungen Ihrer Wahl zu verbreiten.
+Beanstalk
+Themenseiten
+type
+"guide"
+"topic"
+mal_table_td
+mal_block
+mal_block_title
+mal_block_desc
+mal_table_col
+mal_table_colgroup
+mal_table_tr
+mal_table_thead
+mal_table_tbody
+mal_table_tfoot
+mal_info
+section
+info
+title
+page
+id
+style
+mal_section
+mal_attr_link
+mal_inline
+var
+cmd
+replaceable
+sys
+file
+git.kernel.org
+systemitem
+class
+span
+word
+phrase
+mal_inline_app
+mal_inline_cmd
+mal_inline_code
+mal_inline_em
+mal_inline_file
+mal_inline_gui
+mal_inline_guiseq
+mal_inline_input
+mal_inline_key
+mal_inline_keyseq
+mal_inline_link
+mal_inline_media
+mal_inline_output
+mal_inline_span
+mal_inline_sys
+mal_inline_var
+mal_inline = {
+gui
+ouptut
+echo $SHELL
+/bin/bash
+"prompt"
+"error"
+media
+mime
+videoobject
+xref
+href
+role
+Siehe
+ulink
+endterm
+xrefstyle
+keyseq
+key
+"combo"
+"sequence"
+Strg
+Q
+Umschalt
+C
+x
+s
+Emacs
+M
+F9
+Y
+userinput
+guiseq
+Datei
+_Neu
+shortcut
+Schließen
+Filter
+em
+accelerators
+mnemonics
+bold
+strong
+gtk_container_add
+gtk_button_new_with_label(
+Block-Spiele
+structfield
+structname
+varname
+sgmltag
+app
+Totem Video-Player
+totem
+totem
+-mtime
+find
+Themen-Einstellungen
+years
+credit
+year
+mal_external
+revision
+desc
+version
+docversion
+pkgversion
+status
+revhistory
+mal_info_desc
+mal_info_credit
+mal_info_license
+mal_info_link
+mal_info_title
+mal_info_revision
+mal_info = element info { attribute * - (mal:* | local:*) { text } *, (
+name
+license
+mal_info_name
+mal_info_email
+mal_info_years
+&gt;email
+its:translate
+tree
+list
+item
+terms
+cite
+variablelist
+varlistentry
+beanstalk
+steps
+"numbered"
+li
+step
+substeps
+stepalternatives
+mal_block_cite
+p
+simpara
+mal_block_basic
+mal_block_formal
+mal_block_lists
+mal_table
+mal_block = (
+mal_block_code
+mal_block_example
+mal_block_media
+mal_block_p
+mal_block_screen
+mal_block_basic = (
+mal_block_comment
+mal_block_figure
+mal_block_listing
+mal_block_note
+mal_block_quote
+mal_block_synopsis
+mal_block_formal = (
+mal_block_list
+mal_block_steps
+mal_block_terms
+mal_block_tree
+mal_block_lists = (
+bug #1234
+full_name
+email_address
+J
+shred
+"disc"
+"circle"
+remark
+codeblock
+mailto:
+ref
+xml:id
+IETF RFC 3066
+its:term
+its:termInfoRef
+
+its:rules
+its:dir
+its:locNote
+its:locNoteRule
+img
+paragraph
+Externe Namensraum-Elemente
+credits
+revisions
+table
+inline emphasis
+simplelist
+outut

@@ -1,0 +1,126 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Bidouiller & appname;
+Dans l'esprit du logiciel libre, vous êtes les bienvenues pour bidouiller & appname; comme vous le souhaitez. Vous devez pouvoir écrire des scripts pour importer, exporter ou modifier les données très facilement. Ce chapitre vous donne plus d'informations sur ce qui est possible de faire.
+Format de fichier
+Le fichier de données par défaut est une archive zip, avec normalement l'extension. tc. Á l'intérieur de l'archive se trouve un fichier tellico. xml, les images peuvent être incluses dans le dossier images/ de l'archive, ou elles doivent être incluses dans le dossier & XML; directement dans un encodage base64. Les images peuvent aussi être enregistrées dans le dossier de données de l'application, auquel cas, elles ne sont pas du tout dans le fichier de données. & appname; peut aussi charger un fichier & XML;, lui même, non compressé.
+Donnés & XML;
+Collection
+<! [CDATA[< ?xml version="1.0" encoding="UTF-8"? > < !DOCTYPE tellico PUBLIC "-//Robby Stephenson/DTD Tellico V9.0//EN" "http://periapsis.org/tellico/dtd/v9/tellico.dtd" >]] >
+Le fichier commence avec la déclaration et l'encodage & XML; requis suivi du doctype. Quand un nouveau type de champ est ajouté ou que des propriétés additionnelles sont définies sur les champs par défaut, la version du doctype DTD est incrémentée. & appname; peut toujours ouvrir et lire n'importe quelles versions DTD précédentes, mais enregistrera les fichiers dans la version courante. L'emplacement DTD est lié au fichier DTD actuel.
+L'élément de haut niveau est un élément lt; tellicogt;, contenant la déclaration de l'espace de nom par défaut et la version de syntaxe du fichier qui doit toujours correspondre au fichier DTD.
+L'élément lt; tellicogt; contient un élément lt; collectiongt;. Plusieurs collections sont ignorées pour l'instant. L'attribut title contient le titre de la collection, tandis que le type spécifie quelles sortes d'entrées sont contenues dans la collection. Les types autorisés sont listés dans une section suivante. Un attribut optionnel entryTitle peut être utilisé pour spécifier le titre des entrées pour une collection personnalisée, et doit être au pluriel.
+Champs
+< ![CDATA[ < ![CDATA[]] >
+Tous les champs sont définis dans un élément lt; fieldsgt; où ils ne peuvent qu'être unique. Toutes les informations pour un champ, sauf pour les propriétés étendues, sont inclues comme des attributs de l'élément de lt; fieldgt;. Les valeurs autorisées pour flags, format, et type sont données dans la section suivante.
+Un élément lt; fieldgt; avec un attribut de nom équivalent à _default dit à & appname; d'inclure tous les champs par défaut pour ce type de collection.
+Entrées
+Pour tous les champs de la collection, lt; entrygt; peut contenir un élément dont le nom est identique au nom de champ. Si plusieurs valeurs sont permises pour le champ, la lettre s est ensuite ajoutée au nom de champ pour créer un élément, et chaque valeur est ajoutée comme un enfant de l'élément, comme dans le cas des champs 'auteur, genre et mots clés ci-dessus.
+Comme résultat, si des champs additionnels sont ajoutés à la collection, le fichier de données ne sera plus conforme au fichier DTD. Cependant, & appname; utilise un analyseur syntaxique & XML; non valable, les champs additionnels ne poseront donc aucun problèmes.
+Images
+< ![CDATA[ < ![CDATA[]] >
+Dans l'élément lt; imagesgt;, chaque image référencée par une entrée est listée, avec des attributs décrivant la taille de l'image, le format et l'ID. Si l'image est contenu dans le fichier zip, l'élément est vide. Sinon, l'image peut être contenue dans le flux & XML; comme texte d'encodage base64.
+Valeurs du type de collection
+Le type de collection est donné dans l'attribut type de l'élément de la collection. La valeur est identique à la valeur Type dans src/ collection. h.
+Type de collection
+Valeur
+Collection personnalisée
+1
+Collection de livres
+2
+Collection de films
+3
+Collection de musique
+4
+Bibliographie
+5
+Collection de BD
+6
+Collection de vins
+7
+Collection de pièces
+8
+Collection de timbres
+9
+Collection de cartes
+10
+Collection de jeux vidéo
+11
+Catalogue de fichiers
+12
+Collection de jeux de plateau
+13
+Valeurs de type de champ
+& appname; inclura tous les champs par défaut pour une collection si le premier élément de champ a le nom _default. Pour les champs Paragraphe, Tableau, ou Image, la catégorie de champ doit être identique au titre de champ.
+Le type de collection est donné dans l'attribut type de l'élément de la collection. La valeur est identique à la valeur Type dans src/ collection. h.
+Type de champ
+Texte simple
+Paragraphe
+Choix
+Case à cocher
+Nombre
+& URL;
+Tableau en colonnes simples
+Image
+Date
+Note
+14
+Le champ peut avoir différents jeux de drapeaux, donnés comme une valeur OR 'd bitewise dans l'attribut du drapeau sur l'élément de champ. Le drapeau, pour prévenir l'utilisateur d'une suppression d'un champ est voulue pour certaines choses comme la clé de citation pour les entrées bibliographiques.
+Valeur du drapeau de champ
+Drapeaux de champ
+Autoriser des valeurs multiples
+0x01
+Autoriser le regroupement
+0x02
+Autoriser le complètement
+0x04
+Ne pas autoriser la suppression
+0x08
+Le format du champ est donné dans l'attribut du format sur l'élément de champ. Formatage de date n'est pas actuellement utilisé. Le groupement par Personne utilise tous les champs qui utilisent le Formatage de nom.
+Valeurs de format de champ
+Format de champ
+Mise en majuscule automatique seulement
+0
+Formatage du titre
+Formatage du nom
+Formatage de la date
+Pas de formatage
+Cacher les options de configuration
+& appname; a des options de configuration supplémentaires qui ne sont pas visibles dans la Boîte de dialogue de configuration. Ces options n'étaient pas assez importantes pour encombrer la boîte de dialogue avec plus de paramètres, mais comme elles représentent des options qui peuvent plaire à des utilisateurs, l'application les lit depuis le fichier de configuration.
+Les paramètres pour & appname; sont enregistrés dans un fichier dans le dossier personnel de l'utilisateur appelé $KDEHOME / share/ config/ tellicorc. Dans ce fichier, les paramètres sont rangés par groupes, qui apparaissent avec des noms entre crochets, tel que [General Options]. Pour ajouter un paramètre au groupe General Options, cherchez la ligne dans le fichier de configuration avec ce nom de groupe. Si il n'apparaît pas créez le vous même en ajoutant une ligne intitulée [General Options]. Le paramètre peut ensuite être ajouté sous le nom de groupe.
+[General Options]
+Ces paramètres doivent être placés dans le groupe General Options.
+Taille maximum des icônes
+La taille maximum des icônes dans la Vue en iconnes peut être modifiée avec ce paramètre. La valeur par défaut est 96. La taille doit être comprise entre 32 et 128.
+Exemple
+Max Icon Size=72
+[Options - BibTeX]
+Ces paramètres doivent être placés dans le groupe Options - BibTeX.
+lyxpipe
+Ce paramètre est pour l'emplacement de lyxpipe pour l'envoi de citations bibliographiques. Il ne doit pas inclure le suffixe. in.
+lyxpipe=$HOME/. lyx/ lyxpipe
+[Export Options - PilotDB]
+Ces paramètres doivent être placés dans le groupe Export Options - PilotDB.
+Jeu de caractères
+L'encodage de données exportées dans un fichier PilotDB peut être modifié avec ce paramètre. La valeur par défaut est la règle de jeu de caractères pour la locale de l'utilisateur.
+Charset=Windows-1250
+Traduction de caractères BibTeX
+Quand des fichiers BibTeX sont importés ou exportés, certains caractères sont traduits entre leur équivalent TeX et les caractères Unicode. Ces mapping de caractères sont contenus dans le fichier BibTeX-translation. xml, situés dans le dossier d'installation. Le mapping peut être modifié, comme désiré. L'élément clé contient les caractères Unicode, et les éléments de l'entrée qui contiennent les équivalents TeX, qui peuvent être un mapping un-vers-plusieurs. Le premier mapping est le premier utilisé à l'exportation vers BibTeX.
+Astuces XSLT
+Voici quelques astuces pour l'écriture XSLT pour analyser les données & XML; de & appname; (TBD).
+Lecture Seule

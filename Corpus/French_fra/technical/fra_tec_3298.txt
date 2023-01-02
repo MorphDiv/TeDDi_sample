@@ -1,0 +1,75 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+header() permet de spécifier une en-tête HTTP lors de l 'envoi des fichiers HTML.
+Reportez-vous à HTTP 1.1 Specification pour plus d 'informations sur les en-têtes HTTP.
+
+La fonction header() doit être appelée avant la première balise HTML, et avant n 'importe quel envoi de commande PHP.
+C'est une erreur très courante que de lire du code avec la fonction include() ou avec auto_prepend et d'avoir des espaces ou des lignes vides dans ce code qui produisent un début de sortie avant que header() n 'ait été appelé.
+Il y a cependant deux en-têtes spéciales.
+Le premier est "Location".
+Non seulement il renvoie une en-tête au client, mais en plus, il envoie un statut de redirection à Apache.
+Du point de vue de l'auteur de script, cela importe peu, mais pour ceux qui connaissent les rouages internes d'Apache, c 'est primordial.
+?php header( "Location: http: / /www.php.net / "); / * Redirige le client vers le site PHP * / exit(); / * Garantit que le code ci-dessous n 'est jamais exécuté. * /?
+
+HTTP / 1.1 demande une URI absolue comme argument de Location:, y compris le protocole, hôte et chemin absolu.
+Mais certains navigateurs acceptent les URI relatives.
+Vous pouvez généralement utiliser les variables globales $HTTP_SERVER_VARS[ 'HTTP_HOST'], $HTTP_SERVER_VARS['PHP_SELF'] et dirname() pour construire vous-même une URI absolue:
+header( "Location: http: / /".$HTTP_SERVER_VARS['HTTP_HOST'] ." / ".dirname($HTTP_SERVER_VARS['PHP_SELF']) ." / ".$relative_url);
+Le deuxième type d'appel spécial regroupe toutes les en-têtes qui commencent par "HTTP / "(la casse n'est pas importante).
+Par exemple, si vous avez votre page d'erreur 404 Apache qui pointe sur un script PHP, c 'est une bonne idée que de vous assurer que le script PHP génère une erreur 404.
+La première chose à faire dans votre script est:
+
+
+En PHP 3, cela ne fonctionne que si PHP est compilé comme module Apache.
+Vous pouvez arriver au même au résultat en utilisant l 'entête Status.
+header( "Status:
+404 Not Found");
+Les scripts PHP génèrent souvent du HTML dynamiquement, qui ne doit pas être mis en cache, ni par le client, ni par les proxy intermédiaires.
+On peut forcer la désactivation du cache de nombreux clients et proxy avec
+
+Mon, 26 Jul 1997 05:00:00 GMT"); / / Date du passé header("Last-Modified: ". gmdate("D, d M Y H:i:s")." GMT"); / / toujours modifié header("Cache-Control: no-cache, must-revalidate"); / / HTTP / 1.1 header("Pragma: no-cache"); / / HTTP / 1.0?
+
+Vous pouvez vous rendre compte que vos pages ne sont jamais mises en cache même si vous utilisez toutes les entêtes ci-dessus.
+Il existe toute une collection de paramètres que les utilisateurs peuvent modifier sur leur navigateur pour modifier le comportement par défaut du cache.
+En envoyant les entêtes ci-dessus, vous pouvez imposer vos propres valeurs.
+De plus, les paramètres session_cache_limiter() et session.cache_limiter peuvent être utilisé pour générer les entêtes de caches corrects, lorsque les sessions sont utilisées.
+N'oubliez jamais que header() N'oubliez jamais que header() doit être appelée avant que le moindre contenu ne soit envoyé, soit par des lignes HTML habituelles dans le fichier, soit par des affichges PHP.
+Une erreur très classique est de lire un fichier avec include() ou require(), et de laisser des espaces ou des lignes vides, qui génèreront un affichage avant que la fonction header() ne soit appelée.
+Le même problème existe avec les fichiers PHP / HTML standards.
+?php require( "user_logging.inc")? ?php header("Content-Type: audio / x-pn-realaudio");? / / Erreur:
+Notez la ligne blanche ci-dessus
+
+En PHP 4, vous pouvez utiliser le système de cache (output buffering) pour contourner ce problème.
+Tous vos textes générés seront mis en buffer sur le serveur jusqu 'à ce que vous les envoyiez.
+Vous pouvez utiliser les fonctions ob_start() et ob_end_flush() dans vos scripts, ou en modifiant la directive de configuration output_buffering dans votre fichier php.ini ou vos fichiers de configuration du serveur.
+Si vous voulez que vos utilisateur recoivent une alerte pour sauver les fichiers générés, comme par exemple si vous générez un fichier PDF, vous pouvez utiliser l 'entête Content-Disposition pour fournir un nom de fichier par défaut, à afficher dans le dialogue de sauvegarde.
+?php header( "Content-type: application / pdf"); header("Content-Disposition: attachment; filename=downloaded.pdf"); / *... output pdf file... * /
+
+Il y a un bug sous Microsoft Internet Explorer 4.01 qui empêche cet entête de fonctionner.
+Il n'y a pas d 'autre solution.
+Il y a aussi un bug dans Microsoft Internet Explorer 5.5 qui interfère avec ceci, mais qui peut être résolu en utilisant le Service Pack 2 ou plus récent.
+Voir aussi headers_sent(), setcookie(), et la section sur l 'authentification HTTP.
+Précédent
+Sommaire
+Suivant
+HTTP
+Niveau supérieur

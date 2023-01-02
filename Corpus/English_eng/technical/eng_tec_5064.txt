@@ -1,0 +1,55 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3 = 3.0.3, PHP 4)
+This function will sort an array by its values using a user-supplied comparison function.
+If the array you wish to sort needs to be sorted by some non-trivial criteria, you should use this function.
+The comparison function must return an integer less than, equal to, or greater than zero if the first argument is considered to be respectively less than, equal to, or greater than the second.
+Note:
+If two members compare as equal, their order in the sorted array is undefined.
+Up to PHP 4.0.6 the user defined functions would keep the original order for those elements, but with the new sort algorithm intruduced with 4.1.0 this is no longer the case as there is no solution to do so in an efficient way.
+Example 1. usort() example
+function cmp ($a, $b) {if ($a == $b) return 0; return ($a $b)? -1:
+1;} $a = array (3, 2, 5, 6, 1); usort ($a, "cmp"); while (list ($key, $value) = each ($a)) {echo "$key: $value\n";}
+This example would display:
+0:
+6 1:
+5 2:
+3 3:
+2 4:
+1
+Note:
+Obviously in this trivial case the rsort() function would be more appropriate.
+Example 2. usort() example using multi-dimensional array
+function cmp ($a, $b) {return strcmp($a["fruit"], $b["fruit"]);} $fruits[0]["fruit"] = "lemons"; $fruits[1]["fruit"] = "apples"; $fruits[2]["fruit"] = "grapes"; usort($fruits, "cmp"); while (list ($key, $value) = each ($fruits)) {echo "\$fruits[$key]: ". $value["fruit"]. "\n";}
+When sorting a multi-dimensional array, $a and $b contain references to the first index of the array.
+This example would display:
+$fruits[ 0]: apples $fruits[1]: grapes $fruits[2]: lemons
+Example 3. usort() example using a member function of an object
+class TestObj {var $name; function TestObj($name) {$this - name = $name;} / * This is the static comparing function: * / function cmp_obj($a, $b) {$al = strtolower($a - name); $bl = strtolower($b - name); if ($al == $bl) return 0; return ($al $bl)? +1: -1;}} $a[] = new TestObj("c"); $a[] = new TestObj("b"); $a[] = new TestObj("d"); uasort($a, array ("TestObj", "cmp_obj")); foreach ($a as $item) {print $item - name ."\n";}
+This example would display:
+b c d
+See also uasort(), uksort(), sort(), asort(), arsort(), ksort(), natsort(), and rsort().
+Prev
+Home
+Next
+uksort
+Up
+Aspell functions [deprecated]

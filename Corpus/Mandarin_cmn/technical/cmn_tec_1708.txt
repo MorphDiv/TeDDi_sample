@@ -1,0 +1,57 @@
+# language_name_wals:	Mandarin
+# language_name_glotto:	Mandarin Chinese
+# iso639_3:	cmn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hans
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/zh_CN.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Line Input # 语句 [运行时]
+/text/sbasic/shared/03020203.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+Line Input 语句
+mw changed index entry
+Line Input # 语句 [运行时]
+从顺序文件将字符串并读取到变量。
+语法：
+Line Input #FileNumber As Integer, Var As String
+参数：
+FileNumber：
+要从中读取数据的文件编号。该文件必须先用含有 INPUT 关键字的 Open 语句打开。
+Var：
+用于存储结果的变量名称。
+Line Input#
+语句，可以从打开的文件中读取字符串并将它写入一个变量。逐行读取字符串变量的过程在遇到第一个回车 (Asc=13) 或换行 (Asc=10) 时停止。得到的字符串中不包括行尾标记。
+示例：
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; This is a line of text &quot;
+Print #iNumber, &quot; This is another line of text &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
+End Sub

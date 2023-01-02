@@ -1,0 +1,54 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Appendix B.
+Migrating from PHP 3 to PHP 4
+Next
+With PHP 3 the error reporting level was set as a simple numeric value formed by summing up the numbers related to different error levels.
+Usual values where 15 for reporting all errors and warnings or 7 for reporting everything but simple notice messages reporting bad style and things like that.
+PHP 4 has a larger set of error and warning levels and comes with a configuration parser that now allows for symbolic constants to be used for setting the intended behavior.
+Error reporting level should now be configured by explicitly taking away the warning levels you do not want to generate error messages by x-oring them from the symbolic constant E_ALL.
+Sounds complicated?
+Well, lets say you want the error reporting system to report all but the simple style warnings that are categorized by the symbolic constant E_NOTICE.
+Then you' ll put the following into your php.ini: error_reporting = E_ALL ~ (E_NOTICE).
+If you want to suppress warnings too you add up the appropriate constant within the braces using the binary or operator '|': error_reporting= E_ALL ~ (E_NOTICE | E_WARNING).
+Warning
+When upgrading code or servers from PHP 3 to PHP 4 you should check these settings and calls to error_reporting() or you might disable reporting the new error types, especially E_COMPILE_ERROR.
+This may lead to empty documents without any feedback of what happened or where to look for the problem.
+Warning
+Using the old values 7 and 15 for setting up error reporting is a very bad idea as this suppresses some of the newly added error classes including parse errors.
+This may lead to very strange behavior as scripts might no longer work without error messages showing up anywhere.
+This has lead to a lot of unreproducible bug reports in the past where people reported script engine problems they were not capable to track down while the TRUE case was usually some missing '}' in a required file that the parser was not able to report due to a misconfigured error reporting system.
+So checking your error reporting setup should be the first thing to do whenever your scripts silently die.
+The Zend engine can be considered mature enough nowadays to not cause this kind of strange behavior.
+A lot of existing PHP 3 code uses language constructs that should be considered as very bad style as this code, while doing the intended thing now, could easily be broken by changes in other places.
+PHP 4 will output a lot of notice messages in such situations where PHP 3 didn 't.
+The easy fix is to just turn off E_NOTICE messages, but it is usually a good idea to fix the code instead.
+The most common case that will now produce notice messages is the use of unquoted string constants as array indices.
+Both PHP 3 and 4 will fall back to interpret these as strings if no keyword or constant is known by that name, but whenever a constant by that name had been defined anywhere else in the code it might break your script.
+This can even become a security risk if some intruder manages to redefine string constants in a way that makes your script give him access rights he wasn 't intended to have.
+So PHP 4 will now warn you whenever you use unquoted string constants as for example in $_SERVER[ REQUEST_METHOD].
+Changing it to $_SERVER[ 'REQUEST_METHOD'] will make the parser happy and greatly improve the style and security of your code.
+Another thing PHP 4 will now tell you about is the use of uninitialized variables or array elements.
+Prev
+Home
+Next
+Parser behavior
+Up
+Initializers

@@ -1,0 +1,168 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+This section holds common questions about the way to install PHP.
+PHP is available for almost any OS (except maybe for MacOS before OSX), and almost any web server.
+To install PHP, follow the instructions in the INSTALL file located in the distribution.
+Windows users should also read the install.txt file.
+There are also some helpful hints for Windows users here.
+[mybox:user / src / php4] root# apachectl configtest apachectl: / usr / local / apache / bin / httpd Undefined symbols: _compress _uncompress
+cgi error:
+The specified CGI application misbehaved by not returning a complete set of HTTP headers.
+The headers it did return are:
+1.
+Unix / Windows:
+Where should my php.ini file be located?
+By default on UNIX it should be in / usr / local / lib which is install-path / lib.
+Most people will want to change this at compile-time with the --with-config-file-path flag.
+You would, for example, set it with something like:
+--with-config-file-path= / etc
+On Windows the default path for the php.ini file is the Windows directory.
+If you 're using the Apache webserver, php.ini is first searched in the Apaches install directory, e.g. c:\program files\apache group\apache.
+This way you can have different php.ini files for different versions of Apache on the same machine.
+See also the chapter about the configuration file.
+2.
+Unix:
+I installed PHP, but every time I load a document, I get the message 'Document Contains No Data'!
+What 's going on here?
+This probably means that PHP is having some sort of problem and is core-dumping.
+Look in your server error log to see if this is the case, and then try to reproduce the problem with a small test case.
+If you know how to use 'gdb', it is very helpful when you can provide a backtrace with your bug report to help the developers pinpoint the problem.
+If you are using PHP as an Apache module try something like:
+Stop your httpd processes
+gdb httpd
+Stop your httpd processes
+run -X -f / path / to / httpd.conf
+Then fetch the URL causing the problem with your browser
+run -X -f / path / to / httpd.conf
+If you are getting a core dump, gdb should inform you of this now
+type: bt
+You should include your backtrace in your bug report.
+This should be submitted to http: / /bugs.php.net /
+If your script uses the regular expression functions (ereg() and friends), you should make sure that you compiled PHP and Apache with the same regular expression package.
+This should happen automatically with PHP and Apache 1.3.x
+3.
+Unix:
+I installed PHP using RPMS, but Apache isn 't processing the PHP pages!
+What 's going on here?
+Assuming you installed both Apache and PHP from RPM packages, you need to uncomment or add some or all of the following lines in your http.conf file:
+# Extra Modules AddModule mod_php.c AddModule mod_php3.c AddModule mod_perl.c # Extra Modules LoadModule php_module modules / mod_php.so LoadModule php3_module modules / libphp3.so / * for PHP 3 * / LoadModule php4_module modules / libphp4.so / * for PHP 4 * / LoadModule perl_module modules / libperl.so
+AddType application / x-httpd-php3 .php3 / * for PHP 3 * / AddType application / x-httpd-php .php / * for PHP 4 * /
+4.
+Unix:
+I installed PHP 3 using RPMS, but it doesn 't compile with the database support I need!
+What 's going on here?
+Due to the way PHP 3 built, it is not easy to build a complete flexible PHP RPM.
+This issue is addressed in PHP 4.
+For PHP 3, we currently suggest you use the mechanism described in the INSTALL.REDHAT file in the PHP distribution.
+If you insist on using an RPM version of PHP 3, read on...
+The RPM packagers are setting up the RPMS to install without database support to simplify installations and because RPMS use / usr / instead of the standard / usr / local / directory for files.
+You need to tell the RPM spec file which databases to support and the location of the top-level of your database server.
+This example will explain the process of adding support for the popular MySQL database server, using the mod installation for Apache.
+Of course all of this information can be adjusted for any database server that PHP supports.
+We will assume you installed MySQL and Apache completely with RPMS for this example as well.
+First remove mod_php3:
+rpm -e mod_php3
+Then get the source rpm and INSTALL it, NOT --rebuild
+rpm -Uvh mod_php3-3.0.5-2.src.rpm
+Then edit the / usr / src / redhat / SPECS / mod_php3.spec file
+In the %build section add the database support you want, and the path.
+For MySQL you would add
+--with-mysql= / usr\
+. / configure --prefix= / usr\ --with-apxs= / usr / sbin / apxs\ --with-config-file-path= / usr / lib\ --enable-debug=no\ --enable-safe-mode\ --with-exec-dir= / usr / bin\ --with-mysql= / usr\ --with-system-regex
+Once this modification is made then build the binary rpm as follows:
+rpm -bb / usr / src / redhat / SPECS / mod_php3.spec
+Then install the rpm
+rpm -ivh / usr / src / redhat / RPMS / i386 / mod_php3-3.0.5-2.i386.rpm
+5.
+Unix:
+I patched Apache with the FrontPage extensions patch, and suddenly PHP stopped working.
+Is PHP incompatible with the Apache FrontPage extensions?
+No, PHP works fine with the FrontPage extensions.
+The problem is that the FrontPage patch modifies several Apache structures, that PHP relies on.
+Recompiling PHP (using'make clean; make') after the FP patch is applied would solve the problem.
+6.
+Unix / Windows:
+I have installed PHP, but when I try to access a PHP script file via my browser, I get a blank screen.
+Do a 'view source' in the web browser and you will probably find that you can see the source code of your PHP script.
+This means that the web server did not send the script to PHP for interpretation.
+Something is wrong with the server configuration - double check the server configuration against the PHP installation instructions.
+7.
+Unix / Windows:
+I have installed PHP, but when try to access a PHP script file via my browser, I get a server 500 error.
+Something went wrong when the server tried to run PHP.
+To get to see a sensible error message, from the command line, change to the directory containing the PHP executable (php.exe on Windows) and run php -i.
+If PHP has any problems running, then a suitable error message will be displayed which will give you a clue as to what needs to be done next.
+If you get a screen full of html codes (the output of the phpinfo() function) then PHP is working, and your problem may be related to your server configuration which you should double check.
+8.
+Some operating systems:
+I have installed PHP without errors, but when I try to start apache I get undefined symbol errors:
+[mybox:user / src / php4] root# apachectl configtest apachectl: / usr / local / apache / bin / httpd Undefined symbols: _compress _uncompress
+This has actually nothing to do with PHP, but with the MySQL client libraries.
+Some need --with-zlib, others do not.
+This is also covered in the MySQL FAQ.
+9.
+Windows:
+I have installed PHP, but when I to access a PHP script file via my browser, I get the error:
+cgi error:
+The specified CGI application misbehaved by not returning a complete set of HTTP headers.
+The headers it did return are:
+This error message means that PHP failed to output anything at all.
+To get to see a sensible error message, from the command line, change to the directory containing the PHP executable (php.exe on Windows) and run php -i.
+If PHP has any problems running, then a suitable error message will be displayed which will give you a clue as to what needs to be done next.
+If you get a screen full of html codes (the output of the phpinfo() function) then PHP is working.
+Once PHP is working at the command line, try accessing the script via the browser again.
+If it still fails then it could be one of the following:
+File permissions on your PHP script, php.exe, php4ts.dll, php.ini or any PHP extensions you are trying to load are such that the anonymous internet user ISUR_ machinename cannot access them.
+The script file does not exist (or possibly isn't where you think it is relative to your web root directory).
+Note that for IIS you can trap this error by ticking the 'check file exists' box when setting up the script mappings in the Internet Services Manager.
+If a script file does not exist then the server will return a 404 error instead.
+There is also the additional benefit that IIS will do any authentication required for you based on the NTLanMan permissions on your script file.
+10.
+Windows:
+I' ve followed all the instructions, but still can't get PHP and IIS to work together!
+Make sure any user who needs to run a PHP script has the rights to run php.exe!
+IIS uses an anonymous user which is added at the time IIS is installed.
+This user needs rights to php.exe.
+Also, any authenticated user will also need rights to execute php.exe.
+And for IIS4 you need to tell it that PHP is a script engine.
+Also, you will want to read this faq.
+11.
+When running PHP as CGI with IIS, PWS, OmniHTTPD or Xitami, I get the following error:
+Security Alert!
+You must set the cgi.force_redirect directive to 0.
+It defaults to 1 so be sure the directive isn' t commented out (with a;).
+Like all directives, this is set in php.ini
+Because the default is 1, it' s critical that you're 100% sure that the correct php.ini file is being read.
+Read this faq for details.
+12.
+How do I know if my php.ini is being found and read?
+It seems like it isn' t as my changes aren't being implemented.
+To be sure your php.ini is being read by PHP, make a call to phpinfo() and near the top will be a listing called Configuration File (php.ini).
+This will tell you where PHP is looking for php.ini and whether or not it 's being read.
+If just a directory PATH exists than it 's not being read and you should put your php.ini in that directory.
+If php.ini is included within the PATH than it is being read.
+If php.ini is being read and you 're running PHP as a module then be sure to restart PHP after making changes to php.ini
+Prev
+Home
+Next
+Database issues
+Up
+Build Problems

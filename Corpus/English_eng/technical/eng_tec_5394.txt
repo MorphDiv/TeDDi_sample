@@ -1,0 +1,168 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+PostgreSQL database is Open Source product and available without cost.
+Postgres, developed originally in the UC Berkeley Computer Science Department, pioneered many of the object-relational concepts now becoming available in some commercial databases.
+It provides SQL92 / SQL99 language support, transaction integrity and type extensibility.
+PostgreSQL is an open source descendant of this original Berkeley code.
+To use PostgreSQL support, you need PostgreSQL 6.5 or later, PostgreSQL 7.0 or later to enable all PostgreSQL module features.
+PostgreSQL supports many character encoding including multibyte character encoding.
+The current version and more information about PostgreSQL is available at http: / /www.postgresql.org /.
+In order to enable PostgreSQL support, --with-pgsql[ =DIR] is required when you compile PHP.
+DIR is the PostgreSQL base install directory, defaults to / usr / local / pgsql.
+If shared object module is available, PostgreSQL module may be loaded using extension directive in php.ini or dl() function.
+The behaviour of these functions is affected by settings in php.ini.
+Table 1.
+PostgreSQL configuration options
+Name
+Default
+Changeable
+pgsql.allow_persistent
+"1"
+PHP_INI_SYSTEM
+pgsql.max_persistent
+"-1"
+PHP_INI_SYSTEM
+pgsql.max_links
+"-1"
+PHP_INI_SYSTEM
+pgsql.auto_reset_persistent
+"0"
+PHP_INI_SYSTEM
+pgsql.ignore_notice
+"0"
+PHP_INI_ALL
+pgsql.log_notice
+"0"
+PHP_INI_ALL
+Here is a short explanation of the configuration directives.
+Whether to allow persistent Postgres connections.
+The maximum number of persistent Postgres connections per process.
+The maximum number of Postgres connections per process, including persistent connections.
+Warning
+Using the PostgreSQL module with PHP 4.0.6 is not recommended due to a bug in the notice message handling code.
+Use 4.1.0 or later.
+Warning
+PostgreSQL function names will be changed in 4.2.0 release to confirm to current coding standards.
+Most of new names will have additional underscores, e.g. pg_lo_open().
+Some functions are renamed to different name for consistency. e.g. pg_exec() to pg_query().
+Older names can be used in 4.2.0 and a few releases from 4.2.0, but they may be deleted in the future.
+Table 2.
+Function names changed
+Old name
+New name
+pg_exec()
+pg_query()
+pg_getlastoid()
+pg_last_oid()
+pg_cmdtuples()
+pg_affected_rows()
+pg_numrows()
+pg_num_rows()
+pg_numfields()
+pg_num_fields()
+pg_fieldname()
+pg_field_name()
+pg_fieldsize()
+pg_field_size()
+pg_fieldnum()
+pg_field_num()
+pg_fieldprtlen()
+pg_field_prtlen()
+pg_fieldisnull()
+pg_field_is_null()
+pg_freeresult()
+pg_free_result()
+pg_result()
+pg_fetch_result()
+pg_loreadall()
+pg_lo_read_all()
+pg_locreate()
+pg_lo_create()
+pg_lounlink()
+pg_lo_unlink()
+pg_loopen()
+pg_lo_open()
+pg_loclose()
+pg_lo_close()
+pg_loread()
+pg_lo_read()
+pg_lowrite()
+pg_lo_write()
+pg_loimport()
+pg_lo_import()
+pg_loexport()
+pg_lo_export()
+The old pg_connect() / pg_pconnect() syntax will be deprecated to support asynchronous connections in the future.
+Please use a connection string for pg_connect() and pg_pconnect().
+Not all functions are supported by all builds.
+It depends on your libpq (The PostgreSQL C Client interface) version and how libpq is compiled.
+If there is missing function, libpq does not support the feature required for the function.
+It is also important that you do not use an older libpq than the PostgreSQL Server to which you will be connecting.
+If you use libpq older than PostgreSQL Server expects, you may have problems.
+Since version 6.3 (03 / 02 / 1998) PostgreSQL uses unix domain sockets by default.
+TCP port will NOT be opened by default.
+A table is shown below describing these new connection possibilities.
+This socket will be found in / tmp / .s.PGSQL.5432.
+This option can be enabled with the '-i' flag to postmaster and it's meaning is: "listen on TCP / IP sockets as well as Unix domain sockets ".
+Table 3.
+Postmaster and PHP
+Postmaster
+PHP
+Status
+postmaster
+pg_connect( "dbname=MyDbName");
+OK
+postmaster -i
+pg_connect( "dbname=MyDbName");
+OK
+postmaster
+pg_connect( "host=localhost dbname=MyDbName");
+Unable to connect to PostgreSQL server: connectDB() failed:
+Is the postmaster running and accepting TCP / IP (with -i) connection at'localhost 'on port '5432'? in / path / to / file.php on line 20.
+postmaster -i
+pg_connect( "host=localhost dbname=MyDbName");
+OK
+A connection to PostgreSQL server can be established with the following value pairs set in the command string: $conn = pg_connect( "host=myHost port=myPort tty=myTTY options=myOptions dbname=myDB user=myUser password=myPassword ");
+The previous syntax of: $conn = pg_connect ("host", "port", "options", "tty", "dbname") has been deprecated.
+Environmental variables affect PostgreSQL server / client behavior.
+For example, PostgreSQL module will lookup PGHOST environment variable when the hostname is omitted in the connection string.
+Supported environment variables are different from version to version.
+Refer to PostgreSQL Programmer' s Manual (libpq - Environment Variables) for details.
+Make sure you set environment variables for appropriate user.
+Use $_ENV or getenv() to check which environment variables are available to the current process.
+Example 1.
+Setting default parameters
+PGHOST=pgsql.example.com PGPORT=7890 PGDATABASE=web-system PGUSER=web-user PGPASSWORD=secret PGDATESTYLE=ISO PGTZ=JST PGCLIENTENCODING=EUC-JP export PGHOST PGPORT PGDATABASE PGUSER PGPASSWORD PGDATESTYLE PGTZ PGCLIENTENCODING
+The constants below are defined by this extension, and will only be available when the extension has either been compiled into PHP or dynamically loaded at runtime.
+Starting with PostgreSQL 7.1.0, you can store up to 1GB into a field of type text.
+In older versions, this was limited to the block size (default was 8KB, maximum was 32KB, defined at compile time)
+To use the large object (lo) interface, it is required to enclose large object functions within a transaction block.
+A transaction block starts with a SQL statement BEGIN and if the transaction was valid ends with COMMIT or END.
+If the transaction fails the transaction should be closed with ROLLBACK or ABORT.
+Example 2.
+Using Large Objects
+?php $database = pg_connect ("dbname=jacarta"); pg_query ($database, "begin"); $oid = pg_lo_create ($database); echo "$oid\n"; $handle = pg_lo_open ($database, $oid, "w"); echo "$handle\n"; pg_lo_write ($handle, "large object data"); pg_lo_close ($handle); pg_query ($database, "commit");?
+Prev
+Home
+Next
+posix_uname
+Up
+pg_affected_rows

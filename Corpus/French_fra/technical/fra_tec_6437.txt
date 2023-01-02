@@ -1,0 +1,47 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Questions et réponses
+& reporting. bugs; & updating. documentation;
+À quel point le & partman; est -il dangereux pour mes données & #160;?
+Avant tout, vous ne devrez jamais effectuer aucune opération destructive quelle qu'elle soit (suppression, déplacement, redimensionnement) sans avoir au préalable fait une sauvegarde complète de tout ce qui va en être affecté.
+Cela dit, l'utilisation du & partman; est sûre. Il effectue des contrôles exhaustifs avant et après chaque opération, appelle les outils externes écrits et maintenus par les auteurs des systèmes de fichiers. De plus, il a été testé de façon intensive.
+Il y a toujours un risque de perte de données dû à un bogue inconnu. Les auteurs du & partman; essaient de minimiser ce risque, mais il n'existe bien évidemment aucune garantie.
+J'ai installé tous les paquetages externes recommandés de prise en charge de systèmes de fichiers, mais je ne bénéficie pas encore d'une prise en charge pour toutes les opérations prévues sur tous les systèmes de fichiers.
+Le & partman; ne peut pas faire n'importe quoi, en principe, avec tous les systèmes de fichiers.
+Un exemple est la réalisation d'un contrôle de système de fichiers sur linuxswap & #160;: ce n'est tout simplement pas possible. Il existe d'autres limitations comme celles inhérentes à certains systèmes de fichiers. On ne peut pas réduire les systèmes de fichiers JFS ou XFS car ni l'un ni l'autre ne le tolèrent, avec ou sans le & partman;.
+Pourquoi ne vois -je pas d'informations de progression significatives pendant le redimensionnement d'une partition & #160;?
+Le & partman; ne peut afficher les informations de progression que lorsqu'il connaît la durée des tâches que nécessitera une opération. Malheureusement, ce n'est habituellement pas le cas lorsqu'on redimensionne des partitions, car le travail de loin le plus long ici est le redimensionnement du système de fichiers présent sur la partition. Le redimensionnement des systèmes de fichiers est le plus souvent une manipulation qu'un outil externe peut effectuer pour le compte du & partman;. De plus, comme ces outils externes ne fournissent pas d'informations de progression utiles au & partman;, il n'y a pas de rapport pendant qu'ils s'exécutent.
+Pourquoi ne puis -je pas redimensionner la partition racine & #160;? Comment puis -je redimensionner la partition / home si elle est active & #160;?
+Pour modifier une partition, il faut ne pas qu'elle soit pas montée. Vous ne pouvez en revanche pas libérer la partition racine, ni libérer la partition / home si le dossier personnel de l'utilisateur actuellement connecté travaille dessus.
+La solution à ce problème consiste à amorcer à partir d'un CD Linux Live livré avec le & partman; et à modifier ces partitions à partir de là.
+J'obtiens un message d'avertissement dans la sortie du journal m'indiquant qu'il est impossible de créer une partition de la taille que j'ai demandée et que celle -ci sera au contraire plus petite. Que s'est -il passé & #160;?
+Sur les tables de partitions MS-DOS, les partitions doivent commencer et se terminer sur des limites de cylindres et ce, principalement pour des raisons historiques. Le & partman; se chargera de cette tâche en interne et essaiera de ne pas ennuyer l'utilisateur avec cette limitation.
+Dans de rares circonstances, le & partman; ne sera cependant pas en mesure de mettre enœ uvre une opération de la façon demandée par l'utilisateur, en raison de cette limitation. Par exemple, s'il y a un cylindre d'une taille de 8 & #160; Mio sur un périphérique et que vous essayez de redimensionner une partition à 6 & #160; Mio, cela ne fonctionnera pas.
+Vous risquez également de rencontrer ce message si vous avez un périphérique et une table de partitions où les partitions ne sont pas, pour une raison quelconque, coupées correctement aux limites d'un cylindre, et que vous essayez de déplacer ou de copier ces partitions pour la première fois.
+Le message en lui-même est inoffensif et n'est là que pour informer l'utilisateur qu'il est impossible d'effectuer une tâche tout à fait exactement selon ses attentes. Vos partitions et vos données ne seront affectées négativement en aucune manière si vous voyez apparaître ce message.
+Combien d'opérations puis -je ajouter à la liste des opérations en attente & #160;?
+Il n'y a pas de limite.
+Il n'est cependant pas recommandé d'ajouter trop d'opérations à la liste. Il reste toujours un risque minime qu'une opération puisse échouer avec une erreur, auquel cas le & partman; arrêtera l'exécution des opérations. Dans ce cas, il est beaucoup plus facile de découvrir ce qui s'est passé (et d'ajouter à nouveau toutes les opérations qui n'auraient pu être exécutées) si la liste des opérations en attente n'était pas excessivement longue.
+Le redimensionnement d'un système de fichiers ext2 ou ext3 a échoué avec un message dans le rapport indiquant qu '« & #160; il ne reste plus d'espace sur le périphérique & #160; ». Que s'est -il passé & #160;? Mes données sont -elles corrompues à présent & #160;?
+Il s'agit d'un problème lié à la commande e2resize et au système de fichiers ext2/ 3 sous-jacent. Si un système de fichiers est presque plein, e2resize ne peut pas le réduire, même s'il devrait être possible de le faire à partir du nombre de secteurs libres restants. Le & partman; ne peut malheureusement pas savoir à l'avance si e2resize s'interrompra ou non avec cette erreur pour un système de fichiers donné. Si cela se produit, aucune modification ne sera effectuée et vos données ne seront pas négativement affectées.
+Il n'existe pas de solution de contournement réelle pour ce problème pour l'instant.
+Pourquoi ne puis -je pas formater ma disquette avec le & partman; & #160;? Pourquoi n'existe -t-il pas de prise en charge pour l'écriture de CD ou la gravure de DVD & #160;?
+Rien de tout cela ne correspond à ce pour quoi a été conçu le & partman; & #160;: c'est une application qui traite les partitions et les systèmes de fichiers qu'elles contiennent. Les disquettes, CD ou DVD n'ont pas pas besoin de partitions et n'en utilisent pas.
+Pourquoi ne puis -je modifier des partitions sur un périphérique comportant une table de partitions amiga ou bsd & #160;?
+Le & partman; n'autorise pour le moment l'accès en lecture seule à aucun type de table de partitions autre que MS-DOS, ceci pour des raisons de sécurité & #160;: la prise en charge dans le & partman; de ces types de tables de partitions n'en est pas vraiment une et le peu qui existe (ou ne fonctionne qu'incidemment) n'a pas été assez testé pour l'utiliser en toute confiance.
+Naturellement, vous pouvez toujours créer une nouvelle table de partitions MS-DOS sur le périphérique en question, mais ce n'est probablement pas ce que vous souhaitez.

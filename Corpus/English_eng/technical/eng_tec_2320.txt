@@ -1,0 +1,79 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+PHP is capable of receiving file uploads from any RFC-1867 compliant browser (which includes Netscape Navigator 3 or later, Microsoft Internet Explorer 3 with a patch from Microsoft, or later without a patch).
+This feature lets people upload both text and binary files.
+With PHP 's authentication and file manipulation functions, you have full control over who is allowed to upload and what is to be done with the file once it has been uploaded.
+Related Configurations Note:
+See also the file_uploads, upload_max_filesize, upload_tmp_dir, and post_max_size directives in php.ini
+Note that PHP also supports PUT-method file uploads as used by Netscape Composer and W3C 's Amaya clients.
+See the PUT Method Support for more details.
+A file upload screen can be built by creating a special form which looks something like this:
+Example 18-1.
+File Upload Form
+form enctype=" multipart / form-data "action="_URL_" method="post "input type="hidden" name="MAX_FILE_SIZE "value="30000" Send this file: input name="userfile "type="file" input type="submit "value="Send File" / form
+Warning
+The MAX_FILE_SIZE is advisory to the browser.
+It is easy to circumvent this maximum.
+So don 't count on it that the browser obeys your wish!
+The PHP-settings for maximum-size, however, cannot be fooled.
+The Variables defined for uploaded files differs depending on the PHP version and configuration.
+The autoglobal $_FILES exists as of PHP 4.1.0 The $HTTP_POST_FILES array has existed since PHP 4.0.0.
+These arrays will contain all your uploaded file information.
+Using $_FILES is preferred.
+If the PHP directive register_globals is on, related variable names will also exist. register_globals defaults to off as of PHP 4.2.0.
+The contents of $_FILES from our example script is as follows.
+Note that this assumes the use of the file upload name userfile, as used in the example script above.
+The original name of the file on the client machine.
+The mime type of the file, if the browser provided this information.
+An example would be "image / gif".
+The size, in bytes, of the uploaded file.
+The temporary filename of the file in which the uploaded file was stored on the server.
+The error code associated with this file upload. ['error'] was added in PHP 4.2.0
+Note:
+In PHP versions prior 4.1.0 this was named $HTTP_POST_FILES and it 's not an autoglobal variable like $_FILES is.
+PHP 3 does not support $HTTP_POST_FILES.
+When register_globals is turned on in php.ini, additional variables are available.
+For example, $userfile_name will equal $_FILES[ 'userfile']['name'], $userfile_type will equal $_FILES['userfile']['type'], etc.
+Keep in mind that as of PHP 4.2.0, register_globals defaults to off.
+It 's preferred to not rely on this directive.
+Files will by default be stored in the server 's default temporary directory, unless another location has been given with the upload_tmp_dir directive in php.ini.
+The server 's default directory can be changed by setting the environment variable TMPDIR in the environment in which PHP runs.
+Setting it using putenv() from within a PHP script will not work.
+This environment variable can also be used to make sure that other operations are working on uploaded files, as well.
+Example 18-2.
+Validating file uploads
+See also the function entries for is_uploaded_file() and move_uploaded_file() for further information.
+The following example will process the file upload that came from a form.
+?php / / In PHP earlier then 4.1.0, $HTTP_POST_FILES should be used instead of $_FILES. / / In PHP earlier then 4.0.3, use copy() and is_uploaded_file() instead of move_uploaded_file $uploaddir = '/ var / www / uploads /'; print "pre"; if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploaddir. $_FILES['userfile']['name'])) {print "File is valid, and was successfully uploaded.
+Here' s some more debugging info:\n"; print_r($_FILES);} else {print "Possible file upload attack!
+Here' s some debugging info:\n"; print_r($_FILES);}?
+The PHP script which receives the uploaded file should implement whatever logic is necessary for determining what should be done with the uploaded file.
+You can for example use the $_FILES[ 'userfile']['size'] variable to throw away any files that are either too small or too big.
+You could use the $_FILES[ 'userfile']['type'] You could use the $_FILES['userfile']['type'] variable to throw away any files that didn't match a certain type criteria.
+As of PHP 4.2.0, you could use $_FILES[ 'userfile']['error'] and plan your logic according to the error codes.
+Whatever the logic, you should either delete the file from the temporary directory or move it elsewhere.
+The file will be deleted from the temporary directory at the end of the request if it has not been moved away or renamed.
+Prev
+Home
+Next
+Cookies
+Up
+Error Messages Explained

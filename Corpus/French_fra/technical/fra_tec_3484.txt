@@ -1,0 +1,41 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+imagegif() crée un fichier image GIF avec le nom filename d'après l 'image im.
+L'argument im est un identifiant valide retourné par la fonction imagecreate().
+Le format de l'image sera GIF87a, à moins que l'image n'ait une couleur transparente (mise en place grâce à la fonction imagecolortransparent())), ce qui fera qu 'elle sera au format GIF89a.
+Le nom du fichier est optionnel, et dans ce cas, l 'image sera transmise directement à la sortie standard.
+En envoyant une en-tête de type image / gifcontent-type, (grâce à la fonction header()), vous pouvez créer des images avec des scripts PHP.
+
+Etant donné que toutes les fonctions GIF ont été supprimées de la bibliothèque GD version 1.6, cette fonction ne sera pas accessible si vous avez cette version de la librairie.
+Le code suivant vous permet d 'écrire des scripts PHP plus portables: le type de GD est automatiquement détecté.
+Il remplace la séquence Header( "Content-type: image / gif"); ImageGif($im); par un code plus souple:
+?php if (function_exists("imagegif")) {header("Content-type: image / gif"); imagegif($im);} elseif (function_exists("imagejpeg")) {header("Content-type: image / jpeg"); imagejpeg($im, "", 0.5);} elseif (function_exists("imagepng")) {header("Content-type: image / png"); imagepng($im);} elseif (function_exists("imagewbmp")) {header("Content-type: image / vnd.wap.wbmp"); imagewbmp($im);} else {die("Pas de support graphique avec PHP sur ce serveur");}?
+
+En PHP 4, à partir de la version 4.0.2, vous pouvez utiliser la fonction imagetypes() à la place de function_exists() pour vérifier que certains formats d 'images sont supportés:
+?php if (function_exists("imagegif")) {header("Content-type: image / gif"); imagegif($im);} elseif (function_exists("imagejpeg")) {header("Content-type: image / jpeg"); imagejpeg($im, "", 0.5);} elseif (function_exists("imagepng")) {header("Content-type: image / png"); imagepng($im);} elseif (function_exists("imagewbmp")) {header("Content-type: image / vnd.wap.wbmp"); imagewbmp($im);} else {die("Pas de support graphique avec PHP sur ce serveur");}?
+Voir aussi imagejpeg(), imagewbmp(), imagepng(), imageinterlace(), imagegif() et imagetypes().
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur
+ImageInterlace

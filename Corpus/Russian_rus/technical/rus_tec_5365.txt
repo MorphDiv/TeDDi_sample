@@ -1,0 +1,147 @@
+# language_name_wals:	Russian
+# language_name_glotto:	Russian
+# iso639_3:	rus
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Cyrl
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ru.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Руководство по PHP
+Пред.
+Глава 7. Типы
+След.
+Arrays
+
+
+
+
+
+
+Syntax
+Specifying with array()
+
+
+
+array( "foo "= "bar", 12 = true);
+
+
+
+
+array( "somearray "= array(6 = 5, 13 = 9, "a" = 43));
+
+
+Having e.g. the highest index being -6 will result in being -5 the new key.
+
+
+/ / This array is the same as... array( 5 = 43, 32, 56, "b "= 12); / / ...this array array(5 = 43, 6 = 32, 7 = 56, "b" = 12);
+
+
+
+
+
+
+
+Creating / modifying with square-bracket syntax
+
+
+
+
+$arr = array( 5 = 1, 12 = 2); $arr[] = 56; / / This is the same as $arr[13] = 56; / / at this point of the script $arr["x"] = 42; / / This adds a new element to / / the array with key "x "unset($arr[5]); / / This removes the element from the array unset($arr); / / This deletes the whole array
+Useful functions
+
+Замечание:
+
+
+
+$a = array( 1 = 'one', 2 = 'two', 3 = 'three'); unset($a[2]); / * will produce an array that would have been defined as $a = array(1 = 'one', 3 = 'three'); and NOT $a = array(1 = 'one', 2 = 'three'); * / $b = array_values($a); / / Now b is array(1 = 'one', 2 = 'three')
+
+
+Array do' s and don 'ts
+Why is $foo[ bar] wrong?
+
+
+
+
+$foo[ bar] = 'enemy'; echo $foo[bar]; / / etc
+
+
+echo $arr[ foo(true)];
+$error_descriptions[ E_ERROR] = "A fatal error has occured"; $error_descriptions[E_WARNING] = "PHP issued a warning"; $error_descriptions[E_NOTICE] = "This is just an informal notice";
+$error_descriptions[ 1] = "A fatal error has occured"; $error_descriptions[2] = "PHP issued a warning"; $error_descriptions[8] = "This is just an informal notice";
+Then, how is it possible that $foo[ bar] works?
+
+
+
+So why is it bad then?
+
+
+Замечание:
+When you turn error_reporting to E_ALL, you will see that PHP generates notices whenever an index is used which is not defined.
+Consider this script:
+?php / / Turn on the display of all errors error_reporting( E_ALL); / / Define the test array $abc = array("x "= "y"); / / Access element with the *bad* method echo $abc[x];?
+br / b Notice / b:
+Use of undefined constant x - assumed 'x' in b / path / to / script.php / b on line b 10 / b br /
+Замечание:
+Inside a double-quoted string, another syntax is valid.
+See variable parsing in strings for more details.
+Converting to array
+
+If you convert an object to an array, you get the properties (member variables) of that object as the array 's elements.
+
+
+Examples
+
+/ / this $a = array( 'color '= 'red', 'taste' = 'sweet', 'shape '= 'round', 'name' = 'apple', 4 / / key will be 0); / / is completely equivalent with $a['color'] = 'red'; $a['taste'] = 'sweet'; $a['shape'] = 'round'; $a['name'] = 'apple'; $a[] = 4; / / key will be 0 $b[] = 'a'; $b[] = 'b'; $b[] = 'c'; / / will result in the array array(0 = 'a ', 1 = 'b', 2 = 'c'), / / or simply array('a', 'b', 'c')
+Пример 7-4.
+
+/ / Array as (property -)map $map = array ('version '= 4, 'OS' = 'Linux', 'lang '= 'english', 'short_tags' = true); / / strictly numerical keys $array = array (7, 8, 0, 156, -10); / / this is the same as array(0 = 7, 1 = 8,...) $switching = array (10, / / key = 0 5 = 6, 3 = 7, 'a '= 4, 11, / / key = 6 (maximum of integer-indices was 5) '8' = 2, / / key = 8 (integer!) '02 '= 77, / / key = '02' 0 = 12 / / the value 10 will be overwritten by 12); / / empty array $empty = array();
+Пример 7-5.
+
+$colors = array( 'red', 'blue', 'green', 'yellow'); foreach ($colors as $color) {echo "Do you like $color?\n";} / * output:
+
+
+
+Do you like yellow? * /
+
+
+Пример 7-6.
+
+foreach ($colors as $key = $color) {/ / won't work: / /$color = strtoupper($color); / / works: $colors[$key] = strtoupper($color);} print_r($colors); / * output:
+Array ([0] = RED [1] = BLUE [2] = GREEN [3] = YELLOW) * /
+
+Пример 7-7.
+
+$firstquarter = array( 1 = 'January', 'February', 'March'); print_r($firstquarter); / * output:
+
+Пример 7-8.
+
+/ / fill an array with all items from a directory $handle = opendir( '.'); while ($file = readdir($handle)) {$files[] = $file;} closedir($handle);
+
+
+
+
+Пример 7-9.
+
+sort( $files); print_r($files);
+
+
+Пример 7-10.
+
+$fruits = array ("fruits "= array ("a" = "orange", "b "= "banana", "c" = "apple "), "numbers" = array (1, 2, 3, 4, 5, 6,), "holes "= array ("first", 5 = "second", "third")); / / Some examples to address values in the array above echo $fruits["holes"][5]; / / prints "second "echo $fruits["fruits"]["a"]; / / prints "orange" unset($fruits["holes"][0]); / / remove "first "/ / Create a new multi-dimensional array $juices["apple"]["green"] = "good";
+
+
+$arr1 = array( 2, 3); $arr2 = $arr1; $arr2[] = 4; / / $arr2 is changed, / / $arr1 is still array(2,3) $arr3 = $arr1; $arr3[] = 4; / / now $arr1 and $arr3 are the same
+Пред.
+Начало
+След.
+Строки
+Уровень выше

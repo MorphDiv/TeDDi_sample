@@ -1,0 +1,237 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+Todas las funciones son como esta:
+void php3_algo( INTERNAL_FUNCTION_PARAMETERS) {}
+Los argumentos son siempre de tipo pval.
+Este tipo contiene una unión que es el tipo actual del argumento.
+Así, si su función tiene dos argumentos, deberá hacer algo como lo que sigue al principio de la misma:
+Ejemplo E-1.
+Extrayendo argumentos de función
+
+Cuando cambie alguno de los parámetros pasados, tanto si son enviados por referencia o por valor, puede volver a comenzar con éste llamando la función pval_destructor sobre el mismo, o, si es una ARRAY a la que quiere añadir algo, puede utilizar funciones similares a las incluídas en internal_functions.h, que manipulan el valor return_value como si fuera de tipo ARRAY.
+Además, si cambia un parámetro a IS_STRING, asegúrese primero de asignar el valor y el tamaño a la cadena creada por estrdup() y sólo entonces cambiar su tipo a IS_STRING.
+Si modifica la cadena de un parámetro que ya es IS_STRING o IS_ARRAY, deberá primero aplicarle la función pval_destructor.
+Una función puede tomar un número variable de argumentos.
+Si su función puede tomar tanto 2 como 3 argumentos, utilice el siguiente código:
+Ejemplo E-2.
+Argumentos de función variables
+
+El tipo de cada argumento se guarda en el campo type del pval.
+Este tipo puede ser:
+Tabla E-1.
+Tipos Internos de PHP
+
+Cadena
+
+Coma flotante de doble precisión
+
+Entero largo
+
+Matriz
+
+Nada
+
+
+
+?? (N.D.: si alguno de estos no se puede pasar a una función, bórrese)
+
+
+
+
+Si obtiene un argumento de un tipo y desea utilizarlo como si fuera de otro, o si quiere forzar a que un argumento sea de un tipo determinado, puede usar una de las siguientes funciones de conversión:
+convert_to_long( arg1); convert_to_double(arg1); convert_to_string(arg1); convert_to_boolean_long(arg1); / * Si la cadena es "" o "0 "pasa a ser 0; si no, vale 1 * / convert_string_to_number(arg1); / * Convierte la cadena a LONG o a DOUBLE, dependiendo de su contenido * /
+Estas funciones convierten el valor in-situ.
+No devuelven nada.
+El argumento real es almacenado en una unión cuyos miembros son:
+
+
+
+La memoria necesitada por una función deberá ser asignada usando emalloc() o estrdup().
+Estas son funciones abstractas de manejo de memoria que son similares a las funciones normales malloc() y strdup().
+La memoria deberá liberarse con efree().
+Hay dos tipos de memoria en este programa: la memoria que se devuelve al troceador (parser) en una variable, y la memoria que se necesita para almacenamiento temporal de datos en sus funciones.
+Cuando asigne una cadena a una variable que se devolverá al troceador deberá asegurarse previamente de asignar la memoria con emalloc() o con estrdup().
+Esta memoria NUNCA debe ser liberada por usted, salvo si más adelante, en la misma función, sobreescribe la asignación original (aunque este hábito de programación no es bueno).
+Para cada trozo de memoria temporal / permanente que precise en sus funciones / librería deberá utilizar las funciones emalloc(), estrdup(), y efree().
+Estas se comportan EXACTAMENTE como sus funciones equivalentes.
+Cualquier cosa que asigne con emalloc() o estrdup() deberá liberarla con efree() en uno u otro momento, salvo que se suponga que deba permanecer activa hasta el final del programa; de otro modo, se producirá una fuga de memoria.
+El significado de "estas se comportan exactamente como sus funciones equivalentes" es: si llama a efree() sobre algo que no ha sido asignado previamente con emalloc() o con estrdup(), puede provocar un fallo de segmentación.
+Por ello debe tener cuidado y liberar toda la memoria desperdiciada.
+Si compila con "-DDEBUG", el PHP3 mostrará una lista de toda la memoria que fue asignada usando emalloc() y estrdup(), pero que nunca fue liberada con efree(), al terminar de ejecutar el guión especificado.
+Están disponibles una serie de macros que hacen más fácil el asignar una variale en la tabla de símbolos:
+SET_VAR_STRING( nombre,valor) [1]
+SET_VAR_DOUBLE( nombre,valor)
+SET_VAR_LONG( nombre,valor)
+[1]
+Las tablas de símbolos en PHP 3.0 se implementan como tablas hash (con extracto).
+En todo momento, symbol_table es un puntero a la tabla de símbolos 'principal', mientras que active_symbol_table apunta a la tabla de símbolos activa (pueden ser idénticas, al principio de todo, o diferentes, si se está dentro de una función).
+Los ejemplos siguientes utilizan 'active_symbol_table'.
+Deberá reemplazarla por symbol_table si desea trabajar específicamente con la tabla de símbolos 'principal'.
+También se pueden aplicar las mismas funciones a matrices, como se explica más abajo.
+Ejemplo E-3.
+Comprobando si $algo existe en una tabla de símbolos
+if (hash_exists(active_symbol_table ,"algo",sizeof("algo"))) {existe...} else {no existe}
+Ejemplo E-4.
+Hallando el tamaño de una variable en una tabla de símbolos
+hash_find( active_symbol_table ,"algo",sizeof("algo"), valptr); check(valptr.type);
+Si desea definir un nuevo símbolo de matriz en una tabla de símbolos, deberá hacer lo que sigue.
+Primero, deberá comprobar si ya existe usando hash_exists() o hash_find() y abortar la ejecución de forma apropiada.
+Luego inicialice la matriz:
+Ejemplo E-5.
+Inicializando una nueva matriz
+pval matriz; if (array_init (matriz) == FAILURE) {falló...}; hash_update(active_symbol_table ,"algo",sizeof("algo"), matriz,sizeof(pval),NULL);
+Ahora se muestra cómo añadirle elementos:
+Ejemplo E-6.
+Añadir entradas a una nueva matriz
+pval elemento; elemento.type = IS_LONG; elemento.value.lval = 5; / * define $algo["bar"] = 5 * / hash_update(matriz.value.ht ,"bar",sizeof("bar"), elemento,sizeof(pval),NULL); / * define $algo[7] = 5 * / hash_index_update(matriz.value.ht,7, elemento,sizeof(pval),NULL); / * define el siguiente puesto libre en $algo[], * $algo[8], como 5 (funciona como en php2) * / hash_next_index_insert(matriz.value.ht, elemento,sizeof(pval),NULL);
+hash_next_index_insert() usa más o menos la misma lógica que "$algo[] = bar; "en el PHP 2.0.
+Si está preparando una matriz como valor devuelto por una función, puede inicializar la misma como antes, haciendo:
+if (array_init(return_value) == FAILURE) {falló...;}
+... y luego añadiéndole valores con las funciones auxiliares:
+add_next_index_long( return_value,val_long); add_next_index_double(return_value,val_double); add_next_index_string(return_value,estrdup(val_cadena));
+Por supuesto, si la adición no se realiza justo después de inicializar la matriz, probablemente tenga que buscarla antes:
+pval *matriz; if (hash_find(active_symbol_table ,"algo",sizeof("algo") ,(void **) matriz)==FAILURE) {no se hayó...} else {usar matriz - value.ht...}
+Nótese que hash_find recibe un puntero a un puntero a pval, y no un puntero a pval.
+Casi cualquier función de matrices asociativas devuelve SUCCESS o FAILURE (excepto por hash_exists(), que devuelve un valor lógico de certeza).
+Están disponibles varias macros para facilitar la devolución de valores de una función.
+Todas las macros RETURN_* fijan el valor y retornan de la función:
+
+
+
+
+RETURN_STRING( s,dup) Si dup es TRUE, duplica la cadena
+RETURN_STRINGL( s,l,dup) Devuelve la cadena (s) especificando el largo (l).
+
+Las macros RETVAL_* fijan el valor, pero no retornan.
+
+
+
+RETVAL_STRING( s,dup) Si dup es TRUE, duplica la cadena
+RETVAL_STRINGL( s,l,dup) Devuelve la cadena (s) especificando el largo (l).
+
+Las macros anteriores harán un estrdup() del argumento 's ', de modo que puede liberar con seguridad el argumento después de llamar a la macro, o, alternativamente, utilizar memoria asignada estáticamente.
+Si su función devuelve respuestas lógicas de éxito / error, use siempre RETURN_TRUE y RETURN_FALSE respectivamente.
+Su función también puede devolver un tipo de datos complejo, tal como un objeto o una matriz.
+Devolviendo un objeto:
+Llame a object_init( return_value).
+Rellénela con valores.
+Las funciones disponibles para ello son listadas más abajo.
+Posilemente registre funciones para este objeto.
+Para obtener valores del objeto, la función deberá de obtener "this" desde la active_symbol_table.
+Su tipo deberá ser IS_OBJECT, y básicamente se trata de una matriz asociativa estándar (es decir, que podrá usar funciones de matriz asociativa sobre .value.ht).
+El registro en sí de la función se puede hacer utilizando:
+add_method( return_value, nombre_func, puntero_func);
+Las funciones utilizadas para rellenar un objeto son:
+add_property_long( return_value, nombre_propiedad, l) - Añade una propiedad llamada 'nombre_propiedad', de tipo long, y con valor 'l '
+add_property_double( return_value, nombre_propiedad, d) - Igual, pero añadiendo un double
+add_property_string( return_value, nombre_propiedad, cad) - Igual, pero añadiendo una cadena
+add_property_stringl( return_value, nombre_propiedad, cad, l) - Igual, pero añadiendo una cadena de longitud 'l '
+Devolviendo una matriz:
+Llame a array_init( return_value).
+Rellénela con valores.
+Las funciones disponibles para ello son listadas más abajo.
+Las funciones utilizadas para rellanar una matriz son:
+add_assoc_long( return_value,clave,l) - añade un elemento asociativo con clave 'clave 'y valor long 'l'
+add_assoc_double( return_value,clave,d)
+add_assoc_string( return_value,clave,cad,duplicar)
+add_assoc_stringl( return_value,clave,cad,largo,duplicar) - especifica el largo de la cadena
+add_index_long( return_value,indice,l) - añade un elemento en la posición 'indice 'con valor long 'l'
+add_index_double( return_value,indice,d)
+add_index_string( return_value,indice,cad)
+add_index_stringl( return_value,indice,cad,largo) - especifica el largo de la cadena
+add_next_index_long( return_value,l) - añade un elemento a la matriz en la próxima posición libre con valor long 'l '
+
+add_next_index_string( return_value,cad)
+add_next_index_stringl( return_value,cad,largo) - especifica el largo de la cadena
+El PHP 3.0 tiene una forma estandarizada de tratar con distintos tipos de recursos.
+Esto sustituye a las listas enlazadas locales del PHP 2.0.
+Funciones disponibles:
+php3_list_insert( ptr, tipo) - devuelve el 'id 'del recurso recién insertado
+php3_list_delete( id) - borra el recurso con el id especificado
+php3_list_find( id,*tipo) - devuelve el puntero al recurso con el id especificado, y actualiza 'tipo 'al tipo del mismo
+El código típico de un lista sería como este:
+Ejemplo E-7.
+Añadiendo un nuevo recurso
+RESOURCE *recurso; / * ...asignar memoria para el recurso y adquirirlo... * / / * añadir un recurso a la lista * / return_value - value.lval = php3_list_insert((void *) recurso, LE_RESOURCE_TYPE); return_value - type = IS_LONG;
+Ejemplo E-8.
+Utilizando un recurso existente
+pval *id_recurso; RESOURCE *recurso; int tipo; convert_to_long(id_recurso); recurso = php3_list_find(id_recurso - value.lval, tipo); if (tipo != LE_RESOURCE_TYPE) {php3_error(E_WARNING ,"el recurso número %d tiene el tipo equivocado",id_recurso - value.lval); RETURN_FALSE;} / * ...usar recurso... * /
+Ejemplo E-9.
+Borrando un recurso
+pval *id_recurso; RESOURCE *recurso; int tipo; convert_to_long(id_recurso); php3_list_delete(id_recurso - value.lval);
+El PHP 3.0 tiene una forma estándar de almacenar recursos persistentes (es decir, recursos que se mantienen entre accesos).
+El primer módulo que utilizó esta característica fue el MySQL y tras él fue el mSQL, así que uno puede hacerse una buena idea de cómo utilizar un recurso persistente leyendo mysql.c.
+Las funciones a revisar son:
+
+
+
+La idea general de los módulos persistentes es:
+Codifique todos sus módulos para que funcionen con la lista regulares de recursos mencionadas en la sección (9).
+Codifique funciones extra de conexión que comprueben si el recurso ya está en la lista de recursos persistentes.
+Si ya está, regístrelo en la lista regular como un puntero a la lista de recursos persistentes (debido a 1., el resto del código deberá funcionar de inmediato).
+Si no está en la lista, créelo, añádalo a la lista de recursos persistentes Y añada un puntero al mismo desde la lista regular de recursos.
+Así todo el código funcionará porque está en la lista regular, pero en la siguiente conexión el recurso ya estará en la lista persistente y podrá ser usado sin re-crearlo.
+Deberá registrar estos recursos con un tipo diferente (por ejemplo, LE_MYSQL_LINK para el enlace no persistente y LE_MYSQL_PLINK para un enlace persistente).
+Si se leyera mysql.c, notaría que, salvo por que hay una función de conexión más compleja, no hay que cambiar nada más del resto del módulo.
+Existe exactamente la misma interfaz para la lista de recursos regular y para la lista de recursos persistente, pero cambiando únicamente 'lista' por 'listap ':
+php3_plist_insert( ptr, tipo) - devuelve el 'id 'del recurso recién insertado
+php3_plist_delete( id) - borra el recurso con el id especificado
+php3_plist_find( id,*tipo) - devuelve el puntero al recurso con el id especificado, y actualiza 'tipo 'al tipo del mismo
+Sin embargo, es más que probable que estas funciones se muestren inútiles cuando intente implementar un módulo persistente.
+Típicamente usted querrá usar el hecho de que la tabla de recursos persistentes es en realidad una matriz asociativa.
+Por ejemplo, en los módulos MySQL / mSQL, cuando hay una llamada a pconnect() (conexión persistente), la función combina en una cadena el servidor / usuario / clave que se pasaron a la función y codifica el enlace SQL con esta cadena como clave.
+La siguiente vez que alguien llame a pconnect() con el mismo servidor / usuario / clave, se generará la misma clave, y la función hayará el enlace SQL en la lista persistente.
+Hasta que se documente mejor, deberá mirar en mysql.c o en msql.c para ver como utilizar las capacidades de matriz asociativa de la listap.
+Una cosa importante: a los recursos que van a parar a la lista de recursos persistentes *NO* se les debe asignar memoria usando el gestor de memoria del PHP, es decir, que NO deben ser creados utilizando emalloc() o estrdup(), etc.
+En este caso se debe usar las funciones habituales malloc(), strdup(), etc.
+La razón para esto es simple: al final de la petición (final del acceso), se borran todos los trozos de memoria asignados con el gestor de memoria del PHP.
+Como la lista persistente se supone que no se debe borrar al final de una petición, no se debe utilizar el gestor de memoria del PHP para asignar memoria a los recursos de la misma.
+Cuando registre un recuros que vaya a estar en la lista persistente, deberá añadir destructores tanto a la lista persistente como a la no persistente.
+El destructor de la lista no persistente no deberá hacer nada.
+El de la lista persistente deberá liberar adecuadamente los recursos obtenidos por dicho tipo (por ejemplo, memoria, enlaces SQL, etc.).
+Tal y como pasa para los recursos no persistentes, DEBERÁ añadir destructores para cada recurso aunque no sean necesarios y estén vacíos.
+Recuerde que como no se pueden usar emalloc() y similares en conjunción con la lista persistente, tampoco podrá utilizar efree() aquí.
+Muchas de las características del PHP3 pueden ser configuradas en tiempo de ejecución.
+Estas directivas de configuración pueden aparecer tanto en el fichero php3.ini o, en el caso de la versión de módulo del Apache, en los archivos .conf del propio Apache.
+La ventaja de tenerlos en los archivos .conf del Apache es que se puden configurar directorio por directorio.
+Esto quiere decir que cada uno puede tener un cierto safemodeexecdir, por ejemplo, mientras otro directorio puede tener otro.
+Esta granularidad en la configuración es especialmente útil cuando un servidor soporta múltiples servidores virtuales.
+Los pasos necesarios para añadir una nueva directiva:
+Añada la directiva a la estructura php3_ini_structure en mod_php3.h.
+En main.c, edite la función php3_module_startup y añada la llamada a cfg_get_string() o a cfg_get_long() según se requiera.
+Añada la directiva, las restricciones y un comentario a la estructura php3_commands en mod_php3.c.
+Cuidado con la parte de restricciones.
+Las de tipo RSRC_CONF sólo puede aparecer en los archivos .conf del Apache.
+Las directivas de tipo OR_OPTIONS pueden aparecer en cualquier parte, incluso en los habituales archivos .htaccess.
+Añada el elemento apropiado para su directiva, bien en php3take1handler(), bien en php3flaghandler().
+Necesita añadir su nueva directiva a la sección de configuración de la función _php3_info() en functions / info.c.
+Y finalmente, por supuesto, deberá utilizar su nueva directiva en algún sitio.
+Estará accesible como php3_ini.directiva.
+[1]
+Tenga cuidado aquí.
+El valor a usar se debe asignar dinámicamente y de forma manual, pues el código de manejo de memoria intentará liberar este puntero más adelante.
+Nunca pase memoria asignada de forma estática a SET_VAR_STRING.
+Anterior
+Inicio
+Siguiente
+Protocolo del debugger
+Subir
+Llamando a Funciones del Usuario

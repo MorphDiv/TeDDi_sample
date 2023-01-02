@@ -1,0 +1,65 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 4 = 4.0.6)
+dbx_query() returns an object or 1 on success, and 0 on failure.
+The result object is returned only if the query given in sql_statement produces a result set.
+Example 1.
+How to handle the returned value
+?php $link = dbx_connect( DBX_ODBC, "", "db", "username", "password") or die("Could not connect"); $result = dbx_query($link, 'SELECT id, parentid, description FROM table'); if (is_object($result)) {/ /... do some stuff here, see detailed examples below... / / first, print out field names and types / / then, draw a table filled with the returned field values} else if ($result == 1) {echo("Query executed successfully, but no result set returned");} else {exit("Query failed");} dbx_close($link);?
+The flags parameter is used to control the amount of information that is returned.
+It may be any combination of the following constants with the bitwise OR operator (|).
+The DBX_COLNAMES_* flags override the dbx.colnames_case setting from php.ini.
+It is always set, that is, the returned object has a data property which is a 2 dimensional array indexed numerically.
+For example, in the expression data[ 2][3] 2 stands for the row (or record) number and 3 stands for the column (or field) number.
+The first row and column are indexed at 0.
+If DBX_RESULT_ASSOC is also specified, the returning object contains the information related to DBX_RESULT_INFO too, even if it was not specified.
+It provides info about columns, such as field names and field types.
+It effects that the field values can be accessed with the respective column names used as keys to the returned object 's data property.
+Associated results are actually references to the numerically indexed data, so modifying data[ 0][0] causes that data[0]['field_name_for_first_column'] is modified as well.
+The case of the returned column names will not be changed.
+The case of the returned column names will be changed to uppercase.
+The case of the returned column names will be changed to lowercase.
+DBX_RESULT_INDEX
+DBX_RESULT_INDEX | DBX_RESULT_INFO
+DBX_RESULT_INDEX | DBX_RESULT_INFO | DBX_RESULT_ASSOC - this is the default, if flags is not specified.
+The returing object has four or five properties depending on flags:
+It is a valid handle for the connected database, and as such it can be used in module specific functions (if required).
+$result = dbx_query ($link, "SELECT id FROM table"); mysql_field_len ($result - handle, 0);
+These contain the number of columns (or fields) and rows (or records) respectively.
+$result = dbx_query ($link, 'SELECT id FROM table'); echo $result - rows; / / number of records echo $result - cols; / / number of fields
+It is returned only if either DBX_RESULT_INFO or DBX_RESULT_ASSOC is specified in the flags parameter.
+It is a 2 dimensional array, that has two named rows (name and type) to retrieve column information.
+Example 2. lists each field 's name and type
+$result = dbx_query ($link, 'SELECT id FROM table', DBX_RESULT_INDEX | DBX_RESULT_INFO); for ($i = 0; $i $result - cols; $i+ +) {echo $result - info['name'][$i]. "\n"; echo $result - info['type'][$i]. "\n";}
+This property contains the actual resulting data, possibly associated with column names as well depending on flags.
+If DBX_RESULT_ASSOC is set, it is possible to use $result - data[ 2]["field_name"].
+Example 3. outputs the content of data property into HTML table
+$result = dbx_query ($link, 'SELECT id, parentid, description FROM table'); echo "table \n"; foreach ($result - data as $row) {echo" tr \n"; foreach ($row as $field) {echo "td $field / td";} echo "/ tr \n";} echo" / table \n";
+Note:
+Always refer to the module-specific documentation as well.
+Column names for queries on an Oracle database are returned in lowercase.
+See also: dbx_escape_string() and dbx_connect().
+Prev
+Home
+Next
+dbx_escape_string
+Up
+dbx_sort

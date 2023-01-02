@@ -1,0 +1,259 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+Die Unterstützung von Sessions in PHP bietet die Möglichkeit, bestimmte Daten während einer Folge von Aufrufen Ihrer Website festzuhalten.
+Damit können Sie persönlichere Applikationen erstellen und Ihre Website ansprechender gestalten.
+Falls Sie mit dem Sessionmanagment von PHPLIB vertraut sind, werden Sie Ähnlichkeiten zu PHPs Session-Unterstützung feststellen.
+Einem Besucher wird beim Aufruf Ihrer Website eine eindeutige ID, die sogenannte Session-ID, zugeordnet.
+Diese wird entweder benutzerseitig in einem Cookie abgelegt oder in der URL übermittelt.
+Die Unterstützung von Sessions erlaubt Ihnen, eine beliebige Anzahl von Variablen zu registrieren und diese über Anfragen hinweg zu erhalten.
+Wenn ein Besucher Ihre Website aufruft, überprüft PHP automatisch (falls session.auto_start auf 1 gesetzt ist) oder auf Anfrage (explizit durch session_start() oder implizit durch session_register()), ob mit der Anfrage schon eine bestimmte Session-ID gesendet wurde.
+Wenn dies der Fall ist, wird die zuvor gespeicherte Umgebung wiederhergestellt.
+Alle registrierten Variablen werden serialisiert, nachdem die Anfrage beendet ist.
+Registrierte Variablen, die nicht definiert sind, werden als nicht definiert gekennzeichnet.
+Auch bei darauffolgenden Zugriffen werden sie nicht vom Session-Modul definiert, außer der Benutzer definiert sie später.
+Anmerkung:
+Die Behandlung von Sessions wurde in PHP 4.0 eingeführt.
+Wenn Sie Sessions verwenden, bedeutet das nicht, dass Sie absolut sicher sein können, dass die Session-Daten nur vom jeweiligen Benutzer gesehen werden können.
+Es ist wichtig, dass Sie beim Speichern und Anzeigen sensibler Daten daran denken.
+Wenn Sie Daten in einer Session speichern, sollten Sie sich immer fragen, wie groß der Schaden ist, wenn jemand anderes diese Informationen sieht oder inwieweit Ihre Anwendung davon betroffen ist, wenn die Session in Wirklichkeit von jemand anderem benutzt wird.
+Kann zum Beispiel jemand, der eine Session übernimmt, als dieser Benutzer eine Nachricht an ein Forum senden und stellt das ein großes Problem dar?
+Oder vielleicht kann er sehen, was der ursprüngliche Benutzer zu bestellen beabsichtigte, weil er Zugriff auf den Einkaufswagen dieses Benutzers bekommt.
+Für einen Blumenladen wäre das offensichtlich weniger dramatisch als für eine Apotheke.
+Deshalb sollte es beim Umgang mit sensiblen Daten immer zusätzliche Methoden geben, mit denen festgestellt werden kann, ob es sich um eine gültige Session handelt.
+Sessions sind als Mechanismus für sichere Authentifizierung nicht verlässlich.
+Sessions vertrauen auf die Session-ID, was bedeutet, dass eine Session 'gestohlen' werden kann, indem die Session-ID gestohlen wird.
+Dies kann durch Verwendung eines Cookies, speziell eines Session-Cookies, erschwert werden, aber das macht es keinesfalls unmöglich und stützt sich immer noch darauf, dass der Benutzer alle Browserfenster schließt, damit das Cookie verfällt.
+Außerdem können auch Session-Cookies in einem Netzwerk ausgeschnüffelt werden oder von einem Proxyserver protokolliert werden.
+Diese Erweiterung benötigt zur Erstellung keine externen Bibliotheken.
+Die Unterstützung von Sessions ist in PHP standardmäßig aktiviert.
+Falls Sie Ihr PHP ohne Unterstützung von Sessions bauen wollen, müssen Sie bei der Konfiguration die Option --disable-session angeben.
+Das Verhalten dieser Funktionen wird von Einstellungen in der php.ini bestimmt.
+Tabelle 1.
+Session-Konfigurationsoptionen
+Bezeichnung
+Grundeinstellung
+Änderbar
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Das Sessionmanagementsystem unterstützt eine Anzahl von Konfigurationsoptionen, die Sie in Ihrer php.ini setzen können.
+Wir geben Ihnen dazu einen kleinen Überblick.
+session.save_handler definiert den Namen der Prozedur, die benutzt wird, um die Daten zu speichern und zurückzuholen, die mit der Session in Verbindung stehen.
+Grundeinstellung files.
+Siehe auch session_set_save_handler().
+session.save_path session.save_path definiert das Argument, das an die Speicherprozedur übergeben wird.
+Wenn Sie die standardmäßige files Prozedur wählen, ist das der Pfad, unter dem die Dateien erzeugt werden.
+Grundeinstellung / tmp.
+Wenn die Verzeichnistiefe von session.save_path größer als zwei ist, wird die Garbage-Collection nicht durchgeführt.
+Siehe auch session_save_path().
+Warnung
+Wenn Sie ein Verzeichnis gewählt haben, für das jeder Leserechte hat, wie das z.B. bei / tmp (Grundeinstellung) der Fall ist, könnten andere Serverbenutzer mit Hilfe der Dateiliste dieses Verzeichnisses Ihre Sessions entführen.
+Anmerkung:
+Benutzer von Windows müssen diese Variable ändern, um die Session-Funktionen von PHP nutzen zu können.
+Stellen Sie sicher, dass Sie einen gültigen Pfad, z.B. c: / temp, angegeben haben.
+session.name session.name spezifiziert den Namen der Session, der als Cookie-Name verwendet wird.
+Grundeinstellung PHPSESSID.
+Siehe auch session_name().
+session.auto_start spezifiziert, ob das Session-Modul zu Beginn einer Anfrage automatisch eine Session startet.
+Grundeinstellung 0 (deaktiviert).
+session.serialize_handler definiert den Namen der Prozedur, die benutzt wird, um Daten zu serialisieren / deserialisieren.
+Gegenwärtig wird ein internes PHP-Format (Name php) und WDDX (name wddx) unterstützt.
+WDDX steht nur zur Verfügung, wenn PHP mit WDDX support kompiliert wurde.
+Grundeinstellung php.
+session.gc_probability spezifiziert die prozentuale Wahrscheinlichkeit, dass die gc (garbage collection) Routine bei jeder Anfrage gestartet wird.
+Grundeinstellung 1.
+session.gc_maxlifetime spezifiziert die Anzahl der Sekunden, nach denen Daten als 'garbage' ('Müll') betrachtet und entsorgt werden.
+Anmerkung:
+Falls Sie die standardmäßige dateibasierte Session-Prozedur verwenden, muss Ihr Dateisystem die Zugriffszeiten (atime) verfolgen.
+Windows FAT tut dies nicht.
+Sie müssen sich daher einen anderen Weg einfallen lassen, um die 'Müllentsorgung' Ihrer Session zu erledigen, wenn Sie an ein FAT-Dateisystem gebunden sind oder an irgendein anderes Dateisystem, das keine atime-Kontrolle bietet.
+session.referer_check enthält die Zeichenkette, auf die Sie jeden HTTP-Referer überprüfen wollen.
+Wenn der Referer vom Client gesendet und die Zeichenkette nicht gefunden wurde, wird die eingebettete Session-ID als ungültig gekennzeichnet.
+Grundeinstellung ist eine leere Zeichenkette.
+session.entropy_file gibt den Pfad zu einer externen Quelle (Datei) an, die bei der Erzeugung einer Session-ID als zusätzliche Entropiequelle verwendet wird.
+Beispiele sind / dev / random oder / dev / urandom, die auf vielen Unix-Systemen zur Verfügung stehen.
+session.entropy_length spezifiziert die Anzahl der Bytes, die von der oben spezifizierten Datei gelesen werden.
+Grundeinstellung 0 (deaktiviert).
+session.use_cookies spezifiziert, ob das Modul Cookies verwendet, um die Session-ID clientseitig zu speichern.
+Grundeinstellung 1 (aktiviert).
+session.use_only_cookies spezifiziert, ob das Modul nur Cookies verwendet, um die Session-ID clientseitig zu speichern.
+Grundeinstellung 0 Grundeinstellung 0 (deaktiviert, für Rückwärts-Kompatibilität).
+Mit Aktivierung dieser Einstellung wird möglichen Angriffen durch Übermittlung von Session-IDs in URLs vorgebeugt.
+Diese Einstellung wurde in PHP 4.3.0 hinzugefügt.
+session.cookie_lifetime spezifiziert die Cookie-Lebensdauer, die an den Browser geschickt wird, in Sekunden.
+Der Wert 0 bedeutet "bis der Browser geschlossen wird." Grundeinstellung 0.
+Siehe auch session_get_cookie_params() und session_set_cookie_params().
+session.cookie_path session.cookie_path spezifiziert den Pfad, in dem das Session-Cookie gesetzt wird.
+Grundeinstellung /.
+Siehe auch session_get_cookie_params() und session_set_cookie_params().
+session.cookie_domain spezifiziert die Domain, unter der das Session-Cookie gesetzt wird.
+In der Grundeinstellung überhaupt keine.
+Siehe auch session_get_cookie_params() und session_set_cookie_params().
+session.cookie_secure spezifiziert, ob Cookies nur über sichere Verbindungen geschickt werden sollen.
+Grundeinstellung off.
+Diese Einstellung wurde in PHP 4.0.4 hinzugefügt.
+Siehe auch session_get_cookie_params() und session_set_cookie_params().
+session.cache_limiter spezifiziert die Methode der Cacheverwaltung, die bei Session-Seiten benutzt wird (none / nocache / private / private_no_expire / public).
+Grundeinstellung nocache.
+Siehe auch session_cache_limiter().
+session.cache_expire spezifiziert in Minuten, wie lange Session-Seiten im Cache bleiben.
+Bei nocache ist diese Angabe wirkungslos.
+Grundeinstellung 180.
+Siehe auch session_cache_expire().
+session.use_trans_sid bestimmt ob transparente SID-Unterstützung aktiviert ist oder nicht.
+Grundeinstellung 0 (deaktiviert).
+Anmerkung:
+In PHP 4.1.2 oder darunter wird sie durch compilieren mit --enable-trans-sid aktiviert.
+Ab PHP 4.2.0 ist das Feature trans-sid immer eincompiliert.
+URL-basiertes Session-Management hat im Vergleich zu Cookie-basiertem Session-Management zusätzliche Sicherheitsrisiken.
+Benutzer können zum Beispiel eine URL, die eine aktive Session-ID enthält, per Email an Freunde schicken oder in ihren Bookmarks speichern und immer mit der selben Session-ID auf Ihre Seite zugreifen.
+url_rewriter.tags bestimmt, wenn Unterstützung für transparente SID aktiviert ist, welche HTML-Tags so umgeschrieben werden, dass sie die Session-ID beinhalten.
+Grundeinstellung a=href,area=href,frame=src,input=src,form=fakeentry
+Die Konfigurationseinstellungen von track_vars und register_globals beeinflussen, wie die Session-Variablen gespeichert und wiederhergestellt werden.
+Anmerkung:
+Seit PHP 4.0.3 ist track_vars immer aktiviert.
+Diese Erweiterung definiert keine Resource-Typen.
+Folgende Konstanten werden von dieser Erweiterung definiert und stehen nur zur Verfügung, wenn die Erweiterung entweder statisch in PHP kompiliert oder dynamisch zur Laufzeit geladen wurde.
+Konstante, die den Namen und die ID der Session in der Form "name=ID" enthält.
+Anmerkung:
+Seit PHP 4.1.0 steht $_SESSION genau wie $_POST, $_GET, $_REQUEST und so weiter, als globale Variable zur Verfügung.
+Im Gegensatz zu $HTTP_SESSION_VARS ist $_SESSION immer global.
+Deshalb brauchen Sie für $_SESSION nicht das Schlüsselwort global zu verwenden.
+Bitte beachten Sie, dass in dieser Dokumentation nun überall $_SESSION verwendet wird.
+Sie können $_SESSION durch $HTTP_SESSION_VARS ersetzen, wenn Sie Letzteres bevorzugen.
+Für die Schlüssel des assoziativen $_SESSION -Arrays gelten die selben Beschränkungen, wie für die Bezeichnungen von regulären Variablen in PHP, d.h. sie dürfen nicht mit einer Zahl, sondern müssen mit einem Buchstaben oder Unterstrich beginnen.
+Um weitere Deteils zu erhalten, siehe Abschnitt Variablen.
+Falls register_globals deaktiviert ist, können nur Bestandteile des globalen assoziativen Arrays $_SESSION als Session-Variablen registriert werden.
+Wiederhergestellte Session-Variablen stehen nur im Array $_SESSION zur Verfügung.
+Aus Gründen der Verbesserung der Sicherheit und der Lesbarkeit des Codes wird die Verwendung von $_SESSION (oder $HTTP_SESSION_VARS bei PHP 4.0.6 oder niedriger) empfohlen.
+Mit $_SESSION werden die Funktionen session_register(), session_unregister() und session_is_registered() nicht benötigt.
+Auf die Session-Variablen kann wie auf jede normale Variable zugegriffen werden.
+Beispiel 1.
+Registrierung einer Variablen mit $_SESSION.
+?php session_start(); / / Verwenden Sie bei PHP 4.0.6 oder niedriger $HTTP_SESSION_VARS if (!isset($_SESSION['zaehler'])) {$_SESSION['zaehler'] = 0;} else {$_SESSION['zaehler']++;}?
+Beispiel 2.
+Aufheben der Registrierung einer Variablen mit $_SESSION und deaktiviertem register_globals.
+?php session_start(); / / Verwenden Sie bei PHP 4.0.6 oder niedriger $HTTP_SESSION_VARS unset($_SESSION['zaehler']);?
+Beispiel 3.
+Aufheben der Registrierung einer Variablen mit aktiviertem register_globals, nachdem sie unter Verwendung von $_SESSION registriert wurde.
+?php session_start(); / / Ab PHP 4.3, können Sie auch einfach das vorige Beispiel benutzen. session_unregister('count');?
+Wenn register_globals aktiviert ist, kann jede globalen Variable als Session-Variable registriert werden.
+Beim Neustart einer Session werden diese Variablen als entsprechende globale Variablen wiederhergestellt.
+Da PHP wissen muss, welche globalen Variablen als Session-Variablen registriert sind, muss der Benutzer Variablen mit der Funktion session_register() registrieren.
+Sie können das vermeiden, indem Sie einfach Einträge in $_SESSION setzen.
+Achtung
+Wenn Sie $_SESSION verwenden und register_globals deaktivieren, sollten Sie session_register(), session_is_registered() und session_unregister() Wenn Sie $_SESSION verwenden und register_globals deaktivieren, sollten Sie session_register(), session_is_registered() und session_unregister() nicht verwenden, wenn Ihre Scripte mit PHP 4.2 und niedriger funktionieren sollen.
+Sie können diese Funktionen ab 4.3 verwenden.
+Wenn Sie register_globals aktivieren, sollten Sie session_unregister() Wenn Sie register_globals aktivieren, sollten Sie session_unregister() verwenden, weil beim Deserialisieren von Session-Daten die Session-Variablen als globale Variablen registriert werden.
+Die Deaktivierung von register_globals ist sowohl aus Sicherheitsgründen als auch wegen der Performance empfehlenswert.
+Beispiel 4.
+Registrierung einer Variablen bei aktiviertem register_globals
+?php if (!session_is_registered('zaehler')) {session_register("zaehler"); $zaehler = 0;} else {$zaehler++;}?
+Wenn register_globals aktiviert ist, dann referenzieren die globalen Variablen und die Einträge von $_SESSION für Session-Variablen, die in vorherigen Instanzen der Session registriert wurden, automatisch den selben Wert.
+Wenn Sie darüber hinaus eine neue Session-Variable mittels session_register() registrieren, referenzieren der Eintrag im globalen Bereich und der $_SESSION -Eintrag bis zum nächsten session_start() nicht den selben Wert (gilt nur bis einschließlich PHP 4.2).
+D.h. eine Änderung an der globalen Variablen wird nicht vom $_SESSION -Eintrag widergespiegelt.
+Es ist unwahrscheinlich, dass das in der Praxis eine Rolle spielt und wurde in PHP 4.3 korrigiert.
+Es gibt zwei Methoden, eine Session-ID zu übermitteln:
+
+URL Parameter
+Das Session-Modul unterstützt beide Methoden.
+Cookies sind optimal, aber da sie nicht zuverlässig sind (Clients müssen sie nicht unbedingt akzeptieren), können wir uns nicht auf sie verlassen.
+Die zweite Methode hängt die Session-ID direkt an die URLs.
+Falls PHP mit --enable-trans-sid kompiliert wurde, kann es dies transparent machen.
+Diese Option ist ab PHP 4.2 immer aktiviert.
+Wenn Sie diese Option aktivieren, werden relative URIs automatisch geändert, sodass sie die Session-ID enthalten.
+Alternativ können Sie die Konstante SID verwenden, die definiert wird, falls vom Client keinen passendes Cookie gesendet wurde.
+SID hat entweder die Form session_name=session_id oder ist eine leere Zeichenkette.
+Anmerkung:
+Die php.ini -Anweisung arg_separator.output ermöglicht es, die Trennung von Argumenten anzupassen.
+Das folgende Beispiel demonstriert, wie eine Variable registriert wird und wie unter Verwendung einer SID korrekt auf eine andere Seite verwiesen wird.
+Beispiel 5.
+Zählen der Seitenaufrufe eines einzelnen Benutzers
+?php if (!session_is_registered('zaehler')) {session_register('zaehler'); $zaehler = 1;} else {$zaehler++;}?
+Hallo Besucher, Sie haben diese Seite ?php echo $zaehler;?
+Mal aufgerufen. p Hier gehts A HREF=" nextpage.php? ?php echo SID? "weiter / A
+Falls der Benutzer Cookies deaktiviert hat, ist das ?php echo SID? nötig, um die Session-ID zu erhalten (wenn short_open_tag aktiviert ist, kann ?=SID? verwendet werden).
+Das ?=SID? ist nicht nötig, wenn PHP mit --enable-trans-sid kompiliert wurde.
+Anmerkung:
+Bei nichtrelativen URLs wird davon ausgegangen, dass sie auf externe Seiten zeigen und, weil es ein Sicherheitsrisiko wäre, die SID an einen anderen Server zu übermitteln, von daher wird keine SID angehängt.
+Wenn Sie die Speicherung in einer Datenbank oder irgendeine andere Art der Speicherung realisieren wollen, können Sie session_set_save_handler() verwenden, um eine Reihe von benutzerdefinierten Speicherfunktionen zu erzeugen.
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

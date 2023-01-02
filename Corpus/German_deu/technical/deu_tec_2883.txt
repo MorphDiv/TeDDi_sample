@@ -1,0 +1,46 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+Erzeugt eine anonyme Funktion an Hand der übergebenen Parameter und gibt einen eindeutigen Namen für diese zurück.
+Normalerweise sind die args Normalerweise sind die args als mit "'" begrenzte Strings zu übergeben.
+Dies gilt auch für code.
+Dadurch werden die Variablen vor dem Parsen geschützt.
+Falls sie "" "verwenden, müssen sie die Variablen-Namen "escapen", wie z.B. \$avar.
+Dieser Befehl kann z.B. verwendet werden, um eine Funktion an Hand von Informationen zu erzeugen, die erst zur Laufzeit vorliegen.
+Beispiel 1.
+Erzeugen einer anonymen / temporären Funktion per create_function():
+$newfunc = create_function( '$a,$b' ,'return "ln($a) + ln($b) = ".log($a * $b) ;'); echo "Neue Temp-Funktion: $newfunc\n"; echo $newfunc(2,M_E) ."\n"; / / Ausgabe: / / Neue Temp-Funktion: lambda_1 / / ln(2) + ln(2.718281828459) = 1.6931471805599
+Beispiel 2.
+Beispiel zum o.a.
+Verwendungszweck:
+function process( $var1, $var2, $farr) {for ($f=0; $f count($farr); $f++) echo $farr[$f]($var1,$var2) ."\n";} / / Erzeugung eines Bündels an mathematischen Funktionen $f1 = 'if ($a =0) {return "b*a^2 = ".$b*sqrt($a);} else {return false ;}'; $f2 = "return \"min(b^2+a, a^2,b) = \".min(\$a*\$a+\$b,\$b*\$b+\$a) ;"; $f3 = 'if ($a 0 $b != 0) {return "ln(a) / b = ".log($a) / $b;} else {return false ;}'; $farr = array (create_function('$x,$y', 'return "als trig: ".(sin($x) + $x*cos($y)) ;'), create_function('$x,$y', 'return "als Hypotenuse: ".sqrt($x*$x + $y*$y) ;'), create_function('$a,$b', $f1), create_function('$a,$b', $f2), create_function('$a,$b', $f3)); echo "\nGebrauch des ersten Arrays der anonymen Funktionen\n"; echo "Parameter:
+2.3445, M_PI\n"; process(2.3445, M_PI, $farr); / / Erzeugung eines Bündels an String-Behandlungs-Routinen $garr = array (create_function('$b, $a' ,'if (strncmp ($a, $b, 3) == 0) return "** \"$a\ "'. 'und \"$b\"\n** Sieht für mich gleich aus! (ansehen der ersten 3 Zeichen)" ;'), create_function('$a, $b' ,'; return "CRCs: ".crc32($a).", ".crc32(b) ;'), create_function('$a, $b' ,'; return "ähnlich(a, b) = ".similar_text($a, $b, $p) ."($p%)" ;')); echo "\nGebrauch des zweiten Arrays der anonymen Funktionen\n"; process("Twas brilling and the slithy toves", "Twas the night", $garr);
+Gebrauch des ersten Arrays der anonymen Funktionen Parameter:
+2.3445, M_PI als trig: -1.6291725057799 als Hypotenuse:
+3.9199852871011 b*a^2 = 4.8103313314525 min( b^2+a, a^2,b) = 8.6382729035898 ln(a / b) = 0.27122299212594 Gebrauch des zweiten Arrays der anonymen Funktionen ** "Twas the night "und "Twas brilling and the slithy toves" ** Sieht für mich gleich aus! (ansehen der ersten 3 Zeichen) CRCs: -725381282, 1908338681 ähnlich(a,b) = 11(45.833333333333%)
+Beispiel 3.
+Gebrauch der anonymen Funktionen als Callback-Funktion:
+$av = array( "der ","ein" ,"dieser ","jener "); array_walk($av, create_function( '$v,$k' ,'$v = $v ."Zug" ;')); print_r($av); / / mit PHP3 benutzen sie bitte var_dump() / / Ausgaben: / / Array / / (/ / [0] = der Zug / / [1] = ein Zug / / [2] = dieser Zug / / [3] = jener Zug / /) / / Ein Array aus Strings nach Länge geordnet $sv = array("kurz" ,"länger" ,"noch länger" ,"dieser ist am längsten"); print_r($sv); / / Ausgaben: / / Array / / (/ / [0] = kurz / / [1] = länger / / [2] = noch länger / / [3] = dieser ist am längsten / /) / / Sortierung von lang nach kurz usort($sv, create_function('$a,$b' ,'return strlen($b) - strlen($a) ;')); print_r($sv); / / Ausgabe: / / Array / / (/ / [0] = dieser ist am längsten / / [1] = noch länger / / [2] = länger / / [3] = kurz / /)
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

@@ -1,0 +1,79 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+LDAP steht für Lightweight Directory Access Protocol und ist ein Protokoll um auf "Directory Servers" - Verzeichnis - Server - zuzugreifen.
+Das Verzeichnis ist dabei eine spezielle Art einer Datenbank, das Informationen in einer Baumstruktur bereithält.
+Das Konzept ist dabei ähnlich der Verzeichnisstruktur Ihrer Festplatte, mit der Ausnahme, dass in diesem Zusammenhang das Wurzelverzeichnis "Die Welt" ist und die Unterverzeichnisse der ersten Ebene "Länder "abbilden.
+Die weiteren Verzeichnisse unterhalb der Länderebene enthalten Einträge für Firmen, Organisationen oder Städte.
+Noch tiefer geschachtelt stehen Verzeichniseinträge für Personen und vielleicht für Ausstattung oder Dokumente.
+Um auf eine Datei in einem Unterverzeichnis auf Ihrer Festplatte zu verweisen, könnten Sie eine Schreibweise wie folgt verwenden
+/usr / local / meine_daten / doku
+Die Schrägstriche markieren jeden Teil in diesem Verweis und die Sequenz wird von links nach rechts gelesen.
+Das entsprechende Gegenstück zu einer voll qualifizierten Dateireferenz ist in LDAP der Eindeutige Name ("distinguished name"), der Einfachheit halber als "dn "bezeichnet.
+Ein Beispiel für einen solchen dn könnte sein
+cn=Hans Mustermann,ou=Buchhaltung,o=Meine Firma,c=DE
+Das Komma markiert jeden Teil in diesem Verweis und die Sequenz wird von rechts nach links gelesen.
+Diesen dn würden Sie wie folgt lesen:
+Land = DE Organisation (organisation) = Meine Firma Organisationseinheit (organisationalUnit) = Buchhaltung Einfacher Name (commonName) = Hans Mustermann
+In der gleichen Weise, in der es keine allgemeinverbindlichen Regeln gibt, wie Sie die Verzeichnisstruktur Ihrer Festplatte organsieren, kann der Verwalter eines Verzeichnis-Servers jede beliebige Struktur implementieren, die für den Einsatzzweck sinnvoll ist.
+Die Botschaft ist folgende:
+Sie können keinen Code schreiben um auf einen Verzeichnis-Server zuzugreifen, ohne etwas über dessen Struktur zu wissen.
+Genauso wenig können Sie eine Datenbank nutzen ohne Kenntnis darüber, was in derselben vorhanden ist.
+Viele Informationen finden Sie unter
+
+
+
+
+Das Netscape SDK enthält einen hilfreichen Programmer´s Guide im .html Format.
+Sie müssen sich die LDAP Client Bibliotheken herunterladen und übersetzen.
+Sie können entweder das ldap-3.3 Packet von der University of Michigan oder das Netscape Directory SDK 3.0 verwenden.
+LDAP Unterstützung ist in PHP im Standard nicht aktiviert.
+Sie müssen die Konfigurationsoption --with-ldap beim Übersetzen von PHP angeben.
+Hinweis für Win32 Benutzer:
+Um dieses Modul unter Windows nutzen zu können, müssen Sie libsasl.dll aus dem DLL Ordner des PHP / Win32 Packets in den SYSTEM32 Ordner Ihres Systems kopieren (z.B.:
+C:\WINNT\SYSTEM32 oder C:\WINDOWS\SYSTEM32).
+Das Verhalten dieser Funktionen wird von Einstellungen in der php.ini bestimmt.
+Tabelle 1.
+LDAP Konfigurations-Optionen
+
+Standard
+Veränderbar
+
+
+
+Diese Erweiterung definiert keine Resource-Typen.
+Folgende Konstanten werden von dieser Erweiterung definiert und stehen nur zur Verfügung, wenn die Erweiterung entweder statisch in PHP kompiliert oder dynamisch zur Laufzeit geladen wurde.
+Informationen von einem Verzeichnis-Server beziehen für alle Einträge bei denen der Nachname mit "S" beginnt.
+Darstellung eines Auszugs mit Name und Email-Adresse.
+Beispiel 1.
+LDAP Such-Beispiel
+?php / / Grundlegende Abfolge bei LDAP ist verbinden, binden, suchen, / / interpretieren des Sucheergebnisses, Verbindung schließen echo "h3 LDAP query Test / h3"; echo "Verbindung.. ."; $ds=ldap_connect("localhost"); / / muss ein gültiger LDAP Server / / sein! echo "Ergebnis der Verbindung: ".$ds. "p"; if ($ds) {echo "Bindung.. ."; $r=ldap_bind($ds); / / das ist ein "anonymer "bind, / / typischerweise nur Lese Zugriff echo "Ergebnis der Bindung ".$r." p "; echo "Suche nach (sn=S*).. ."; / / Suchen des Nachnamen-Eintrags $sr=ldap_search($ds ,"o=Meine Firma, c=DE", "sn=S*"); echo "Ergebnis der Suche ".$sr." p "; echo "Anzahl gefundenen Einträge ".ldap_count_entries($ds,$sr)." p "; echo "Einträge holen... p"; $info = ldap_get_entries($ds, $sr); echo "Daten für ".$info["count"]. "Items gefunden: p"; for ($i=0; $i $info["count"]; $i++) {echo "dn ist: ". $info[$i]["dn"]." br "; echo "erster cn Eintrag:". $info[$i]["cn"][0]. "br"; echo "erster email Eintrag: ". $info[$i]["mail"][0]." p ";} echo "Verbindung schließen"; ldap_close($ds);} else {echo" h4 Verbindung zum LDAP Server nicht möglich / h4 ";}?
+Bevor Sie die LDAP Aufrufe benutzen können, müssen Sie folgendes wissen...
+Den Namen oder die Adresse des Verzeichnis-Servers den Sie benutzen wollen
+Den "Basis dn" des Servers (den Teil des Weltverzeichnisses, das auf diesem Server eingerichtet ist, das könnte "o=Meine Firma,c=DE "sein.
+Brauchen Sie ein Passwort um auf den Server zuzugreifen? (Viele Server bieten Lesezugriff für einen "anonymen bind", verlangen aber ein Passwort für alles weitere)
+Die typische Abfolge von LDAP Aufrufen in einer Anwendung folgen diesem Muster
+ldap_connect() / / Aufbau einer Verbindung zum Server connection to server | ldap_bind() / / anonymes oder authentifiziertes "login "|ldap_connect() / / Aufbau einer Verbindung zum Server connection to server | ldap_bind() / / anonymes oder authentifiziertes "login" | mache irgendwas, z.B.
+Verzeichnis durchsuchen oder aktualisieren und stelle das Ergebnis dar | ldap_close() / / "logout "
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

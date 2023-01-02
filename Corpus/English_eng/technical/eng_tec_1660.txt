@@ -1,0 +1,111 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/en_GB.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Programming Examples for Controls in the Dialogue Box Editor
+/text/sbasic/guide/sample_code.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+programming examples for controls
+dialogue boxes;loading (example)
+dialogue boxes;displaying (example)
+controls;reading or editing properties (example)
+list boxes;removing entries from (example)
+list boxes;adding entries to (example)
+examples; programming controls
+dialogue box editor;programming examples for controls
+Programming Examples for Controls in the Dialogue Box Editor
+dialogue box
+called &quot; Dialog1 &quot; .
+Use the tools on the
+Toolbox
+bar in the dialogue box editor to create the dialogue box and add the following controls: a
+Check Box
+called &quot; CheckBox1 &quot; , a
+Label Field
+called &quot; Label1 &quot; , a
+Button
+called &quot; CommandButton1 &quot; and a
+List Box
+called &quot; ListBox1 &quot; .
+Be consistent with uppercase and lowercase letter when you attach a control to an object variable.
+Global Function for Loading Dialogue Boxes
+Function LoadDialog(Libname as String, DialogueBoxName as String, Optional oLibContainer)
+Dim oLib as Object
+Dim oLibDialog as Object
+Dim oRuntimeDialog as Object
+If IsMissing(oLibContainer ) then
+oLibContainer = DialogLibraries
+End If
+oLibContainer.LoadLibrary(LibName)
+oLib = oLibContainer.GetByName(Libname)
+oLibDialog = oLib.GetByName(DialogueBoxName)
+oRuntimeDialog = CreateUnoDialog(oLibDialog)
+LoadDialog() = oRuntimeDialog
+End Function
+Displaying a Dialogue Box
+rem global definition of variables
+Dim oDialog1 AS Object
+Sub StartDialog1
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+oDialog1.Execute()
+end sub
+Read or Edit Properties of Controls in the Program
+Sub Sample1
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM get dialogue box model
+oDialog1Model = oDialog1.Model
+REM display text of Label1
+oLabel1 = oDialog1.GetControl( &quot; Label1 &quot; )
+MsgBox oLabel1.Text
+REM set new text for control Label1
+oLabel1.Text = &quot; New Files &quot;
+REM display model properties for the control CheckBox1
+oCheckBox1Model = oDialog1Model.CheckBox1
+MsgBox oCheckBox1Model.Dbg_Properties
+REM set new state for CheckBox1 for model of control
+oCheckBox1Model.State = 1
+REM display model properties for control CommandButton1
+oCMD1Model = oDialog1Model.CommandButton1
+MsgBox oCMD1Model.Dbg_Properties
+REM display properties of control CommandButton1
+oCMD1 = oDialog1.GetControl( &quot; CommandButton1 &quot; )
+MsgBox oCMD1.Dbg_Properties
+REM execute dialogue box
+oDialog1.Execute()
+End Sub
+Add an Entry to a List Box
+Sub AddEntry
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM adds a new entry to the List Box
+oDialog1Model = oDialog1.Model
+oListBox = oDialog1.GetControl( &quot; ListBox1 &quot; )
+dim iCount as integer
+iCount = oListBox.ItemCount
+oListBox.additem( &quot; New Item &quot; & iCount,0)
+end sub
+Remove an Entry from a List Box
+Sub RemoveEntry
+BasicLibraries.LoadLibrary( &quot; Tools &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM remove the first entry from the List Box
+oDialog1Model = oDialog1.Model
+oListBox = oDialog1.GetControl( &quot; ListBox1 &quot; )
+oListBox.removeitems(0,1)
+end sub

@@ -1,0 +1,39 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# iso639_3:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Let's do something a bit more useful now. We are going to check what sort of browser the person viewing the page is using. In order to do that we check the user agent string that the browser sends as part of its HTTP request. This information is stored in a variable. Variables always start with a dollar-sign in PHP. The variable we are interested in right now is $_SERVER["HTTP_USER_AGENT"].
+PHP Autoglobals Note: $_SERVER is a special reserved PHP variable that contains all web server information. It's known as an Autoglobal (or Superglobal). See the related manual page on Autoglobals for more information. These special variables were introduced in PHP 4.1.0. Before this time, we used the older $HTTP_*_VARS arrays instead, such as $HTTP_SERVER_VARS. Although deprecated, these older variables still exist. (See also the note on old code.)
+To display this variable, we can simply do:
+
+예 2-2. Printing a variable (Array element)
+A sample output of this script may be:
+There are many types of variables available in PHP. In the above example we printed an Array element. Arrays can be very useful.
+$_SERVER is just one variable that's automatically made available to you by PHP. A list can be seen in the Reserved Variables section of the manual or you can get a complete list of them by creating a file that looks like this:
+
+예 2-3. Show all predefined variables with phpinfo()
+If you load up this file in your browser you will see a page full of information about PHP along with a list of all the variables available to you.
+You can put multiple PHP statements inside a PHP tag and create little blocks of code that do more than just a single echo. For example, if we wanted to check for Internet Explorer we could do something like this:
+
+예 2-4. Example using control structures and functions
+A sample output of this script may be:
+Here we introduce a couple of new concepts. We have an if statement. If you are familiar with the basic syntax used by the C language this should look logical to you. If you don't know enough C or some other language where the syntax used above is used, you should probably pick up any introductory PHP book and read the first couple of chapters, or read the Language Reference part of the manual. You can find a list of PHP books at http://www.php.net/books.php.
+The second concept we introduced was the strstr() function call. strstr() is a function built into PHP which searches a string for another string. In this case we are looking for "MSIE" inside $_SERVER["HTTP_USER_AGENT"]. If the string is found, the function returns TRUE and if it isn't, it returns FALSE. If it returns TRUE, the if statement evaluates to TRUE and the code within its {braces} is executed. Otherwise, it's not. Feel free to create similar examples, with if, else, and other functions such as strtoupper() and strlen(). Each related manual page contains examples too.
+We can take this a step further and show how you can jump in and out of PHP mode even in the middle of a PHP block:
+
+예 2-5. Mixing both HTML and PHP modes
+A sample output of this script may be:
+Instead of using a PHP echo statement to output something, we jumped out of PHP mode and just sent straight HTML. The important and powerful point to note here is that the logical flow of the script remains intact. Only one of the HTML blocks will end up getting sent to the viewer depending on if strstr() returned TRUE or FALSE In other words, if the string MSIE was found or not.

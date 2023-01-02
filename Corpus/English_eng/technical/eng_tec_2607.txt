@@ -1,0 +1,114 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3 = 3.0.8, PHP 4)
+dba_open() establishes a database instance for path with mode using handler.
+path is commonly a regular path in your filesystem.
+mode is "r" for read access, "w "for read / write access to an already existing database, "c" for read / write access and database creation if it doesn't currently exist, and "n "for create, truncate and read / write access.
+Additional you can set the databse lock method with the next char.
+Use "l" to lock the database with an .lck file or "d "to lock the databasefile itself.
+It is important that all of your applications do this consistently.
+If you want to test the access and do not want to wait for the lock you can add "t" as third character.
+When you are absolutly sure that you do not require database locking you can do so by using "-" instead of "l "or "d".
+When none of "d", "l" or "-" is used dba will lock on the database file as it would with "d ".
+handler is the name of the handler which shall be used for accessing path.
+It is passed all optional parameters given to dba_open() and can act on behalf of them.
+dba_open() returns a positive handle or FALSE, in the case the database was opened successfull or fails, respectively.
+Note:
+There can only be one writer for one database file.
+When you use dba on a webserver and more than one request requires write operations they can only be done one after another.
+Also read during write is not allowed.
+The dba extension uses locks to prevent this.
+See the follwoing table:
+Table 1.
+DBA locking
+already open
+mode = "rl"
+mode = "rlt"
+mode = "wl"
+mode = "wlt"
+mode = "rd"
+mode = "rdt"
+mode = "wd"
+mode = "wdt"
+not open
+ok
+ok
+ok
+ok
+ok
+ok
+ok
+ok
+mode = "rl"
+ok
+ok
+wait
+false
+illegal
+illegal
+illegal
+illegal
+mode = "wl"
+wait
+false
+wait
+false
+illegal
+illegal
+illegal
+illegal
+mode = "rd"
+illegal
+illegal
+illegal
+illegal
+ok
+ok
+wait
+false
+mode = "wd"
+illegal
+illegal
+illegal
+illegal
+wait
+false
+wait
+false
+ok: the second call will be successfull.
+wait: the second call waits until dba_close() is called for the first.
+false: the second call returns false.
+illegal: you must not mix "l" and "d "modifiers for mode parameter.
+Note:
+Since PHP 4.3.0 it is possible to open database files over network connection.
+However in cases a socket connection will be used (as with http or ftp) the connection will be locked instead of the resource itself.
+This is important to know since in such cases locking is simply ignored on the resource and other solutions have to be found.
+Note:
+Locking and the mode modifiers "l", "d"," - "and "t" were added in PHP 4.3.0.
+In PHP versions before PHP 4.3.0 you must use semaphores to guard against simultanious database access for any database handler with the exception of GDBM.
+See System V semaphore support.
+See also: dba_popen() dba_close()
+Prev
+Home
+Next
+dba_nextkey
+Up
+dba_optimize

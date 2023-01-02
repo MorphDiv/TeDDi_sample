@@ -1,0 +1,58 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Dir 関数 [実行時]
+/text/sbasic/shared/03020404.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe; bug fix: i29276
+Dir 関数
+Dir 関数 [実行時]
+個々のファイルやディレクトリの名前および、指定した検索パスに該当するドライブやディレクトリの中にある、すべてのファイルおよびディレクトリの名前を返します。
+構文:
+Dir [(Text As String) [, Attrib As Integer]]
+戻り値:
+文字列
+パラメータ:
+URL 指定
+を用いることもできます。
+Attrib:
+ファイル属性の指定ビットを示す整数表式。Dir 関数は、指定した属性に該当するファイルやディレクトリドライブのみを返します。こうした属性指定は、該当する値を加算することで、複数の指定を組み合わせることが可能です。
+0 : 通常のファイル。
+16 : ディレクトリの名前のみを返す。
+この属性指定は、特定のファイルやディレクトリが存在するかをチェックしたい場合や、1 つのディレクトリ中にあるすべてのファイルとフォルダ名を確認する場合などに使用します。
+特定のファイルが存在するかをチェックするには、該当ファイルの絶対パスとファイル名を指定します。該当するファイルやディレクトリが存在しなかった場合、Dir 関数は文字長ゼロの空白文字列 ( &quot; &quot; ) を返します。
+指定ディレクトリ中にあるすべてのファイル名を取得するには、下記の手順で操作します。Dir 関数の初回呼び出し時に、検索パスを「D:\Files\*.sxw」のような完全な形で指定します。パスの指定に間違いが無く、該当するファイルが 1 つでも検索された場合、Dir 関数は検索パス上で最初に検出したファイル名を返します。検索パス上に存在する2番目以降のファイル名を得るには、引数を指定せずに Dir 関数を再度呼び出します。
+ディレクトリ名のみを取得したい場合は、属性指定用のパラメータを使います。ボリューム名を取得する場合も同様です (たとえばハードディスクのパーティションなど)。
+例:
+Sub ExampleDir
+REM すべてのファイルとディレクトリの表示
+Dim sPath As String
+Dim sDir as String, sValue as String
+sDir= &quot; Directories: &quot;
+sPath = CurDir
+sValue = Dir$(sPath + getPathSeparator + &quot; * &quot; ,16)
+Do
+If sValue < > &quot; . &quot; and sValue < > &quot; .. &quot; Then
+if (GetAttr( sPath + getPathSeparator + sValue) AND 16) > 0 then
+REM ディレクトリの取得
+sDir = sDir & chr(13) & sValue
+End If
+End If
+SValue = Dir$
+Loop Until sValue = &quot; &quot;
+MsgBox sDir,0,sPath
+End sub

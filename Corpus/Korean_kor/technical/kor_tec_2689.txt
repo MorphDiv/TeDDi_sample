@@ -1,0 +1,48 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# iso639_3:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+XML (eXtensible Markup Language)은 웹에서 문서교환을 위해 구조화된 데이터 포멧이다. XML은 The World Wide Web consortium (W3C)에 의해 정의된 기준이고, XML과 그 기술에 관한 정보는 http://www.w3.org/XML/ 에서 찾아 볼 수 있다.
+이 extension은 expat 을 사용한다. 이것은 http://www.jclark.com/xml/ 에서 찾아 볼 수 있다. 기본적으로 expat이 포함되어 만들어진 library는 존재하지 않고, 아래의 make rule를 사용하여 만들어 사용할 수 있다.(make파일에 추가.):
+만일 Apache-1.3.7 이후 버젼을 사용한다면 이미 필요한 expat library는 존재함을 명심하라. 단지 PHP를 --with-xml (without any additional path)로 configure 함으로 Apache에 빌드된 expat library를 자동적으로 사용할 수 있다.
+UNIX에서는, --with-xml 옵션을 포함하여 configure 를 실행한다. 컴파일러가 찾을 수 있는 어딘가에 expat library는 설치될 것이다. 만일 Apache 1.3.9 이후 버젼에서 PHP가 모듈로 설치되어 있다면, 아파치에 포함된 expat library를 자동적으로 사용할 수 있다. 만일 expat이 컴파일러가 찾을 수 없는 곳에 설치되어 있다면 CPPFLAGS 와 LDFLAGS 를 configure 하기전에 설정할 필요가 있다.
+PHP를 설치했다. Tada! That should be it (^^).
+이 PHP extension 도구들은 James Clark's expat 을 지원한다. 이 도구는 XML 문서를 구문대로 분석한다.(하지만 그 유효성은 확이하지 않는다.) 이것은 PHP가 지원하는 세가지 source character encodings 을 지원한다.: US-ASCII, ISO-8859-1, UTF-8. 하지만, UTF-16 은 지원하지 않는다.
+이 extension은 create XML parsers 를 생성시키고 다른 XML 이벤트를 위한 handlers 를 정의한다. 각각의 XML parser는 또한 조정가능한 parameters 를 갖는다.
+XML event handlers defined are:
+표 1. Supported XML handlers
+The element handler functions may get their element names case-folded. Case-folding is defined by the XML standard as "a process applied to a sequence of characters, in which those identified as non-uppercase are replaced by their uppercase equivalents". In other words, when it comes to XML, case-folding simply means uppercasing.
+By default, all the element names that are passed to the handler functions are case-folded. This behaviour can be queried and controlled per XML parser with the xml_parser_get_option() and xml_parser_set_option() functions, respectively.
+The following constants are defined for XML error codes (as returned by xml_parse()):
+PHP's XML extension supports the Unicode character set through different character encoding s. There are two types of character encodings, source encoding and target encoding. PHP's internal representation of the document is always encoded with UTF-8.
+Source encoding is done when an XML document is parsed. Upon creating an XML parser, a source encoding can be specified (this encoding can not be changed later in the XML parser's lifetime). The supported source encodings are ISO-8859-1, US-ASCII and UTF-8. The former two are single-byte encodings, which means that each character is represented by a single byte. UTF-8 can encode characters composed by a variable number of bits (up to 21) in one to four bytes. The default source encoding used by PHP is ISO-8859-1.
+Target encoding is done when PHP passes data to XML handler functions. When an XML parser is created, the target encoding is set to the same as the source encoding, but this may be changed at any point. The target encoding will affect character data as well as tag names and processing instruction targets.
+If the XML parser encounters characters outside the range that its source encoding is capable of representing, it will return an error.
+If PHP encounters characters in the parsed XML document that can not be represented in the chosen target encoding, the problem characters will be "demoted". Currently, this means that such characters are replaced by a question mark.
+Here are some example PHP scripts parsing XML documents.
+This first example displays the stucture of the start elements in a document with indentation.
+예 1. Show XML Element Structure
+
+예 2. Map XML to HTML
+This example maps tags in an XML document directly to HTML tags. Elements not found in the "map array" are ignored. Of course, this example will only work with a specific XML document type.
+This example highlights XML code. It illustrates how to use an external entity reference handler to include and parse other documents, as well as how PIs can be processed, and a way of determining "trust" for PIs containing code.
+XML documents that can be used for this example are found below the example (xmltest.xml and xmltest2.xml.)
+
+예 3. External Entity Example
+
+예 4. xmltest.xml
+This file is included from xmltest.xml:
+예 5. xmltest2.xml

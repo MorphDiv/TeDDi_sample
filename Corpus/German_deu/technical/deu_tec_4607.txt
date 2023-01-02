@@ -1,0 +1,163 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+SESAM / SQL-Server ist ein von Fujitsu Siemens Computers in Deutschland entwickeltes Mainframe-Datenbanksystem für High-End Server mit dem Betriebssystem BS2000 / OSD.
+In zahlreichen BS2000-Installationen hat SESAM / SQL-Server unter Beweis gestellt:
+die einfach zu handhabende Unterstützung von Java-, Web - und Client-Server-Anwendungen
+eine Hochverfügbarkeit von mehr als 99,99%
+die Fähigkeit, bis zu mehrere hunderttausend Benutzer zu bedienen
+Mit einer PHP3 SESAM-Schnittstelle sind jetzt auch Datenbank-Operationen per PHP-scripts möglich.
+Konfigurationshinweise:
+Die PHP-SESAM-Schnittstelle muss als Modul in Apache integriert werden.
+Stand-alone-Betrieb ist nicht möglich.
+Im Apache-PHP-Modul ist die SESAM-Schnittstelle entsprechend den Apache-Vorschriften zu konfigurieren.
+Tabelle 1.
+SESAM-Konfigurationsvorschriften
+
+Bedeutung
+
+Beispiel:
+
+
+
+
+
+
+
+
+Zusätzlich zur PHP-SESAM-Schnittstelle muss natürlich die SESAM-Datenbank selbst auf dem BS2000-System installiert und konfiguriert werden:
+der SESAM database handler (DBH) muss gestartet sein
+die Datenbank und der DBH müssen verbunden sein
+Für eine Verbindung zwischen dem PHP script und dem DBH müssen die Parameter von CNF und NAM der SESAM-Konfiguration den Werten des im BS2000 gestarteten DBH ensprechen.
+Bei verteilten Datenbanken muss ein SESAM / SQL-DCN-Agent gestartet werden, dessen Konfigurationstabelle Host - und Datenbank-Namen enthält.
+Die Kommunication zwischen PHP im BS2000-Subsystem POSIX und dem DBH im BS2000 erfolgt über Zugriffe eines speziellen Treibermoduls (SQLSCI) und der SESAM-Anschlußmodule auf einen gemeinsamen Speicherbereich (common memory).
+Der common-memory-pool-Mechanismus und die Tatsache, dass PHP in den Webserver statisch eingebunden ist, machen die Datenbankzugriffe sehr schnell.
+Datenbankzugriffe über ODBC, JDBC or UTM sind nicht erforderlich.
+Nur ein kleines Lademodul (SESMOD) wird zum PHP gebunden, während die SESAM-Anschlußmodule aus der SESAM-OML (PLAM-Bibliothek) nachgeladen werden. library.
+In der PHP-Konfiguration ,muss diese SESAM-OML und der für die SESAM-Konfiguration erforderliche Linkname angegeben werden (SQLSCI ist wie in SESAM V3.0 in der Standard-SESAM-Toolbibliothek verfügbar).
+Wegen der SQL-Syntaxvorschriften für Anführungszeichen (doppelte Anführungszeichen statt AnfÜhrungszeichen mit vorangestelltem Gegenschrägstrich wie in manchen anderen Datenbanken) wird empfohlen, die PHP-Konfigurationsvorschriften php3_magic_quotes_gpc und php3_magic_quotes_sybase für alle SESAM betreffenden PHP-scripts auf On zu setzen.
+Überlegungen zur Ablaufzeit:
+Wegen der spezifischen Eigenschaften der BS2000-Prozeßsteuerung kann der Treiber erst nach dem fork des Apache-Servers für seine Sohn-Prozesse geladen werden.
+Der erste SESAM-Zugriff jedes dieser Prozesse wird dadurch etwas verlangsamt, alle weiteren Zugriffe werden jedoch ohne Beeinträchtigung abgearbeitet.
+Ein explizit definierter SESAM-Meldungskatalog wird bei jedem Laden des Treibers (d.h. beim ersten SESAM-Zugriff) geladen.
+BS2000 erzeugt nach dem erfolgreichen Laden dieses Katalogs eine Meldung, die an die error_logfile von Apache geschickt wird.
+Da BS2000 z.
+Zt. ein Unterdrücken dieser Meldung nicht erlaubt, wird das logfile langsam damit vollgeschrieben.
+Bitte beachten: die SESAM-OML (PLAM-Bibliothek) und die SESAM-Konfigurationsdatei müssen für die Benutzerkennung, unter der der Webserver läuft, lesbar sein!
+Andernfalls kann der Server den Treiber nicht laden, womit die SESAM-Funktionen nicht zur Verfügung stehen.
+Auch der Zugriff die Datenbank selbst muss dem Server möglich sein, da sonst keine Verbindung zum DBH möglich ist.
+Cursor Typen:
+Die für SQL-Abfragen "select type" zugewiesenen Ergebniscursor können "sequential "oder "scrollable" sein, Standardwert ist wegen des geringeren Speicherbedarfs "sequential "
+"Scrollable" Cursors können im Ausgabedatensatz beliebig positioniert werden.
+Für jede "scrollable" Abfrage gibt es globale Standardwerte für den Scroll-Typ (initialisiert zu:
+SESAM_SEEK_NEXT) und der Scrolling-Abstand, der entweder einmal mit: sesam_seek_row() oder jedesmal beim Lesen einer Zeile mit: sesam_fetch_row() gesetzt werden kann.
+Die folgende Tabelle zeigt die Behandlung der globalen Stadtardwerte für Scroll-Typ und Scroll-Abstand beim Lesen einer Zeile mit "scrollable" Cursor:
+Tabelle 2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bemerkungen zur Portierung:
+Da in PHP Indizes üblicherweise mit NULL gestartet werden, musste die SESAM-Schnittstelle entsprechend adaptiert werden: während in der "normalen" SESAM-Schnittstelle ein Array mit Index 1 beginnt, wird in PHP NULL als Startpunkt verwendet - z.B. hat beim Lesen von Spalten mit sesam_fetch_row() die erste Spalte den Index 0 und the folgenden Spalten haben Indizes bis zu (aber nicht einschließlich!) dem Spaltenindex ($array["count"]).
+Beim Portieren von SESAM-Anwendungen aus aus anderen höheren Programmiersprachen nach PHP ist diese Schnittstellenänderung zu beachten.
+Wo es erforderlich ist, beinhaltet die jeweilige PHP-SESAM-Funktion einen Hinweis auf die mit NULL beginnende Indizierung.
+Sicherheitsaspekte:
+Beim Zugriff auf SESAM-Datenbanken sollte der normale Benutzer eines Web-Servers nur die allernötigsten Privilegien bekommen.
+Im allgemeinen sollte auf Datenbanken nur lesender Zugriff möglich sein.
+Weitergehende Rechte sollten - nur falls wirklich erforderlich - abhängig vom jeweiligen Einsatzfall eingerichtet werden.
+Auf keinen Fall sollte man beliebigen Benutzern im Internet volle Zugriffsrechte auf eine Datenbank gewähren!
+Der Zugriff auf PHP-scripts für die Datenbank-Administration sollte in jedem Fall per Passwort und / oder durch SSL-Verbindung geschützt sein.
+Migration von anderen SQL-Datenbanken:
+Unterschiedliche SQL-Ausprägungen sind nie 100-prozentig kompatibel.
+Bei der Portierung von SQL-Anwendungen anderer Datenbanken nach SESAM können daher Anpassungen erforderlich sein.
+Auf folgende, typische Unterschiede sei besonders hingewiesen:
+Herstellerspezifische Datentypen
+Manche herstellerspezifischen Datentypen müssen u.U. durch Standard-SQL-Typen ersetzt werden, wie z.B.
+TEXT in VARCHAR( max. size).
+Schlüsselwörter als SQL-Bezeichner
+In SESAM müssen Schlüsselwörter in Anführungsstrichen (???) angegeben werden (SQL-Standard) Schlüssel.
+Länge der Anzeige in Datentypen
+Datentypen in SESAM sind nicht durch Längenangabe, sondern durch ihre Genauigkeit spezifiziert.
+Statt int( 4) für ganze Zahlen bis '9999 'braucht SESAM lediglich int für eine implizite Länge von 31 Bit.
+Als Datentypen für Datum und Zeit gibt es in SESAM nur:
+DATE, TIME( 3) und TIMESTAMP(3).
+SQL-Datentypen mit herstellerspezifischen Attributen der Form: unsigned, zerofill, oder auto_increment attributes
+Unsigned und zerofill werden nicht unterstützt.
+Um die SESAM-implizite automatische Erhöhung zu nutzen, gibt es anstelle von "... VALUES(0,...)"
+
+
+Numerische Variablen dürfen nicht mit Zeichenkonstanten initialisiert werden.
+Statt dessen ist DEFAULT 0 zu verwenden.
+Dem Initialisierungs-string für Variablen des SQL-Datentyps datetime muss das jeweilige Schlüsselwort als Prefix vorangestellt werden wie in CREATE TABLE exmpl (xtime timestamp(3) DEFAULT TIMESTAMP '1970-01-01 00:00:00.000 'NOT NULL);
+
+Manche Datenbanken liefern die geschätzte / erratene Anzahl von Ausgabezeilen als Abfrageresultat an, obwohl der gelieferte Wert grob falsch ist.
+SESAM kennt die Anzahl von Ausgabezeilen erst, wenn sie tatsächlich gelesen wurden.
+Falls diese Information TATSÄCHLICH benötigt wird, sollte man SELECT COUNT(...) WHERE..., versuchen.
+Diese Funktion ermittelt die Anzahl der Treffer.
+Ein zweiter Aufruf liefert (hoffentlich) die eigentlichen Ergebnisse.
+
+In SESAM muss im Kommamdo DROP TABLE der Name entweder um die Schlüsselwörter RESTRICT oder CASCADE ergänzt werden.
+Bei der Angabe von RESTRICT wird ein Fehler gemeldet, wenn abhängige Objekte (z.B.
+VIEWs) existieren, während bei CASCADE abhängige Objekte zusammen (???) mit der definierten Tabelle gelöscht werden.
+Bemerkungen zu weiteren SQL-Datentypen:
+SESAM unterstützt z.Zt. keine Daten von Typ BLOB.
+Für zukünftige SESAM-Versionen ist diese Unterstützung geplant.
+Bei SQL-Abfragen werden von der PHP-Schnittstelle folgende Datentypen automatisch konvertiert:
+Tabelle 3.
+
+
+
+
+"integer"
+
+"double"
+
+"string"
+
+"string"
+Unterstützung der SESAM-Features "multiple fields":
+Diese spezielle SESAM-Funktion erlaubt die Definiton von Spalten als Feld-Array.
+Eine "multiple field" Spalte wird wie folgt definiert:
+Beispiel 1.
+
+
+Beispiel 2.
+
+INSERT INTO multi_field_test (pkey, multi(2..3)) VALUES ('Second', 'first_val' ,'second_val ')
+Bei der Ausgabe von Ergebniszeilen wird auf "multiple columns" wie auf "inlined "zusätzliche Spalten zugegriffen.
+Im obigen Beispiel bekommt "pkey" den Indexwert NULL und auf die drei Spalten "multi(1..3) "kann mit den Indizes 1 bis 3 zugegriffen werden.
+SESAM-spezifische Details sind in den Handbüchern the SESAM / SQL-Server documentation (english) oder the SESAM / SQL-Server documentation (german) beschrieben.
+Beide Manuale sind online abrufbar und stehen in gedruckter Form zur Verfügung.
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

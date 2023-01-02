@@ -1,0 +1,56 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+When PHP parses a file, it simply passes the text of the file through until it encounters one of the special tags which tell it to start interpreting the text as PHP code.
+The parser then executes all the code it finds, up until it runs into a PHP closing tag, which tells the parser to just start passing the text through again.
+This is the mechanism which allows you to embed PHP code inside HTML: everything outside the PHP tags is left utterly alone, while everything inside is parsed as code.
+There are four sets of tags which can be used to denote blocks of PHP code.
+Of these, only two (?php...? and script language="php "... / script) are always available; the others can be turned on or off from the php.ini Of these, only two (?php...? and script language="php"... / script) are always available; the others can be turned on or off from the php.ini configuration file.
+While the short-form tags and ASP-style tags may be convenient, they are not as portable as the longer versions.
+Also, if you intend to embed PHP code in XML or XHTML, you will need to use the ?php...? form to conform to the XML.
+The tags supported by PHP are:
+Example 6-1.
+Ways of escaping from HTML
+1. ?php echo( "if you want to serve XHTML or XML documents, do like this\n");?
+2.? echo ("this is the simplest, an SGML processing instruction\n");? ?= expression?
+This is a shortcut for "? echo expression?" 3. script language="php "echo ("some editors (like FrontPage) don't like processing instructions"); / script 4.% echo ("You may optionally use ASP-style tags");% %= $variable; # This is a shortcut for"% echo... "%
+The first way, ?php...?, is the preferred method, as it allows the use of PHP in XML-conformant code such as XHTML.
+The second way is not available always.
+Short tags are available only when they have been enabled.
+This can be done via the short_tags() function (PHP 3 only), by enabling the short_open_tag configuration setting in the PHP config file, or by compiling PHP with the --enable-short-tags option to configure.
+Even if it is enabled by default in php.ini-dist, use of short tags are discouraged.
+The fourth way is only available if ASP-style tags have been enabled using the asp_tags configuration setting.
+Note:
+Support for ASP-style tags was added in 3.0.4.
+Note:
+Using short tags should be avoided when developing applications or libraries that are meant for redistribution, or deployment on PHP servers which are not under your control, because short tags may not be supported on the target server.
+For portable, redistributable code, be sure not to use short tags.
+The closing tag for the block will include the immediately trailing newline if one is present.
+Also, the closing tag automatically implies a semicolon; you do not need to have a semicolon terminating the last line of a PHP block.
+PHP allows you to use structures like this:
+Example 6-2.
+Advanced escaping
+?php if ($expression) {? strong This is true. / strong ?php} else {? strong This is false. / strong ?php}?
+Prev
+Home
+Next
+Language Reference
+Up
+Instruction separation

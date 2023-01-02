@@ -1,0 +1,36 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+ocinewdescriptor() alloue l 'espace nécessaire pour stocker un descripteur, ou un pointeur de LOB.
+Les valeurs acceptées pour type sont oci_D_FILE, oci_D_LOB et oci_D_ROWID.
+Exemple 1. ocinewdescriptor
+?php / * Ce script est fait pour être appelé dans un formulaire HTML * Il attends les variables $user, $password, $table, $where, et $commitsize * Le script efface alors les lignes sélectionnées avec ROWID et valide * l'effacement après chaque groupe de $commitsize lignes. * (Utilisez avec prudence, car il n'y a pas d'annulation possible). * / $conn = ociLogon($user, $password); $stmt = ociparse($conn ,"select rowid from $table $where"); $rowid = ociNewDescriptor($conn,oci_D_ROWID); ociDefineByName($stmt ,"ROWID", $rowid); ociexecute($stmt); while (ociFetch($stmt)) {$nrows = ociRowCount($stmt); $delete = ociparse($conn ,"delete from $table where ROWID = :rid"); ociBindByName($delete ,":rid", $rowid,-1,oci_B_ROWID); ociexecute($delete); print "$nrows\n"; if (($nrows% $commitsize) == 0) {ociCommit($conn);}} $nrows = ociRowCount($stmt); print "$nrows effacées...\n"; ociFreeStatement($stmt); ociLogoff($conn);?
+?php / * Ce script est fait pour être appelé depuis un formulaire HTML. * Il attends les variables $user, $password, $table, $where, et $commitsize, * données par le formulaire.
+Le script efface * les lignes sélectionnées avec ROWID est valide les transactions * à chaque jeu de $commitsize lignes. (Attention: il n'y plus d'annulation) * / if(!isset($lob_upload) | | $lob_upload == 'none') {? form action="upload.php3 "method="post" enctype="multipart / form-data "Upload file: input type="file" name="lob_upload "br input type="submit" value="Upload "- input type="reset" / form ?php} else {/ / $lob_upload contains the temporary filename of the uploaded file $conn = ociLogon($user, $password); $lob = ociNewDescriptor($conn, oci_D_LOB); $stmt = ociparse($conn ,"insert into $table (id, the_blob) values(my_seq.NEXTVAL, EMPTY_BLOB()) returning the_blob into :the_blob"); ociBindByName($stmt, ':the_blob', $lob, -1, oci_B_BLOB); ociexecute($stmt, oci_DEFAULT); if($lob - savefile($lob_upload)) {ociCommit($conn); echo "Blob sauvé!\n"; }else {echo "Impossible de sauver le Blob\n";} ociFreeDescriptor($lob); ociFreeStatement($stmt); ociLogoff($conn);}?
+Exemple 2.
+Exemple avec ocinewdescriptor()
+?php / * Appel d'une procédure PL / SQL stockée qui prend un clobs * en entrée (PHP 4 = 4.0.6). * Exemple de signateure de procédure stockée PL / SQL: * * PROCEDURE save_data * Nom de l'argument Type In / Out Default? * ----------------------------- - ---------------------- - ----- - ------- - * KEY NUMBER(38) IN * DATA CLOB IN * * / $conn = OCILogon($user, $password); $stmt = OCIParse($conn, "begin save_data(:key, :data); end ;"); $clob = OCINewDescriptor($conn, OCI_D_LOB); OCIBindByName($stmt, ':key', $key); OCIBindByName($stmt, ':data', $clob, -1, OCI_B_CLOB); $clob - WriteTemporary($data); OCIExecute($stmt, OCI_DEFAULT); OCICommit($conn); $clob - close(); $clob - free(); OCIFreeStatement($stmt);?
+Précédent
+Sommaire
+Suivant
+ociNewCursor
+Niveau supérieur
+ociNLogon

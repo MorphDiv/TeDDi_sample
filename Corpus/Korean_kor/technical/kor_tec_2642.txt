@@ -1,0 +1,104 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# iso639_3:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+There are many languages in which all characters can be expressed by single byte. Multi-byte character codes are used to express many characters for many languages. mbstring is developed to handle Japanese characters. However, many mbstring functions are able to handle character encoding other than Japanese.
+A multi-byte character encoding represents single character with consecutive bytes. Some character encoding has shift(escape) sequences to start/end multi-byte character strings. Therefore, a multi-byte character string may be destroyed when it is divided and/or counted unless multi-byte character encoding safe method is used. This module provides multi-byte character safe string functions and other utility functions such as conversion functions.
+Since PHP is basically designed for ISO-8859-1, some multi-byte character encoding does not work well with PHP. Therefore, it is important to set mbstring.internal_encoding to a character encoding that works with PHP.
+
+
+
+
+
+These are examples of internal character encoding that works with PHP and does NOT work with PHP.
+Character encoding, that does not work with PHP, may be converted with mbstring 's HTTP input/output conversion feature/function.
+참고: SJIS should not be used for internal encoding unless the reader is familiar with parser/compiler, character encoding and character encoding issues.
+참고: If you use databases with PHP, it is recommended that you use the same character encoding for both database and internal encoding for ease of use and better performance.
+If you are using PostgreSQL, it supports character encoding that is different from backend character encoding. See the PostgreSQL manual for details.
+mbstring is an extended module. You must enable the module with the configure script. Refer to the Install section for details.
+The following configure options are related to the mbstring module.
+
+--enable-mbstring: Enable mbstring functions. This option is required to use mbstring functions.
+참고: As of PHP 4.3.0, the option --enable-mbstring will be enabled by default and replaced with --with-mbstring[=LANG] to support Chinese, Korean and Russian language support. Japanese character encoding is supported by default. If --with-mbstring=cn is used, simplified chinese encoding will be supported. If --with-mbstring=tw is used, traditional chinese encoding will be supported. If --with-mbstring=kr is used, korean encoding will be supported. If --with-mbstring=ru is used, russian encoding will be supported. If --with-mbstring=all is added, all supported character encoding in mbstring will be enabled, but the binary size of PHP will be maximized because of huge Unicode character maps. Note that Chinese, Korean and Russian encoding is experimentally supported in PHP 4.3.0.
+--enable-mbstr-enc-trans: Enable HTTP input character encoding conversion using mbstring conversion engine. If this feature is enabled, HTTP input character encoding may be converted to mbstring.internal_encoding automatically.
+참고: As of PHP 4.3.0, the option --enable-mbstr-enc-trans will be eliminated and replaced with mbstring.encoding_translation. HTTP input character encoding conversion is enabled when this is set to On (the default is Off).
+--enable-mbregex: Enable regular expression functions with multibyte character support.
+The behaviour of these functions is affected by settings in php.ini.
+
+표 1. Multi-Byte String configuration options
+Here is a short explanation of the configuration directives.
+mbstring.language defines default language used in mbstring. Note that this option defines mbstring.interanl_encoding and mbstring.interanl_encoding should be placed after mbstring.language in php.ini
+mbstring.encoding_translation enables HTTP input character encoding detection and translation into internal chatacter encoding.
+mbstring.internal_encoding defines default internal character encoding.
+mbstring.http_input defines default HTTP input character encoding.
+mbstring.http_output defines default HTTP output character encoding.
+mbstring.detect_order defines default character code detection order. See also mb_detect_order().
+mbstring.substitute_character defines character to substitute for invalid character encoding.
+mbstring.func_overload overload(replace) single byte functions by mbstring functions. mail(), ereg(), etc. are overloaded by mb_send_mail(), mb_ereg(), etc. Possible values are 0, 1, 2, 4 or a combination of them. For example, 7 for overload everything. 0: No overload, 1: Overload mail() function, 2: Overload str*() functions, 4: Overload ereg*() functions.
+Web Browsers are supposed to use the same character encoding when submitting form. However, browsers may not use the same character encoding. See mb_http_input() to detect character encoding used by browsers.
+If enctype is set to multipart/form-data in HTML forms, mbstring does not convert character encoding in POST data. The user must convert them in the script, if conversion is needed.
+Although, browsers are smart enough to detect character encoding in HTML. charset is better to be set in HTTP header. Change default_charset according to character encoding.
+
+예 1. php.ini setting example
+
+예 2. php.ini setting for EUC-JP users
+
+예 3. php.ini setting for SJIS users
+This extension has no resource types defined.
+The constants below are defined by this extension, and will only be available when the extension has either been compiled into PHP or dynamically loaded at runtime.
+
+
+
+HTTP input/output character encoding conversion may convert binary data also. Users are supposed to control character encoding conversion if binary data is used for HTTP input/output.
+If enctype for HTML form is set to multipart/form-data, mbstring does not convert character encoding in POST data. If it is the case, strings are needed to be converted to internal character encoding.
+
+
+There is no way to control HTTP input character conversion from PHP script. To disable HTTP input character conversion, it has to be done in php.ini.
+예 4. Disable HTTP input conversion in php.ini
+When using PHP as an Apache module, it is possible to override PHP ini setting per Virtual Host in httpd.conf or per directory with .htaccess. Refer to the Configuration section and Apache Manual for details.
+
+There are several ways to enable output character encoding conversion. One is using php.ini, another is using ob_start() with mb_output_handler() as ob_start callback function.
+참고: For PHP3-i18n users, mbstring 's output conversion differs from PHP3-i18n. Character encoding is converted using output buffer.
+
+예 5. php.ini setting example
+
+예 6. Script example
+Currently, the following character encoding is supported by the mbstring module. Character encoding may be specified for mbstring functions' encoding parameter.
+The following character encoding is supported in this PHP extension:
+UCS-4, UCS-4BE, UCS-4LE, UCS-2, UCS-2BE, UCS-2LE, UTF-32, UTF-32BE, UTF-32LE, UCS-2LE, UTF-16, UTF-16BE, UTF-16LE, UTF-8, UTF-7, ASCII, EUC-JP, SJIS, eucJP-win, SJIS-win, ISO-2022-JP, JIS, ISO-8859-1, ISO-8859-2, ISO-8859-3, ISO-8859-4, ISO-8859-5, ISO-8859-6, ISO-8859-7, ISO-8859-8, ISO-8859-9, ISO-8859-10, ISO-8859-13, ISO-8859-14, ISO-8859-15, byte2be, byte2le, byte4be, byte4le, BASE64, 7bit, 8bit and UTF7-IMAP.
+As of PHP 4.3.0, the following character encoding support will be added experimentaly: EUC-CN, CP936, HZ, EUC-TW, CP950, BIG-5, EUC-KR, UHC (CP949), ISO-2022-KR, Windows-1251 (CP1251), Windows-1252 (CP1252), CP866, KOI8-R.
+php.ini entry, which accepts encoding name, accepts "auto" and "pass" also. mbstring functions, which accepts encoding name, and accepts "auto ".
+If "pass" is set, no character encoding conversion is performed.
+If "auto" is set, it is expanded to "ASCII,JIS,UTF-8,EUC-JP,SJIS ".
+See also mb_detect_order()
+참고: "Supported character encoding" does not mean that it works as internal character code.
+Because almost PHP application written for language using single-byte character encoding, there are some difficulties for multibyte string handling including japanese. Almost PHP string functions such as substr() do not support multibyte string.
+Multibyte extension (mbstring) has some PHP string functions with multibyte support (ex. substr() supports mb_substr()).
+Multibyte extension (mbstring) also supports 'function overloading' to add multibyte string functionality without code modification. Using function overloading, some PHP string functions will be oveloaded multibyte string functions. For example, mb_substr() is called instead of substr() if function overloading is enabled. Function overload makes easy to port application supporting only single-byte encoding for multibyte application.
+mbstring.func_overload in php.ini should be set some positive value to use function overloading. The value should specify the category of overloading functions, sbould be set 1 to enable mail function overloading. 2 to enable string functions, 4 to regular expression functions. For example, if is set for 7, mail, strings, regex functions should be overloaded. The list of overloaded functions are shown in below.
+표 2. Functions to be overloaded
+Most Japanese characters need more than 1 byte per character. In addition, several character encoding schemas are used under a Japanese environment. There are EUC-JP, Shift_JIS(SJIS) and ISO-2022-JP(JIS) character encoding. As Unicode becomes popular, UTF-8 is used also. To develop Web applications for a Japanese environment, it is important to use the character set for the task in hand, whether HTTP input/output, RDBMS and E-mail.
+
+
+A multi-byte character is usually twice of the width compared to single-byte characters. Wider characters are called "zen-kaku" - meaning full width, narrower characters are called "han-kaku" - meaning half width. "zen-kaku" characters are usually fixed width.
+Some character encoding defines shift(escape) sequence for entering/exiting multi-byte character strings.
+ISO-2022-JP must be used for SMTP/NNTP.
+"i-mode" web site is supposed to use SJIS.
+Multi-byte character encoding and its related issues are very complex. It is impossible to cover in sufficient detail here. Please refer to the following URLs and other resources for further readings.
+Unicode/UTF/UCS/etc
+http://www.unicode.org/
+Japanese/Korean/Chinese character information
+ftp://ftp.ora.com/pub/examples/nutshell/ujip/doc/cjk.inf

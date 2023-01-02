@@ -1,0 +1,158 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+Hyperwave ha sido desarrollado en el IICM en Graz.
+Comenzó con el nombre Hyper-G y cambió a Hyperwave cuando fue comercializado (Si lo recuerdo bien, fue en 1996).
+Hyperwave no es software gratuiro.
+La versión actual, 4.1, está disponible en www.hyperwave.com.
+Se puede solicitar gratuitamente una versión limitada (30 días).
+Hyperwave es un sistema de información similar a una base de datos (HIS, Hyperwave Information Server - Servidor Hyperwave de Información).
+Su objetivo es el almacenamiento y manipulación de documentos.
+Un documento puede ser cualquier bloque posible de datos que también puede ser almacenado en un archivo.
+Cada documento se acompaña por su registro de objeto.
+El registro de objeto contiene metadatos para el documento.
+Los metadatos son una lista de atributos que pueden ser extendidos por el usuario.
+Ciertos atributos siempre son fijados por el servidor Hyperwave, otros pueden ser modificados por el usuario.
+Un atributo es un par nombre / valor de la forma nombre=valor.
+El registro completo del objeto tiene tantos de estos pares como guste el usuario.
+El nombre de un atributo no tiene porqué ser único, p. ej. un título puede aparecer varias veces en el registro de un objeto.
+Esto tiene sentido si se desea especificar un título en diferentes idiomas.
+En dicho caso existe la convención de que cada valor de título esté precedido por la abreviatura de dos letras del idioma, seguida por dos puntos, como p. ej. 'en:Title in English' o 'es:Título en Español '.
+Otros atributos tales como descripciones o palabras clave son canditatos potenciales a esta diferenciación.
+También se pueden reemplazar las abreviaturas de idioma por cualquier otra cadena siempre y cuando estén separadas por los dos puntos del resto del valor del atributo.
+Cada registro de objeto tiene una representación nativa como cadena con cada par nombre / valor separado por una línea nueva.
+La extensión Hyperwave también conoce una segunda representación que consiste en un array asociativo donde el nombre del atributo es la clave.
+Los valores de atributo multilingües en sí mismos forman otro array asociativo donde la clave es la abreviatura del idioma.
+Realmente cualquier atributo múltiple forma una tabla asociativa donde la cadena a la izquierda de los dos puntos en el valor de atributo es la clave. (Esto no se ha implementado por completo.
+Sólo los atributos Title, Description y Keyword son tratados adecuadamente.)
+Aparte de los documentos, todos los hiper-enlaces contenidos en un documento son almacenados también como registros de objeto.
+Cuando el documento sea insertado en la base de datos, los hiper-enlaces que haya en un documento serán borrados del mismo y almacenados como objetos individuales.
+El registro de objeto del enlace contiene información acerca de dónde comienza y dónde termina.
+Para recuperar el documento original se deberá recuperar el documento sin los enlaces y la lista de los mismos para reinsertarla (Las funciones hw_pipedocument() y hw_gettext() hacen esto para usted).
+La ventaja de separar los enlaces del documento es obvia.
+Una vez un documento al que apunta un enlace cambia de nombre, el enlace puede modificarse fácilmente.
+El documento que contiene el enlace no se ve afectado.
+Incluso se puede añadir un enlace a un documento sin alterarlo.
+Decir que hw_pipedocument() y hw_gettext() hacen automáticamente la inserción de enlaces no es tan simple como suena.
+Insertar los enlaces implica una cierta jerarquía en los documentos.
+En un servidor web esto viene dado por el sistema de archivos, pero el Hyperwave tiene su propia jerarquía y los nombres no representan la posición de un objeto en dicha jerarquía.
+Por tanto, la creación de los enlaces precisa primeramente de realizar un mapeado entre el espacio de nombres y la jerarquía del Hyperwave y el espacio de nombres respectivo de una jerarquía de web.
+La diferencia fundamental entre Hyperwave y la web es la distinción clara entre nombres y jerarquía que se da en el primero.
+El nombre no contiene ninguna información sobre la posición del objeto en la jerarquía.
+En la web, el nombre también contiene la información sobre la posición en la jerarquía del objeto.
+Esto nos lleva a dos posibles formas de mapeo.
+O bien se reflejan la jerarquía del Hyperwave y el nombre del objeto Hyperwave en el URL o sólo el nombre.
+Para facilitar las cosas, se utiliza el segundo método.
+El objeto Hyperwave de nombre 'mi_objeto' es mapeado a 'http: / /host / mi_objeto 'sin importar dónde reside dentro de la jerarquía de Hyperwave.
+Un objeto con el nombre 'padre / mi_objeto' podría ser el hijo de 'mi_objeto 'en la jerarquía Hyperwave, aunque en el espacio de nombres web aparezca justamente lo opuesto y el usuario pueda ser llevado a confusión.
+Esto sólo se puede evitar seleccionando nombres de objetos razonables.
+Hecha esta decisión surge un segundo problema. ¿Cómo implicar al PHP? el URL http: / /host / mi_objeto no llamará a ningún script PHP a no ser que se le diga al servidor que lo transforme en p. ej. 'http: / /host / script_php3 / mi_objeto' y que el 'script_php3 'luego evalúe la variable $PATH_INFO y recupere el objeto con nombre 'mi_objeto' del servidor Hyperwave.
+Hay sólo un pequeño inconveniente que se puede resolver fácilmente.
+Cuando se reescribe cualquier URL no se permite el acceso a ningún otro documento en el servidor web.
+Un script de PHP para buscar en el servidor Hyperwave sería imposible.
+Por lo tanto se necesitará al menos una segunda regla de reescritura para que excluya ciertos URL, como los que empiecen p. ej. por http: / /host / Hyperwave.
+Básicamente esto sería compartir un espacio de nombres entre el servidor web y el servidor Hyperwave.
+Los enlaces se insertan en los documentos basándose en el mecanismo citado más arriba.
+Se vuelve más complicado si el PHP no se está ejecutando como módulo del servidor o como script CGI, sino que se ejecuta como aplicación, p. ej. para volcar el contenido del servidor de Hyperwave a un CD-ROM.
+En dicho caso tiene sentido mantener la jerarquía Hyperwave y mapearla en el sistema de archivos.
+Esto entra conflicto con los nombres de los objetos si estos reflejan su propia jerarquía (p. ej. eligiendo nombres que comienzan por '/').
+Por tanto, la '/' tendrá que ser reemplazada por otro carácter, p. ej. '_ 'para continuar.
+El protocolo de red para comunicarse con el servidor Hyperwave se denomina HG-CSP (Hyper-G Client / Server Protocol, Protocolo Hyper-G Cliente / Servidor).
+Está basado en mensajes que inician ciertas acciones, p. ej. obtener el registro de un objeto.
+En versiones anteriores del Servidor Hyperwave se distribuyeron dos clientes nativos (Harmony, Amadeus) para la comunicación con el servidor.
+Ambos desaparecieron cuando se comercializó el Hyperwave.
+Para sustituírlo se proporcionó el llamado wavemaster.
+El wavemaster es como un conversor de protocolo de HTTP a HG-CSP.
+La idea es realizar toda la administración de la base de datos y la visualización de documentos con una interfaz web.
+El wavemaster implementa una serie de posicionadores para acciones que permiten personalizar la interfaz.
+Dicho conjunto de posicionadores se denomina el Lenguaje PLACE.
+El PLACE no posee muchas de las características de un lenguaje de programación real y las extensiones al mismo únicamente alargan la lista de posicionadores.
+Esto ha obligado al uso de JavaScript que, en mi opinión, no hace la vida más fácil.
+Añadir soporte de Hyperwave al PHP rellenaría el espacio que deja la falta de un lenguaje de programación que permita personalizar la interfaz.
+El PHP implementa todos los mensajes definidos en el HG-CSP pero además proporciona comandos más poderosos, p. ej. recuperar documentos completos.
+El Hyperwave tiene su propia terminología para dar nombre a ciertos tipos de información.
+Esta ha sido ampliamente extendida y anulada.
+Casi todas las funciones operan en uno de los siguientes tipos de datos.
+ID de objeto:
+Un valor entero único paara cada objeto del servidor Hyperwave.
+También es uno de los atributos del registro de objeto (ObjectID).
+Los ID de objeto se usan generalmente como parámetros de entrada que especifican a un objeto.
+registro de objeto:
+Una cadena con pares atributo-valor con la forma atributo=valos.
+Los pares están separados unos de otros por un retorno de carro.
+Un registro de objeto puede convertirse fácilmente en una tabla (array) de objetos usando hw_object2array().
+Varias funciones devuelven registros de objeto.
+Los nombres de dichas funciones terminan en obj.
+tabla de objetos:
+Una tabla asociativa con todos los atributos de un objeto.
+La clave es el nombre del atributo.
+Si un atributo aparece más de una vez en un registro de objeto será convertido en otra tabla asociativa o indizada.
+Los atributos que dependen del idioma (como el título, claves o descripción) se convertirán en una tabla asociativa con la abreviatura del idioma como clave.
+El resto de los atributos múltiples crearán una tabla indizada.
+Las funciones de PHP nunca devuelven tablas de objetos.
+
+Este es un nuevo tipo de datos que almacena el documento actual, p. ej.
+HTML, PDF, etc.
+Está algo optimizado para documentos HTML pero puede usarse para cualquier formato.
+Varias funciones que devuelven una tabla de registros de objeto también devuelven una tabla asociativa con información estadística sobre los mismos.
+La tabla es el último elemento del registro de objeto.
+La tabla estadística contiene los siguientes elementos:
+Número de registros de objeto con el atributo PresentationHints puesto a Hidden.
+Número de registros de objeto con el atributo PresentationHints puesto a CollectionHead.
+Número de registros de objeto con el atributo PresentationHints puesto a FullCollectionHead.
+Índice a una tabla de regitros de objeto con el atributo PresentationHints puesto a CollectionHead.
+Índice a una tabla de regitros de objeto con el atributo PresentationHints puesto a FullCollectionHead.
+
+Número de registros de objeto.
+La extensión Hyperwave se utiliza mejor cuando el PHP se compila como un módulo de Apache.
+En tal caso el servidor Hyperwave subyacente puede ser ocultado casi por completo de los usuarios si el Apache utiliza su motor de re-escritura.
+Las siguientes instrucciones explicarán esto.
+Como el PHP con soporte Hyperwave incluído en el Apache se ha diseñado para sustituir la solución nativa de Hyperwave basada en Wavemaster, asumiré que el servidor Apache sólo sirve como interfaz web para el Hyperwave.
+Esto no es necesario, pero simplifica la configuración.
+El concepto es bastante sencillo.
+Primeramente necesita un script PHP que evalúe la variable PATH_INFO y que trate su valor como el nombre de un objeto Hyperwave.
+Llamemos a este script 'Hyperwave'.
+El URL http: / /nombre.servidor / Hyperwave / nombre_de_objeto El URL http: / /nombre.servidor / Hyperwave / nombre_de_objeto devolvería entonces el objeto Hyperwave llamado 'nombre_de_objeto'.
+Dependiendo del tipo del objeto, así reaccionará el script.
+Si es una colección, probablemente devolverá un lista de hijos.
+Si es un documento devolverá el tipo MIME y el contenido.
+Se puede mejorar ligeramente si se usa el motor de re-escritura del Apache.
+Desde el punto de vista del usuario será más sencillo si el URL http: / /nombre.servidor / nombre de objeto devuelve el objeto.
+La regla de reescritura es muy sencilla:
+
+
+
+para devolver el script en sí
+para permitir las búsquedas
+para identificarse
+para ajustar su perfil
+uno para cada función adicional como mostrar los atributos del objeto, mostrar información sobre usuarios, mostrar el estado del servidor, etc.
+Aún hay varias cosas pendientes:
+hw_InsertDocument debe dividirse en hw_InsertObject() y hw_PutDocument().
+Los nombres de algunas funciones aún no están fijados.
+Muchas funciones precisan la conexión actual como primer parámetro.
+Esto obliga a escribir mucho, lo cual no es con frecuencia necesario si sólo hay una conexión abierta.
+Una conexión por defecto mejoraría esto.
+La conversión de registro de objeto a tabla de objeto necesita manipular cualquier atributo múltiple.
+Anterior
+Inicio
+Siguiente
+
+Subir

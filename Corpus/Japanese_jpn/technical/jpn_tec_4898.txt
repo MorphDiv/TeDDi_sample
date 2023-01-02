@@ -1,0 +1,55 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+以下の関数は、エラー処理およびログ記録を行います。これらの関数によ り、独自のエラー処理規則を定義することが可能になり、同時にエラーの ログを記録する方法を修正することが可能になります。これにより、ニー ズに即したエラー出力の変更と拡張が可能になります。
+ログ記録関数により他のマシンやemail(またはポケベルのゲートウエイ に!)、システムログ等に直接メッセージを送信することが可能になります。 これにより、ログを行うものを選択したり、アプリケーションやWebサイ トに最も重要な部分をモニタすることが可能になります。
+エラー出力関数により、エラーのフィードバックのレベルと種類、 簡単な通知からカスタマイズされた関数までエラーの際に返すもの をカスタマイズすることが可能になります。
+これらの関数は、標準モジュールの一部と して利用可能であり、常に使用できます。
+これらの関数はPHPコアに含まれるため、使用す る際にインストールは不要です。
+これらの関数の動作は、 php.ini の設定により変化します。
+
+表 1エラーおよびロギング設定オプション
+以下に設定ディレクティブの簡単な説明を示します。
+エラー出力レベルを設定します。パラメータは、あるビットフィールドを表 す整数か定数名で指定します。このerror_reportingのレベルと定数は、 定義済の定数 および php.ini に記述されています。 実行時に設定するには、 error_reporting() 関数を指定して下さい。 display_errors ディレ クティブも参照して下さい。
+PHP 4のデフォルトの設定では、 E_NOTICE レベル のエラーは出力されません。開発時にはこのエラーを表示させたい場合 もあるかもしれません。
+注意 開発時に E_NOTICE を有効にすることにはいくつ かの利点があります。デバッグのために、NOTICE メッセージはコード の中のバグの可能性について警告を与えます。例えば、代入されていな い値を使用した場合は、警告を発生します。 これは、書き間違いを見付け、デバッグの時間を節約するために非常 に有用です。NOTICEメッセージは、好ましくないコードに警告します。 例えば、$arr[item] は $arr['item'] と書く方が好ましいです。 これは、PHPが"item"を定数として取り扱うためです。 定数でない場合、PHPは配列の添字ようの文字列と判断します。
+PHP 3では、 (E_ERROR | E_WARNING | E_PARSE) が デフォルトの設定で、同じことを意味しました。しかし、PHP 3の php3.ini では定数がサポートされていないため、 error_reportingの設定は数値で指定する必要があり、この場合は、 7 とします。
+エラーをHTML出力の一部として画面に出力するかどうかを定義します。
+display_errorsをonにした場合でも、PHPの起動シーケンスにおいて発 生したエラーは表示されません。デバッグ時を除き、 display_startup_errorsをoffにしておくことが強く推奨されます。
+エラーメッセージを、サーバーのエラーログまたは error_log に記録するかどうかを指定 します。このオプションはサーバーに依存します。
+注意 実用Webサイトではエラー表示を行う変わりにエラーを記録することを 強く推奨します。
+log_errorsの最大長をキロバイト単位で設定します。 error_log には、 この設定で情報が追加されます。デフォルトは1024で、0を指定すると 最大長の制限は全く適用されなくなります。
+繰り返されるメッセージを記録しません。エラーの繰り返しは、 ignore_repeated_source が trueに設定されるまで同じファイルの同じ行で発生します。
+メッセージの繰り返しを無視する場合にメッセージのソースを無視しま す。この設定をOnにすると、異なるファイルまたはソース行からの同じ エラーメッセージの繰り返しを記録しなくなります。
+このパラメータをOffにした場合、(stdoutまたはログに)メモリーリー クは表示されなくなります。これは、デバッグ用コンパイル時に error_reporting で E_WARNINGを有効にしている場合のみ有効です。
+有効にした場合、直近のエラーメッセージが、 $php_errormsg 変 数に常に代入されます。
+エラーメッセージのHTMLタグをオフにします。htmlエラー用の新しい形 式では、ユーザがエラーまたはエラーを発生した関数を説明するページ に導くようクリック可能なメッセージを出力します。これらのリファレ ンスは、 docref_root およ び docref_ext の設定に依存 します。
+The new error format contains a reference to a page describing the error or function in causing the error. In case of manual pages you can download the manual in your language and set this ini directive to the url of your local copy. If your local copy of the manual can be reached by '/manual/' you can simply use docref_root=/manual/. Additional you have to set docref_ext to match the fileextensions of your copy docref_ext=.html. It is possible to use external references. For example you can use docref_root=http://manual/en/ or docref_root="http://landonize.it/?how=url theme=classic filter=Landon url=http%3A%2F%2Fwww.php.net%2F"
+Most of the time you want the docref_root value to end with a slash '/'. But see the second example above which does not have nor need it.
+docref_root を参照して下さ い。
+注意 docref_extの値はドット '.'で始まる必要があります。
+エラーメッセージの前に出力する文字列。
+エラーメッセージの後に出力する文字列。
+Name of the file where script errors should be logged. If the special value syslog is used, the errors are sent to the system logger instead. On UNIX, this means syslog(3) and on Windows NT it means the event log. The system logger is not supported on Windows 95. See also: syslog().
+有効な場合、このオプションは加算演算子( +) が文字列で使用されている場合に警告を出力します。 これにより、文字列結合演算子(. )を用いて書き直 す必要があるスクリプトを見付けることが容易になります。
+この一覧にある定数は、PHPコアに含まれており常に利用可能です。
+注意 以下の定数を php.ini で使用することができますが、 httpd.conf のようなPHPの外部では、 代わりにビットマスク値を使用する必要があります。
+表 2エラーとロギング
+The above values (either numerical or symbolic) are used to build up a bitmask that specifies which errors to report. You can use the bitwise operators to combine these values or mask out certain types of errors. Note that only '|', '~', '!', and '' will be understood within php.ini, however, and that no bitwise operators will be understood within php3.ini.
+エラー処理機能をPHPで使用するための例を示します。ファイルに(XML形式 で)情報を記録し、論理的に致命的なエラーの場合開発者に電子メールを送 信するようなエラー処理関数を定義します。
+例 1スクリプト内でのエラー処理
+syslog() も参照して下さい。

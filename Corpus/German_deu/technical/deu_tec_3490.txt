@@ -1,0 +1,38 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+Gibt TRUE zurück, wenn die Datei filename mittels HTTP POST upgeloaded wurde.
+Das ist hilfreich sicherzustellen, dass kein böswilliger User versucht hat das Script zu überlisten, indem er es Dateien bearbeiten lässt, die es gar nicht bearbeiten sollte.
+Zum Beispiel / etc / passwd.
+Diese Prüfung ist speziell dort interessant, wo irgendeine Aktion mit upgeloadeten Dateien deren Inhalt dem User zugänglich machen könnte (oder auch anderen Usern auf dem selben System).
+is_uploaded_file() ist in PHP 3 nur nach Version 3.0.16, und in PHP 4 nur nach Version 4.0.2 verfügbar.
+Sollten Sie eine frühere Version benutzen, können Sie sich mit der folgenden Funktion weiterhelfen:
+Anmerkung:
+Das folgende Beispiel funktioniert nicht in Versionen nach PHP 4.0.2.
+Das liegt an der internen Funktionalität von PHP, welche sich nach dieser Version geändert hat.
+?php / * Userland Test für hochgeladene Datei. * / function is_uploaded_file( $filename) {if (!$tmp_file = get_cfg_var('upload_tmp_dir')) {$tmp_file = dirname(tempnam('', ''));} $tmp_file .= '/'. basename($filename); / * Der Benutzer könnte einen führenden Slash in php.ini haben... * / return (ereg_replace(' / +', '/', $tmp_file) == $filename);} / * So verwenden Sie sie, nachdem Sie in diesen älteren * Versionen auch keine move_uploaded_file() haben: * / if (is_uploaded_file($HTTP_POST_FILES['userfile'])) {copy($HTTP_POST_FILES['userfile'], "/ place / to / put / uploaded / file");} else {echo "Mögliche Dateiupload-Attacke:
+Dateiname '$HTTP_POST_FILES[userfile]' .";}?
+Siehe auch move_uploaded_file(), und das Kapitel Steuerung von Dateiuploads für ein einfaches Anwendungsbeispiel.
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

@@ -1,0 +1,46 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Chapitre 14.
+Les classes et les objets
+Suivant
+
+En PHP 3, les objets perdent leur association de classe à travers le processus de sauvegarde et relecture.
+Le type de la variable après relecture est bien objet mais il n 'a plus de méthode ou de nom de classe.
+Cela rend la focntionnalité plutôt inutile (l'objet est devenu un tableau avec une syntaxe étrange).
+Attention
+La documentation suivante n 'est valable que pour PHP 4.
+serialize() retourne une chaîne représentant une valeur qui peut être stockée dans les sessions de PHP, ou une base de données. unserialize() peut relire cette chaîne pour recréer la valeur originale. serialize() va sauver toutes les variables d 'un objet.
+Le nom de la classe sera sauvé mais par les méthodes de cet objet.
+Pour permettre à unserialize() de lire un objet, la classe de cet objet doit être définie.
+C'est-à-dire, si vous avez un objet $a de la classe A dans une page php1.php, et que vous le linéarisez avec serialize(), vous obtiendrez une chaîne qui fait référence à la classe A, et contient toutes les valeurs de $a.
+Pour pouvoir le relire avec la fonction unserialize() dans une page page2.php, il faut que la définition de la classe A soit présente dans cette deuxième page.
+Cela peut se faire de manière pratique en sauvant la définition de la classe A dans un fichier séparé, et en l 'incluant dans les deux pages page1.php et page2.php.
+?php classa.inc: class A {var $one = 1; function show_one() {echo $this - one;}}? page1.php: ?php include("classa.inc"); $a = new A; $s = serialize($a); / / enregistrez $s où la page2.php pourra le trouver. $fp = fopen("store", "w"); fputs($fp, $s); fclose($fp);? page2.php: ?php / / Ceci est nécessaire pour que unserialize() fonctionne correctement include("classa.inc"); $s = implode("", @file("store")); unserialize($s); / / maintenant, utilisez la méthode show_one de l'objet $a. $a - show_one();?
+Si vous utilisez les sessions et la fonction session_register() pour sauver des objets, ces objets seront linéarisés automatiquement avec la fonction serialize() à la fin de chaque script, et relus avec unserialize() au début du prochain script.
+Cela signifie que ces objets peuvent apparaître dans n 'importe quelle page qui utilise vos sessions.
+Il est vivement recommandé d'inclure la définition de classe dans toutes vos pages, même si vous n 'utilisez pas ces classes dans toutes vos pages.
+Si vous l'oubliez et qu 'un tel objet est présent, il perdra sa classe, et deviendra un objet de classe stdClass sans aucune fonction, et donc, plutôt inutile.
+Si, dans l'exemple ci-dessus, $a devient un objet de session avec l'utilisation de session_register("a"), vous devez pensez à inclure le fichier classa.inc dans toutes vos pages, et pas seulement page1.php et page2.php.
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur
+Les fonctions magiques __sleep et __wakeup

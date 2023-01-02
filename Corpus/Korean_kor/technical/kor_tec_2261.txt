@@ -1,0 +1,84 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# iso639_3:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 4 = 4.0.5)
+This function is EXPERIMENTAL. The behaviour of this function, the name of this function, and anything else documented about this function may change without notice in a future release of PHP. Use this function at your own risk.
+swfaction() creates a new Action, and compiles the given script into an SWFAction object.
+The script syntax is based on the C language, but with a lot taken out- the SWF bytecode machine is just too simpleminded to do a lot of things we might like. For instance, we can't implement function calls without a tremendous amount of hackery because the jump bytecode has a hardcoded offset value. No pushing your calling address to the stack and returning- every function would have to know exactly where to return to.
+So what's left? The compiler recognises the following tokens:
+
+
+
+
+
+
+
+There is no typed data; all values in the SWF action machine are stored as strings. The following functions can be used in expressions:
+Returns the number of milliseconds (?) elapsed since the movie started.
+Returns a pseudo-random number in the range 0-seed.
+Returns the length of the given expression.
+Returns the given number rounded down to the nearest integer.
+Returns the concatenation of the given expressions.
+
+
+Returns the substring of length length at location location of the given string string.
+Additionally, the following commands may be used:
+Duplicate the named movie clip (aka sprite). The new movie clip has name name and is at depth depth.
+Removes the named movie clip.
+Write the given expression to the trace log. Doubtful that the browser plugin does anything with this.
+Start dragging the movie clip target. The lock argument indicates whether to lock the mouse (?)- use 0 (FALSE) or 1 (TRUE). Optional parameters define a bounding area for the dragging.
+Stop dragging my heart around. And this movie clip, too.
+Call the named frame as a function.
+Load the given URL into the named target. The target argument corresponds to HTML document targets (such as "_top" or "_blank"). The optional method argument can be POST or GET if you want to submit variables back to the server.
+Load the given URL into the named target. The target argument can be a frame name (I think), or one of the magical values "_level0" (replaces current movie) or "_level1" (loads new movie on top of current movie).
+Go to the next frame.
+Go to the last (or, rather, previous) frame.
+Start playing the movie.
+Stop playing the movie.
+Toggle between high and low quality.
+Stop playing all sounds.
+Go to frame number num. Frame numbers start at 0.
+Go to the frame named name. Which does a lot of good, since I haven't added frame labels yet.
+Sets the context for action. Or so they say- I really have no idea what this does.
+Movie clips (all together now- aka sprites) have properties. You can read all of them (or can you?), you can set some of them, and here they are:
+
+
+
+
+currentFrame - (read-only)
+totalFrames - (read-only)
+
+visible - 1=on, 0=off (?)
+width - (read-only)
+height - (read-only)
+
+target - (read-only) (???)
+framesLoaded - (read-only)
+
+dropTarget - (read-only) (???)
+url - (read-only) (???)
+highQuality - 1=high, 0=low (?)
+focusRect - (???)
+soundBufTime - (???)
+This simple example will move the red square across the window.
+예 1. swfaction() example
+This simple example tracks down your mouse on the screen.
+예 2. swfaction() example
+Same as above, but with nice colored balls...
+예 3. swfaction() example
+This simple example will handles keyboard actions. (You'll probably have to click in the window to give it focus. And you'll probably have to leave your mouse in the frame, too. If you know how to give buttons focus programatically, feel free to share, won't you?)
+예 4. swfaction() example

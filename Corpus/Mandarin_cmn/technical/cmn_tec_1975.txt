@@ -1,0 +1,63 @@
+# language_name_wals:	Mandarin
+# language_name_glotto:	Mandarin Chinese
+# iso639_3:	cmn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hans
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/zh_CN.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+处理空白单元格
+/text/scalc/05/empty_cells.xhp
+空白单元格; 处理
+i86303
+处理空白单元格
+从 OpenOffice.org 3.0 和 StarSuite 9 开始，对空白单元格的处理发生了变化。
+在以前的版本中，空白单元格在某些上下文中强制为 0，在另一些地方强制为空字符串，但在直接比较中有例外情况，如果 A1 为空，那么 =A1=0 和 =A1= &quot; &quot; 的结果都是 TRUE。空值一直延续到对该值的调用才发生改变，所以当 lookup 的结果是返回一个空单元格时就有 =VLOOKUP(...)=0 和 =VLOOKUP(...)= &quot; &quot; 的值是 TRUE。
+对一个空白单元格的简单引用仍显示为数字 0，但不再必须为数字类型。因此，与引用单元格的比较如所期望的那样。
+对于以下示例，A1 包含一个数字，B1 为空，C1 包含对 B1 的引用：
+A1:
+1 B1: < empty > C1: =B1（显示 0）
+=B1=0 = > TRUE
+=B1= &quot; &quot; = > TRUE
+=C1=0 = > TRUE
+=C1= &quot; &quot; = > TRUE（之前为 FALSE）
+=ISNUMBER(B1) = > FALSE
+=ISNUMBER(C1) = > FALSE（之前为 TRUE）
+=ISNUMBER(VLOOKUP(1;A1:C1;2)) = > FALSE (B1)
+=ISNUMBER(VLOOKUP(1;A1:C1;3)) = > FALSE（C1，之前为 TRUE）。
+=ISTEXT(B1) = > FALSE
+=ISTEXT(C1) = > FALSE
+=ISTEXT(VLOOKUP(1;A1:C1;2)) = > FALSE（B1，之前为 TRUE）
+=ISTEXT(VLOOKUP(1;A1:C1;3)) = > FALSE (C1)
+=ISBLANK(B1) = > TRUE
+=ISBLANK(C1) = > FALSE
+=ISBLANK(VLOOKUP(1;A1:C1;2)) = > TRUE（B1，之前为 FALSE）
+=ISBLANK(VLOOKUP(1;A1:C1;3)) = > FALSE (C1)
+请注意，在 Microsoft Excel 中的处理方式有所不同，它总是返回一个数字作为对一个空白单元格或者返回值是空白单元格的公式的引用结果。例如：
+A1: < empty >
+B1: =A1 = > 显示 0，但只是对一个空白单元格的引用
+=ISNUMBER(A1) = > FALSE
+=ISTEXT(A1) = > FALSE
+=A1=0 = > TRUE
+=A1= &quot; &quot; = > TRUE
+=ISNUMBER(B1) = > FALSE (MS-Excel:
+TRUE)
+=ISTEXT(B1) = > FALSE
+=B1=0 = > TRUE
+=B1= &quot; &quot; = > TRUE (MS-Excel:
+FALSE)
+C1: =VLOOKUP(...) 含有空白单元格结果 = > 显示为空（MS-Excel: 显示 0）
+=ISNUMBER(VLOOKUP(...)) = > FALSE
+=ISTEXT(VLOOKUP(...)) = > FALSE
+=ISNUMBER(C1) = > FALSE (MS-Excel:
+TRUE)
+=ISTEXT(C1) = > FALSE

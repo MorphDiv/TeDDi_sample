@@ -1,0 +1,59 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 4 = 4.0.5)
+udm_add_search_limit() returns TRUE on success, FALSE on error.
+Adds search restrictions.
+agent - a link to Agent, received after call to udm_alloc_agent().
+var - defines parameter, indicating limit.
+val - defines value of the current parameter.
+Possible var values:
+UDM_LIMIT_URL - defines document URL limitations to limit search through subsection of database.
+It supports SQL% and _ LIKE wildcards, where% matches any number of characters, even zero characters, and _ matches exactly one character.
+E.g. http: / /my.domain.__ / catalog may stand for http: / /my.domain.ru / catalog and http: / /my.domain.ua / catalog.
+UDM_LIMIT_TAG - defines site TAG limitations.
+In indexer-conf you can assign specific TAGs to various sites and parts of a site.
+Tags in mnoGoSearch 3.1.x are lines, that may contain metasymbols% and _.
+Metasymbols allow searching among groups of tags.
+E.g. there are links with tags ABCD and ABCE, and search restriction is by ABC_ - the search will be made among both of the tags.
+UDM_LIMIT_LANG - defines document language limitations.
+UDM_LIMIT_CAT - defines document category limitations.
+Categories are similar to tag feature, but nested.
+So you can have one category inside another and so on.
+You have to use two characters for each level.
+Use a hex number going from 0-F or a 36 base number going from 0-Z.
+Therefore a top-level category like 'Auto' would be 01.
+If it has a subcategory like 'Ford', then it would be 01 (the parent category) and then'Ford' which we will give 01.
+Put those together and you get 0101.
+If 'Auto' had another subcategory named'VW', then it's id would be 01 because it belongs to the'Ford 'category and then 02 because it's the next category.
+So it 's id would be 0102.
+If VW had a sub category called 'Engine' then it's id would start at 01 again and it would get the'VW 'id 02 and'Auto' id of 01, making it 010201.
+If you want to search for sites under that category then you pass it cat=010201 in the url.
+UDM_LIMIT_DATE - defines limitation by date document was modified.
+Format of parameter value: a string with first character or, then with no space - date in unixtime format, for example:
+Udm_Add_Search_Limit( $udm,UDM_LIMIT_DATE, "908012006");
+If character is used, then search will be restricted to those documents having modification date greater than entered.
+If, then smaller.
+Prev
+Home
+Next
+mnoGoSearch Functions
+Up
+udm_alloc_agent

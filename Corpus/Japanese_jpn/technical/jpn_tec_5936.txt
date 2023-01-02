@@ -1,0 +1,58 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+& kde; の設定
+& kde; で使用する言語はどのように設定すればよいですか？
+& kde; で使用する言語を設定するには二つの方法があります:
+kde; システム設定を使用する
+kde; システム設定を起動し、 国と言語内の 国と言語を選択します。ここで言語と地域を設定することができます。もし & kde; が、選択した言語の訳を発見できなければ、デフォルトの言語を代わりに使用します。通常、デフォルトの言語はアメリカ英語です。
+& kde; で言語を設定する場合は、 kde; システム設定を使うことが望ましいです。
+環境変数 KDE_LANGを使用する
+二つ目の方法は、システムの標準的な地域設定を使います。環境変数 KDE_LANGに言語をセットしてください。例えば、使用する言語をドイツ語にセットする場合、使用しているシェルが bashなら、 export KDE_LANG=deを実行します。
+& kde; にはキーボードの配列を変更する機能はありますか？
+はい。 kde; システム設定を起動し、 国と言語内の キーボード配列で設定することができます。
+標準のテキストログインを & kde; ログインスクリーンで置き換えるには、どのようにすればよいですか？
+& UNIX; のディストリビューションによっては、SuSE; & Linux; の YaSTのような設定ツールが付属している場合があります。これを使用して変更することができるのであれば、これを使うべきです。もし何らかの事情で使えないのであれば、以下の説明が役に立つかもしれません。
+はじめに、 /etc/inittabを編集しデフォルトのランレベルをグラフィカルログインのランレベル (RedHat; や & SuSE; では 5) にします。まず、ファイル中の id:3:initdefault:を id:5:initdefault:に修正します。そして、 x:5:respawn:/usr/bin/X11/xdm -nodaemonの行をコメントアウトし、次の行に x:5:respawn: /opt/kde/bin/kdm -nodaemonを追加します。
+& kdm; のパスは環境によって異なります。
+& kde; ログインスクリーンが起動できるか確かめるために、シェル上で init 5を実行してください。(RedHat; の場合)
+正常に起動できるか確認せずにグラフィカルログインを使い始めることは危険です。もし起動できなければ、あなたは困難に直面することになるでしょう...
+FreeBSD の場合、 /etc/ttysを編集する必要があります。ファイル中の ttyv8 "/usr/X11R6/bin/xdm -nodaemon" xterm off secureのような行を ttyv8 "/usr/local/bin/kdm -nodaemon" xterm off secureに置き換えてください。
+& kde; のテーマに関する情報はどこで見つけられますか？
+http://www.kde-look.orgで、KDE の様々なテーマや外観に関するリソースを探すことができます。
+& MIME; タイプを変更するにはどのようにすればよいですか？
+& konqueror; を使っているのであれば、このようにしてください。まず、konqueror; を起動し 設定 Konqueror を設定 を選び、 ファイルの関連付けを選択してください。ここで、変更したいタイプ (text/englishや image/gifなど) を見つけてアプリケーションを設定してください。
+& kde; (kdm;) が .bash_profileを読み込んでくれません！
+ログインマネージャの xdmや & kdm; はログインシェルを使わないため、 .profileや .bash_profileなどが実行されません。ユーザがログインするときに xdmは、 Xstartupを root 権限で、 Xsessionをユーザ権限で実行します。なので、一般的にユーザプロファイルは Xsessionへ書き込むことになっています。そのため、 Xsessionや .Xsessionを使用してください。
+& kde; で & TrueType; フォントを使うにはどのようにすればよいですか？
+& X-Window; に & TrueType; フォントサポートを適用する必要があります。フォントに関する情報は x.themes.org、 xfsft (X11 向け & TrueType; フォントサポート)、 X-TrueType; サーバプロジェクトのホームページを参照してください。
+もし、Microsoft; & Windows; に & TrueType; フォントがたくさんあるのであれば、フォントフォルダからフォントを使うために XF86Configを編集してください。そしてフォント管理ツールを使って、kde; でフォントが使えるように設定してください。
+& kde; でユーロ記号を使うことは可能ですか？
+場合によります。詳しくは http://www.koffice.org/kword/euro.phpを参照してください。
+& kde; の起動時にプログラムを実行するにはどのようにすればよいですか？
+様々な方法があります。例えば、環境設定をセットするスクリプトを実行したいのであれば (gpg-agentや ssh-agentを実行するためのものなど)、 $KDEHOME/env/にスクリプトを入れることができます。スクリプトの拡張子は .shにしてください。$ KDEHOMEは通常、 ~/.kde/になっています。また、スクリプトをすべての & kde; ユーザに実行させたいのであれば、 $KDEDIR/env/以下にスクリプトを入れてください。$ KDEDIRは、kde; がインストールされたパス (kde-config--prefixで確認できます) にセットされています。
+& kde; の起動後にスクリプトを実行したいのであれば、 Autostartフォルダを利用してください。 Autostartへ追加する方法:
+& konqueror; を起動します。
+場所ツールバーに、 Autostartへのパスを入力し移動します。( Autostartのパスは kde-config--userpath autostartで確認できます)
+ビュー上で右クリックし、 新規作成 アプリケーションへのリンク を選択します。
+表示されたウィンドウの アプリケーションタブをクリックし、 コマンド欄に実行したいコマンドを入力してください。
+「ユーザ切り替え機能」のように、二人以上のユーザが一度にログインするにはどのようにすればよいですか？
+二人以上のユーザが一度にログインできるようにするためには、複数のセッション (X-Window; では 「ディスプレイ」) を使うことができるプログラムを設定する必要があります。
+& kde; では、このプログラムを & kdm; (「kde; ディスプレイマネージャ」の略) といいます。もし、ログインスクリーンに & kdm; を使っていないのなら複数のセッションを使う方法を調べる必要があります。
+& kdm; がシステム上で仮想ターミナルをサポートするのであれば (現時点では Linux のみ)、デフォルトでインストール時に自動で設定されます。もし設定されていないのであれば、kdm; のマニュアル内の S pecifying permanent & X-Server;s (常設の X サーバを指定する)を参照し てください。kdmrc を修正した後は、 killall -HUP kdmを実行して変更を適用してください。
+デスクトップ上でクリックをすると、どこでも Kメニューを表示できるように設定したいです。
+訳注: このドキュメントの原文は & kde; 3 向けの内容になっているため、kde; 4 には当てはまらない点が多くあります。この項目も & kde; 3 向けに、kde; コントロールセンターを使用した方法が書かれていますが、kde; 4.0.1 の時点ではまだ実装されていないためご了承ください。 kde; コントロールセンターを起動し、 デスクトップ 挙動 を選択してください。このページでデスクトップ上でのマウスの作用を設定できます。左クリックで Kメニューを開くために、左ボタンの項目をアプリケーションメニューに変更してください。

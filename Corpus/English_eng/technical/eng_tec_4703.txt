@@ -1,0 +1,106 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3, PHP 4)
+setcookie() defines a cookie to be sent along with the rest of the HTTP headers.
+Like other headers, cookies must be sent before any output from your script (this is a protocol restriction).
+This requires that you place calls to this function prior to any output, including html and head tags as well as any whitespace.
+If output exists prior to calling this function, setcookie() will fail and return FALSE.
+If setcookie() successfully runs, it will return TRUE.
+This does not indicate whether the user accepted the cookie.
+All the arguments except the name argument are optional.
+If only the name argument is present, the cookie by that name will be deleted from the remote client.
+You may also replace an argument with an empty string ("") in order to skip that argument.
+Because the expire and secure arguments are integers, they cannot be skipped with an empty string, use a zero (0) instead.
+The following table explains each parameter of the setcookie() function, be sure to read the Netscape cookie specification for specifics.
+Table 1. setcookie() parameters explained
+Parameter
+Description
+Examples
+name
+The name of the cookie.
+'cookiename' is called as $_COOKIE['cookiename']
+value
+The value of the cookie.
+This value is stored on the clients computer; do not store sensitive information.
+Assuming the name is' cookiename', this value is retrieved through $_COOKIE['cookiename']
+expire
+The time the cookie expires.
+This is a unix timestamp so is in number of seconds since the epoch.
+In otherwords, you' ll most likely set this with the time() function plus the number of seconds before you want it to expire.
+Or you might use mktime().
+time( )+60*60*24*30 will set the cookie to expire in 30 days.
+If not set, the cookie will expire at the end of the session (when the browser closes).
+path
+The path on the server in which the cookie will be available on.
+If set to '/', the cookie will be available within the entire domain.
+If set to '/ foo /', the cookie will only be available within the / foo / directory and all sub-directories such as / foo / bar / of domain.
+The default value is the current directory that the cookie is being set in.
+domain
+The domain that the cookie is available.
+To make the cookie available on all subdomains of example.com then you' d set it to '.example.com '.
+The. is not required but makes it compatible with more browsers.
+Setting it to www.example.com will make the cookie only available in the www subdomain.
+Refer to tail matching in the spec for details.
+secure
+Indicates that the cookie should only be transmitted over a secure HTTPS connection.
+When set to 1, the cookie will only be set if a secure connection exists.
+The default is 0.
+0 or 1
+Once the cookies have been set, they can be accessed on the next page load with the $_COOKIE or $HTTP_COOKIE_VARS Once the cookies have been set, they can be accessed on the next page load with the $_COOKIE or $HTTP_COOKIE_VARS arrays.
+Note, autoglobals such as $_COOKIE became available in PHP 4.1.0. $HTTP_COOKIE_VARS has existed since PHP 3.
+Cookie values also exist in $_REQUEST.
+Note:
+If the PHP directive register_globals is set to on then cookie values will also be made into variables.
+In our examples below, $TextCookie will exist.
+It 's recommended to use $_COOKIE.
+Common Pitfalls:
+Cookies will not become visible until the next loading of a page that the cookie should be visible for.
+To test if a cookie was successfully set, check for the cookie on a next loading page before the cookie expires.
+Expire time is set via the expire parameter.
+A nice way to debug the existence of cookies is by simply calling print_r( $_COOKIE);.
+Cookies must be deleted with the same parameters as they were set with.
+Cookies names can be set as array names and will be available to your PHP scripts as arrays but seperate cookies are stored on the users system.
+Consider explode() or serialize() to set one cookie with multiple names and values.
+In PHP 3, multiple calls to setcookie() in the same script will be performed in reverse order.
+If you are trying to delete one cookie before inserting another you should put the insert before the delete.
+In PHP 4, multiple calls to setcookie() are performed in the order called.
+Some examples follow how to send cookies:
+Example 1. setcookie() send examples
+?php $value = 'something from somewhere'; setcookie ("TestCookie", $value); setcookie ("TestCookie", $value,time()+3600); / * expire in 1 hour * / setcookie ("TestCookie", $value,time()+3600, "/ ~rasmus /", ".example.com", 1);?
+Note that the value portion of the cookie will automatically be urlencoded when you send the cookie, and when it is received, it is automatically decoded and assigned to a variable by the same name as the cookie name.
+To see the contents of our test cookie in a script, simply use one of the following examples:
+?php / / Print an individual cookie echo $_COOKIE[ "TestCookie"]; echo $HTTP_COOKIE_VARS["TestCookie"]; / / Another way to debug / test is to view all cookies print_r($_COOKIE);?
+When deleting a cookie you should assure that the expiration date is in the past, to trigger the removal mechanism in your browser.
+Examples follow how to delete cookies sent in previous example:
+Example 2. setcookie() delete examples
+?php / / set the expiration date to one hour ago setcookie ("TestCookie", "", time() - 3600); setcookie ("TestCookie","", time() - 3600, "/ ~rasmus /", ".example.com", 1);?
+You may also set array cookies by using array notation in the cookie name.
+This has the effect of setting as many cookies as you have array elements, but when the cookie is received by your script, the values are all placed in an array with the cookie 's name:
+?php / / set the cookies setcookie ("cookie[three]", "cookiethree"); setcookie ("cookie[two]", "cookietwo"); setcookie ("cookie[one]", "cookieone"); / / after the page reloads, print them out if (isset($_COOKIE['cookie'])) {foreach ($_COOKIE['cookie'] as $name = $value) {echo "$name: $value br / \n";}} / * which prints three: cookiethree two: cookietwo one: cookieone * /?
+For more information on cookies, see Netscape 's cookie specification at http: / /www.netscape.com / newsref / std / cookie_spec.html.
+Microsoft Internet Explorer 4 with Service Pack 1 applied does not correctly deal with cookies that have their path parameter set.
+Netscape Communicator 4.05 and Microsoft Internet Explorer 3.x appear to handle cookies incorrectly when the path and time are not set.
+Prev
+Home
+Next
+headers_sent
+Up
+Hyperwave functions

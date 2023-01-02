@@ -1,0 +1,49 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Forms Data Format (FDF) est un format de fomulaire pour les documents PDF.
+Vous pouvez lire la documentation (en anglais) à http: / /partners.adobe.com / asn / developer / acrosdk / forms.html pour plus de détails sur les tenants et les aboutissants.
+
+Si vous rencontrez des problèmes de configuration de PHP avec le support fdftk, vérifiez bien que le fichier d 'en-têtes FdfTk.h et la librairie libFdfTk.so sont bien situés.
+Elle devrait être dans les dossiers fdftk-dir / include et fdftk-dir / lib.
+Cela ne sera pas le cas si vous avez simplement décompressé la distribution FdfTk.
+L 'esprit de FDF est similaire à celui des formulaires HTML.
+Les différences résident dans les moyens de transmission des données au serveur, lorsque le bouton "submit" (soumettre) est pressé (ce qui est du ressort de Form Data Format) et le format de formulaire lui-même (qui est plutôt du ressort de Portable Document Format, PDF).
+Gérer des données FDF est un des objectifs des fonctions FDF.
+Mais il y en a d 'autres.
+Vous pouvez aussi prendre un formulaire PDF, et pré-remplir les champs, sans modifier le formulaire lui-même.
+Dans ce cas, on va créer un document FDF (fdf_create()), remplir les champs (fdf_set_value()) et l'associer à un fichier PDF (fdf_set_file()).
+Finalement, le tout sera envoyé au client, avec le type MIME "application / vnd.fdf".
+Le module "Acrobat reader" de votre navigateur va reconnaître ce type MIME, et lire le fichier PDF, puis le remplis avec FDF.
+Si vous éditez un fichier FDF avec un éditeur de texte, vous trouverez un catalogue d 'objet avec le nom de FDF.
+Cet objet peut contenir des entrées telles que Fields, F, Status Cet objet peut contenir des entrées telles que Fields, F, Status etc..
+Les entrées les plus couramment utilisées sont Fields, qui indique une liste de champs de contrôle, et F qui contient le nom du fichier PDF a qui appartiennent ces données.
+Ces entrées sont désignées dans la documentation PDF sous le nom de / F-Key ou / Status-Key.
+La modification de ces entrées est possible avec les fonctions fdf_set_file() et fdf_set_status().
+Les champs sont modifiables avec les fonctions fdf_set_value(), fdf_set_opt() etc..
+Les exemples suivants montre comme évaluer les données du formulaire.
+Exemple 1.
+Evaluer un document FDF
+?php / / Sauver le fichier FDF dans un fichier temporaire. $fdffp = fopen( "test.fdf", "w"); fwrite($fdffp, $HTTP_FDF_DATA, strlen($HTTP_FDF_DATA)); fclose($fdffp); / / Ouvrir le fichier temporaire, et utiliser les données. / / Le formulaire pdf contenait différents fichiers texte, avec pour nom: / / volume, date, comment, publisher, preparer, ainsi que deux boîtes / / à cocher show_publisher et show_preparer. $fdf = fdf_open("test.fdf"); $volume = fdf_get_value($fdf, "volume"); echo "La valeur du champs volume était: 'B $volume / B' br "; $date = fdf_get_value($fdf, "date"); echo "La valeur du champs date était 'B $date / B' br"; $comment = fdf_get_value($fdf, "comment"); echo "La valeur du champs comment était 'B $comment / B' br "; if(fdf_get_value($fdf, "show_publisher") == "On") {$publisher = fdf_get_value($fdf, "publisher"); echo "La valeur du champs publisher était: 'B $publisher / B' br";} else echo "La valeur du champs ne doit pas être affichée. br "; if(fdf_get_value($fdf, "show_preparer") == "On") {$preparer = fdf_get_value($fdf, "preparer"); echo "La valeur du champs preparer était 'B $preparer / B' br";} else echo "La valeur du champs Preparer ne doit pas être affiché. br "; fdf_close($fdf);?
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

@@ -1,0 +1,119 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Guide des styles de fenêtre de discussion de & kopete;
+Référence des styles de fenêtre de discussion de & kopete;
+A partir de & kopete; 0.12, nous utilisons le format d 'Adium pour nos styles de fenêtre de discussion. Ce format est basé sur des modèles en HTML et CSS. Ils sont plus faciles à faire car il suffit de connaître HTML et CSS. De plus, les styles peuvent avoir plusieurs variantes (définies par des fichiers CSS) qui ajoutent plus de possibilités de personnalisation.
+Guide de référence.
+Le format d'Adium est consistué d'une structure de dossiers, de modèles HTML, de fichiers CSS et de mots clés qui seront remplacés chaque fois que le modèle est utilisé. La conversation finale est une page XHTML où les messages sont ajoutés par manipulations DOM. L'élément central est un élément div nommé Chat. Ce qui se trouve avant et après cet élément div sont les en-têtes/ pieds de page du modèle. Les messages sont fils de cet élément div nommé Chat.
+Structure de dossiers
+Un style doit respecter une structure de dossiers. Le code de & kopete; est pensé autour de cette structure. Pour archiver le style, vous devez archiver le dossier nomDuStyle. Cette structure est celle utilisée par les applications Mac OS X. Vous devez aussi respecter la casse décrite ici, car les systèmes UNIX en tiennent compte.
+styleName\\ (peut avoir l'extension. adiumMessageStyle, parce qu'elle est standard sous Mac OS X) Contents\\ Info. plist Resources\\ main. css Header. html Footer. html Status. html Incoming\\ (and Outgoing\\) Content. html NextContent. html (pour les messages consécutifs) Context. html (pour l'historique) NextContext. html Action. html Variants\\ *. css
+A propos du & lt; div id="insert"gt; lt; /divgt;
+C'est un élément div spécial utilisé en interne. Il désigne l'endroit où insérer le prochain message. Si c'est un nouveau message, il est supprimé et le nouveau message en prend la place. Mais si c'est un message consécutif, le div est remplace par le ceontenu du nouveau message. Cet élément div est obligatoire dans les modèles Content, Context, NextContent et NextContext (respectivement Contenu, Contexte, ContenuSuivant et ContexteSuivant). Il peut aussi se trouver dans les modèles Action et Status (Statut)
+Modèles HTML.
+Description des modèles.
+En-tête Header. html (Obligatoire)
+Utilisez le modèle Header pour afficher un en-tête sympa à la conversation. Ce modèle est inséré avant l'élément div Chat. Si vous ne l'utilisez pas, mettez un fichier vide.
+Pied de page Footer. html (Obligatoire)
+Même principe que pour l'en-tête, mais c'est pour le pied de page de la conversation. ce modèle est inséré après l'élément div Chat. Si vous ne l'utilisez pas, mettez un fichier vide.
+Statut Status. html (obligatoire)
+Ce modèle est utilisé pour afficher un message interne. On peut citer en exemple les changements de statut, ou les messages de Kopete comme les demandes de transferts de fichier. Il est aussi utilisé pour les messages d'action si le style ne fournit pas de modèle de type Action.
+Message entrant Incoming/ Content. html
+Message sortant Outgoing/ Content. html (Obligatoires)
+Ces modèles de contenus sont le coeur de ce thème. Pensez -y comme un bloc qui contiendra les messages... Assurez vous qu'il pourra recevoir des messages consécutifs, ne le faites pas dans le but d'afficher un seul message. Les messages consécutifs seront insérés dans l'élément div Insert.
+Message consécutif entrant Incoming/ NextContent. html
+Message consécutif sortant Outgoing/ NextContent. html (Obligatoires)
+Le modèle NextContent est la partie du thème pour les messages consécutifs. Il sera inséré dans le bloc du message. Le modèle HTML devrait contenir le strict minimum permettant d'afficher le message.
+Incoming/ Action. html
+Outgoing/ Action. html (Optionnel) (Extension de & kopete;)
+Ce modèle est une extension de & kopete; au format Adium. Elle est disponible en entrée comme en sortie. Les messages Action sont des messages speciaux disant qu'ils font une action. Exemple: "/ me installe & kopete;" serait affiché "DarkShock installe & kopete;".
+Incoming/ Context. html
+Incoming/ NextContext. html
+Outgoing/ Context. html
+Outgoing/ NextContext. html (Optionnel)
+Ces modèles ne sont pas utilisés par Kopete. Pour Adium, ils servent à l'affichage de l'historique. C'est à peu près le même principe que Content et NextContent mais avec quelques différences pour les distinguer des messages normaux.
+Concernant les styles CSS styles et les variantes
+Les modèles HTML sont utilisés pour définir la structure mais tout le style est décrit dans des fichiers CSS. Le fichier main. css est le style principal, alors que les variantes sont des altérations de ce style principal. On peut trouver dans les variantes par exemple des couleurs différentes ou le retrait des photos utilisateurs. Les lichiers main. css et celui de la variante sont importés dans la page XHTML finale.
+- main. css
+C'est le fichier CSS principal qui est commun à toutes les variantes. Ce fichier devrait contenir toutes la présentation du style.
+-Variantes
+Les variantes sont des fichiers CSS. Situés dans le dossier Variants/. Chaque variante est un fichier CSS incluant le fichier main. css altérant le style principal.
+Déboguer les styles
+Voici deux astuces pour tester un style pendant sa création.
+-Sauver un extrait d'une conversation.
+Dans la fenêtre de discussion, vous pouvez sauver une conversation. Vous aurez une copie de la page XHTML affichée. Ouvrez -la dans Konqueror pour tester votre fichier CSS.
+-Désactivez le cache des styles
+Un petit booléen extste dans la configuration pour désactiver le cache pour les styles. Une fois cette option activée, le modèle HTML est rechargé chaque fois que le style est demandé. Très utile pour tester un style pour & kopete;. Pour celà, ajoutez les lignes suivantes dans votre kopeterc
+[KopeteStyleDebug] disableStyleCache=true
+Référence des mots-clés
+Les mots-clés sont comme des trous à remplir avec les détails. A chaque message, Ils sont remplacés par leurs valeurs par rapport à leurs contexte. Pour récupérer toutes les fonctionnalités de Kopete, nous avons ajouté quelques mots-clés à ceux d'Adium. Quelques autres ne sont disponibles que dans un certains contexte.
+Liste des mots-clés pour les modèles d'en-têtes et de pieds de page.
+Ces mots-clés sont traités au début de la conversation.
+%chatName%
+C'est le nom de la conversation en cours. Typiquement, ce sera le nom du contact et son statut. Pour IRC, ce sera le sujet du canal.
+%sourceName%
+%destinationName%
+Ce sont les noms des contacts de cette conversation. %sourceName% est votre nom. %destinationName% est le nom du contact avec lequel vous discutez. Préférez %chatName% aux deux précédents, car ils pourraient être source de confusion dans le cas de discussions de groupe et pour IRC.
+%incomingIconPath%
+%outgoingIconPath%
+Ce sont les images/ photos/ avatars des contacts de la conversation. Incoming représente la photo du contact et Outgoing représente votre propre photo. Si il n'y a pas de photo disponible, l'image buddy_icon. png se trouvant dans les dossiers Incoming ou Outgoing.
+%timeOpened%
+%timeOpened{X}%
+C'est l'heure où la conversation a commencé. %timeOpened% utilisant le formatage par défaut. Si vous voulez préciser un format d'heure spécifique, utilisez le mot-clé %timeOpened{X}% où X est la chaîne de caractère contenant le format de l'heure. Les paramètres pour les heures sont les mêmes que pour la fonction strftime venant de la glibc. Lancez man strftime pour avoir la liste des différents paramètres.
+Liste des mots-clés pour les modèles Content, NextContent, Context, NextContext et Action
+Ces mots-clés sont traités à chaque message.
+%userIconPath%
+C'est l'image/ la photo/ l'avatar du contact associé au message. n'y a pas de photo disponible, l'image buddy_icon. png se trouvant dans les dossiers Incoming ou Outgoing suivant la direction du message.
+%senderScreenName%
+C'est l'identifiant du contact associé au message. Exemples: me@hotmail. com, 45566576, JohnSmith.
+%sender%
+C'est le nom d'affichage du contact (ou du MetaContact) associé au message.
+%service%
+Affichage du nom du service associé au message. Exemples: Jabber, Yahoo, MSN.
+%textbackgroundcolor{X}%
+Dans & kopete;, ce mot-clé représente la couleur d'arrière plan. Ignorez le paramètre entre accolades et n'utilisez le que sous la forme %textbackgroundcolor{}.
+%senderStatusIcon% (Extension de & kopete;)
+Affiche l'icone de statut du contact associé au message. C'est un chemin de fichier.
+%senderColor%
+%senderColor{N}% (Extension de & kopete;)
+Génère une couleur pour l'identifiant du contact expéditeur. Peut être utilisé pour avoir une autre couleur que le surnom du contact.
+%senderColor{N}% où N est un nombre positif. Si N est plus grand que 100, cela représente une couleur plus claire que la couleur du contact. Si N vaut 150 cela désignera une couleur qui sera 50% plus lumineuse. Si N est plus petit que 100, cela donnera donc une couleur plus foncée. Utile pour avoir une couleur d'arrière plan différente pour chaque contact.
+p. message {color: inherit; border-color: inherit;}
+Liste des mots-clés communs aux messages et à Status. html
+%message%
+Le message lui-même. C'est un morceau de HTML.
+%time%
+%time{X}%
+L'heure de réception du message. %time% utilise par défaut le format horaire local. Si vous voulez utiliser un format spécifique, utilisez %time{X}% où X est la chaîne de caractère contenant le format de l'heure. Les paramètres pour les heures sont les mêmes que pour la fonction strftime venant de la glibc. Lancez man strftime pour avoir la liste des différents paramètres.
+%messageDirection% (Extension de & kopete;)
+Représente le sens d'écriture, si le message doit être écrit de droite à gauche, ou de gauche à droite. Les valeurs sont respectivement "rtl" ou "ltr". Allez lire Message Direction guideline pour voir comment utiliser ce mot-clé correctement.
+Conseils à la création de styles de fenêtre de discussion de & kopete;
+Le guide à la création des styles de fenêtre de discussion de & kopete; est une liste de choses que votre style de fenêtre de discussion doit gérer pour être compatible avec Kopete
+Gérer la surbrillance
+Votre style doit gérer la surbrillance. Dans Kopete et Adium, le %textbackgroundcolor{}% est remplacé par la couleur de surbrillance. Ajoutez l'attribut de style: background-color: %textbackgroundcolor{}% à l'élément HTML qui affiche le message.
+Les modèles pour les messages consécutifs sont obligatoires.
+Ce conseil est destiné aux personnes qui réécrivent les anciens styles en XSL vers le nouveau format. Tous les styles doivent fournir un modèle pour les messages consécutifs. C'est maintenant une fonctionnalité standard.
+Utilisez l'encodage UTF-8.
+Tout est dit dans le titre. Vos fichiers doivent être enregistrés en UTF-8.
+Fournissez le fichier Contents/ Info. plist pour l'interopérabilité avec Adium
+Le fichier Contents/ Info. plist n'est pas encore utilisé par Kopete. Mais si vous voulez que votre style soit compatible avec Adium, vous devez fournir ce fichier. Voici un exemple basique pour ce fichier. Les chaines à remplacer sont entourées par des "$".
+<! [CDATA[< ?xml version="1.0" encoding="UTF-8"? > < !DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd" > CFBundleDevelopmentRegion English CFBundleGetInfoString $Your style full name$ CFBundleIdentifier $Your style ID in the form: com.adiumx.smooth.operator.style$ CFBundleInfoDictionaryVersion 1.0 CFBundleName $Your style name here$ CFBundlePackageType AdIM MessageViewVersion 3]] >
+Fournissez le fichier buddy_icon. png
+Vous devez mettre un fichier appelé buddy_icon. png dans les dossiers Incoming et Outgoing. Ces images seront utilisées quand le contact n'a pas de photo.
+Gérez l'écriture de droite à gauche avec le mot clé %messageDirection%.
+Le mot clé %messageDirection% existe pour les langues qui, à travers le monde, s'écrivent de droite à gauche. Il définit le sens d'écriture du message, "rtl"(right-to-left & #160;: droite à gauche) ou" ltr"(left-to-right & #160;: gauche à droite). Ajoutez cet attribut de style à l'élément HTML affichant le message: direction: %messageDirection%. L'apercu dans la section apparence de la configuration inclut une case à cocher permettant de vérifier si votre style s'affiche correctement. Cela devrait faire commencer les chaînes de caractères du coté droit.

@@ -1,0 +1,332 @@
+# language_name_wals:	Mandarin
+# language_name_glotto:	Mandarin Chinese
+# iso639_3:	cmn
+# year_composed:	NA
+# year_published:	2014
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hans
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/zh_CN.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Wylmer Wang <wantinghard\@gmail\.com>_
+external ref='figures/jhbuild_sample_dot_output.png' md5='af9fe7edb29fcaefeadfb2f5987aa6e4'
+JHBuild 手册
+
+
+
+
+
+
+
+介绍
+入门
+安装 JHBuild
+
+
+
+
+配置 JHBuild
+
+repos['git.gnome.org'] = 'ssh://
+
+
+
+
+
+
+构建前提条件
+
+使用 JHBuild
+
+
+
+
+
+
+
+
+
+
+
+JHBuild 和 GNOME
+构建 GNOME
+X 库
+运行单个 GNOME 应用程序
+
+
+运行应用程序：
+
+
+运行 GNOME 桌面环境
+
+测试 JHBuild 是否工作：
+
+设置 GNOME 从显示管理器运行
+构建和安装 JHBuild GNOME。
+
+#!/bin/sh
+
+GNOME=
+
+[Desktop Entry]
+Name=GNOME (JHBuild)
+Comment=This session logs you into GNOME testing session
+TryExec=/usr/bin/gnome-jhbuild-session
+Exec=/usr/bin/gnome-jhbuild-session
+Icon=
+Type=Application
+重新启动
+从显示管理器运行 GNOME
+Buildbot 集成
+配置 Buildbot Slave
+
+jhbuildbot_master = 'build.gnome.org:9070'
+jhbuildbot_slavename = 'slavename'
+jhbuildbot_password = 'password'
+命令参考
+
+
+
+
+autobuild
+
+
+
+bootstrap
+
+build
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+make
+
+buildone
+
+checkbranches
+
+
+
+clean
+
+dot
+
+
+或 PNG 图像：
+
+示例 JHBuild dot 输出
+gui
+
+info
+
+list
+
+
+
+
+rdepends
+
+
+
+run
+
+
+
+sanitycheck
+
+shell
+
+
+ if [ -n "$UNDER_JHBUILD" ]; then
+ PS1="[jhbuild] $PS1"
+ fi
+sysdeps
+
+
+
+
+tinderbox
+
+
+uninstall
+
+update
+
+updateone
+
+配置文件参考
+use_local_modulesets = True
+autogenargs = '--disable-static --disable-gtk-doc'
+skip = ['mozilla', 'pulseaudio']
+repos['git.gnome.org'] = 'ssh://username@git.gnome.org/git/'
+配置变量
+
+
+
+简单的例子
+branches['modulename'] = (None, 'branchname')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+其他配置文件结构
+
+os.environ['CFLAGS'] = '-O0 -g'
+
+
+模块集文件语法
+模块源
+&lt;repository name="
+&lt;branch
+ [ repo="
+其他属性描述如下
+Bazaar
+&lt;repository type="bzr" name="launchpad.net"
+ href="lp:"/gt;
+&lt;repository type="bzr" name="launchpad.net"
+ href="lp:"
+ trunk-template="~bzr-pqm/%(module)s/bzr.dev"
+ branches-template="~bzr-pqm/%(module)s/%(branch)s"/gt;
+&lt;branch repo="launchpad.net"
+ module="bzr"
+ checkoutdir="bzr-next"/gt;
+&lt;branch repo="launchpad.net"
+ module="bzr"
+ branch="2.2"
+ checkoutdir="bzr-beta"/gt;
+CVS
+&lt;repository type="cvs" name="tango.freedesktop.org"
+ cvsroot=":pserver:anoncvs@anoncvs.freedesktop.org:/cvs/tango"
+ password=""/gt;
+Darcs
+&lt;repository type="darcs" name="telepathy.freedesktop.org"
+ href="http://projects.collabora.co.uk/darcs/telepathy/"/gt;
+Git
+&lt;repository type="git" name="git.freedesktop.org"
+ href="git://anongit.freedesktop.org/git/"/gt;
+&lt;branch repo="git.freedesktop.org" module="swfdec/swfdec"
+ checkoutdir="swfdec"
+ revision="
+Mercurial
+&lt;repository type="hg" name="hg.gtk-vnc"
+ href="http://gtk-vnc.codemonkey.ws/hg/" /gt;
+&lt;branch repo="hg.gtk-vnc" module="outgoing.hg" checkoutdir="gtk-vnc"/gt;
+Monotone
+&lt;repository type="mtn" name="pidgin.im"
+ server="pidgin.im" database="pidgin.im.mtn"
+ defbranch="im.pidgin.pidgin"/gt;
+Subversion
+&lt;repository type="svn" name="svn.gnome.org" default="yes"
+ href="http://svn.gnome.org/svn/"/gt;
+&lt;branch revision="gnome-2-20"/gt;
+System
+&lt;repository type="system" name="system"/gt;
+Tarballs
+&lt;repository type="tarball" name="dbus/dbus-python"
+ href="http://dbus.freedesktop.org/releases/dbus-python/"/gt;
+&lt;branch module="dbus-python-0.80.2.tar.gz" version="0.80.2"
+ repo="dbus/dbus-python"
+ hash="md5:2807bc85215c995bd595e01edd9d2077" size="453499"gt;
+ &lt;patch file="dbus-glib-build.patch" strip="1" /gt;
+&lt;/branchgt;
+包含其他模块集
+&lt;include href="
+模块定义
+autotools
+&lt;autotools id="
+cmake
+&lt;cmake id="
+distutils
+&lt;distutils id="
+&lt;linux id="
+perl
+&lt;perl id="
+systemmodule
+&lt;systemmodule id="
+&lt;systemmodule id="
+waf
+&lt;waf id="
+testmodule
+&lt;testmodule id="
+metamodule
+&lt;metamodule id="
+废弃的元素
+cvsroot
+&lt;cvsroot name="
+svnroot
+&lt;svnroot name="
+废弃的模块类型
+tarball
+&lt;tarball id="

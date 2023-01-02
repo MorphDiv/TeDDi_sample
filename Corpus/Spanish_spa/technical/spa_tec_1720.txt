@@ -1,0 +1,71 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Función Dir [Ejecución]
+/text/sbasic/shared/03020404.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe; bug fix: i29276
+Dir;función
+Función Dir [Runtime]
+Devuelve el nombre de un archivo, directorio o todos los archivos y directorios de una unidad o directorio que coincidan con la ruta de acceso de búsqueda especificada.
+Sintaxis:
+Dir [(Texto As String) [, Atrib As Integer]]
+Valor de retorno:
+Cadena
+Parámetros:
+Texto:
+Cualquier expresión de cadena que especifique la ruta de acceso de búsqueda, el directorio o el archivo.
+Este argumento sólo puede especificarse la primera vez que se llame a la función Dir.
+Si se desea, la ruta de acceso puede escribirse en la
+notación URL
+.
+Atrib:
+Cualquier expresión entera que especifique atributos de archivo bit a bit.
+La función Dir sólo devuelve archivos o directorios que coincidan con los atributos especificados.
+Pueden combinarse varios atributos añadiendo los valores siguientes:
+0 :
+Archivos normales.
+16 :
+Sólo devuelve el nombre del directorio.
+Este atributo se usa para comprobar si un archivo o directorio existen o para determinar todos los archivos y carpetas de un directorio específico.
+Para comprobar si un archivo existe, escriba la ruta de acceso completa y el nombre del archivo.
+Si el nombre de archivo o de directorio no existen, la función Dir devuelve una cadena de longitud cero ( &quot; &quot; ).
+Para generar una lista de todos los archivos de un directorio específico, proceda de esta manera:
+La primera vez que llame a la función Dir, especifique la ruta de acceso de búsqueda completa para los archivos, por ejemplo: &quot; D:\Archivos\*.sxw &quot; .
+Si la ruta de acceso es correcta y la búsqueda encuentra al menos un archivo, la función Dir devuelve el nombre del primer archivo que cumpla la ruta de acceso de búsqueda.
+Para que se devuelvan nombres de archivo adicionales que coincidan con la ruta de acceso, llame a Dir de nuevo, pero sin argumentos.
+Para que sólo se devuelvan directorios, use el parámetro de atributo.
+Lo mismo se aplica si se desea determinar el nombre de un volumen (por ejemplo, una partición de disco duro)
+Ejemplo:
+Sub EjemploDir
+REM Muestra todos los archivos y directorios
+Dim sRuta As String
+Dim sDir as String, sValor as String
+sDir= &quot; Directorios: &quot;
+sRuta = CurDir
+sValue = Dir$(sPath + getPathSeparator + &quot; * &quot; ,16)
+Do
+If sValor < > &quot; . &quot; and sValor < > &quot; .. &quot; Then
+if (GetAttr( sRuta + getPathSeparator + sValor) AND 16) > 0 then
+REM obtener los directorios
+sDir = sDir & chr(13) & sValor
+End If
+End If
+sValor = Dir$
+Loop Until sValor = &quot; &quot;
+MsgBox sDir,0,sRuta
+End sub

@@ -1,0 +1,60 @@
+# language_name_wals:	Mandarin
+# language_name_glotto:	Mandarin Chinese
+# iso639_3:	cmn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hans
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/zh_CN.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Input# 语句 [运行时]
+/text/sbasic/shared/03020202.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+Input 语句
+Input# 语句 [运行时]
+从打开的顺序文件读取数据。
+语法：
+Input #FileNumber As Integer; var1[, var2[, var3[,...]]]
+参数：
+FileNumber：
+包含要读取的数据的文件编号。该文件必须使用含有 INPUT 关键字的 Open 语句打开。
+var：
+数字或字符串变量，用于存放从打开的文件中读取的值。
+Input#
+语句从打开的文件中读取数值或字符串，并将这些数据指定到一个或多个变量。读取数字变量的过程在遇到第一个回车 (Asc=13)、换行 (Asc=10)、空格或逗号时停止，而读取字符串变量的过程在遇到第一个回车 (Asc=13)、换行 (Asc=10) 或逗号时停止。
+在打开的文件中，数据和数据类型的出现顺序必须与 &quot; var &quot; 参数中变量的传送顺序相同。如果将非数字类型的值指定给某个数字变量， &quot; var &quot; 将被指定为 &quot; 0 &quot; 。
+Line Input#
+语句逐行读取纯文本文件（只包含可打印字符的文件）。
+如果在读取某个数据元素时到达了文件末尾，就会出错，进程也会异常中止。
+示例：
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; This is a line of text &quot;
+Print #iNumber, &quot; This is another line of text &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
+End Sub

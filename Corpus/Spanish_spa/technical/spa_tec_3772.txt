@@ -1,0 +1,33 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+
+
+Ejemplo 1.
+Usando un REF CURSOR de un procedimiento almacenado
+?php / / suppose your stored procedure info.output returns a ref cursor in :data $conn = OCILogon( "scott" ,"tiger"); $curs = OCINewCursor($conn); $stmt = OCIParse($conn ,"begin info.output(:data); end ;"); ocibindbyname($stmt ,"data", $curs,-1,OCI_B_CURSOR); ociexecute($stmt); ociexecute($curs); while (OCIFetchInto($curs, $data)) {var_dump($data);} OCIFreeCursor($stmt); OCIFreeStatement($curs); OCILogoff($conn);?
+Ejemplo 2.
+Usando un REF CURSOR en una sentencia select
+?php print "HTML BODY"; $conn = OCILogon("scott" ,"tiger"); $count_cursor = "CURSOR(select count(empno) num_emps from emp ". "where emp.deptno = dept.deptno) as EMPCNT from dept"; $stmt = OCIParse($conn ,"select deptno,dname,$count_cursor"); ociexecute($stmt); print" TABLE BORDER=\"1\ ""; print "TR"; print "TH DEPT NAME / TH"; print "TH DEPT # / TH"; print "TH # EMPLOYEES / TH"; print "/ TR"; while (OCIFetchInto($stmt, $data,OCI_ASSOC)) {print "TR"; $dname = $data["DNAME"]; $deptno = $data["DEPTNO"]; print "TD $dname / TD"; print "TD $deptno / TD"; ociexecute($data ["EMPCNT "]); while (OCIFetchInto($data ["EMPCNT"], $subdata,OCI_ASSOC)) {$num_emps = $subdata["NUM_EMPS"]; print "TD $num_emps / TD";} print "/ TR";} print "/ TABLE"; print "/ BODY / HTML"; OCIFreeStatement($stmt); OCILogoff($conn);?
+Anterior
+Inicio
+Siguiente
+
+Subir

@@ -1,0 +1,76 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+XML (eXtensible Markup Language) は、Web における構造化された ドキュメント交換用のデータフォーマットです。XML は、World Wide Web consortium (W3C) で規定された規格です。XML に関する情報およ び関連する技術は、 http://www.w3.org/XML/ で参照することができます。
+このPHP拡張機能は、James Clark氏の expat のサポートをPHPに付加します。 このツールキットは、XML ドキュメントの構文解析をしますが、 検証は行いません。3種類のソース 文字エンコーディング 、 US-ASCII, ISO-8859-1, UTF-8 がPHPでサポートされます。 UTF-16 はサポートさ れません。
+この拡張モジュールは、 XML パーサの作成 を行い、異なった XML イベントに関して ハンドラ を定義します。各XMLパーサーには、設定可能な小数の パラメータ もあります。
+この拡張機能は、 expat を使用します。こ れは、 http://www.jclark.com/xml/ にあります。 expatに付属のMakefileは、デフォルトでライブラリを構築しません。こ れを行うmakeルールを次のように指定できます。
+付属しているexpatライブラリを用いて以下の関数はデフォルトで有効となっ ています。 --disable-xml を指定してXMLサポート を無効にすることができます。Apache 1.3.9以降でモジュールとしてPHPを コンパイルする場合、PHPは、Apacheから自動的に付属する expat ライブラリを使用します。 付属するexpatライブラリを使用したくない場合には、 --with-expat-dir=DIR を指定してPHP のconfigureを実行して下さい。ただし、DIRは、expatをインストールした ベースディレクトリです。
+Windows版の PHP にはこの拡張モジュールのサポートが組み込まれています。これらの関数を使用するために拡張モジュールを追加でロードする必要はありません。
+この拡張モジュールは設定ディレクティブを全く 定義しません。
+この拡張モジュールはリソース型を全く定義し ません。
+これらの定数は、この拡張モジュールで定義されており、 この拡張モジュールがPHP内部にコンパイルされているか実行時に動的にロー ドされるかのどちらかの場合のみ使用可能です。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+XML イベントハンドラは次のように定義されます。
+表 1サポートされる XML ハンドラ
+要素ハンドラ関数は、その要素に 大文字小文字を変換する (case-folded) の名前をつけることができます。 大文字変換(case-folding) は、XML標準により "大文字でないものは等 価な大文字に置換される一連の文字に適用されるプロセス" として定義 されています。言い替えると、XML に関しては単に大文字変換は大文字 にすることを意味します。
+デフォルトで、ハンドラ関数に渡される全ての要素名は、大文字変換さ れます。この動作は、 xml_parser_get_option() および xml_parser_set_option() 関数でXMLパーサー 毎にそれぞれ問い合わせ、制御することが可能です。
+(xml_parse() により返されるものとして) XMLエラーコードとして次のような定数が定義されています。:
+PHPのXML拡張機能は、異なった 文字エンコーディング を通じて Unicode 文字セットをサポートします。 ソースエンコーディング および ターゲットエンコーディング という2種類の文字エンコーディングがあります。 PHP におけるドキュメントの内部表現は、常に UTF-8 でエンコードされます。
+ソースエンコーディングは、XMLドキュメントが 構文解析 された際に行わ れます。 XML パーサの 作成 を行う際に、ソースエンコードを指定することができます。 (このエンコーディングは、その XML パーサーが存在する間、後で変更す ることはできません)サポートされるソースエンコーディングは、 ISO-8859-1, US-ASCII, UTF-8 です。前の二つは、シングルバイトエンコー ディングです。これは、各文字がシングルバイトで表現されることを意 味します。 UTF-8 は、1から4バイトの可変ビット 数(最大21ビット)で構成された文字をエンコードすることが可能です。 PHP で用いられるデフォルトのソースエンコーディングは、 ISO-8859-1 です。
+ターゲットエンコーディングは、PHPがデータをXMLハンドラ関数に 渡す時に行われます。あるXMLパーサが作成された際、ターゲットエン コーディングは、ソースエンコーディングと同様に設定されます。 しかし、これは、いつでも変更可能です。ターゲットエンコーディング は、タグ名と同様に文字データに作用し、命令を処理します。
+XML パーサがソースエンコーディングが表現できる範囲の外側の文字に 出会った場合、エラーが返されます。
+解釈するXMLドキュメントにおいてPHPが文字に出会った際に、選択した ターゲットエンコーディングで表現できない文字に出会った場合、問題 の文字は "降格" されます。現在、このことはこのような文字が疑問符 で置換されることを意味します。
+以下にXMLドキュメントを処理するPHPスクリプトの例をいくつか示しま す。
+この最初の例は、あるドキュメント中のstart エレメントの構造をイン デントを付けて表示します。
+例 1XML エレメント構造を表示
+
+例 2XMLをHTMLにマップする
+この例は、XMLドキュメントのタグを直接HTMLタグにマップします。 "map array" にないエレメントは無視されます。もちろん、この例は、 特定の XML ドキュメント型を有する場合のみ動作します。
+この例は、XML コードに焦点を当てます。この例は、他のドキュメント をインクルードし処理するための外部エンティティリファレンスのハン ドラの使用法およびPIの処理方法、PIが含むコードに関する"信頼度" を定義する手段を説明します。
+この例で使用される XML ドキュメントは、例題ファイル (xmltest.xml および xmltest2.xml) にあります。
+
+例 3外部エンティティの例
+
+例 4xmltest.xml
+This file is included from xmltest.xml:
+例 5xmltest2.xml

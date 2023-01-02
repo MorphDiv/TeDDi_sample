@@ -1,0 +1,38 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Handbuch zur Implementierung für das Modul Umleitung
+Ab Version 1.0 enthält & kopete; ein Modul namens Umleitung. Mit diesem Modul können ein- oder ausgehende Nachrichten durch ein externes Skript oder Programm geleitet werden. Durch das Programm geleitet werden alle eingehen Nachrichten, ehe sie das Chatfenster erreichen und alle ausgehenden Nachrichten, ehe sie ins Internet geschickt werden. Für Umleitungen gibt es drei verschiedene Format für den Text: Unformatierter Text Die eigentliche Nachricht im & ascii;-Textformat html;-Text Die eigentliche Nachricht im & html;-Format, die für die Anzeige im Chatfenster gerendert wird Vollständige & xml;-Nachricht Ein & xml;-Dokument mit einer vollständigen Beschreibung der Nachricht einschließlich des & html;-Textteils Dieses Dokument beschreibt die Besonderheiten des & xml;-Formats und gibt Hinweise, wie ein Programm zur Bearbeitung dieses Formats zu schreiben ist.
+& xml;-Ausgabe
+Ein Beispiel für den Datenstrom, den ein Programm auf der Standardeingabe empfängt: & lt;?xml version= 1.0 encoding= ISO-8859-1? > & lt;message subject= "" route= outbound importance= 1 formattedTimestamp= 11:06:46 am timestamp= Sat Dec 1 11:06:46 2007 type= normal mainContactId= spacemonkey1234 time= 11:06 am > & lt;from > & lt;contact contactId= tdurden protocolIcon= aim_protocol userPhoto= /home/kde-devel/.kde4/share/apps/kopete/oscarpictures/tdurden.jpg > & lt;contactDisplayName dir= ltr text= tdurden / > & lt;metaContactDisplayName dir= ltr text= Tyler / > & lt;/contact > & lt;/from > & lt;to > & lt;contact contactId= spacemonkey1234 protocolIcon= aim_protocol userPhoto= /home/kde-devel/.kde4/share/apps/kopete/avatars/User/7e542903e0ac7519a7496e85f5a5b99d.png > & lt;contactDisplayName dir= ltr text= spacemonkey1234 / > & lt;metaContactDisplayName dir= ltr text= Robert Paulson / > & lt;/contact > & lt;/to > & lt;body dir= ltr bgcolor= #000000 color= #000000 > & lt;span style= color:#000000; > heyamp;lt;/span > lt;/body > & lt;/message > Diese Daten im & xml;-Format basieren mehr oder weniger auf der XSD für Chatstile von der Kopete Webseite. Dieser Quelltext stellt eine Nachricht dar. Es gibt einige Dinge zu beachten:
+Das Attribut timestamp im Element message hat das Standardformat der ISO 8601.
+Das Attribut protocolIcon im Element contact wird folgendermaßen bestimmt:
+Ist für das Kontaktobjekt das Attribut userPhoto gesetzt, wird dieses verwendet.
+Fehlt das Attribut, wird der Pfad zu einem Bild des Metakontakts für diesen Kontakt verwendet, unabhängig davon, ob dieser Pfad existiert.
+Die Attribute„ color“ und„ bgcolor“ im Element„ body“ sind leere Zeichenketten, sofern in Kopete kein Wert eingesetzt wurde. Dieser Wert hat das Format für Webfarben.
+Im Text innerhalb des Elements„ body“ ist das Zeichen„ lt ;“ maskiert, da das unmaskierte Zeichen für die & xml;-Struktur verwendet wird. Um den Text korrekt als HTML zu interpretieren, muss„ amp;lt ;“ in„ lt ;“ umgewandelt werden.
+& xml;-Eingabe
+Zulässige Werte
+Für einige Attribute sind nur bestimmte Werte erlaubt. In der Ausgabe des Moduls„ Umleitung“ sind nur zulässige Werte enthalten. Wenn diese Werte im Programm geändert werden, müssen sie immer noch gültig bleiben. Anderfalls ist das Verhalten von & kopete; nicht definiert.
+Attribut route im Element message
+Zulässige Werte: inbound, outbound, oder internal
+Attribute type im Element message
+Zulässige Werte: action oder normal
+Attribut importance im Element message
+Zulässige Werte: 0 für niedrig, 1 für normal und 2 für hoch
+Attribut dir in vielen Elementen
+Zulässige Werte: ltr für Schriften, die von links nach rechts geschrieben werden und rtl für Schriften, die von rechts nach links geschrieben werden

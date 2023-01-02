@@ -1,0 +1,91 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Fonction CreateUnoListener [Exécution]
+/text/sbasic/shared/03132000.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe dedr: fixed #i31078#
+CreateUnoListener, fonction
+Fonction CreateUnoListener [Exécution]
+Crée une instance Listener.
+De nombreuses interfaces Uno permettent d'enregistrer des auditeurs dans une interface Listener dédiée.
+Cela permet de détecter des événements spécifiques et d'appeler la méthode Listener appropriée.
+La fonction CreateUnoListener attend l'interface Listener appelée et lui transmet un objet que celle-ci supporte.
+Cet objet est ensuite transmis à la méthode afin que l'auditeur soit enregistré.
+Syntaxe :
+oListener = CreateUnoListener(Prefixname, ListenerInterfaceName)
+Exemple :
+L'exemple suivant est basé sur un objet de la bibliothèque Basic.
+Dim oListener
+oListener = CreateUnoListener( &quot; ContListener_ &quot; , &quot; com.sun.star.container.XContainerListener &quot; )
+La méthode CreateUnoListener nécessite deux paramètres.
+Le premier, un préfixe, est expliqué en détail ci-dessous.
+Le deuxième paramètre est le nom complet de l'interface Listener à utiliser.
+Celle-ci doit ensuite être ajoutée à l'objet Broadcaster.
+Pour ce faire, vous devez appeler la méthode appropriée d'ajout d'interface Listener.
+Ces méthodes sont toujours construites sur le modèle &quot; addFooListener &quot; , où &quot; Foo &quot; représente le type d'interface Listener sans le 'X'.
+Dans cet exemple, la méthode addContainerListener est appelée pour enregistrer XContainerListener :
+Dim oLib
+oLib = BasicLibraries.Library1 ' Library1 doit exister !
+oLib.addContainerListener( oListener ) ' Enregistrer l'auditeur
+L'auditeur est désormais enregistré.
+Lorsqu'un événement se produit, l'auditeur correspondant appelle la méthode appropriée depuis l'interface com.sun.star.container.XContainerListener.
+Le préfixe appelle les auditeurs enregistrés dans les sous-routines Basic.
+Le système d'exécution Basic recherche les sous-routines ou les fonctions nommées &quot; PrefixListenerMethode &quot; et les appelle.
+Sinon, une erreur d'exécution se produit.
+Dans cet exemple, l'interface Listener utilise les méthodes suivantes :
+disposing :
+interface de base Listener (com.sun.star.lang.XEventListener) : interface de base de toutes les interfaces Listener
+elementInserted :
+Méthode de l'interface com.sun.star.container.XContainerListener
+elementRemoved :
+Méthode de l'interface com.sun.star.container.XContainerListener
+elementReplaced :
+Méthode de l'interface com.sun.star.container.XContainerListener
+Dans cet exemple, le préfixe est ContListener_.
+Par conséquent, les sous-routines suivantes doivent être implémentées dans Basic :
+ContListener_disposing
+ContListener_elementInserted
+ContListener_elementRemoved
+ContListener_elementReplaced
+Un type de structure d'événement contenant des informations sur un événement donné existe pour chaque type d'auditeur.
+Dès qu'une méthode Listener est appelée, une instance de cet événement est transmise à la méthode sous forme de paramètre.
+Les méthodes Listener de Basic peuvent également appeler ces objets d'événements.
+Pour cela, le paramètre approprié doit être transmis dans la déclaration Sub.
+Exemple :
+Sub ContListener_disposing( oEvent )
+MsgBox &quot; disposing &quot;
+MsgBox oEvent.Dbg_Properties
+End Sub
+Sub ContListener_elementInserted( oEvent )
+MsgBox &quot; elementInserted &quot;
+MsgBox oEvent.Dbg_Properties
+End Sub
+Sub ContListener_elementRemoved( oEvent )
+MsgBox &quot; elementRemoved &quot;
+MsgBox oEvent.Dbg_Properties
+End Sub
+Sub ContListener_elementReplaced( oEvent )
+MsgBox &quot; elementReplaced &quot;
+MsgBox oEvent.Dbg_Properties
+End Sub
+Il n'est pas nécessaire d'inclure le paramètre d'un objet d'événement si cet objet n'est pas utilisé :
+' Implémentation minimale de Sub disposing
+Sub ContListener_disposing
+End Sub
+toujours
+être implémentées afin d'éviter des erreurs d'exécution de Basic.

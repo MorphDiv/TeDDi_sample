@@ -1,0 +1,36 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+ocibindbyname() relie la variable PHP variable à l 'emplacement Oracle ph_name.
+Son utilisation (comme entrée ou comme sortie) sera définie à l'exécution, et l 'espace nécessaire sera alloué.
+Le paramètre de longueur length fixe la taille maximum pour la liaison.
+Si vous affectez une longueur de -1, ocibindbyname() utilisera la longueur de variable comme maximum.
+Si vous devez lier des types abstraits de données (LOB / ROWID / BFILE), vous devrez l'allouer dans un premier temps, avec ocinewdescriptor().
+La longueur length ne sert pas pour ces types et devrait être fixée à -1.
+La variable type indique au serveur Oracle, quel type de pointeur va être utilisé.
+Les valeurs possibles sont: oci_B_FILE (Fichier binaires), oci_B_CFILE (Fichier texte), oci_B_CLOB (LOB - texte), oci_B_BLOB (LOB binaire) et oci_B_ROWID (ROWID).
+Exemple 1. ociDefineByName
+?php / * Exemple ociBindByPos par thies@thieso.net (980221) Insère 3 lignes dans emp, et utilise ROWID pour mettre à jour les lignes, juste après l'insertion. * / $conn = ociLogon("scott" ,"tiger"); $stmt = ociparse($conn ,"insert into emp (empno, ename) ". "values (:empno,:ename)". "returning ROWID into :rid"); $data = array(1111 = "Larry", 2222 = "Bill", 3333 = "Jim"); $rowid = ociNewDescriptor($conn,oci_D_ROWID); ociBindByName($stmt ,":empno", $empno,32); ociBindByName($stmt ,":ename", $ename,32); ociBindByName($stmt ,":rid", $rowid,-1,oci_B_ROWID); $update = ociparse($conn ,"update emp set sal = :sal where ROWID = :rid"); ociBindByName($update ,":rid", $rowid,-1,oci_B_ROWID); ociBindByName($update ,":sal", $sal,32); $sal = 10000; while (list($empno,$ename) = each($data)) {ociexecute($stmt); ociexecute($update);} $rowid - free(); ociFreeStatement($update); ociFreeStatement($stmt); $stmt = ociparse($conn ,"select * from emp where empno in (1111,2222,3333)"); ociexecute($stmt); while (ociFetchInto($stmt, $arr,oci_ASSOC)) {var_dump($arr);} ociFreeStatement($stmt); / * Effacement des lignes inutiles dans la table emp.... * / $stmt = ociparse($conn ,"delete from emp where empno in (1111,2222,3333)"); ociexecute($stmt); ociFreeStatement($stmt); ociLogoff($conn);?
+Précédent
+Sommaire
+Suivant
+Oracle 8
+Niveau supérieur

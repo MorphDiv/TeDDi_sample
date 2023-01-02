@@ -1,0 +1,55 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 4 = 4.0.5)
+udm_set_agent_param() は成功時に TRUE 、エラー時に FALSE を返し ます。mnoGoSearch セッションパラメータを定義します。
+以下のパラメータおよびそれらの値が利用可能です。
+UDM_PARAM_PAGE_NUM - はページ番号を検索結果とするために使用さ れます。(結果は、ページ毎にUDM_PARAM_PAGE_SIZE個の結果を有する0 から始まるページで返されます)
+UDM_PARAM_PAGE_SIZE - は一ページに表示される検索結果の数。
+UDM_PARAM_SEARCH_MODE - 検索モード。次の値が利用可能です。: UDM_MODE_ALL - 全ての単語を検索します。; UDM_MODE_ANY - 全ての単語で検索する; UDM_MODE_PHRASE - 熟語検索; UDM_MODE_BOOL - 論理値検索。論理値検索に関する詳細については udm_find() を参照下さい。
+UDM_PARAM_CACHE_MODE - 検索結果のキャッシュモードをオンまたはオ フにします。有効の場合、検索エンジンは検索結果をディスクに保存 します。似たような検索が後で実行された場合、エンジンはより高速 にキャッシュから結果を得ることが可能です。 利用可能な値: UDM_CACHE_ENABLED, UDM_CACHE_DISABLED.
+UDM_PARAM_TRACK_MODE - クエリ追跡モードをオンまたはオフにします。 バージョン3.1.2以降、mnoGoSearch はクエリ追跡モードをサポートし ています。追跡はSQLバージョンにのみ実装されており、組み込みデー タベースでは利用できません。追跡を使用するには、テーブルを追跡 サポート用に作成する必要があります。MySQLの場合、 create/mysql/track.txtを使用して下さい。検索実行時に、フロント エンドはクエリ単語、見つけたドキュメントの数、カレントの秒単位 のUNIXタイムスタンプを保存するためにこれらのテーブルを使用しま す。 利用可能な値: UDM_TRACK_ENABLED, UDM_TRACK_DISABLED.
+UDM_PARAM_PHRASE_MODE - 熟語を用いたインデックスデータベースか どうかを定義します。(indexer.confにおける"phrase" パラメータ) 使用可能な値: UDM_PHRASE_ENABLED および UDM_PHRASE_DISABLED。 熟語検索が有効な場合(UDM_PHRASE_ENABLED)でも、全てのモード (ANY、ALL、BOOL、PHRASE)で検索が可能であることに注意して下さい。 mnoGoSearchのバージョン3.1.10で熟語検索がSQLと組み込みデータベー スモードでのみサポートされました。一方、3.1.11で熟語がcachemode でもサポートされ始めました。
+熟語検索の例:
+"Arizona desert" - このクエリは、"Arizona desert"を熟語として含 む全てのドキュメントを返します。熟語の前後に二重引用符が必要で あることに注意して下さい。
+UDM_PARAM_CHARSET - ローカルなcharsetを定義します。利用可能な値: mnoGoSearchによりサポートされるcharsetの組, 例えば、koi8-r, cp1251,...
+UDM_PARAM_STOPFILE - stopfileの名前とパスを定義します。 (mnoGoSearchと若干違いがあります。つまり、mnoGoSearchにおいては、 相対パスまたはパスが入力されなかった場合、UDM_CONF_DIRに関して このファイルが探されます。モジュールは、このファイルをカレント のパス(すなわち、PHPスクリプトが実行されるパス)で探します。
+UDM_PARAM_STOPTABLE - 指定したSQLテーブルから停止単語をロードし ます。複数のStopwordTableコマンドを使用可能です。このコマンドは、 SQLデータベースサポートを有効にせずにコンパイルした場合は使用で きません。
+UDM_PARAM_WEIGHT_FACTOR - 指定したドキュメント部分の重み係数を 表します。現在、body, title, keywords, description, urlがサポー トされています。この機能を有効にするには、indexer.confの*Weight コマンドに2の累乗を指定して下さい。ここで次のような重みを指定し た場合を考えてみましょう。
+
+同じドキュメントにいくつかの単語が複数回現れる場合、 indexerが単語の重みにOR演算子を使用するので、異なったドキュメン トの部分に単語が現れる回数を検出可能です。ボディーにのみ現れる 単語は、(2進標記で)重み集合00000010を有します。全てのドキュメン ト部分で使用される単語は、重み集合 00011111 を有します。
+このパラメータの値は、16進数文字列 ABCDE です。各桁は、単語重み の対応するビットの因子です。上で指定した重み設定は次のようにな ります。
+E is a factor for weight 1 (URL Weight bit) D is a factor for weight 2 (BodyWeight bit) C is a factor for weight 4 (TitleWeight bit) B is a factor for weight 8 (KeywordWeight bit) A is a factor for weight 16 (DescWeight bit)
+例:
+UDM_PARAM_WEIGHT_FACTOR=00001 は、URLのみを検索します。
+UDM_PARAM_WEIGHT_FACTOR=00100 は、Titleのみを検索します。
+UDM_PARAM_WEIGHT_FACTOR=11100 は、Title,Keywords,Desctriptionを 検索しますが、URL と Bodyは検索しません。
+UDM_PARAM_WEIGHT_FACTOR=F9421 は、次の検索を行います。
+Description with factor 15 (F hex) Keywords with factor 9 Title with factor 4 Body with factor 2 URL with factor 1
+UDM_PARAM_WEIGHT_FACTOR 変数が省略された場合、元の重みの値はソー ト結果から引き出されます。上記で指定した重み設定の場合、ドキュ メントのDescriptionは、最大重み16を有するドキュメントの descriptionを意味します。
+UDM_PARAM_WORD_MATCH - 単語にマッチ。このパラメータを単語検索型 を選択する際に使用可能です。この機能は、"single"および"multi"モー ドでSQLデータベースおよび組み込みのデータベースを使用する場合に のみ動作します。この機能は、cachemodeおよび他のモードでは動作し ません。これは、これらのモードが、単語CRCを使用しており、部分文 字列検索をサポートしていないからです。 利用可能な値は次のようになります。
+UDM_MATCH_BEGIN - 単語の始めにマッチ
+UDM_MATCH_END - 単語の終りにマッチ
+UDM_MATCH_WORD - 単語全体にマッチ
+UDM_MATCH_SUBSTR - 単語の部分文字列にマッチ
+UDM_PARAM_MIN_WORD_LEN - 単語の最短長を定義します。 この制限より短い単語は、stopwordとみなされます。このパラメータ はその値自身も範囲に含むことに注意して下さい。つまり、 UDM_PARAM_MIN_WORD_LEN=3 の場合、3文字の長さの単語はstopwordと 見なされませんが、2文字の単語はstopwordとみなされます。デフォル トは1です。
+UDM_PARAM_ISPELL_PREFIXES - Possible values: UDM_PREFIXES_ENABLED and UDM_PREFIXES_DISABLED, that respectively enable or disable using prefixes. E.g. if a word "tested" is in search query, also words like "test", "testing", etc. Only suffixes are supported by default. Prefixes usually change word meanings, for example if somebody is searching for the word "tested" one hardly wants "untested" to be found. Prefixes support may also be found useful for site's spelling checking purposes. In order to enable ispell, you have to load ispell data with udm_load_ispell_data().
+UDM_PARAM_CROSS_WORDS - enables or disables crosswords support. Possible values: UDM_CROSS_WORDS_ENABLED and UDM_CROSS_WORDS_DISABLED.
+The corsswords feature allows to assign words between a href="xxx" and /a also to a document this link leads to. It works in SQL database mode and is not supported in built-in database and Cachemode.
+注意 Crosswords are supported only in mnoGoSearch 3.1.11 or later.
+UDM_PARAM_VARDIR - specifies a custom path to directory where indexer stores data when using built-in database and in cache mode. By default /var directory of mnoGoSearch installation is used. Can have only string values. The parameter is available in PHP 4.1.0 or later.
+UDM_PARAM_VARDIR - specifies a custom path to directory where indexer stores data when using built-in database and in cache mode. By default /var directory of mnoGoSearch installation is used. Can have only string values. The parameter is available in PHP 4.1.0 or later.

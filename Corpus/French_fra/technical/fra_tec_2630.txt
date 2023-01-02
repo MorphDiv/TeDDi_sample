@@ -1,0 +1,62 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Les connexions persistantes aux bases de données SQL sont des connexions qui ne se referment pas à la fin du script.
+Lorsqu'une connexion persistante est demandée, PHP s'assure qu'il n'y a pas une autre connexion identique (qui serait ouverte précédemment, avec le même nom d'hôte, d'utilisateur et le même mot de passe), et si une telle connexion existe, elle est utilisée.
+Sinon, elle est créée.
+Une connexion identique est une connexion qui a ouvert le même hôte, avec le même nom et le même mot de passe (s'ils sont nécessaires).
+Ceux qui ne sont pas rompus aux techniques des serveurs web et leur distribution de la charge de travail, se font parfois une fausse idée de ces connexions persistantes.
+En particulier, les connexions persistantes ne permettent pas l 'ouverture de plusieurs sessions avec le même lien, ne permettent pas la réalisation de transactions efficaces et ne font pas le café.
+En fait, pour être extrêmement clair sur le sujet, les connexions persistantes ne vous donnent aucune fonctionnalité de plus que les connexions non persistantes.
+Alors pourquoi les connexions persistantes?
+Cela s 'explique par la manière avec laquelle les serveurs web fonctionnent.
+Il y a trois manières d 'utiliser PHP pour générer des pages.
+La première est d'utiliser PHP comme un CGI (Common Interface Gateway).
+Lorsque PHP fonctionne de cette manière, une instance de l 'interpréteur PHP est créée puis détruite pour chaque page demandée.
+Etant donné que cet interpreteur est détruit après chaque requête, toutes les ressources acquises (comme une connexion à une base SQL), sont purement et simplement détruites.
+La deuxième méthode, et de loin, la plus prisée, est d'exécuter PHP sous la forme d 'un module sur un serveur multi-processus, ce qui revient à dire:
+Apache.
+Un tel serveur a typiquement un processus parent qui coordonne un ensemble de processus fils, qui servent les fichiers.
+Lorsque les requêtes parviennent depuis un client, elles sont transmises à un fils disponible.
+Cela signifie que si un client fait une deuxième requête, il peut être servi par un processus client différent du premier.
+Les connexions persistantes vous permettent alors de ne vous connecter à une base SQL que la première fois.
+Lors des connexions ultérieures, les processus fils pourront réutiliser la connexion ouverte précédemment.
+La dernière méthode est d'utiliser PHP sous la forme d 'un module de serveur multi-threads.
+Actuellement, PHP 4 supporte ISAPI, WSAPI, et NSAPI (sous Windows), qui permettent tous d'utiliser PHP comme un module sur un serveur multi-threads tel que Netscape FastTrack (iPlanet), Microsoft's Internet Information Server (IIS), et O'Reilly 's WebSite Pro.
+Le comportement est essentiellement le même que pour les serveurs multi-processus décrits précédemment.
+Notez que SAPI n 'est pas disponible avec PHP 3.
+Si les connexions persistantes n 'ont aucune fonctionnalité de plus, à quoi servent-elles?
+La réponse est extrêmement simple: efficacité.
+Les connexions persistantes sont un bon moyen d 'accélérer les accès à une base SQL si le traitement de connexion à la base est long.
+Ce temps dépend de nombreux facteurs: le type de base de données, cette base est-elle sur le même serveur ou pas, quelle est la charge du serveur de base de données, etc...
+Si le temps de connexion est long, les connexions persistantes seront bien utiles, car une fois ouverte par un processus fils, la connexion est réutilisable sans avoir à se reconnecter.
+Si vous avez 20 processus fils, il suffit d 'avoir 20 connexions persistantes ouvertes, une par fils.
+Notez que les connexions persistantes ont quelques inconvénients si vous hébergez une base de données, dont le nombre maximal de connexion risque d 'être atteint par les connexions persistantes.
+Si votre base de données accepte jusqu 'à 16 connexions simultanées et que, 17 processus essaient de se connecter, le dernier restera sur la touche.
+S'il y a des erreurs dans les scripts qui ne permettent pas de fermer la connexion (par exemple, une boucle infinie), votre serveur sera rapidement engorgé.
+Vérifiez la documentation de votre base de données pour savoir comment elle traite les connexions inactives ou abandonnées.
+Résumons-nous: les connexions persistantes ont été définies pour avoir les mêmes fonctionnalités que les connexions non persistantes.
+Les deux types de connexions sont parfaitement interchangeables, et n 'affecteront pas le comportement de votre script: uniquement son efficacité.
+Précédent
+Sommaire
+Suivant
+Gestion des connexions
+Niveau supérieur
+Safe mode

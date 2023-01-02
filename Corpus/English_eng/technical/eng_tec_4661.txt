@@ -1,0 +1,45 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3 = 3.0.5, PHP 4)
+serialize() returns a string containing a byte-stream representation of value that can be stored anywhere.
+This is useful for storing or passing PHP values around without losing their type and structure.
+To make the serialized string into a PHP value again, use unserialize(). serialize() handles all types, except the resource -type.
+You can even serialize() arrays that contain references to itself.
+References inside the array / object you are serialize() ing will also be stored.
+When serializing objects, PHP will attempt to call the member function __sleep() prior to serialization.
+This is to allow the object to do any last minute clean-up, etc. prior to being serialized.
+Likewise, when the object is restored using unserialize() the __wakeup() member function is called.
+Note:
+In PHP 3, object properties will be serialized, but methods are lost.
+PHP 4 removes that limitation and restores both properties and methods.
+Please see the Serializing Objects section of Classes and Objects for more information.
+Example 1. serialize() example
+/ / $session_data contains a multi-dimensional array with session / / information for the current user.
+We use serialize() to store / / it in a database at the end of the request. $conn = odbc_connect ("webdb", "php", "chicken"); $stmt = odbc_prepare ($conn, "UPDATE sessions SET data =?
+WHERE id = ?"); $sqldata = array (serialize($session_data), $PHP_AUTH_USER); if (!odbc_execute ($stmt, $sqldata)) {$stmt = odbc_prepare($conn, "INSERT INTO sessions (id, data) VALUES(?, ?)"); if (!odbc_execute($stmt, $sqldata)) {/ * Something went wrong.
+Bitch, whine and moan. * /}}
+See Also: unserialize().
+Prev
+Home
+Next
+print_r
+Up
+settype

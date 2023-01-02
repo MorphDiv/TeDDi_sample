@@ -1,0 +1,63 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Kapitel 5.
+Sicherheit
+Nach vorne
+PHP Security hat zwei Seiten der Fehlerbehandlung.
+Eine ist für die Erhöhung der Sicherheit vorteilhaft, die andere ist schädlich.
+Eine Standard-Angriffstaktik beinhaltet die Erstellung eines Profils des anzugreifenden Systems, indem die aufgrund der Einspeisung von unzulässigen Daten zurückgegebenen Fehlermeldungen anhand deren Art und des Kontextes ausgewertet werden.
+Wenn z.B. ein Angreifer Informationen über eine auf einem eingesendeten Formular basierte Seite zusammengetragen hat, kann er versuchen, Variablen zu überschreiben bzw. zu modifizieren:
+Beispiel 5-11.
+Variablen mit einer eigenen HTML Seite angreifen
+
+Die normalerweise zurückgegebenen PHP Fehler können für den Entwickler hilfreich sein, wenn dieser ein Skript debuggen möchte, Hinweise auf eine nicht korrekt arbeitende Funktion oder Datei, oder die PHP Datei und die Zeilennummer des aufgetretenen Fehlers anzeigen lassen möchte.
+Das sind alles Informationen, die ausgenutzt werden können.
+Es ist für einen PHP Entwickler nicht unüblich, show_source(), highlight_string(), oder highlight_file() zur Fehlersuche zu verwenden, jedoch kann dies in einem lebenden System auch versteckte Variablen, ungeprüfte Syntax und andere gefährliche Informationen aufdecken.
+Speziell gefährlich ist es, Code von bekannten Quellen mit integrierten Debugging Handlern auszuführen, oder weit verbreitete Debuggingtechniken zu verwenden.
+Wenn ein Angreifer die von Ihnen benutzte generelle Technik herausfindet, kann er versuchen, mit Brute-Force Ihre Seite zu knacken, indem er verschiedene allgemein gebräuchliche Debug Strings sendet:
+Beispiel 5-12.
+Ausnutzen von gebräuchlichen Debugging Variablen
+
+Ungeachtet der Fehlerbehandlungsmethode führt die Möglichkeit ein System nach Fehlermeldungen sondieren dazu, dass einem Angreifer mehr Informationen geboten werden.
+Zum Beispiel weist schon alleine der Stil einer Fehlermeldung darauf hin, dass auf einem System PHP läuft.
+Wenn der Angreifer auf eine .html Seite kommt und untersuchen möchte welches System im Hintergrund läuft (um nach bekannten Systemschwächen zu suchen), könnte dieser mittels der Einspeisung von falschen Daten herausfinden, dass ein System mit PHP aufgebaut ist.
+Ein Fehler einer Funktion gibt Aufschluss darüber, ob ein System eine bestimmte Datenbankapplikation benutzt, oder gibt Hinweise darauf, wie eine Webseite programmiert bzw. entworfen wurde.
+Dies erlaubt eine tiefere Überprüfung von offenen Datenbank-Ports, oder die Suche nach spezifischen Bugs bzw.
+Schwächen einer Webseite.
+Mit der Einspeisung von falschen Daten kann ein Angreifer z.B. die Reihenfolge der Authentifizierung in einem Skript bestimmen (anhand der Zeilennummern in den Fehlermeldungen), wie auch durch "Herumstochern "Missbrauchsmöglichkeiten an verschiedenen Stellen im Script herausfinden.
+Eine Fehlermeldung des Dateisystems oder eines generellen PHP-Errors welche Rechte der Server hat, wie auch die Struktur und Organisation der Dateien auf dem Webserver.
+Vom Entwickler geschriebene Fehlermeldungen können das Problem verschlimmern, bis hin zum Preisgeben von zuvor "versteckten" Informationen.
+Es gibt drei bedeutende Lösungen zu diesem Thema.
+Die erste ist, alle Funktionen zu überprüfen und zu versuchen, die Menge an Fehlermeldungen zu ersetzen.
+Die zweite ist, die Ausgabe von Fehlermeldungen am laufenden Code generell zu deaktivieren.
+Die dritte ist, sich unter Verwendung der PHP Funktionen zur Fehlerbehandlung seinen eigenen Error-handler zu schreiben.
+Abhängig von Ihrer Sicherheitspolitik könnte jede der drei Lösungen für Sie geeignet sein.
+Ein Weg, diesen Punkt vorzeitig zu behandeln ist, das PHP eigene error_reporting() zu benutzen, um Ihren Code sicherer zu gestalten und möglicherweise gefährliche Nutzungen von Variablen zu entdecken.
+Wenn Sie Ihren Code noch vor dem Einsatz mit E_ALL testen, können Bereiche entdecken, in denen Ihre Variablen eventuell für Verseuchung oder andere Modifikationen offen sind.
+Sind Sie bereit zum Einsatz, können Sie Ihren Code mit E_NONE vor Sondierungen schützen.
+Beispiel 5-13.
+Gefährliche Variablen mit E_ALL finden
+?php if ($username) {/ / Vor Verwendung nicht initialisiert oder geprüft $good_login = 1;} if ($good_login == 1) {/ / Wenn der obige Test fehlschlägt, ist vor der / / Verwendung nicht initialisiert oder geprüft fpassthru (" / highly / sensitive / data / index.html");}?
+Zurück
+Zum Anfang
+Nach vorne
+Datenbank - Sicherheit
+Nach oben
+Verwendung von Register Globals

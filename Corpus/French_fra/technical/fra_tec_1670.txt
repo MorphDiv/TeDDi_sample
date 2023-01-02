@@ -1,0 +1,106 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Utilisation des procédures et des fonctions
+/text/sbasic/shared/01020300.xhp
+Procédures
+Fonctions;utilisation
+Variables;transfert aux procédures et aux fonctions
+Paramètres;procédures et fonctions
+Paramètres;transfert par référence ou valeur
+Variables;portée
+Portée des variables
+GLOBAL, variables
+PUBLIC, variables
+PRIVATE, variables
+Fonctions;type de valeur de retour
+Type de valeur de retour des fonctions
+Utilisation des procédures et des fonctions
+Cette rubrique décrit l'utilisation de base des procédures et des fonctions de $[officename] Basic.
+Lors de la création d'un nouveau module, $[officename] Basic insère automatiquement une procédure SUB appelée &quot; Main &quot; .
+Ce nom par défaut n'a strictement aucune relation avec l'ordre ou le point de départ d'un projet $[officename] Basic.
+Vous pouvez donc renommer cette procédure SUB en toute sécurité.
+Les procédures (SUB) et les fonctions (FUNCTION) vous aident à conserver une présentation structurée en décomposant un programme en parties logiques.
+L'un des avantages des procédures et des fonctions est qu'une fois que vous avez développé un code de programme contenant des composants de tâche, vous pouvez l'utiliser dans un autre projet.
+Transmission de variables aux procédures(SUB) et aux fonctions (FUNCTION)
+Des variables peuvent être transmises aux procédures et aux fonctions.
+Les éléments SUB ou FUNCTION doivent être déclarés pour accepter des paramètres :
+Parameter1 As Type, Parameter2 As Type,...
+)
+Code de programme
+END SUB
+L'élément SUB est appelé à l'aide de la syntaxe suivante :
+SubName(Value1, Value2,...)
+Les paramètres transmis à l'élément SUB doivent correspondre à ceux spécifiés dans la déclaration de SUB.
+Le même processus doit s'appliquer aux fonctions (FUNCTION) pour que celles-ci puissent renvoyer un résultat.
+Ce résultat peut être défini juste avant d'avoir atteint la fin de la fonction en assignant le nom de la fonction et un paramètre à la valeur à renvoyer par la fonction :
+FUNCTION FunctionName(Parameter1 As Type, Parameter2 As Type,...) As Type
+Code de programme
+FunctionName=Result
+End Function
+FUNCTION est appelée à l'aide de la syntaxe suivante :
+Variable=FunctionName(Parameter1, Parameter2,...)
+Library.Module.Macro()
+.
+Par exemple, pour appeler la macro Autotexte depuis la bibliothèque Trucs et astuces, utilisez la commande suivante :
+Gimmicks.AutoText.Main()
+Transmission de paramètres par valeur ou par référence
+Les paramètres peuvent être transmis à un élément SUB ou FUNCTION par référence ou par valeur.
+Sauf indication contraire, les paramètres sont toujours transmis par référence.
+Cela signifie qu'une procédure ou une fonction reçoit un paramètre et peut lire et modifier sa valeur.
+Si vous souhaitez transmettre un paramètre par valeur, insérez le mot-clé &quot; ByVal &quot; avant le paramètre lorsque vous appelez SUB ou FUNCTION, par exemple :
+ByVal
+Parameter)
+Dans ce cas, le contenu d'origine du paramètre n'est pas modifié par la fonction, car elle ne reçoit que la valeur et non pas le paramètre en lui-même.
+Portée des variables
+Une variable définie dans un élément SUB ou FUNCTION reste valide uniquement jusqu'à la fermeture de la procédure.
+L'on se réfère à ce type de variable comme variable &quot; locale &quot; .
+Cependant, dans bien des cas, une variable doit rester valide dans toutes les procédures, dans tous les modules de toutes les bibliothèques, ou après la fermeture d'un SUB ou FUNCTION.
+Déclaration de variables en dehors d'un élément SUB ou FUNCTION
+GLOBAL VarName As TYPENAME
+La variable est valide tant que la session $[officename] est ouverte.
+PUBLIC VarName As TYPENAME
+La variable est valide dans tous les modules.
+PRIVATE VarName As TYPENAME
+La variable est valide dans ce module.
+DIM VarName As TYPENAME
+La variable est valide dans ce module.
+Exemple pour les variables privées
+Force les variables privées à être privées à travers les modules en paramétrant CompatibilityMode(true).
+from i17948, see i54894
+REM ***** Module1 *****
+Private monTexte As String
+Sub initMonTexte
+monTexte = &quot; Bonjour &quot;
+print &quot; in module1 : &quot; , monTexte
+End Sub
+REM ***** Module2 *****
+'Option Explicit
+Sub demoBug
+CompatibilityMode( true )
+initMonTexte
+' Now renvoie une chaîne vide
+' (ou affiche une erreur pour Option Explicit)
+print &quot; Now in module2 : &quot; , monTexte
+End Sub
+Enregistrement du contenu d'une variable après la fermeture d'un élément SUB ou FUNCTION
+STATIC VarName As TYPENAME
+La variable conserve sa valeur jusqu'à la prochaine ouverture d'une instruction Function ou de Sub.
+La déclaration doit exister à l'intérieur d'un élément SUB ou FUNCTION.
+Spécification du type de valeur de retour de FUNCTION
+Insérez, comme pour les variables, un caractère de déclaration de type après le nom de la fonction, ou le type indiqué par &quot; As &quot; et le mot-clé approprié à la fin de la liste des paramètres pour définir le type de la valeur de retour de la fonction, par exemple :
+Function WordCount(WordText as String) as Integer

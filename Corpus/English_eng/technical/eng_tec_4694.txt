@@ -1,0 +1,47 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 4)
+session_set_save_handler() sets the user-level session storage functions which are used for storing and retrieving data associated with a session.
+This is most useful when a storage method other than those supplied by PHP sessions is preferred. i.e.
+Storing the session data in a local database.
+Returns TRUE on success or FALSE on failure.
+Note:
+The "write" handler is not executed until after the output stream is closed.
+Thus, output from debugging statements in the "write" handler will never be seen in the browser.
+If debugging output is necessary, it is suggested that the debug output be written to a file instead.
+Note:
+The write handler is not executed if the session contains no data; this applies even if empty session variables are registered.
+This differs to the default file-based session save handler, which creates empty session files.
+The following example provides file based session storage similar to the PHP sessions default save handler files.
+This example could easily be extended to cover database storage using your favorite PHP supported database engine.
+Read function must return string value always to make save handler work as expected.
+Return empty string if there is no data to read.
+Return values from other handlers are converted to boolean expression.
+TRUE for success, FALSE for failure.
+Example 1. session_set_save_handler() example
+?php function open ($save_path, $session_name) {global $sess_save_path, $sess_session_name; $sess_save_path = $save_path; $sess_session_name = $session_name; return(true);} function close() {return(true);} function read ($id) {global $sess_save_path, $sess_session_name; $sess_file = "$sess_save_path / sess_$id"; if ($fp = @fopen($sess_file, "r")) {$sess_data = fread($fp, filesize($sess_file)); return($sess_data);} else {return(""); / / Must return "" here.}} function write ($id, $sess_data) {global $sess_save_path, $sess_session_name; $sess_file = "$sess_save_path / sess_$id"; if ($fp = @fopen($sess_file, "w")) {return(fwrite($fp, $sess_data));} else {return(false);}} function destroy ($id) {global $sess_save_path, $sess_session_name; $sess_file = "$sess_save_path / sess_$id"; return(@unlink($sess_file));} / ********************************************* * WARNING - You will need to implement some * * sort of garbage collection routine here. * ********************************************* / function gc ($maxlifetime) {return true;} session_set_save_handler ("open", "close", "read", "write", "destroy", "gc"); session_start(); / / proceed to use sessions normally?
+See also the session.save_handler configuration directive.
+Prev
+Home
+Next
+session_set_cookie_params
+Up
+session_start

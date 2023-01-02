@@ -1,0 +1,76 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+
+Este comando permite eliminar, añadir, o modificar atributos individuales de un registro de objeto.
+El objeto está especificado por el ID de objeto objeto_a_cambiar.
+La primera tabla, eliminar, es la lista de atributos a eliminar.
+La segunda tabla, añadir, es la lista de atributos a añadir.
+Para modificar un atributo, hay que borrar el antiguo y añadir uno nuevo. hw_modifyobject() siempre eliminará los atributos antes de añadir los nuevos excepto si el valor del atributo a eliminar no es una cadena o una tabla.
+El último parámetro determina si la modificación se realiza de manera recursiva.
+1 quiere decir que sea recursiva.
+Si alguno de los objetos no se puede modificar, será ignorado sin avisar.
+Incluso hw_error() podría no indicar un error aunque alguno de los objetos no pueda ser modificado.
+Las claves de ambas tablas son los nombres de los atributos.
+El valor de cada elemento de la tabla puede ser una tabla, una cadena o cualquier otra cosa.
+Si es una tabla, cada valor de atributo se construye como la clave de cada elemento más dos puntos y el valor de cada elemento.
+Si es una cadena se toma como valor del atributo.
+Una cadena vacía producirá la supresión completa del atributo.
+Si el valor no es ni cadena ni tabla, sino otra cosa, p. ej. un entero, no se realizará operación alguna en el atributo.
+Esto es necesario se desea añadir un atributo completamente nuevo, no solamente un nuevo valor para un atributo existente.
+Si la tabla eliminar contuviera una cadena vacía para dicho atributo, este se intentaría suprimir, lo que fallaría porque este no existe.
+La siguiente adición de un nuevo valor para dicho atributo también fallará.
+Fijando el valor para dicho atributo p. ej. a 0 hará que ni siquiera se intente eliminar, pero funcionará la adición del mismo.
+Si desea cambiar el atributo 'Nombre' con el valor actual 'libros 'por el de 'artículos' deberá crear dos tablas y llamar a hw_modifyobject().
+Ejemplo 1. modificando un atributo
+/ / $conexion es una conexión con el servidor Hyperwave / / $idobj es la ID del objeto a modificar $tablasupr = array( "Nombre "= "libros"); $tablaanad = array("Nombre" = "artículos"); $hw_modifyobject($conexion, $idobj, $tablasupr, $tablaanad);
+Ejemplo 2. añadiendo un atributo completamente nuevo
+/ / $conexion es una conexión con el servidor Hyperwave / / $idobj es la ID del objeto a modificar $tablasupr = array( "Nombre "= 0); $tablaanad = array("Nombre" = "artículos"); $hw_modifyobject($conexion, $idobj, $tablasupr, $tablaanad);
+Nota:
+Los atributos plurilingües, p. ej. 'Título', se pueden modificar de dos maneras.
+O bien proporcionando los valores de los atributos en su forma nativa 'lenguaje' :'título', bien proporcionando una tabla con los elementos para cada lenguaje según se describe más arriba.
+El ejemplo anterior podría quedar entonces:
+Ejemplo 3. modificando el atributo Título
+$tablasupr = array( "Título "= "es:Libros"); $tablaanad = array("Título" = "es:Artículos"); $hw_modifyobject($conexion, $idobj, $tablasupr, $tablaanad);
+Ejemplo 4. modificando el atributo Título
+$tablasupr = array( "Título "= array("es" = "Libros")); $tablaanad = array("Título "= array("es" = "Artículos", "ge"= "Artikel")); $hw_modifyobject($conexion, $idobj, $tablasupr, $tablaanad);
+Ejemplo 5. eliminando atributos
+$tablasupr = array( "Título "= ""); $tablaanad = array("Tñitulo" = "es:Artículos"); $hw_modifyobject($conexion, $idobj, $tablasupr, $tablaanad);
+Nota:
+Esto eliminará todos los atributos con el nombre 'Título' y añadirá un nuevo atributo 'Título '.
+Esto es útil cuando se desea eliminar atributos de forma recursiva.
+Nota:
+Si necesita eliminar todos los atributos con un cierto nombre tendrá que pasar una cadena vacía como el valor del atributo.
+Nota:
+Sólo los atributos 'Title', 'Description' y 'Keyword '(así, en inglés) manejarán de forma apropiada el prefijo de idioma.
+Si estos atributos no llevaran prefijo de idioma, se les asignariá el prefijo 'xx'.
+Nota:
+El atributo 'Name' es bastante especial.
+En algunos casos no puede ser completamente eliminado.
+Obtendrá un mensaje de error 'Change of base attribute' ('Cambio de atributo base', no está muy claro cuando ocurre).
+Por tanto, tendrá siempre que añadir un nuevo atributo Name primero y luego eliminar el anterior.
+Nota:
+No debe rodear esta función de llamadas a hw_getandlock() ni a hw_unlock(). hw_modifyobject() ya lo hace internamente.
+Devuelve TRUE si no hay error o FALSE en caso contrario.
+Anterior
+Inicio
+Siguiente
+
+Subir

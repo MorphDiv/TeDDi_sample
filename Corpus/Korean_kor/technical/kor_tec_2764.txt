@@ -1,0 +1,29 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# iso639_3:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP 4 features an automatic build system that's very flexible. All modules reside in a subdirectory of the ext directory. In addition to its own sources, each module consists of a config.m4 file, for extension configuration. (for example, see http://www.gnu.org/manual/m4/html_mono/m4.html)
+All these stub files are generated automatically, along with .cvsignore, by a little shell script named ext_skel that resides in the ext directory. As argument it takes the name of the module that you want to create. The shell script then creates a directory of the same name, along with the appropriate stub files.
+Step by step, the process looks like this:
+The default config.m4 shown in 예 27-1 is a bit more complex:
+예 27-1. The default config.m4.
+If you're unfamiliar with M4 files (now is certainly a good time to get familiar), this might be a bit confusing at first; but it's actually quite easy.
+Note: Everything prefixed with dnl is treated as a comment and is not parsed.
+The config.m4 file is responsible for parsing the command-line options passed to configure at configuration time. This means that it has to check for required external files and do similar configuration and setup tasks.
+The default file creates two configuration directives in the configure script: --with-my_module and --enable-my_module. Use the first option when referring external files (such as the --with-apache directive that refers to the Apache directory). Use the second option when the user simply has to decide whether to enable your extension. Regardless of which option you use, you should uncomment the other, unnecessary one; that is, if you're using --enable-my_module, you should remove support for --with-my_module, and vice versa.
+By default, the config.m4 file created by ext_skel accepts both directives and automatically enables your extension. Enabling the extension is done by using the PHP_EXTENSION macro. To change the default behavior to include your module into the PHP binary when desired by the user (by explicitly specifying --enable-my_module or --with-my_module), change the test for $PHP_MY_MODULE to == "yes":
+Note: Be sure to run buildconf every time you change config.m4!
+We'll go into more details on the M4 macros available to your configuration scripts later in this chapter. For now, we'll simply use the default files.

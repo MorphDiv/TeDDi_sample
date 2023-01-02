@@ -1,0 +1,50 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Capítulo 12.
+Estructuras de Control
+Siguiente
+The require_once() statement replaces itself with the specified file, much like the C preprocessor's #include works, and in that respect is similar to the require() statement.
+The main difference is that in an inclusion chain, the use of require_once() will assure that the code is added to your script only once, and avoid clashes with variable values or function names that can happen.
+For example, if you create the following 2 include files utils.inc and foolib.inc
+Ejemplo 12-2. utils.inc
+?php define( PHPVERSION, floor(phpversion())); echo "GLOBALS ARE NICE\n"; function goodTea() {return "Oolong tea tastes good !";}?
+Ejemplo 12-3. foolib.inc
+?php require ("utils.inc"); function showVar($var) {if (PHPVERSION == 4) {print_r($var);} else {dump_var($var);}} / / bunch of other functions...?
+Ejemplo 12-4. cause_error_require.php
+?php require( "foolib.inc"); / * the following will generate an error * / require("utils.inc"); $foo = array("1",array("complex" ,"quaternion")); echo "this is requiring utils.inc again which is also\n"; echo "required in foolib.inc\n"; echo "Running goodTea: ".goodTea() ."\n"; echo "Printing foo: \n"; showVar($foo);?
+GLOBALS ARE NICE GLOBALS ARE NICE Fatal error:
+Cannot redeclare causeerror() in utils.inc on line 5
+Ejemplo 12-5. foolib.inc (fixed)
+... require_once( "utils.inc"); function showVar($var) {...
+Ejemplo 12-6. avoid_error_require_once.php
+... require_once( "foolib.inc"); require_once("utils.inc"); $foo = array("1",array("complex" ,"quaternion"));...
+GLOBALS ARE NICE this is requiring globals.inc again which is also required in foolib.inc Running goodTea:
+Oolong tea tastes good!
+Printing foo:
+Array ([0] = 1 [1] = Array ([0] = complex [1] = quaternion))
+Also note that, analogous to the behavior of the #include of the C preprocessor, this statement acts at "compile time", e.g. when the script is parsed and before it is executed, and should not be used for parts of the script that need to be inserted dynamically during its execution.
+You should use include_once() or include() for that purpose.
+For more examples on using require_once() and include_once(), look at the PEAR code included in the latest PHP source code distributions.
+
+Anterior
+Inicio
+Siguiente
+
+Subir

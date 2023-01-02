@@ -1,0 +1,45 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+Diese Funktionen ermöglichen Ihnen den Zugriff auf Informationen über Klassen und Objektinstanzen.
+Sie können den Namen der Klasse ermitteln, zu der ein Objekt gehört, sowie ihre Eigenschaften und -methoden.
+Mit diesen Funktionen können Sie nicht nur die Klassenmitgliedschaft eines Objektes herausfinden, sondern auch ihre Abstammung (d. h. welche Klasse die des Objektes erweitert).
+In diesem Beispiel definieren wir zuerst eine Basisklasse und eine Erweiterung dieser Klasse.
+Die Basisklasse beschreibt ein beliebiges Gemüse, ob es eßbar ist oder nicht, sowie seine Farbe.
+Die Subklasse Spinat fügt eine Methode hinzu, um sie zu kochen und eine weitere, um herauszufinden, ob sie gekocht ist.
+Beispiel 1. classes.inc
+?php / / Basisklasse mit Eigenschaften und Methoden class Gemuese {var $essbar; var $farbe; function Gemuese ($essbar, $farbe="grün ") {$this - essbar = $essbar; $this - farbe = $farbe;} function ist_essbar() {return $this - essbar;} function welche_farbe() {return $this - farbe;}} / / Ende der Klasse Gemuese / / erweitert die Basisklasse class Spinat extends Gemuese {var $gekocht = false; function Spinat() {$this - Gemuese (true, "grün");} function koche_es() {$this - gekocht = true;} function ist_gekocht() {return $this - gekocht;}} / / Ende der Klasse Spinat?
+Jetzt instantiieren wir zwei Objekte von diesen Klassen und geben Informationen über sie aus, einschließlich ihrer Abstammung.
+Wir definieren auch einige Hilfsfunktionen, hauptsächlich um eine hübsche Ausgabe der Variablen zu erhalten.
+Beispiel 2. test_script.php
+pre ?php include "classes.inc"; / / utility functions function zeige_vars($obj) {$arr = get_object_vars($obj); while (list($prop, $val) = each($arr)) echo " $prop = $val\n";} function zeige_methoden($obj) {$arr = get_class_methods(get_class($obj)); foreach ($arr as $method) echo " function $method()\n";} function klassen_abstammung($obj, $class) {global $$obj; if (is_subclass_of($$obj, $class)) {echo "Objekt $obj gehört zur Klasse ".get_class($$obj); echo" einer Subklasse von $class\n";} else {echo "Object $obj gehört nicht zu einer Subklasse von $class\n";}} / / Instantiiere zwei Objekte $veggie = new Gemuese(true ,"blau"); $leafy = new Spinat(); / / Informationen über die Objekte ausgeben echo "veggie:
+KLASSE ".get_class($veggie) ."\n"; echo "leafy:
+KLASSE ".get_class($leafy); echo", ELTERN ".get_parent_class($leafy) ."\n"; / / Zeige Eigenschaften von veggie echo "\nveggie:
+Eigenschaften\n"; zeige_vars($veggie); / / und Methoden von leafy echo "\nleafy:
+Methoden\n"; zeige_methoden($leafy); echo "\nAbstammung:\n"; klassen_abstammung("leafy", "Spinat"); klassen_abstammung("leafy", "Gemuese");? / pre
+Wichtig ist in diesem Beispiel, dass das Objekt $leafy eine Instanz der Klasse Spinat ist, die eine Subklasse von Gemuese ist.
+Darum gibt der letzte Teil des obigen Skripts folgendes aus:
+[...] Abstammung:
+Objekt leafy gehört nicht zu einer Subklasse von Spinat Objekt leafy gehört zur Klasse spinat einer Subklasse von Gemuese
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

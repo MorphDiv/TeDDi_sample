@@ -1,0 +1,58 @@
+# language_name_wals:	Hebrew (Modern)
+# language_name_glotto:	Modern Hebrew
+# iso639_3:	heb
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hebr
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/he.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+מדריך PHP
+קודם
+הבא
+תוכן העניינים:
+PHP יכולה לטפל בקבלת קבצים שמועלים מכל דפדפן תואם RFC-1867 (שכולל את netscape navigator 3 ומעלה, microsoft internet explorer 3 עם תוסף (patch) של מיקרוסופט, או גירסאות חדשות יותר ללא התוסף). הפיצ 'ר הזה מאפשר לאנשים להעלות גם קבצי טקסט וגם קבצים בינאריים. עם האימות של PHP ופונקציות הטיפול בקבצים, ניתנת שליטה מלאה על מי שמורשה להעלות את הקובץ, ומה לעשות עם הקובץ לאחר שהועלה.
+PHP גם תומכת בשיטת העלאת הקבצים PUT ש-netscape composer והקליינט של W3C, Amaya, משתמשים בה. עוד פרטים על תמיכה בשיטת PUT.
+מסך העלאת קובץ יכול להיבנות על ידי יצירת טופס מיוחד שנראה בערך ככה:
+דוגמה 19-1. טופס העלאת קובץ
+form enctype=" multipart / form-data "action="_URL_" method="post "input type="hidden" name="MAX_FILE_SIZE "value="1000" Send this file: input name="userfile "type="file" input type="submit "value="Send File" / form
+אזהרה
+הגדרת ה-MAX_FILE_SIZE היא בגדר ייעוץ לדפדפן. קל ביותר להערים על המקסימום הזה. כדאי לא לבנות על זה שהדפדפן מציית למשאלתך! על הגדרת ה-PHP עבור הגודל המקסימלי, מצד שני, לא ניתן לעבוד.
+
+
+So don 't count on it that the browser obeys you wish!
+
+ב-PHP, המשתנים הבאים יהיו מוגדרים בסקריפט היעד לאחר העלאת קבצים שהצליחה, בהנחה ש register_globals מופעל ב - php.ini. אם track_vars מופעל, הם יהיו זמינים ב-PHP גם במערת הגלובלי $HTTP_POST_VARS. יש לשים לב ששמות המשתנים הבאים מתייחסים לקובץ שהועלה בשדה בשם 'userfile', כמו בדוגמה שלמעלה:
+$userfile - שם הקובץ הזמני שבו אוחסן הקובץ שהועלה לשרת.
+$userfile_name - השם או הנתיב המקורי של הקובץ על המחשב של זה שהעלה את הקובץ
+$userfile_size - הגודל של הקובץ ביחידות של בייט (byte)
+$userfile_type - ה-mime type של הקובץ, במידה והדפדפן סיפק את הנתון הזה. דוגמה: "image / gif".
+ב-PHP 4, ההתנהגות שונה במקצת, בכך שהמערך הגלובלי $HTTP_POST_FILES דואג להכיל מידע על הקובץ שהועלה. זה זמין רק אם track_vars מופעל, אבל track_vars תמיד מופעל בגירסאות PHP שבאו אחרי 4.0.2.
+התכולה של $HTTP_POST_FILES מפורטת כאן. יש לשים לב שהנחת היסוד היא ששם הקובץ שמועלה הוא 'userfile', כמו בדוגמה למעלה:
+השם המקורי של הקובץ על מחשב הלקוח.
+ה-mime type של הקובץ, אם הדפדפן סיפק את המידע הזה. דוגמה: "image / gif".
+הגודל, ביחידות בייט (byte), של הקובץ שהועלה.
+The temporary filename of the file in which the uploaded file was stored on the server. שם הקובץ הזמני שבו נשמר הקובץ על השרת.
+כברירת מחדל, הקבצים ישמרו בספרייה הזמנית שהיא ברירת המחדל של השרת, אלא אם הוגדר אחרת ב upload_tmp_dir שנמצאת ב php.ini. ניתן לשנות את ספריית ברירת המחדל של השרת על ידי הגדרת משתנה הסביבה TMPDIR בסביבה בה PHP רצה. הגדרה באמצעות putenv() מתוך סקריפט של PHP לא תעבוד. כמו כן, משתנה הסביבה הזה יכול להיות שימושי כשרוצים לוודא שפעולות אחרות מבוצעות על קבצים שהועלו.
+דוגמה 19-2. וידוי העלאת קבצים
+הדוגמאות הבאות הן עבור גירסאות של PHP המאוחרות מ-3.0.16, וגירסאות המאוחרות מ-PHP בגירסה 4.0.2. אפשר לבדוק גם את הפונציות is_uploaded_file() ו - move_uploaded_file().
+?php if (is_uploaded_file($userfile)) {copy($userfile, "/ place / to / put / uploaded / file");} else {echo "Possible file upload attack: filename '$userfile' .";} / * ...or... * / move_uploaded_file($userfile," / place / to / put / uploaded / file");?
+עבור גירסאות קודמות של PHP, צריך לעשות משהו כמו בדוגמה.
+הערה: זה לא יעבוד בגירסאות של PHP שגדולות מ-4.0.2. זה תלוי בתפקודיות הפנימית של PHP ששונתה אחרי הגירסה הזו.
+?php / * Userland test for uploaded file. * / function is_uploaded_file( $filename) {if (!$tmp_file = get_cfg_var('upload_tmp_dir')) {$tmp_file = dirname(tempnam('', ''));} $tmp_file .= '/'. basename($filename); / * User might have trailing slash in php.ini... * / return (ereg_replace(' / +', '/', $tmp_file) == $filename);} if (is_uploaded_file($userfile)) {copy($userfile, "/ place / to / put / uploaded / file");} else {echo "Possible file upload attack: filename '$userfile' .";}?
+סקריפט ה-PHP שמקבל את הקובץ המועלה צריך ליישם כל לוגיקה הכרחית כדי לקבוע מה צריך לעשות עם הקובץ שהועלה. ניתן, לדוגמה, להשתמש במשתנה $file_size כדי למחוק כל קובץ, קטן או גדול מידי. אפשר להשתמש במשתנה $file_type כדי לזרוק כל קובץ שלא תואם לקריטריון של סוג מסויים. תהיה הלוגיקה אשר תהיה, צריך למחוק את הקובץ מהספרייה הזמנית, או להעביר אותו למקום אחר.
+הקובץ ימחק מהספרייה הזמנית בסוף הבקשה אם הוא לא הועבר, או ששמו לא שונה.
+קודם
+ראשי
+הבא
+עוגיות
+למעלה
+מלכודות נפוצות

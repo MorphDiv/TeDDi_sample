@@ -1,0 +1,53 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Apéndice E.
+Desarrollo en PHP
+Siguiente
+Para llamar a funciones del usuario desde una función interna, deberá usar la función call_user_function().
+call_user_function() devuelve SUCCESS si tiene éxito y FAILURE en caso de que la función no sea hallada. ¡Deberá comprobar ese valor de retorno!
+Si devuelve SUCCESS, debe usted ocuparse de destruir el pval devuelto (o devolverlo como el valor de retorno de su función).
+Si devuelve FAILURE, el valor de valret no está definido y no debe tocarlo.
+Todas las funciones internas que llaman a funciones de usuario deben ser reentrantes.
+Entre otras cosas, esto quiere decir que no se utilicen variables globales ni estáticas.
+call_user_function() lleva 6 argumentos:
+Esta es la matriz asociativa en la que se buscará la función.
+Este es un puntero a un objeto sobre el que se invoca la función.
+Deberá valer NULL si se llama a una función global.
+Si no es NULL (es decir, si apunta a un objeto), el argumento tabla_funciones se ignora y se toma su valor a partir de la codificación del objeto.
+El objeto *puede* ser modificado por dicha función (ésta accede a él a través de $this).
+Si por alguna razón no desea que eso ocurra, envíe entonces una copia del objeto.
+El nombre de la función a llamar.
+Debe ser un pval de tipo IS_STRING, con nombre_func.str.val y nombre_func.str.len fijados a los valores apropiados.
+El nombre_func es modificado por call_user_function(), que lo convierte a minúsculas.
+Si necesita preservar el nombre, envíe una copia del mismo.
+Un puntero a una estructura pval, en la que se guarda el valor de returno de la función.
+Hay que asignar espacio a la estructura previamente, porque la función call_user_function() NO lo asigna por sí misma.
+El número de parámetros que se pasan a la función.
+Una matriz de punteros a los valores que se pasarán como argumentos a la función.
+El primer argumento está en el elemento 0, el segundo en el elemento 1, etc.
+La matriz es una matriz de punteros a pval.
+Los punteros se envían tal cual a la función, lo que quiere decir que si la función modifica sus argumentos, se modifican los valores originales (paso por referencia).
+Si no desea ese comportamiento, pase una copia.
+Anterior
+Inicio
+Siguiente
+Desarrollo en PHP
+Subir
+Informando de errores

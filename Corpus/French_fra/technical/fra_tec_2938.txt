@@ -1,0 +1,59 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+Avertissement
+Ce module est EXPERIMENTAL.
+Cela signifie que le comportement de ces fonctions, leurs noms et concrètement, TOUT ce qui est documenté ici peut changer dans un futur proche, SANS PREAVIS!
+Soyez-en conscient, et utiliser ce module à vos risques et périls.
+dbx_query() retourne une ressource dbx_result_object ou 1 en cas de succès (un objet de résultat ne sera retourné que pour les requêtes SQL qui retournent un résultat), ou 0 en cas d 'erreur.
+Le paramètre flags sert à contrôler la quantité d 'informations retournée.
+Il peut être n 'importe quelle combinaisons par OR des constantes:
+DBX_RESULT_INFO, DBX_RESULT_INDEX, DBX_RESULT_ASSOC.
+DBX_RESULT_INFO fournit des informations sur les colonnes, comme les noms des champs et leur type.
+DBX_RESULT_INDEX retourne le résultat dans un tableau indexé (par exemple, data[2][3], où 2 est le numéro de ligne et 3 est le numéro de colonne), dont la première colonne est indexée à 0.
+DBX_RESULT_ASSOC associe les noms de colonnes avec leurs indices.
+Notez que DBX_RESULT_INDEX est toujours retourné, indépendamment de la valeur de flags.
+Si DBX_RESULT_ASSOC est spécifié, DBX_RESULT_INFO est aussi retourné, même s'il n 'a pas été spécifié.
+Ce qui signifie que les seules combinaisons envisageables sont DBX_RESULT_INDEX, DBX_RESULT_INDEX | DBX_RESULT_INFO et DBX_RESULT_INDEX | DBX_RESULT_INFO | DBX_RESULT_ASSOC.
+La dernière combinaison est la valeur par défaut de flags.
+Les résultats associés sont en fait des références, ce qui fait que modifier data[ 0][0], revient à modifier data[0]['fieldnameforfirstcolumn'].
+Un objet dbx_result_object a 5 membres (éventuellement 4, suivants les valeurs de flags): 'handle', 'cols', 'rows', 'info '(optionnel) et 'data'.
+Handle est un identifiant de résultat, qui peut être utilisé avec les fonctions spécifiques à son module.
+Par exemple:
+?php $result = dbx_query( $link, "SELECT id FROM tbl"); mysql_field_len($result - handle, 0);?
+Les membres cols et rows contiennent les numéros de colonne et de champs.
+?php $result = dbx_query( $link, "SELECT id FROM tbl"); echo "Taille du résultat: ". $result - rows." x ". $result - cols." br \n";?
+Le membre info n 'est retourné que si DBX_RESULT_INFO et / ou DBX_RESULT_ASSOC sont spécifié dans le paramètre flags.
+C'est un deuxième tableau, qui possède deux lignes ("name "and "type"), pour connaître les informations sur les colonnes.
+?php $result = dbx_query( $link, "SELECT id FROM tbl"); echo "Nom de la colonne: ". $result - info["name"][0]." br \n"; echo "Type de la colonne: ". $result - info["type"][0]." br \n";?
+Le membre data contient les données effectivement lues, éventuellement associées à des noms de colonnes.
+Si DBX_RESULT_ASSOC est utilisé, il est possible d'utiliser $result - data[2]["fieldname"].
+Exemple 1.
+Exemple avec dbx_query()
+?php $link = dbx_connect( "odbc", "", "base de données", "utilisateur", "mot de passe") or die ("Impossible de se connecter"); $result = dbx_query($link, "SELECT id, parentid, description FROM tbl"); if ($result==0) echo "La requête a échoué\n br "; elseif ($result==1) {echo "La requête a réussie\n br";} else {$rows=$result - rows; $cols=$result - cols; echo "p table dimension: {$result - rows} x {$result - cols} br table border=1 \n"; echo" tr "; for ($col=0; $col $cols; ++$col) {echo" td -{$result - info["name"][$col]} - br -{$result - info["type"][$col]} - / td ";} echo" / tr \n"; for ($row=0; $row $rows; ++$row) {echo "tr"; for ($col=0; $col $cols; ++$col) {echo "td -{$result - data[$row][$col]} - / td";} echo "/ tr \n";} echo" / table p \n"; echo "table dimension: {$result - rows} x id, parentid, description br table border=1 \n"; for ($row=0; $row $rows; ++$row) {echo "tr"; echo "td -{$result - data[$row]["id"]} - / td"; echo "td -{$result - data[$row]["parentid"]} - / td"; echo "td -{$result - data[$row]["description"]} - / td"; echo "/ tr \n";} echo" / table p \n";} dbx_close($link);?
+
+Reportez-vous aussi à la documentation de la base de données que vous utilisez.
+Voir aussi dbx_connect().
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

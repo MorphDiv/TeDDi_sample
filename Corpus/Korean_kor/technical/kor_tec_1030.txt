@@ -1,0 +1,29 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# iso639_3:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 3 = 3.0.12, PHP 4)
+메일박스 정보를 포함하는 객체의 배열을 돌려준다. 각 객체는 다음 속성을 갖는다. 메일박스의 완전한 이름을 갖는 name 속성; 메일 박스안에 포함된 분류체계(hierarchy)의 부분을 위한 분류체계 한정자(hirerarchy delimiter) delimiter 속성; 그리고 attributes. Attributes 속성은 다음에 대해서 테스트될 수 있는 비트마스크(bitmask)값이다:
+LATT_NOINFERIORS - This mailbox has no "children" (there are no mailboxes below this one).
+LATT_NOSELECT - This is only a container, not a mailbox - you cannot open it.
+LATT_MARKED - This mailbox is marked. Only used by UW-IMAPD.
+LATT_UNMARKED - This mailbox is not marked. Only used by UW-IMAPD.
+메일 박스 이름이 출력가능한 아스키(ASCII)코드 범위 밖의 국제적인 문자를 포함한다면 인코딩해야 할것이고, imap_utf7_decode() 함수로 디코딩해야 할것이다.
+ref 인수는 imap_open() 함수 에서와 같이 서버의 사양이면 된다.그리고 pattern 인수는 검색을 시작할 메일 박스의 위치이다. 모든 메일 박스에 적용시키려면 pattern 인수에 '*'라고 하면 된다.
+pattern 인수로 쓸 수 있는 두개의 특별한 문자들이 있다: '*' 과 '%'문자이다. '*'은 모든 메일박스를 돌려줌을 의미한다. pattern 인수에 '*'를 쓰면 모든 메일 박스 체계(hierarchy) 의 목록을 얻을 수 있다. '%'는 현재 레벨만을 돌려준다는 걸 의미한다. pattern 인수에 '%'를 쓰면 최상위 레벨의 메일박스 만을 돌려줄 것이다; UW_IMAPD에 관해 '~/mail/%'을 쓰면 ~/mail 디렉토리의 모든 메일 박스를 돌려주지만, 하위디렉토리는 포함되지 않는다.
+
+예 1. imap_getmailboxes() example
+See also imap_getsubscribed().

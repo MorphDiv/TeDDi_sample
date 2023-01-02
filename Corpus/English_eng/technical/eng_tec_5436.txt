@@ -1,0 +1,52 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 5.
+Security
+Next
+PHP is subject to the security built into most server systems with respect to permissions on a file and directory basis.
+This allows you to control which files in the filesystem may be read.
+Care should be taken with any files which are world readable to ensure that they are safe for reading by all users who have access to that filesystem.
+Since PHP was designed to allow user level access to the filesystem, it 's entirely possible to write a PHP script that will allow you to read system files such as / etc / passwd, modify your ethernet connections, send massive printer jobs out, etc.
+This has some obvious implications, in that you need to ensure that the files that you read from and write to are the appropriate ones.
+Consider the following script, where a user indicates that they 'd like to delete a file in their home directory.
+This assumes a situation where a PHP web interface is regularly used for file management, so the Apache user is allowed to delete files in the user home directories.
+Example 5-1.
+Poor variable checking leads to....
+?php / / remove a file from the user' s home directory $username = $_POST['user_submitted_name']; $homedir = "/ home / $username"; $file_to_delete = "$userfile"; unlink ("$homedir / $userfile"); echo "$file_to_delete has been deleted !";?
+Example 5-2....
+A filesystem attack
+?php / / removes a file from anywhere on the hard drive that / / the PHP user has access to.
+If PHP has root access: $username = ".. / etc /"; $homedir = "/ home /.. / etc /"; $file_to_delete = "passwd"; unlink (" / home /.. / etc / passwd"); echo "/ home /.. / etc / passwd has been deleted !";?
+Only allow limited permissions to the PHP web user binary.
+Check all variables which are submitted.
+Example 5-3.
+More secure file name checking
+?php / / removes a file from the hard drive that / / the PHP user has access to. $username = $_SERVER[ 'REMOTE_USER']; / / using an authentication mechanisim $homedir = "/ home / $username"; $file_to_delete = basename("$userfile"); / / strip paths unlink ($homedir / $file_to_delete); $fp = fopen(" / home / logging / filedelete.log" ,"+a"); / /log the deletion $logstring = "$username $homedir $file_to_delete"; fputs ($fp, $logstring); fclose($fp); echo "$file_to_delete has been deleted !";?
+Example 5-4.
+More secure file name checking
+?php $username = $_SERVER[ 'REMOTE_USER']; / / using an authentication mechanisim $homedir = "/ home / $username"; if (!ereg('^[^. / ][^ / ]*$', $userfile)) die('bad filename'); / /die, do not process if (!ereg('^[^. / ][^ / ]*$', $username)) die('bad username'); / /die, do not process / /etc...?
+Depending on your operating system, there are a wide variety of files which you should be concerned about, including device entries (/ dev / or COM1), configuration files (/ etc / files and the .ini files), well known file storage areas (/ home /, My Documents), etc.
+For this reason, it 's usually easier to create a policy where you forbid everything except for what you explicitly allow.
+Prev
+Home
+Next
+Installed as an Apache module
+Up
+Database Security

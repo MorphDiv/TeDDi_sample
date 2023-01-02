@@ -1,0 +1,87 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 3.
+Installation
+Next
+This section contains notes and hints specific to Netscape and iPlanet installs of PHP, both for Sun Solaris and Windows versions.
+You can find more information about setting up PHP for the Netscape Enterprise Server here: http: / /benoit.noss.free.fr / php / install-php4.html
+To build PHP with NES or iPlanet web servers, enter the proper install directory for the --with-nsapi = DIR To build PHP with NES or iPlanet web servers, enter the proper install directory for the --with-nsapi = DIR option.
+The default directory is usually / opt / netscape / suitespot /.
+Please also read / php-xxx-version / sapi / nsapi / nsapi-readme.txt.
+Example 3-10.
+Installation Example for Netscape Enterprise on Solaris
+Instructions for Sun Solaris 2.6 with Netscape Enterprise Server 3.6 From: bhager@invacare.com 1.
+Install the following packages from www.sunfreeware.com or another download site: flex-2_5_4a-sol26-sparc-local gcc-2_95_2-sol26-sparc-local gzip-1.2.4-sol26-sparc-local perl-5_005_03-sol26-sparc-local bison-1_25-sol26-sparc-local make-3_76_1-sol26-sparc-local m4-1_4-sol26-sparc-local autoconf-2.13 automake-1.4 mysql-3.23.24-beta (if you want mysql support) tar-1.13 (GNU tar) 2.
+Make sure your path includes the proper directories PATH=.: / usr / local / bin: / usr / sbin: / usr / bin: / usr / ccs / bin export PATH 3. gunzip php-x.x.x.tar.gz (if you have a .gz dist, otherwise go to 4) 4. tar xvf php-x.x.x.tar 5. cd.. / php-x.x.x 6.
+For the following step, make sure / opt / netscape / suitespot / is where your netscape server is installed.
+Otherwise, change to correct path: / configure --with-mysql= / usr / local / mysql --with-nsapi= / opt / netscape / suitespot / --enable-track-vars --enable-libgcc 7. make 8. make install
+Firstly you may need to add some paths to the LD_LIBRARY_PATH environment for Netscape to find all the shared libs.
+This can best done in the start script for your Netscape server.
+Windows users can probably skip this step.
+The start script is often located in: / path / to / server / https-servername / start
+You may also need to edit the configuration files that are located in: / path / to / server / https-servername / config /.
+Example 3-11.
+Configuration Example for Netscape Enterprise
+Configuration Instructions for Netscape Enterprise Server From: bhager@invacare.com 1.
+Add the following line to mime.types: type=magnus-internal / x-httpd-php exts=php 2.
+Add the following to obj.conf, shlib will vary depending on your OS, for unix it will be something like / opt / netscape / suitespot / bin / libphp4.so.
+You should place the following lines after mime types init.
+Init fn=" load-modules "funcs="php4_init,php4_close,php4_execute,php4_auth_trans" shlib=" / php4 / nsapiPHP4.dll "Init fn=php4_init errorString="Failed to initialize PHP!" object name="default "... .#NOTE this next line should happen after all'ObjectType 'and before all'AddLog' lines Service fn="php4_execute" type="magnus-internal / x-httpd-php ".. / Object Object name="x-httpd-php" ObjectType fn="force-type "type="magnus-internal / x-httpd-php" Service fn=php4_execute / Object Authentication configuration PHP authentication cannot be used with any other authentication.
+ALL AUTHENTICATION IS PASSED TO YOUR PHP SCRIPT.
+To configure PHP Authentication for the entire server, add the following line:
+Object name=" default "AuthTrans fn=php4_auth_trans.... / Object To use PHP Authentication on a single directory, add the following:
+Object ppath=" d:\path o\authenticated\dir\* "AuthTrans fn=php4_auth_trans / Object
+If you are running Netscape Enterprise 4.x, then you should use the following:
+Example 3-12.
+Configuration Example for Netscape Enterprise 4.x
+Place these lines after the mime types init, and everything else is similar to the example configuration above.
+From:
+Graeme Hoose (GraemeHoose@BrightStation.com) Init fn="load-modules "shlib=" / path / to / server4 / bin / libphp4.so" funcs="php4_init,php4_close,php4_execute,php4_auth_trans "Init fn="php4_init" LateInit="yes "
+To Install PHP as CGI (for Netscape Enterprise Server, iPlanet, perhaps Fastrack), do the following:
+Copy php4ts.dll to your systemroot (the directory where you installed windows)
+Make a file association from the command line.
+Type the following two lines:
+assoc .php=PHPScript ftype PHPScript=c:\php\php.exe %1 %*
+In the Netscape Enterprise Administration Server create a dummy shellcgi directory and remove it just after (this step creates 5 important lines in obj.conf and allow the web server to handle shellcgi scripts).
+In the Netscape Enterprise Administration Server create a new mime type (Category: type, Content-Type: magnus-internal / shellcgi, File Suffix:php).
+Do it for each web server instance you want php to run
+More details about setting up PHP as a CGI executable can be found here: http: / /benoit.noss.free.fr / php / install-php.html
+To Install PHP as NSAPI (for Netscape Enterprise Server, iPlanet, perhaps Fastrack, do the following:
+Copy php4ts.dll to your systemroot (the directory where you installed windows)
+Make a file association from the command line.
+Type the following two lines:
+assoc .php=PHPScript ftype PHPScript=c:\php\php.exe %1 %*
+In the Netscape Enterprise Administration Server create a new mime type (Category: type, Content-Type: magnus-internal / x-httpd-php, File Suffix:php).
+Stop your web service and edit obj.conf.
+At the end of the Init section, place these two lines (necessarily after mime type init!):
+Init fn=" load-modules "funcs="php4_init,php4_close,php4_execute,php4_auth_trans" shlib="c: / php / sapi / php4nsapi.dll "Init fn="php4_init" errorString="Failed to initialise PHP! "
+In The Object name=" default "section, place this line necessarily after all'ObjectType 'and before all'AddLog' lines:
+Service fn=" php4_execute "type="magnus-internal / x-httpd-php"
+At the end of the file, create a new object called x-httpd-php, by inserting these lines:
+Object name=" x-httpd-php "ObjectType fn="force-type" type="magnus-internal / x-httpd-php "Service fn=php4_execute / Object
+Restart your web service and apply changes
+Do it for each web server instance you want PHP to run
+More details about setting up PHP as an NSAPI filter can be found here: http: / /benoit.noss.free.fr / php / install-php4.html
+Prev
+Home
+Next
+Servers-IIS / PWS
+Up
+Servers-OmniHTTPd Server

@@ -1,0 +1,33 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+imap_createmailbox() crée une nouvelle boîte aux lettres nommée mbox.
+Les noms contenant des caractères spéciaux doivent être encodés.
+imap_createmailbox() retourne TRUE en cas de succès, et FALSE en cas d 'erreur.
+Exemple 1.
+Exemple avec imap_createmailbox()
+?php $mbox = imap_open( "{your.imap.host}" ,"utilisateur" ,"mot_de_passe",OP_HALFOPEN) or die("connexion impossible: ".imap_last_error()); $name1 = "nouvellephpbox"; $name2 = imap_utf7_encode("nouvellephpboxéx"); $newname = $name1; echo "Le nouveau nom sera '$name1 'br \n"; # Nous allons créer maintenant une nouvelle boîte aux lettres "phptestbox "# dans votre dossier inbox, vérifier son état et finalement, la supprimer # pour remettre votre inbox dans son état initial. if(@imap_createmailbox($mbox,imap_utf7_encode("{your.imap.host}INBOX.$newname"))) {$status = @imap_status($mbox ,"{your.imap.host}INBOX.$newname",SA_ALL); if($status) {print("Votre nouvelle boîte '$name1' est dans l'état suivant: br \n"); print("Messages:". $status - messages). "br \n"; print("Récent:". $status - recent). "br \n"; print("Non lus:". $status - unseen). "br \n"; print("UID suivant:". $status - uidnext). "br \n"; print("UID validité :". $status - uidvalidity)." br \n"; if(imap_renamemailbox($mbox ,"{your.imap.host}INBOX.$newname" ,"{your.imap.host}INBOX.$name2")) {echo "renommage de la boîte aux lettres '$name1 'en '$name2' br \n"; $newname=$name2;} else {print "imap_renamemailbox sur la nouvelle boîte aux lettres a échoué: ".imap_last_error(). "br \n";}} else {print "imap_status sur la nouvelle boîte aux lettres a échoué: ".imap_last_error()." br \n";} if(@imap_deletemailbox($mbox ,"{your.imap.host}INBOX.$newname")) {print "new mailbox supprimée pour remettre tout en état br \n";} else {print "imap_deletemailbox ur la nouvelle boîte aux lettres a échoué: ".implode( "br \n",imap_errors())." br \n";}} else {print "Impossible de créer une nouvelle boîte aux lettres: ".implode( "br \n",imap_errors())." br \n";} imap_close($mbox);?
+Voir aussi imap_renamemailbox(), imap_deletemailbox() et imap_open() pour connaître le format des noms de mbox.
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

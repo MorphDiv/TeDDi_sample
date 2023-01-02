@@ -1,0 +1,38 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+本節には、 Unix もしくは Windows プラットフォームで Apache 2.0に PHP をインストールするための説明や ヒントがあります。
+Apache 2.0と PHP の組み合わせを(Unix、Windows どちらのプラットフォームでも)実運用環境で使用しないでください。
+Apache 2.0サーバに関する基本的な知識を得るために、 Apache Documentation を一読することを お勧めします。
+PHP 4.3.0がリリースされるまでの間は、Apache 2.0の最新バージョンと 以下のいずれかのリリースとの組み合わせで使用することをお勧めします。
+注意 Apache 2.0 SAPI サポートはPHP 4.2.0から開始されて おり、PHP 4.2.3はApache 2.0.39との組み合わせで動作することが 確認されています。ただし他のApache 2バージョンとの組み合わせでの 動作は保証されていません。PHP 4.2.3とApache 2.0.39との組み合わせに ついてもお勧めはしません。
+上記で触れている全ての PHP バージョンはApache 1.3.x では問題なく動作します。
+最新バージョンの Apache 2.0 を ダウンロードして上述のいずれかのバージョンのPHPを用意してください。 このクイックガイドはApache 2.0で PHP を動作させるための 基本的な部分しかカバーしていません。更なる情報については Apache Documentation をご覧ください。 情報が古く不正確になってしまうため、ここには詳細なバージョン番号は 記述されていません。'NN'という文字列をご使用のバージョンに適宜置き換えて ください。
+例 3-6 インストールガイド(Apache 2 Shared Module Version)
+上記の手順で、 PHP SAPIモジュールサポートを有効にして Apache 2.0を動作させることが出来ます。もちろん、Apacheと PHP 共にもっと多くのconfigureオプションを指定することが出来ます。 詳しい情報を得るにはそれぞれのソースツリーディレクトリで ./configure --help を実行してください。マルチスレッド版のApache 2.0を 構築する場合は、標準MPM-Moduleである prefork を worker もしくは perchild で 上書きする必要があります。このためには、上記のステップ6で --with-mpm=worker もしくは --with-mpm=perchild を指定します。マルチ スレッド版については、その動作に関して十分注意してください。 詳細はApacheドキュメントの MPM-Modules を参照してください。
+注意 マルチスレッド版のApacheを構築する場合は、あなたのシステムがスレッドを サポートしている必要があります。また、この場合 PHP を 実験的なステータスにあるZend Thread Safety(ZTS)で構築することを意味します。 従って全ての拡張モジュールを使用できるわけではありません。 prefork MPM-Moduleでの構築をお勧めします。
+まず Windows特有の事柄 を 読むことをお勧めします。
+Apache 2.0はWindows NT 4.0, Windows 2000, Windows XPでの動作を 想定してデザインされており、現時点ではWindows 9xのサポートは 不完全です。これらのプラットフォームでの動作は保証されません。
+最新バージョンの Apache 2.0 をダウンロードして上記のいずれかのPHPのバージョンを 用意します。まず マニュアル インストールの手順 の手順に従ってから、 PHP と Apacheの統合を開始します。
+Windows上のApache 2.0で PHP を動作させるには2つの 方法があります。一つはCGIバイナリを使用する方法、もう一つはApache モジュールDLLを使用する方法です。前者の場合は一旦Apacheサーバを 停止して httpd.conf を PHP と 動作するように編集します。
+CGIバイナリ を有効にするにはApacheの httpd.conf に以下の3行を追加します。
+例 3-7CGI版PHPとApache 2.0
+注意 PHP 4.3.0からCGIバイナリのファイル名が php-cgi.exe に 変更されています。ApacheのActionディレクティブを記述する際には ご注意ください。
+PHP をApache 2.0のモジュールとして使用したい場合は、 まず php4ts.dll を winnt/system32 (Windows NT/2000)もしくは windows/system32 (Windows XP)に移動します(既存のファイルは全て上書きしてください)。次に PHPモジュール を有効にするため、Apacheの httpd.conf に以下の2行を追加します。
+例 3-8モジュール版PHPとApache 2.0
+注意 c:/php/ はあなたが実際に PHP を インストールしたパスに置き換えてください。
+インストール時に 異なったPHPバージョン のDLLを 混同しないように気をつけてください。

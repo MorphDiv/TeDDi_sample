@@ -1,0 +1,145 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Kapitel 7.
+Typen
+Nach vorne
+Ein String ist eine Folge von Zeichen.
+In PHP entspricht ein Zeichen einem Byte, das heißt, dass exakt 256 unterschiedliche Zeichen möglich sind.
+Das impliziert auch, dass PHP keine native Unterstützung für Unicode bietet.
+Anmerkung:
+Für einen String stellt die Länge kein Problem dar.
+Von PHP-Seite aus gibt es keine praktische Grenze für die Größe eines Strings.
+Daher gibt es keinen Grund sich Sorgen über lange Strings zu machen.
+Ein String kann auf drei verschiedene Weisen geschrieben werden.
+Einfache Anführungszeichen (single quoted)
+Doppelte Anführungszeichen (double quoted)
+Heredoc Syntax
+Der leichteste Weg einen einfachen String zu schreiben, ist der Einschluss in einfache Anführungszeichen (das Zeichen ').
+Um ein einfaches Anführungszeichen wörtlich auszugeben, muss dieses mit einem Backslash (\) escaped werden, wie in vielen anderen Programmiersprachen auch.
+Wenn Sie innerhalb eines Strings einen Backslash vor einem einfachen Anführungszeichen oder am Ende eines Strings ausgeben wollen, müssen Sie diesen verdoppeln.
+Beachten Sie: wenn Sie versuchen irgendwelche anderen Zeichen zu escapen, wird der Backslash ebenfalls ausgegeben!
+Daher besteht für gewöhnlich keine Notwendigkeit den Backslash selbst zu escapen.
+Anmerkung:
+In PHP 3 wird eine Warnung auf der Stufe E_NOTICE ausgegeben, wenn das passiert.
+Anmerkung:
+Anders als bei den zwei anderen Schreibweisen werden Variablen innerhalb von single-quoted Strings nicht ausgewertet.
+echo 'Das ist ein einfacher String'; echo 'Sie können ebenso einen Zeilenumbruch einfügen, auf diese Art .'; echo 'Arnold sagte einmal: "I\'ll be back"'; / / Ausgabe:... "I'll be back "echo 'Sind Sie sicher, dass Sie C:\\*.* löschen wollen ?'; / / Ausgabe:... dass Sie C:\*.* löschen wollen? echo 'Sind Sie sicher, dass Sie C:\*.* löschen wollen ?'; / / Ausgabe:... dass Sie C:\*.* löschen wollen? echo 'Ich versuche einen Zeilenumbruch an diesem Punkt: \n ein Zeilenumbruch'; / / Ausgabe:... diesem Punkt: \n ein Zeilenumbruch' $var = "nur zum Vergnügen"; echo 'Das mache ich $var'; / / Ausgabe:
+Das mache ich $var
+Wenn ein String in doppelten Anführungszeichen (") eingeschlossen ist, versteht PHP mehr Escape-Folgen für spezielle Zeichen:
+Tabelle 7-1.
+Nicht ausgewertete / übergangene Zeichen:
+Zeichenfolge
+Bedeutung
+
+Zeilenvorschub (LF oder 0x0A als ASCII-Code)
+
+Wagenrücklauf (CR oder 0x0D als ASCII-Code)
+
+horizontaler Tabulator (HT oder 0x09 als ASCII-Code
+
+Backslash / Rückstrich
+
+Dollar-Symbol
+
+doppelte Anführungszeichen
+
+die Zeichenfolge, die dem regulären Ausdruck entspricht ist ein Zeichen in Oktal-Schreibweise
+
+die Zeichenfolge, die dem regulären Ausdruck entspricht ist ein Zeichen in Hexadezimal-Schreibweise
+Noch einmal: wenn Sie versuchen, irgend ein anderes Zeichen zu escapen wird der Backslash ebenfalls ausgegeben!
+Der wichtigste Vorteil von double-quoted Strings ist die Tatsache, dass Variablennamen ausgewertet werden.
+Für Details siehe String Analyse (parsing)
+Eine andere Möglichkeit Strings einzufassen, besteht im Gebrauch der heredoc-Syntax ("").
+Hierfür ist nach ein Bezeichner zu setzen.
+Nun folgt der eigentliche String und dann derselbe Bezeichner um den String abzuschließen.
+Der schließende Bezeichner muss in der ersten Spalte der Zeile stehen.
+Die verwendeten Bezeichner müssen den gleichen Regeln entsprechen wie alle anderen PHP-Labels auch:
+Sie dürfen lediglich alphanumerische Zeichen und den Unterstrich enthalten und müssen mit einem Unterstrich oder einem Buchstaben beginnen.
+Warnung
+Es ist sehr wichtig zu beachten, dass die Zeile mit dem schließenden Bezeichner keine anderen Zeichen enthält, ausgenommen möglicherweise ein Semikolon (;).
+Das bedeuted im Besonderen, dass der Bezeichner nicht eingerückt werden darf und es dürfen keine Leerzeichen oder Tabulatoren vor oder nach dem Semikolon stehen.
+Heredoc-Text funktioniert wie ein String innnerhalb doppelter Anführungszeichen, nur ohne doppelte Anführungszeichen.
+Anführungszeichen innerhalb von heredoc-Texten müssen also keiner Sonderbehandlung (escapen) unterzogen werden, aber Sie können dennoch die oben aufgeführten Escape-Anweisungen verwenden.
+Variablen werden ausgewertet, aber besondere Aufmerksamkeit muss komplexen Variablen gewidmet werden, genau wie bei Strings.
+Beispiel 7-2.
+Beispiel zur String-Festlegung per "heredoc "-Methode:
+?php $str = EOD Beispiel eines Strings über mehrere Script-Zeilen durch Gebrauch der heredoc-Syntax.
+EOD; / * komplexeres Beispiel, mit Variablen * / class foo {var $foo; var $bar; function foo() {$this - foo = 'Foo'; $this - bar = array('Bar1', 'Bar2', 'Bar3');}} $foo = new foo(); $name = 'Mein Name'; echo EOT Mein Name ist "$name ".
+Ich schreibe einige $foo - foo.
+Nun schreibe ich gerade einige {$foo - bar[1]}.
+Dies sollte ein großes 'A' schreiben: \x41 EOT;?
+Anmerkung:
+Die heredoc Unterstützung wurde in PHP 4 eingeführt.
+Wird ein String in doppelten Anführungszeichen oder mit heredoc angegeben, werden enthaltene Variablen ausgewertet (geparst).
+Es gibt zwei Syntax-Typen, eine einfache und eine komplexe.
+Die einfache Syntax ist die geläufigste und bequemste.
+Sie bietet die Möglichkeit eine Variable, einen Array-Wert oder eine Objekt-Eigenschaft auszuwerten (parsen).
+Die komplexe Syntax wurde in PHP 4 eingeführt und ist an den geschweiften Klammern {} erkennbar, die den Ausdruck umschließen.
+Sobald ein Dollarzeichen ($) auftaucht, wird der Parser versuchen, gierig so viele Zeichen wie möglich zu bekommen, um einen gültigen Variablennamen zu bilden.
+Schließen Sie Ihren Varaiblennamen in geschweifte Klammern ein, wenn Sie ausdrücklich das Ende des Namens angeben wollen.
+$beer = 'Heineken'; echo "$beer's Geschmack ist großartig"; / / funktioniert, "'"ist kein gültiges / / Zeichen für einen Variablennamen echo "Er hat einige $beers getrunken"; / / funktioniert nicht, 's' ist ein gültiges / / Zeichen für einen Variablennamen echo "Er hat einige ${beer}s getrunken"; / / funktioniert
+Auf ähnliche Weise können Sie erreichen, dass ein Array-Index oder eine Objekt-Eigenschaft ausgewertet wird.
+Bei Array-Indizes markiert die schließende eckige Klammer (]) das Ende des Index.
+Für Objekt-Eigenschaften gelten die gleichen Regeln wie bei einfachen Variablen, obwohl es bei Objekt-Eigenschaften keinen Trick gibt, wie dies bei Variablen der Fall ist.
+$früchte = array( 'Erdbeere '= 'rot', 'Banane '= 'gelb'); / / Beachten Sie: außerhalb von String-Anführungszeichen funktioniert das anders. echo "Eine Banane ist $früchte[Banane] ."; echo "Dieses Quadrat ist $quadrat - breite Meter breit ."; / / Funktioniert nicht.
+Für eine Lösung siehe die komplexe Syntax. echo "Dieses Quadrat ist $quadrat - breite00 Zentimeter breit .";
+Für irgendetwas Komplexeres sollten Sie die komplexe Syntax nutzen.
+Diese wird nicht komplex genannt, weil etwa die Syntax komplex ist, sondern weil Sie auf diesem Weg komplexe Ausdrücke einbeziehen können.
+Tatsächlich können Sie jeden beliebigen Wert einbeziehen, der im Namensbereich in Strings gültig ist.
+Schreiben Sie den Ausdruck einfach auf die gleiche Art und Weise, wie außerhalb des Strings, und umschließen diesen mit {und}.
+Da Sie '{' nicht escapen können, wird diese Syntax nur erkannt, wenn auf {unmittelbar $folgt. (Benutzen Sie "{\$ "oder "\{$" um ein wörtliches "{$ "zu erhalten.) Einige Beispiele, um dies zu verdeutlichen:
+$great = 'fantastisch'; echo "Das ist {$great}"; / / funktioniert nicht, Ausgabe:
+Das ist {fantastisch} echo "Das ist {$great}"; / / funktioniert, Ausgabe:
+Das ist fantastisch echo "Dieses Quadrat ist {$square - width}00 Zentimeter breit ."; echo "Das funktioniert: {$arr[4][3]}"; / / Das ist aus dem gleichen Grund falsch / / wie $foo[bar] außerhalb eines Strings falsch ist. echo "Das ist falsch: {$arr[foo][3]}"; echo "So sollten Sie es machen: {$arr['foo'][3]}"; echo "Sie können sogar schreiben {$obj - values[3] - name}"; echo "Das ist der Wert der Variable mit Namen $name: {${$name}}";
+Auf Zeichen innerhalb von Strings kann durch die Angabe des nullbasierten Offsets in geschweiften Klammern nach dem String, auf das gewünschte Zeichen zugegriffen werden.
+Anmerkung:
+Für Abwärtskompatibilität können Sie immer noch die Array-Klammern verwenden.
+Diese Syntax wird jedoch seit PHP 4 missbilligt.
+Beispiel 7-3.
+Einige String-Beispiele
+?php / / Zuweisung eines Strings. $str = "Dies ist eine Zeichenkette"; / / Erweiterung dieses Strings. $str = $str." mit etwas zusätzlichem Text"; / / andere Möglichkeit zum Erweitern incl.
+Anweisung für Neue-Zeile. $str .= "und einer neuen Zeile am Ende.\n"; / * Nach diesen drei Operationen enthält $str: "Dies ist eine Zeichenkette mit etwas zusätzlichem Text und einer neuen Zeile am Ende.\n." * / / / Dieser String wird am Ende zu: 'p Nummer:
+9 / p '$num = 9; $str = "p Nummer: $num / p"; / / Dieser wird zu' p Nummer: $num / p '$num = 9; $str =' p Nummer: $num / p '; / / Das erste Zeichen eines Strings. $str = 'Das ist ein Test.' $first = $str{0}; / / $first enthält "D "/ / Das letzte Zeichen eines Strings. $str = 'Das ist immer noch ein Test. '$last = $str{strlen($str)-1}; / / $last enthält". "?
+Zeichenketten / Strings können mittels des '.'(dot )-Operators miteinander verbunden werden.
+Beachten Sie, dass dafür nicht der '+' (Additions )-Operator verwendet werden kann Für mehr Informationen schauen Sie bitte unter den Zeichenketten-Operatoren nach.
+Es gibt eine Menge nützlicher Funktionen zur String-Manipulation.
+Für allgemeine Funktionen schauen Sie sich den Abschnitt über String Funktionen an, und für fortgeschrittenes Suchen Ersetzen die Funktionen zu Regulären Ausdrücken (in zwei Ausführungen:
+Perl Kompatibel und POSIX erweitert).
+Weiterhin gibt es auch noch Funktionen für URL-Strings, und Funktionen zum Verschlüsseln / Entschlüsseln von Strings (mcrypt und mhash).
+Schließlich, falls Sie immer noch nicht das gefunden haben wonach Sie suchen, schauen Sie unter den Zeichen-Typen Funktionen nach.
+Sobald ein String als numerischer Wert ausgewertet wird, wird der resultierende Wert und Typ wie folgt festgelegt.
+Der String wird als float Der String wird als float ausgewertet, wenn er eines der Zeichen '.', 'e' oder 'E 'enthält.
+Ansonsten wird er als Integer-Wert interpretiert.
+Der Wert wird durch den Anfangsteil des Strings bestimmt.
+Sofern der String mit gültigen numerischen Daten beginnt, werden diese als Wert benutzt.
+Andernfalls wird der Wert 0 (Null) sein.
+Gültige numerische Daten sind ein optionales Vorzeichen, gefolgt von einer oder mehreren Zahlen (optional mit einem Dezimalpunkt).
+Wahlweise kann auch ein Exponent angegeben werden.
+Der Exponent besteht aus einem 'e' oder 'E ', gefolgt von einer oder mehreren Zahlen.
+$foo = 1 + "10.5"; / / $foo ist float (11.5) $foo = 1 + "-1.3e3"; / / $foo ist float (-1299) $foo = 1 + "bob-1.3e3"; / / $foo ist integer (1) $foo = 1 + "bob3"; / / $foo ist integer (1) $foo = 1 + "10 Kleine Schweine"; / / $foo ist integer (11) $foo = 4 + "10.2 Ferkel"; / / $foo ist float (14.2) $foo = "10 Schweine" + 1; / / $foo ist integer (11) $foo = "10.0 Schweine "+ 1; / / $foo ist float (11) $foo = "10.0 Schweine" + 1.0; / / $foo ist float (11)
+Weitere Informationen über solche Umwandlungen finden Sie in den UNIX Manualseiten unter strtod( 3).
+Wenn Sie irgendein Beispiel dieses Abschnitts testen wollen, können Sie dieses per "Copy und Paste" übernehmen.
+Fügen Sie die folgende Zeile Ihrem Skript hinzu und Sie sehen selbst was passiert:
+echo "\$foo==$foo; Typ ist". gettype ($foo). "br / \n";
+Zurück
+Zum Anfang
+Nach vorne
+Fließkomma-Zahlenwerte
+Nach oben

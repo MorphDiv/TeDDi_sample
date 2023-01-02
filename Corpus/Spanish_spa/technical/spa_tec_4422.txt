@@ -1,0 +1,66 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Capítulo 8.
+
+Siguiente
+El ámbito de una variable es el contexto dentro del que la variable está definida.
+La mayor parte de las variables PHP sólo tienen un ámbito simple.
+Este ámbito simple también abarca los ficheros incluidos y los requeridos.
+Por ejemplo:
+$a = 1; include "b.inc";
+Aquí, la variable $a dentro del script incluido b.inc.
+De todas formas, dentro de las funciones definidas por el usuario aparece un ámbito local a la función.
+Cualquier variables que se use dentro de una función está, por defecto, limitada al ámbito local de la función.
+Por ejemplo:
+$a = 1; / * ámbito global * / Function Test () {echo $a; / * referencia a una variable de ámbito local * /} Test ();
+Este script no producirá salida, ya que la orden echo utiliza una versión local de la variable $a, a la que no se ha asignado ningún valor en su ámbito.
+Puede que usted note que hay una pequeña diferencia con el lenguaje C, en el que las variables globales están disponibles automáticamente dentro de la función a menos que sean expresamente sobreescritas por una definición local.
+Esto puede causar algunos problemas, ya que la gente puede cambiar variables globales inadvertidamente.
+En PHP, las variables globales deben ser declaradas globales dentro de la función si van a ser utilizadas dentro de dicha función.
+Veamos un ejemplo:
+$a = 1; $b = 2; Function Sum () {global $a, $b; $b = $a + $b;} Sum (); echo $b;
+El script anterior producirá la salida "3".
+Al declarar $a y $b globales dentro de la función, todas las referencias a tales variables se referirán a la versión global.
+No hay límite al número de variables globales que se pueden manipular dentro de una función.
+Un segundo método para acceder a las variables desde un ámbito global es usando el array $GLOBALS propio de PHP3.
+El ejemplo anterior se puede reescribir así:
+$a = 1; $b = 2; Function Sum () {$GLOBALS["b"] = $GLOBALS["a"] + $GLOBALS["b"];} Sum (); echo $b;
+El array $GLOBALS es un array asociativo con el nombre de la variable global como clave y los contenidos de dicha variable como el valor del elemento del array.
+Otra característica importante del ámbito de las variables es la variable static.
+Una variable estática existe sólo en el ámbito local de la función, pero no pierde su valor cuando la ejecución del programa abandona este ámbito.
+Consideremos el siguiente ejemplo:
+Function Test () {$a = 0; echo $a; $a++;}
+Esta función tiene poca utilidad ya que cada vez que es llamada asigna a $a el valor 0 y representa un "0".
+La sentencia $a++, que incrementa la variable, no sirve para nada, ya que en cuanto la función termina la variable $a desaparece.
+Para hacer una función útil para contar, que no pierda la pista del valor actual del conteo, la variable $a debe declararse como estática:
+Function Test () {static $a = 0; echo $a; $a++;}
+Ahora, cada vez que se llame a la función Test(), se representará el valor de $a y se incrementará.
+Las variables estáticas también proporcionan una forma de manejar funciones recursivas.
+Una función recursiva es la que se llama a sí misma.
+Se debe tener cuidado al escribir una función recursiva, ya que puede ocurrir que se llame a sí misma indefinidamente.
+Hay que asegurarse de implementar una forma adecuada de terminar la recursión.
+La siguiente función cuenta recursivamente hasta 10, usando la variable estática $count para saber cuándo parar:
+Function Test () {static $count = 0; $count++; echo $count; if ($count 10) {Test ();} $count--;}
+Anterior
+Inicio
+Siguiente
+Variables predefinidas
+Subir
+Variables variables

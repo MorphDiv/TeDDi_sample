@@ -1,0 +1,74 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+Warnung
+Diese Funktion ist EXPERIMENTELL.
+Das Verhalten, der Funktionsname und alles Andere was hier dokumentiert ist, kann sich in zukünftigen PHP-Versionen ohne Ankündigung ändern.
+Seien Sie gewarnt und verwenden Sie diese Funktion auf eigenes Risiko.
+Die Funktion socket_select() Die Funktion socket_select() nimmt als Parameter Socket-Arrays entgegen und wartet, ob diese ihren Status ändern.
+Diejenigen, die Hintergrundwissen über BSD Sockets haben, werden feststellen, dass diese Socket-Arrays in Wirklichkeit die so genannten Datei-Deskriptor-Mengen sind.
+Drei, voneinander unabhängige Arrays mit Socket-Deskriptoren werden überwacht.
+Die Sockets, die im read Array aufgelistet sind, werden daraufhin überwacht, ob Zeichen zum Auslesen an den Sockets verfügbar sind (um genauer zu sein: es wird überwacht, ob das Auslesen den Socket blockiert - besonders aber, ob ein Socket bereit ist, wenn er zu Ende gelesen hat.
+In diesem Fall gibt ein socket_read() einen leeren String zurück.)
+Die Sockets, die im write Array aufgelistet sind, werden daraufhin überwacht, ob ein Schreibvorgang den Socket blockiert.
+Die Sockets, die im except Array aufgelistet sind, werden auf Ausnahmen überwacht.
+Warnung
+Beim Beenden werden alle Arrays aktualisiert, und zeigen an, welche Sockets ihren Status geändert haben.
+Sie brauchen nicht jedes Array einzeln an socket_select() übergeben.
+Sie können leere Arrays oder NULL stattdessen angeben.
+Vergessen Sie nicht, dass diese Arrays by reference übergeben werden müssen und dass sie verändert werden, nachdem die Funktion socket_select() beendet ist.
+
+/* Vorbereiten des read Arrays * / $read = array( $socket1, $socket2); if (false === ($num_changed_sockets = socket_select($read, $write = NULL, $except = NULL, 0))) {/ * Fehlerbehandlung * / else if ($num_changed_sockets 0) {/ * Mindesten bei einem Socket ist etwas interessantes passiert * /}
+Anmerkung:
+Wegen einer Einschränkung in der aktuellen Zend Engine ist es nicht möglich, eine Konstante, wie etwa NULL, direkt als Parameter an Funktionen zu übergeben, die Referenzen auf Parameter als Argumente erwarten.
+Sie können stattdessen eine temporäre Variable oder einen Ausdruck, in dem der am weitesten links stehende Teilausdruck eine temporäre Variable ist, benutzen.
+
+tv_sec und tv_usec bilden zusammen den timeout tv_sec und tv_usec bilden zusammen den timeout Parameter.
+Der timeout ist nach oben durch die verstrichene Zeit, bis socket_select() zurückkehrt, begrenzt. tv_sec kann 0 sein, wodurch socket_select() sofort zurückkehrt.
+Dies ist nützlich beim Polling.
+Falls der Parameter tv_sec NULL ist (kein Timeout), kann socket_select() unendlich lange blockieren.
+Bei Erfolg gibt socket_select() Bei Erfolg gibt socket_select() die Anzahl der Socket-Deskriptoren zurück, die in den aktualisierten Arrays enthalten sind.
+Falls der Timeout wirksam wird, bevor irgend etwas Interessantes passiert, ist das Funktionsergebnis 0.
+Falls ein Fehler auftritt wird FALSE zurückgegeben.
+Der Fehlercode kann dann mit socket_last_error() abgefragt werden.
+Anmerkung:
+Wenn Sie einen Fehler aufspüren wollen, müssen Sie unbedingt den Operator === benutzen.
+Weil socket_select() auch 0 zurückgeben kann, wird der Vergleich mit == sonst zu TRUE ausgewertet.
+if (false === socket_select($r, $w, $e = NULL, 0)) {echo "socket_select() fehlgeschlagen, Grund: ". socket_strerror(socket_last_error()). "\n";}
+Anmerkung:
+Seien Sie sich bewusst, dass manche Socket-Implementierungen sehr sorgfältig benutzt werden müssen.
+Ein paar grundsätzliche Regeln:
+Sie sollten immer versuchen, socket_select() ohne Timeout zu benutzen.
+Ihr Programm sollte nichts tun, wenn keine Daten verfügbar sind.
+Code, der von Zeitbegrenzungen abhängig ist, ist normalerweise nicht portierbar und schwierig zu debuggen.
+Es sollte kein Socket-Deskriptor in die Arrays eingefügt werden, wenn Sie nicht vorhaben, die Ergebnisse nach der Ausführung eines socket_select() Funktionsaufrufs zu prüfen und entsprechend darauf zu reagieren.
+Nachdem socket_select() beendet ist, müssen alle Sockets in allen Socket-Arrays geprüft werden.
+Jeder Socket, der zum Schreiben zur Verfügung steht, muss beschrieben werden und aus jedem Socket, der zum Lesen verfügbar ist, muss gelesen werden.
+Bei Schreib / Leseoperationen auf den Sockets in den Arrays müssen Sie damit rechnen, dass nicht notwendigerweise alle Daten geschrieben / gelesen werden, die Sie angeben.
+Seien Sie darauf vorbereitet, dass Sie möglicherweise nur ein einziges Byte schreiben / lesen können.
+Fast allen Socket-Implementierungen ist gemeinsam, dass sie nur eine einzige Ausnahme in dem except Array auffangen können.
+Dies ist, wenn mehr Daten ankommen, als der Socket lesen kann.
+See also socket_read(), socket_write(), socket_last_error() und socket_strerror().
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

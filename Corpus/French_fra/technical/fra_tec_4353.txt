@@ -1,0 +1,58 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+preg_replace() analyse subject pour trouver l 'expression pattern et remplace les résultats par replacement.
+replacement peut contenir des références de la forme\\ n ou, depuis PHP 4.0.4) $n.
+Cette dernière forme est recommandée.
+Ces références seront remplacées par le texte capturé par la n '-ième parenthèse capturante du masque. n peut prendre des valeurs de 0 à 99, et \\0 ou $0, correspondent au texte de qui satisfait le masque complet.
+Les parenthèses ouvrantes sont comptées de gauche à droite (en commençant à 1) pour déterminer le numéro de parenthèse capturante.
+Si la recherche n 'aboutit à aucun résultat, subject sera inchangé.
+Tous les paramètres de preg_replace() peuvent être des tableaux.
+Si subject est un tableau, alors l 'opération sera appliquée à chacun des éléments du tableau, et le tableau sera retourné.
+Si pattern et replacement sont des tableaux, alors preg_replace() prend une valeur de chaque tableau, et l 'utilise pour faire la recherche et le remplacement.
+Si replacement à moins d 'éléments que pattern, alors la chaîne vide est utilisé pour le reste des valeurs.
+Si pattern est un tableau, et que replacement est une chaîne, alors cette chaîne sera utilisée pour chaque valeur de pattern.
+Le contraire n 'aurait pas de sens.
+/e force preg_replace() à traiter replacement comme du code PHP une fois que les substitutions adéquates ont été faites.
+Conseil :assurez-vous que replacement est un code PHP valide, car sinon, PHP trouvera une erreur d'analyse (parse error) dans cette ligne.
+/F indique que le paramètre replacement doit être considéré comme un nom de fonction.
+Cette fonction sera appelée, avec un tableau contenant les éléments trouvés comme arguments.
+La fonctoin doit retourner la chaine de remplacement.
+Cette option a été ajoutée en PHP 4.0.4.
+Exemple 1.
+Remplacement de plusieurs valeurs
+?php $patterns = array ("/ (19|20)(\d{2}) -(\d{1,2}) -(\d{1,2}) /", "/ ^\s*{(\w+)}\s*= / "); $replace = array ("\\3 / \\4 / \\1\\2", "$\\1 ="); print preg_replace ($patterns, $replace, "{startDate} = 1999-5-27");?
+Exemple 2.
+Utilisation de l 'option / e
+?php preg_replace( "/ (\ / ?)(\w+)([^ ]* / e", "'\\1'.strtoupper('\\2') .'\\3'", $html_body);?
+Cela va mettre en majuscule toutes les balises HTML du texte.
+Exemple 3.
+Conversion HTML en texte
+?php / / $document contient un document HTML / / Ce script va effacer les balises HTML, les javascript / / et les espaces.
+Il remplace aussi quelques entités HTML / / courante en leur équivalent texte. $search = array ("'script[? ]*? .*? / script 'si", / / Supprime le javascript"' [\ /\ !]* ?[^? ]*? 'si", / / Supprime les balises HTML "'([\r\n])[\s]+'", / / Supprime les espaces "'(quot|#34) ;'i", / / Supprime les entites HTML"' (amp|#38) ;'i", "'(lt|#60) ;'i","' (gt|#62) ;'i", "'(nbsp|#160) ;'i","' (iexcl|#161) ;'i", "'(cent|#162) ;'i","' (pound|#163) ;'i", "'(copy|#169) ;'i","' #(\d+) ;'e"); / / Evaluation comme PHP $replace = array ("", "", "\\1", "\"", "", "",? "," ", chr(161), chr(162), chr(163), chr(169), "chr(\\1)"); $text = preg_replace ($search, $replace, $document);?
+
+Le paramètre limit a été ajouté à partir de PHP 4.0.1pl2.
+Voir aussi preg_match(), preg_match_all() et preg_split().
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

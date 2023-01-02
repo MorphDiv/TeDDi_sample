@@ -1,0 +1,156 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Marco Menardi gnu@kde. org
+Santiago Fernández santi@kde-es. org Traductor
+Compartir datos con & kontact; a través de IMAP
+Introducción
+Para mi pequeña oficina, he estado buscando durante un tiempo una solución PIM que me permitiese compartir datos, para que mi secretaria y yo pudiéramos compartir contactos, citas, etc. Siendo usuario de & kde;, había oído hablar del proyecto Kroupware y esperaba su finalización. Pero cuando ví lo complicada que era la arquitectura y la configuración del servidor 1.0 de Kolab (el servidor del proyecto), decidí esperar por el desarrollo de Kolab 2.0. En cualquier caso, el producto Kolab era el adecuado a mis necesidades. Afortunadamente en el wiki de & kde; encontré algunos trozos de conversaciones del IRC en el que hablaban sobre la compartición de datos sin la infraestructura de Kolab... mmm ¡interesante!
+Para oficinas y necesidades pequeñas, puede utilizar & kontact; para compartir datos sin que necesite instalar el servidor Kolab u otros motores de trabajo corporativo. Puede funcionar con tan solo el servidor IMAP, que se puede configurar de forma sencilla.
+Mi escenario es un servidor Debian inestable y & kde; 3.4. He accedido a & kontact; y otras magníficas aplicaciones GNU/ Linux desde windows utilizando Cygwin/ X, mientras esperaba que el proyecto wine fuera capaz de ejecutar los últimos programas Windows que necesito (y que no están disponibles en GNU/ Linux). Quiero compartir contactos, acontecimientos, notas con mi secretaria.
+Qué es IMAP
+Esta definición es del diccionario de alta tecnología de ComputerUser. com:
+Internet Message Access Protocol (protocolo de acceso a la mensajería por Internet). Un protocolo que permite al usuario llevar a cabo ciertas funciones de correo electrónico en un servidor remoto en lugar de en un equipo local. A través de IMAP el usuario puede crear, borrar y cambiar el nombre de buzones de correo, obtener nuevos mensajes, borrar mensajes y utilizar funciones de búsqueda en el correo. Para enviar correo se necesita un protocolo diferente. También llamado Internet Mail Access Protocol (Protocolo de acceso a correo por internet).
+Por tanto, se puede considerar un almacén de datos. Para utilizarlo necesitará un servidor IMAP, como Cyrus, Courier o UW.
+¿Kolab o IMAP?
+Kolab tiene la habilidad para compartir datos entre diferentes clientes. Esto hace posible que su secretaria utilice Outlook y usted utilice & kontact;, por ejemplo.
+Podrá utilizar una interfaz de configuración para administrar usuarios, configurar su cuenta de correo, una central LDAP de configuración de datos y un servidor de libreta de direcciones, filtrado de correo basura y virus, scripts para las vacaciones, manejo de disponibilidad de listas, manejo de recursos (habitaciones, vehículos), grupos, listas de distribución, gestión de invitaciones automáticas, & etc;
+Pero esto puede causar una serie de problemas iniciales. Para los novatos como yo significa: una larga y frustrante pesadilla, y demasiada complejidad para que todo funcione a la primera. Es decir, no gracias, me quedo con IMAP.
+Cómo configurar el servidor de IMAP Cyrus
+Mi elección es Cyrus, que forma parte del paquete de software Kolab, por tanto podré utilizar Kolab en el futuro, al menos me informaré.
+Inicie la instalación y la configuración.
+Conviértase en root.
+# apt-get install cyrus21-imapd cyrus21-common cyrus21-admin cyrus21-client sasl-bin sasl2-bin Instalando cyrus21-imapd... El instalador ha preguntado algo que no he entendido sobre la búsqueda de una dirección... He pulsado Entrar.
+El instalador también ha creado el usuario cyrus que se encuentra en el grupo (creado automáticamente) sasl, que es el « propietario » de todos los archivos cyrus. Al final con ps -A puede encontrar los nuevos procesos: cyrmaster y notifyd.
+El problema real en la configuración de Cyrus es la autentificación, que no es trivial y yo soy novato, con un conocimiento limitado sobre lo que estoy haciendo.
+Cyrus puede utilizar diferentes mecanismos SASL (Simple Authentication and Security Layer o capa de autentificación simple y seguridad), el predeterminado es sasldb (guarda los nombres de los usuarios y las contraseñas en el archivo protegido SASL sasldb), pero también están soportados getpwent, kerberos4, kerberos5, PAM, rimap, shadow y LDAP.
+Como no quiero definir usuarios/ contraseñas diferentes a los de acceso a mi & Linux; he elegido el mecanismo « shadow », es decir, Cyrus utilizará las contraseñas de & Linux; para la autentificación.
+Para hacer ésto tenemos que decirle a sasl que utilice saslauthd como método de autentificación de contraseñas, y a continuación se configurará saslauthd para utilizar « shadow » (o « getpwent ») como mecanismo de autentificación.
+De acuerdo, ¡comencemos!
+Como root, cambie la contraseña en Linux del usuario cyrus:
+# passwd cyrus
+Introduzca la contraseña que desee (y recuérdela). Nosotros utilizaremos para este ejemplo « cyrus » como contraseña de administración de cyrus.
+# vi / etc/ imapd. conf
+sasl_pwcheck_method: saslauthd instead of the default auxprop
+elimine la marca # de la línea:
+#admins: cyrus
+Así podrá administrar cyrus accediendo como usuario cyrus (¡que fantasía he tenido!).
+# vi / etc/ default/ saslauthd
+Descomentar la línea:
+# START=yes
+(de otra forma saslauthd no se iniciará cuando arranque el sistema, ¡incluso aunque se haga referencia en / etc/ rcx. d!).
+En lugar de MECHANISM="pam "asigne MECHANISM="shadow" de forma que en el arranque del sistema se ejecute saslauthd -a shadow.
+Una vez que salga de su editor, reinicie sasl y cyrus.
+Para comprobar IMAP:
+su cyrus $imtest -m login -p imap localhost
+Será preguntado por la contraseña (usuario) de cyrus, que debe introducir.
+Si el usuario cyrus se ha autentificado correctamente, aparecerán las siguientes línes:
+S: L01 OK User logged in Authenticated.
+Para salir teclee. logout (ie; punto espacio « logout »)
+Ahora añada un usuario llamado groupware y asígnele una contraseña, utilizando sus herramientas habituales. Debería incluirse en un grupo sin privilegios como nobody ya que no precisa iniciar una sesión de intérprete de órdenes o tener un directorio personal.
+Ahora también tendremos que crear el usuario y un IMAP en cyrus:
+# cyradm --user cyrus localhost después de introducir la contraseña para el usuario administrador cyrus, obtendrá el prompt localhostgt; localhostgt; cm user. groupware localhostgt; lm lista el buzón de correo recién creado user. groupware (\\HasNoChildren)) localhostgt; quit
+Puede teclear help para obtener un lista de las órdenes disponibles.
+Puede comprobar lo que pasa con:
+# ls -l / var/ spool/ cyrus/ mail/ g/ user/ groupware total 12 -rw------- 1 cyrus mail 4 Oct 29 20:55 cyrus. cache -rw------- 1 cyrus mail 155 Oct 29 20:55 cyrus. header -rw------- 1 cyrus mail 76 Oct 29 20:55 cyrus. index
+Ahora debería ser capaz de conectarse con un cliente IMAP como el usuario groupware y véa el INBOX.
+En el protocolo IMAP, seleccionar el buzón de correo INBOX es un mundo mágico, un tipo de « alias » para la estructura superior de directorios. El cliente ve INBOX, y el mapa del servidor IMAP en la carpeta y en la estructura de archivos / var/ spool/ cyrus/ mail/....
+Cómo configurar los clientes & kontact;
+Me he conectado a mi PC servidor de oficina GNU/ Linux (una especie de « caja negra » sin monitor ni teclado) desde 2 PC & Windows; 2000 con Cygwin/ X, utilizándolo como servidor X-Window (en un futuro próximo espero reemplazar ambos con 2 clientes ligeros mini-itx utilizando LTSP). Con esta configuración cada usuario ejecuta & kontact; en la misma máquina en la que esté instalado y ejecutándose Cyrus (servidor local).
+Para que & kontact; trabaje con IMAP, debe completar los siguientes pasos:
+Crear una cuenta IMAP en Cyrus para el falso usuario groupware (¡ya lo habíamos hecho!).
+Crear/ configurar una cuenta IMAP en & kmail; para conectarse como este usuario.
+Utilice kresources para hacer que los componentes de & kontact; trabajen con los datos proporcionados por la fuente IMAP.
+Activar la funcionalidad de trabajo corporativo y relacionar las supcarpetas de IMAP INBOX (sino está preparado).
+Disfrute de & kontact; y comparta datos con su Cyrus IMAP.
+Inicie la sesión de & kde; con la primera cuenta de « usuario real » a la que quiera dotar de la funcionalidad de trabajo corporativo.
+Cree la cuenta de IMAP en & kmail;.
+Ejecute & kontact; y seleccione Correo (el componente & kmail;). En el menú elija Preferencias Configurar KMail Cuentas pestaña Recibiendo, y pulse el botón Añadir.... A continuación se le preguntará por el tipo de cuenta de correo, debiendo seleccionar IMAP desconectado (no solo IMAP). A continuación en la pestaña General introduzca los siguientes datos:
+Nombre de la cuenta: office_gwdata
+El nombre que será utilizado para la carpeta « local » que apunta a esta cuenta IMAP.
+Usuario: groupware
+El usuario Cyrus que se ha elegido como « propietario » de todos los datos de la oficina.
+Contraseña:
+La contraseña del usuario groupware.
+Servidor: localhost
+Recuerde que para nuestro ejemplo, el cliente & kontact; se ejecuta en el mismo ordenador que el servidor IMAP.
+Puerto: 143
+Predeterminado.
+Marque Almacenar la contraseña IMAP y así no será preguntado la próxima vez que ejecute & kontact;. Marque Activar intervalo de comprobación de correo y asigne el valor en minutos.
+Tenga en cuenta que hemos elegido el tipo de cuenta IMAP desconectado. Esto tiene el efecto de copiar los datos de trabajo corporativo « localmente en el cliente » (en la carpeta personal), y sincronizándose cada cierto tiempo las conexiones de los clientes. Esto parece muy ineficiente, pudiéndose duplicar los datos en algunas ocasiones (ie; si tiene 10 usuarios que utilizan & kontact;, obtendrá los datos 10+1 veces), pero es la única forma de que las cosas funcionen rápido, puesto que cada conexión de & kontact; obtiene todos los datos y & korganizer; y & kaddressbook; tienen que interpretarlos. Si utiliza « IMAP desconectado » los datos se almacenan de forma local, y únicamente se envía la « delta » (ie; los datos que han cambiado).
+Por otra parte, si sus usuarios ejecutan & korganizer; en el mismo PC que se ejecuta el servidor IMAP, parece razonable utilizar IMAP (que es llamado « IMAP conectado ») para ahorrar espacio, puesto que la velocidad de transferencia no es un inconveniente. Pero desafortunadamente esto no funciona, puesto que & kontact; no actualiza automáticamente la carpeta Calendario en « IMAP conectado », por lo tanto no se actualizará cada vez que alguien añada un evento (debería ir manualmente a la aplicación & kmail; y pulsar sobre la carpeta Calendario). Adicionalmente, en el arranque, cuando se leen las carpetas de Calendario, podrá ver un gran parpadeo y actualizaciones de datos muy lentas.
+Ahora tenemos que indicarle a & kontact; que utilice IMAP como fuente de datos para los diferentes componentes. Desde el & kmenu;, elija Ejecutar orden y ejecute kcmshell4 kresources. En el cuadro combinado seleccione Contactos, pulse el botón Añadir... y seleccione Libreta de direcciones en el servidor IMAP por medio de KMail. A continuación seleccione la línea nueva y pulse el botón Utilizar como estándar. Haga lo mismo para el Calendario y Notas.
+Ahora tenemos que activar la funcionalidad de trabajo corporativo de & kmail; (y en consecuencia, & kontact; entero):
+Seleccione Preferencias Configurar KMail Varios Groupware.
+Marque Activar la funcionalidad de recurso IMAP.
+Seleccione Español como Idioma para las carpetas de groupware (en el caso de que ya existan carpetas en el servidor IMAP creadas por un programa diferente en un idioma diferente).
+Ahora vaya a Las carpetas de recursos están en la cuenta y seleccione la subcarpeta Entrante de la carpeta office_gwdata.
+Deje desmarcado Ocultar las carpetas de groupware por el momento, ya veremos que sucede. Podrá volver aquí y marcarlo una vez que todo esté claro.
+Cuando pulse Aceptar aparecerá el mensaje: kmail; creará las carpetas requeridas para los recursos IMAP como subcarpetas de entrante.
+Si no quiere hacer esto, pulse No, y se desactivará el recurso IMAP. Pulse Si (esto solo pasará la primera vez con el primer « usuario real »). Podrá verlo de forma inmediata en el árbol de carpetas de & kmail;, que bajo office_gwdata entrada se habrán creado:
+Calendario
+Contactos
+Notas
+Tareas
+Diario
+si ahora hace:
+# ls -l / var/ spool/ cyrus/ mail/ g/ user/ groupware/ drwx------ 2 cyrus mail 144 Oct 31 16:36 Calendar drwx------ 2 cyrus mail 144 Oct 31 16:36 Contacts drwx------ 2 cyrus mail 144 Oct 31 16:36 Journal drwx------ 2 cyrus mail 144 Oct 31 16:36 Notes drwx------ 2 cyrus mail 144 Oct 31 16:36 Tasks -rw------- 1 cyrus mail 4 Oct 31 15:28 cyrus. cache -rw------- 1 cyrus mail 155 Oct 29 20:55 cyrus. header -rw------- 1 cyrus mail 76 Oct 31 15:28 cyrus. index
+Como puede ver, office_gwdata entrada no se almacena en el directorio personal del usuario de & kontact;, pero sí en las carpetas de usuarios IMAP groupware.
+Ahora & kontact; está preparado para trabajar con los datos guardados aquí. En la aplicación calendario, si la cuenta IMAP de & kmail; es del tipo « desconectado », la ventana de recursos debería mostrar el elemento Recurso imap con 3 subelementos, que son rutas a los archivos personales locales. Sin embargo, la aplicación de Contactos no mostrará subelementos bajo Recurso imap.
+Ahora podrá iniciar la sesión de & kde; con un nombre de usuario diferente y configurar sus cliente & kontact; de forma similar a:
+Abra & kontact; y en el componente KMail añada una cuenta IMAP especificando como servidor el ordenador en el que se está ejecutando el servidor Cyrus (en mi caso: 192.168.1.3).
+Recuerde marcar Activar intervalo de comprobación de correo y establecer el valor en minutos. Cuando lo confirme, no será preguntado respecto a la creación de la subcarpeta (puesto que estas se encuentran en el servidor IMAP), y podrá verlos en el árbol de carpetas.
+Active la funcionalidad groupware para poder guardar los datos en el servidor IMAP.
+Asegúrese de que en « IMAP desconectado », los datos se transmitan al servidor IMAP únicamente cuando los clientes se conecten para comprobar el correo nuevo. Por tanto si sus clientes en & kontact; tienen el Intervalo de comprobación de correo establecido, por ejemplo, en 5 minutos, en el peor de los casos tendrá un retraso de 10 minutos desde que se escribió el acontecimiento hasta que se le aparezca al resto de los usuarios.
+Cómo tener acceso de sólo lectura
+Asegúrese de tener instalada una implementación de IMAP en & kontact; adecuada, ya que las anteriores a la versión 1.01 se cuelgan con esta configuración, y por ello esta configuración no funcionará con ella, por tanto cuando utilice este tipo de configuración, necesitará utilizar una configuración anterior.
+En la configuración anterior, tendremos el mismo usuario « falso », llamado groupware, que se utiliza por los usuarios « reales » de & kontact; (ie; tony, rohn, amanda, & etc;) utilizado por la cuenta de IMAP con su usuario y contraseña. Pero de esta forma todos los usuarios reales tienen los mismos permisos de lectura/ escritura, puesto que se conectan como el usuario groupware al servidor IMAP.
+Para limitar el acceso a algunos usuarios (típicamente, proporcionando acceso de solo lectura), pueden utilizarse las ACL (Access Control Lists - listas de control de acceso).
+Seleccione en & kmail; una subcarpeta de office_gwdata entrada, por ejemplo Calendario, y pulse con el botón derecho del ratón. Seleccione Propiedades pestaña Control de acceso. Aquí podrá introducir los usuarios a los que quiera dar acceso a esta carpeta y lo que pueden hacer.
+Para experimentar intente cambiar algunos elementos, dando « Todos » los permisos al usuario mary.
+En el nivel cyrus (en el PC que se está ejecutando el servidor IMAP cyrus, con las herramientas cyrus), lo primero que necesitamos es añadir el usuario mary, para que reconozca al usuario IMAP, y cree una carpeta IMAP para ella.
+A continuación iniciamos la sesión de GNU/ Linux como mary y entramos en & kontact;. Como se vió anteriormente, configuraremos una cuenta IMAP en & kmail; pero con los datos del usuario (en lugar del falso usuario groupware y su contraseña, utilizaremos mary y su contraseña).
+En el árbol de carpetas de & kmail;, esta vez verá esta estructura: office_gwdata usuario groupware Calendario y Tareas. Compruebe el correo (Archivo Comprobar correo) y tendrá una carpeta « entrada » bajo « office_gwdata ».
+Ahora active la funcionalidad de trabajo corporativo de & kmail; y en Las carpetas de recursos son subcarpetas de escriba entrada como subcarpeta de office_gwdata.
+Ahora tendrá dos ramas de carpetas bajo « office_gwdata »:
+« entrada » con Calendario, Contactos, Notas, Tareas y Diario, se guarda en la carpeta IMAP de mary en el servidor IMAP.
+El « usuario », con la subcarpeta « groupware » y las subcarpetas a las que mary tiene acceso (en este ejemplo, Calendario y Tareas).
+Pulse con el & RMB; en « Calendario » del « usuario » y compruebe si es del tipo Calendario (sino, debería serlo), y si las « tareas » del « usuario » son del tipo Tareas.
+Ahora en el Calendario tendrá disponibles dos recursos IMAP sobre los que escribir, por tanto, si crea un nuevo acontecimiento, se le preguntará sobre cuál de los dos utilizar (o si tiene los recursos locales disponibles, ¡tendrá 3!).
+Vaya a la pequeña pantalla inferior de la izquierda en Calendario, la que muestra los recursos disponibles, y desmarque aquellos que no apunten a la ruta. groupware. directory (véa la cabecera de cada ruta del recurso).
+Créditos
+Soy novato, y para este cómo solo he utilizado mi tiempo y mi deseo. Para obtener el conocimiento debo dar las gracias a algunas personas en los canales de freenode por su competencia, paciencia y amabilidad.
+Agradecimientos especiales a:
+Para la parte IMAP Cyrus en el canal #cyrus:
+[protagonist] Andy Morgan morgan@orst. edu.
+[plixed] Okke Timm okke. timm@web. de.
+Para la parte & kontact; en el canal #kontact:
+[till] Till Adam adam@kde. org.
+[dfaure] David Faure faure@kde. org.
+[mdouhan] Matt Douhan matt@fruitsalad. org.
+¡Muchas gracias chicos!
+Ah, y también para, [markit] Marco Menardi mmenaz@mail. com.
+Lecturas adicionales
+Referencias
+KDE: http: / /www. kde. org
+Sitio web de & kontact;: http: / /www. kontact. org
+Proyecto Kroupware: http: / /www. kroupware. org
+Comunidad wiki de & kde;: http: / /wiki. kde. org
+Proyecto wine: http: / /www. winehq. org
+Proyecto Cygwin/ X: http: / /x. cygwin. com
+Proyecto LTSP: http: / /www. ltsp. org
+Ahora active la funcionalidad de trabajo corporativo de & kmail; y en Las carpetas de recursos son subcarpetas de escriba entrada como subcarpeta de « office_gwdata ».

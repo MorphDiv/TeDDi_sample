@@ -1,0 +1,39 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+& kopete; Pipes Plugin Implementation Guide
+Beginning with & kopete; 1.0, & kopete; ships with a plugin called Pipes. Pipes allows you to pipe incoming or outgoing messages through an external script or executable. An incoming message will be piped through the executable before it reaches your chat window, while outgoing messages will be piped through the executable before they are sent over the internet. Pipes can receive text in one of three forms: Plain text body The body of the message, in plain & ascii; text html; text body The body of the message, in & html;, as it would be if your chat peer had sent HTML to you, which will be rendered in the chat window xml; full message An & xml; document that describes all the characteristics of the message, including the & html; body. This document describes the specifics of the & xml; format, and how to write a program that can handle it.
+& xml; Output
+Here's an example of what a program will receive in its standard input stream: & lt; ?xml version="1.0 "encoding="ISO-8859-1"? > & lt; message subject= "" route="outbound "importance="1" formattedTimestamp="11:06:46 am "timestamp="Sat Dec 1 11:06:46 2007" type="normal "mainContactId="spacemonkey1234" time="11:06 am "> & lt; from > & lt; contact contactId="tdurden" protocolIcon="aim_protocol "userPhoto="/ home/ kde-devel/. kde4/ share/ apps/ kopete/ oscarpictures/ tdurden. jpg" > & lt; contactDisplayName dir="ltr "text="tdurden" / > & lt; metaContactDisplayName dir="ltr "text="Tyler" / > & lt; /contact > & lt; /from > & lt; to > & lt; contact contactId="spacemonkey1234 "protocolIcon="aim_protocol" userPhoto="/ home/ kde-devel/. kde4/ share/ apps/ kopete/ avatars/ User/ 7e542903e0ac7519a7496e85f5a5b99d. png "> & lt; contactDisplayName dir="ltr" text="spacemonkey1234 "/ > & lt; metaContactDisplayName dir="ltr" text="Robert Paulson "/ > & lt; /contact > & lt; /to > & lt; body dir="ltr" bgcolor="#000000 "color="#000000" > & lt; span style= "color: #000000;" > heyamp; lt; /span > lt; /body > & lt; /message > This & xml; is loosely based on the XSD used for chatstyles found at the Kopete website. This code represents one message. There are a few things to note:
+The "timestamp" attribute in the "message" element is in ISO 8601 standard format.
+The "protocolIcon" attribute in the "contact" element is chosen like this:
+If the Contact object has the photo property set, that path is used.
+If not, the Contact's MetaContact is asked for a picture path, and that is used regardless of being null or not.
+The "color" and "bgcolor" attributes in the "body" element are empty strings if they are not set in Kopete. They are in web color format.
+The content inside the "body" element has "lt;" escaped, so it is not confused with the actual & xml; structure. Obviously, to correctly interpret the body as HTML, one would have to convert the "amp; lt;" s to "lt;" s.
+& xml; Input
+Your program will receive & xml; in its standard input stream, it will have the opportunity to modify it, and then it must hand it back to & kopete; by way of its standard output stream. If your program modifies the following elements, the internal knowledge that & kopete; has of the message will be modified to reflect your changes. "message" attribute "timestamp" but not other time attributes "message" attribute "subject" "message" attribute "type" "message" attribute "importance" "body" attribute "color". This is usually set to a web color number, but can be set to a name. The names defined by SVG are accepted by QColor in Qt 4, so they are the only names that may be used. "body" attribute "bgcolor" & mdash; same behaviour as "color" content of element "body" If you modify elements or their attributes not mentioned above, your changes to those elements will have no effect.
+Acceptable Values
+Some attributes have certain acceptable values. The Pipes plugin's output will always have legal values. If your program chooses to change these attributes, they must remain legal. If not, & kopete; 's behavior is undefined.
+Attribute "route" in element "message"
+Must be "inbound", "outbound", or "internal"
+Attribute "type" in element "message"
+Must be "action" or "normal"
+Attribute "importance" in element "message"
+Must be "0" for low, "1" for normal, and "2" for high
+Attribute "dir" in many elements
+Must be "ltr" for left-to-right or "rtl" for right-to-left

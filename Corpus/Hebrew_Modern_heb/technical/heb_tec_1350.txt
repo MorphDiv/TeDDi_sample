@@ -1,0 +1,53 @@
+# language_name_wals:	Hebrew (Modern)
+# language_name_glotto:	Modern Hebrew
+# iso639_3:	heb
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hebr
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/he.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+מדריך PHP
+קודם
+פרק 7. משתנים
+הבא
+כאשר נשלח טופס לסקריפט PHP, כל המשתנים מטופס זה יהיו זמינים בסקריפט. אם ההגדרה של track_vars מאופשרת, משתנים אלו ימוקמו במערכים האסוציאטיבים $HTTP_POST_VARS, $HTTP_GET_VARS, ו\או $HTTP_POST_FILES, בהתאמה למקור המשתנים.
+למידע נוסף בנושא יש לעיין בפרק משתנים מוגדרים מראש.
+דוגמה 7-1. משתנה פשוט בטופס
+form action=" foo.php "method="post" Name: input type="text "name="username" br input type="submit "/ form
+כאר הטופס הנ" ל נשלח, הערך שמכיל שדה הטקסט בטופס יהיה זמין במשתנה $HTTP_POST_VARS['username']. אם אופציית register_globals מאופשרת, המשתנה יוגדר גם כמשתנה $username שמוגדר בטווח המשתנים הגלובלי.
+הערה: כאשר הוראת הקונפיגורציה magic_quotes_gpc מאופשרת, מושפעים ערכי משתנים של GET, POST וערכי עוגיות באופן שערך כמו (It's "PHP !") ישתנה בצורה אוטומטית ל (It\'s \"PHP!\"). תהליך זה נדרש לצורך הכנסת מידע לבסיס נתונים. יש לעיין גם במידע על addslashes(), stripslashes() ו - magic_quotes_sybase.
+PHP מבינה גם תכני מערכים של טפסים. (יש לעיין ב שאלות ותשובות למידע נוסף). אפשר למשל להשתמש בתכונה זו על מנת לאחד משתנים מסויימים לקבוצות או לקלוט מידע מתיבת בחירה רבת אפשרויות.
+דוגמה 7-2. משתני טופס מורכבים
+form action=" array.php "method="post" Name: input type="text "name="personal[name]" br Email: input type="text "name="personal[email]" br Beer: br select multiple name="beer[] "option value="warthog" Warthog option value="guinness "Guinness option value="stuttgarter" Stuttgarter Schwabenbr auml;u / select input type="submit "/ form
+ב - PHP 3 קיימת הגבלה למימד אחד בלבד במערכי הטפסים. ב - PHP 4 לא קיימת הגבלה כזו.
+ניתן להגדיר תמונה ככפתור שליחה של טופס במקום כפתור שליחה סטנדרטי:
+
+כאשר המשתמש ישלח את הטופס, משתני הטופס יועברו אל השרת ובנוסף יועברו משתנים המציינים את מיקום הלחיצה של העכבר בתמונה ויוגדרו כ - $sub_x ו - $sub_y. יש לציין ששם המשתנה המקורי מכיל נקודה שמומרת ל קו-תחתי על-ידי PHP באופן אוטומטי.
+PHP תומכת בצורה שקופה בעוגיות HTTP לפי הגדרתן ב - Netscape' s Spec. עוגיות הן מנגנון המאפשר אגירת מידע בדפדפן ועל ידי-כך מאפשרות מעקב או זיהוי המשתמשים. ניתן להגדיר עוגיה בעזרת הפונקציה setcookie(). עוגיות הן חלק מכותר ה - (HTTP header) HTTP ולכן קריאה לפונקציה setcookie() חייבת להתבצע לפני שנשלח פלט כלשהו לדפדפן. הגבלה זהה חלה גם על הפונקציה header(). כל עוגיה שנשלחת מהלקוח הופכת באופן אוטומטי למשתנה PHP בדומה לאופן הפעולה בשימוש ב שיטות GET ו - POST.
+ניתן לקבוע לעוגיה אחת מספר ערכים על-ידי הוספת [] לשם העוגיה. לדוגמה:
+setcookie( "MyCookie[]", "Testing", time()+3600);
+יש לציין כי עוגיה שנקבעה תדרוס ערכים קודמים של עוגיה בעלת שם זהה אלא אם מדובר בנתיב שונה או שם domain שונה כך שלבניית אפליקציה של עגלת קניות, יש צורך להגדיר מונה ולהעבירו הלאה. לדוגמה:
+דוגמה 7-3. דוגמת SetCookie
+$Count++; setcookie("Count", $Count, time()+3600); setcookie("Cart[$Count]", $item, time()+3600);
+PHP מגדירה באופן אוטומטי משתני סביבה כמשתני PHP רגילים.
+echo $HOME; / * Shows the HOME environment variable, if set. * /
+מאחר שגם המידע המגיע בעזרת GET, POST ומנגנון העוגיות נוצר כמשתנה PHP רגיל בסקריפט, לפעמים עדיף לקרוא את משתנה הסביבה היישר מהסביבה כדי לוודא שהתקבל הערך מהמקור הנכון. פונקציית getenv() משמשת לצורך זה. ניתן גם לקבוע משתנה סביבה בעזרת הפונקציה putenv().
+בדרך-כלל PHP לא תשנה את שם המשתנה המועבר לסקריפט. אולם, יש לציין כי תו הנקודה אינו תו תקין בשם משתנה. מסיבה זו הדוגמה הבאה לא תקינה:
+$varname.ext; / * invalid variable name * /
+מסיבה זו חשוב לציין שכאשר PHP מקבלת שם משתנה עם נקודה, הנקודה תוחלף בקו-תחתי.
+ב - PHP אין הפרדה בין סוגי משתנים ובדרך-כלל התבצעות המרות לפי הצורך ולכן לא תמיד ברור מהו סוג המשתנה בכל זמן נתון. ב - PHP מספר פונקציות למציאת סוג המשתנה: gettype(), is_long(), is_double(), is_string(), is_array(), ו - is_object().
+קודם
+ראשי
+הבא
+שמות משתנים שמשתנים
+למעלה
+קבועים

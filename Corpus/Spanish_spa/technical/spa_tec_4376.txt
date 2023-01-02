@@ -1,0 +1,60 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Capítulo 13.
+Funciones
+Siguiente
+La información puede suministrarse a las funciones mediante la lista de parámetros, una lista de variables y / o constantes separadas por comas.
+PHP soporta pasar parámetros por valor (el comportamiento por defecto), por referencia, y parámetros por defecto.
+Listas de longitud variable de parámetros sólo están soportadas en PHP4 y posteriores; ver Listas de longitud variable de parámetros y la referencia de las funciones func_num_args(), func_get_arg(), y func_get_args() para más información.
+Un efecto similar puede conseguirse en PHP3 pasando un array de parámetros a la función:
+
+Por defecto, los parámetros de una función se pasan por valor (de manera que si cambias el valor del argumento dentro de la función, no se ve modificado fuera de ella).
+Si deseas permitir a una función modificar sus parámetros, debes pasarlos por referencia.
+Si quieres que un parámetro de una función siempre se pase por referencia, puedes anteponer un ampersand () al nombre del parámetro en la definición de la función:
+function add_some_extra( $string) {$string .= 'y algo más .';} $str = 'Esto es una cadena,'; add_some_extra($str); echo $str; / / Saca 'Esto es una cadena, y algo más. '
+Si deseas pasar una variable por referencia a una función que no toma el parámetro por referencia por defecto, puedes anteponer un ampersand al nombre del parámetro en la llamada a la función:
+function foo ($bar) {$bar .= 'y algo más .';} $str = 'Esto es una cadena,'; foo ($str); echo $str; / / Saca 'Esto es una cadena, 'foo ($str); echo $str; / / Saca 'Esto es una cadena, y algo más.'
+Una función puede definir valores por defecto para los parámetros escalares estilo C++:
+function makecoffee ($type = "cappucino") {return "Hacer una taza de $type.\n";} echo makecoffee (); echo makecoffee ("espresso");
+La salida del fragmento anterior es:
+Hacer una taza de cappucino.
+Hacer una taza de espresso.
+El valor por defecto tiene que ser una expresión constante, y no una variable o miembro de una clase.
+En PHP 4.0 también es posible especificar unset como parámetro por defecto.
+Esto significa que el argumento no tomará ningún valor en absoluto si el valor no es suministrado.
+Destacar que cuando se usan parámetros por defecto, estos tienen que estar a la derecha de cualquier parámetro sin valor por defecto; de otra manera las cosas no funcionarán de la forma esperada.
+Considera el siguiente fragmento de código:
+function makeyogurt ($type = "acidophilus", $flavour) {return "Haciendo un bol de $type $flavour.\n";} echo makeyogurt ("mora"); / / No funcionará de la manera esperada
+La salida del ejemplo anterior es:
+
+Missing argument 2 in call to makeyogurt() in / usr / local / etc / httpd / htdocs / php3test / functest.html on line 41 Haciendo un bol de mora.
+Y ahora, compáralo con:
+function makeyogurt ($flavour, $type = "acidophilus") {return "Haciendo un bol de $type $flavour.\n";} echo makeyogurt ("mora"); / / funciona como se esperaba
+La salida de este ejemplo es:
+Haciendo un bol de acidophilus mora.
+PHP4 soporta las listas de longitud variable de parámetros en las funciones definidas por el usuario.
+Es realmente fácil, usando las funciones func_num_args(), func_get_arg(), y func_get_args().
+No necesita de ninguna sintaxis especial, y las listas de parámetros pueden ser escritas en la llamada a la función y se comportarán de la manera esperada.
+Anterior
+Inicio
+Siguiente
+Funciones
+Subir
+Devolver valores

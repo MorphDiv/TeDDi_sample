@@ -1,0 +1,74 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Instrucción Open [Ejecución]
+/text/sbasic/shared/03020103.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+Open;instrucción
+Instrucción Open [Ejecución]
+Abre un canal de datos.
+Sintaxis:
+Open NombreArchivo As String [For Modo] [Access ModoES] [protección] As [#]NúmeroArchivo As Integer [Len = LongitudJuegoDatos]
+Parámetros:
+FileName:
+Nombre y ruta del archivo que quieres abrir.
+Si quieres leer un archivo que no exista (Access = Read), aparecera un mensaje de error.
+Si intentas abrir un archivo que no existe (Access = Write), un nuevo archivo será creado.
+Mode:
+Palabra clave que especifica el modo del archivo.
+Los valores permitidos son:
+Append (agrega a un archivo secuencial), Binary (datos que pueden ser accesados usando Get y Put), Input (abre datos de canal para ser leidos), Output (abre canales de datos para escritura), y Random (edita valores relativos).
+ModoES:
+Palabra clave que define el tipo de acceso.
+Valores válidos:
+Read (sólo lectura), Write (sólo escritura), Read Write (ambos).
+Protección:
+Palabra clave que define el estado de seguridad de un archivo después de su apertura.
+Valores válidos:
+Shared (el archivo pueden abrirlo otras aplicaciones), Lock Read (el archivo está protegido contra lectura), Lock Write (el archivo está protegido contra escritura), Lock Read Write (impide el acceso al archivo).
+NúmeroArchivo:
+Cualquier expresión entera de 0 a 511 que indica el número de un canal de datos libre.
+A continuación puede pasar órdenes a través del canal de datos para acceder al archivo.
+El número de archivo debe determinarlo la función FreeFile inmediatamente antes de la instrucción Open.
+LongitudJuegoDatos
+Para archivos de acceso aleatorio, defina la longitud de los registros.
+Sólo se puede modificar el contenido de los archivos que se hayan abierto con la instrucción Open.
+Si intenta abrir un archivo que ya está abierto, aparecerá un mensaje de error.
+Ejemplo:
+Sub EjemploTrabajoConArchivo
+Dim iNumero As Integer
+Dim sLinea As String
+Dim aArchivo As String
+Dim sMensaje as String
+aArchivo = &quot; c:\data.txt &quot;
+iNumero = Freefile
+Open aArchivo For Output As #iNumero
+Print #iNumero, &quot; Esta es una línea de texto &quot;
+Print #iNumero, &quot; Esta es otra línea de texto &quot;
+Close #iNumero
+iNumero = Freefile
+Open aArchivo For Input As iNumero
+While not eof(iNumero)
+Line Input #iNumero, sLinea
+If sLinea < > &quot; &quot; then
+sMensaje = sMensaje & sLinea & chr(13)
+end if
+wend
+Close #iNumero
+Msgbox sMensaje
+End Sub

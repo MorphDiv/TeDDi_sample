@@ -1,0 +1,214 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Regul\xE4re Ausdr\xFCcke
+Einleitung
+Regul\xE4re Ausdr\xFCcke stellen eine M\xF6glichkeit zur Verf\xFCgung, vielleicht zu suchende Teile von Text in einer Form zu beschreiben, die von einer kleinen Software verstanden wird, so dass diese feststellen kann, ob die Beschreibung zutrifft und sogar Text zur sp\xE4teren Verwendung speichern kann.
+Ein Beispiel:
+Nehmen Sie an, Sie wollen eine Text nach Abschnitten durchsuchen, die mit einem der Namen Henrik oder Pernille beginnen, gefolgt von einer Form des Verbs say.
+Mit einer normalen Suche w\xFCrden Sie anfangen, nach dem ersten Namen Henrik zu suchen, vielleicht gefolgt von sa, also Henrik sa.
+Bei dieser Suche w\xFCrden Sie alle Treffer \xFCberspringen m\xFCssen, die nicht am Anfang eines Abschnittes stehen und die, hinter denen ein sa steht, aber kein says, said und so weiter.
+Dann nat\xFCrlich das Ganze von vorn f\xFCr den n\xE4chsten Namen...
+Mit regul\xE4ren Ausdr\xFCcken k\xF6nnen Sie dies mit einer einzelnen Suche erreichen und das noch genauer.
+Um dies zu erreichen, definieren regul\xE4re Ausdr\xFCcke Regeln zum Ausdr\xFCcken von Details einer zu suchenden Zeichenkette.
+Unser Beispiel, das wir wie folgt ausdr\xFCcken k\xF6nnen:
+^[ ]{0,4}(Henrik|Pernille) sa(ys|id)
+Das oben angegebene Beispiel zeigt alle vier Hauptkonzepte von regul\xE4ren Ausdr\xFCcke, speziell:
+Muster
+Behauptungen
+Quantifizierer
+Referenzen
+Das Hochzeichen (^) am Anfang des Ausdruckes kennzeichnet eine Behauptung, die nur dann wahr ist, wenn sich der folgende Text am Anfang einer Zeile befindet.
+Die Zeichenketten [ ] und (Henrik|Pernille) sa(ys|id) sind Muster.
+Das erste ist ein Zeichen das entweder auf ein Leerzeichen oder ein Tabulatorzeichen zutrifft, das andere enth\xE4lt als erstes ein Untermuster, das entweder auf Henrik oder Pernille zutrifft, dann ein Muster, das exakt auf sa zutrifft und zum Schluss wieder ein Untermuster, das auf ys, oder id zutrifft.
+Die Angabe {0,4} ist ein Quantifizierer, der sagt: von 0 bis 4 mal das vorher spezifizierte.
+Weil Software f\xFCr regul\xE4re Ausdr\xFCcke, die das Konzept von Referenzen den gesamten zutreffenden Teil des Textes wie auch in Klammern eingeschlossene Untermuster sichert, k\xF6nnen Sie diese gefundenen Textstellen (diese sind nach dem Suchen mit einem regul\xE4ren Ausdruck in einem Textdokument in einem Editor meistens ausgew\xE4hlt) oder den gefundenen Namen oder den letzten Teil des Verbs weiterverwenden, die Referenzen erm\xF6glichen den Zugriff auf diese.
+Zusammengefasst: die regul\xE4ren Ausdr\xFCcke treffen zu, wo wir wollten, und nur dort.
+Die folgenden Abschnitte beschreiben im einzelnen, wie Muster, Zeichenklassen, Behauptungen, Quantifizierer und Backreferenzen benutzt werden und der letzte Abschnitt gibt einige n\xFCtzliche Beispiele.
+Muster
+Muster bestehen aus Zeichenketten und Zeichenklassen.
+Muster k\xF6nnen Untermuster enthalten, diese sind in Klammern eingeschlossene Muster.
+Steuerzeichen
+In Mustern und in Zeichenklassen haben einige Zeichen spezielle Bedeutungen.
+Um diese Steuerzeichen zu finden, m\xFCssen sie als solche markiert werden.
+Dies geschieht durch das Voranstellen eines R\xFCckw\xE4rtsschr\xE4gstriches (\) vor das Zeichen.
+Die Software ignoriert die Kennzeichnung als Steuerzeichen von Zeichen, die in dem betrachteten Zusammenhang keine Steuerzeichen sind.
+So ist z.B. die Angabe von (\j), also ein j als Steuerzeichen markiert, kein Problem.
+Wenn Sie Zweifel haben, ob ein Zeichen eine spezielle Bedeutung hat, k\xF6nnen Sie dies ohne Bedenken als Steuerzeichen markieren.
+Zeichenklassen und Abk\xFCrzungen
+Eine Zeichenklasse ist ein Ausdruck, der auf einen bestimmten Satz von Zeichen zutrifft.
+Zeichenklassen werden in regul\xE4ren Ausdr\xFCcken durch Setzen der zugelassenen Zeichen in eckige Klammern [] oder durch Nutzen einer der im Folgenden beschriebenen abgek\xFCrzten Klassen definiert.
+Einfache Zeichenklassen enthalten nur ein oder mehrere Zeichen, z.B. [abc] (zutreffend auf einen der Buchstaben a, b oder c) oder [0123456789] (zutreffend auf eine Zahl).
+Da Buchstaben und Zahlen eine festgelegte Reihenfolge haben, k\xF6nnen diese durch Angabe des Bereiches :abgek\xFCrzt werden: [a-c] entspricht [abc] und [0-9] entspricht [0123456789].
+Diese Angaben k\xF6nnen auch kombiniert werden, z.B. trifft [a-fynot1-38] auf die folgenden Zeichen zu: a, b, c, d, e, f, y, n, o, t, 1, 2, 3 oder 8.
+Da Gro\xDFbuchstaben von Kleinbuchstaben unterschieden werden, m\xFCssen Sie zur Angabe von a oder b ohne Unterscheidung von Gro\xDF- und Kleinschreibung [aAbB] angeben.
+Die Erzeugung von negativen Klassen, die auf alles au\xDFer zutreffen, erfolgt durch das Hoch-Zeichen (^) am Anfang der Klassendefinition:
+[^abc] trifft auf alle Zeichen au\xDFer a, b oder c zu.
+\a
+Trifft auf das ASCII -Beep-Zeichen zu (BEL, 0x07).
+\f
+Trifft auf das ASCII Seitenvorschub-Zeichen zu (FF, 0x0C).
+\n
+Trifft auf das ASCII -Zeilenvorschub-Zeichen zu (LF, 0x0A, Unix newline).
+\r
+Trifft auf das ASCII -Wagenr\xFCcklauf-Zeichen zu (CR, 0x0D).
+ 
+Trifft auf das ASCII -Zeichen Horizontaltabulator zu (HT, 0x09).
+\v
+Trifft auf das ASCII -Zeichen Vertikaltabulator zu (VT, 0x0B).
+\xhhhh
+Dieser Ausdruck trifft auf das Unicodezeichen mit dem Code mit der Hexadezimalzahl hhhh (zwischen 0x0000 und 0xFFFF) zu. \0ooo (z.B., \zero ooo) trifft auf das ASCII -/Latin-1-Zeichen mit dem Code mit der Oktalzahl ooo (zwischen 0 und 0377) zu.
+. (Punkt)
+Trifft auf jedes Zeichen einschlie\xDFlich Zeilenvorschub zu.
+\d
+Trifft auf eine Ziffer zu.
+Entspricht [0-9].
+\D
+Trifft auf ein Zeichen, das keine Ziffer ist, zu.
+Entspricht [^0-9] oder [^\d].
+\s
+Trifft auf ein Zeichen, das einen Zwischenraum angibt, zu.
+Praktisch entspricht dies [ \n\r].
+\S
+Trifft auf ein Zeichen, das keinen Zwischenraum angibt, zu.
+Praktisch entspricht dies [^ \n\r] oder [^\s].
+\w
+Trifft auf ein druckbares Zeichen zu - in diesem Fall Buchstabe oder Ziffer.
+Entspricht [a-zA-Z0-9].
+Das Zeichen Unterstrich (_) trifft nicht zu.
+\W
+Trifft auf alle Zeichen au\xDFer Buchstaben und Ziffern zu.
+Entspricht [^a-zA-Z0-9] oder [^\w]
+Die abgek\xFCrzten Klassen k\xF6nnen in selbstdefinierte Klassen eingef\xFCgt werden, z.B. kann f\xFCr die Klasse druckbares Zeichen, Leerzeichen oder Punkt der Ausdruck [\w\.] verwendet werden.
+Die Angabe von Klassen nach POSIX-Notierung, [:<class name>:], wird gegenw\xE4rtig nicht unterst\xFCtzt.
+Zeichen mit speziellen Bedeutungen (Steuerzeichen) innerhalb von Zeichenklassen
+Die folgenden Zeichen haben spezielle Bedeutungen innerhalb des Ausdrucks in eckigen Klammern [], diese m\xFCssen als Steuerzeichen gekennzeichnet werden, damit sie als Zeichen in die Klasse einbezogen werden:
+]
+Beendet die Definition der Zeichenklasse.
+Dieses Zeichen braucht nicht als Steuerzeichen gekennzeichnet werden, wenn es das erste Zeichen in einer Zeichenklassendefinition (nach dem Zeichen [oder ^) ist.
+^ (Hoch-Zeichen)
+Bezeichnet eine negative Klasse, wenn es das erste Zeichen in einer Zeichenklassendefinition ist.
+Wenn es als druckbares Zeichen behandelt werden soll, muss es als Steuerzeichen gekennzeichnet werden, wenn es das erste Zeichen in einer Zeichenklassendefinition ist.
+- (Bindestrich)
+Kennzeichnet einen logischen Bereich.
+Wenn es als Zeichen behandelt werden soll, muss es als Steuerzeichen gekennzeichnet werden.
+\ (R\xFCckw\xE4rtsschr\xE4gstrich)
+Das Zeichen zum Kennzeichnen eines Steuerzeichens.
+Dieses Zeichen muss immer als Steuerzeichen gekennzeichnet werden, wenn es als druckbares Zeichen behandelt werden soll.
+Alternativen: trifft zu wenn eins von
+Wenn ein erkanntes Muster von mehreren Mustern als zutreffend erkannt werden soll, dann m\xFCssen Sie diese Muster durch einen senkrechten Strich | getrennt angeben.
+Der Ausdruck John|Harry wird z.B. als zutreffend erkannt, wenn entweder John oder Harry gefunden wird.
+Untermuster
+Untermuster sind in Klammern eingeschlossene Muster, die in regul\xE4ren Ausdr\xFCcken viele Verwendungen haben.
+Angabe von Alternativen
+Sie k\xF6nnen Untermuster verwenden, um Gruppen von Alternativen in einem Muster anzugeben.
+Die Alternativen werden durch den senkrechten Strich | getrennt.
+Um eines der Worte int, float oder double zu erkennen, geben Sie int|float|double an.
+Wenn eines der Worte nur dann erkannt werden soll, wenn nach dem Wort Zwischenraum und dann Buchstaben folgen, dann verwenden Sie den folgenden Ausdruck mit den Worten im Untermuster: (int|float|double)\s+\w+.
+Speichern von gefundenem Text (Referenzen)
+Wenn Sie eine Referenz verwenden wollen, dann benutzen Sie ein Untermuster zum Speichern des gew\xFCnschten Teils des Musters.
+Wenn Sie z.B. das zweifache Auftreten des selben Wortes getrennt durch ein Komma und eventuell Zwischenraum finden wollen, dann w\xFCrden Sie (\w+),\s*\1 verwenden.
+Das Untermuster \w+ findet ein St\xFCck aus druckbaren Zeichen.
+Der gesamte Ausdruck trifft zu, wenn diese von einem Komma und keinem oder mehreren Zwischenraumzeichen und dann von einem gleichen St\xFCck von Zeichen gefolgt werden. (Der Ausdruck \1 verweist auf das erste in Klammern angegebene Untermuster.)
+Sehen Sie auch unter Referenzen nach.
+Vorw\xE4rtsgerichtete Behauptungen
+Eine vorw\xE4rtsgerichtete Behauptung ist ein Untermuster, das mit ?= oder?! anf\xE4ngt.
+Dies findet Bill Clinton oder Billy the kid, aber ignoriert stillschweigend den anderen Treffer.
+Untermuster, die f\xFCr Behauptungen benutzt werden, werden nicht gespeichert.
+Sehen Sie auch unter Behauptungen nach.
+Zeichen mit speziellen Bedeutungen (Steuerzeichen) innerhalb von Mustern
+\ (R\xFCckw\xE4rtsschr\xE4gstrich)
+Das Escape-Zeichen.
+^ (Hoch-Zeichen)
+Kennzeichnet den Anfang der Zeichenkette.
+$
+Kennzeichnet das Ende der Zeichenkette.
+() (linke und rechte Klammer)
+Kennzeichnet Untermuster.
+{} (linke und rechte geschweifte Klammer)
+Kennzeichnet numerische Quantifizierer.
+[] (linke und rechte eckige Klammer)
+Kennzeichnet Zeichenklassen.
+| (senkrechter Strich)
+Logisches ODER.
+Trennt Alternativen.
++ (Pluszeichen)
+Quantifizierer, steht f\xFCr eins oder mehrere.
+* (Stern)
+Quantifizierer, steht f\xFCr kein oder mehrere.
+? (Fragezeichen)
+Ein optionales Zeichen.
+Kann als Quantifizierer; 0- oder 1-mal gedeutet werden.
+Quantifizierer
+Quantifizierer gestatten dem regul\xE4ren Ausdruck die Angabe einer Anzahl von entweder Zeichen, Zeichenklasen oder Untermustern.
+Quantifizierer werden in geschweifte Klammern ({und}) eingeschlossen und haben die Form {[minimale Anzahl][,[maximale Anzahl]]}
+{1}
+Genau einmaliges Auftreten
+{0,1}
+Kein oder einmaliges Auftreten
+{,1}
+Kein oder einmaliges Auftreten (Kurzform)
+{5,10}
+Mindestens 5- bis maximal 10-maliges Auftreten
+{5,}
+Mindestens 5-maliges Auftreten.
+* (Stern)
+entspricht {0,} findet jede Anzahl des Auftretens.
++ (Pluszeichen)
+entspricht {1,} findet mindestens einmaliges Auftreten.
+? (Fragezeichen)
+entspricht {0,1} findet kein oder einmaliges Auftreten.
+Gier
+Wenn Quantifizierer ohne Maximum verwendet werden, dann findet der regul\xE4re Ausdruck so viel wie m\xF6glich vom Suchtext, dieses Verhalten wird auch als gierig bezeichnet.
+Moderne Software f\xFCr regul\xE4re Ausdr\xFCcke stellt die M\xF6glichkeit bereit, das gierige Verhalten auszuschalten, aber in einer grafischen Umgebung ist es das Interface, das Ihnen Zugriff auf diese M\xF6glichkeit bereitstellen muss.
+Ein Dialogfenster zum Suchen kann z.B. eine Option mit dem Namen Minimales Finden bereitstellen, es sollte auch anzeigen, ob gieriges Verhalten Standard ist.
+In Beispielen
+Hier sind einige Beispiele der Verwendung von Quantifizierern
+^\d{4,5}\s
+Trifft auf die Zahlen in 1234 go und 12345 now zu, aber nicht die in f\xFCr 567 eleven oder 223459 somewhere
+\s+
+Trifft auf ein oder mehrere Zwischenraumzeichen zu.
+(bla){1,}
+Trifft zu f\xFCr alle in blablabla und das bla in blackbird oder tabla.
+/?>
+Trifft f\xFCr das /> in <closeditem/> sowie auch f\xFCr das > in <openitem> zu.
+Behauptungen
+Behauptungen erweitern den regul\xE4ren Ausdruck so, dass er nur unter bestimmten Bedingungen zutrifft.
+Einige Behauptungen haben ein Muster das gefunden werden muss, aber der zutreffende Teil des Suchtextes dieses Musters wird nicht Teil des Ergebnisses des gesamten regul\xE4ren Ausdrucks.
+^ (Hochzeichen:
+Anfang der Zeichenkette)
+Trifft auf den Anfang des zu suchenden Textes zu.
+Der Ausdruck ^Peter trifft auf Peter im Text Peter, hey! zu, aber nicht auf Hey, Peter!.
+$(Ende der Zeichenkette)
+Trifft auf das Ende des Suchtextes zu.
+Der Ausdruck you\?$ trifft auf das letzte you in You didn't do that, did you? zu, aber nirgendwo in You didn't do that, right?.
+\b (Wortgrenze)
+Trifft zu, wenn ein druckbares Zeichen auf der einen Seite aber keines auf der anderen Seite ist.
+Dieser Ausdruck dient zum Finden von Wortenden, wenn nach beiden Enden gesucht wird, zum Finden des ganzen (einzelnstehenden) Wortes.
+Der Ausdruck \bin\b trifft auf das einzelnstehende in in He came in through the window zu, aber nicht auf das in in window.
+\B (keine Wortgrenze)
+Trifft immer dort zu, wo \b nicht zutrifft.
+Dieser Ausdruck dient zum Finden von Text innerhalb von Worten.
+Der Ausdruck \bin\B trifft z.B. auf das in im Wort window im Text He came in through the window zu, aber nicht auf das einzelnstehende in.
+(?=PATTERN) (Positive Vorw\xE4rtsreferenz)
+Eine Vorw\xE4rtsreferenz pr\xFCft den Text, der dem eventuell zutreffenden Teil des Textes folgt.
+Die Vorw\xE4rtsreferenz verhindert, dass der Text zutrifft, wenn der nachfolgende Text nicht auf das MUSTER der Behauptung zutrifft.
+Wenn die Behauptung zutrifft, wird der Text, der auf diese zutrifft, allerdings nicht Bestandteil des Ergebnisses.
+Der Ausdruck handy(?=\w) trifft auf handy in handyman zu, aber nicht auf das in That came in handy!
+(?!PATTERN) (Negative Vorw\xE4rtsreferenz)
+Der Ausdruck const \w+\b(?!\s*&) trifft auf const char im Text const char* foo, aber nicht const QString in const QString& bar weil das & auf die negative Vorw\xE4rtsreferenz zutrifft.
+Referenzen

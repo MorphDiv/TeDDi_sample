@@ -1,0 +1,44 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# iso639_3:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+There are two possible ways to bridge PHP and Java: you can either integrate PHP into a Java Servlet environment, which is the more stable and efficient solution, or integrate Java support into PHP. The former is provided by a SAPI module that interfaces with the Servlet server, the latter by this Java extension.
+The Java extension provides a simple and effective means for creating and invoking methods on Java objects from PHP. The JVM is created using JNI, and everything runs in-process.
+This extension is EXPERIMENTAL. The behaviour of this extension -- including the names of its functions and anything else documented about this extension -- may change without notice in a future release of PHP. Use this extension at your own risk.
+You need a Java VM installed on your machine to use this extension.
+To include Java support in your PHP build you must add the option --with-java[=DIR] where DIR points to the base install directory of your JDK. This extension can only be built as a shared dl. More build instructions for this extension can be found in php4/ext/java/README.
+Note to Win32 Users: In order to enable this module on a Windows environment, you must copy jvm.dll from the DLL folder of the PHP/Win32 binary package to the SYSTEM32 folder of your windows machine. (Ex:C:\WINNT\SYSTEM32 or C:\WINDOWS\SYSTEM32)
+The behaviour of these functions is affected by settings in php.ini.
+
+표 1. Java configuration options
+This extension has no resource types defined.
+This extension has no constants defined.
+
+예 1. Java Example
+예 2. AWT Example
+new Java() will create an instance of a class if a suitable constructor is available. If no parameters are passed and the default constructor is useful as it provides access to classes like java.lang.System which expose most of their functionallity through static methods.
+Accessing a member of an instance will first look for bean properties then public fields. In other words, print $date.time will first attempt to be resolved as $date.getTime(), then as $date.time.
+Both static and instance members can be accessed on an object with the same syntax. Furthermore, if the java object is of type java.lang.Class, then static members of the class (fields and methods) can be accessed.
+Exceptions raised result in PHP warnings, and NULL results. The warnings may be eliminated by prefixing the method call with an "@" sign. The following APIs may be used to retrieve and reset the last error:
+java_last_exception_get()
+java_last_exception_clear()
+Overload resolution is in general a hard problem given the differences in types between the two languages. The PHP Java extension employs a simple, but fairly effective, metric for determining which overload is the best match.
+Additionally, method names in PHP are not case sensitive, potentially increasing the number of overloads to select from.
+Once a method is selected, the parameters are cooerced if necessary, possibly with a loss of data (example: double precision floating point numbers will be converted to boolean).
+In the tradition of PHP, arrays and hashtables may pretty much be used interchangably. Note that hashtables in PHP may only be indexed by integers or strings; and that arrays of primitive types in Java can not be sparse. Also note that these constructs are passed by value, so may be expensive in terms of memory and time.
+The Java Servlet SAPI builds upon the mechanism defined by the Java extension to enable the entire PHP processor to be run as a servlet. The primary advanatage of this from a PHP perspective is that web servers which support servlets typically take great care in pooling and reusing JVMs. Build instructions for the Servlet SAPI module can be found in php4/sapi/README. Notes:
+While this code is intended to be able to run on any servlet engine, it has only been tested on Apache's Jakarta/tomcat to date. Bug reports, success stories and/or patches required to get this code to run on other engines would be appreciated.
+PHP has a habit of changing the working directory. sapi/servlet will eventually change it back, but while PHP is running the servlet engine may not be able to load any classes from the CLASSPATH which are specified using a relative directory syntax, or find the work directory used for administration and JSP compilation tasks.

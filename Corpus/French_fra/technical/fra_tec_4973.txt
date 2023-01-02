@@ -1,0 +1,77 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Chapitre 7.
+Les types
+Suivant
+PHP ne nécessite pas de déclaration explicite du type d 'une variable.
+Le type d'une variable est déterminé par le contexte d 'utilisation.
+Par exemple, si vous assignez une chaîne de caractères à la variable var, var devient une chaîne de caractère.
+Si vous assignez un nombre entier à var, elle devient un entier.
+Un exemple de convertisseur automatique de type est l'opérateur '+ '.
+Si un des opérandes est de type double, alors tous les opérandes sont évalués comme des variables de type double et le résultat est de type double.
+Sinon, tous les opérandes sont évalués comme des variables de type entier et le résultat sera du type entier.
+Il est à noter que cela NE CHANGE PAS le type des opérandes.
+Le seul changement est la manière dont les opérandes sont évaluées.
+?php $foo = "0"; / / $foo est une chaîne de caractères (ASCII 48) $foo += 2; / / $foo est maintenant du type entier (2) $foo = $foo + 1.3; / / $foo est maintenant du type double (3.3) $foo = 5 + "10 Petits cochons"; / / $foo est du type entier (15) $foo = 5 + "10 cochonnets"; / / $foo est du type entier (15)?
+Si les deux derniers exemples vous semblent obscurs ou si vous voulez forcer une variable a être évaluée avec un certain type, reportez-vous au paragraphe Conversion de type ci-dessous.
+Si vous voulez changer le type d 'une variable, intéressez-vous à aux fonctions de conversion de chaînes.
+Si vous voulez forcer le type d 'une variable, vous pouvez vous reporter à la section transtypage.
+Si vous voulez changer le type d'une variable, utilisez settype().
+Pour tester les exemples de cette section, il suffit d'en faire un copier / coller, et d 'insérer les lignes dans un script PHP.
+?php echo "\$foo==$foo; le type est". gettype ($foo). "br \n";?
+
+Le comportement de la conversion automatique est actuellement indéfinie.
+?php $a = 1; / / $a est un entier $a[0] = "f"; / / $a devient un tableau, et $a[0] contient "f "?
+Bien que dans l'exemple ci-dessus, il semble évident que $a va devenir un tableau, dont le premier élément est 'f', considérez l 'exemple suivant:
+?php $a = "1"; / / $a est une chaîne $a[0] = "f"; / / Qu'est ce qu 'une position dans une chaîne? que se passe t il??
+Etant donné que PHP supporte l'indexation de chaîne avec des offsets identiques à celles des tableaux, l'exemple ci-dessus conduit à un problème: est ce que $a est un tableau, dont le premier élément est "f", ou bien est ce que "f "est le premier élément de la chaîne de caractères $a?
+Pour cette raison, aussi bien pour PHP 3.0.12 que PHP 4.0b3-RC4, le résultat de la conversion automatique est considéré comme indéfinie.
+Des solutions sont en cours de discussion.
+La conversion de type en PHP fonctionne de la même manière qu'en C: le nom du type désiré est écrit entre parenthèses devant la variable à transtyper ("cast").
+?php $foo = 10; / / $foo est un entier $bar = (double) $foo; / / $bar est un double?
+Les conversions autorisées sont:
+(int), (integer) - type entier
+(bool), (boolean) - booléen
+(real), (double), (float) - type double
+(string) - ctype chaîne
+(array) - type tableau
+(object) - type objet
+Il est à noter que les tabulations et les espaces sont autorisés à l 'intérieur des parenthèses, donc les lignes suivantes sont équivalentes:
+
+Le transtypage n 'a pas toujours de résultat prévisible.
+Pour plus d 'informations, voyez:
+Conversion en booléen
+Conversion en entier
+Avertissement
+Pour transformer facilement une variable en chaîne, entourez la simplement de guillements doubles.
+Lors de la conversion d'un tableau en chaîne, le résultat sera le mot Array Lors de la conversion d'un tableau en chaîne, le résultat sera le mot Array (tableau, en anglais).
+Lors de la conversion d'un objet en chaîne, le résultat sera le mot Object (objet, en anglais).
+Dans les deux cas, une alerte sera affichée.
+Lorsque vous transtypez un scalaire ou une chaîne en tableau, la variable verra son contenu affecté au premier élément du tableau.
+?php $var = 'ciao'; $arr = (array) $var; echo $arr[0]; / / affiche 'ciao'?
+Lorsque vous transtypez un scalaire ou une chaîne en objet, la valeur de la variable sera transformée en attribut de l 'objet.
+L'attribut s'appellera 'scalar ':
+?php $var = 'ciao'; $obj = (object) $var; echo $obj - scalar; / / affiche 'ciao'?
+Précédent
+Sommaire
+Suivant
+La valeur NULL
+Niveau supérieur
+Les variables

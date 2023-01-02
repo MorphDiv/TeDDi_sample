@@ -1,0 +1,47 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+unset() détruit les variables var.
+Notez qu'en PHP 3, unset() retournait toujours TRUE (en fait, la valeur entière 1). unset() n'est plus une véritable fonction: c'est une structure du langage, ce qui fait qu 'elle ne retourne pas de valeur.
+Lire la valeur retournée par unset() (dans une variable, par exemple), retourne une erreur d 'analyse.
+Exemple 1.
+Exemple avec unset()
+?php / / Destruction d'une seule variable unset ($foo); / / Destruction d'un élément de tableau unset ($bar['quux']); / / Destruction de plusieurs variables unset ($foo1, $foo2, $foo3);?
+Le comportement de unset() à l'intérieur d 'une fonction peut varier suivant le type de variable que vous voulez détruire.
+Si une variable globale est détruite avec unset() depuis une fonction, seule la variable locale sera détruite.
+Le variable globale gardera la valeur acquise avant l'appel à unset().
+?php function destroy_foo() {global $foo; unset($foo);} $foo = 'bar'; destroy_foo(); echo $foo;?
+
+Si une variable qui est passée par référence est détruite à l'intérieur d 'une fonction, seule la variable locale sera détruite.
+La variable globale conservera la dernière valeur qu'elle avait avant l'appel de unset().
+?php function foo( $bar) {unset($bar); $bar = "bla";} $bar = 'truc'; echo "$bar\n"; foo($bar); echo "$bar\n";?
+truc truc
+Si une variable statique est détruite à l'intérieure d'une fonction unset() détruira la référence à la variable statique, plutôt que la variable statique elle même.
+?php function foo() {static $a; $a++; echo "$a\n"; unset($a);} foo(); foo(); foo();?
+
+Si vous voulez détruire une variable globale, depuis une fonction, vous pouvez utiliser le tableau $GLOBALS:
+?php function foo() {unset($GLOBALS['bar']);} $bar = "truc"; foo();?
+Voir aussi isset() et empty().
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

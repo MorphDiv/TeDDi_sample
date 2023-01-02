@@ -1,0 +1,46 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+One of the most important issues for language extensions is accepting and dealing with data passed via arguments.
+Most extensions are built to deal with specific input data (or require parameters to perform their specific actions), and function arguments are the only real way to exchange data between the PHP level and the C level.
+Of course, there' s also the possibility of exchanging data using predefined global values (which is also discussed later), but this should be avoided by all means, as it's extremely bad practice.
+PHP doesn' t make use of any formal function declarations; this is why call syntax is always completely dynamic and never checked for errors.
+Checking for correct call syntax is left to the user code.
+For example, it 's possible to call a function using only one argument at one time and four arguments the next time - both invocations are syntactically absolutely correct.
+Since PHP doesn 't have formal function definitions with support for call syntax checking, and since PHP features variable arguments, sometimes you need to find out with how many arguments your function has been called.
+You can use the ZEND_NUM_ARGS macro in this case.
+In previous versions of PHP, this macro retrieved the number of arguments with which the function has been called based on the function 's hash table entry, ht, which is passed in the INTERNAL_FUNCTION_PARAMETERS list.
+As ht itself now contains the number of arguments that have been passed to the function, ZEND_NUM_ARGS has been stripped down to a dummy macro (see its definition in zend_API.h).
+But it 's still good practice to use it, to remain compatible with future changes in the call interface.
+Note:
+The old PHP equivalent of this macro is ARG_COUNT.
+The following code checks for the correct number of arguments:
+if( ZEND_NUM_ARGS() != 2) WRONG_PARAM_COUNT;
+Figure 32-1.
+WRONG_PARAM_COUNT in action.
+This macro prints a default error message and then returns to the caller.
+Its definition can also be found in zend_API.h and looks like this:
+ZEND_API void wrong_param_count( void); #define WRONG_PARAM_COUNT {wrong_param_count(); return;}
+Prev
+Home
+Next
+Summary
+Up
+Retrieving Arguments

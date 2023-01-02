@@ -1,0 +1,68 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+Diese Funktion wird verwendet, um Variablen eines Arrays in die aktuelle Symboltabelle zu importieren.
+Es behandelt die Schlüssel des assoziativen Arrays var_array als Variablennamen, und die Werte als Variablenwerte.
+Für jedes Paar Schlüssel / Wert wird - abhängig von den Parametern extract_type und prefix - eine Variable in der aktuellen Symboltabelle eingetragen.
+Anmerkung:
+Seit Version 4.0.5 gibt diese Funktion die Anzahl der extrahierten Variablen zurück.
+Anmerkung:
+EXTR_IF_EXISTS und EXTR_PREFIX_IF_EXISTS wurde in Version 4.2.0. eingeführt.
+Anmerkung:
+EXTR_REFS wurde in Version 4.3.0 eingeführt.
+extract() prüft jeden Schlüssel, ob dieser einen gültigen Variablennamen ergibt, und auch auf eventuelle Kollisionen mit existierenden Variablen in der Symboltabelle.
+Die Art, wie ungültige / numerische Schlüssel und Kollisionen behandelt werden, wird mit extract_type spezifiziert.
+Es kann einen der folgenden Werte annehmen:
+Im Falle einer Kollision wird die existierende Variable überschrieben.
+Im Falle einer Kollision wird die existierende Variable nicht überschrieben.
+Im Falle einer Kollision wird dem Variablennamen prefix vorangestellt.
+Allen Variablennamen wird prefix vorangestellt.
+Seit PHP 4.0.5 gilt dies auch für numerische Variablen.
+Nur ungültigen / numerischen Variablennamen wird prefix vorangestellt.
+Dieser Flag wurde mit PHP 4.0.5 eingeführt.
+Überschreibt die Variable nur, wenn sie bereits in der aktuellen Symboltabelle existiert, sonst geschieht nichts.
+Dies ist dann hilfreich, wenn Sie eine Liste mit gültigen Variablen definieren, und dann z.B. nur jene Variablen extrahieren, welche Sie aus $_REQUEST definiert haben.
+Dieser Flag wurde in PHP 4.2.0 eingeführt.
+Erstellt nur Variablennamen mit Präfix, wenn die Version ohne Präfix der selben Variable in der aktuellen Symboltabelle existiert.
+Dieser Flag wurde in PHP 4.2.0 eingeführt.
+Extrahiert Variablen als Referenzen.
+Das heißt, dass die Werte der importierten Variablen noch immer auf die Werte des Parameters var_array referenzieren.
+Sie können diesen Flag alleine oder auch in Kombination mit einem anderen Flag verwenden, indem Sie Oder-Verknüpfungen im extract_type erstellen.
+Dieser Flag wurde in PHP 4.3.0 eingeführt.
+Ist extract_type nicht spezifiziert, so wird EXTR_OVERWRITE angenommen.
+Beachten Sie, dass prefix nur dann nötig ist, wenn extract_type EXTR_PREFIX_SAME, EXTR_PREFIX_ALL, EXTR_PREFIX_INVALID, oder EXTR_PREFIX_IF_EXISTS ist.
+Ist das Resultat trotz Präfix kein gültiger Variablenname, wird es nicht in die Symboltabelle importiert.
+extract() gibt die Anzahl erfolgreich in die Symboltabelle importierter Variablen zurück.
+Eine mögliche Verwendung für extract ist der Import der Variablen in einem von wddx_deserialize() gelieferten assoziativen Array in die Symboltabelle.
+Beispiel 1. extract()
+?php / * Annahme: $var_array ist ein von wddx_deserialize zurückgegebenes Array * / $groesse = "groß"; $var_array = array ("farbe" = "blau", "groesse "= "mittel", "form" = "Kugel"); extract ($var_array, EXTR_PREFIX_SAME, "wddx"); print "$farbe, $groesse, $form, $wddx_groesse\n";?
+Das obige Beispiel wird folgendes ausgeben:
+blau, groß, Kugel, mittel
+$size wurde nicht überschrieben, da wir EXTR_PREFIX_SAME spezifiziert haben, was im Anlegen von $wddx_size $size wurde nicht überschrieben, da wir EXTR_PREFIX_SAME spezifiziert haben, was im Anlegen von $wddx_size endete.
+Wäre EXTR_SKIP spezifiziert worden, dann wäre $wddx_size nicht angelegt worden.
+EXTR_OVERWRITE hätte $size mit dem Wert "medium" überschrieben, und EXTR_PREFIX_ALL hätte die neuen Variablen $wddx_color, $wddx_size, und $wddx_shape angelegt.
+Sie müssen assoziative Arrays benutzen, numerisch indizierte Arrays liefern keine Resultate.
+Siehe auch compact().
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

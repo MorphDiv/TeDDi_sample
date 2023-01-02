@@ -1,0 +1,119 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+& kopete; Chat Window Style Guide
+& kopete; Chat Window Style reference.
+Beginning with & kopete; 0.12, we are now using Adium format for our Chat Window style. The theme format is based on HTML templates and CSS. They are easier to make and develop, only a knowledge of HTML and CSS is needed. Also, styles can have variants (defined as CSS file) which add more customization value:).
+Reference guide.
+Adium format consist of a directory structure, HTML templates, CSS files and keywords that are replaced each time the template is processed. The final conversation is a XHTML page where messages are added with DOM operations. The central element is a div element named Chat. Before and after this div element goes the Header and Footer template. Messages are children of the Chat div element.
+Directory Structure
+A style must respect this directory structure. Code in & kopete; are thinking around this directory structure. When archiving the style, archive the styleName directory. The directory structure is a structure of a Mac OS X bundle for those familiar with that operating system. Also you must respect the case displayed here, because a UNIX system is case-sensitive.
+styleName\\ (can have. adiumMessageStyle as suffix, because in Mac OS X it is a bundle) Contents\\ Info. plist Resources\\ main. css Header. html Footer. html Status. html Incoming\\ (and Outgoing\\) Content. html NextContent. html (for consecutive messages) Context. html (for message history) NextContext. html Action. html Variants\\ *. css
+About & lt; div id="insert"gt; lt; /divgt;
+This is a special div element used internally. It is a placeholder to indicate where to insert the next message. If it is a new message, it is removed and the new message take place. But if it is a consecutive message, the div element is replaced with the content of new message. This special div element is required in Content, Context, NextContent, NextContext templates. Though it not harm to put it also in Action and Status template.
+HTML templates.
+Template description.
+Header. html (Required)
+Use the Header template to display a nice header to the conversation. This template is inserted before Chat div element. If you do n't use it, just put an empty file.
+Footer. html (Required)
+This is mostly the same as Header but it is for the footer of a conversation. This template is inserted after Chat div element. If you do n't use it, just put an empty file.
+Status. html (Required)
+This template is used to display an internal message. Internal messages such as status change, message from Kopete (eg; Incoming File Transfer). When the style do not supply an Action template, it is used to display Action message.
+Incoming/ Content. html
+Outgoing/ Content. html (Required)
+The content template is the message core. Think it as a block that will hold messages. Make sure it is ready to receive consecutive messages, do n't design it to only display one message. Consecutive messages will be inserted at the div insert element.
+Incoming/ NextContent. html
+Outgoing/ NextContent. html (Required)
+The NextContent template is a message fragment for consecutive messages. It will be inserted into the main message block. The HTML template should contain the bare minimum to display a message.
+Incoming/ Action. html
+Outgoing/ Action. html (Optional) (kopete; Extension)
+This template is a & kopete; extension to the Adium format. It is available for Incoming and Outgoing direction. Action messages are special message to tell we are doing an action. Example: "/ me is installing & kopete;" would be displayed as "DarkShock is installing & kopete;".
+Incoming/ Context. html
+Incoming/ NextContext. html
+Outgoing/ Context. html
+Outgoing/ NextContext. html (Optional)
+These templates are not used in Kopete. In Adium, they are used to display history. It is mostly the same thing as Content and NextContent but with some differences to distinguish from normal messages.
+About CSS styles and Variants
+HTML template are used to describe how the structure is made. But all the style is described in CSS files. main. css is the main style, where variants are just alterations of the main style. Examples of variants are different colors, no display of user photo. Both main. css and variants and imported in final XHTML page.
+- main. css
+This is the main CSS file which is common for all variants. This file should contain all the main description of the style.
+-Variants
+Variants are CSS files located in Variants/ directory. Each variant is a single CSS file that include the main. css and do alteration to the main style.
+Debugging styles
+Here is two tips for testing a style while creating it.
+-Save a sample conversation.
+In Chat Window, you can save a conversation. This is a copy of the internal XHTML page displayed. Use it in Konqueror to test your CSS files.
+-Disable style cache.
+A little configuration switch exist to disable the style cache. When enabled, it reload the HTML templates each time the style is asked. Add the following lines to your kopeterc. Very useful when testing a style in & kopete;
+[KopeteStyleDebug] disableStyleCache=true
+Keywords reference
+Keywords are likes holes to fill with details. On each new message, they are replaced with the correct value corresponding to their context. To fully support all features of Kopete, we added some keywords extensions to the Adium. Also some keywords are only available in certain context.
+Keywords list for Header and Footer templates.
+There keywords are processed at the beginning of the chat.
+%chatName%
+This is the name of the current chat session. For a typical session, it display the name of the contact and his status. For IRC, it display the topic of a channel.
+%sourceName%
+%destinationName%
+These are the name of the contacts for a chatsession. %sourceName% is your name. %destinationName% is the name of the contact you are chatting with. Prefer %chatName% over those, because they could be confusing for groupchat and IRC.
+%incomingIconPath%
+%outgoingIconPath%
+These are the image/ photo/ avatar of the contacts for a chatsession. Incoming represent the contact photo and Outgoing represent your own photo. If they are no photo available, it use buddy_icon. png image which is located in Incoming or Outgoing directory.
+%timeOpened%
+%timeOpened{X}%
+It is the time when the chat session begin. %timeOpened% use the default time format for the current locale. If you want to use a specific time format, use %timeOpened{X}% where X is a string containing the time format. The time parameters are the same as the glibc function strftime. Do man strftime to get the list of available parameters.
+Keywords list for Content, NextContent, Context, NextContext, Action template
+There keywords are processed for each message.
+%userIconPath%
+This is the image/ photo/ avatar of the contact associated with the message. If they are no photo available, it use buddy_icon. png image which is located in Incoming and Outgoing directory depending of the message direction.
+%senderScreenName%
+This is the contact ID of the contact associated with the message. Examples: me@hotmail. com, 45566576, JohnSmith.
+%sender%
+This is the name of the contact associated with the message. It use MetaContact display name as a source.
+%service%
+Display the name of the service associated with the message. Examples: Jabber, Yahoo, MSN.
+%textbackgroundcolor{X}%
+In & kopete;, this keyword is used to represent the highlight background color. Ignore parameter in the braces and only use it as %textbackgroundcolor{}.
+%senderStatusIcon% (kopete; extension)
+Display the status icon of the contact associated with the message. It's a file path.
+%senderColor%
+%senderColor{N}% (kopete; extension)
+Generate a color from the sender contact id. Can be used to display a different color for contact nickname.
+%senderColor{N}% where N is a positive number. If N is greater than 100, it represent a lighter color than the contact's color. If N equal 150 it is a color which is 50% brighter. If N is less than 100 then it is a darker color. Useful for having a background colored differently for each contact.
+p. message {color: inherit; border-color: inherit;}
+Keyword list common for messages and Status. html
+%message%
+The message itself. This is a HTML fragment.
+%time%
+%time{X}%
+The time when the message was received. %time% use the default time format for the current locale. If you want to use a specific time format, use %time{X}% where X is a string containing the time format. The time parameters are the same as the glibc function strftime. Do man strftime to get the list of available parameters.
+%messageDirection% (kopete; Extension)
+Represent the message direction, if the message must be displayed right-to-left or left-to-right. The values are either "rtl" or "ltr". Read Message Direction guideline to see how to use this keyword properly.
+& kopete; Chat Window Style Guideline
+The & kopete; Chat Window Style Guideline is a set of things that your Chat Window style must support to be compliant with Kopete.
+Support highlight
+Your style must show highlight. In Kopete and Adium, the %textbackgroundcolor{}% is replaced with the highlight color. Add this style attribute: background-color: %textbackgroundcolor{}% to the HTML element that display the message.
+Consecutive message templates are required.
+This guideline is for people rewriting old XSL styles to the new format. All styles must supply a template for consecutive messages. It is now a default feature.
+Use UTF-8 encoding.
+The title said it all. You must save your files to UTF-8.
+Supply Contents/ Info. plist for interopability with Adium
+The Contents/ Info. plist file is not used in Kopete yet. But if you want your style to be compatible with Adium, you must supply that file. Here a basic example file. Strings to replace are enclosed with "$".
+<! [CDATA[ < ?xml version="1.0" encoding="UTF-8"? > < !DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd" > CFBundleDevelopmentRegion English CFBundleGetInfoString $Your style full name$ CFBundleIdentifier $Your style ID in the form: com.adiumx.smooth.operator.style$ CFBundleInfoDictionaryVersion 1.0 CFBundleName $Your style name here$ CFBundlePackageType AdIM MessageViewVersion 3]] >
+Supply buddy_icon. png
+You must place a file named buddy_icon. png in the Incoming and Outgoing. These images will be used when the contact have no photo.
+Support right-to-left languages with %messageDirection% keyword.
+%messageDirection% keyword is present for languages in the world that write right-to-left. It define the message direction, if it is "rtl" (right-to-left) or "ltr" (left-to-right). Add this style attribute to the HTML element that display the message: direction: %messageDirection%. Style preview in appearance config include a right-to-left to check if your style display it correctly. It should begin the string from the right.

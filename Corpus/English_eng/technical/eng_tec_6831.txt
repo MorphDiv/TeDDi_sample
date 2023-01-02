@@ -1,0 +1,41 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+How-To: Installing a New Operating System
+This how-to describes the preparation of a new hard disk device for an OS installation: Suppose you bought a new hard disk and now intend to use it as a replacement for the old one that currently holds your OS and data partitions. You would also like to take this oppurtunity to install a new operation system. Several steps will have to be taken to make the transition from the old to the new system and drive.
+In the following, / dev/ sdb is the old hard disk and / dev/ sdc is the new one. This screenshot shows the situation on the source device:
+Main window with source device
+The new device will look like this. Note that it does n't yet have valid partition table, thus the first step to take is to create one by selecting:
+Main window with destination device
+After confirming the warning dialog you can begin creating partitions on the new device by clicking the extended partition and selecting. Begin with an extended partition at the end of the device to later hold the home and swap partitions:
+Creating an extended partition
+Click OK and the operation to create this extended partition is added to the list.
+Now create a primary partition on the rest of the device where the new OS will be installed. Make it as large as the unallocated area in front of the extended partition:
+Creating a primary partition
+Click OK in the dialog to accept your choice. The operation to create the new primary partition is then added to the operation list.
+Now it is time to copy the home partition from the old device to the extended partition on the new device. Select the old device in the Device List panel, click on partition sdb5 and pick.
+Then go back to the new device and click the extended partition. Select. The following dialog will come up:
+Pasting the home partition
+This already looks mostly okay but you already know that you will not need that much free space after the home partition because you will later create a swap partition there.
+So grab the right resize handle in the dialog's resizer widget and move it to the right until the free space after the pasted partition has a size more suitable for a swap partition:
+Resizing a pasted partition
+This looks fine. Click OK to accept and close the dialog. A new operation to paste the copied partition to the extended partition on sdc is added to the operation list. Note that this operation will also set the new size.
+Finally you will want to create a new swap partition at the end of the extended partition on sdc. There is no need to copy the existing swap partition from sdb because swap does not hold any permanent information worth keeping. Simply create a new partition with type linuxswap that fills the whole of the unallocated area after the new home partition.
+The main window with all operations and the preview of how sdc will look like once they are applied now looks like this:
+Main window after setting up all operations
+This looks great so select, confirm the warning dialog and wait until the operations have all been executed. For details on executing operations see the how-to on resizing partitions.
+Your new hard disk device is now ready for the installation of your new operation system.

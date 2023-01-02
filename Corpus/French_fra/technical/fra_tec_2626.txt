@@ -1,0 +1,72 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+PHP est capable de recevoir des fichiers émis par un navigateur conforme à la norme RFC-1867 (c'est-à-dire Netscape Navigator 3 ou supérieur, Microsoft Internet Explorer 3 avec un patch de Microsoft, ou supérieur sans le patch).
+Cette fonctionnalité permet de charger des fichiers textes ou binaires.
+Avec l 'authentification et les fonctions de manipulation des fichiers, vous avez un contrôle total sur le chargement et la gestion des fichiers chargés.
+Notez bien que PHP supporte aussi le chargement par la méthode PUT comme dans le navigateur Netscape Composer et les clients Amaya du W3C.
+Reportez-vous au chapitre sur le support de la méthode PUT.
+Un écran de chargement de fichiers peut être constitué en créant un formulaire de la manière suivante:
+Exemple 18-1.
+Formulaire de chargement de fichier
+FORM ENCTYPE=" multipart / form-data "ACTION="_URL_" METHOD="POST "INPUT TYPE="hidden" name="MAX_FILE_SIZE "value="1000" Envoyez ce fichier:
+INPUT NAME=" userfile "TYPE="file" INPUT TYPE="submit "VALUE="Send File" / FORM
+En PHP 3, les variables suivantes seront définies dans le script de destination, en cas de téléchargement réussi, et en supposant que register_globals est activé dans le fichier php.ini.
+Si track_vars est activé, elles seront aussi disponibles dans le dossier $HTTP_POST_VARS.
+Notez que les noms des variables suivantes supposent que nom du fichier téléchargé est 'userfile', comme présenté dans l 'exemple ci-dessus.
+$userfile - Le nom temporaire du fichier qui sera chargé sur la machine serveur.
+$userfile_name - Le nom du fichier original sur le système de l 'envoyeur.
+$userfile_size - La taille du fichier envoyé en octets.
+$userfile_type - Le type MIME du fichier, si le navigateur a fourni cette information.
+Par exemple, "image / gif".
+En PHP 4, le comportement est légèrement différent, car c'est la variable d 'environnement $HTTP_POST_FILES, qui contiendra les informations sur les fichiers téléchargés.
+Ces informations sont disponibles dans si l 'option track_vars est activée, mais track_vars est toujours activée dans les versions de PHP supérieures à la version 4.0.2.
+Le contenu du tableau $HTTP_POST_FILES décrit ci-dessous.
+Notez que l'on suppose ici que le nom du fichier téléchargé est 'userfile', comme présenté dans l 'exemple ci-dessus:
+Le nom du fichier original sur la machine source.
+Le type MIME du fichier, si le navigateur a fourni cette information.
+Par exemple, "image / gif".
+La taille du fichier envoyé, en octets.
+Le nom temporaire du fichier qui sera chargé sur la machine serveur.
+Les fichiers seront enregistrés par défaut dans le dossier des fichiers temporaires, à moins qu'un autre dossier n 'ait été fourni avec la directive de configuration upload_tmp_dir du fichier php.ini.
+Le dossier par défaut du serveur peut être modifié grâce à la variable d'environnement TMPDIR, de l 'utilisateur qui exécute PHP.
+Sa modification avec putenv() depuis un script PHP ne fonctionnera pas.
+Cette variable d'environnement peut aussi être utilisée pour s'assurer que d 'autres opérations fonctionnent avec les fichiers téléchargés.
+Exemple 18-2.
+Validation de fichiers téléchargés
+Les exemples suivants fonctionnent sur les versions de PHP 3 supérieures à la version 3.0.16, et supérieures à la version 4.0.2 pour PHP 4.
+Reportez-vous à la section des fonctions pour étudier is_uploaded_file() et move_uploaded_file().
+?; php if (is_uploaded_file($userfile)) {copy($userfile, "/ dossier / des / fichiers / telecharges / ");} else {echo "Attaque potentielle par fichier téléchargé: fichier '$userfile' .";} / * ...ou... * / move_uploaded_file($userfile," / dossier / des / fichiers / telecharges");?
+Pour les versions plus anciennes de PHP, vous devrez faire quelque chose comme ceci:
+?; php / * Test du fichier téléchargé. * / function is_uploaded_file($filename) {if (!$tmp_file = get_cfg_var('upload_tmp_dir')) {$tmp_file = dirname(tempnam('', ''));} $tmp_file .= '/'. basename($filename); / * L'utilisateur peut avoir un slash final dans php.ini... * / return (ereg_replace(' / +', '/', $tmp_file) == $filename);} if (is_uploaded_file($userfile)) {copy($userfile, "/ place / to / put / uploaded / file");} else {echo "Attaque potentielle par fichier téléchargé: fichier '$userfile' .";}?
+
+Cela ne fonctionnera PAS avec les versions de PHP 4 supérieure à 4.0.2.
+Cela repose sur des fonctionnalités internes à PHP qui ont évolué après cette version.
+Le script PHP qui reçoit le fichier chargé doit pouvoir gérer le fichier de manière appropriée.
+Vous pouvez utiliser la variable $file_size Vous pouvez utiliser la variable $file_size pour recaler tous les fichiers qui sont trop gros ou trop petits.
+Vous pouvez utiliser la variable $file_type pour recaler les fichiers qui n 'ont pas le bon type.
+Quelques soient les actions, ce script doit pouvoir supprimer le fichier du dossier temporaire, ou le déplacer ailleurs.
+Le fichier sera automatiquement effacé du fichier temporaire à la fin du script, s'il n 'a pas été déplacé ou renommé.
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur
+Erreurs classiques

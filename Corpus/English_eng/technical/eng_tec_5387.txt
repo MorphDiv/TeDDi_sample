@@ -1,0 +1,70 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+The Output Control functions allow you to control when output is sent from the script.
+This can be useful in several different situations, especially if you need to send headers to the browser after your script has began outputting data.
+The Output Control functions do not affect headers sent using header() or setcookie(), only functions such as echo() and data between blocks of PHP code.
+No external libraries are needed to build this extension.
+There is no installation needed to use these functions; they are part of the PHP core.
+The behaviour of these functions is affected by settings in php.ini.
+Table 1.
+Output Control configuration options
+Name
+Default
+Changeable
+output_buffering
+"0"
+PHP_INI_PERDIR | PHP_INI_SYSTEM
+output_handler
+NULL
+PHP_INI_PERDIR | PHP_INI_SYSTEM
+implicit_flush
+"0"
+PHP_INI_PERDIR | PHP_INI_SYSTEM
+Here is a short explanation of the configuration directives.
+You can enable output buffering for all files by setting this directive to 'On'.
+If you wish to limit the size of the buffer to a certain size - you can use a maximum number of bytes instead of 'On', as a value for this directive (e.g., output_buffering=4096).
+You can redirect all of the output of your scripts to a function.
+For example, if you set output_handler to mb_output_handler(), character encoding will be transparently converted to the specified encoding.
+Setting any output handler automatically turns on output buffering.
+Note:
+You cannot use both mb_output_handler() with ob_inconv_handler() and you cannot use both ob_gzhandler() and zlib.output_compression.
+FALSE by default.
+Changing this to TRUE tells PHP to tell the output layer to flush itself automatically after every output block.
+This is equivalent to calling the PHP function flush() after each and every call to print() or echo() and each and every HTML block.
+When using PHP When using PHP within an web environment, turning this option on has serious performance implications and is generally recommended for debugging purposes only.
+This value defaults to TRUE when operating under the CLI SAPI.
+See also ob_implicit_flush().
+This extension has no resource types defined.
+This extension has no constants defined.
+Example 1.
+Output Control example
+?php ob_start(); echo "Hello\n"; setcookie ("cookiename", "cookiedata"); ob_end_flush();?
+In the above example, the output from echo() would be stored in the output buffer until ob_end_flush() was called.
+In the mean time, the call to setcookie() successfully stored a cookie without causing an error. (You can not normally send headers to the browser after data has already been sent.)
+Note:
+When upgrading from PHP 4.1 (and 4.2) to 4.3 that due to a bug in earlier versions you must ensure that implict_flush is OFF in your php.ini, otherwise any output with ob_start() will be not be hidden from output.
+See also header() and setcookie().
+Prev
+Home
+Next
+ovrimos_rollback
+Up
+flush

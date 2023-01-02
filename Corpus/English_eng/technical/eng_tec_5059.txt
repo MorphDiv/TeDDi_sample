@@ -1,0 +1,48 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3, PHP 4)
+unset() destroys the specified variables.
+Note that in PHP 3, unset() will always return TRUE (actually, the integer value 1).
+In PHP 4, however, unset() is no longer a true function: it is now a statement.
+As such no value is returned, and attempting to take the value of unset() results in a parse error.
+Example 1. unset() example
+/ / destroy a single variable unset ($foo); / / destroy a single element of an array unset ($bar['quux']); / / destroy more than one variable unset ($foo1, $foo2, $foo3);
+The behavior of unset() inside of a function can vary depending on what type of variable you are attempting to destroy.
+If a globalized variable is unset() inside of a function, only the local variable is destroyed.
+The variable in the calling environment will retain the same value as before unset() was called.
+function destroy_foo() {global $foo; unset($foo);} $foo = 'bar'; destroy_foo(); echo $foo;
+bar
+If a variable that is PASSED BY REFERENCE is unset() inside of a function, only the local variable is destroyed.
+The variable in the calling environment will retain the same value as before unset() was called.
+function foo( $bar) {unset($bar); $bar = "blah";} $bar = 'something'; echo "$bar\n"; foo($bar); echo "$bar\n";
+something something
+If a static variable is unset() inside of a function, unset() destroyes the variable and all its references.
+function foo() {static $a; $a++; echo "$a\n"; unset($a);} foo(); foo(); foo();
+1 2 3
+If you would like to unset() a global variable inside of a function, you can use the $GLOBALS array to do so:
+function foo() {unset($GLOBALS['bar']);} $bar = "something"; foo();
+See also isset() and empty().
+Prev
+Home
+Next
+unserialize
+Up
+var_dump

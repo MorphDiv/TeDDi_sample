@@ -1,0 +1,74 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/en_GB.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Open Statement[Run-time]
+/text/sbasic/shared/03020103.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+Open statement
+Open Statement[Run-time]
+Opens a data channel.
+Syntax:
+Open FileName As String [For Mode] [Access IOMode] [Protected] As [#]FileNumber As Integer [Len = DatasetLength]
+Parameters:
+FileName:
+Name and path of the file that you want to open.
+If you try to read a file that does not exist (Access = Read), an error message appears.
+If you try to write to a file that does not exist (Access = Write), a new file is created.
+Mode:
+Keyword that specifies the file mode.
+Valid values:
+Append (append to sequential file), binary (data can be accessed by bytes using Get and Put), Input (opens data channel for reading), Output (opens data channel for writing) and Random (edits relative files).
+IOMode:
+Keyword that defines the access type.
+Valid values:
+Read (read-only), Write (write-only), Read Write (both).
+Protected:
+Keyword that defines the security status of a file after opening.
+Valid values:
+Shared (file may be opened by other applications), Lock Read (file is protected against reading), Lock Write (file is protected against writing), Lock Read Write (denies file access).
+FileNumber:
+An integer expression from 0 to 511 to indicate the number of a free data channel.
+You can then pass commands through the data channel to access the file.
+The file number must be determined by the FreeFile function immediately before the Open statement.
+DatasetLength:
+For random access files, set the length of the records.
+You can only modify the content of a file that was opened with the Open statement.
+If you try to open a file that is already open, an error message appears.
+Example:
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; This is a line of text &quot;
+Print #iNumber, &quot; This is another line of text &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
+End Sub

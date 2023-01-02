@@ -1,0 +1,1481 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+GNOME Desktop System Administration Guide
+The GNOME System Administration Guide provides information to administrators on how to configure and manage different aspects of the desktop environment for users.
+2006
+Brent Smith
+2005
+2004
+Sun Microsystems
+2003
+GNOME Documentation Project
+Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License (GFDL), Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. You can find a copy of the GFDL at this
+This manual is part of a collection of GNOME manuals distributed under the GFDL. If you want to distribute this manual separately from the collection, you can do so by adding a copy of the license to the manual, as described in section 6 of the license.
+Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and the members of the GNOME Documentation Project are made aware of those trademarks, then the names are in capital letters or initial capital letters.
+DOCUMENT IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, WITHOUT LIMITATION, WARRANTIES THAT THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS FREE OF DEFECTS MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE OR NON-INFRINGING. THE ENTIRE RISK AS TO THE QUALITY, ACCURACY, AND PERFORMANCE OF THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS WITH YOU. SHOULD ANY DOCUMENT OR MODIFIED VERSION PROVE DEFECTIVE IN ANY RESPECT, YOU (NOT THE INITIAL WRITER, AUTHOR OR ANY CONTRIBUTOR) ASSUME THE COST OF ANY NECESSARY SERVICING, REPAIR OR CORRECTION. THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS LICENSE. NO USE OF ANY DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS AUTHORIZED HEREUNDER EXCEPT UNDER THIS DISCLAIMER; AND
+UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY, WHETHER IN TORT (INCLUDING NEGLIGENCE), CONTRACT, OR OTHERWISE, SHALL THE AUTHOR, INITIAL WRITER, ANY CONTRIBUTOR, OR ANY DISTRIBUTOR OF THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT, OR ANY SUPPLIER OF ANY OF SUCH PARTIES, BE LIABLE TO ANY PERSON FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY CHARACTER INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF GOODWILL, WORK STOPPAGE, COMPUTER FAILURE OR MALFUNCTION, OR ANY AND ALL OTHER DAMAGES OR LOSSES ARISING OUT OF OR RELATING TO USE OF THE DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT, EVEN IF SUCH PARTY SHALL HAVE BEEN INFORMED OF THE POSSIBILITY OF SUCH DAMAGES.
+DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT ARE PROVIDED UNDER THE TERMS OF THE GNU FREE DOCUMENTATION LICENSE WITH THE FURTHER UNDERSTANDING THAT:
+Brent
+Smith
+Sun
+GNOME Documentation Team
+GNOME 2.14 Desktop System Administration Guide V2.4
+March 2004
+GNOME 2.6 Desktop System Administration Guide V2.3
+GNOME 2.4 Desktop System Administration Guide V2.2
+September 2003
+GNOME 2.2 Desktop System Administration Guide V2.1
+January 2003
+GNOME 2.0 Desktop System Administration Guide V2.0
+December 2002
+This manual describes version 2.14 of the GNOME Desktop.
+Feedback
+To report a bug or make a suggestion regarding the GNOME Desktop or this manual, follow the directions in the
+Using GConf
+The information in this chapter describes how to use
+Introduction to GConf
+GConf
+introduction
+
+Set mandatory values for particular preferences for all users. In this way, system administrators can control whether users can update particular preferences.
+Set default values for particular preferences for all users.
+Use suggested values for preferences that are specified in definition files for the preferences.
+Read documentation on each preference.
+
+
+A repository of user preferences.
+A daemon,
+A command line tool,
+GConf Repository
+repository
+Each preference in the
+The repository is structured like a simple hierarchical file system. The repository contains the following:
+Directories that correspond to applications that use the
+Subdirectories that correspond to categories of preferences. For example, the file system contains the directory
+Special files that list the preference keys in the directory, and contain information about the keys. For example, a file that contains information about the keys that relate to the HTTP proxy preferences is in the directory
+A
+Preference keys typically have simple values such as strings, integers, or lists of strings and integers. The format of the preference key in the repository depends on the backend module that is used to read the repository. The following is an example of the
+When this guide refers to a preference key, the path to the key is added to the name of the key. For example, the
+GConf Configuration Sources
+configuration sources
+The
+The backend module to use to read the repository.
+The permissions on the repository.
+The location of the repository.
+The
+xml:readonly:/etc/gconf/gconf.xml.mandatory
+include /etc/gconf/2/local-mandatory.path
+include "$(HOME)/.gconf.path"
+include /etc/gconf/2/local-defaults.path
+xml:readwrite:$(HOME)/.gconf
+xml:readonly:/etc/gconf/gconf.xml.defaults
+When
+Configuration Source
+Description
+Mandatory
+The permissions on this configuration source are set to read only. Users cannot overwrite the values in this source, so the preferences in the source are mandatory.
+User
+This configuration source is stored in the
+You can use the
+Default
+This configuration source contains the default preference settings.
+The sequence of the configuration sources in the path file ensures that mandatory preference settings override user preference settings. The sequence also ensures that user preference settings override default preference settings. That is,
+Mandatory preferences
+User-specified preferences
+Default preferences
+The
+Included Configuration Source
+/etc/gconf/2/local-mandatory.path
+Use this configuration source to store mandatory preference values for a particular system.
+$(HOME)/.gconf.path
+The user specifies the location of the configuration source in the home directory, in a file that is called
+/etc/gconf/2/local-defaults.path
+Use this configuration source to store default preference values for a particular system.
+GConf Schemas
+schemas
+schema keys
+schema objects
+description
+A
+Item
+Preference key
+An element in the
+Schema key
+A key that stores a schema object for a preference key.
+Schema object
+An element in a configuration source that contains information for a preference key, such as the following:
+The name of the application that uses the preference key.
+The type of value required for the preference key, for example integer, boolean, and so on.
+A default value for the preference key.
+Brief documentation on the preference key.
+The following table gives examples of a preference key, a schema key, and a schema object:
+Example
+/desktop/gnome/interface/font_name
+/schemas/desktop/gnome/interface/font_name
+You can associate a schema key with a preference key. For example, the following
+When you associate a schema key with a preference key, the preference uses the suggested value that is specified in the schema object of the schema key. The suggested value is contained in the
+Typically, schemas are stored in the default configuration source.
+GConf Schema Definition Files
+schema definition files
+Schemas are generated from
+The schema definition files are included in the
+Some schema definition files correspond closely to a part of the GNOME Desktop user interface. For example,
+Some parts of the GNOME Desktop user interface contain preferences that represent preference keys from more than one schema definition file. For example, the
+GConf Daemon
+gconfd
+GConf daemon
+daemon
+The
+An instance of the
+When an application requests the value of a preference key, the daemon searches the configuration sources as follows:
+Search for the value of the preference key in each configuration source, in the order specified in the path file. If the value is found, return the value.
+If a value is not found, search for the schema key that corresponds to the preference key in each configuration source, in the order specified in the path file.
+If the schema key is found, check the value of the schema key.
+If the value of the schema key is a schema object, return the suggested value in the
+The
+To terminate the
+gconftool-2 --shutdown
+GConf Command Line Tool
+gconftool-2
+GConf command line tool
+command line tool
+
+Set the values of keys.
+Display the values of keys.
+Install schemas from schema definition files when you install an application.
+For example, use the following command to display the values of all keys in the
+gconftool-2 --recursive-list /desktop/gnome
+Below are listed some of the options that you can use with the
+gconftool-2 Command Options
+--all-dirs
+Lists all subdirectories in a directory that you specify.
+--all-entries
+Displays the values of all keys in a directory that you specify.
+configuration-source
+--config-source=
+Use this option with the
+--direct
+Use this option with the
+--dump
+Generates a list that contains all preference keys in a
+For example, you can redirect the output from this option to generate a file that lists all keys that are related to your panel configuration. You can use the
+--get
+Displays the value of a preference key that you specify. Also displays the values of the elements in the schema object for a schema key that you specify.
+--help
+Displays a help message about the
+filename
+--load=
+Use this option to sets the values of preference keys in the current directory in a configuration source to the values in the file that you specify. The file that you specify must contain XML descriptions of the keys, in a
+--long-desc=
+Use this option with the
+--makefile-install-rule
+Installs schema definition files to applications.
+owner
+--owner=
+Use this option with the
+--recursive-list
+Displays the values of all preference keys in all subdirectories in a directory that you specify.
+--recursive-unset
+Resets the values of all preference keys, in all subdirectories in a directory, from the user setting to the setting in the default configuration source.
+--set
+Sets the value of a preference key, and writes the value to the user configuration source. Use the
+gconftool-2 \\
+ --set "/apps/gnome-terminal/profiles/Default/background_color" \\
+ --type string "#000000"
+You can also use the
+--set-schema
+Sets the value of an attribute in a schema key, and writes the value to the default configuration source.
+Use the following options with the
+--type
+--short-desc
+--long-desc
+--owner
+For example, the following command sets the short description in the schema key for the
+gconftool-2 \\
+ --set-schema "/schemas/apps/gnome-terminal/profiles/Default/background_color" \\
+ --short-desc "Default background color of terminal"
+--short-desc=
+Use this option with the
+--shutdown
+Terminates the
+data-type
+--type=
+Use this option to specify the data type when you set a value of a preference key. You can also use this option when you set the value of an attribute in a schema key. The following is a list of valid data types:
+bool
+float
+int
+list
+pair
+string
+--unset
+Resets the value of a preference key from the user setting to the setting in the default configuration source.
+--usage
+Displays a brief help message about the
+To Set Preference Values
+preference values, setting
+preference values
+setting with GConf
+You can set a mandatory value or a default value for a preference key. Before you change mandatory preference values or default preference values for users, you must ensure that the
+To set a mandatory value or a default value for a preference key, use the
+preference-key
+value
+gconftool-2 --direct \\
+ --config-source
+For example, to set
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \\
+ --type string \\
+ --set /system/http_proxy/host wwwproxy.xyz.com
+The user cannot override this preference value.
+You can also use the
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults \\
+ --type int \\
+ --set /apps/metacity/general/num_workspaces 5
+The user can override this preference value.
+Before you change mandatory preference values or default preference values for users, you must ensure that all users are logged out.
+Setting General Preferences
+The following sections describe how to assign mandatory or default values to general preferences.
+To Set HTTP Proxy Preferences
+HTTP proxy, setting
+HTTP proxy
+To set HTTP proxy preferences, you modify the values of the preference keys in the
+proxy-name
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \\
+ --type string \\
+ --set /system/http_proxy/host
+To set a default value for the HTTP proxy host, run the following command:
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults \\
+ --type string \\
+ --set /system/http_proxy/host
+You can also set other HTTP proxy-related preferences. For information on the other HTTP proxy preferences, see the
+To Set Print Manager Preferences
+To set print manager preferences, you modify the values of the preference keys in the
+print manager, setting
+print manager
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \\
+ --type bool \\
+ --set /apps/gnome-print-manager/show_all_jobs false
+To set a default value for this preference, run the following command:
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults \\
+ --type bool \\
+ --set /apps/gnome-print-manager/show_all_jobs false
+You can also set other print manager preferences. For information on the other print manager preferences, see the
+To Set the Number of Workspaces
+number of workspaces, setting
+workspaces
+setting number with GConf
+To set a mandatory number of workspaces, use the following command:
+integer
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \\
+ --type int \\
+ --set /apps/metacity/general/num_workspaces
+To set a default number of workspaces, use the following command:
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults \\
+ --type int \\
+ --set /apps/metacity/general/num_workspaces
+You can also set other window manager preferences. For information on the other window manager preferences, see the
+To Set Keyboard Accessibility Preferences
+keyboard accessibility, setting
+keyboard
+setting accessibility preferences with GConf
+To set keyboard accessibility preferences, you modify the values of the preference keys in the
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \\
+ --type bool \\
+ --set /desktop/gnome/accessibility/keyboard/enable true
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults \\
+ --type bool \\
+ --set /desktop/gnome/accessibility/keyboard/enable false
+You can also set other keyboard accessibility preferences. For information on the other keyboard accessibility preferences, see the
+To Set Keyboard Shortcut Preferences
+keyboard shortcuts, setting
+setting shortcut preferences with GConf
+To set keyboard shortcut preferences, you modify the values of preference keys in
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \\
+ --type string \\
+ --set /apps/metacity/global_keybindings/panel_run_dialog 'lt;Altgt;F3'
+You can also set other keyboard shortcut preferences. For information on the other keyboard shortcut preferences, see the
+Setting Panel and Panel Object Preferences
+panel object preferences, setting
+panel preferences, setting individual
+panels
+preferences, individual, setting with GConf
+The
+Number of panels.
+Types of the panels.
+Properties of the panels.
+Contents of the panels.
+The configuration of individual panels and of panel objects is a complex task. To configure individual panels and panel objects, you must first understand the structure of the
+To set preferences for individual panels and panel objects, you must set the values of many preferences in a configuration source. The easiest way to set the values of panel preferences is to use the
+Specifying Individual Panels and Panel Objects
+panel and panel object
+The file
+The
+Keys that specify the general structure of panels, applets, and other panel objects in the GNOME Desktop. The following keys specify the number of panels, panel objects, and applets that appear in the GNOME Desktop:
+/apps/panel/default_setup/general/toplevel_id_list
+/apps/panel/default_setup/general/object_id_list
+/apps/panel/default_setup/general/applet_id_list
+The keys also assign identifiers to each panel, panel object, and applet. For example, the following sample from
+In the
+Keys that specify the properties of the panels. The panel property keys are structured as follows:
+/apps/panel/default_setup/toplevels/
+For example, the key
+Keys that specify the panel objects, the panel object properties, and the panels in which the objects reside. For example, the following sample from
+Keys that specify the applets, the applet preferences, and the panels in which the applets reside. For example, the following sample from
+The OAFIID is a unique identifier for an applet. To find the OAFIID for a particular applet, see the
+To Set Preferences for Individual Panels and Panel Objects
+To set the preferences for a panel and the objects on a panel perform the following steps:
+Log in to a GNOME session, and configure the panels as required.
+Use the
+For example, the following command creates an XML description of the default panel configuration in a file called
+gconftool-2 --dump /apps/panel &gt; my-panel-setup.entries
+Open the
+For example, you might want to change the location of the desktop entry files. The following is an excerpt from a file generated with the
+In the sample above, you might want to change the reference to
+When you generate a panel configuration with the
+Use the
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults \\
+ --load my-panel-setup.entries
+Setting Look-and-Feel Preferences
+The following sections describe how to assign mandatory or default values to look-and-feel preferences.
+To Set Font Preferences
+fonts, setting
+fonts
+To set font preferences, you modify the values of two preference keys. The following table shows the keys to modify, and the part of the user interface to which the keys correspond:
+GConf Location
+User Interface Component
+
+/apps/nautilus/preferences/desktop_font
+
+For example, to set
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \\
+ --type string \\
+ --set /desktop/gnome/interface/font_name "Sans 12"
+
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults \\
+ --type string \\
+ --set /apps/nautilus/preferences/desktop_font "palatino 12"
+To Set Background Preferences
+background, setting
+background
+preferences, setting with GConf
+To set preferences for the desktop background, you modify the values of the preference keys in the
+filename.png
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \\
+ --type string \\
+ --set /desktop/gnome/background/picture_filename
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults \\
+ --type string \\
+ --set /desktop/gnome/background/picture_filename
+You can also set other background preferences. For information on the other background preferences, see the
+To Set Splash Image Preferences
+splash image, setting
+splash screen
+image, setting with GConf
+To set splash image preferences, you modify the value of the preference keys in the
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \\
+ --type bool \\
+ --set /apps/gnome-session/options/show_splash_screen false
+gconftool-2 --direct \\
+ --config-source xml:readwrite:/etc/gconf/gconf.xml.defaults \\
+ --type bool \\
+ --set /apps/gnome-session/options/show_splash_screen false
+You can also set other splash image preferences. For information on the other splash image preferences, see the
+To Restore Default Preference Values
+restoring default preference values
+restoring to default with GConf
+To restore the default preference values for a user, run the following command:
+user-configuration-source
+gconftool-2 --direct \\
+ --config-source
+Replace
+This command resets the values of all preference keys, in all subdirectories, from the user setting to the setting in the default configuration source.
+Customizing Menus
+The information in this chapter describes how the GNOME Desktop implements menus and how you can customize menus.
+Introduction to Menus
+menus
+The GNOME Desktop implements menus according to the
+Customize the menu hierarchy easily. You can edit a small number of files to customize the menu hierarchy. You do not need to modify your applications or move files.
+Install applications easily. You do not need to provide information about the menu hierarchy to applications when you install the applications.
+Configure menus so that users cannot modify the menus.
+Menus in the GNOME Desktop use the following components:
+Menu definition files
+Desktop entry files
+Directory entry files
+Menu Definition Files
+menu definition files
+.menu files
+Menu files define the hierarchy of menus that are used in the GNOME menu bar. By modifying these files, you can customize menus for all users, or for a single user depending on the location of the
+$XDG_CONFIG_DIRS is the environment variable defined in the
+Menu files must reside at
+If you are confused about the order in which paths are searched, here is a simple list for resolving the location of
+Search each directory in
+Search each directory in
+Use the first
+You can see an example of a
+For example, the
+Example of a
+&lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+ "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd"gt;
+&lt;Menugt;
+ &lt;Namegt;Applicationslt;/Namegt;
+ &lt;Directorygt;Applications.directorylt;/Directorygt;
+
+ &lt;!-- Read standard .directory and .desktop file locations --gt;
+ &lt;DefaultAppDirs/gt;
+ &lt;DefaultDirectoryDirs/gt;
+
+ &lt;!-- Accessories submenu --gt;
+ &lt;Menugt;
+ &lt;Namegt;Accessorieslt;/Namegt;
+ &lt;Directorygt;Accessories.directorylt;/Directorygt;
+ &lt;Includegt;
+ &lt;Andgt;
+ &lt;Categorygt;Utilitylt;/Categorygt;
+ &lt;Notgt;
+ &lt;Categorygt;Systemlt;/Categorygt;
+ &lt;/Notgt;
+ &lt;/Andgt;
+ &lt;/Includegt;
+ &lt;/Menugt; &lt;!-- End Accessories --gt;
+
+ &lt;!-- possibly more submenus --gt;
+
+&lt;/Menugt; &lt;!-- End Applications --gt;
+
+Menu Definition File Elements
+Element
+&lt;Menugt;
+The root element which may contain nested
+&lt;Namegt;
+Specifies the name of the menu. Every
+&lt;Directorygt;
+Specifies the name of the directory entry file that specifies the name, comment, and icon for the menu. If this element is not specified, then the
+By default,
+&lt;DefaultAppDirsgt;
+$XDG_DATA_DIRS/applications/
+This is an instruction which indicates that all the available desktop entries from
+&lt;DefaultDirectoryDirsgt;
+$XDG_DATA_DIRS/desktop-directories/
+This is an instruction which indicates that all the available directory entries from
+&lt;Includegt;
+&lt;Filenamegt;
+&lt;Categorygt;
+&lt;Andgt;
+&lt;Orgt;
+&lt;Notgt;
+&lt;Allgt;
+desktop entries
+Contains a list of matching rules by which the contents of a menu are generated. May include the
+&lt;Excludegt;
+The opposite of
+desktop entry
+A matching rule that selects a
+A matching rule that selects a
+all
+A matching rule that selects a
+any
+A matching rule that selects a
+A matching rule that does not select a
+A matching rule which selects all
+Desktop Entry Files
+desktop entry files
+.desktop files
+A
+$XDG_DATA_DIRS is the environment variable defined in the
+Desktop entry files must reside in the
+The following is a sample desktop entry file:
+[Desktop Entry]
+Encoding=UTF-8
+Name=Calculator
+Name[fr]=Calculatrice
+...
+Comment=Perform calculations
+Comment[fr]=Effectue des calculs compliqués
+...
+Exec=gcalctool
+Icon=accessories-calculator
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=GNOME;GTK;Utility;Calculator
+
+Desktop Entry Keys
+Desktop Entry Key
+Categories
+Specifies the keywords that describe the item. The keywords are separated with semicolons (;). To see a list of the standard category keywords, see the desktop menu specification at
+
+Comment
+Specifies a short description of the item. The comment is displayed as a tooltip when you point to the item in the menu.
+Encoding
+Specifies the encoding of the desktop entry file.
+Exec
+Specifies a command to execute when you choose the item from the menu.
+Icon
+Specifies the filename of an icon that represents the item. Does not specify the path to the filename, or the file extension.
+MimeType
+Specifies the MIME types that the application can handle.
+Name
+Specifies the name of the item. This name is displayed on the item in the menu.
+NoDisplay
+This options means
+Terminal
+Specifies whether the command in the
+If the command does not create a window in which to run, the value of this key must be
+Type
+Specifies the type of item. This value is one of the following:
+
+
+
+
+For more information on the keys in desktop entry files, see the desktop entry specification at the following URL:
+http://www.freedesktop.org/Standards/desktop-entry-spec
+Panel launchers and desktop objects also use desktop entry files. The desktop entry files for launchers and desktop objects provide the same information as for items in a menu. For example, the desktop entry files provide the command to run when a user chooses the launcher or object.
+Directory Entry Files
+directory entry files
+.directory files
+A
+Directory entry files must reside in the
+The following is a sample directory entry file:
+[Desktop Entry]
+Name=Graphics
+Name[fr]=Graphisme
+...
+Comment=Graphics applications
+Comment[fr]=Applications graphiques
+...
+Icon=gnome-graphics
+Type=Directory
+Encoding=UTF-8
+
+Directory Entry Keys
+Directory Entry Key
+Specifies the name of the menu. This name is displayed on the menu.
+Specifies a short description of the menu. The comment is displayed as a tooltip when you point to the menu.
+Specifies the filename of an icon that represents the menu. Does not specify the path to the filename, or the file extension.
+Specifies the type of menu. The value of this key is always
+Editing System Menus
+editing
+You can edit menu configuration files and menu data files manually to customize menus.
+Adding Menus
+adding
+To add a menu for all users, perform the following steps:
+Create a directory entry file for the item that you want to add. Place the directory entry file in the
+Locate the
+In the
+Create a
+Create a
+See
+The next time that users log in, the menu should appear in the menu bar.
+Missing Menu?
+If you did not specify any matching rules in the
+Adding an Item to a Menu
+adding items to
+To add an item to a menu for all users, perform the following steps:
+Create a desktop entry file for the item that you want to add. For more information on desktop entry files, see
+Place the desktop entry file in the
+Verify that a
+The next time that users log in, the menu item is in the assigned location.
+Editing the Properties of a Menu
+editing properties of
+To edit the properties of a menu for all users, perform the following steps:
+Find the
+Locate the directory entry for this menu. Modify the contents to change the properties of the menu. For more information on
+Editing a Menu Item
+editing menu items
+To edit a menu item, perform the following steps:
+Locate the desktop entry in the
+Edit the desktop entry to change the properties of the menu item. For more information on desktop entry files, see
+Deleting an Item from a Menu
+deleting menu items
+To delete an item from a menu for all users:
+Find the
+Insert an
+Insert the
+The next time that users log in, the menu item is not displayed in the menu.
+&lt;!-- ... --gt;
+
+ &lt;Menugt;
+ &lt;Namegt;Accessibilitylt;/Namegt;
+ &lt;Directorygt;Accessibility.directorylt;/Directorygt;
+ &lt;Includegt;
+ &lt;Andgt;
+ &lt;Categorygt;Accessibilitylt;/Categorygt;
+ &lt;Notgt;lt;Categorygt;Settingslt;/Categorygt;lt;/Notgt;
+ &lt;/Andgt;
+ &lt;/Includegt;
+ &lt;Excludegt;
+ &lt;Filenamegt;dasher.desktoplt;/Filenamegt;
+ &lt;/Excludegt;
+ &lt;/Menugt;
+
+&lt;!-- ... --gt;
+Editing User Menus and Menu Merging
+editing user menus
+You can use the following GNOME Desktop applications to edit menus for users:
+GNOME Menu Editor
+A simple menu editor is available for users to edit their menus. For more information, see
+To manually create a custom menu for a user, the
+User menus can contain all the elements described in
+Since user menu files take precedence over the system menu file, it will completely replace the system menu unless it explicitly
+Merging the System Menu
+merging the system menu
+Often, a user only wants to add or delete menu items in addition to the standard system menu. To support single changes like these, it is recommended that you use the
+The
+Older Specifications
+Older specifications did not include the
+The merging is performed as follows:
+Merged menu file refers to the next
+The children of the root
+All child
+
+&lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+ "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd"gt;
+
+&lt;Menugt;
+ &lt;Namegt;Applicationslt;/Namegt;
+ &lt;MergeFile type="parent"gt;/etc/xdg/menus/applications.menult;/MergeFilegt;
+ &lt;Menugt;
+ &lt;Namegt;Accessibilitylt;/Namegt;
+ &lt;Excludegt;
+ &lt;Filenamegt;dasher.desktoplt;/Filenamegt;
+ &lt;/Excludegt;
+ &lt;/Menugt;
+&lt;/Menugt;
+Merging Arbitrary Menus
+merging arbitrary menus
+Arbitrary menu files can be merged in much the same way as system menus. The difference is that the
+The merge is performed in the same way except that the location of the
+Installing Themes
+This chapter describes themes, the theme settings that are available in the GNOME Desktop, how to install options for theme settings, and how to create a custom option.
+Introduction to Themes
+themes
+A theme is a group of coordinated settings that specifies the visual appearance of a part of the GNOME Desktop. Users can choose themes to change the appearance of the GNOME Desktop.
+A theme contains settings that affect different parts of the GNOME Desktop, as follows:
+Controls
+
+Window frame
+
+
+Theme Index File
+Each theme has an index file which defines the characteristics of the theme. The name of the index file is
+The following is a sample theme index file:
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=High Contrast Large
+Name[es]=Alto contraste grande
+Comment=Large black-on-white text and icons
+Comment[es]=Textos e iconos grandes en negro sobre blanco
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=HighContrastLargePrint
+IconTheme=HighContrast
+MetacityTheme=Atlanta
+ApplicationFont=sans 18
+The following table describes the keys in theme index files:
+Keys in Theme Index Files
+Index File Key
+Specifies that this theme determines the appearance of several theme options, such as controls, window frames, and icons.
+The name of the theme. This is the name of the theme that is displayed in the
+A brief description of the theme. This is the text that is displayed under the name of the theme in the
+GtkTheme
+Corresponds to the controls setting in the
+IconTheme
+Corresponds to the icons setting in the
+MetacityTheme
+Corresponds to the window frame setting in the
+ApplicationFont
+Corresponds to the application font setting in the
+To Install a New Controls Option
+controls options
+installing
+You can add a new option for the controls setting in the
+Option file
+option-name
+/usr/share/themes/
+Image files
+/usr/share/themes/
+Typically, a new option for the controls setting is supplied as a
+Users can install their own options for the controls setting. If a user installs an option for the controls setting, the option is stored in the
+To Install a New Window Frame Option
+window frame options
+You can add a new option for the window frame setting in the
+/usr/share/themes/
+/usr/share/themes/
+Typically, a new option for the window frame setting is supplied as a
+Users can install their own options for the window frame setting. If a user installs an option for the window frame setting, the option is stored in the
+To Install a New Icons Option
+icons options
+You can add a new option for the icons setting in the
+/usr/share/icons/
+/usr/share/icons/
+Typically, a new option for the icons setting is supplied as a
+Users can install their own options for the icons setting. If a user installs an option for the icons setting, the option is stored in the
+Installing Icons for Themes
+installing icons
+The GNOME Desktop provides several themes that are designed for users with special visual needs. For example, some of the themes are designed for users with low vision. Several versions of icons might be required so that the icon can be displayed properly in each theme.
+You might need to install a new icon for an application. When you install a new icon, you must create several versions of the icon, so that the icon displays correctly in the themes. You must create several versions of the following types of icon:
+Icons that are used within applications in the GNOME Desktop.
+Icons that are used internally by GTK+ applications, or GTK+ stock icons.
+When you install a new icon, you must create several versions of the icon, so that the icon displays correctly in the themes. You can create the icons in several formats, for example Portable Network Graphic (PNG) format. The suggested size of icons for the desktop environment is 48 pixels by 48 pixels. At this size, most themes can rescale the icons.
+When you install a new icon, create the following 48 pixel by 48 pixel versions of the icon:
+Regular icon
+Low contrast icon
+High contrast icon
+Inverse high contrast icon
+If possible, create 16 pixel by 16 pixel versions of the each of the icons above also, for themes that do not require large print.
+Install the icons to the image files location that is specified for the theme in
+For more information on how to create icons for application launchers and for panels, see
+To Create a Custom Controls Option
+creating custom
+If the options for the controls setting are not suitable for the needs of your users, you can create a custom controls option. To create a custom controls option, perform the following steps:
+Create a directory structure for the option in the
+/usr/share/themes/SmallPrint
+/usr/share/themes/SmallPrint/gtk-2.0
+Locate the
+Open the
+If the new option includes images, install the images for the new option in the
+Users can now choose the new option for the controls setting.
+For more information on
+Configuring Fonts
+This chapter describes how to configure fonts in the GNOME Desktop.
+Introduction to Configuring Fonts
+configuring fonts
+fontconfig
+GNOME Desktop uses the
+The
+For more information about the
+http://freedesktop.org/software/fontconfig
+Font Substitution
+substitution
+The
+If the system needs to display a character that is not present in the selected font,
+The
+To Add a Font for All Users
+adding for all users
+To add a font for all users, perform the following steps:
+Copy the font file to one of the directories in the
+The
+directory-name
+fc-cache
+To Add a Font for an Individual User
+adding for individual users
+To add a font for an individual users, perform the following steps:
+Copy the font file to the
+MIME Types
+This chapter describes how applications detect MIME types, how to register MIME types, and how to add applications to the GNOME Desktop.
+The purpose of this chapter is to make it easy for an administrator to understand how to configure different parts of the MIME database and give an general overview of the MIME system. Therefore we will
+Introduction to MIME Types
+MIME types
+A
+As another example, the
+Open the file in an appropriate application.
+Display a string that describes the type of file.
+Display an appropriate icon to represent the file.
+Display a list of other applications that can open the file.
+MIME types were originally proposed as a standard for identifying the message body of an e-mail message. Now, many systems use MIME types to identify the format of arbitrary files on the file system. MIME types are composed of a top-level
+application
+audio
+image
+message
+model
+multipart
+text
+video
+There are eight media types currently blessed by the
+Implementation of MIME types in GNOME follows the
+Standard locations for all MIME related files.
+A standard way for applications to register information about a new MIME type.
+A standard way to retrieve the MIME type for a file.
+A standard way to retrieve information about a MIME type.
+The rest of the chapter describes the files and directories that make up the MIME database, details about source XML files, how to create or modify MIME types, how to register applications as handlers for certain MIME types and finally, how to add an application to the GNOME desktop.
+The MIME Database
+database
+The MIME database is a collection of files that make up:
+The set of known MIME types
+The method for determing the MIME type of a file
+Meta information regarding a MIME type, such as a human readable description to use when displaying files of this type.
+Location
+As an administrator, the most important and basic step to understanding the MIME system is learning the locations where these files are stored. Since the
+The MIME database is created from the set of files located in the
+For example, assuming default paths for the environment variables,
+~/.local/share/mime/text/plain.xml
+/usr/local/share/mime/text/plain.xml
+/usr/share/mime/text/plain.xml
+Contents
+The following is a list of directories and files that are found inside the MIME database along with brief descriptions:
+&lt;MIMEgt;/packages/
+This directory contains any number of XML files, each of which describe a collection of MIME types. By default, the
+Applications which provide information about new MIME types are to install a
+MEDIA
+SUBTYPE
+&lt;MIMEgt;/
+These directories and files are automatically generated from the collection of source XML files in the
+Example:
+&lt;?xml version='1.0' encoding='utf-8'?gt;
+&lt;mime-type xmlns="http://www.freedesktop.org/standards/shared-mime-info" type="text/plain"gt;
+&lt;!--Created automatically by update-mime-database. DO NOT EDIT!--gt;
+ &lt;commentgt;plain text documentlt;/commentgt;
+ &lt;!-- possibly more translations --gt;
+ &lt;comment xml:lang="es"gt;documento de texto sencillolt;/commentgt;
+ &lt;comment xml:lang="eu"gt;testu soileko dokumentualt;/commentgt;
+ &lt;comment xml:lang="fi"gt;perustekstiasiakirjalt;/commentgt;
+ &lt;comment xml:lang="fr"gt;document plein textelt;/commentgt;
+ &lt;!-- possibly more translations --gt;
+&lt;/mime-typegt;
+
+&lt;MIMEgt;/globs
+Contains one line with a MIME type and a glob pattern, separated by a colon. Files which match the glob pattern are resolved to the MIME type specified before the colon. There are special rules about how filenames are matched by the glob pattern; for more details see the
+This file is also generated by the
+&lt;MIMEgt;/magic
+A binary file which contains information on how to resolve MIME types by
+This file is also generated by the
+&lt;MIMEgt;/XMLnamespaces
+Contains a mapping of XML namespaces to MIME types. Each line contains three fields, the namespace, the localName and the MIME type. Each field is separated by a space. If the localName is empty, then there are two spaces between the namespace and the MIME type.
+&lt;MIMEgt;/aliases
+Contains a list of aliases for each MIME type. An alias is simply a MIME type that is sometimes known as another type. For each line in this file there are two fields: the first field is the alias name, and the second field is the MIME type. The fields are separated by a space.
+&lt;MIMEgt;/subclasses
+A type is a subclass of another type if any instance of the first type is also an instance of the second. For example, all image/svg files are also text/xml, text/plain and application/octet-stream files. Subclassing is about the format, rather than the catagory of the data (for example, there is no 'generic spreadsheet' class that all spreadsheets inherit from).
+Contains a list of subclassed MIME types and their
+Refreshing the MIME Database
+Understanding how to refresh the MIME database is important for administrators who wish to add new MIME types to the system, or otherwise modify information about a MIME type. The application
+For example, if an application installs information about a new MIME type to
+#
+update-mime-database /usr/share/mime
+***
+* Updating MIME database in /usr/share/mime...
+***
+The MIME database is refreshed by scanning all the source XML files in the directory
+The source XML files
+source XML files
+Located in the
+It must specify the namespace as
+The root element must be
+Zero or more
+By default, the
+
+Child elements of
+Element (and attributes)
+*.xyz
+&lt;glob pattern="
+mime-type
+pattern
+This element specifies a glob pattern against filenames. If the filename matches, then it is assigned the MIME type of the parent
+50
+&lt;magic priority="
+match
+priority
+type
+offset
+mask
+XDG shared mime info specification
+This element contains a list of
+media
+subtype
+&lt;alias type="
+application/x-pdf
+application/pdf
+This element defines an alias for the parent
+&lt;sub-class-of type="
+image/svg
+text/xml
+text/plain
+application/octet-stream
+This element defines the parent
+locale
+&lt;comment xml:lang="
+xml:lang
+This element provides a human readable description for the MIME type. There can be zero or more occurrences of this element as long as each one contains a unique value for the
+namespace
+&lt;root-XML namespaceURI="
+namespaceURI
+localName
+If a file is determined to an XML file, then this element helps to further classify it through the use of the
+The easiest way to understand these files is to take a look at an example. Borrowing from the
+The order in which glob patterns and magic rules apply is beyond the scope of this document. For details on this, see the
+Example of a source XML file:
+&lt;?xml version='1.0'?gt;
+&lt;mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'gt;
+ &lt;mime-type type="text/x-diff"gt;
+ &lt;commentgt;Differences between fileslt;/commentgt;
+ &lt;comment xml:lang="af"gt;verskille tussen lêerslt;/commentgt;
+ &lt;!-- more translated comment elements --gt;
+ &lt;magic priority="50"gt;
+ &lt;match type="string" offset="0" value="diff\ "/gt;
+ &lt;match type="string" offset="0" value="***\ "/gt;
+ &lt;match type="string" offset="0" value="Common subdirectories: "/gt;
+ &lt;/magicgt;
+ &lt;glob pattern="*.diff"/gt;
+ &lt;glob pattern="*.patch"/gt;
+ &lt;/mime-typegt;
+&lt;/mime-infogt;
+Modifying MIME types
+verifying changes
+modifying
+You should never directly modify the source XML files that are installed to the
+You can modify the MIME database for all users on the system or for a particular user depending on the location of the file you change. To modify the database for all users, make changes to the file
+After changes are made, you must always run the
+Adding or Modifying MIME types
+To add one or more MIME types for all users:
+Create or modify an existing
+Place the
+Update the MIME database by running
+To add one or more MIME types for a single user, follow the same steps, except place your
+Verifying Changes
+After you have made a change to the MIME database and refreshed its contents, you can verify that the change has taken effect using the
+Running
+$
+gnomevfs-info mime-diagram.svg
+Name : mime-diagram.svg
+Type : Regular
+MIME type : image/svg+xml
+Default app : eog.desktop
+Size : 14869
+Blocks : 32
+I/O block size : 4096
+Local : YES
+SUID : NO
+SGID : NO
+Sticky : NO
+Permissions : 600644
+Link count : 1
+UID : 1000
+GID : 100
+Access time : Wed Feb 22 18:24:47 2006
+Modification time : Wed Feb 22 18:24:42 2006
+Change time : Wed Feb 22 18:24:42 2006
+Device # : 775
+Inode # : 297252
+Readable : YES
+Writable : YES
+Executable : NO
+
+
+To create (or override) a MIME type and verify the changes:
+Make a new, empty file in your home directory called
+When no glob patterns or magic rules match a file, then it is resolved to the MIME type
+Use
+Create (or modify) the
+Refresh the database using
+Use
+gnomevfs-info testing.xyz | grep MIME
+MIME type : application/x-newtype
+
+&lt;?xml version='1.0' encoding='utf-8'?gt;
+&lt;mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info"gt;
+ &lt;mime-type type="application/x-newtype"gt;lt;commentgt;new mime typelt;/commentgt;lt;glob pattern="*.xyz"/gt;lt;/mime-typegt;
+&lt;/mime-infogt;
+Registering Applications for MIME Types
+registering applications for
+applications
+registry
+Registering applications to handle MIME types is fairly straightforward. Applications are registered by creating a
+After creating or modifying a
+Default applications to use for specific MIME types should be specified in a file called
+A User's
+[Default Applications]
+application/pdf=evince.desktop
+text/html=epiphany.desktop
+text/plain=gedit.desktop
+image/jpeg=eog.desktop
+image/png=eog.desktop
+text/xml=gedit.desktop
+XDG Desktop Entry Specification
+How to register MIME types for applications is part of the
+Adding an Application to the GNOME Desktop
+adding applications
+To add an application to the GNOME Desktop, perform the following steps:
+Add a menu item for the application. For more information on how to add an item to a menu, see
+Add an icon for the application to
+If the application uses a new MIME type, add a source XML file to the MIME database. For more information, see
+If the application uses a new MIME type, add an icon for the MIME type to
+To associate the application with a MIME type, include a
+Setting Screensavers
+This chapter describes how to set preferences for the screensaver. This chapter also provides information on how to modify the displays that are available for the screensaver.
+Introduction to Screensavers
+screensavers
+gnome-screensaver
+A
+Setting Screensaver Preferences
+setting preferences
+All screensaver preferences and settings are stored in
+To modify screensaver application preferences, users can use the
+Users can also run the command
+To set default screensaver settings and policy for all users, modify the screensaver settings in the Default GConf Configuration Source.
+To set mandatory screensaver settings and policy for all users, modify the screensaver settings in the Mandatory GConf Configuration Source.
+Modifying Screensaver Themes
+modifying screensaver themes
+The screensaver application allows users to choose one or more
+To add a new screensaver theme, copy the executable file for the
+The
+Customize the themes easily. You can edit a small number of files to customize the available themes. You do not need to modify your applications or move files.
+Install themes easily. You do not need to provide information about the system when you install the themes.
+Configure the system so that users cannot modify the themes.
+For more information, see
+Session Management
+This chapter introduces session management, and describes how to set session defaults. The chapter also contains information on sessions and login scripts.
+Introduction to Sessions
+sessions
+A session occurs between the time that a user logs in to the GNOME Desktop and the time that the user logs out. The session manager starts after the
+At a minimum, the following applications run in a session:
+The session manager,
+The
+The
+The
+Setting Session Defaults
+setting defaults
+The following table lists the files that contain default session information:
+File
+/usr/share/gnome/default.session
+Default session file. Default session details are stored in this file.
+$HOME/.gnome2/session
+User session file. When a user modifies the session, the details are stored in this file.
+To set default session details for all users, modify the default session file.
+To restore the default session settings for a user, delete the session file from the home directory of the user. If no user session file is present, the default settings in
+To save the current session as the default session, users can run the
+Help System
+This chapter describes the Help system in the GNOME Desktop.
+Introduction to the Help System
+online Help
+Help
+The GNOME Desktop displays help in the
+The source documents for the help are XML files. The XML files are written to the DocBook XML Version 4.1.2 document type definition (DTD). The DocBook XML files are converted to HTML using stylesheets installed with
+http://www.oasis-open.org/docbook/xml
+The Help system uses
+OMF Files
+.omf files
+OMF files
+The XML file for each manual has an associated OMF file. The OMF file contains information about the manual that is used by the Help browser. OMF files have a
+When you install an application, the installation process installs an OMF file to a directory of OMF files. If a Help document has an associated OMF file in an OMF file directory, the Help document is displayed in the Help browser.
+OMF files contain information about Help documents such as the following:
+The location of the XML file for the Help document
+The title of the Help document
+A subject category to which the Help document belongs
+For more information on how to create OMF files, please see
+ScrollKeeper Cataloging System
+ScrollKeeper cataloging system
+
+
+OMF_DIR=/usr/share/omf:/usr/local/share/omf:/opt/gnome2/share/omf:/opt/kde/omf
+
+The hierarchy of subject categories is defined in the file
+For more information on the
+If the help document XML file is moved to a new location, then the location in the OMF file needs to be updated.
+Improving Performance
+This chapter describes how to improve the performance of the GNOME Desktop.
+Introduction to Improving Performance
+performance, improving
+This chapter lists several preferences whose settings you can change to improve the performance of the GNOME Desktop. You can use the
+You can also use the
+Reducing CPU Usage
+reducing CPU usage
+reducing
+CPU usage
+This section describes preferences that you can set to reduce CPU usage by the GNOME Desktop.
+To Use Theme Options Which Require Less CPU Resources
+and CPU usage
+Some window frame theme options load image files to draw the window frame. Other options use simpler techniques to draw the window frame.
+The Crux window frame option loads image files, and can be slow on systems with limited CPU resources. To reduce CPU usage, use one of the following window frame options:
+Atlanta
+Esco
+The following window frame options also use less CPU resources than Crux:
+AgingGorilla
+Bright
+Metabox
+Metabox does not work well with inverse controls options such as HighContrastInverse. Use Atlanta with inverse controls options.
+
+gconftool-2 \\
+--type string \\
+--set /apps/metacity/general/theme
+For example, to use Atlanta, run the following command:
+gconftool-2 \\
+--type string \\
+--set /apps/metacity/general/theme Atlanta
+Alternatively, users can use the
+You can use the
+metacity-theme-viewer
+For example, to measure the performance of Atlanta and preview Atlanta, run the following command:
+metacity-theme-viewer Atlanta
+To Reduce CPU Usage by Turning Off Display of Icons in Menus
+icons, in menus
+menu icons
+turning off
+Some items in menus display an icon beside the item. To turn off this feature, run the following command:
+gconftool-2 \\
+--type bool \\
+--set /desktop/gnome/interface/menus_have_icons false
+Alternatively, users can use the
+To Reduce CPU Usage by Turning Off the Splash Screen
+By default, when users log in to the desktop environment, a splash screen is displayed. Icons are displayed on the splash screen while the user logs in. You can turn off the splash screen to reduce CPU usage during login.
+
+gconftool-2 \\
+--type bool \\
+--set /apps/gnome-session/options/show_splash_screen false
+Alternatively, users can use the
+To Reduce CPU Usage by Turning Off Panel Animation
+animation, turning off
+When users show or hide panels, the panels can show or hide in an animated style. To turn off panel animation, run the following command:
+gconftool-2 \\
+--type bool \\
+--set /apps/panel/global/enable_animations false
+Alternatively, users can use the
+Improving File Manager Performance
+Nautilus
+file manager
+The
+To Modify Performance Preferences
+modifying performance preferences
+The file manager includes performance-related preferences. Each performance preference can take one of three values. The values are described in the following table:
+Value
+always
+Performs the action for both local files, and files on other file systems.
+local_only
+Performs the action for local files only. When you set a performance preference to
+never
+Never performs the action. When you set a performance preference to never, the CPU usage and the network traffic are reduced.
+The following table describes the performance preferences for the file manager. For the fastest performance, set the value of the preferences to
+Preference
+show_icon_text
+Specifies when to preview the content of text files in the icon that represents the file. To never preview the content of text files, run the following command:
+gconftool-2 \\
+--type string \\
+--set /apps/nautilus/preferences/show_icon_text never
+Alternatively, users can perform the following steps:
+Choose
+Select an option for the
+show_directory_item_counts
+Specifies when to show the number of items in folders. To never show the number of items in folders, run the following command:
+gconftool-2 \\
+--type string \\
+--set /apps/nautilus/preferences/show_directory_item_counts never
+Select an option for the
+show_image_thumbnails
+Specifies when to show thumbnails of image files. To never show thumbnails, run the following command:
+gconftool-2 \\
+--type string \\
+--set /apps/nautilus/preferences/show_image_thumbnails never
+Select an option for the
+preview_sound
+Specifies when to preview the content of sound files. To never preview the content of sound files, run the following command:
+gconftool-2 \\
+--type string \\
+--set /apps/nautilus/preferences/preview_sound never
+Select an option for the
+To Turn Off the Side Pane, Toolbar, and Location Bar
+side pane, turning off
+The file manager includes preferences that enable you to turn off the side pane and the toolbar. To improve file manager performance, turn off the side pane and the toolbar.
+To turn off the side pane, run the following command:
+gconftool-2 \\
+--type bool \\
+--set /apps/nautilus/preferences/start_with_sidebar false
+
+gconftool-2 \\
+--type bool \\
+--set /apps/nautilus/preferences/start_with_toolbar false
+You can also turn off the location bar. Users can use the
+
+gconftool-2 \\
+--type bool \\
+--set /apps/nautilus/preferences/start_with_location_bar false
+To Turn Off the Desktop
+desktop, turning off
+desktop
+The file manager contains a preference that enables users to use
+Use the file manager to change the pattern or color of the desktop background.
+Use the desktop objects, such as
+To disable the desktop, run the following command:
+gconftool-2 \\
+--type bool \\
+--set /apps/nautilus/preferences/show_desktop false
+Reducing X Window System Network Traffic
+X Window System network traffic
+X Window System network traffic, reducing
+network traffic, reducing
+This section describes preferences that you can set to reduce X Window System network traffic on the GNOME Desktop.
+To Use Theme Options Which Create Less Network Traffic
+and network traffic
+Remote display protocols do not transfer every pixel in a block of pixels if all pixels in the block are the same color.
+To reduce X Window System network traffic, use a window frame theme option that uses solid colors. That is, use one of the following window frame options:
+For information on how to change theme options, see
+To Reduce Network Traffic by Turning Off Display of Icons in Menus
+Some items in menus display an icon beside the item. If the icon is located on another file system, this feature can increase X Window System network traffic. This feature can also increase X Window System network traffic if the panels are displayed on a remote host.
+For information on how to turn off this feature, see
+Reducing Color Usage and Improving Display Quality
+color usage
+display quality, improving
+Many modern computer systems support 24-bit color, that is, 16,777,216 colors. However, many users still use systems that support 8-bit color, that is, 256 colors.
+The GNOME Desktop uses the
+The following display problems might occur on systems that support 8-bit color:
+Windows, icons, and background images might appear grainy. Many themes, background images, and icons use colors that are not in the websafe color palette. The colors that are not in the palette are replaced with the nearest equivalent or a dithered approximation. This use of replacement colors causes the grainy appearance.
+Applications that do not use the websafe color palette have less colors available. Color errors might occur. Some colors might not appear in the user interface of the application. Some applications might crash if the application cannot allocate colors.
+Color flashing might occur when users switch between applications that use the websafe color palette, and applications that do not use this palette. The applications that do not use the websafe color palette might use a custom colormap. When the custom colormap is used, other visual components might lose colors, then become unviewable.
+The following sections describe how to optimize the appearance of the GNOME Desktop for systems that support 8-bit color.
+To Use Theme Options That Use the Websafe Color Palette
+and color usage
+Some window frame theme options use colors that are in the websafe color palette. Bright and Esco use colors from the websafe color palette. Bright and Esco do not have the grainy appearance of other window frame options on 8-bit color displays. Use Bright or Esco for the best color display on 8-bit visual modes.
+To Reduce Color Usage by Turning Off Display of Icons in Menus
+Some items in menus display an icon beside the item. If the icon contains colors that are not in the websafe color palette, this feature can increase the number of colors used.
+To Reduce Color Usage by Turning Off the Splash Screen
+You can turn off the splash screen to make more colors available for the GNOME Desktop and for applications.
+For information on how to turn off the splash screen, see
+To Reduce Color Usage by Using a Solid Color for the Background
+using solid color
+Use a solid color for the desktop background. Use of a solid color reduces the number of colors used by the GNOME Desktop.
+To set a solid color for the background, run the following commands:
+gconftool-2 \\
+--type string \\
+--set /desktop/gnome/background/picture_options none
+gconftool-2 \\
+--type string \\
+--set /desktop/gnome/background/color_shading_type solid
+hexadecimal-color
+gconftool-2 \\
+--type string \\
+--set /desktop/gnome/background/primary_color #
+Alternatively, users can use the
+Disabling GNOME Desktop Features
+This chapter describes how to disable particular features of the GNOME Desktop.
+Introduction to Disabling GNOME Desktop Features
+disabling features
+lockdown
+The GNOME Desktop includes features that you can use to restrict access to certain functions in the GNOME Desktop. The disable features are useful in various situations where you want to restrict the actions that users can perform on a computer. For example, you might want to prevent command line operations on a computer that is for public use at a trade show. The disable features are also known as
+You set
+Locking Down Setting Manually
+To Disable Lock Screen and Log Out
+lock screen
+log out
+To disable the lock screen and log out functions, set the
+When you disable the lock screen and log out functions, the following items are removed from the panels:
+
+
+
+Also, any
+To Disable Command Line Operations
+command line
+To disable operations from a command line, set the
+When you disable command line operations, the following changes occur in the user interface:
+The
+Main Menu
+
+
+Any
+To disable command line operations, you must also remove menu items that start terminal applications. For example, you might want to remove menu items that contain the following commands from the menus:
+
+/usr/bin/xterm
+/usr/bin/setterm
+The items are removed from the following menus:
+Add to Panel
+Launcher from menu
+To disable command line operations, you must also disable the
+To Disable Panel Configuration
+panel configuration
+To disable panel configuration, set the
+When you disable panel configuration, the following changes occur in the user interface:
+The following items are removed from the panel popup menu, and from the drawer popup menu:
+Delete This Panel
+Properties
+New Panel
+The launcher popup menu is disabled.
+The following items are removed from the applet popup menu:
+Remove From Panel
+Lock
+Move
+The
+The launcher drag feature is disabled, so that users cannot drag launchers to, or from, panels.
+The panel drag feature is disabled, so that users cannot drag panels to new locations.
+Lockdown Editor
+As of GNOME 2.14, a graphical lockdown editor called
+Getting Started
+To run the lockdown editor:
+Click the
+Run the
+You will see a window with several different tabs. Each of the tabs represents a different category of desktop settings that can be disabled. In the next section, we will discuss each category and provide a brief description for each setting that can be disabled.
+Disabling Features
+To disable a setting, make sure the checkbox next to the setting's description is checked. Most settings will take effect immediately, however some settings will require that the application be restarted in order to take effect.
+When
+The following subsections will give a brief description of the settings that can be disabled for each category.
+Depending on the applications you have installed, you may see fewer categories than those described in this section.
+General
+Disable command line
+Prevent the user from accessing the terminal or specifying a command line to be executed. For example, this would disable access to the panel's "Run Application" dialog.
+Disable printing
+Prevent the user from printing. For example, this would disable access to all applications' "Print" dialogs.
+Disable print setup
+Prevent the user from modifying print settings. For example, this would disable access to all applications' "Print Setup" dialogs.
+Disable save to disk
+Prevent the user from saving files to disk. For example, this would disable access to all applications' "Save as" dialogs.
+Panel
+Lock down the panels
+If true, the panel will not allow any changes to the configuration of the panel. Individual applets may need to be locked down separately however. The panel must be restarted for this to take effect.
+Disable force quit
+If true, the panel will not allow a user to force an application to quit by removing access to the force quit button.
+Disable lock screen
+If true, the panel will not allow a user to lock their screen, by removing access to the lock screen menu entries.
+Disable log out
+If true, the panel will not allow a user to log out, by removing access to the log out menu entries.
+Epiphany Web Browser
+Disable quit
+User is not allowed to close Epiphany.
+Disable arbitrary URL
+Disable the user's ability to type in a URL to Epiphany.
+Disable bookmark editing
+Disable the user's ability to add or edit bookmarks.
+Disable history
+Disable all historical information by disabling back and forward navigation, not allowing the history dialog and hiding the most used bookmarks list.
+Disable javascript chrome
+Disable JavaScript's control over window chrome.
+Disable toolbar editing
+Disable the user's ability to edit toolbars.
+Force fullscreen mode
+Locks Epiphany in fullscreen mode.
+Hide menubar
+Hide the menubar by default. The menubar can still be accessed using F10.
+Disable unsafe protocols
+Disables loading of content from unsafe protocols. Safe protocols are http and https.
+GNOME Screensaver
+Lock on activation
+Set this to TRUE to lock the screen when the screensaver goes active.
+Allow log out
+Set this to TRUE to offer an option in unlock dialog to logging out after a delay. The Delay is specified in the "logout_delay" key.
+Allow user switching
+Set this to TRUE to offer an option in the unlock dialog to switch to a different user account.
+Hidden Directories
+This appendix describes the hidden directories that the GNOME Desktop adds to the home directories of users.
+hidden directories
+.* directories
+A hidden directory is a directory that has a name that begins with a period (.).
+Hidden Directories in User Home Directories
+Directory
+.config
+This is the default location for the environment variable
+.fonts
+Contains fonts specific to a particular user. When a user installs a font by dragging it to the
+.esd_auth
+Contains the authentication cookie for the GNOME sound daemon. The GNOME sound daemon is the Enlightened Sound Daemon (ESD).
+NOTE: This is a file, not a directory.
+.gconf
+Contains the
+.gconfd
+Contains the following
+Configuration information.
+Lock information for objects that are referenced by an
+State information for objects that are referenced by an IOR.
+.gnome
+Contains user-specific application data that is not stored in the
+NOTE: this directory is deprecated and is only used by GNOME 1.x applications.
+.gnome2
+Contains user-specific application data that is not stored in the
+Keyboard shortcut information.
+Window location information.
+Desktop entry files for panel launchers.
+This directory may also contain sub-directories that store application specific data.
+.gnome2-private
+Ignore this directory. This directory has no function at the time of publication of this guide.
+.local/share
+This is the default location for the environment variable
+.metacity
+Contains session data for the
+.nautilus
+Contains file manager data that is specific to the user. For example, this directory can contain the following:
+Metadata for the directories with which the user works.
+
+
+.themes
+Contains controls theme options, window frame theme options, and icons theme options that the user adds. The user can add themes from the
+.thumbnails
+Contains image thumbnails for the user. The image thumbnails are used in the file manager. The file manager contains a preference that the user can select to stop generation of thumbnail images.
+Security Note on Configuring SMB Printers
+This appendix provides a security note related to the configuration of printers on Windows network shares.
+Samba
+SMB
+Windows network shares
+configuring printers
+Windows network shares are also referred to as Samba or
+The username and password for the print queue is stored as unencrypted text in the file
+To reduce the impact of possible security violations, ensure that the username and password required to access the print queue is used only for the print queue. This ensures that any possible security violation is restricted to unauthorized use of the print queue.
+Glossary
+.desktop
+
+.directory
+.omf
+application registry
+The application registry is a collection of desktop entry files which register applications. The location of the application registry for the GNOME Desktop is
+desktop entry file
+A data file that provides information about an item in a menu. The desktop entry file specifies the details for the item such as a name, a command to run, an icon, and so on. Desktop entry files have a
+directory entry file
+A data file that provides information about a menu. The directory entry file specifies details such as a name for the menu, a tooltip for the menu, and an icon to represent the menu. Directory entry files have a
+GConf configuration source
+A storage location in the
+GConf preference key
+An element in the
+GConf path file
+A file that lists the GConf configuration sources, and the order in which to search the sources.
+GConf schema
+A collective term for a schema key and a schema object.
+GConf schema definition file
+A
+GConf schema key
+A key that stores a schema object for a preference key. For example,
+GConf schema object
+An element in a configuration source that contains information about a preference key. The schema object contains information such as a default value for the preference key, and documentation on the preference key.
+glob pattern
+A glob pattern is used to match a file name by using special characters such as
+Interoperable Object Reference
+An Interoperable Object Reference (IOR) is a string reference to a CORBA object. An IOR encodes a hostname and port to which messages can be sent to control the object. The IOR also contains an object key to identify the object.
+magic rule
+A magic rule defines a file's MIME type by specifying text or binary data to search for at the beginning of the file. Offsets to look for this data are defined in a magic rule.
+Menu definition files define the hierarchy of menus that are used in the GNOME menu bar.
+MIME
+Multipurpose Internet Mail Extension.
+MIME source XML file
+A MIME source XML file defines how MIME types are resolved for different kinds of files. There are three ways in which this can be done: using file extensions (glob patterns), using magic rules and using XML namespaces. MIME source XML files are located in the
+MIME type
+A MIME type identifies the format of a file. The MIME type enables applications to read the file. For example, an email application can use the
+MIME type database
+The MIME type database is a collection of files which register MIME types for the desktop environment. The location of the MIME type database is the directory
+OMF file
+Open Source Metadata Framework file. This is a file that is associated with the XML file for a manual. The OMF file contains information about the manual that is used by the Help browser. OMF files have a
+PAM
+Pluggable Authentication Modules.
+screensaver
+A screensaver is an application that replaces the image on a screen when the screen is not in use. The screensaver application for the GNOME Desktop is
+screensaver display
+A screensaver display is an application that displays images on the screen of the user when the screen is not in use.
+UDP
+User Datagram Protocol.
+Uniform Resource Identifier
+A Uniform Resource Identifier (URI) is a string that identifies a particular location in a file system or on the web. For example, the address of a web page is a URI.
+websafe color palette
+The websafe color palette is a general-purpose palette of 216 colors. The websafe color palette is designed to optimize the use of color on systems that support 8-bit color. The websafe color palette is also called the
+translator-credits

@@ -1,0 +1,84 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Kapitel 8.
+Variablen
+Nach vorne
+Sobald ein Formular an ein PHP-Skript übergeben wird, wird jede Variable dieses Formulars dem Skript automatisch verfügbar gemacht.
+Dafür sorgt PHP.
+Falls die Konfigurationsoption track_vars auf "on" gesetzt ist, werden diese Variablen in diesen assoziativen Arrays abgelegt $HTTP_POST_VARS, $HTTP_GET_VARS und / oderr $HTTP_POST_FILES, entsprechend der Quelle, aus der die fragliche Variable kommt.
+Für weitere Informationen über diese Variablen lesen Sie bitte den Abschnitt über Vordefinierte Variablen.
+Beispiel 8-1.
+Einfache Formular-Variablen
+form action=" foo.php "method="post" Name: input type="text "name="username" br input type="submit "/ form
+Wird dieses Formular abgeschickt, steht der Wert des Textfeldes in der Variable $HTTP_POST_VARS[ 'username'] zur Verfügung.
+Wenn in der Konfigurationsdatei die Option register_globals auf "on" gesetzt ist, steht die Variable auch als $username global zur Verfügung.
+Anmerkung:
+Die Konfigurationseinstellung zu magic_quotes_gpc betrifft Get, Post and Cookie Werte.
+Ist diese Einstellung aktiv wird der Wert (It's "PHP !") automatisch zu (It\'s \"PHP!\").
+Escaping ist notwendig, wenn Sie ihre Daten in eine Datenbank einfügen wollen.
+Siehe auch: addslashes(), stripslashes() und magic_quotes_sybase.
+Im Zusammenhang mit Formular-Variablen versteht PHP auch Arrays (siehe auch die verwandte Faq).
+Sie können z.B. die betreffenden Variablen gruppieren oder dieses Leistungsmerkmal nutzen, um Werte aus Mehrfach-Auswahl-Bereichen zu erhalten.
+Beispiel 8-2.
+Komplexere Formular-Variablen
+form action=" array.php "method="post" Name: input type="text "name="personal[name]" br Email: input type="text "name="personal[email]" br Bier: br select multiple name="bier[] "option value="binding" Binding option value="warsteiner "Warsteiner option value="stauder" Stauder option value="stuttgarter "Stuttgarter Schwabenbräu / select input type="submit" / form
+In PHP 3 ist die Verwendung von Arrays in Formularvariablen auf eindimensionale Arrays beschränkt.
+In PHP 4 besteht diese Einschränkung nicht mehr.
+Zur Übertragung eines Formulars kann auch ein Bild (Image) statt eines Übertragungs-Schalters (Submit-Button) benutzt werden, dessen Tag wie folgt aussieht:
+
+Klickt der Benutzer irgendwo auf das Bild, wird das entsprechende Formular an den Web-Server übertragen.
+Hierbei sind zwei zusätzliche Variablen vorhanden, sub_x und sub_y.
+Diese enthalten die Koordinaten des Klick-Punktes innerhalb des Bildes.
+Die Erfahreneren werden sagen, dass die Variablen, die vom Browser gesendet werden einen Punkt enthalten statt eines Unterstrichs.
+Dieser Punkt wird von PHP automatisch in einen Unterstrich verwandelt.
+PHP unterstützt HTTP-Cookies, wie sie in Netscape 's Spec definiert sind.
+Cookies ermöglichen die Daten-Speicherung innerhalb der jeweiligen Browser-Umgebung zur Weiterleitung oder wiederholten Identifikation von Benutzern.
+Sie können Cookies erzeugen, indem sie die Funktion setcookie() benutzen.
+Cookies sind Teil des HTTP-Headers, deshalb muss die setcookie-Funktion aufgerufen werden, bevor irgendeine Ausgabe an den Browser gesendet wird.
+Dabei handelt es sich um die gleiche Einschränkung, die auch für die header() -Funktion gilt.
+Alle Cookies, die der Client an sie sendet werden in PHP-Variablen umgesetzt, genau wie die Daten bei den GET - und POST-Methoden.
+Wenn sie einem einzelnen Cookie mehrere Wert zuweisen wollen müssen sie dem Cookie-Namen [] hinzufügen.
+Z.B.:
+SetCookie ("MeinCookie[]", "Ich teste", time()+3600);
+Bedenken sie, dass ein Cookie ein vorhergehendes Cookie gleichen Namens überschreibt, es sei denn, der Pfad oder die Domain ist anders.
+Für eine Warenkorb-Anwendung können Sie deshalb z.B. einen Zähler bilden und diesen weiterleiten:
+Beispiel 8-3.
+SetCookie-Beispiel
+$Count++; setcookie("Count", $Count, time()+3600); setcookie("Cart[$Count]", $item, time()+3600);
+PHP sorgt automatisch für die Verfügbarkeit der Umgebungs - Variablen als normale PHP-Variablen.
+echo $HOME; / * Zeigt die HOME-Umgebungs-Variable (sofern gesetzt). * /
+Da Informationen per GET, POST und Cookie-Mechanismen übergeben werden, ist es manchmal das Beste, Umgebungs-Variablen explizit auszulesen.
+Dadurch wird die richtige Version eingelesen.
+Hierfür kann die getenv() -Funktion genutzt werden.
+Den Wert einer Umgebungs-Variablen können Sie per putenv() - Funktion setzen.
+Normalerweise verändert PHP die Variablen-Bezeichner nicht, wenn sie einem Skript übergeben werden.
+Es sollte aber beachtet werden, dass der Punkt (".") kein gültiger Bestandteil eines Variablen-Bezeichners ist.
+Deshalb achten sie auf folgendes:
+$varname.ext; / * ungültiger Variablen-Bezeichner * /
+Deshalb ist es wichtig zu wissen, dass PHP in den ihm übergebenen Variablen alle Punkte (.) automatisch durch einen Unterstrich (_) ersetzt.
+Da PHP den Typ der Variablen bestimmt und (im Allgemeinen) selbst eine entsprechende Umformung vornimmt, ist es nicht immer klar, welchen Typ eine Variable gerade hat.
+PHP beinhaltet einige Funktionen, die dies herausfinden.
+Als da sind: gettype(), is_long(), is_double(), is_string(), is_array() und is_object().
+Zurück
+Zum Anfang
+Nach vorne
+Variable Variablen
+Nach oben
+Konstanten

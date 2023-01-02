@@ -1,0 +1,52 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Chapitre 18.
+Gestion des chargements de fichier
+Suivant
+PHP supporte la méthode HTTP PUT utilisée par les navigateurs tels que Netscape Composer et W3C Amaya.
+Les requêtes de type PUT sont beaucoup plus simples que les chargements de fichiers, et elles ressemblent à:
+
+Normalement, cela signifie que le client distant va sauver les données qui suivent dans le fichier: / path / filename.html de votre disque.
+Ce n'est évidemment pas très sécurisé de laisser Apache ou PHP écraser n'importe quel fichier de l 'arborescence.
+Pour éviter ceci, il faut d'abord dire au serveur que vous voulez qu 'un script PHP donné gère la requête.
+Avec Apache, il y a une directive pour cela:
+Script.
+Elle peut être placée n'importe où dans le fichier de configuration d 'Apache.
+En général, les webmestres la place dans le bloc Directory, ou peut être dans le bloc Virtualhost.
+La ligne suivante fera très bien l 'affaire:
+Script PUT / put.php3
+Elle indique à Apache qu 'il doit envoyer les requêtes de chargement par méthode PUT au script put.php3.
+Bien entendu, cela présuppose que vous avez activé PHP pour qu 'il prenne en charge les fichiers de type .php3, et que PHP est actif.
+Dans le fichier put.php3 file vous pouvez mettre ceci:
+
+Ce script va copier le fichier chargé par le client distant à l 'endroit désiré.
+Vous aurez probablement à effectuer quelques tests et des authentifications d'utilisateur, avant d 'effectuer cette copie.
+Le seul piège est que lorsque PHP reçoit un chargement par méthode PUT, il va enregistrer le fichier dans le dossier temporaire, tout comme avec la méthode POST-method.
+A la fin de la requête, le fichier sera effacé.
+Ce qui fait que ce script doit placer le fichier chargé quelque part.
+Le nom du fichier temporaire est placé dans la variable globale $PHP_PUT_FILENAME, et la destination prévue est placée dans $REQUEST_URI Le nom du fichier temporaire est placé dans la variable globale $PHP_PUT_FILENAME, et la destination prévue est placée dans $REQUEST_URI (ces noms peuvent changer d'une configuration d'Apache à l'autre).
+Cette destination est celle qui est demandée par le client, et vous n 'avez pas à obéir aveuglément au client.
+Vous pourriez par exemple, déplacer le fichier dans un dossier de chargement.
+Précédent
+Sommaire
+Suivant
+Chargement multiples de fichiers
+Niveau supérieur
+Utilisation des fichiers à distance

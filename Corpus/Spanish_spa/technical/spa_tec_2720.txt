@@ -1,0 +1,75 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+PHP es capaz de recibir envíos de archivo de cualquier navegador que cumpla la norma RFC-1867 (entre los que se incluyen Netscape Navigator 3 o posterior, Microsoft Internet Explorer 3 con un parche o posterior sin éste).
+Ésta característica permite que los usuarios envien archivos de texto y binarios.
+Mediante la autentificación y funciones de manejo de archivos de PHP, es posible un control total de quién puede enviar archivos y que se hace con éstos una vez recibidos.
+Es importante destacar que PHP también soporta el método PUT para envío de archivos tal y como lo utiliza Netscape Composer y el cliente Amaya de W3C.
+Consulte Soporte del método PUT para más detalles.
+Una página de envío de archivos se puede crear mediante un formulario parecido a éste:
+Ejemplo 18-1.
+Formulario de envío de archivo
+form enctype=" multipart / form-data "action="_URL_" method="post "input type="hidden" name="MAX_FILE_SIZE "value="1000" Send this file: input name="userfile "type="file" input type="submit "value="Send File" / form
+Aviso
+MAX_FILE_SIZE debe ser consultado por el navegador; aun así es sencillo saltarse este máximo por lo tanto no se debe presuponer que el navegador siempre lo respetará.
+En contrapartida, la configuracion de PHP relativa al tamaño maximo no puede ser obviada.
+Las variables definidas para los archivos enviados varian en función de la versión y configuración de PHP que se utilice.
+Las variables de las que hablamos a continuación serán definidas en la página destino despues de una recepción de fichero correcta.
+Cuando track_vars este activado, el array $HTTP_POST_FILES / $_FILES se inicializará.
+Por ultimo, las variables relacionadas seran inicializadas como globales cuando register_globals esté habilitado.
+Cabe señalar que el uso de las variables globales no esta recomendado en ningún caso.
+A partir de PHP 4.1.0, $_FILES puede ser utilizado alternativamente a $HTTP_POST_FILES. $_FILES es siempre global asi que global no debe ser usado con $_FILES en el ámbito de función.
+$HTTP_POST_FILES / $_FILES contienen la información sobre el fichero recibido.
+A continuación se describe el contenido de $HTTP_POST_FILES.
+Se ha tomado el nombre 'userfile' para el fichero recibido tal y como se usaba en el script de ejemplo anterior:
+El nombre original del fichero en la máquina cliente.
+El tipo mime del fichero (si el navegador lo proporciona).
+Un ejemplo podría ser "image / gif".
+El tamaño en bytes del fichero recibido.
+El nombre del fichero temporal que se utiliza para almacenar en el servidor el archivo recibido.
+Nota:
+A partir de PHP 4.1.0 se puede utilizar el variable corta $_FILES.
+PHP 3 no soporta $HTTP_POST_FILES.
+Cuando register_globals se activa en el php.ini las siguientes variables son accesibles.
+Se ha tomado el nombre 'userfile' para el fichero recibido tal y como se usaba en el script de ejemplo del principio:
+$userfile - El nombre del fichero temporal que se utiliza para almacenar en el servidor el archivo recibido.
+$userfile_name - El nombre original del fichero en la máquina cliente.
+$userfile_size - El tamaño en bytes del fichero recibido.
+$userfile_type - El tipo mime del fichero (si el navegador lo proporciona).
+Un ejemplo podría ser "image / gif".
+Por defecto, los ficheros serán almacenados en el directorio temporal por defecto del servidor a no ser que se especifique otra localizacion con la directiva upload_tmp_dir en php.ini.
+El directorio temporal por defecto del servidor puede ser modificado cambiando el valor de la variable de entorno TMPDIR en el contexto en que se ejecuta PHP La configuración de las variables de entorno no se puede realizar en PHP a través de la función putenv().
+Esta variable de entorio puede ser utilizada también para asegurarnos que otras operaciones con archivos recibidos están funcionando correctamente.
+Ejemplo 18-2.
+Verificando los archivos recibidos
+Los siguientes ejemplos son validos para versiones de PHP 4 superiores a la 4.0.2.
+Veanse las funciones is_uploaded_file() y move_uploaded_file().
+?php / / In PHP 4.1.0 or later, $_FILES should be used instead of $HTTP_POST_FILES. if (is_uploaded_file($HTTP_POST_FILES['userfile']['tmp_name'])) {copy($HTTP_POST_FILES['userfile']['tmp_name'], "/ place / to / put / uploaded / file");} else {echo "Possible file upload attack.
+Filename: ". $HTTP_POST_FILES['userfile']['name'];} / * ...or... * / move_uploaded_file($HTTP_POST_FILES['userfile']['tmp_name']," / place / to / put / uploaded / file");?
+El script PHP que recibe el fichero, debe implementar la lógica necesaria para determinar que debe ser realizado con el fichero.
+Se puede utilizar, por ejemplo, la variable $HTTP_POST_FILES[ 'userfile']['size'] para descartar los ficheros demasiado chicos o demasiado grandes; por otro lado, se puede usar la variable $HTTP_POST_FILES['userfile']['type'] para descartar los que no se ajusten a algun criterio de tipo.
+Cualquiera que sea la logica que utilicemos, se debe borrar o mover el archivo del directorio temporal.
+El archivo será borrado del directorio temporal al final de la petición si no se ha movido o renombrado.
+Anterior
+Inicio
+Siguiente
+
+Subir
+Errores comunes

@@ -1,0 +1,36 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# iso639_3:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Streams were introduced with PHP 4.3.0 as a way of generalizing file, network, data compression, and other opperations which share a common set of functions and uses. In its simplest definition, a stream is a resource object which exhibits streamable behavior. That is, it can be read from or written to in a linear fashion, and may be able to fseek() to an arbitrary locations within the stream.
+A wrapper is additional code which tells the stream how to handle specific protocols/encodings. For example, the http wrapper knows how to translate a URL into an HTTP/1.0 request for a file on a remote server. There are many wrappers built into PHP by default (See 부록 H), and additional, custom wrappers may be added either within a PHP script using stream_register_wrapper(), or directly from an extension using the API Reference in 43장. Because any variety of wrapper may be added to PHP, there is no set limit on what can be done with them. To access the list of currently registered wrappers, use stream_get_wrappers().
+A filter is a final piece of code which may perform opperations on data as it is being read from or written to a stream. Any number of filters may be stacked onto a stream. Custom filters can be defined in a PHP script using stream_register_filter() or in an extension using the API Reference in 43장. To access the list of currently registered filters, use stream_get_filters().
+A stream is referenced as: scheme :// target
+scheme (string) - The name of the wrapper to be used. Examples include: file, http, https, ftp, ftps, compress.zlib, compress.bz2, and php. See 부록 H for a list of PHP builtin wrappers. If no wrapper is specified, the function default is used (typically file ://).
+target - Depends on the wrapper used. For filesystem related streams this is typically a path and filename of the desired file. For network related streams this is typically a hostname, often with a path appended. Again, see 부록 H for a description of targets for builtin streams.
+No external libraries are needed to build this extension.
+Streams are an integral part of PHP as of version 4.3.0. No steps are required to enable them.
+This extension has no configuration directives defined in php.ini.
+User designed wrappers can be registered via stream_register_wrapper(), using the class definition shown on that manual page.
+class php_user_filter is predefined and is an abstract baseclass for use with user defined filters. See the manual page for stream_register_filter() for details on implementing user defined filters.
+
+As with any file or socket related function, an opperation on a stream may fail for a variety of normal reasons (i.e.: Unable to connect to remote host, file not found, etc...). A stream related call may also fail because the desired stream is not registered on the running system. See the array returned by stream_get_wrappers() for a list of streams supported by your installation of PHP. As with most PHP internal functions if a failure occours an E_WARNING message will be generated describing the nature of the error.
+
+예 1. Using file_get_contents() to retrieve data from multiple sources
+
+예 2. Making a POST request to an https server
+
+예 3. Writting data to a compressed file

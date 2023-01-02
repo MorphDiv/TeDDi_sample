@@ -1,0 +1,213 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Integrating existing software with GNOME
+Guide for Independent Software Vendors
+Rosanna
+Yuen
+zana@gnome.org
+Federico
+Mena-Quintero
+federico@gnu.org
+Mike
+Hearn
+mike@navi.cx
+2005, 2006
+Rosanna Yuen, Federico Mena-Quintero, Mike Hearn
+0.6
+2006/September/19
+Extended the icon guidelines.
+0.5
+2006/September/18
+Integrated the content of Rosanna Yuen's first article on freedesktop.org standards.
+0.0
+June 2005
+Initial version of this document.
+Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License (GFDL), Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. You can find a copy of the GFDL at this
+This manual is part of a collection of GNOME manuals distributed under the GFDL. If you want to distribute this manual separately from the collection, you can do so by adding a copy of the license to the manual, as described in section 6 of the license.
+Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and the members of the GNOME Documentation Project are made aware of those trademarks, then the names are in capital letters or initial capital letters.
+DOCUMENT IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, WITHOUT LIMITATION, WARRANTIES THAT THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS FREE OF DEFECTS MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE OR NON-INFRINGING. THE ENTIRE RISK AS TO THE QUALITY, ACCURACY, AND PERFORMANCE OF THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS WITH YOU. SHOULD ANY DOCUMENT OR MODIFIED VERSION PROVE DEFECTIVE IN ANY RESPECT, YOU (NOT THE INITIAL WRITER, AUTHOR OR ANY CONTRIBUTOR) ASSUME THE COST OF ANY NECESSARY SERVICING, REPAIR OR CORRECTION. THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS LICENSE. NO USE OF ANY DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS AUTHORIZED HEREUNDER EXCEPT UNDER THIS DISCLAIMER; AND
+UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY, WHETHER IN TORT (INCLUDING NEGLIGENCE), CONTRACT, OR OTHERWISE, SHALL THE AUTHOR, INITIAL WRITER, ANY CONTRIBUTOR, OR ANY DISTRIBUTOR OF THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT, OR ANY SUPPLIER OF ANY OF SUCH PARTIES, BE LIABLE TO ANY PERSON FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY CHARACTER INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF GOODWILL, WORK STOPPAGE, COMPUTER FAILURE OR MALFUNCTION, OR ANY AND ALL OTHER DAMAGES OR LOSSES ARISING OUT OF OR RELATING TO USE OF THE DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT, EVEN IF SUCH PARTY SHALL HAVE BEEN INFORMED OF THE POSSIBILITY OF SUCH DAMAGES.
+DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT ARE PROVIDED UNDER THE TERMS OF THE GNU FREE DOCUMENTATION LICENSE WITH THE FURTHER UNDERSTANDING THAT:
+Preface
+GNOME is a project to build a complete desktop and development platform based entirely on free software. Many companies, governments, schools, institutions, and individuals have deployed the GNOME desktop on their systems. If you are a developer of third-party software ("Independent Software Vendor" or
+This guide will be useful in the following situations:
+You are a software developer or distributor who has an application that is not explicitly designed to work with GNOME, but you want to ensure that it runs comfortably within a GNOME desktop.
+You are a system administrator for an institution that has deployed GNOME desktops to its users. You also have legacy or in-house applications, and you want your users of GNOME to be able to access those applications comfortably.
+You are writing a GNOME application proper and you need a checklist of basic things to do to ensure that your application integrates well with the rest of the GNOME desktop.
+In general, this guide is about integrating existing software into a GNOME desktop. On the other hand, if you are considering writing new software, we encourage you to develop it completely with GNOME as your target platform; please refer to the
+One of the main concerns of GNOME is the user experience. Users should have a comfortable computing environment: this means having a complete desktop and a set of applications which operate together in a consistent way. With relatively little work, applications which are not written explicitly with GNOME in mind can be made to run comfortably within a GNOME desktop.
+Structure of this guide
+This guide is structured as a list of tasks that you need to perform to integrate existing software with GNOME. The guide presents these tasks roughly in order of importance. For example, the task of adding your application to the GNOME desktop's menus appears before the task for adding drag-and-drop support. Also, this guide has an
+Standards and freedesktop.org
+Many of the integration tasks in this guide rely on standards which are relevant to more than GNOME. Other desktop projects like the
+Creating a perfect application is a wonderful feeling. Whether large or small, you want the desktop to recognize your application and for them to interact appropriately. With multiple desktops currently available, it is best for your application to be able to integrate itself in as many of them as possible. Even though no official rules have been adopted, there is a set of specifications available at
+Although not a formal standards body, freedesktop.org maintains a set of informal but commonly agreed upon guidelines. When followed, these guidelines allow applications to be integrated on to compliant desktops.
+Basic Integration
+This chapter teaches you about the very basic steps you should take to integrate a program into the GNOME desktop. These steps concern the following:
+Letting the user launch your application by making it appear in the desktop's panel menus, or any other launching mechanism in the desktop.
+Letting the desktop know which types of user-created files require your application to be launched.
+Letting the desktop know how to display the appropriate icons for your program and the files which your program creates.
+Desktop files: putting your application in the desktop menus
+To run applications from GNOME, users click on icons on their desktops or they select the applications which they want to run from a menu. Therefore, the first step in integrating an existing program with GNOME is to
+Unlike in Windows or MacOS, in GNOME the users menus are automatically constructed from the list of registered applications. Each published application specifies a set of categories to which it belongs, and the systems menu configuration sorts and arranges them. This mechanism follows the freedesktop.org desktop entry and menu standards.
+Though common in other desktops, creating your own application-specific submenu is not recommended. Instead, provide one menu item for each application you ship. Extra items such as help files, READMEs or links to your web site should be embedded into the application itself.
+In GNOME and other freedesktop.org-compliant desktops, an application gets registered into the desktop's menus through a
+put the application in the
+list the application in the
+create appropriate launchers in the menu or on the desktop.
+associate the name and description of the application.
+use the appropriate icon.
+recognize the MIME types it supports for opening files.
+To add a menu entry for your application, create a desktop file. It should have a unique filename, and there are no length limits so avoid abbreviations and feel free to include brand names. However, don't put spaces or international characters in the file name. For instance, "foocorp-painter-pro.desktop" would be a good filename to choose but "fcpp.desktop" would be a bad name, as would "FooCorp Painter Pro.desktop". The file should be UTF-8 encoded, and should resemble the following template:
+These desktop files contain metadata about your application, and play a central role in integrating the program with the GNOME and other standards compliant desktops. The template presented here is the most basic possible. The file can be linguistically translated so your applications name can appear in the user's native language.
+Note that the
+Note that the KDE Desktop requires one to run
+Place this file in the
+Each working desktop file needs to follow the same format. A minimal example of a desktop file is shown in
+Other than the first line identifying the desktop file, the order of the lines is not important. In
+However, the keys are case sensitive.
+Sample desktop file
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Sample Application Name
+Comment=A sample application
+Exec=application
+Icon=application.png
+Terminal=false
+Line by line explanation
+Line
+Description
+[Desktop Entry]
+The first line of every desktop file and the section header to identify the block of key value pairs associated with the desktop. Necessary for the desktop to recognize the file correctly.
+Type=Application
+Link
+Directory
+Tells the desktop that this desktop file pertains to an application. Other valid values for this key are
+Encoding=UTF-8
+Describes the encoding of the entries in this desktop file.
+Name=Sample Application Name
+Names of your application for the main menu and any launchers.
+Comment=A sample application
+Describes the application. Used as a tooltip.
+Exec=application
+The command that starts this application from a shell. It can have arguments.
+Icon=application.png
+The icon name associated with this application.
+Terminal=false
+Describes whether application should run in a terminal.
+Starting your application
+If your application can take command line arguments, you can signify that by using the fields as shown in
+Exec variables
+Add...
+Accepts...
+%f
+a single filename.
+%F
+multiple filenames.
+%u
+a single URL.
+%U
+multiple URLs.
+%d
+a single directory. Used in conjunction with
+%D
+multiple directories. Used in conjunction with
+%n
+a single filename without a path.
+%N
+multiple filenames without paths.
+%k
+a URI or local filename of the location of the desktop file.
+%v
+the name of the Device entry.
+Foreign languages
+To create localized names and comments, additional lines for each locale need to be added. For example, to add a Swedish version of the comment, add the following line:
+Comment[sv]=Exempelprogramnamn
+There is no limit to the number of translations in the file.
+Since maintaining a long list of translations in a file is cumbersome, a better way to create these translations is to use the
+References
+
+Installing icons
+In
+The desktop looks for icons in the selected theme directory of
+To better visually integrate with the GNOME desktop, while keeping your application look native when run under KDE, Windows XP or Mac OS X, follow the
+
+
+
+Adding MIME types
+If your application can open specific MIME types, you need to let the desktop know in the desktop file. For example, if your application can accept
+MimeType=image/png
+Additional Mime types can be added by separating the different types with semicolons.
+The system already knows of a large number of MIME types. However, if you are creating one of your own, you need to register your MIME type into the MIME database. In the
+Sample file for registering a new MIME type
+example
+search-string
+newextension
+&lt;?xml version="1.0" encoding="UTF-8"?gt;
+&lt;mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info"gt;
+ &lt;mime-type type="application/x-
+In this example, replace the example MIME type with the name of your MIME type. The
+Because the
+Once your new MIME type is adequately described in the file, run the following in a shell:
+update-mime-database /usr/share/mime
+For more information on choosing a good MIME extension and to register your MIME type, go to the
+
+Deeper Integration with the Desktop
+This chapter contains a list of things which you can do to make your application have better integration with GNOME than the absolute minimum. For example, GNOME is able to display feedback while an application is being launched: you can see how to enable this feedback in
+Startup notification
+Although the fields shown in
+When startup notification is set, the panel and cursor notifies the user that the application has started. When the application appears onscreen, the panel and cursor return to normal.
+To let the launcher know your application supports startup notification, add the following line to your desktop file:
+StartupNotify=true
+This command in the desktop file enables the desktop to use whatever startup notification is built in to either your application or your toolkit. Most modern toolkits work transparently with the startup notification system. If you are not using a modern toolkit, the
+Regardless of toolkit, there is one type of application where you would have to manually handle feedback. Applications with remoting capabilities (where you tell an existing process to open a new window instead of starting a new process) cannot use the built-in mechanism. The value of the DESKTOP_LAUNCH_ID environment has to be passed by your application and have it notify the launching system of your new window. If you are using
+
+Installing a Thumbnailer Program
+The GNOME file manager, Nautilus, can display little thumbnails tailored for each file instead of generic icons in its file lists. For example, a word processor document can be made to appear as a little version of the first page in the document. This is useful because users can see a small representation of the visible data in their files, which may aid in recalling what file they are looking for. You can make your application create these thumbnails with a few simple steps.
+A
+For each MIME type which you want to handle, you have to create a pair of GConf keys:
+application@x-foo
+/desktop/gnome/thumbnailers/
+Type: boolean. Determines whether this thumbnailer will be run. You can enable or disable each individual thumbnailer. When you install a new thumbnailer, you should of course make this key's value be
+/desktop/gnome/thumbnailers/
+Type: string. The command which GNOME will use when it needs to generate a thumbnail for a file of type
+That is, each MIME type requires two GConf keys (
+Within the
+%i
+Input file name. This is the file that your thumbnailer needs to read.
+Input URI. If your thumbnailer can handle URIs instead of plain file names, use
+%o
+Output file name. This is where your thumbnailer should write the thumbnail image in PNG format.
+%s
+128
+Size of the thumbnail as a single integer. For example, if this gets substituted with
+Either of
+Additional information
+As an additional configuration parameter, you can turn on the boolean key
+Integration Checklist
+This appendix provides a checklist of the various tasks presented through this guide. You can use the checklist to ensure that your software is integrated into GNOME in at least the most basic ways, and also as a resource to plan for further integration work.
+Does your application appear in the menus of the GNOME Panel?
+Does your application have an icon for the panel menus or the desktop? If so, does it have multiple pre-rendered sizes and a scalable
+If your application can load or save files, does it register the MIME types that it can handle?
+Does your application provide MIME icons for the file manager?
+Does your application support startup notification, so that GNOME can display feedback to the user while your application is being launched?
+If your application creates "printable" documents, does it install a thumbnailer for use by the file manager?
+Acknowledgments
+Many thanks to Jakub Steiner for providing a beautiful CSS stylesheet for the HTML version of this guide!
+translator-credits

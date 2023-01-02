@@ -1,0 +1,89 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+Returning values from your functions to PHP was described briefly in an earlier section; this section gives the details.
+Return values are passed via the return_value variable, which is passed to your functions as argument.
+The return_value argument consists of a zval container (see the earlier discussion of the call interface) that you can freely modify.
+The container itself is already allocated, so you don 't have to run MAKE_STD_ZVAL on it.
+Instead, you can access its members directly.
+To make returning values from functions easier and to prevent hassles with accessing the internal structures of the zval container, a set of predefined macros is available (as usual).
+These macros automatically set the correspondent type and value, as described in Table 35-1 and Table 35-2.
+Note:
+The macros in Table 35-1 automatically return from your function, those in Table 35-2 only set the return value; they don't return from your function.
+Table 35-1.
+Predefined Macros for Returning Values from a Function
+Macro
+Description
+RETURN_RESOURCE( resource)
+Returns a resource.
+RETURN_BOOL( bool)
+Returns a Boolean.
+RETURN_NULL()
+Returns nothing (a NULL value).
+RETURN_LONG( long)
+Returns a long.
+RETURN_DOUBLE( double)
+Returns a double.
+RETURN_STRING( string, duplicate)
+Returns a string.
+The duplicate flag indicates whether the string should be duplicated using estrdup().
+RETURN_STRINGL( string, length, duplicate)
+Returns a string of the specified length; otherwise, behaves like RETURN_STRING.
+This macro is faster and binary-safe, however.
+RETURN_EMPTY_STRING()
+Returns an empty string.
+RETURN_FALSE
+Returns Boolean false.
+RETURN_TRUE
+Returns Boolean true.
+Table 35-2.
+Predefined Macros for Setting the Return Value of a Function
+Macro
+Description
+RETVAL_RESOURCE( resource)
+Sets the return value to the specified resource.
+RETVAL_BOOL( bool)
+Sets the return value to the specified Boolean value.
+RETVAL_NULL
+Sets the return value to NULL.
+RETVAL_LONG( long)
+Sets the return value to the specified long.
+RETVAL_DOUBLE( double)
+Sets the return value to the specified double.
+RETVAL_STRING( string, duplicate)
+Sets the return value to the specified string and duplicates it to Zend internal memory if desired (see also RETURN_STRING).
+RETVAL_STRINGL( string, length, duplicate)
+Sets the return value to the specified string and forces the length to become length (see also RETVAL_STRING).
+This macro is faster and binary-safe, and should be used whenever the string length is known.
+RETVAL_EMPTY_STRING
+Sets the return value to an empty string.
+RETVAL_FALSE
+Sets the return value to Boolean false.
+RETVAL_TRUE
+Sets the return value to Boolean true.
+Complex types such as arrays and objects can be returned by using array_init() and object_init(), as well as the corresponding hash functions on return_value.
+Since these types cannot be constructed of trivial information, there are no predefined macros for them.
+Prev
+Home
+Next
+Duplicating Variable Contents:
+The Copy Constructor
+Up
+Printing Information

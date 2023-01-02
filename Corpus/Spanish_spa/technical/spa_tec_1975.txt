@@ -1,0 +1,65 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manejo de celdas vacias
+/text/scalc/05/empty_cells.xhp
+celdas vacias;uso de
+i86303
+Manejo de celdas vacias
+Comenzando con OpenOffice.org 3.0 y StarOffice 9, el manejo de celdas vacias ha cambiado.
+Previamente, las celdas vacías estaban forzadas al número 0 en algunos contextos y a cadenas vacías en otros, excepto en comparaciones directas donde =A1=0 y =A1= &quot; &quot; ambas resultaban en VERDADERO si A1 estaba vacía.
+Ahora el vacío se hereda mientras se utiliza, así que ambos =BUSCARV(...)=0 y =BUSCARV(...)= &quot; &quot; dan VERDADERO si el resultado a buscar en una celda vacía fue devuelto.
+Una simple referencia para una celda vacía aún se visualiza como un número 0 pero no es necesariamente de tipo numérico, de tal modo que las comparaciones con referencia a la celda funcionan como se espera.
+Para el siguiente ejemplo, A1 contiene un numero, B1 esta vacio, C1 contiene la referencia a B1:
+A1:
+1 B1: < empty > C1: =B1 (muestra 0)
+=B1=0 = > VERDADERO
+=B1= &quot; &quot; = > VERDADERO
+=C1=0 = > VERDADERO
+=C1= &quot; &quot; = > VERDADERO (previamente era FALSO)
+=ESNÚMERO(B1) = > FALSO
+=ESNÚMERO(C1) = > FALSO (previamente era VERDADERO)
+=ESNÚMERO(BUSCARV(1;A1:C1;2)) = > FALSO (B1)
+=ESNÚMERO(BUSCARV(1;A1:C1;3)) = > FALSO (C1, previamente era VERDADERO)
+=ESTEXTO(B1) = > FALSO
+=ESTEXTO(C1) = > FALSO
+=ESTEXTO(BUSCARV(1;A1:C1;2)) = > FALSO (B1, previamente era VERDADERO)
+=ESTEXTO(BUSCARV(1;A1:C1;3)) = > FALSO (C1)
+=ESBLANCO(B1) = > VERDADERO
+=ESBLANCO(C1) = > FALSO
+=ESBLANCO(BUSCARV(1;A1:C1;2)) = > VERDADERO (B1, previamente era FALSO)
+=ESBLANCO(BUSCARV(1;A1:C1;3)) = > FALSO (C1)
+Note que Microsoft Excel se comporta diferente y siempre devuelve un número como el resultado de una referencia para una celda vacía o una fórmula en la celda con el resultado de una celda vacía.
+Por ejemplo:
+A1: < empty >
+B1: =A1 = > muestra 0, pero es sólo una referencia a una celda vacía.
+=ESNÚMERO(A1) = > FALSO
+=ESTEXTO(A1) = > FALSO
+=A1=0 = > VERDADERO
+=A1= &quot; &quot; = > VERDADERO
+=ESNÚMERO(B1) = > FALSO (MS-Excel:
+VERDADERO)
+=ESTEXTO(B1) = > FALSO
+=B1=0 = > VERDADERO
+=B1= &quot; &quot; = > VERDADERO (MS-Excel:
+FALSO)
+C1: =BUSCARV(...) con una celda vacía resulta = > mostrar vacío (MS-Excel: muestra 0)
+=ESNÚMERO(BUSCARV(...)) = > FALSO
+=ESTEXTO(BUSCARV(...)) = > FALSO
+=ESNÚMERO(C1) = > FALSO (MS-Excel:
+VERDADERO)
+=ESTEXTO(C1) = > FALSO

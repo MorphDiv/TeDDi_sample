@@ -1,0 +1,77 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Chapitre 8.
+Les variables
+Suivant
+Lorsqu 'un formulaire est envoyé à un script PHP, toutes les variables du formulaire seront automatiquement disponibles dans le script.
+Par exemple, considérons le formulaire suivant:
+Exemple 8-1.
+Exemple avec un formulaire simple
+form action=" foo.php "method="post" Nom: input type="text "name="nom" br input type="submit "/ form
+Lorsque ce formulaire est envoyé, le PHP va créer la variable $nom, qui contiendra la valeur que vous avez entrée dans le champs Nom: du formulaire.
+
+La directive de configuration magic_quotes_gpc affecte les valeurs issues des méthodes GET et POST ainsi aue des Cookies.
+Si cette directive est active, une valeur telle que It's "PHP! "sera automagiquement transformée en It\'s \"PHP!\".
+L 'échappement est nécessaire pour les insertions en base de données.
+Voyez addslashes(), stripslashes() et magic_quotes_sybase.
+Le PHP permet aussi l 'utilisation des tableaux dans le contexte de formulaire, mais seulement des tableaux à une seule dimension.
+Comme cela, vous pouvez rassembler des variables ou utiliser cette fonctionnalité pour récupérer les valeurs d 'un choix multiple:
+Exemple 8-2.
+Variables complexes de formulaire
+form action=" array.php "method="post" Name: input type="text "name="personal[name]" br Email: input type="text "name="personal[email]" br Beer: br select multiple name="vin[] "option value="medoc" Médoc option value="chablis "Chablis option value="riesling" Riesling / select input type="submit "/ form
+Si l'option "track_vars "est activée, soit par l 'option de compilation track_vars, soit par la directive de configuration? php_track_vars?, les variables transmises par les méthodes POST et GET pourront aussi être trouvées dans le tableau associatif global $HTTP_POST_VARS ou $HTTP_GET_VARS suivant la méthode utlisée.
+Lorsque vous envoyez le résultat d'un formulaire, vous pouvez utiliser une image au lieu du bouton "submit "standard en utilisant un tag:
+input type=image src=" image.gif "name="sub"
+Lorsqu'un utilisateur clique sur l 'image, le formulaire sera transmis au serveur avec deux variables de plus, sub_x et sub_y.
+Ces deux variables contiennent les coordonnées de l'endroit où l 'utilisateur à cliqué.
+Les utilisateurs expérimentés remarqueront que les noms de variables sont transmis avec une virgule à la place du caractère "_", mais le PHP fait la conversion automatiquement.
+Le PHP supporte les cookies HTTP de manière totalement transparente, comme défini dans les Netscape 's Spec.
+Les cookies sont un mécanisme permettant de stocker des données sur la machine cliente à des fins d'authentification de l 'utilisateur.
+Vous pouvez établir un cookie grâce à la fonction setcookie().
+Les cookies font partie intégrante du "header" HTTP, et donc la fonction setcookie() doit être appelée avant que le moindre affichage ne soit envoyé au navigateur.
+C'est la même restriction que pour la fonction header().
+Tout cookie envoyé depuis le client sur le serveur sera automatiquement stocké sous forme de variable, comme pour la méthode POST ou GET.
+Si vous souhaitez assigner plusieurs valeurs à un seul cookie, il vous faut ajouter les caractères [] au nom de votre cookie.
+Par exemple:
+?php setcookie ("MonCookie[]", "test", time()+3600);?
+Il est à noter qu'un cookie remplace le cookie précédent par un cookie de même nom tant que le "path "ou le domaine sont identiques.
+Donc, pour une application de caddie, vous devez implémenter un compteur et l 'incrémenter au fur et à mesure.
+C 'est-à-dire:
+Exemple 8-3.
+Exemple avec setcookie()
+?php $compte++; SetCookie ("Compte", $compte, time()+3600); SetCookie ("Caddie[$compte]", $item, time()+3600);?
+Le PHP fait en sorte que les variables d 'environnement soient accessibles directement comme des variables PHP normales.
+?php echo $HOME; / * Affiche la valeur de la variable d 'environnement HOME, si celle-ci est affectée. * /?
+Même si le PHP crée les variables lors de l'utilisation des méthodes GET, POST et cookie, il est de temps en temps préférable de transmettre explicitement la valeur de la variable afin d 'être sûr de la valeur.
+La fonction getenv() peut être utilisée pour récupérer la valeur des variables d 'environnement.
+Vous pouvez aussi affecter une variable d'environnement grâce à la fonction putenv().
+Typiquement, PHP ne modifie pas les noms des variables lorsqu 'elles sont passées à un script.
+Cependant, il faut noter que les points (.) ne sont pas autorisés dans les noms de variables PHP.
+Pour cette raison, jetez un oeil sur:
+?php $varname.ext; / * nom de variable invalide * /?
+Pour cette raison, il est important de noter que PHP remplacera automatiquement les points des noms de variables entrantes par des soulignés (underscore).
+Parceque le PHP détermine le type des variables et les convertit (généralement) comme il faut, ce n 'est pas toujours le type de variable que vous souhaitez.
+PHP inclut des fonctions permettant de déterminer le type d'une variable: gettype(), is_long(), is_double(), is_string(), is_array() et is_object().
+Précédent
+Sommaire
+Suivant
+Les variables dynamiques
+Niveau supérieur
+Les constantes

@@ -1,0 +1,512 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Die Konfigurationsdateien von & kdm;
+Dieses Kapitel dokumentiert die Dateien, die das Verhalten von & kdm; beeinflussen. Einige davon können auch über das & kcontrol;-Modul geändert werden, aber nicht alle.
+& kdmrc;- die Haupt-Konfigurationsdatei von & kdm;
+Das grundlegende Format für diese Datei ist an INI-Dateien angelehnt. Einstellungen werden als Schlüssel/Wert-Paare in Sektionen abgelegt. Alle Einträge berücksichtigen Groß-/Kleinschreibung. Syntaktische Fehler oder unbekannte Schlüssel/Wert-Paare veranlassen & kdm; dazu entsprechende Fehlermeldungen auszugeben, die aber nicht-kritisch sind.
+Zeilen, die mit # beginnen, sind Kommentare. Leere Zeilen werden ebenfalls ignoriert.
+Sektionen werden mit [Name der Sektion] gekennzeichnet.
+Sie können jeden X-Display separat konfigurieren.
+Jeder Display hat einen Display-Namen, der aus dem Rechnernamen (der Host name, der bei lokalen Displays, die in StaticServers eingetragen sind, leer ist), einem Doppelpunkt und der Display-Nummer besteht. Zusätzlich gehört ein Display noch zu einer Display-Klasse, aber diese kann in den meisten Fällen ignoriert werden.
+Sektionen mit Display-spezifischen Einstellungen besitzen die formale Syntax [X- nbsp; Rechner nbsp;[nbsp;: nbsp; Nummer nbsp;[nbsp; _ nbsp; Klasse nbsp;]nbsp;]nbsp; - nbsp; Untersektion nbsp;]
+Alle Sektionen mit der selben Untersektion bilden eine Sektionsklasse.
+Sie können den Platzhalter * für Rechner, Nummer und Klasse verwenden. Bestandteile, die sich am Ende befinden, dürfen weggelassen werden. Für Sie wird der Platzhalter * angenommen. Der Rechner-Bestandteil kann eine Domain-Angabe sein, wie .inf.tu.dresden.de oder der Platzhalter + (trifft auf alle nicht-leeren Einträge zu).
+Aus welcher Sektion eine Einstellung verwendet wird, entscheidet sich nach den folgenden Regeln:
+Eine exakte Übereinstimmung hat Vorrang vor einer teilweisen Übereinstimmung (im Rechner-Bestandteil), die wiederum Vorrang vor dem Platzhalter hat. (+ hat Vorrang vor *).
+Bei exakt übereinstimmenden Einträgen nimmt die Priorität von links nach rechts ab.
+Beispiel: Display-Name meinrechner.foo:0, Klasse dpy
+[X-meinrechner.foo:0_dpy] hat Vorrang vor
+[X-meinrechner.foo:0_*] (identisch mit [X-meinrechner.foo:0]) hat Vorrang vor
+[X-meinrechner.foo:*_dpy] hat Vorrang vor
+[X-myhost.foo:*_*] (identisch mit [X-meinrechner.foo]) hat Vorrang vor
+[X-.foo:*_*] (identisch mit [X-.foo]) hat Vorrang vor
+[X-+:0_dpy] hat Vorrang vor
+[X-*:0_dpy] hat Vorrang vor
+[X-*:0_*] (identisch mit [X-*:0]) hat Vorrang vor
+[X-*:*_*] (identisch mit [X-*]).
+Die folgenden Sektionen stimmen nicht mit diesem Display überein:
+[X-seinrechner], [X-meinrechner.foo:0_dec], [X-*:1], [X-:*]
+Häufige Sektionen sind [X-*] (alle Displays), [X-:*] (alle lokalen Displays) und [X-:0] (der erste lokale Display).
+Das Format aller Schlüssel ist Schlüssel nbsp; = nbsp; Wert. Schlüssel sind nur in Sektionen gültig, für die sie definiert sind. Manche Schlüssel sind für bestimmte Displays nicht anwendbar und werden dann ignoriert.
+Wird eine Einstellung in keiner passenden Sektion gefunden, wird die Voreinstellung verwendet.
+Sonderzeichen müssen durch einen Backslash geschützt werden (führende und anhängende Leerzeichen (\\s), Tabulatoren (\ ), Zeilenvorschub (\), Wagenrücklauf (\\r) und der Backslash selbst (\\\\).
+In Listen werden die Felder durch Kommata ohne Leerzeichen getrennt.
+Einige Befehlszeichenketten werden nach den vereinfachten sh-Regeln in einzelne Teile (Wörter) aufgespalten. Einfache Anführungszeichen (') und doppelte Anführungszeichen (") haben die übliche Bedeutung, der Backslash kennzeichnet alles (nicht nur Sonderzeichen). Beachten Sie, dass Backslash-Zeichen verdoppelt werden müssen, da sie ansonsten nicht als Backslash ausgewertet werden.
+Eine jungfräuliche & kdmrc; ist sehr ausführlich dokumentiert. Alle Kommentare gehen verloren, sobald Sie die Datei über das Kontrollzentrum ändern.
+Die Sektion [General] von & kdmrc;
+Diese Sektion enthält globale Einstellungen, die in keine andere Sektion passen.
+ConfigVersion
+Diese Einstellung existiert einzig zum Zwecke automatischer Upgrades. Ändern Sie sie nicht! Es könnte sein, dass ihre Änderung mit zukünftigen Upgrades nicht verträglich ist. Dies kann dazu führen, dass & kdm; nicht mehr startet.
+StaticServers
+Liste der Anzeigen (X-Server) die dauerhaft von & kdm; verwaltet werden. Anzeigen mit einem Rechnernamen sind entfernte Anzeigen die bereits laufen, die anderen sind lokale Anzeigen, für die & kdm; einen neuen X-Server startet (siehe die Option ServerCmd). Jede Anzeige kann zu einer Klasse gehören. Hängen Sie diese an den Namen der Anzeige nach einem Unterstrich an. Details dazu finden Sie unter.
+Die Voreinstellung ist :0.
+ReserveServers
+List der Displays auf Anforderung. Siehe StaticServers für die Syntax.
+Per Voreinstellung leer.
+ServerVTs
+Liste der virtuellen Terminals, die einem X-Server zugeordnet werden. Für negative Werten wird der absolute Wert verwendet und das VT wird erst zugewiesen, wenn der Kernel es freigibt. Wenn & kdm; die Liste ausgeschöpft hat, werden mehr VT s als der absolute Wert des letzten Eintrags zugewiesen. Dies gilt derzeit nur für Linux.
+ConsoleTTYs
+Diese Option ist für Betriebssysteme (BS) mit Unterstützung für virtuelle Terminals (VT) sowohl durch & kdm; und das BS selbst. Derzeit gilt dies nur für Linux.
+Wenn & kdm; in den Konsole-Modus umschaltet, überwacht es alle hier aufgeführten TTY -Zeilen (ohne das führende /dev /). Findet auf keinem davon innerhalb eines bestimmten Zeitraumes eine Aktivität statt, schaltet & kdm; zurück zum X login.
+PidFile
+Die angegebene Datei wird angelegt, um darin die ASCII-Darstellung der Prozess-ID des Hauptprozesses von & kdm; abzulegen. Ist kein Dateiname angegeben, wird die PID nicht abgelegt.
+LockPidFile
+Die Optione steuert, ob & kdm; Dateisperren verwendet, um zu verhindern, dass mehrere Display-Manager sich gegenseitig ins Gehege kommen.
+Die Voreinstellung ist true.
+AuthDir
+Hier wird der Ordner eingetragen, in dem & kdm; die Autorisierungsdateien des & X-Server; speichert, während die Sitzung initialisiert wird. & kdm; erwartet, dass hier liegengebliebene Dateien vom System bei einem Reboot entfernt werden.
+Die Autorisierungsdatei für einen bestimmten Display kann mit AuthFile in [X-*-Core] angegeben werden.
+Die Voreinstellung ist /var/run/xauth.
+AutoRescan
+Dieser boolesche Wert steuert, ob & kdm; seine Konfigurationsdateien automatisch neu einliest, wenn es feststellt, dass diese geändert wurden.
+ExportList
+Zusätzliche Umgebungsvariablen, die & kdm; an alle von ihm gestarteten Programme übergibt. LD_LIBRARY_PATH und XCURSOR_THEME sind gute Kandidaten, andere Umgebungsvariablen sind nur selten nötig.
+RandomFile
+Falls das System keine eigene Entropie-Quelle wie /dev/urandom besitzt (siehe dazu die Option RandomDevice) und kein Entropie-Dienst wie EGD läuft (siehe dazu die Option PrngdSocket und PrngdPort), dann wird & kdm; den eingebauten Zufallszahlengenerator einsetzen. Dieser erstellt erstellt nacheinander Prüfsummen aus Teilen dieser Datei (deren Inhalt sich häufig ändern sollte).
+Diese Option existiert nicht unter Linux und verschiedenen BSD-Systemen.
+Die Voreinstellung ist /dev/mem.
+PrngdSocket
+Falls das System keinen eigenen Zufallsgenerator enthält hat (wie & eg; /dev/urandom, siehe RandomDevice), werden zufällige Daten aus dem UNIX-Socket eines Pseudo-Zufallszahlengenerators wie EGD gelesen (http://egd.sourceforge.net).
+PrngdPort
+Das Selbe wie PrngdSocket, auf localhost nur TCP-Sockets verwenden.
+RandomDevice
+Der Pfad zum zeichenbasierten Gerät, von dem & kdm; Zufallsdaten lesen soll. Ist dieser Eintrag leer, wird das vom System bevorzugte Gerät für Entropie verwendet.
+Diese Option existiert nicht auf OpenBSD, da es stattdessen die Funktion arc4_random verwendet.
+FifoDir
+Der Ordner, in dem die Befehls-Sockets erzeugt werden sollen. Zum Abschalten diese Option leer lassen.
+Die Voreinstellung ist /var/run/xdmctl.
+FifoGroup
+Die Gruppe, zu dem der globale Befehl Socket gehören soll. Entweder ein Name oder eine numerische ID.
+DataDir
+In diesem Ordner speichert & kdm; seine dauerhaften Arbeitsdaten ab. Es handelt sich dabei um Daten wie & eg; den zuvor auf einer bestimmten Anzeigen angemeldeten Benutzer.
+Die Voreinstellung ist /var/lib/kdm.
+DmrcDir
+Der Ordner, in dem & kdm; die .dmrc -Dateien von Benutzern speichert. Dies wird nur benötigt, wenn die Persönlichen Ordner vor der Benutzeranmeldung nicht lesbar sind (so ist es & eg; bei AFS).
+Die Sektion [Xdmcp] von & kdmrc;
+Dieser Abschnitt enthält Optionen die festlegen wie & kdm; Anfragen von & XDMCP; behandelt.
+Enable
+Soll & kdm; auf eingehende Anfragen von & XDMCP; warten.
+Port
+Dies gibt den UDP-Port an, den & kdm; zum Warten auf eingehende & XDMCP;-Anfragen verwendet. Sofern Sie keine Fehlersuche auf Ihrem System betreiben sollten Sie diesen Wert in der Voreinstellung belassen.
+Die Voreinstellung ist 117.
+KeyFile
+Eine & XDMCP;-Authentifizierung nach XDM-AUTHENTICATION-1 erfordert einen gemeinsam genutzten privaten Schlüssel zwischen & kdm; und dem Terminal. Mit dieser Option geben Sie die Datei an, die die nötigen Informationen enthält. Jeder Eintrag in der Datei enthält einen Anzeigenamen und den gemeinsamen privaten Schlüssel.
+Xaccess
+Um nicht autorisierte & XDMCP;-Dienste zu verhindern und die Weiterleitung von & XDMCP;-IndirectQuery-Anfragen zu ermöglichen, enthält diese Datei eine Datenbank mit Rechnernamen, denen entweder direkter Zugriff auf diesen Rechner erlaubt wird oder eine Liste mit Rechnern, an die solche Anfragen weitergeleitet werden sollen. Das Format dieser Datei wird unter beschrieben.
+Die Voreinstellung ist $kde_confdir /kdm/Xaccess.
+ChoiceTimeout
+Dies ist die Anzahl Sekunden die gewartet werden soll, nachdem der Benutzer einen Rechner ausgewählt hat. Wenn die Anzeige innerhalb der Wartezeit eine & XDMCP;-IndirectQuery sendet, wird die Anfrage an den ausgewählten Rechner weitergeleitet. Ansonsten wird von einer neuen Sitzung ausgegangen und der Auswähler wird erneut angezeigt.
+Die Voreinstellung ist 15.
+RemoveDomainname
+Beim Zusammenstellen des Anzeigenamens für & XDMCP;-Clients wird durch die Namensauflösung typischerweise ein voll qualifizierter Rechnername für das Terminal erzeugt. Weil dies manchmal verwirrend sein kann, entfernt & kdm; den Domänennamen vom FQHN, sofern er der Domäne des lokalen Rechners entspricht und diese Option aktiviert ist.
+SourceAddress
+Legt fest, dass die nummerische IP-Adresse der eingehenden Verbindung auf Multihomed-Rechnern anstelle des Rechnernamens verwendet werden soll. Dies wird verwendet, um zu Verbindungsversuche auf einem falschen (möglicherweise deaktivierten) Netzwerkgerät zu verhindern.
+Die Voreinstellung ist false.
+Willing
+Dies gibt ein Programm an, welches (als Systemverwalter) ausgeführt wird, wenn ein & XDMCP;-DirectQuery oder BroadcastQuery empfangen wird und dieser Rechner & XDMCP;-Anzeige-Management anbietet. Die Ausgabe des Programms kann in einem Chooser-Fenster angezeigt werden. Wenn kein Programm angegeben ist, wird der Text Willing to manage gesendet.
+Die Sektion [Shutdown] von & kdmrc;
+Dieser Bereich enthält globale Optionen, die das Herunterfahren des Systems betreffen.
+HaltCmd
+Der Befehl zum Anhalten bzw. Herunterfahren des Rechners. Diese Zeichenfolge wird in einzelne Wörter aufgespalten.
+Die Voreinstellung ist ein sinnvoller Befehl für das System, auf dem & kdm; kompiliert wurde. Beispielsweise: /sbin/shutdownnbsp; -h nbsp; now.
+RebootCmd
+Der Befehl zum Neustarten des Rechners. Diese Zeichenfolge wird in einzelne Wörter aufgespalten.
+Die Voreinstellung ist ein sinnvoller Befehl für das System, auf dem & kdm; kompiliert wurde. Beispielsweise: /sbin/shutdownnbsp; -r nbsp; now.
+AllowFifo
+Gibt an, ob es erlaubt ist, das System mit Hilfe des globalen Befehls-Sockets herunterzufahren.
+AllowFifoNow
+Legt fest, ob das Abbrechen aktiver Sitzungen erlaubt ist, wenn das System über den globalen Befehls-Socket heruntergefahren wird.
+Dies wird erst wirksam, wenn AllowFifo aktiviert ist.
+BootManager
+Dies legt den Bootmanager fest, den & kdm; zum Anbieten von Startmöglichkeiten im Dialog zum Herunterfahren verwenden soll.
+None
+no boot manager
+Grub
+Grub Boot-Manager
+Lilo
+Lilo Boot-Manager (Linux on i386 & x86-64 only)
+Die Voreinstellung ist None.
+Die Sektionsklasse [X-*-Core] von & kdmrc;
+Diese Sektionsklasse enthält Einstellungen für die Einrichtung der Oberfläche & kdm;.
+OpenDelay
+Siehe OpenRepeat.
+OpenTimeout
+Die Voreinstellung ist 120.
+OpenRepeat
+Diese Einstellungen legen & kdm;s Verhalten beim Öffnen einer Verbindung zu einem & X-Server; fest. OpenDelay entspricht der gewünschten Pausenlänge (in Sekunden) zwischen erfolgreichen Versuchen, OpenRepeat ist gibt die Anzahl der Versuche an und OpenTimeout ist die Zeit, die für einen Verbindungsversuch aufgewendet werden kann. Nachdem OpenRepeat Versuche unternommen wurden, oder wenn OpenTimeout Sekunden in einem Verbindungsversuch überschritten wurden, wird der Verbindungsversuch als gescheitert angesehen.
+Die Voreinstellung ist 5.
+StartAttempts
+Legt fest, wieviele Versuche & kdm; unternehmen soll, um eine Verbindung zu entfernten Anzeigen aus der Liste StaticServers zu öffnen, bevor der Verbindungsversuch aufgegeben und der deaktiviert wird. Lokale Anzeigen werden nur einmal probiert und & XDMCP;-Anzeigen werden unendlich oft vom Client probiert (außer die Option -once wurde an den & X-Server; übergeben).
+Die Voreinstellung ist 4.
+ServerAttempts
+Legt fest, wie oft & kdm; versuchen soll, einen lokalen & X-Server; zu starten. Der Startversuch beinhaltet das Ausführen und Initialisieren.
+Die Voreinstellung ist 1.
+ServerTimeout
+Gibt an, wie lange & kdm; auf den vollständigen Start eines lokalen & X-Server;s warten soll.
+ServerCmd
+Die Befehlszeile zum Starten des & X-Server;s, ohne Displaynummer und Spezifikation des virtuellen Terminals. Diese Zeichenfolge wird in einzelne Wörter aufgespalten.
+Die Voreinstellung ist ein sinnvoller Befehl für das System, auf dem & kdm; kompiliert wurde. Beispielsweise: /usr/X11R6/bin/X.
+ServerArgsLocal
+Weitere Argumente für lokale Sitzungen des & X-Server;s. Diese Zeichenfolge wird in einzelne Wörter aufgespalten.
+ServerArgsRemote
+Weitere Argumente für entfernte Sitzungen des & X-Server;s. Diese Zeichenfolge wird in einzelne Wörter aufgespalten.
+ServerVT
+Das Virtuelle Terminal, auf dem der & X-Server; laufen soll. Stattdessen sollte besser die Option ServerVTs verwendet werden. Lassen Sie diesen Wert leer, wenn & kdm; automatisch ein VT zuweisen soll. Ein Wert von -1 verhindert die Zuweisung von VT s - dies ist nötig an Systemen mit mehreren physikalischen Konsolen. Derzeit nur für Linux.
+ServerTTY
+Diese Option ist für Betriebssysteme ohne Unterstützung für VT s gedacht (entweder von & kdm; oder vom Betriebssystem selbst. Dies gilt derzeit für alle Betriebssysteme außer Linux.
+Wenn & kdm; in den Konsolenmodus umschaltet, überwacht es dieses TTY (angegeben ohne das führende /dev /) auf Aktivität. Wenn das Terminal für einige Zeit unbenutzt ist, schaltet & kdm; wider zurück auf die grafische X-Anmeldeoberfläche.
+PingInterval
+Siehe PingTimeout.
+PingTimeout
+Um herauszufinden, wenn entfernte Anzeigen nicht mehr zur Verfügung stehen, sendet & kdm; in regelmäßigen Abständen einen Ping. Die Option PingInterval legt die Wartezeit zwischen den Pings fest (in Minuten). PingTimeout gibt die maximale Antwortzeit des Terminals auf einen Ping an (in Minuten). Wenn das entfernte Terminal nicht rechtzeitig reagiert, wird die Sitzung als tot deklariert und beendet.
+Wenn Sie häufiger entfernte X-Terminals verwenden, die unter Umständen die Verbindung verlieren, so sollten Sie die Wartezeit erhöhen. Der einzige Nachteil daran ist, dass eine Sitzung länger bestehen bleibt, nachdem ein Terminal versehentlich abgeschaltet wurde.
+TerminateServer
+Legt fest, ob & kdm; den lokalen & X-Server; nach dem Sitzungsende ganz neu starten soll, anstelle ihn zu nur zurückzusetzen. Sie sollten diese Option verwenden, falls der & X-Server; ein Speicherleck aufweist oder das System beim Zurücksetzen abstürzen lässt.
+ResetSignal
+Die Signalnummer, die den lokalen & X-Server; zum Zurücksetzen veranlasst.
+Die Voreinstellung ist 1 (SIGHUP).
+TermSignal
+Die Signalnummer, die den lokalen & X-Server; zum Beenden veranlasst.
+Die Voreinstellung ist 15 (SIGTERM).
+Authorize
+Dies legt fest, ob & kdm; Autorisierung für lokale & X-Server;-Verbindungen erzeugt und verwendet. Für & XDMCP;-Anzeigen wird die von der Anzeige angeforderte Autorisierung verwenden, nicht-XDMCP;-Anzeigen unterstützen sowieso keine Autorisierung.
+AuthNames
+Falls Authorize wahr ist, werden die hier aufgezählten Autorisierungsmechanismen verwendet. MIT-MAGIC-COOKIE-1-Autorisierung ist grundsätzlich immer verfügbar; XDM-AUTHORIZATION-1, SUN-DES-1 und MIT-KERBEROS-5 könnten ebenso verfügbar sein (abhängig von der Konfiguration beim Kompilieren).
+Die Voreinstellung ist DEF_AUTH_NAME.
+ResetForAuth
+Einige alte & X-Server; lesen die Autorisationsdatei beim Zurücksetzen & X-Server;s neu ein anstatt beim Prüfen der ersten Verbindung. Da & kdm; die Autorisierungsinformationen erst kurz vor der Verbindung erzeugt, erhält solch ein alter & X-Server; nicht-aktuelle Autorisierungsdaten. Diese Option veranlasst & kdm; dazu, das Signal SIGHUP an den & X-Server; zu senden, nachdem die Datei erzeugt wurde. Der dadurch veranlasste & X-Server;-Reset sorgt dann für das Neu-Einlesen der Datei durch den & X-Server;.
+AuthFile
+Diese Datei wird verwendet, um dem & X-Server; die Autorisierungsdaten von & kdm; zu übermitteln. Dazu wird die Option -auth des & X-Server;s verwendet. Diese Datei sollte in einem Ordner aufbewahrt werden, der nicht von jedem beschreibbar ist. Sonst besteht die Gefahr, dass die Datei entfernt oder manipuliert wird und somit der Autorisierungsmechanismus des & X-Server;s nicht mehr funktionieren würde. Falls nicht angegeben, wird ein zufälliger Name aus AuthDir und dem Namen der Anzeige generiert.
+Resources
+Diese Option gibt die Datei an, die von xrdb als Ressourcendatenbank auf das root-Fenster des Bildschirms 0 der Anzeige geladen werden soll. KDE-Programme verwenden grundsätzlich keine X-Ressourcen, daher ist diese Option nur nützlich, falls das Setup -Programm einige solche Ressourcen benötigt.
+Xrdb
+Das xrdb -Programm, welches zum Einlesen der X-Ressourcendatei benutzt werden soll. Die Ressourcendatei wurde in Resources angegeben. Diese Zeichenfolge wird in einzelne Wörter aufgespalten.
+Die Voreinstellung ist ${x_bindir }/xrdb.
+Setup
+Diese Zeichenfolge wird in einzelne Wörter aufgespalten. Sie gibt ein Programm an, das (als Systemverwalter root) vor der Anzeige des Anmeldefensters ausgeführt wird. Dies kann zum Ändern des Bildschirminhalts um das Anmeldefenster genutzt werden oder um weitere Fenster nebenher anzuzeigen (eg; könnten Sie hier eine xconsole ausführen). Der üblicherweise verwendete Name hierfür heißt Xsetup. Siehe auch.
+Startup
+Diese Zeichenfolge wird in einzelne Wörter aufgespalten. Sie gibt ein Programm an, welches (als Systemverwalter root) nach der Benutzer-Authentifizierung ausgeführt wird. Die üblicherweise verwendete Datei hierfür heißt Xstartup. Siehe auch.
+Reset
+Diese Zeichenfolge wird in einzelne Wörter aufgespalten. Sie gibt ein Programm an, das (als Systemverwalter root) nach Beendigung der Sitzung ausgeführt wird. Die üblicherweise verwendete Datei hierfür heißt Xreset. Siehe auch.
+Session
+Diese Zeichenfolge wird in einzelne Wörter aufgespalten. Sie gibt das Sitzungsprogramm an, das (als der Benutzer der Sitzung) ausgeführt wird. Die üblicherweise verwendete Datei hierfür heißt Xsession. Siehe auch.
+Die Voreinstellung ist ${x_bindir }/xterm -ls -T.
+FailsafeClient
+Falls das Session -Programm nicht ausgeführt werden kann, wird & kdm; auf dieses Programm zurückgreifen. Das Programm wird ohne jegliche Argumente aufgerufen, aber verfügt über die gleichen Umgebungsvariablen, als wenn eine normale Sitzung gestartet worden wäre (siehe).
+Die Voreinstellung ist ${x_bindir }/xterm.
+UserPath
+Die PATH -Umgebungsvariable für nicht- root - Session.
+Die Voreinstellung hängt von dem System ab, auf dem & kdm; kompiliert wurde.
+SystemPath
+Die PATH -Umgebungsvariable für alle Programme außer nicht- root - Session. Diese Sitzung sollte nach Möglichkeit nicht den Pfad. (den jeweils aktuellen Ordner) enthalten.
+SystemShell
+Die PATH -Umgebungsvariable für alle Programme außer Session.
+Die Voreinstellung ist /bin/sh.
+UserAuthDir
+Falls & kdm; die normale Benutzerautorisierungsdatei ($HOME /.Xauthority) nicht schreiben kann, wird eine einzigartige Datei in diesem Ordner erstellt und die Umgebungsvariable XAUTHORITY zeigt dann auf diese neu erstellte Datei.
+Die Voreinstellung ist /tmp.
+ForceUserAuthDir
+Wenn true gesetzt, wird UserAuthDir in jedem Fall verwendet.
+AutoReLogin
+Wenn diese Einstellung aktiviert ist, wird & kdm; einen abgestürzten (oder mittels Strg+Alt+Entf beendeten) & X-Server; automatisch neu starten. Achtung: Das Aktivieren dieser Einstellung kann zu einem Sicherheitsproblem werden. Eine mit Passwort geschützte Sitzung könnte umgangen werden (es sei denn, & kde;s eingebauter Bildschirmschoner mit Passwort wird verwendet).
+AllowRootLogin
+Falls diese Einstellung deaktiviert ist, wird dem Systemverwalter root und anderen Benutzern mit der UID=0 ein direktes Anmelden untersagt.
+AllowNullPasswd
+Wenn diese Einstellung deaktiviert ist, können sich nur noch Benutzer mit einem zugewiesenen Passwort anmelden.
+AllowShutdown
+Dies bestimmt, wem das Herunterfahren des Systems gestattet ist. Dies gilt sowohl für das Anmeldefenster als auch für den Befehls-Socket.
+es wird kein Eintrag Herunterfahren... angezeigt
+Root
+das root -Passwort muss zum Herunterfahren eingegeben werden
+All
+Jeder kann den Rechner herunterfahren
+Die Voreinstellung ist All.
+AllowSdForceNow
+Wer darf aktive Sitzungen beim Herunterfahren abbrechen.
+es ist überhaupt kein erzwungenes Herunterfahren erlaubt
+das root -Passwort muss zum erzwungenen Herunterfahren eingeben werden
+Jeder kann das Herunterfahren des Rechners erzwingen
+DefaultSdMode
+Die Voreinstellung zum Herunterfahren und zur Zeiteinstellung
+Schedule
+Herunterfahren, nachdem alle aktiven Sitzungen beendet wurden (möglicherweise auf einmal)
+TryNow
+Herunterfahren, wenn keine aktiven Sitzungen offen sind; ansonsten geschieht nichts
+ForceNow
+bedingungslos Herunterfahren
+Die Voreinstellung ist Schedule.
+ScheduledSd
+Wie soll der Zeitplan zum Herunterfahren angeboten werden:
+Never
+überhaupt nicht
+Optional
+als Knopf in einfachen Herunterfahren-Dialogen
+Always
+anstelle der einfachen Herunterfahren-Dialoge
+Die Voreinstellung ist Never.
+NoPassEnable
+Passwortlose Anmeldungen auf dieser Anzeige zulassen. Nur mit größter Vorsicht verwenden!
+NoPassUsers
+Die Benutzer, die kein Passwort zur Anmeldung benötigen. Einträge mit einem vorangestellten @ repräsentieren alle Benutzer in der so benannten Gruppe. * meint alle Benutzer außer root (und jeden anderen Benutzer mit der UID=0). Tragen Sie hier niemals den Benutzer root ein!
+AutoLoginEnable
+Aktiviert die automatische Anmeldung. Verwenden Sie diese Einstellung mit größter Vorsicht!
+AutoLoginAgain
+Falls wahr, wird nach dem Abmelden erneut automatisch angemeldet. Ansonsten wird die automatische Anmeldung nur beim Start einer Anzeige-Sitzung verwendet.
+AutoLoginDelay
+Die Wartezeit in Sekunden, bevor die automatische Anmeldung durchgeführt wird.
+AutoLoginUser
+Der automatisch anzumeldende Benutzer. Geben Sie hier niemals den Benutzer root an!
+AutoLoginPass
+Das Passwort für den automatisch anzumeldenden Benutzer. Dies wird nicht benötigt, es sei denn der Benutzer wird in einer NIS - oder Kerberos-Domäne angemeldet. Wenn Sie diese Option verwenden, sollten Sie chmodnbsp; 600 nbsp; kdmrc ausführen, damit das Passwort nicht durch jeden lesbar ist.
+AutoLoginLocked
+Durch diese Option wird das System sofort nach der Anmeldung gesperrt. Dies funktioniert allerdings nur mit KDE-Sitzungen.
+SessionsDirs
+Eine Liste mit Ordnern, die Sitzungsbeschreibungen enthalten.
+Die Voreinstellung ist ${kde_datadir }/kdm/sessions.
+ClientLogFile
+Die Datei (relativ zum Heimatordner des Benutzers), in die die Ausgaben der Sitzung umgeleitet werden.
+Die folgenden Zeichenpaare werden durch ihren jeweiligen Wert ersetzt: %d Name des aktuellen Displays %u Anmeldename des aktuellen Benutzers %r Zunächst leer. Siehe unten.%% ein einzelnes% Wenn der konstruierte Dateiname nicht mit Sicherheit verwendet werden kann und die Spezifikation enthält% Irgendwas r, werden andere Namen versucht - diesmal wird% Irgendwas r zu Irgendwas gefolgt von einer Zufallszahl aufgelöst.
+Die Voreinstellung ist .xsession-errors.
+ClientLogFallback
+Alternativlösung, wenn ClientLogFile nicht benutzt werden kann. Hierbei gelten die selben Expansionsregeln. Benutzen Sie hier keine relativen Pfade.
+Die Voreinstellung ist /tmp/xerr-%u-%d%-r.
+UseSessReg
+Gibt an, ob & kdm;s eingebaute Registrierung in utmp/wtmp/lastlog benutzt werden soll. Falls nicht, sollte das Programm sessreg in den Skripten Startup und Reset, oder alternativ das PAM -Modul pam_lastlog, verwendet werden.
+Die [X-*Greeter] Abschnittklasse von & kdmrc;
+Diese Abschnittklasse enthält Optionen, die die Einrichtung des & kdm;-Anmeldefensters (Greeter) betreffen.
+GUIStyle
+Geben Sie den Stil der Bedienelemente für das Anmeldefenster an. Wenn Sie die Option leer lassen, wird die eingebaute Voreinstellung verwendet (derzeit Plastik).
+ColorScheme
+Geben Sie das Farbschema für die Bedienelemente des Anmeldefensters ein. Ein leerer Eintrag bewirkt die Verwendung der Voreinstellung Gelbartiges-Grau mit hellblauben und gelben Elementen.
+LogoArea
+Legt fest, was im Anmeldefenster rechts neben den Eingabe-Textfeldern, bzw. falls UserList abeschaltet ist, über ihnen angezeigt werden soll:
+nothing
+Logo
+das mit LogoPixmap angegebene Bild
+Clock
+eine schicke analoge Uhr
+Die Voreinstellung ist Clock.
+LogoPixmap
+Das im Anmeldefenster anzuzeigende Bild, falls LogoArea auf Logo eingestellt ist.
+GreeterPos
+Die relative Position (in Prozent der Anzeigeausmaße, X, Y) an der die Mitte des Anmeldefensters erscheinen soll. & kdm; richtet das Fenster an den Bildschirmrändern aus, die es sonst möglicherweise überschneiden würde.
+Die Voreinstellung ist 50,50.
+GreeterScreen
+Dies ist der Bildschirm, auf dem das Anmeldefenster auf Mehrschirmsystemen (Multi-Head, Xinerama) erscheinen soll. Die Nummerierung beginnt bei 0. Bei Xinerama entspricht dies der Reihenfolge der Auflistung im Bereich ServerLayout der Datei XF86Config. -1 bedeutet, den Bildschirm oben links zu verwenden, -2 ist der Bildschirm oben rechts.
+GreetString
+Die Überschrift im Anmeldefenster. Ein leerer Eintrag deaktiviert die Überschrift.
+Die folgenden Platzhalter werden durch entsprechenden Werte ersetzt:
+%d
+Name der aktuellen Anzeige
+%h
+der lokale Rechnername, möglicherweise mit Domänenname
+%n
+lokaler Rechnername, höchstwahrscheinlich der Rechnername ohne den Domänennamen
+%s
+das Betriebssystem
+%r
+die Betriebssystemversion
+%m
+Maschinentyp (Hardwarebezogen)
+%%
+das Prozentzeichen%
+Die Voreinstellung ist Willkommen zu %s auf %n.
+AntiAliasing
+Legt fest, ob die Kantenglättung für die Schrift im Anmeldefenster aktiviert werden soll.
+GreetFont
+Die Schriftart für die Überschrift des Anmeldefensters.
+Die Voreinstellung ist Serif,24,bold.
+StdFont
+Die normale Schrift im Anmeldefenster.
+Die Voreinstellung ist Sans Serif,10.
+FailFont
+Die Schriftart, die für die Nachricht Anmeldung fehlgeschlagen verwendet wird.
+Die Voreinstellung ist Sans Serif,10,fett.
+NumLock
+Legt den Status der Num Lock-Taste im Anmeldefenster fest:
+Off
+abschalten
+On
+einschalten
+Keep
+den aktuellen Status beibehalten
+Die Voreinstellung ist Keep.
+Language
+Die im Anmeldefenster zu verwendenden Regional- und Spracheinstellung, kodiert wie $LC_LANG.
+Die Voreinstellung ist en_US.
+UserCompletion
+Aktiviert die automatische Vervollständigung im Textfeld für den Benutzernamen.
+UserList
+Zeigt eine Liste mit Benutzernamen, echten Namen und Bildern im Anmeldefenster an.
+ShowUsers
+Diese Einstellung legt fest, welche Benutzer in der Benutzerliste (Option UserList) angezeigt werden und/oder für Autovervollständigung (UserCompletion) zur Verfügung stehen. Bei Wahl von Selected, enthält SelectedUsers eine endgültige Liste der Benutzer. Mit der Einstellung NotHidden enthält die Liste anfangs alle gefundenen Benutzern im System. In HiddenUsers aufgeführte Benutzer werden aus der Liste entfernt, genauso wie alle Benutzer mit einer UID größer MaxShowUID, oder einer UID die nicht 0 und kleiner als MinShowUID ist. Einträge in SelectedUsers und HiddenUsers mit einem vorangestellten @ repräsentieren alle Benutzer der so genannten Gruppe. Schlussendlich wird die fertige Liste alphabetisch sortiert, sofern die Option SortUsers aktiviert ist.
+Die Voreinstellung ist NotHidden.
+SelectedUsers
+Siehe ShowUsers.
+HiddenUsers
+MinShowUID
+MaxShowUID
+Die Voreinstellung ist 65535.
+SortUsers
+FaceSource
+Wenn UserList aktiviert ist, wird hiermit angegeben, aus welchen Quellen & kdm; die Benutzerbilder bezieht:
+AdminOnly
+aus lt; FaceDir gt;/$ USER .face[.icon]
+PreferAdmin
+bevorzugt & lt; FaceDir gt;, ansonsten $HOME
+PreferUser
+... und anders herum
+UserOnly
+aus dem Persönlichen Ordner $HOME /.face[.icon] des Benutzers
+Die Bilder dürfen in jedem von Qt unterstützten Format vorliegen, aber der Dateiname muss den folgenden Erwartungen von & kdm; entsprechen: .face.icon muss ein 48x48 Pixel großes Symbol sein, während .face ein 300x300 Pixel großes Bild ist. Derzeit wird das große Bild nur als Sicherheit verwendet. Es wird dann auf die benötigte Größe verkleinert. Möglicherweise wird es aber in Zukunft auch im Logobereich oder einem Kurztipp angezeigt.
+Die Voreinstellung ist AdminOnly.
+FaceDir
+Siehe FaceSource.
+Die Voreinstellung ist ${kde_datadir }/kdm/faces.
+PreselectUser
+Gibt an, ob und welcher Benutzer für die Anmeldung vorausgewählt sein soll:
+keinen Benutzer vorauswählen
+Previous
+der Benutzer, der sich als letzter erfolgreich angemeldet hat
+Default
+Der Benutzer, der in der Option DefaultUser angegeben ist
+Falls FocusPassword aktiviert ist und ein Benutzer vorausgewählt wurde, so wird die Schreibmarke automatisch in das Passworteingabefeld gestellt, so dass direkt mit der Passworteingabe begonnen werden kann.die
+Die Vorauswahl eines Benutzers kann als Sicherheitsrisiko empfunden werden, weil einem möglichen Angreifer auf diese Weise ein gültiger Benutzername verraten wird. Nun muss er nur noch das Passwort erraten und nicht mehr beides. Auf der anderen Seite könnte man auch DefaultUser entsprechend setzen, um einen gefälschten Benutzernamen einzustellen.
+DefaultUser
+Siehe PreselectUser.
+FocusPasswd
+EchoPasswd
+Wenn true, wird das eingegebene Passwort in Form von Sternchen dargestellt. Andernfalls erfolgt bei Eingabe des Passworts keine sichtbare Ausgabe.
+UseBackground
+Falls aktiviert, wird & kdm; automatisch das Programm krootimage starten, um den Hintergrund einzurichten. Ansonsten ist Das Setup -Programm dafür zuständig.
+BackgroundCfg
+Die Konfigurationsdatei für krootimage. Sie enthält einen Abschnitt [Desktop0], genauso wie kdesktoprc auch. Die Optionen werden hier nicht weiter beschrieben. Erraten Sie deren Bedeutung oder verwenden Sie das Kontrollzentrum zur Einstellung.
+Die Voreinstellung ist ${kde_confdir }/kdm/backgroundrc.
+GrabServer
+Zur Erhöhung der Sicherheit beansprucht das Anmeldefenster exklusiv den & X-Server; und anschließend beim Start die Tastatur. Diese Option gibt an, ob die Beanspruchung für die Dauer des Auslesens von Name und Passwort beibehalten werden soll. Wenn Deaktiviert, wird der & X-Server; wieder freigegeben, sobald die Tastatur erfolgreich beansprucht wurde, ansonsten wird der & X-Server; bis kurz vor den Sitzungsstart beansprucht.
+Das Aktivieren dieser Einstellung deaktiviert die Optionen UseBackground und Setup.
+GrabTimeout
+Diese Option gibt die maximale Wartezeit für & kdm; an, bis eine Beanspruchung erfolgreich ist. Eine Beanspruchung könnte scheitern, wenn der & X-Server; oder die Tastatur bereits durch einen anderen X-Client beansprucht wurde oder wenn die Wartezeit im Netzwerk ziemlich hoch ist. Sie sollten die Wartezeit nicht unvorsichtig heraufsetzen, denn ein Benutzer könnte getäuscht werden durch ein Fenster, welches wie das Anmeldefenster von & kdm; aussieht. Falls die Beanspruchung durch & kdm; fehlschlägt, wird der & X-Server; beendet und neu gestartet.
+Die Voreinstellung ist 3.
+AuthComplain
+Warnen, falls eine Anzeige keine X-Autorisierung hat. Dies ist der Fall, wenn
+die Datei mit den Autorisierungsdaten für den lokalen & X-Server; nicht erstellt werden konnte,
+eine entfernte & XDMCP;-Anzeige keine Autorisierung angefordert hat oder
+die Anzeige eine entfernte Anzeige aus der Liste StaticServers ist.
+LoginMode
+Gibt an, ob das Anmeldefenster für lokale Anzeigen mit der Auswahl von entfernten Rechnern oder der lokalen Anmeldung starten soll und ob der Wechsel zum jeweils anderen Modus erlaubt ist.
+LocalOnly
+nur lokale Anmeldung möglich
+DefaultLocal
+im lokalen Modus starten, das Umschalten in den entfernten Modus ist erlaubt
+DefaultRemote
+RemoteOnly
+es können nur entfernte Rechner ausgewählt werden
+Die Voreinstellung ist LocalOnly.
+ChooserHosts
+Eine Liste mit Rechnern, die automatisch zum Menü für entfernte Anmeldungen hinzugefügt werden. Der besondere Eintrag * meint Broadcast. Dies hat keine Wirkung, wenn LoginMode auf LocalOnly eingetstellt ist.
+Die Voreinstellung ist *.
+ForgingSeed
+Diese Zahl wird als Zufallsbasis verwendet, wenn gefälschte gespeichterte Sitzungstypen & etc; für unbekannte Nutzer generiert werden. Dies ist nützlich, um einem potentiellen Angreifer keine Rückschlüsse auf real existierende Benutzer zu ermöglichen. Dieser Wert sollte zufällig, aber einheitlich über die gesamte Anmeldedomäne sein.gefäl
+ShowLog
+Aktiviert & kdm;s eingebaute xconsole. Hinweis: Dies kann nur für eine Anzeige gleichzeitig aktiv sein. Die Option ist nur verfügbar, wenn & kdm; mit der Option --enable-kdm-xconsole konfiguriert und kompiliert wurde.
+LogSource
+Die Datenquelle für & kdm;s eingebaute xconsole. Falls leer, wird eine Protokollumleitung von /dev/console angefordert. Dies zeigt keine Wirkung, wenn ShowLog deaktiviert ist.
+PluginsLogin
+Gibt Kommunikationserweiterungen für das Anmeldefenster an; die erste in der Liste ist eingangs ausgewählt. Jede Erweiterung kann mit dem Basisnamen (expandiert zu $kde_modulordner /kgreet_ basis) oder dem vollständigen Pfad angegeben werden.
+Kommunikationserweiterungen sind Module für das Anmeldefenster, mit deren Hilfe Authentifizierungsdaten über Benutzer eingeholt werden können. Mit & kde; wird derzeit nur die classic -Erweiterung ausgeliefert, welche die typische Form Benutzername/Passwort unterstützt.Authe
+Die Voreinstellung ist classic.
+PluginsShutdown
+Das Gleiche wie PluginsLogin, nur für den Herunterfahren-Dialog.
+PluginOptions
+Eine Liste mit Optionen in der form Schlüssel = Wert. Die Kommunikationserweiterungen können diese Einstellungen abrufen; welche Schlüssel-Wert-Paare gültig sind, liegt im Ermessen der jeweiligen Erweiterung.
+AllowConsole
+Zeigt die Option zur Konsolen-Anmeldung im Anmeldefenster an (falls ServerTTY / ConsoleTTYs eingerichtet ist).
+AllowClose
+Zeigt die Option X-Server neu starten / Verbindung schließen im Anmeldefenster an.
+Preloader
+Ein Programm, welches läuft, während das Anmeldefenster sichtbar ist. Dieses soll soviel wie möglich von der (wahrscheinlich) zu startenden Sitzung im Voraus laden.
+UseTheme
+Legt fest, ob das Anmeldefenster einen bestimmten Stil erhalten soll
+Theme
+Der für das Anmeldefenster zu verwendende Stil. Dies kann entweder auf einen Ordner oder auf eine XML-Datei verweisen.
+Angeben permanenter & X-Server;
+Jeder Eintrag in der Liste StaticServers definiert eine Anzeige, die dauerhaft verwaltet werden soll und kein & XDMCP; verwendet. Diese Methode wird typischerweise nur für lokale, von & kdm; gestartete & X-Server; verwendet; & kdm; kann jedoch auch externe Anzeigen verwalten, egal ob sie auf dem gleichen Rechner oder räumlich entfernt laufen.
+Die formale Syntax lautet: Anzeigename nbsp;[ _ Anzeigeklasse] für alle & X-Server;. Fremde Anzeigen unterscheiden sich darin, dass sie den Rechnernamen im Namen der Anzeige enthalten, und sei es nur localhost.
+Der Anzeigename muss der Option -display des X-Programmes angehängt werden können. Diese Angabe wird zum Erzeugen der Anzeigespezifischen Abschnittsnamen verwendet, achten Sie also darauf, die Namen korrekt anzugeben. Der Anzeigename von & XDMCP;-Anzeigen wird aus der Adresse des rückwärts aufgelösten Rechnernamens generiert. Zu Zwecken der Konfiguration wird das Präfix localhost von lokal laufenden & XDMCP;-Anzeigen nicht entfernt, um sie von durch & kdm; gestarteten Anzeigen unterscheiden zu können.
+Die Anzeigeklasse wird auch in den Anzeigespezifischen Bereichen verwendet. Dies ist nützlich, wenn Sie viele ähnliche Anzeigen und Einstellungen für die gesamte Gruppe festlegen möchten. Wenn Sie & XDMCP; verwenden, muss die Anzeige ihre Klasse bekanntmachen. Das Handbuch zu Ihrem Terminal sollte die Anzeigeklasse für Ihr Gerät angeben. Falls dies nicht der Fall sein sollte, können Sie & kdm; im Debug-Modus betreiben und mit grep das Protokoll nach class durchforsten.
+Die in ReserveServers angegebenen Anzeigen werden nicht beim Start von & kdm; gestartet, sondern wenn der Start explizit über den Befehls-Socket angefordert wird. Wenn Reserver-Anzeigen angegeben sind, wird das & kde;-Menü ziemlich weit unten den Eintrag Neue Sitzung starten anzeigen; damit können Sie eine neue Reserve-Anzeige mit einer neuen Sitzung starten. Ihr Bildschirm wird zu der neuen Sitzung umschalten und Sie haben eine Minute Zeit, sich anzumelden. Wenn keine weiteren Reserve-Anzeigen mehr verfügbar sind, wird der Menüeintrag ausgeblendet.
+Wenn & kdm; eine Sitzung startet, werden die Authorisierungsdaten für den & X-Server; eingerichtet. Für lokale Server übergibt & kdm; die Option -auth nbsp; Dateiname an den & X-Server; und übergibt damit die nötigen Daten. Für & XDMCP;-Anzeigen übergibt & kdm; die Daten über die & XDMCP;- Accept -Nachricht.
+& XDMCP; Zugriffskontrolle
+Die mit AccessFile angegebene Datei enthält Informationen, mit denen & kdm; die Kontrolle über Verbindungsversuche von entfernten & XDMCP;-Anzeigen regelt. Die Datei enthält vier Arten von Einträgen: Regeln zur Reaktion auf direkte und Broadcast -Anfragen, Regeln zur Reaktion auf indirekte Anfragen, Makrodefinitionen für indirekte Anfragen und Einträge, die festlegen, auf welchen Netzwerkschnittstellen & kdm; auf & XDMCP;-Anfragen wartet. Leere Zeilen werden ignoriert, # wird als Kommentarzeichen gewertet, woraufhin der Rest der Zeile ignoriert wird, und\\ bewirkt, dass ein direkt darauf folgendes newline -Zeichen ignoriert wird, um & eg; eine Liste über mehrere Zeilen realisieren zu können.
+Das Format der indirekten Einträge ist einfach, entweder ein Rechnername oder Muster, welches mit dem Rechnernamen des Anzeigegerätes verglichen wird. Alternativ kann ein Makro verwendet werden, damit der Eintrag auf alles passt, wozu das Makro aufgelöst werden kann. Muster werden von Rechnernamen mit Hilfe von einem oder mehr Metazeichen unterschieden: * passt auf eine Folge von 0 oder mehr Zeichen und? passt auf genau ein beliebiges Zeichen. Wenn der Eintrag ein Rechnername ist, werden alle Vergleiche mit Hilfe von Netzwerkadressen durchgeführt. Jeder Name, der zur korrekten Adresse aufgelöst werden kann, ist gültig. Nur die erste für einen Rechnernamen ermittelte Netzwerkadresse wird verwendet. Für Muster werden nur kanonische Rechnernamen in den Vergleich einbezogen, stellen Sie also sicher, dass Sie keine Aliase verwenden. Rechnernamen aus & XDMCP;-Anfragen enthalten immer den lokalen Domänennamen, selbst wenn die Rückwärtsauflösung einen Kurznamen zurückliefert. Sie können also Muster für die lokale Domäne verwenden. Wenn Sie einem Eintrag ein! voranstellen, so wird die Bedeutung umgekehrt, der Rechner also ausgeschlossen. Das Voranstellen von = hat keine Auswirkung, ist aber bei Angabe eines Makros nötig, um den Eintrag von einer Makro-Definition zu unterscheiden. Um nur auf direkte Anfragen für einen Rechner oder Muster zu reagieren, können Sie dem Eintrag das Stichwort NOBROADCAST anhängen. Auf diese Weise können Sie verhindern, dass ein & kdm;-Server in Menüs erscheint, die auf Broadcasts reagieren.
+Ein indirekter Eintrag enthält ebenfalls einen Rechnername, ein Muster oder ein Makro, jedoch folgt dem Eintrag eine Liste mit Rechnernamen oder Makros, an die die Anfragen weitergeleitet werden sollen. Indirekte Einträge können ebenfalls ausschließen. In diesem Fall müssen Sie einen (gültigen) dummy-Rechnernamen zur Verfügung stellen, damit der Eintrag von einem direkten Eintrag unterschieden werden kann. Falls & kdm; über IPv6-Unterstützung verfügt, können auch Multicast-Adressgruppen in der Liste erscheinen. Wenn die Liste der indirekten Rechner das Stichwort CHOOSER enthält, so werden indirekte Anfragen nicht weitergeleitet, sondern stattdessen wird die Rechnerauswahl von & kdm; angezeigt. Diese wiederum sendet direkte Anfragen an jeden der verbleibenden Einträge in der Liste und offeriert dann ein Menü mit allen antwortenden Anzeigen. Die Rechnerliste kann auch das Stichwort BROADCAST enthalten, damit der Chooser auch Broadcast -Anfragen sendet. Beachten Sie bitte, dass einige Systeme keine UDP-Pakete via broadcast senden können, daher wird diese Funktion dort nicht korrekt arbeiten.
+Bei der Überprüfung der Zugangsberechtigung für einen bestimmten Rechner wird jeder Eintrag durchgegangen und der erste passende Eintrag entscheidet über die Antwort. Direkte und Broadcast -Anfragen werden ignoriert, wenn nach einem indirekten Eintrag gesucht wird, und umgekehrt funktioniert es genauso.
+Eine Makrodefinition enthält einen Makronamen und eine Liste mit Rechnernamen und weiteren Makros, auf die dieses Makro expandiert. Um Makros von Rechnernamen unterscheiden zu können, starten Sie mit dem Prozentzeichen%.
+Der letzte Eintrag dieser Art ist die LISTEN -Direktive. Die formale Syntax lautet: nbsp; LISTEN nbsp;[ Schnittstelle nbsp;[ multicast-liste]] Wenn eine oder mehrere LISTEN -Einträge angegeben sind, wartet & kdm; nur an den definierten Netzwerkschnittstellen auf & XDMCP;-Anfragen. Schnittstellen können entweder Rechnernamen oder IP-Adressen von Netzwerkkarten auf diesem Rechner sein. Der Platzhalter * repräsentiert alle verfügbaren Netzwerkschnittstellen. Wenn Multicast-Gruppenadressen in einer LISTEN -Zeile angegeben werden, so tritt & kdm; diesen Multicast-Gruppen an der Schnittstelle bei. Für IPv6-Multicast hat die IANA ff0 X :0:0:0:0:0:0:12b als den permanent zugewiesenen Adressbereich für & XDMCP; vorgesehen. Das X im Präfix kann durch einen gültigen Bereichsidentifizierer (scope), wie & eg; 1 für Node-Local, 2 für Link-Local, 5 für Site-Local & etc; (siehe IETF RFC 2373) vergeben werden. & kdm; verwendet in der Voreinstellung die Link-Local-Adresse ff02:0:0:0:0:0:0:12b um möglichst nah am IPv4-Pendant zu sein. Wenn keine LISTEN -Zeilen angegeben werden, wartet & kdm; auf allen Schnittstellen und betritt die Standard-Multicastgruppe für & XDMCP;-Anfragen. Um das Warten auf & XDMCP;-Verbindungen zu deaktivieren, können Sie eine LISTEN -Zeile ohne Adresse angeben, jedoch wird die Verwendung von [Xdmcp] Enable vorgezogen.
+Hilfsprogramme
+Die folgenden Programme werden von & kdm; in bestimmten Startphasen ausgeführt. Es handelt sich typischerweise um Shell-Skripte.
+Die Setup-, Startup- und Reset-Programme werden als Systemverwalter root ausgeführt. Beim Erstellen dieser Skripte sollte man die Systemsicherheit im Auge behalten. Das erste Argument ist auto, sofern die Sitzung aus einer automatischen Anmeldung resultiert; ansonsten werden keine Argumente an die Skripte übergeben.
+Setup-Programm
+Das Programm Xsetup wird ausgeführt, nachdem der & X-Server; gestartet oder zurückgesetzt wurde, aber befor das Anmeldefenster angezeigt wird. Hier können Sie & eg; den Hintergrund manipulieren (falls die Option UseBackground deaktiviert ist) oder zusätzliche Fenster anzeigen lassen.
+Zusätzlich zu den mit ExportListe angegebenen, werden noch die folgenden Umgebungsvariablen übergeben:
+DISPLAY
+der zugewiesene Anzeigename
+PATH
+der Wert von SystemPath
+SHELL
+der Wert von SystemShell
+XAUTHORITY
+kann auf eine authority-Datei gesetzt werden
+DM_CONTROL
+der Wert von FifoDir
+Beachten Sie, dass andere Fenster keinerlei Eingaben von der Tastatur erhalten werden, weil & kdm; die Tastatur für sich beansprucht. Die Interaktion mit der Maus ist jedoch möglich. Gehen Sie vorsichtig mit möglichen Sicherheitsproblemen um. Wenn GrabServer aktiviert ist, kann Xsetup gar keine Verbindung zur Anzeige herstellen. Ressourcen für dieses Programm können in der Datei Resources abgelegt werden.
+Startup-Programm
+Das Programm Startup wird als Systemverwalter root ausgeführt, wenn der Benutzer sich anmeldet. Hier können Einträge in utmp vorgenommen werden (dafür könnte sessreg nützlich sein), entfernte Persönliche Ordner des Benutzers eingebunden werden, oder die Sitzung beendet werden falls eine Voraussetzung nicht erfüllt wird. Die meisten dieser Aufgaben werden auf modernen Systemen bereits von entsprechenden PAM -Modulen bereitgestellt.
+HOME
+der initiale Arbeitsordner des Benutzers
+LOGNAME
+der Benutzername
+USER
+& kdm; wartet, bis das Programm sich beendet, bevor die eigentliche Sitzung des Benutzers startet. Wenn der Rückgabewert des Programms nicht 0 ist, wird & kdm; die Sitzung nicht fortführen und stattdessen erneut authentifizieren.
+Session-Programm
+Das Programm Xsession ist der Befehl, welches als die Sitzung des Benutzers ausgeführt wird. Sie wird mit den Rechten des angemeldeten Benutzers ausgeführt. Das erste Argument an das Programm ist der Wert failsafe, default oder custom oder eine Zeichenkette, die von einer Bourne-Shell ausgewertet werden kann.Zeichenket
+der Wert von UserPath (oder SystemPath für root -Sitzungen)
+Die Standard-Shell des Benutzers
+kann auf eine vom Standard abweichende Authority-Datei eingestellt werden
+KRBTKFILE
+kann auf einen Kerberos4-Benutzerdaten-Zwischenspeicher-Namen eingestellt werden
+KRB5CCNAME
+kann auf einen Kerberos5-Benutzerdaten-Zwischenspeicher-Namen eingestellt werden
+XDM_MANAGED
+wird eine kommaseparierte Liste mit Parametern enthalten, die für die Sitzung interessant sein könnten. Dazu gehört zum Beispiel welche Kommunikationserweiterung für die Anmeldung benutzt wurde.
+DESKTOP_SESSION
+der Name der Sitzung, die der Benutzer ausgewählt hat
+Reset-Programm
+Entsprechend zu Xstartup wird Xreset ausgeführt, nachdem die Sitzung beendet wurde. Dies wird als Systemverwalter root ausgeführt und sollte die Befehle zum Rückgängigmachen der Befehle aus Xstartup enthalten. Dazu gehört & eg; das Entfernen der Einträge aus utmp oder das Lösen der Laufwerkseinbindungen von Dateiservern.
+Die Umgebungsvariablen, die an Xstartup übergeben wurden, werden ebenso an Xreset übergeben.
+Die Datei (relativ zum Persönlichen Ordner des Benutzers) in die die Ausgaben der Sitzung umgeleitet werden sollen. Der Platzhalter %s wird in der Zeichenkette mit dem Namen der Anzeige ersetzt. Verwenden Sie%%, wenn Sie das Prozentzeichen% erhalten möchten.
+EchoMode
+Das Passworteingabefeld verschleiert den dort eingegebenen Text. Hier können Sie wählen, wie dies geschehn soll:
+OneStar
+Für jedes eingegebene Zeichen wird ein * angezeigt
+ThreeStars
+Für jedes eingegebene Zeichen werden drei Sterne *** angezeigt
+NoEcho
+es wird nichts angezeigt, der Cursor bewegt sich nicht
+Die Voreinstellung ist OneStar.

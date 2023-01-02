@@ -1,0 +1,145 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Chapitre 7.
+Les types
+Suivant
+Les chaînes de caractères sont des séquences de caractères.
+En PHP, un caractère est un octet, et il y en 256 de possibles.
+PHP n'a pas (encore?) de support natif d 'Unicode.
+
+La taille n 'est pas un problème majeur pour une chaîne.
+Elle peut devenir très grande sans problème.
+Il n'y a a pas à s 'en faire pour cela.
+Une chaîne peut être spécifiée de trois manières différentes:
+guillemets simples
+guillemets doubles
+syntaxe HereDoc
+Le moyen le plus simple de spécifier une chaîne de caractères est d'utiliser les guillemets simples: '.
+Pour spécifier un guillemet simple littéral, vous devez l'échapper avec un anti-slash (\), comme dans de nombreux langages.
+Si un anti-slash doit apparaître dans votre chaîne ou bien en fin de chaîne, il faudra le doubler.
+Notez que si vous essayez d'échapper n'importe quel autre caractère, l 'anti-slash sera conservé!
+Il n'y a pas besoin d'échapper d 'autres caractères que le guillemets lui-même.
+
+En PHP 3, une alerte sera affichée si cela arrive avec un niveau de rapport d 'erreur de E_NOTICE.
+
+Contrairement aux autres syntaxes, les variables présentes dans la chaîne ne seront PAS remplacées par leurs valeurs.
+?php echo 'Ceci est une chaîne simple'; echo 'Vous pouvez inclure des nouvelles lignes dans une chaîne, comme ceci .'; echo 'Arnold a coutume de dire: "I\'ll be back"'; / / affiche:... "I'll be back "echo 'Etes vous sûr de vouloir effacer le dossier C:\\*.* ?'; / / affiche:
+Etes vous sûr de vouloir effacer le dossier C:\*.*? echo 'Etes vous sûr de vouloir effacer le dossier C:\*.* ?'; / / affiche:
+Etes vous sûr de vouloir effacer le dossier C:\*.*? echo 'Je suis en train de mettre une nouvelle ligne comme ceci: \n'; / / affiche:
+Je suis en train de mettre une nouvelle ligne comme ceci: \n?
+Si la chaîne est entourés de guillemets doubles, PHP va comprendre certaines séquences de caractères:
+Tableau 7-1.
+Les caractères spéciaux
+Séquence
+Valeur
+
+Nouvelle ligne (linefeed, LF ou 0x0A (10) en ASCII)
+
+Retour à la ligne( carriage return, CR ou 0x0D (13) en ASCII)
+
+Tabulation horizontale (HT ou 0x09 (9) en ASCII)
+
+Antislash
+
+Caractère $
+
+Guillemets doubles
+
+Une séquence de caractères qui permet de rechercher un nombre en notation octale.
+
+Une séquence de caractères qui permet de rechercher un nombre en notation hexadécimale.
+Si vous essayez d'utiliser l'anti-slash sur n'importe quelle autre séquence, l 'anti-slash sera affiché dans votre chaîne.
+Le plus important des chaînes à guillemets doubles est le fait que les variables qui s 'y trouvent seront remplacées par leurs valeurs.
+Voir la section sur le traitement des variables dans les chaînes pour plus de détails.
+Un autre moyen de délimiter les chaînes est d'utiliser la syntaxe de "Here doc "(en français, documentation ici):, suivi d 'un identifiant arbitraire, puis de la chaîne.
+Cette séquence se termine par l 'identifiant initial, placé en premier sur une nouvelle ligne.
+L'identifiant utilisé doit suivre les mêmes règles que les étiquettes PHP: il ne doit contenir uniquement que des caractères alpha-numériques, et des soulignés ("_"), et enfin, commencer par un caractère alphabétique ou un souligné.
+Avertissement
+Il est très important de noter que la ligne qui contient l'identifiant de fermeture ne doit contenir aucun autre caractère, hormis, éventuellement, un point-virgule;.
+Cela signifie notamment que l'identifiant ne doit pas être indenté, et qu'il n'y a aucun caractère blanc entre le retour à la ligne et l'identifiant, ou bien entre l'identifiant et le;.
+Le plus dur est peut être qu'il ne faut pas qu'il y ait un retour à la ligne ((\r) à la fin de cette ligne, mais seulement un form-feed (\n).
+Puisque Microsoft Windows utilise la séquence \r\n Puisque Microsoft Windows utilise la séquence \r\n comme terminaison de ligne, la syntaxe heredoc risque de ne pas fonctionner là.
+Cependant, la plupart des éditeurs PHP fournissent une sauvegarde au format UNIX.
+La syntaxe Here doc se comporte exactement comme une chaîne à guillemets doubles, sans les guillemets doubles.
+Cela signifie que vous n'avez pas à échapper les guillemets (simples ou doubles) dans cette syntaxe.
+Les variables sont remplacées par leur valeur, et le même soin doit leur être apporté que dans les chaînes à guillemets doubles.
+Exemple 7-1.
+Exemple de chaîne HereDoc
+?php $str = EOD Exemple de chaîne s'étalant sur plusieurs lignes avec la syntaxe heredoc EOD; / * Exemple plus complexe, avec des variables. * / class foo {var $foo; var $bar; function foo() {$this - foo = 'Foo'; $this - bar = array('Bar1', 'Bar2', 'Bar3');}} $foo = new foo(); $name = 'MonNom'; echo EOT Mon nom est "$name ".
+J 'affiche des $foo - foo.
+Maintenant, j'affiche un {$foo - bar[1]}.
+Ceci se traduit par un 'A' majuscule: \x41 EOT;?
+
+Le support Here doc a été ajouté en PHP 4.
+Lorsqu'une chaîne est spécifiée avec des guillemets doubles, ou en utilisant la syntaxe heredoc, les variables qu 'elle contient sont remplacées par leur valeur.
+Il y a deux types de syntaxe, une simple et une complexe.
+La syntaxe simple est la plus courante, et la plus pratique: elle fournit un moyen d'utiliser les variables, que ce soit des chaînes, des tableaux ou des membres d 'objets.
+La syntaxe complexe a été introduite en PHP 4 et peut être reconnue grâce aux accolades entourant les expressions.
+Dès qu'un signe dollar $Dès qu'un signe dollar $est rencontré, l'analyseur PHP va lire autant de caractère qu 'il peut pour former un nom de variable valide.
+Entourez le nom de la variable avec des accolades pour indiquer explicitement son nom.
+?php $boisson = 'vin'; echo "Du $boisson, du pain et du fromage !'; / / OK, car "," n'est pas autorisé dans les noms de variables echo "Il a goûté plusieurs $vins"; / / Pas OK, car 's' peut entrer dans un nom de variable, et PHP recherche $boissons echo "Il a goûté plusieurs ${vin}s"; / / OK?
+Similairement, vous pouvez aussi utiliser un élément de tableau, ou un membre d 'objet.
+Pour les éléments de tableau, le crochet fermant ']' marquera la fin du nom de la variable.
+Pour les membres d'objets, les mêmes règles que ci-dessus s 'appliquent.
+Cependant, il n 'existe pas de truc comme pour les variables simples.
+$fruits = array( 'fraise '= 'rouge', 'banane '= 'jaune'); echo "Une banane est $fruits[banane] ."; / / OK.
+Notez toutefois que pour cet exemple, cela fonctionne / / différemment.
+Voyez $foo[ bar] hors des chaînes echo "Ce carré est large de $carre - largeur mètres ."; / / OK echo "Ce carré est large de $carre - largeur00 mètres. ."; / / pas OK / / pour résoudre ce problème, voyez syntaxe complexe.
+Pour tout ce qui sera plus compliqué, voyez la syntaxe complexe.
+La syntaxe est dite "complexe" car elle permet l'utilisation d 'expressions complexes, et non pas parcequ 'elle serait obscure.
+Nuance.
+En fait, vous pouvez inclure n'importe quelle valeur qui est dans l 'espace de nom avec cette syntaxe.
+Il suffit d'écrire une expression exactement comme si elle était hors de la chaîne, puis de l'entourer d'accolades {}.
+Puisque vous ne pouvez pas échapper les accolades, cette syntaxe ne commence qu'à partir du signe dollar, qui suit immédiatement l 'accolade ouvrante.
+Par exemple, vous pouvez utiliser "{\$" pour obtenir un "{$ "littéral.
+Voici quelques exemples:
+?php $super = 'fantastique'; echo "C'est {$super}"; / / ne fonctionne pas, / / affiche "C'est {fantastique} "echo "C'est {$super}"; / / fonctionne, / / affiche "C'est fantastique" echo "Ce carré a {$square - width}00 centimètres de large ."; echo "Ceci fonctionne: {$tableau[4][3]}"; echo "Ceci échoue: {$tableau[foo][3]}"; / / pour la même raison que $tableau[bar] ne fonctionne pas hors d'une chaîne echo "Essayez plutôt comme ceci: {$tableau['foo'][3]}"; echo "Vous pouvez même écrire {$objet - valeurs[3] - nom}"; echo "Voici la valeur de la variable nommée $name: {${$name}}"; / / cela fonctionne, mais c'est vivement déconseillé. / / Et pour finir, on peut combiner avec des fonctions $inv = 'Bordeaux'; echo "Je reprendrai bien un verre de cet excellent {${strrev('niv')}}, hips";?
+Les caractères d'une chaîne sont accessibles en spécifiant leur offset (le premier caractère est d'offset 0) entre accolade, après le nom de la variable.
+
+Pour assurer la compatibilité ascendante, vous pouvez toujours accéder aux caractères avec des crochets.
+Mais cette syntaxe est obsolète en PHP 4.
+Exemple 7-2.
+Exemples de chaînes
+?php / * Affectation d'une chaîne. * / $str = "Ceci est une chaîne"; / * Concaténation. * / $str = $str. "avec un peu plus de texte"; / * Une autre méthode de concaténation. * / $str .=" et une nouvelle ligne à la fin.\n"; / * Cette chaîne finira comme: 'p Nombre:
+9 / p '* / $num = 9; $str = "p Nombre: $num / p"; / * Celle-ci sera' p Nombre: $num / p '* / $num = 9; $str =' p Nombre: $num / p '; / * Premier caractère d'une chaîne * / $str = 'Ceci est un test .'; $first = $str{0}; / * Dernier caractère d'une chaîne. * / $str = 'This is still a test .'; $last = $str{strlen($str)-1};?
+Les chaînes peuvent être concaténées avec l'opérateur '.' (point).
+Notez que l'opérateur d'addition '+ '(plus) ne fonctionnera pas.
+Reportez-vous à la section opérateurs de chaînes.
+Il y a une grande quantité de fonctions pratiques pour modifier les chaînes.
+Reportez-vous à la section chaînes de caractères pour les fonctions les plus générales, à Expressions régulières Perl et Expressions régulières POSIX extendues pour les recherches et remplacements.
+Il y a aussi les fonctions sur les URL, ainsi que des fonctions de chiffrage (mcrypt et mhash).
+Finalement, si vous ne trouvez toujours pas votre bonheure, il y a les fonctions de types de caractères.
+Lorsqu 'une chaîne de caractère est évaluée comme une valeur numérique, le résultat et le type de la variable sont déterminés comme suit.
+La chaîne de caractères est de type "double" si elle contient un des caractère '.', 'e' ou 'E '.
+Sinon, elle est de type entier ("integer").
+La valeur est définie par la première partie de la chaîne.
+Si la chaîne de caractères débute par une valeur numérique cette valeur sera celle utilisée.
+Sinon, la valeur sera égale à 0 (zéro).
+Lorsque la première expression est une chaîne de caractères, le type de la variable dépend de la seconde expression.
+?php $foo = 1 + "10.5"; / / $foo est du type float (11.5) $foo = 1 + "-1.3e3"; / / $foo est du type float (-1299) $foo = 1 + "bob-1.3e3"; / / $foo est du type integer (1) $foo = 1 + "bob3"; / / $foo est du type integer (1) $foo = 1 + "10 Small Pigs"; / / $foo est du type integer (11) $foo = 1 + "10 Little Piggies"; / / $foo est du type integer (11) $foo = "10.0 pigs" + 1; / / $foo est du type integer (11) $foo = "10.0 pigs "+ 1.0; / / $foo est du type float (11)?
+Pour plus d'informations sur les conversions de type, voir les pages de man à propos de la fonction strtod(3).
+Si vous voulez testez l'un des exemples de cette section, vous pouvez faire un copier / coller et l 'insérer dans un script pour voir comment il se comporte.
+?php echo "\$foo==$foo; type is". gettype ($foo). "br \n";?
+Précédent
+Sommaire
+Suivant
+Les nombres à virgule flottante
+Niveau supérieur
+Les tableaux

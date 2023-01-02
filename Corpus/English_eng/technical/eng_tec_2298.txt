@@ -1,0 +1,85 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Appendix D.
+Debugging PHP
+Next
+The PHP 3 debugger protocol is line-based.
+Each line has a type, and several lines compose a message.
+Each message starts with a line of the type start and terminates with a line of the type end.
+PHP 3 may send lines for different messages simultaneously.
+A line has this format:
+Date in ISO 8601 format (yyyy - mm - dd)
+Time including microseconds: hh: mm: uuuuuu
+DNS name or IP address of the host where the script error was generated.
+PID (process id) on host of the process with the PHP 3 script that generated this error.
+Type of line.
+Tells the receiving program about what it should treat the following data as:
+Table D-1.
+Debugger Line Types
+Name
+Meaning
+start
+Tells the receiving program that a debugger message starts here.
+The contents of data will be the type of error message, listed below.
+message
+The PHP 3 error message.
+location
+File name and line number where the error occurred.
+The first location line will always contain the top-level location. data will contain file: line.
+There will always be a location line after message and after every function.
+frames
+Number of frames in the following stack dump.
+If there are four frames, expect information about four levels of called functions.
+If no "frames" line is given, the depth should be assumed to be 0 (the error occurred at top-level).
+function
+Name of function where the error occurred.
+Will be repeated once for every level in the function call stack.
+end
+Tells the receiving program that a debugger message ends here.
+Line data.
+Table D-2.
+Debugger Error Types
+Debugger
+PHP 3 Internal
+warning
+E_WARNING
+error
+E_ERROR
+parse
+E_PARSE
+notice
+E_NOTICE
+core-error
+E_CORE_ERROR
+core-warning
+E_CORE_WARNING
+unknown
+(any other)
+Example D-1.
+Example Debugger Message
+1998-04-05 23:27:400966 lucifer.guardian.no( 20481) start: notice1998-04-05 23:27:400966 lucifer.guardian.no(20481) start: notice 1998-04-05 23:27:400966 lucifer.guardian.no(20481) message:
+Uninitialized variable 1998-04-05 23:27:400966 lucifer.guardian.no( 20481) location: (NULL ):7Uninitialized variable 1998-04-05 23:27:400966 lucifer.guardian.no(20481) location: (NULL ):7 1998-04-05 23:27:400966 lucifer.guardian.no(20481) frames:
+1 1998-04-05 23:27:400966 lucifer.guardian.no( 20481) function: display 1998-04-05 23:27:400966 lucifer.guardian.no(20481) location: / home / ssb / public_html / test.php3:10 1998-04-05 23:27:400966 lucifer.guardian.no(20481) end: notice
+Prev
+Home
+Next
+Using the Debugger
+Up
+Extending PHP

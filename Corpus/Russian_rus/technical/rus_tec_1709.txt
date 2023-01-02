@@ -1,0 +1,66 @@
+# language_name_wals:	Russian
+# language_name_glotto:	Russian
+# iso639_3:	rus
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Cyrl
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/ru.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Инструкция Input# [время выполнения]
+/text/sbasic/shared/03020202.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+инструкция Input
+Инструкция Input# [время выполнения]
+Считывает данные из открытого последовательного файла.
+Синтаксис:
+Input #НомерФайла As Integer; var1[, var2[, var3[,...]]]
+Параметры:
+НомерФайла
+.
+Номер файла, из которого должны быть считаны данные.
+Такой файл должен быть открыт инструкцией Open с ключевым словом INPUT.
+var
+.
+Числовая или строковая переменная, которой присваивается значение, считываемое из открытого файла.
+Input#
+используется для считывания числовых значений или строк из открытого файла и для присваивания этих данных одной или более переменным.
+Числовая переменная считывается до первого возврата каретки (Asc=13), перевода строки (Asc=10), пробела или запятой.
+Строковая переменная считывается до первого возврата каретки (Asc=13), перевода строки (Asc=10) или запятой.
+Данные и типы данных в открытом файле должны появляться в том же порядке, что и переменные, переданные в параметр &quot; var &quot; .
+При попытке присвоить нечисловые значения числовой переменной параметру &quot; var &quot; будет присвоено значение &quot; 0 &quot; .
+Line Input#
+, который читает обычные текстовые файлы (содержащие только печатные символы) построчно.
+Если конец файла достигнут при считывании элемента данных, появляется ошибка, и процесс прерывается.
+Пример:
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; Это строка текста &quot;
+Print #iNumber, &quot; Это еще одна строка текста &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
+End Sub

@@ -1,0 +1,59 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 18.
+Handling file uploads
+Next
+PUT method support has changed between PHP 3 and PHP 4.
+In PHP 4, one should use the standard input stream to read the contents of an HTTP PUT.
+Example 18-4.
+Saving HTTP PUT files with PHP 4
+?php / * PUT data comes in on the stdin stream * / $putdata = fopen( "php: / /stdin" ,"r"); / * Open a file for writting * / $fp = fopen("myputfile.ext" ,"w"); / * Read the data 1kb at a time and write to the file * / while ($data = fread($putdata,1024)) fwrite($fp,$data); / * Close the streams * / fclose($fp); fclose($putdata);?
+Note:
+All documentation below applies to PHP 3 only.
+PHP provides support for the HTTP PUT method used by clients such as Netscape Composer and W3C Amaya.
+PUT requests are much simpler than a file upload and they look something like this:
+PUT / path / filename.html HTTP / 1.1
+This would normally mean that the remote client would like to save the content that follows as: / path / filename.html in your web tree.
+It is obviously not a good idea for Apache or PHP to automatically let everybody overwrite any files in your web tree.
+So, to handle such a request you have to first tell your web server that you want a certain PHP script to handle the request.
+In Apache you do this with the Script In Apache you do this with the Script directive.
+It can be placed almost anywhere in your Apache configuration file.
+A common place is inside a Directory block or perhaps inside a Virtualhost block.
+A line like this would do the trick:
+Script PUT / put.php
+This tells Apache to send all PUT requests for URIs that match the context in which you put this line to the put.php script.
+This assumes, of course, that you have PHP enabled for the .php extension and PHP is active.
+Inside your put.php file you would then do something like this:
+?php copy( $PHP_UPLOADED_FILE_NAME,$DOCUMENT_ROOT.$REQUEST_URI);?
+This would copy the file to the location requested by the remote client.
+You would probably want to perform some checks and / or authenticate the user before performing this file copy.
+The only trick here is that when PHP sees a PUT-method request it stores the uploaded file in a temporary file just like those handled but the POST-method.
+When the request ends, this temporary file is deleted.
+So, your PUT handling PHP script has to copy that file somewhere.
+The filename of this temporary file is in the $PHP_PUT_FILENAME variable, and you can see the suggested destination filename in the $REQUEST_URI (may vary on non-Apache web servers).
+This destination filename is the one that the remote client specified.
+You do not have to listen to this client.
+You could, for example, copy all uploaded files to a special uploads directory.
+Prev
+Home
+Next
+Uploading multiple files
+Up
+Using remote files

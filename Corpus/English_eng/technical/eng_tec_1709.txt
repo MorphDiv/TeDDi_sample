@@ -1,0 +1,69 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/en_GB.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Put Statement [Run-time]
+/text/sbasic/shared/03020204.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+Put statement
+Put Statement [Run-time]
+Writes a record to a relative file or a sequence of bytes to a binary file.
+Get
+statement
+Syntax:
+Put [#] FileNumber As Integer, [position], Variable
+Parameters:
+FileNumber:
+An integer expression that defines the file that you want to write to.
+Position:
+For relative files (random access files), the number of the record that you want to write.
+For binary files (binary access), the position of the byte in the file from which you want to start writing.
+Variable:
+Name of the variable that you want to write to the file.
+Len
+clause of the
+Open
+statement, the space between the end of the newly written record and the next record is padded with existing data from the file that you are writing to.
+Note for binary files:
+The contents of the variables are written to the specified position and the file pointer is inserted directly after the last byte.
+No space is left between the records.
+Example:
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM Must be a variant type
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM Position to start writing
+Put #iNumber,, &quot; This is the first line of text &quot; REM Fill line with text
+Put #iNumber,, &quot; This is the second line of text &quot;
+Put #iNumber,, &quot; This is the third line of text &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; This is new text &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; This is the text in record 20 &quot;
+Print Lof(#iNumber)
+Close #iNumber
+end sub

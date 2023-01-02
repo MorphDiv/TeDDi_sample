@@ -1,0 +1,122 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 33.
+Creating Variables
+Next
+Resources are a special kind of data type in PHP.
+The term resources doesn 't really refer to any special kind of data, but to an abstraction method for maintaining any kind of information.
+Resources are kept in a special resource list within Zend.
+Each entry in the list has a correspondending type definition that denotes the kind of resource to which it refers.
+Zend then internally manages all references to this resource.
+Access to a resource is never possible directly - only via a provided API.
+As soon as all references to a specific resource are lost, a corresponding shutdown function is called.
+For example, resources are used to store database links and file descriptors.
+The de facto standard implementation can be found in the MySQL module, but other modules such as the Oracle module also make use of resources.
+Note:
+In fact, a resource can be a pointer to anything you need to handle in your functions (e.g. pointer to a structure) and the user only has to pass a single resource variable to your function.
+To create a new resource you need to register a resource destruction handler for it.
+Since you can store any kind of data as a resource, Zend needs to know how to free this resource if its not longer needed.
+This works by registering your own resource destruction handler to Zend which in turn gets called by Zend whenever your resource can be freed (whether manually or automatically).
+Registering your resource handler within Zend returns you the resource type handle Registering your resource handler within Zend returns you the resource type handle for that resource.
+This handle is needed whenever you want to access a resource of this type later and is most of time stored in a global static variable within your extension.
+There is no need to worry about thread safety here because you only register your resource handler once during module initialization.
+The Zend function to register your resource handler is defined as:
+ZEND_API int zend_register_list_destructors_ex( rsrc_dtor_func_t ld, rsrc_dtor_func_t pld, char *type_name, int module_number);
+There are two different kinds of resource destruction handlers you can pass to this function: a handler for normal resources and a handler for persistent resources.
+Persistent resources are for example used for database connection.
+When registering a resource, either of these handlers must be given.
+For the other handler just pass NULL.
+zend_register_list_destructors_ex() accepts the following parameters:
+ld
+Normal resource destruction handler callback
+pld
+Pesistent resource destruction handler callback
+type_name
+A string specifying the name of your resource.
+It' s always a good thing to specify an unique name within PHP for the resource type so when the user for example calls var_dump($resource); he also gets the name of the resource.
+module_number
+The module_number is automatically available in your PHP_MINIT_FUNCTION function and therefore you just pass it over.
+The resource destruction handler (either normal or persistent resources) has the following prototype:
+void resource_destruction_handler( zend_rsrc_list_entry *rsrc TSRMLS_DC);
+typedef struct _zend_rsrc_list_entry {void *ptr; int type; int refcount;} zend_rsrc_list_entry;
+Now we know how to start things, we define our own resource we want register within Zend.
+It is only a simple structure with two integer members:
+typedef struct {int resource_link; int resource_type;} my_resource;
+void my_destruction_handler( zend_rsrc_list_entry *rsrc TSRMLS_DC) {/ / You most likely cast the void pointer to your structure type my_resource *my_rsrc = (my_resource *) rsrc - ptr; / / Now do whatever needs to be done with you resource.
+Closing / / Files, Sockets, freeing additional memory, etc. / / Also, don' t forget to actually free the memory for your resource too! do_whatever_needs_to_be_done_with_the_resource(my_rsrc);}
+Note:
+One important thing to mention:
+If your resource is a rather complex structure which also contains pointers to memory you allocated during runtime you have to free them before freeing the resource itself!
+Now that we have defined
+what our resource is and
+our resource destruction handler
+create a global variable within the extension holding the resource ID so it can be accessed from every function which needs it
+define the resource name
+write the resource destruction handler
+and finally register the handler
+/ / Somewhere in your extension, define the variable for your registered resources. / / If you wondered what 'le' stands for: it simply means'list entry'. static int le_myresource; / / It's nice to define your resource name somewhere #define le_myresource_name "My type of resource "[...] / / Now actually define our resource destruction handler void my_destruction_handler(zend_rsrc_list_entry *rsrc TSRMLS_DC) {my_resource *my_rsrc = (my_resource *) rsrc - ptr; do_whatever_needs_to_be_done_with_the_resource(my_rsrc);} [...] PHP_MINIT_FUNCTION(my_extension) {/ / Note that'module_number 'is already provided through the / / PHP_MINIT_FUNCTION() function definition. le_myresource = zend_register_resource_destructors_ex(my_destruction_handler, NULL, le_myresource_name, module_number); / / You can register additional resources, initialize / / your global vars, constants, whatever.}
+To actually register a new resource you use can either use the zend_register_resource() function or the ZEND_REGISTER_RESOURE() macro, both defined in zend_list.h.
+Although the arguments for both map 1:1 it 's a good idea to always use macros to be upwards compatible:
+int ZEND_REGISTER_RESOURCE( zval *rsrc_result, void *rsrc_pointer, int rsrc_type);
+rsrc_result
+This is an already initialized zval * container.
+rsrc_pointer
+Your resource pointer you want to store.
+rsrc_type
+The type which you received when you registered the resource destruction handler.
+If you followed the naming scheme this would be le_myresource.
+What is really going on when you register a new resource is it gets inserted in an internal list in Zend and the result is just stored in the given zval * container:
+rsrc_id = zend_list_insert( rsrc_pointer, rsrc_type); if (rsrc_result) {rsrc_result - value.lval = rsrc_id; rsrc_result - type = IS_RESOURCE;} return rsrc_id;
+RETURN_RESOURCE( rsrc_id)
+Note:
+It is common practice that if you want to return the resource immidiately to the user you specify the return_value as the zval * container.
+Zend now keeps track of all references to this resource.
+As soon as all references to the resource are lost, the destructor that you previously registered for this resource is called.
+The nice thing about this setup is that you don 't have to worry about memory leakages introduced by allocations in your module - just register all memory allocations that your calling script will refer to as resources.
+As soon as the script decides it doesn 't need them anymore, Zend will find out and tell you.
+Now that the user got his resource, at some point he is passing it back to one of your functions.
+The value.lval inside the zval * container contains the key to your resource and thus can be used to fetch the resource with the following macro:
+ZEND_FETCH_RESOURCE:
+ZEND_FETCH_RESOURCE( rsrc, rsrc_type, rsrc_id, default_rsrc_id, resource_type_name, resource_type)
+rsrc
+This is your pointer which will point to your previously registered resource.
+rsrc_type
+This is the typecast argument for your pointer, e.g. myresource *.
+rsrc_id
+This is the address of the zval * container the user passed to your function, e.g. z_resource if zval *z_resource is given.
+default_rsrc_id
+This integer specifies the default resource ID if no resource could be fetched or -1.
+resource_type_name
+This is the name of the requested resource.
+It' s a string and is used when the resource can't be found or is invalid to form a meaningful error message.
+resource_type
+The resource_type you got back when registering the resource destruction handler.
+In our example this was le_myresource.
+To force removal of a resource from the list, use the function zend_list_delete().
+You can also force the reference count to increase if you know that you' re creating another reference for a previously allocated value (for example, if you're automatically reusing a default database link).
+For this case, use the function zend_list_addref().
+To search for previously allocated resource entries, use zend_list_find().
+The complete API can be found in zend_list.h.
+Prev
+Home
+Next
+Objects
+Up
+Macros for Automatic Global Variable Creation

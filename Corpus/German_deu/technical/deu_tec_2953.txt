@@ -1,0 +1,69 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+dbx_query() gibt bei Erfolg ein Objekt oder 1 zurück, oder 0 im Fehlerfall.
+Das Objekt wird nur zurückgegeben, wenn die in sql_statement angegebene Abfrage eine Ergebnisliste liefert.
+Beispiel 1.
+Wie mit dem gelieferten Wert umgegangen wird
+?php $link = dbx_connect( DBX_ODBC, "", "db", "username", "password") or die("Fehler beim Verbinden"); $result = dbx_query($link, 'SELECT id, parentid, description FROM table'); if (is_object($result)) {/ /... tue hier irgendetwas, detaillierte Beispiele siehe unten... / / erst die Ausgabe der Feldnamen und Typen / / dann die Ausgabe einer Tabelle mit den gelieferten Werten} else if ($result == 1) {echo("Abfrage wurde erfolgreich ausgeführt, jedoch keine Ergebnisse");} else {exit("Fehler bei Abfrage");} dbx_close($link);?
+Der Parameter flags Der Parameter flags wird verwendet, um die Menge der zu liefernden Informationen zu steuern.
+Die folgenden Konstanten können mit dem Bit-Operator (|) beliebig kombiniert werden.
+Die Flags DBX_COLNAMES_* heben die Einstellungen dbx.colnames_case in der php.ini auf.
+Dieser Flag ist immer gesetzt, d.h. dass zurückgegebene Objekt hat eine Eigenschaft data, welche aus einem zweidimensionalen, numerisch indizierten Array besteht.
+Zum Beispiel steht in data[ 2][3] die 2 für die Reihen - (bzw.
+Datensatz -) Nummer, und 3 steht für die Spalten - (bzw.
+Feld - Nummer).
+Die erste Reihe und Spalte haben den Index 0.
+Ist DBX_RESULT_ASSOC ebenfalls angegeben, so enthält das zurückgegebene Objekt auch Informationen im Zusammenhang mit DBX_RESULT_INFO, selbst wenn es nicht angegeben wurde.
+Liefert Informationen über Spalten, wie Feldnamen und Feldtypen.
+Dies bewirkt, dass in der data Eigenschaft des zurückgegebenen Objektes auf die Werte eines Feldes mit den entsprechenden Spaltennamen als Schlüssel zugegriffen werden kann.
+Assoziierte Ergebnisse sind eigentlich Referenzen zu den numerisch indizierten Daten, weshalb eine Änderung von data[ 0][0] auch den Inhalt von data[0]['feldname_für_erste_spalte'] betrifft.
+
+
+
+
+
+DBX_RESULT_INDEX | DBX_RESULT_INFO | DBX_RESULT_ASSOC - dies ist Standard, wenn flags nicht angegeben ist.
+Das zurückgegebene Objekt hat abhängig von flags vier oder fünf Eigenschaften:
+Das ein gültiges Handle für die verbundene Datenbank, und als solche kann es (wenn nötig) auch in modulspezifischen Funktionen verwendet werden.
+
+Diese enthalten die Anzahl der Spalten (oder Felder) bzw.
+Reihen (oder Datensätze).
+$result = dbx_query ($link, 'SELECT id FROM table'); echo $result - rows; / / Anzahl der Datensätze echo $result - cols; / / Anzahl der Felder
+Dies wird nur zurückgegeben, wenn im Parameter flags entweder DBX_RESULT_INFO oder DBX_RESULT_ASSOC spezifiziert sind.
+Es ist ein zweidimensionales Array mit zwei Reihen (name und type), welches die Spalteninformationen enthält.
+Beispiel 2.
+Auflistung von Name und Typ jedes Feldes
+
+Diese Eigenschaft enthält die aktuellen Ergebnisdaten, möglicherweise auch mit den Spaltennamen assoziiert, was jedoch vom Parameter flags abhängig ist.
+Wenn DBX_RESULT_ASSOC gesetzt ist, können Sie $result - data[ 2]["feldname"] verwenden.
+Beispiel 3.
+Ausgabe des Inhaltes der data Eigenschaft in eine HTML Tabelle
+
+Anmerkung:
+Konsultieren Sie bitte auch die modulspezifische Dokumentation.
+Spaltennamen für Abfragen an einer Oracle Datenbank werden in Kleinbuchstaben zurückgegeben.
+Siehe auch dbx_escape_string() und dbx_connect().
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

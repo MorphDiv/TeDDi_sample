@@ -1,0 +1,44 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+このセクションにはPHPスクリプトを書くにあたってよく問題となる事柄が 集められています。
+1. あらゆるフォームから送信されたデータを扱うことができる汎用的な PHPスクリプトを書きたいのですが、POSTメソッドでどのようなデータ が送信されたかを知るにはどうするのですか？
+まず、 php.ini で track_vars が有効になっていること を確認してください。PHP 4.0.3以降ではこの設定値は常にonです。 track_vars がonになっているとPHPはいくつかの連 想配列を生成します。このうち最も重要なのが $HTTP_POST_VARS です。と言うわけで、POSTメソッ ドにより送信されたデータを扱う汎用的なスクリプトを書くには、以下 のようにします。
+2. シングルクオート(')をバックスラッシュでエスケープされた シングルクオート(\')に変換しなければならないのですが、 正規表現を用いてこれを行うにはどの様にするのですか？
+まずはじめに、 addslashes() を見てみてください。 この関数はまさにこの通りのことを行ってくれます。それと、 php.ini ファイルの設定値 magic_quotes_gpc も参照し てください。
+3. 次のようなコードを実行すると、思った通りの順番で出力が表示されま せん。
+式の中で関数の実行結果を使用する(例えば上の例の様に他の文字列と 連結する)ためには、 echo() するのではなく、その 値を return しなければいけません。
+4. 改行されないのですが？
+PHPでは、"? "か"? \n"(\nは改行を表します)をPHPのコードブロッ クの終端と見なします。このため、コードブロック終端の改行記号は省 略され、表示される文は1行になります。つまり、改行をさせるために は、PHPのコードブロックの終端の後にもう1つ改行を挿入する必要があ るということです。
+なぜPHPはこのようなことをするのでしょうか？なぜならHTMLを出力する 場合にはこの方が都合のよいことが多いからです。もしとても長い1行を 出力しなければならない場合に、改行が解釈されてしまうとしたらどう でしょう。ソースコードの1行もとても読めないくらい長いものになって しまいます。
+5. 'Warning: Cannot send session cookie - headers already sent...'や 'Cannot add header information - headers already set...'といった メッセージが出力されるのですが。 sent...'.
+header(), set_cookie() や セッション関数は出力ストリームにヘッダを付加する関数で、ヘッダを 送信できるのは本文の出力を開始する前のみです。これはApacheモジュール 版のPHPを実行している場合は以下のようなコードで貴方が送信している 全てのリクエストヘッダを表示することが出来ます。
+6. リクエストヘッダに直接アクセスしたいのですが、どうすればよいですか？
+もしPHPがApacheモジュールとして動作しているなら、 getallheaders() を使えば全てのヘッダを取得する ことができます。下のちょっとしたコードで全てのリクエストヘッダを 表示することができます。
+7. IISで認証を行おうとすると'No Input file specified'というエラーが 発生します。
+これはIISのセキュリティモデルの欠点で、IISで動作するCGIに共通する 問題です。これを回避策するには、認証のかかったディレクトリに(PHP が解釈しない)HTMLファイルを作成します。そしてMETAタグを使ってPHP を使用したページにリダイレクトするか、リンクを張ります。こうすれ ばPHPは認証済みかどうかを正しく認識することが出来ます。ISAPIモジュー ルの場合はこの問題は起きません。また、これは他のNTウェブサーバに は影響ありません。詳しくは http://support.microsoft.com/support/kb/articles/q160/4/22.asp を参照してください。
+8. 私が書いたPHPスクリプトはIEとLynxでは動作するのですが、Netscapeを 使うと出力の一部が失われてしまいます。"ソースの表示"をするとIEには あるがNetscapeにはない内容があります。
+NetscapeはHTMLタグの扱いがIEに比べて厳密になっています(テーブル等)。 スクリプトが出力したHTMLを validator.w3.org などのHTMLバリデータに掛けてみると良いでしょう。 例えば /table が無いとこのような現象が発生します。
+また、IEとLynxは共にHTMLストリーム中のNULL文字( \0 )を 無視しますがNetscapeは無視しません。この問題をチェックする一番の方法 は コマンドライン版 の PHP(つまりCGIバージョン)をコンパイルして、コマンドラインからその スクリプトを実行することです。その出力を od -c にパイプして \0 があるかどうかを チェックしてください。もしWindowsを使っている場合は、バイナリファ イルを扱えるエディタかそれに類するソフトウェアが必要です。IEや Lynxと異なりNetscapeはNULL文字を見つけるとその行の文字を一切出力 しません。
+9. どうすればXMLとPHPは共存することが出来るのですか？XMLの ?xml タグがPHPでエラーになります。
+php.ini ファイルの short_tags を0に設定するか、 Apacheディレクティブを使ってショートタグを無効にしなければなりま せん。また、 File セクションを使ってファイルごとに選択的に 設定を行うことも出来ます。
+10. FrontPageやその他のHTMLエディタを使うと、書いたPHPのコードが勝手 にあちこちに移動されてしまいます。どうしたらいいですか？
+最も簡単なのはASPタグを使う方法です。こうすればASPの様に %と% をコード区切りとして使用することが出来ます。有名なHTMLエディ タは(今のところ)ASPタグを賢く扱ってくれます。ASPスタイルのタグを 有効にするには php.ini ファイルで asp_tags を設定するか、Apacheディレ クティブを使用します。
+11. あらかじめ設定されている変数を全て網羅したリストはどこにあるので すか？なぜPHPのドキュメントにはその一覧がないのですか？
+一番良い方法はHTMLに ?php phpinfo();? と書いてそのページをロードすることです。そこには環境変数やウェブ サーバが設定した特殊な変数の一覧を含む、PHPの設定に関するあらゆ る情報が表示されます。こうしたリストがPHPのドキュメントに無いの は、各々のサーバによりその項目と内容が異なるからです。
+12. ユーザ定義関数の中で、標準的な($DOCUMENT_ROOTや$HTTP_REFERER等の) CGI変数にアクセスしたいのですが、PHPはそれらの変数を見つけること ができていないようです。何がおかしいのですか？
+環境変数は通常のグローバル変数と同じ様に扱われるので、(例えば global $DOCUMENT_ROOT; のように)ユーザ定義関数 の中でグローバル変数として宣言するか、グローバル変数の配列を使っ て(つまり、 $GLOBALS["DOCUMENT_ROOT"] として)ア クセスしてください。

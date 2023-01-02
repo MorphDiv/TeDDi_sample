@@ -1,0 +1,29 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 3 = 3.0.3, PHP 4)
+返り値: 成功時に正の Informix 結果 ID、エラー時に FALSE
+リソース "result_id" は、クエリー結果を取得するために 他の関数により使用されます。 ifx_affected_rows() 関数による取得を行うために "affected_rows" をセットします。
+ifx_query() は、サーバー上の指定したリンク ID が指す現在アクティブなデータベースにクエリーを送信します。リンク ID が指定されない場合は、最後にオープンされたリンクを仮定します。 リンクがオープンされていない場合、この関数は、 ifx_connect() がコールされた時と同様にリンクを 確立しようと試み、それを使用します。
+接続 conn_id において query を実行します。"select 型" のクエリー では、カーソルが定義され、オープンされます。オプションの cursor_type パラメータにより、そのカーソル を"スクロール" または "ホールド" カーソルとすることができます。こ のオプションはビットマスクであり、IFX_SCROLL, IFX_HOLD, または両 方とも指定することができます。select でないクエリーは、"直ちに実 行"されます。IFX_SCROLL および IFX_HOLD は定数シンボルのため引用 符で括る必要はありません。このパラメータを省略した場合、カーソル は通常のシーケンシャルカーソルになります。
+どちらのタイプのクエリーにおいても、(予測または実際の数として) 作用された行の数は、 ifx_affected_rows() により 取得するために保存されます。
+もし、update クエリーにおいて BLOB (BYTE または TEXT) カラムがあ る場合、対応する "BLOB ID" を有する blobidarray パラメータを追加することが可能 です。この場合、クエリーテキストのこれらのカラムを "?" で置換する ことが必要です。
+TEXT (または BYTE) カラムの内容が許すならば、 "ifx_textasvarchar(1)" または "ifx_byteasvarchar(1)" を使用するこ とも可能です。これにより、TEXT (または BYTE) カラムは、select ク エリーの通常の(しかし長い)VARCHAR カラムと同様に処理され、BLOB ID で悩むこともなくなります。
+ifx_textasvarchar(0) または ifx_byteasvarchar(0) (デフォルト値) の場合、select クエリーは、BLOB ID (整数値) に属するものとして BLOB カラムを返します。BLOB 関数により文字列またはファイルとして BLOB の値を得ることが可能です。(以下を参照)
+ifx_connect() も参照下さい。
+例 1"orders" テーブルの全行を HTML テーブルとして表示する
+例 2値を "catalog" テーブルに挿入する

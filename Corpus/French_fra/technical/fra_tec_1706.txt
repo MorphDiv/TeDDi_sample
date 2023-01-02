@@ -1,0 +1,65 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Instruction Get [Exécution]
+/text/sbasic/shared/03020201.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+Get, instruction
+Instruction Get [Exécution]
+Lit un enregistrement dans un fichier relatif, ou une séquence d'octets dans un fichier binaire, et l'insère dans une variable.
+PUT
+Syntaxe :
+Get [#] FileNumber As Integer, [Position], Variable
+Paramètres :
+FileNumber : expression au format nombre entier déterminant le numéro de fichier.
+Position :
+pour les fichiers ouverts en mode Random,
+Position
+est le numéro de l'enregistrement à lire.
+Position
+indique la position octale du début de la lecture dans le fichier.
+Position
+n'est pas spécifié, la position actuelle ou l'enregistrement de données actif du fichier est utilisé.
+Variable : nom de la variable à lire.
+Vous pouvez utiliser tout type de variable sauf les variables d'objets.
+Exemple :
+Sub ExampleRandomAccess
+Dim iNumber As Integer
+Dim sText As Variant REM Doit être un variant
+Dim aFile As String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Seek #iNumber,1 REM Position au début
+Put #iNumber,, &quot; Ceci est la première ligne de texte. &quot; REM Remplir la ligne avec du texte
+Put #iNumber,, &quot; Ceci est la seconde ligne de texte. &quot;
+Put #iNumber,, &quot; Ceci est la troisième ligne de texte. &quot;
+Seek #iNumber,2
+Get #iNumber,,sText
+Print sText
+Close #iNumber
+iNumber = Freefile
+Open aFile For Random As #iNumber Len=32
+Get #iNumber,2,sText
+Put #iNumber,, &quot; Ceci est un nouveau texte. &quot;
+Get #iNumber,1,sText
+Get #iNumber,2,sText
+Put #iNumber,20, &quot; Ceci est le texte de l'enregistrement 20. &quot;
+Print Lof(#iNumber)
+Close #iNumber
+end sub

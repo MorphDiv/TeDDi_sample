@@ -1,0 +1,123 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+This is an interface to the mcrypt library, which supports a wide variety of block algorithms such as DES, TripleDES, Blowfish (default), 3-WAY, SAFER-SK64, SAFER-SK128, TWOFISH, TEA, RC2 and GOST in CBC, OFB, CFB and ECB cipher modes.
+Additionally, it supports RC6 and IDEA which are considered "non-free".
+These functions work using mcrypt.
+To use it, download libmcrypt-x.x.tar.gz from here and follow the included installation instructions.
+Windows users will find all the needed compiled mcrypt binaries here.
+If you linked against libmcrypt 2.4.x or higher, the following additional block algorithms are supported:
+CAST, LOKI97, RIJNDAEL, SAFERPLUS, SERPENT and the following stream ciphers:
+ENIGMA (crypt), PANAMA, RC4 and WAKE.
+With libmcrypt 2.4.x or higher another cipher mode is also available; nOFB.
+You need to compile PHP with the --with-mcrypt[ =DIR] parameter to enable this extension.
+DIR is the mcrypt install directory.
+Make sure you compile libmcrypt with the option --disable-posix-threads.
+The behaviour of these functions is affected by settings in php.ini.
+Table 1.
+Mcrypt configuration options
+Name
+Default
+Changeable
+mcrypt.algorithms_dir
+NULL
+PHP_INI_ALL
+mcrypt.modes_dir
+NULL
+PHP_INI_ALL
+This extension has no resource types defined.
+The constants below are defined by this extension, and will only be available when the extension has either been compiled into PHP or dynamically loaded at runtime.
+Mcrypt can operate in four block cipher modes (CBC, OFB, CFB, and ECB).
+If linked against libmcrypt-2.4.x or higher the functions can also operate in the block cipher mode nOFB and in STREAM mode.
+Below you find a list with all supported encryption modes together with the constants that are defines for the encryption mode.
+For a more complete reference and discussion see Applied Cryptography by Schneier (ISBN 0-471-11709-9).
+MCRYPT_MODE_ECB (electronic codebook) is suitable for random data, such as encrypting other keys.
+Since data there is short and random, the disadvantages of ECB have a favorable negative effect.
+MCRYPT_MODE_CBC (cipher block chaining) is especially suitable for encrypting files where the security is increased over ECB significantly.
+MCRYPT_MODE_CFB (cipher feedback) is the best mode for encrypting byte streams where single bytes must be encrypted.
+MCRYPT_MODE_OFB (output feedback, in 8bit) is comparable to CFB, but can be used in applications where error propagation cannot be tolerated.
+It' s insecure (because it operates in 8bit mode) so it is not recommended to use it.
+MCRYPT_MODE_NOFB (output feedback, in nbit) is comparable to OFB, but more secure because it operates on the block size of the algorithm.
+MCRYPT_MODE_STREAM is an extra mode to include some stream algorithms like WAKE or RC4.
+Some other mode and random device constants:
+Here is a list of ciphers which are currently supported by the mcrypt extension.
+For a complete list of supported ciphers, see the defines at the end of mcrypt.h.
+The general rule with the mcrypt-2.2.x API is that you can access the cipher from PHP with MCRYPT_ciphername.
+With the libmcrypt-2.4.x and libmcrypt-2.5.x API these constants also work, but it is possible to specify the name of the cipher as a string with a call to mcrypt_module_open().
+MCRYPT_3DES
+MCRYPT_ARCFOUR_IV (libmcrypt 2.4.x only)
+MCRYPT_ARCFOUR (libmcrypt 2.4.x only)
+MCRYPT_BLOWFISH
+MCRYPT_CAST_128
+MCRYPT_CAST_256
+MCRYPT_CRYPT
+MCRYPT_DES
+MCRYPT_DES_COMPAT (libmcrypt 2.2.x only)
+MCRYPT_ENIGMA (libmcrypt 2.4.x only, alias for MCRYPT_CRYPT)
+MCRYPT_GOST
+MCRYPT_IDEA (non-free)
+MCRYPT_LOKI97 (libmcrypt 2.4.x only)
+MCRYPT_MARS (libmcrypt 2.4.x only, non-free)
+MCRYPT_PANAMA (libmcrypt 2.4.x only)
+MCRYPT_RIJNDAEL_128 (libmcrypt 2.4.x only)
+MCRYPT_RIJNDAEL_192 (libmcrypt 2.4.x only)
+MCRYPT_RIJNDAEL_256 (libmcrypt 2.4.x only)
+MCRYPT_RC2
+MCRYPT_RC4 (libmcrypt 2.2.x only)
+MCRYPT_RC6 (libmcrypt 2.4.x only)
+MCRYPT_RC6_128 (libmcrypt 2.2.x only)
+MCRYPT_RC6_192 (libmcrypt 2.2.x only)
+MCRYPT_RC6_256 (libmcrypt 2.2.x only)
+MCRYPT_SAFER64
+MCRYPT_SAFER128
+MCRYPT_SAFERPLUS (libmcrypt 2.4.x only)
+MCRYPT_SERPENT( libmcrypt 2.4.x only)
+MCRYPT_SERPENT_128 (libmcrypt 2.2.x only)
+MCRYPT_SERPENT_192 (libmcrypt 2.2.x only)
+MCRYPT_SERPENT_256 (libmcrypt 2.2.x only)
+MCRYPT_SKIPJACK (libmcrypt 2.4.x only)
+MCRYPT_TEAN (libmcrypt 2.2.x only)
+MCRYPT_THREEWAY
+MCRYPT_TRIPLEDES (libmcrypt 2.4.x only)
+MCRYPT_TWOFISH (for older mcrypt 2.x versions, or mcrypt 2.4.x)
+MCRYPT_TWOFISH128 (TWOFISHxxx are available in newer 2.x versions, but not in the 2.4.x versions)
+MCRYPT_TWOFISH192
+MCRYPT_TWOFISH256
+MCRYPT_WAKE (libmcrypt 2.4.x only)
+MCRYPT_XTEA (libmcrypt 2.4.x only)
+You must (in CFB and OFB mode) or can (in CBC mode) supply an initialization vector (IV) to the respective cipher function.
+The IV must be unique and must be the same when decrypting / encrypting.
+With data which is stored encrypted, you can take the output of a function of the index under which the data is stored (e.g. the MD5 key of the filename).
+Alternatively, you can transmit the IV together with the encrypted data (see chapter 9.3 of Applied Cryptography by Schneier (ISBN 0-471-11709-9) for a discussion of this topic).
+Mcrypt can be used to encrypt and decrypt using the above mentioned ciphers.
+If you linked against libmcrypt-2.2.x, the four important mcrypt commands (mcrypt_cfb(), mcrypt_cbc(), mcrypt_ecb(), and mcrypt_ofb()) can operate in both modes which are named MCRYPT_ENCRYPT and MCRYPT_DECRYPT, respectively.
+Example 1.
+Encrypt an input value with TripleDES under 2.2.x in ECB mode
+?php $key = "this is a secret key"; $input = "Let us meet at 9 o'clock at the secret place ."; $encrypted_data = mcrypt_ecb (MCRYPT_3DES, $key, $input, MCRYPT_ENCRYPT);?
+If you linked against libmcrypt 2.4.x or 2.5.x, these functions are still available, but it is recommended that you use the advanced functions.
+Example 2.
+Encrypt an input value with TripleDES under 2.4.x and higher in ECB mode
+?php $key = "this is a secret key"; $input = "Let us meet at 9 o'clock at the secret place ."; $td = mcrypt_module_open ('tripledes', '', 'ecb', ''); $iv = mcrypt_create_iv (mcrypt_enc_get_iv_size ($td), MCRYPT_RAND); mcrypt_generic_init ($td, $key, $iv); $encrypted_data = mcrypt_generic ($td, $input); mcrypt_generic_deinit ($td); mcrypt_module_close ($td);?
+Prev
+Home
+Next
+mcal_week_of_year
+Up
+mcrypt_cbc

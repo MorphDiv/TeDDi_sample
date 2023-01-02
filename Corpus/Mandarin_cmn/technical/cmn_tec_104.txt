@@ -1,0 +1,34 @@
+# language_name_wals:	Mandarin
+# language_name_glotto:	Mandarin Chinese
+# iso639_3:	cmn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hans
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/zh_CN.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+HTML 筛选器和窗体
+/text/shared/02/01170700.xhp
+窗体; HTML 筛选器
+HTML 筛选器和表单
+在 HTML 文档中，您可以使用所有的控件元素和表单事件。到现在为止，有很多事件（如焦点事件）一直没有被修改。它们将继续被导入和导出，例如用于 JavaScript 的 ONFOCUS、ONBLUR 等，用于 $[officename] Basic 的 SDONFOCUS、SDONBLUR 等。
+由侦听接口和事件的方法名称组成的通用名称用于所有其他事件：注册为 XListener::method 被导出为
+SDEvent-XListener-method = &quot; /* event-code */ &quot;
+请注意，此选项中的 XListener- 和 method 组件对大小写敏感。
+控制的事件处理是使用 $[officename] API 来实现。当为控制指定事件时，对象会将自己以内部注册的方式注册成特定控制事件的“收听者”。为此，该对象必须使用特定的接口，例如 XFocusListener 接口，以便对瞄准事件做出反应。事件发生后，控制会在接收到瞄准时调用收听者接口的特殊方法。内部注册的对象随后将调用指定到该事件的 JavaScript 或 $[officename] Basic 代码。
+HTML 筛选会准确地使用这些侦听接口和方法名称，以根据需要导入和导出事件。要注册焦点事件，可以通过
+< INPUT TYPE=text ONFOCUS= &quot; /* code */ &quot;
+而不是通过
+< INPUT TYPE=text SDEvent-XFocusListener-focusGained= &quot; /* code */ &quot;
+注册。这样就可以根据需要来注册事件了，包括列表框中未提供的事件。要定义事件的脚本语言，请在文档标题中写入以下行：
+< META HTTP-EQUIV= &quot; content-script-type &quot; CONTENT= &quot; ... &quot; >
+对于 CONTENT ，使用用于 $[officename] Basic 的 &quot; 文字/x-StarBasic &quot; 或用于 JavaScript 的 &quot; 文字/JavaScript &quot; 。如果未给出任何内容，则从 JavaScript 给出
+导出过程中，将基于在宏管理中找到的第一个模块来定义默认的脚本语言。对于事件，每个文档只能使用一种语言。

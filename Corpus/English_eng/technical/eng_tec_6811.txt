@@ -1,0 +1,109 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Questions and Answers
+& reporting. bugs;
+Questions about Dialing
+I ca n't get & kppp; to work. & kppp; tells me pppd has died or that a timeout has expired. What's going on?
+Did you read this manual carefully? Here are once more the most common pitfalls:
+Click on the Details button. & kppp; will you give an excerpt from the PPP log messages (may not work on non-Linux; systems, or even on some & Linux; distributions). The log will help you to track down the bug.
+Make sure that pppd is the actual pppd binary not a script
+Make sure that pppd is setuid root. You may set this mode by issuing chmod u+s pppd as root.
+Make sure that your / etc/ ppp/ options file exists and that it does n't contain any conflicting entries. If in doubt: Leave this file empty.
+Make sure that you do n't use the option lock as an argument for pppd (kppp; is already taking care of device locking).
+Remove the lock option from both your / etc/ ppp/ options and tilde; /. ppprc files!
+Using the symbolic link / dev/ modem may cause some conflicts. Eliminate this source of trouble by using the real device, & ie; / dev/ cuaX or / dev/ ttySX.
+COM1 equals ttyS0, COM2 is ttyS1 and so on.
+Make sure you set the right permission. In case of trouble you might want to run it as root first and then later, when everything is working fine give it less harmful permission if you can not afford to run & kppp; setuid root. The proper way to proceed would probably be creating a modem group.
+You might be launching pppd too early, & ie; before the remote server is ready to negotiate a PPP connection. If you are using a login script, you should use the built-in terminal to verify your login procedure. Some providers will require you to issue a simple Send or Send ppp to launch PPP. Some users even reported, that they had to append Pause 1 or Pause 2 to their script to solve timing conflicts.
+If nothing helps, you might obtain some debugging info from your systems log by issuing:
+# tail / var/ log/ messages
+pppd died - The remote system is required to authenticate itself...
+Typical error message in system log:
+pppd[699]: The remote system is required to authenticate itself pppd[699]: but I could n't find any suitable secret (password) for it to use to do so. pppd[699]: (None of the available passwords would let it use an IP address.)
+As far as I can tell there are two causes for this problem:
+/ etc/ ppp/ options contains the auth option. Simply put a # comment in front and try again.
+Your system already has a default route. Have you set up a local network? In this case recent versions of pppd will behave as if auth had been specified. To override this you may add noauth to the pppd arguments in kppp 'setup dialog. Alternatively you could take down the local network prior to dialing in. I'd be thankful if someone could provide instructions on how to peacefully combine the two network connections.
+pppd dies with 2.4. x Linux kernel
+Typical error messages in the system log:
+pppd[1182]: pppd 2.3.11 started by user, uid 500 pppd[1182]: ioctl(PPPIOCGFLAGS): Invalid argument pppd[1182]: tcsetattr: Invalid argument pppd[1182]: Exit.
+Install pppd 2.4.0b1 or better. See Documentation/ Changes in the kernel sources for more info.
+Why does & kppp; tell me Unable to open the modem?
+This means that & kppp; does n't have permissions to open the modem device or that you selected a modem device on the Modem Tab Dialog that is not valid. First make sure you selected the right modem device. Once you are sure you have selected the right modem device, you must give & kppp; the right permission to access the modem device and to be able to modify / etc/ resolv. conf in case you want & kppp; to configure DNS correctly for you. If you can afford to run & kppp; setuid root this would solve all access problems for you, if not you will have to figure out what the right permissions are for your purposes. In order to give & kppp; setuid root permissions do the following:
+% su root # chown root: root & dollar; KDEDIR/ bin/ kppp # chmod +s & dollar; KDEDIR/ bin/ kppp # exit
+Why does & kppp; tell me it ca n't create a modem lock file?
+This in most instances means that you have installed & kppp; without setuid bit on while you, the person executing & kppp;, does n't have write access to the lock file folder which by default is / var/ lock. This for example is the case on & RedHat; systems. Check the modem dialog for the precise location you have chosen. The solution is easy -- either run & kppp; setuid if you can afford to, or give regular users write access to / var/ lock or create a modem group that will have access to the / var/ lock file.
+Why is & kppp; installed with the setuid bit on?
+There is no need for the setuid bit, if you know a bit of & UNIX; systems administration. Simply create a modem group, add all users that you want to give access to the modem to that group and make the modem device read/ writable for that group. Also if you want DNS configuration to work with & kppp;, then / etc/ resolv. conf must be read/ writable by the members of that group. The same counts for / etc/ ppp/ pap-secrets and / etc/ ppp/ chap-secrets if you want to use the built-in PAP or CHAP support, respectively.
+The & kppp; team has lately done a lot of work to make & kppp; setuid-safe. But it's up to you to decide if you install and how you install it.
+You might also want to read the Security section.
+What do I do when & kppp; just sits there and waits with the message: Expecting OK
+Have you played with the CR/ LF setting? Try CR, LF or CR/ LF.
+Alternatively, your modem might need some time to respond to its initialization. Open the Modem Commands dialog on the Modem tab and adjust the Pre-Init and Post-Init delays. See if you are successful when drastically increasing their values, and then do some fine-tuning later.
+The connection works fine, but I ca n't start any applications!
+You have probably selected the Auto Configure Host Name option, and the X Server has problems connecting to your newly named host. If you really need this option (and chances are you really do n't), you are unfortunately on your own to set up the appropriate authorizations. Issuing xhost + before starting the connection would do the job, but be warned of the security risks involved, since this effectively gives everyone else access to your X Server.
+& kppp; reports a successful connection, but & konqueror; just says Unknown host hostname, and & Netscape; reports The server does not have a DNS entry.
+Try pinging another server by its IP number, & eg; ping 195.0.254.76. If that works, you could try the following:
+Check if you have provided & kppp; with at least one DNS address.
+Check the contents of / etc/ host. conf. There should be a line saying something similar to order hosts, bind. The bind keyword advises the resolver library to include a name server query when performing an address lookup. If such a line is not there, try adding it.
+How do I make & kppp; send a\ or a \\r
+Just send an empty string such as in the following script:
+Send # send an empty string Expect ID: Send itsme Expect word: Send forgot Expect granted Send ppp
+How can I stop & kppp; complaining: Ca n't create lock file?
+This happens because you do n't have permissions to create a lock file. If you chose to use a lock file, you must have write permission to the folder (typically / var/ lock). This is of course no problem if you have given & kppp; setuid permissions. Please read the section on Lock files.
+Why is my modem making so much noise when dialing?
+Click on Setup, then Modem. You can control the modem volume here in three steps: Off, medium and high. For most modems, medium or high result in the same volume. If changing this setting does n't work, make sure the correct settings for your modem are specified in Setup, Modem, Modem Commands.
+I turned the modem volume to Off and verified the modem commands, but I still hear that awful noise during dialing. Why?
+The volume initialization string can get lost if your modem ca n't cope with the speed it is receiving commands from & kppp;. Increase the value of Post-Init Delay in Setup, Modem, Modem Commands.
+& kppp; keeps reporting unusual modem speeds like 115200 or 57600
+Many modems only report the speed of the serial line and not the speed over the telephone line as default. You must configure these modems to report the true line speed by adding some commands to the modem init or dial strings. For many modems this command is ATW2. If you want to add it to the dial string (which normally starts with ATD), the new dial string would be ATW2D.
+Why does & kppp; report Unknown speed
+New modems often have very complex connection messages like CONNECT LAP. M/ V42. bis/ 115000: RX/ 31200: TX, and & kppp; cannot parse this message correctly. Turn on Show Log and you'll see the connection speed.
+I get a slow connection speed
+If you are not satisfied with the modem speed, make sure you've set the connection speed (you can reach it by clicking on Setup, Device, Connection Speed) to 57600 or higher. Make sure your serial ports support higher speeds. Many older systems based on i486 do not work correctly if you set the speed to 115200. If you have an old 8250 UART chip, it wo n't work. If you have a 16550 or 16550A it should work flawlessly.
+Additionally, you should consult your modem manual to look for init strings that enable a high speed mode.
+I get a REALLY slow connection speed!
+If data drips on at a rate of just a few bytes per second, you should check your hardware setup. If moving your mouse speeds up the transmission this is definitely a hardware issue!
+You can obtain some information about your serial port with setserial -a / dev/ ttySx and check for interrupt conflicts with other components of your system. The & kcontrol; module Information might also be of help here.
+My phone line needs pulse dialing instead of tone dialing (or vice-versa). How do I change that?
+You must modify your modem dial string. Nearly all modems support the following AT commands:
+ATDT
+Selects tone dialing
+ATDP
+Selects pulse dialing
+Questions about Telephone Cost Rules
+How do I write a telephones cost rules file?
+Just follow the TEMPLATE rules file supplied with & kppp;. You should be able to find a copy in $KDEDIR/ doc/ HTML/ yourlang / kppp/. Use the -r & kppp; command line option to check the syntax of your proposed rules file.
+I have written a telephone cost rules for my region. Where can I submit it so that others can make use of it?
+Can my phone cost rulefile contain fractional time units like "(0.17, 45.5)"?
+Yes this is possible. But you should n't use unusually small time units below a tenth of a second, because this would result in higher CPU load, although you probably wo n't notice on a modern CPU.
+My country observes other moving holidays than Easter.
+In that case, you need to write new code that allows for the computation of that holiday. Please have a look at ruleset. cpp and emulate the easter example. Then send in the patches!.
+Questions about the System Logs
+I see a message saying Serial line is looped back. What does this mean?
+Short answer: You did n't start the PPP software on the peer system.
+The logs show Signal 15
+If you see the following lines, you've probably just received a timeout error from & kppp;. & kppp; has been waiting for the PPP interface to come up and gave up after the specified timeout. pppd was signalled to shut down, with signal number 15, & ie; SIGTERM.
+pppd[26921]: pppd 2.3.5 started by me, uid 500 pppd[26921]: Using interface ppp0 pppd[26921]: Connect: ppp0 & lt; --gt; / dev/ ttyS0 pppd[26921]: Terminating on signal 15. pppd[26921]: Connection terminated. pppd[26921]: Exit.
+What about Receive serial link is not 8-bit clean
+The PPP daemon is alarmed by the fact that all the data it receives has bit 8 set to zero. In most cases this simply indicates that the remote PPP server is n't running yet. You might still be confronted by a login prompt that echoes back all the data sent by your pppd.
+and ca n't locate module ppp-compress? What's this?
+Do you see the following messages?
+modprobe: ca n't locate module ppp-compress-21 modprobe: ca n't locate module ppp-compress-26 modprobe: ca n't locate module ppp-compress-24
+Just add the lines:
+alias ppp-compress-21 bsd_comp alias ppp-compress-24 ppp_deflate alias ppp-compress-26 ppp_deflate
+to your / etc/ conf. modules file.

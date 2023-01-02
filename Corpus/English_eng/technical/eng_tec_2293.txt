@@ -1,0 +1,47 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 12.
+Control Structures
+Next
+PHP 4 (not PHP 3) includes a foreach construct, much like Perl and some other languages.
+This simply gives an easy way to iterate over arrays. foreach works only on arrays, and will issue an error when you try to use it on a variable with a different data type or an uninitialized variables.
+There are two syntaxes; the second is a minor but useful extension of the first:
+foreach( array_expression as $value) statement foreach(array_expression as $key = $value) statement
+The first form loops over the array given by array_expression.
+On each loop, the value of the current element is assigned to $value and the internal array pointer is advanced by one (so on the next loop, you'll be looking at the next element).
+The second form does the same thing, except that the current element 's key will be assigned to the variable $key on each loop.
+Note:
+When foreach first starts executing, the internal array pointer is automatically reset to the first element of the array.
+This means that you do not need to call reset() before a foreach loop.
+Note:
+Also note that foreach operates on a copy of the specified array, not the array itself, therefore the array pointer is not modified as with the each() construct and changes to the array element returned are not reflected in the original array.
+However, the internal pointer of the original array is advanced with the processing of the array.
+Assuming the foreach loop runs to completion, the array 's internal pointer will be at the end of the array.
+You may have noticed that the following are functionally identical:
+reset ($arr); while (list(, $value) = each ($arr)) {echo "Value: $value br \n";} foreach ($arr as $value) {echo "Value: $value br \n";}
+reset ($arr); while (list($key, $value) = each ($arr)) {echo "Key: $key; Value: $value br \n";} foreach ($arr as $key = $value) {echo "Key: $key; Value: $value br \n";}
+Some more examples to demonstrate usages:
+/* foreach example 1: value only * / $a = array (1, 2, 3, 17); foreach ($a as $v) {print "Current value of \$a: $v.\n";} / * foreach example 2: value (with key printed for illustration) * / $a = array (1, 2, 3, 17); $i = 0; / * for illustrative purposes only * / foreach($a as $v) {print "\$a[$i] = $v.\n"; $i++;} / * foreach example 3: key and value * / $a = array ("one "= 1, "two" = 2, "three "= 3, "seventeen" = 17); foreach($a as $k = $v) {print "\$a[$k] = $v.\n";} / * foreach example 4: multi-dimensional arrays * / $a[0][0] = "a"; $a[0][1] = "b"; $a[1][0] = "y"; $a[1][1] = "z"; foreach($a as $v1) {foreach ($v1 as $v2) {print "$v2\n";}} / * foreach example 5: dynamic arrays * / foreach(array(1, 2, 3, 4, 5) as $v) {print "$v\n";}
+Prev
+Home
+Next
+for
+Up
+break

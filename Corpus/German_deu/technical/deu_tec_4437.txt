@@ -1,0 +1,65 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Kapitel 3.
+
+Nach vorne
+Diese Sektion enthält Anmerkungen und Hinweise zur Installation von PHP auf HP-UX Systemen.
+Beispiel 3-2.
+Installationsanleitung für HP-UX 10
+Von: paul_mckay@clearwater-it.co.uk 04-Jan-2001 09:49 (Diese Tipps sind für PHP 4.0.4 und Apache v1.3.9) Sie wollen also PHP und Apache auf einer HP-UX 10.20 installieren?
+
+Sie brauchen gzip, holen Sie sich eine Binärdistribution von http: / /hpux.connect.org.uk / ftp / hpux / Gnu / gzip-1.2.4a / gzip-1.2.4a-sd-10.20.depot.Z dekomprimieren Sie die Datei, und installieren Sie sie mit swinstall 2.
+Sie brauchen gcc, holen Sie sich eine Binärdistribution von http: / /gatekeep.cs.utah.edu / ftp / hpux / Gnu / gcc-2.95.2 / gcc-2.95.2-sd-10.20.depot.gz gunzip, und installieren Sie sie mit swinstall.
+
+Sie brauchen die GNU binutils, holen Sie sich eine Binärdistribution von http: / /hpux.connect.org.uk / ftp / hpux / Gnu / binutils-2.9.1 / binutils-2.9.1-sd-10.20.depot.gz gunzip, und installieren Sie sie mit swinstall.
+
+Nun benötigen Sie bison, holen Sie sich eine Binärdistribution von http: / /hpux.connect.org.uk / ftp / hpux / Gnu / bison-1.28 / bison-1.28-sd-10.20.depot.gz installieren Sie sie wie oben 4.
+Nun benötigen Sie flex, holen Sie sich den Source von einem der http: / /www.gnu.org mirrors.
+Es ist in dem non-gnu Verzeichnis der FTP-Site.
+Downloaden Sie die Datei, gunzip, dann tar -xvf 'en Sie sie.
+Gehen Sie in das erstellte Verzeichnis flex, und führen ein. / configure aus, dann make, und dann make install.
+Sollten dabei Fehler auftreten liegt es vielleicht daran, dass gcc etc. nicht im PATH sind.
+Ist das der Fall, fügen Sie diese bitte dem PATH hinzu.
+OK, nun zum schwierigen Teil:
+
+Laden Sie die Sources von PHP und Apache herunter.
+7.
+Führen Sie gunzip und tar -xvf an ihnen aus.
+Wir müssen einige Dateien ändern, dass sie richtig kompiliert werden können.
+
+Erst muss die Konfigurationsdatei geändert werden, denn es scheint als würde sie aus den Augen verlieren, dass sie auf einer hpux Maschine ist.
+Es gibt sicher einen besseren Weg dies zu tun, aber einfacher Weg ist es, lt_target=hpux10.20 in die Zeile 47286 des configure Skriptes zu schreiben.
+
+Als nächstes müssen wir die Apache GuessOS Datei ändern.
+Unter apache_1.3.9 / src / helpers ändern Sie die Zeile 89 von "echo "hp${HPUXMACH}-hpux${HPUXVER}"; exit 0" auf: "echo "hp${HPUXMACH}-hp-hpux${HPUXVER}"; exit 0 "10.
+Sie können PHP nicht als Shared Object unter HP-UX installieren, weshalb Sie es statisch kompilieren müssen; folgen Sie einfach den Anweisungen auf der Apache Seite.
+
+Das Kompilieren PHP und Apache sollte OK gehen, aber Apache wird nicht starten.
+Sie müssen einen neuen User für Apache einrichten, z.B. www oder apache.
+Dann ändern Sie die Zeilen 252 und 253 der conf / httpd.conf in Apache so, dass statt User nobody Group nogroup etwas ähnliches steht wie:
+User www Group sys Das hat den Grund, dass Sie Apache unter HP-UX nicht als nobody laufen lassen können.
+Jetzt sollten Apache und PHP laufen.
+Ich hoffe das hilft jemandem, Paul Mckay.
+Zurück
+Zum Anfang
+Nach vorne
+Unix / Linux Installation
+Nach oben
+Unix / Solaris Installation

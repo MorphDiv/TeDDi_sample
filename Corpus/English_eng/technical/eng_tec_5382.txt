@@ -1,0 +1,71 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+Warning
+This extension is EXPERIMENTAL.
+The behaviour of this extension - - including the names of its functions and anything else documented about this extension - - may change without notice in a future release of PHP.
+Use this extension at your own risk.
+In Object Oriented Programming, it is common to see the composition of simple classes (and / or instances) into a more complex one.
+This is a flexible strategy for building complicated objects and object hierachies and can function as a dynamic alternative to multiple inheritance.
+There are two ways to perform class (and / or object) composition depending on the relationship between the composed elements:
+Association and Aggregation.
+An Association is a composition of independently constructed and externally visible parts.
+When we associate classes or objects, each one keeps a reference to the ones it is associated with.
+When we associate classes statically, one class will contain a reference to an instance of the other class.
+For example:
+Example 1.
+Class association
+class DateTime {function DateTime() {/ / empty constructor} function now() {return date("Y-m-d H:i:s");}} class Report {var $_dt = new DateTime(); / / more properties... function Report() {/ / initialization code...} function generateReport() {$dateTime = $_dt - now(); / / more code...} / / more methods...} $rep = new Report();
+Example 2.
+Object association
+class DateTime {/ / same as previous example} class DateTimePlus {var $_format; function DateTimePlus($format="Y-m-d H:i:s") {$this - _format = $format} function now() {return date($this - _format);}} class Report {var $_dt; / / we'll keep the reference to DateTime here / / more properties... function Report() {/ / do some initialization} function setDateTime ($dt) {$this - _dt = $dt;} function generateReport() {$dateTime = $_dt - now(); / / more code...} / / more methods...} $rep = new Report(); $dt = new DateTime(); $dtp = new DateTimePlus("l, F j, Y (h:i:s a, T)"); / / generate report with simple date for web display $rep - setDateTime ($dt); echo $rep - generateReport(); / / later on in the code... / / generate report with fancy date $rep - setDateTime ($dtp); $output = $rep - generateReport(); / / save $output in database / /... etc...
+Aggregation, on the other hand, implies encapsulation (hidding) of the parts of the composition.
+We can aggregate classes by using a (static) inner class (PHP does not yet support inner classes), in this case the aggregated class definition is not accessible, except through the class that contains it.
+The aggregation of instances (object aggregation) involves the dynamic creation of subobjects inside an object, in the process, expanding the properties and methods of that object.
+Object aggregation is a natural way of representing a whole-part relationship, (for example, molecules are aggregates of atoms), or can be used to obtain an effect equivalent to multiple inheritance, without having to permanently bind a subclass to two or more parent classes and their interfaces.
+In fact object aggregation can be more flexible, in which we can select what methods or properties to "inherit" in the aggregated object.
+We define 3 classes, each implementing a different storage method:
+Example 3. storage_classes.inc
+?php class FileStorage {var $data; function FileStorage($data) {$this - data = $data;} function write($name) {$fp = fopen(name, "w"); fwrite($fp, $this - data); fclose($data);}} class WDDXStorage {var $data; var $version = "1.0"; var $_id; / / "private "variable function WDDXStorage($data) {$this - data = $data; $this - _id = $this - _genID();} function store() {if ($this - _id) {$pid = wddx_packet_start($this - _id); wddx_add_vars($pid, "this - data"); $packet = wddx_packet_end($pid);} else {$packet = wddx_serialize_value($this - data);} $dbh = dba_open("varstore", "w", "gdbm"); dba_insert(md5(uniqid("",true)), $packet, $dbh); dba_close($dbh);} / / a private method function _genID() {return md5(uniqid(rand(),true));}} class DBStorage {var $data; var $dbtype = "mysql"; function DBStorage($data) {$this - data = $data;} function save() {$dbh = mysql_connect(); mysql_select_db("storage", $dbh); $serdata = serialize($this - data); mysql_query("insert into vars ('$serdata',now())", $dbh); mysql_close($dbh);}}?
+We then instantiate a couple of objects from the defined classes, and perform some aggregations and deaggregations, printing some object information along the way:
+Example 4. test_aggregation.php
+?php include "storageclasses.inc"; / / some utilty functions function p_arr($arr) {foreach($arr as $k= $v) $out[] = " $k = $v"; return implode("\n", $out);} function object_info($obj) {$out[] = "Class: ".get_class($obj); foreach(get_object_vars($obj) as $var= $val) if (is_array($val)) $out[] = "property: $var (array)\n".p_arr($val); else $out[] = "property: $var = $val"; foreach(get_class_methods($obj) as $method) $out[] = "method: $method"; return implode("\n", $out);} $data = array(M_PI, "kludge != cruft"); / / we create some basic objects $fs = new FileStorage($data); $ws = new WDDXStorage($data); / / print information on the objects echo "\$fs object\n"; echo object_info($fs) ."\n"; echo "\n\$ws object\n"; echo object_info($ws) ."\n"; / / do some aggregation echo "\nLet's aggregate \$fs to the WDDXStorage class\n"; aggregate($fs, "WDDXStorage"); echo "\$fs object\n"; echo object_info($fs) ."\n"; echo "\nNow let us aggregate it to the DBStorage class\n"; aggregate($fs, "DBStorage"); echo "\$fs object\n"; echo object_info($fs) ."\n"; echo "\nAnd finally deaggregate WDDXStorage\n"; deaggregate($fs, "WDDXStorage"); echo "\$fs object\n"; echo object_info($fs) ."\n";?
+We will now consider the output to understand some of the side-effects and limitation of object aggregation in PHP.
+First, the newly created $fs and $ws First, the newly created $fs and $ws objects give the expected output (according to their respective class declaration).
+Note that for the purposes of object aggregation, private elements of a class / object begin with an underscore character ("_"), even though there is not real distinction between public and private class / object elements in PHP.
+$fs object Class: filestorage property: data (array) 0 = 3.1415926535898 1 = kludge != cruft method: filestorage method: write $ws object Class: wddxstorage property: data (array) 0 = 3.1415926535898 1 = kludge != cruft property: version = 1.0 property: _id = ID::9bb2b640764d4370eb04808af8b076a5 method: wddxstorage method: store method: _genid
+We then aggregate $fs with the WDDXStorage class, and print out the object information.
+We can see now that even though nominally the $fs object is still of FileStorage, it now has the property $version, and the method store(), both defined in WDDXStorage.
+One important thing to note is that it has not aggregated the private elements defined in the class, which are present in the $ws object.
+Also absent is the constructor from WDDXStorage, which will not be logical to aggegate.
+Let' s aggregate $fs to the WDDXStorage class $fs object Class: filestorage property: data (array) 0 = 3.1415926535898 1 = kludge != cruft property: version = 1.0 method: filestorage method: write method: store
+The proccess of aggregation is cummulative, so when we aggregate $fs with the class DBStorage, generating an object that can use the storage methods of all the defined classes.
+Now let us aggregate it to the DBStorage class $fs object Class: filestorage property: data (array) 0 = 3.1415926535898 1 = kludge != cruft property: version = 1.0 property: dbtype = mysql method: filestorage method: write method: store method: save
+Finally, the same way we aggregated properties and methods dynamically, we can also deaggregate them from the object.
+So, if we deaggregate the class WDDXStorage from $fs, we will obtain:
+And deaggregate the WDDXStorage methods and properties $fs object Class: filestorage property: data (array) 0 = 3.1415926535898 1 = kludge != cruft property: dbtype = mysql method: filestorage method: write method: save
+One point that we have not mentioned above, is that the process of aggregation will not override existing properties or methods in the objects.
+For example, the class FileStorage defines a $data property, and the class WDDXStorage also defines a similar property which will not override the one in the object acquired during instantiation from the class FileStorage.
+Prev
+Home
+Next
+odbc_tables
+Up
+aggregate_info

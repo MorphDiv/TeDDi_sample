@@ -1,0 +1,134 @@
+# language_name_wals:	Turkish
+# language_name_glotto:	Turkish
+# iso639_3:	tur
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/tr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Kullanım Kılavuzu
+Önceki
+Sonraki
+Bölüm 23.
+Güvenli Kip
+Güvenli kip paylaşımlı-sunucu kavramının getirdiği güvenlik sorunlarını çözmeye yönelik bir adımdır.
+Bu sorunu PHP seviyesinde çözmeye çalışmak, mimari açıdan doğru değildir, fakat HTTP sunucusu ve işletim sistemi seviyesindeki alternatifler çok gerçekçi olmadığından, çok sayıda kişi, özellike ISS 'ler, şimdilik güvenli kipi kullanırlar.
+Güvenli kipi kontrol eden direktifler şunlardır:
+safe_mode = Off open_basedir = safe_mode_exec_dir = safe_mode_allowed_env_vars = PHP_ safe_mode_protected_env_vars = LD_LIBRARY_PATH disable_functions =
+safe_mode 'un aktif olduğu zamanlarda, PHP, dosya fonksiyonlarıyla bir dosya üzerinde işlem yapmadan önce o dosyayla çalışmakta olan betiğin sahiplerini karşılaştırır.
+Örneğin:
+
+
+
+
+
+Eğer safe_mode yerine, open_basedir ile bir dizin belirtirseniz, bütün dosya işlemleri belirtilen bu dizin altında gerçekleşecektir.
+Örneğin (Apache httpd.conf örneği):
+
+
+
+Ayrıca istediğiniz fonksiyonların kullanımdan kaldırabilirsiniz.
+Bunu php.ini dosyamıza eklersek:
+
+
+Güvenli Kip tarafından kısıtlanan / iptal edilen fonksiyonlar
+Safe Mode tarafından kısıtlanan fonksiyonların listesi büyük ihtimalle halen tam değil ve yanlış olması gayet mümkün:
+Tablo 23-1.
+Güvenli Kip tarafından kısıtlanan fonksiyonlar
+Fonksiyon
+Kısıtlama
+dbmopen()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+dbase_open()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+filepro()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+filepro_rowcount()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+filepro_retrieve()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+ifx_*()
+sql_safe_mode kısıtlamaları, (!= Güvenli Kip)
+ingres_*()
+sql_safe_mode kısıtlamaları, (!= Güvenli Kip)
+mysql_*()
+sql_safe_mode kısıtlamaları, (!= Güvenli Kip)
+pg_loimport()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+posix_mkfifo()
+Betiği çalıştıran UID ile işlem yapılan dizinin aynı olup olmadığını kontrol eder.
+putenv()
+safe_mode_protected_env_vars ve safe_mode_allowed_env_vars ini-direktiflerine uyar.
+Ayrıca putenv() hakkındaki dökümanlara bakınız.
+move_uploaded_file()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+chdir()
+Betiği çalıştıran UID ile işlem yapılan dizinin aynı olup olmadığını kontrol eder.
+dl()
+Bu fonksiyon safe-mode da etkinleştirilemez.
+ters tırnak işlemi
+Bu fonksiyon safe-mode da etkinleştirilemez.
+shell_exec() (ters tırnakların fonksiyonal eşi)
+Bu fonksiyon safe-mode da etkinleştirilemez.
+exec()
+Sadece safe_mode_exec_dir ile belirtilen dizindeki programları çalıştırabilirsiniz.
+Pratiksel nedenlerden ötürü şu an için programa giden yolda.. olmasına izin verilmiyor.
+system()
+Sadece safe_mode_exec_dir ile belirtilen dizindeki programları çalıştırabilirsiniz.
+Pratiksel nedenlerden ötürü şu an için programa giden yolda.. olmasına izin verilmiyor.
+passthru()
+Sadece safe_mode_exec_dir ile belirtilen dizindeki programları çalıştırabilirsiniz.
+Pratiksel nedenlerden ötürü şu an için programa giden yolda.. olmasına izin verilmiyor.
+popen()
+Sadece safe_mode_exec_dir ile belirtilen dizindeki programları çalıştırabilirsiniz.
+Pratiksel nedenlerden ötürü şu an için programa giden yolda.. olmasına izin verilmiyor.
+mkdir()
+Betiği çalıştıran UID ile işlem yapılan dizinin aynı olup olmadığını kontrol eder.
+rmdir()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+rename()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+Betiği çalıştıran UID ile işlem yapılan dizinin aynı olup olmadığını kontrol eder.
+unlink()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+Betiği çalıştıran UID ile işlem yapılan dizinin aynı olup olmadığını kontrol eder.
+copy()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+Betiği çalıştıran UID ile işlem yapılan dizinin aynı olup olmadığını kontrol eder. (kaynak ve hedef için)
+chgrp()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+chown()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+chmod()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+Ek olarak SUID, SGID ve sticky bitlerini açamazsınız.
+touch()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+Betiği çalıştıran UID ile işlem yapılan dizinin aynı olup olmadığını kontrol eder.
+symlink()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+Betiği çalıştıran UID ile işlem yapılan dizinin aynı olup olmadığını kontrol eder. (not: sadece hedef kontrol ediliyor)
+link()
+Betiği çalıştıran UID ile işlem yapılan dosya / dizinin aynı olup olmadığını kontrol eder.
+Betiği çalıştıran UID ile işlem yapılan dizinin aynı olup olmadığını kontrol eder. (not: sadece hedef kontrol ediliyor)
+getallheaders()
+Güvenli Kipte, 'authorization' ile başlayan başlıklar (büyük / küçük harf ayrımı yok) döndürülmez.
+Uyarı:
+Bu getallheader() fonksiyonunun aol-server uyarlamasında bozuk!
+php4 / main / fopen_wrappers.c dosyasını kullanan tüm fonksiyonlar
+??
+Önceki
+Baþlangýç
+Sonraki
+Kalıcı Veritabanı Bağlantıları
+Yukarý
+Fonksiyonlar

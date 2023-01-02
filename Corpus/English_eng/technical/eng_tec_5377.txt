@@ -1,0 +1,121 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+These functions allow you to access MySQL database servers.
+More information about MySQL can be found at http: / /www.mysql.com /.
+Documentation for MySQL can be found at http: / /www.mysql.com / documentation /.
+In order to have these functions available, you must compile PHP with MySQL support.
+By using the --with-mysql[ =DIR] configuration option you enable PHP to access MySQL databases.
+If you use this option without specifying the path to MySQL, PHP will use the built-in MySQL client libraries.
+With PHP 4 MySQL support is always enabled; if you don't specify the configure option, the bundled libraries are used.
+Users who run other applications that use MySQL (for example, running PHP 3 and PHP 4 as concurrent apache modules, or auth-mysql) should always specify the path to MySQL: --with-mysql= / path / to / mysql.
+This will force PHP to use the client libraries installed by MySQL, avoiding any conflicts.
+The windows version of PHP The windows version of PHP has built in support for this extension.
+You do not need to load any additional extension in order to use these functions.
+Warning
+Crashes and startup problems of PHP may be encountered when loading this extension in conjunction with the recode extension.
+See the recode extension for more information.
+The behaviour of these functions is affected by settings in php.ini.
+Table 1.
+MySQL Configuration Options
+Name
+Default
+Changeable
+mysql.allow_persistent
+"On"
+PHP_INI_SYSTEM
+mysql.max_persistent
+"-1"
+PHP_INI_SYSTEM
+mysql.max_links
+"-1"
+PHP_INI_SYSTEM
+mysql.default_port
+NULL
+PHP_INI_ALL
+mysql.default_socket
+NULL
+PHP_INI_ALL
+mysql.default_host
+NULL
+PHP_INI_ALL
+mysql.default_user
+NULL
+PHP_INI_ALL
+mysql.default_password
+NULL
+PHP_INI_ALL
+mysql.connect_timeout
+"0"
+PHP_INI_SYSTEM
+Here is a short explanation of the configuration directives.
+Whether to allow persistent connections to MySQL.
+The maximum number of persistent MySQL connections per process.
+The maximum number of MySQL connections per process, including persistent connections.
+The default TCP port number to use when connecting to the database server if no other port is specified.
+If no default is specified, the port will be obtained from the MYSQL_TCP_PORT environment variable, the mysql-tcp entry in / etc / services or the compile-time MYSQL_PORT constant, in that order.
+Win32 will only use the MYSQL_PORT constant.
+The default socket name to use when connecting to a local database server if no other socket name is specified.
+The default server host to use when connecting to the database server if no other host is specified.
+Doesn 't apply in safe mode.
+The default user name to use when connecting to the database server if no other name is specified.
+Doesn 't apply in safe mode.
+The default password to use when connecting to the database server if no other password is specified.
+Doesn 't apply in safe mode.
+Connect timeout in seconds.
+On Linux this timeout is also used for waiting for the first answer from the server.
+There are two resource types used in the MySQL module.
+The first one is the link identifier for a database connection, the second a resource which holds the result of a query.
+The constants below are defined by this extension, and will only be available when the extension has either been compiled into PHP or dynamically loaded at runtime.
+Since PHP 4.3.0 it is possible to specify additional client flags for the mysql_connect() and mysql_pconnect() functions.
+The following constants are defined:
+Table 2.
+MySQL client constants
+constant
+description
+MYSQL_CLIENT_COMPRESS
+use compression protocol
+MYSQL_CLIENT_IGNORE_SPACE
+Allow space after function names
+MYSQL_CLIENT_INTERACTIVE
+Allow interactive_timeout seconds (instead of wait_timeout) of inactivity before closing the connection.
+The function mysql_fetch_array() uses a constant for the different types of result arrays.
+The following constants are defined:
+Table 3.
+MySQL fetch constants
+constant
+description
+MYSQL_ASSOC
+Columns are returned into the array having the fieldname as the array index.
+MYSQL_BOTH
+Columns are returned into the array having both a numerical index and the fieldname as the array index.
+MYSQL_NUM
+Columns are returned into the array having a numerical index to the fields.
+This index starts with 0, the first field in the result.
+This simple example shows how to connect, execute a query, print resulting rows and disconnect from a MySQL database.
+Example 1.
+MySQL extension overview example
+?php / * Connecting, selecting database * / $link = mysql_connect( "mysql_host", "mysql_user", "mysql_password") or die("Could not connect"); print "Connected successfully"; mysql_select_db("my_database") or die("Could not select database"); / * Performing SQL query * / $query = "SELECT * FROM my_table"; $result = mysql_query($query) or die("Query failed"); / * Printing results in HTML * / print "table \n"; while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {print " tr \n"; foreach ($line as $col_value) {print " td $col_value / td \n";} print " / tr \n";} print" / table \n"; / * Free resultset * / mysql_free_result($result); / * Closing connection * / mysql_close($link);?
+Prev
+Home
+Next
+msql
+Up
+mysql_affected_rows

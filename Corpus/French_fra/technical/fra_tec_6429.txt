@@ -1,0 +1,47 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Conseils et astuces pour modem
+Cette section nous amène directement à l'art (pas si) effrayant de l'optimisation de modem. Les commandes sont toutes du standard Hayes, mais tous les modems ne sont pas égaux, vos expériences peuvent varier.
+Les sessions modems
+Une session modem vous permet d'interagir directement avec le modem. Vous saisissez les commandes, et il répondra. Pour obtenir une session modem, lorsqu'aucune connexion n'est active, allez dans Configuration, et la fenêtre de dialogue Modem Terminal. Cela ouvrira une fenêtre pour une configuration interactive du modem. Essayez de saisir ATZ (ce qui initialise votre modem). Vous devez obtenir une réponse OK. Utilisez Fichier Fermer pour terminer la session.
+Profils des modems
+Une des raisons pour lesquelles vous voulez envoyer directement les commandes au modem est si vous avez un ensemble de configurations modem que vous voulez garder, et vous n'avez pas à spécifier à chaque connexion. Une bonne manière de faire ça est via les profils modem. Les modems peuvent avoir plusieurs profils enregistrés numérotés 0,1,... ATamp; V peut être utilisé pour les voir tous. Le profil utilisé par défaut est habituellement 0 (ceci peut être changé via ATamp; Y). Le profil actuellement utilisé est appelé le profil actif.
+Lorsque vous changez un réglage, le profil actif est modifié. La commande ATZ oblige le modem à charger le profil par défaut, écrasant tout changement que vous avez fait. Pour enregistrer les changements, chargez le profil que vous voulez changer via ATZ n (où n est le numéro du profil). Faites les changements que vous voulez, et enregistrez -les avec ATamp; W n. Pour obliger kppp à utiliser le profil que vous voulez, changez la chaîne d'initialisation du modem (Configuration Modem Commandes modem Chaîne d'initialisation). Par exemple ATZ1 obligera kppp à initialiser le modem et à utiliser le profil n°1.
+Si vous voulez initialiser votre modem pour revenir à un point de départ connu, utilisez ATamp; Famp; W pour régler le profil actif aux paramètres d'usine par défaut, et les enregistrer dans le profil par défaut.
+Les exemples de changement de profils sont dans la prochaine section
+Obliger le modem à rendre la main
+Quelques fois vous pourrez trouver que & kppp; a des difficultés pour raccrocher le modem. Cela ressemble à une mauvaise coordination entre les réglages & kppp; et ceux du modem. Un modem standard utilise deux méthodes pour décider de raccrocher & #160;: Commande, et DTR. La méthode commande implique d'envoyer une séquence d'espacement au modem, ce qui le met dans le mode commande, alors il utilise la commande pour raccrocher (ATH).
+En dehors de & kppp;, quand vous configurerez le paquetage pppd manuellement, il est souvent pratique d'utiliser la méthode commande, parce que celle -ci peut sortir d'une session terminal, et ensuite lancer pppd sans que le modem ne raccroche. Dans la plupart des situations, la méthode DTR est préférée, puisque plus simple.
+Méthode DTR (ATamp; Dn)
+La méthode DTR fera raccrocher le modem même si & kppp; arrête d'utiliser le modem. Si vous obtenez une session modem, et demandez l'état via ATamp; V, et vous pouvez voir parmi les réglages affichés pour le profil actif un amp; D0, et la méthode DTR de raccrochage est désactivée. Pour activer la méthode DTR, utilisez le bouton Terminal pour avoir une session modem, ensuite & #160;:
+ATZ # initialise le profil par défaut ATamp; D2 # règle le raccrochage à la chute du DTR ATamp; W # écrit dans le profil par défaut
+Comment la méthode DTR fonctionne
+Même si la ligne Data Terminal Ready (DTR) sur la ligne série entre l'ordinateur hôte et le modem devient haute, le modem raccroche. Lorsque & kppp; ouvre le port série, la ligne DTR est descendue, sur un modem extérieur, vous pouvez voir la lumière DTR (or TR) s'allumer quand cela arrive. Lorsque la lumière TR s'éteint (parce que & kppp; a fermé le port série, ou quelque chose de pire & #160;!), le modem raccrochera.
+La méthode commande
+L'autre moyen de forcer le modem à raccrocher lorsque vous êtes connecté (utilisé quand ATamp; D n où n n'est pas 2) est d'obliger le modem à accepter la commande quand une session est en cours. Pour l'obliger à raccrocher proprement, ouvrez une session modem, et régler le garde temps à un cours intervalle comme & #160;:
+ATZ ATS12=5 ATamp; W
+Ensuite utilisez la glissière garde temps dans la section commandes du modem faire correspondre le registre (S12 à 5. Le modem doit alors raccrocher proprement.
+Comment la méthode commande fonctionne
+Lorsque le modem local est connecté à un modem distant, il est dans l'état connecté, où il passe tous les caractères qu'il reçoit du modem distant sans interprétation. Pour forcer le modem à accepter les caractères en tant que des commandes pour lui-même, on doit passer le modem en état de commande. La commande d'échappement fait cela.
+Le commande d'échappement est définie comme étant trois intervalles de temps qui dont la longueur est définie par S12 en cinquantièmes de seconde.
+Muet (doit au moins durer plus que S12 / 50 secondes)
+Le caractère d'échappement (défini par le registre S2, le réglage par défaut est +), répété trois fois (moins que S12 / 50 secondes entre chaque).
+Une fois le modem en mode commande, vous pouvez lui envoyer des commandes. Pour le faire raccrocher, envoyez la commande ATH. Le code d'échappement et la chaîne de raccrochage utilisée par & kppp; sont montrées dans la fenêtre de dialogue commandes modem. Cela doit correspondre à votre modem.
+Forcer la numérotation plus rapide
+Si vous pouvez utiliser la numérotation par tonalité, le temps que cela prend à composer peut être changé en utilisant le registre S11. Il donne la durée (en centième de seconde) pour envoyer chaque tonalité lors de la numérotation. Le réglage par défaut est habituellement 95 (presque une seconde). À quelle vitesse vous pouvez composer dépend du matériel de la compagnie de téléphone qui s'occupe de votre ligne. La durée minimum est 50, soit environ deux fois plus vite, et cette vitesse fonctionne la plupart du temps.
+ATZ # initialise le profil par défaut ATS11=50 # composition la plus rapide possible, utilisez un chiffre plus grand si ça ne fonctionne pas ATamp; W # écrit dans le profil par défaut

@@ -1,0 +1,209 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Depuis la version 4.3, PHP supporte un nouveau type de SAPI (Server Application Programming Interface, c'est à dire Interface de Programmation d'Applications Serveur) appelé CLI, ce qui signifie Command Line Interface et se traduit par Interface de Ligne de Commande.
+Comme son nom l'indique, ce type SAPI cible les applications shell (ou desktop), écrites en PHP.
+Il y a pas mal de différences enter le type CLI SAPI et les autres SAPI, qui sont expliqués dans ce chapitre.
+Le CLI SAPI a été publié puor la première fois avec la version PHP 4.2.0, mais il est resté expérimental, et doit être explicitement activé avec la commande --enable-cli, lorsque vous exécutez le script. / configure.
+Depuis PHP 4.3.0, le CLI SAPI n'est plus expérimental, et est donc toujours compilé et installé comme binaire PHP (appelé aussi php.exe sous Windows).
+Les différences les plus notables entre le CLI SAPI et les SAPI sont:
+Contrairement au CGI SAPI, aucun entête HTTP n 'est écrits dans le résultat.
+Bien que le CGI SAPI fournisse un moyen de supprimer les entêtes HTTP, il n'y a pas moyen d 'activer les entêtes HTTP dans le CLI SAPI.
+Il y a plusieurs directives du php.ini qui sont ignorées par le CLI SAPI, car elles n 'ont pas de sens, en environnement shell:
+Tableau 23-1.
+Directives php.ini ignorées
+
+Valeur par défaut pour CLI SAPI
+Commentaire
+
+
+Il peut être bien difficile de lire les messages d'erreur sur un terminal lorsqu 'ils sont noyés dans des balises HTML sans grand intérêts.
+Par conséquent, cette directive est forcée à FALSE.
+
+
+Il est souhaitable que tout affichage en provenance de print(), echo() et consorts soit immédiatement affiché dans le terminal, et non pas placé dans un buffer quelconque.
+Vous pouvez toujours utiliser la bufferisation de sortie si vous voulez retarder un affichage, ou bien en manipuler ultimement le contenu.
+
+
+Etant donné les possibilités infinies de PHP en environnement shell, le temps d'exécution maximal d 'un script PHP a été rendu illimité.
+Alors que les scripts destinés au web doivent s 'accomplir en une fraction de seconde, il arrive que les scripts shell requièrent bien plus de temps.
+
+
+Les variables globales de PHP $argc (numbre d'arguments passés à l'application) et $argv (tableau contenant les arguments passés à l'application) sont toujours enregistré et rempli avec les données appropriées, lorsque vous utilisez le CLI SAPI.
+
+Ces directives ne peuvent pas être initialisées avec d 'autres valeurs dans le fichier php.ini ou par une autre méthode.
+C'est une limitation, car ces valeurs par défaut s 'appliquent une fois que tous les autres fichiers de configuration ont été analysés.
+Cependant, ces valeurs peuvent être modifiées durant l'exécution (ce qui n'est pas logique pour certaines directives, comme par exemple register_argc_argv).
+Pour faciliter le travail en environnement shell, les constantes suivantes sont définies:
+Tableau 23-2.
+Constantes spécifiques au CLI
+Constante
+Déscription
+
+
+
+
+
+
+Etant donné ce qui précède, vous n'avez pas besoin d 'ouvrir un fichier vers stderr par vous-même, mais vous pouvez utiliser cette constante directement, comme un descripteur de fichier:
+
+Exemple de différence entre CGI SAPI et CLI SAPI:
+?php / * Un test simple: affiche le dossier d'ex eacute;cution * / echo getcwd(), "\n";?
+Lorsque vous utilisez la version CGI, l 'affichage pourra être
+$pwd / tmp $php-cgi -f autre_dossier / test.php / tmp / autre_dossier
+En utilisant le CLI SAPI, on obtient:
+$pwd / tmp $php -f autre_dossier / test.php / tmp
+
+CGI SAPI supporte le même comportement de CLI SAPI, en lui passant l'option -C, lorsque vous l 'invoquez en ligne de commmande.
+La liste des options de ligne de commande fournies par PHP est disponible en exécutant PHP avec l 'option -h:
+
+
+
+Le CLI SAPI dispose de trois moyens pour lire le code du script PHP que vous voulez exécuter:
+Indiquer à PHP d "exécuter un fichier:
+php mon_script.php php -f mon_script.php
+Donner du code PHP à exécuter directement en ligne de commande.
+
+
+Lisez l'exemple attentivement, il n'y a ni balise d 'ouverture, ni balise de fermeture!
+L'option -r fonctionne sans ces balises, et les ajouter conduira alors à une erreur d 'analyse.
+Donner du code PHP dans l'entrée standard (stdin).
+Cela donne la possibilité de créer dynamiquement du code PHP, puis de le fournir à PHP, et enfin, de le traiter à nouveau en shell.
+Voici un exemple fictif:
+
+Comme toute application shell, l 'exécutable PHP accepte des arguments, et votre script peut aussi les recevoirs.
+Le nombre d'arguments n 'est pas limité par PHP, mais par le shell, qui a une limite en terme de nombre de caractères qui peuvent être passés.
+Généralement, vous n 'atteidrez pas cette limite, mais cela reste possible.
+Les arguments passés au script seront transmis via la variable tableau $argv.
+L,index zéro contiendra toujours le nom du script appelé.
+Si le code a été fourni en ligne de commande, ou via stdin, ce premier élément vaudra -.
+L'autre variable globale fournie est $argc qui contient le nombre d'éléments dans le tableau $argv: ce nombre est différent du nombre d 'arguments passés au script.
+Tant que les arguments que vous passez à votre script ne commencent pas par le caractère -, il n 'y a rien de spécial à surveiller.
+Si vous passez des arguments à voter script qui commencent par -, cela posera des problèmes car PHP va penser qu 'il doit les interpréter.
+Pour éviter cela, utilisez le séparateur - -.
+Après cet argument, tous les arguments suivants seront passés à votre script sans être modifié ou analysé par PHP.
+# Cela ne va pas ex eacute; cuter le code, mais afficher l'aide de PHP $php -r 'var_dump($argv); '-h Usage: php [options] [-f] file [args...] [...] # Cela va passer l'argument '-h' agrave; votre script, et eacute;viter que PHP ne le traite $php -r 'var_dump($argv); '- - -h array(2) {[0]= string(1) "-" [1]= string(2) "-h "}
+Cependant, il y a une autre méthode pour utiliser PHP en script shell.
+Vous pouvez aussi utiliser la ligne #! / usr / bin / php en tout début de votre script, suivi de code PHP compris entre balise ouvrantes / fermantes.
+Vous pouvez aussi ajouter après #! / usr / bin / php les options nécessaires.
+Vous pouvez aussi le faire en ligne de commande.
+De cette manière, le script peut être exécuté comme un script shell habituel:
+
+
+Tableau 23-3.
+Options de ligne de commande
+
+
+
+Affiche le code avec la colorisation syntaxique.
+Cette option utilise le mécanisme interne pour analyser le fichier, et produire une version colorisée du code source, au format HTML.
+Notez que cette option ne fait que générer un bloc HTML, sans les entêtes. code [...] / code
+
+Cette option ne fonctionne pas avec l 'option -r.
+
+Affiche la source sans les commentaires et les espaces.
+
+Cette option ne fonctionne pas avec l 'option -r.
+
+Analyse et exécute le fichier donné après l 'option -f.
+Cette optione est optionnelle, et peut être omise.
+Le seul nom du fichier est suffisant.
+
+Affiche les versions de PHP, PHP SAPI, et Zend sur le terminal.
+Par exemple:
+$php -v PHP 4.3.0-dev (cli), Copyright (c) 1997-2002 The PHP Group Zend Engine v1.2.1, Copyright (c) 1998-2002 Zend Technologies
+
+Avec cette option, vous pouvez spécifier le nom du dossier dans lequel PHP va recherche le fichier php.ini, ou encore vous pouvez spécifier un fichier de configuration directement (qui n'a pas obligatoirement à être appelé php.ini):
+$php -c / custom / directory / mon_script.php $php -c / custom / directory / custom-file.ini mon_script.php
+
+Exécute PHP de manière interactive.
+
+Cette option permet de modifier n 'importe quelle directive de configuration du fichier php.ini.
+La syntaxe est:
+
+Exemples:
+# L'omission de la valeur conduit agrave; donner la valeur de "1 "$php -d max_execution_time -r '$foo = ini_get("max_execution_time"); var_dump($foo); 'string(1) "1" # Passer une valeur vide conduit agrave; donner la valeur de "" php -d max_execution_time= -r '$foo = ini_get("max_execution_time"); var_dump($foo);' string(0) "" # La directive de configuration sera n'importe quelle valeur pass eacute;e apr egrave;s le caract egrave;re '= '$php -d max_execution_time=20 -r '$foo = ini_get("max_execution_time"); var_dump($foo);' string(2) "20 "$php -d max_execution_time=doesntmakesense -r '$foo = ini_get("max_execution_time"); var_dump($foo); 'string(15) "doesntmakesense"
+
+Génére des informations étendues pour le profilage et le débogage.
+
+Charge une extension Zend.
+Si seulement un fichier est fourni, PHP essaie de charger cette extension dans le dossier courant par défaut des librairie sur votre système (généralement spécifié avec / etc / ld.so.conf sous Linux).
+Passer un nom de fichier avec le chemin complet fera que PHP utilisera ce fichier, sans recherche dans les dossiers classiques.
+Un chemin de dossier relatif indiquera à PHP qu 'il doit chercher uniquement les extensions dans ce dossier.
+
+Cette option permet de faire une vérification syntaxique sur le code PHP fourni.
+En cas de réussite, le message No syntax errors detected in filename (Aucune d'erreur de syntaxe n 'ont été détectées dans nom_de_fichier est affiché sur la sortie standard, et le script shell retourne 0.
+En cas d'erreur, le message Errors parsing filename (Erreurs d'analyse dans le fichier filename) est affiché, en plus des messages d'erreurs détectés par l 'analyseur lui même.
+Le script shell retourne le code 255.
+Cette option ne détecte pas les erreurs fatales (comme par exemple les fonctions non définies).
+Utilisez -f si vous voulez tester aussi ces erreurs.
+
+Cette option ne fonctionne pas avec l 'option -r.
+
+Cette option liste les extensions PHP et Zend compilées et chargées:
+
+
+Cette option appelle la fonction phpinfo(), et affiche le résultat.
+Si PHP ne fonctionne pas correctement, il est recommandé d'utiliser la commande php -i et de voir si il n'y a pas d'erreurs affichées avant ou après la table d 'information.
+N 'oubliez pas que le résutltat de cette option est au format HTML, et donc grand et illisible directement.
+
+Cette option permet l 'exécution de PHP directement dans la ligne de commande.
+Les balises de PHP (?php et?) ne sont pas demandées, et coauseront une erreur d 'analyse.
+
+De l'attention doit être portée lors de l'utilisation de cette option de PHP, pour qu'il n 'y ait pas de collision avec les substitutions de variables en lignes de commande, réalisées par le shell.
+Exemple conduisant à une erreur d 'analyse:
+
+
+
+
+
+Avec cette option, vous pouvez obtenir des informations sur la liste des options supporté par votre PHP, avec des explications succintes.
+L 'exécutable PHP peut être utilisé pour exécuter des scripts indépendants du serveur web.
+Si vous êtes sur un système Unix, il est recommandé d 'ajouter la ligne de configuration en début de scripts, de le rendre exécutable de manière à ce que le système sache quel programme doit exécuter le script.
+Sous Windows, vous pouvez associer l'exécutable php.exe avec le double-clic sur les fichiers d 'extension .php, ou bien vous pouvez faire un fichier batch pour exécuter le script grâce à PHP.
+La première ligne utilisée dans le monde Unix ne perturbera pas PHP sous Windows, ce qui rend les scripts facilements portables.
+Un exemple complet est disponible ci-dessous:
+Exemple 23-1.
+Script prévu pour être exécuté en ligne de commande (script.php)
+
+C'est une ligne de commande agrave; une option.
+Utilisation: ?php echo $argv[ 0];? option option peut ecirc ;tre un mot que vous souhaitez afficher.
+Avec les options --help, -help, -h, et -?, vous obtiendrez cette aide. ?php} else {echo $argv[1];}?
+Dans le script ci-dessus, nous utilisons la première ligne pour indiquer que le fichier doit être exécuté par PHP.
+Nous travaillons avec une version CLI, donc il n'y a pas d 'entêtes HTTP qui soient affichés.
+Il y a deux variables que vous pouvez utiliser avec les applications de ligne de commande: $argc et $argv.
+La première est le nombre d'arguments plus un (le nom du script qui est exécuté).
+La seconde est un tableau contenant les arguments, commençant avec le nom du script en élément 0 ($argv[0]).
+Dans notre exemple, nous avnos vérifié qu'il y a plus ou moins d 'un argument.
+De plus, si cet argument est --help, -help, -h ou -?, nous avons affiché un message d 'aide, ainsi que le nom du script.
+Nous nous recevons un autre argument, cet argument est affiché dans le terminal.
+Pour exécuter le script ci-dessus sous Unix, vous devez le rendre exécuétable, puis l 'appeler avec une commande comme: script.php echothis ou script.php -h.
+Sous Windows, vous pouvez faire un fichier batch pour cela:
+Exemple 23-2.
+Fichier batch pour exécuter un script PHP en ligne de commande (script.bat)
+@c:\php\php.exe script.php %1 %2 %3 %4
+Si vous avez nommé le programme ci-dessus script.php, et que vous avez votre exécutable php.exe situé à c:\php\php.exe, ce fichier batch l 'exécutera avec les options que vous lui passez: script.bat echothis ou script.bat -h.
+Voir aussi l 'extension Readline, qui dispose de nombreuses fonctions pour améliorer la convivialité de vos applications en ligne de commande.
+Précédent
+Sommaire
+Suivant
+Safe mode
+Niveau supérieur
+Index des fonctions

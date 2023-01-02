@@ -1,0 +1,55 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(no version information, might be only in CVS)
+php_stream_make_seekable() checks if origstream is seekable.
+If it is not, it will copy the data into a new temporary stream.
+If successful, newstream is always set to the stream that is valid to use, even if the original stream was seekable.
+flags allows you to specify your preference for the seekeable stream that is returned: use PHP_STREAM_NO_PREFERENCE to use the default seekable stream (which uses a dynamically expanding memory buffer, but switches to temporary file backed storage when the stream size becomes large), or use PHP_STREAM_PREFER_STDIO to use "regular "temporary file backed storage.
+Table 43-1. php_stream_make_seekable() return values
+Value
+Meaning
+PHP_STREAM_UNCHANGED
+Original stream was seekable anyway. newstream is set to the value of origstream.
+PHP_STREAM_RELEASED
+Original stream was not seekable and has been released. newstream is set to the new seekable stream.
+You should not access origstream anymore.
+PHP_STREAM_FAILED
+An error occurred while attempting conversion. newstream is set to NULL; origstream is still valid.
+PHP_STREAM_CRITICAL
+An error occurred while attempting conversion that has left origstream in an indeterminate state. newstream is set to NULL and it is highly recommended that you close origstream.
+Note:
+If you need to seek and write to the stream, it does not make sense to use this function, because the stream it returns is not guaranteed to be bound to the same resource as the original stream.
+Note:
+If you only need to seek forwards, there is no need to call this function, as the streams API will emulate forward seeks when the whence parameter is SEEK_CUR.
+Note:
+If origstream is network based, this function will block until the whole contents have been downloaded.
+Note:
+NEVER call this function with an origstream that is reference by a file pointer in a PHP script!
+This function may cause the underlying stream to be closed which could cause a crash when the script next accesses the file pointer!
+Note:
+In many cases, this function can only succeed when origstream In many cases, this function can only succeed when origstream is a newly opened stream with no data buffered in the stream layer.
+For that reason, and because this function is complicated to use correctly, it is recommended that you use php_stream_open_wrapper() and pass in PHP_STREAM_MUST_SEEK in your options instead of calling this function directly.
+Prev
+Home
+Next
+php_stream_copy_to_mem
+Up
+php_stream_cast

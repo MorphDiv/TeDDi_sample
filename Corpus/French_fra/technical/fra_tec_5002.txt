@@ -1,0 +1,235 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Toutes les fonctions suivent le schéma suivant:
+
+Les arguments sont toujours de type val.
+Ce type contient un membre de type union, qui indique le type reél d 'argument.
+De cette façon, si votre fonction prend deux arguments, elle ressemble à ceci:
+Exemple E-1.
+Argument de fonction de lecture
+
+Lorsque vous modifiez l'un des paramètres, qu'ils soient envoyés par référence ou par valeur, vous pouvez le passer à pval_destructor pour le réinitialiser, ou, s'il s'agit d 'un tableau et que vous voulez ajouter des valeurs, vous pouvez utiliser des fonctions similaires à celles qui sont dans internal_functions.h, qui manipule return_value comme tableau.
+Par ailleurs, si vous modifiez un paramètre en IS_STRING, assurez-vous que vous avez bien assigné un nouvelle chaîne avec estrdup() et une nouvelle longueur de chaîne.
+Seulement après, vous pouvez modifier le type en IS_STRING.
+Si vous modifiez une chaîne en IS_STRING ou IS_ARRAY vous devez d 'abord appeler le destructeur pval_destructor.
+Une fonction peut prendre un nombre variable d 'arguments.
+Si votre fonction peut prendre deux ou trois arguments, utiliser la syntaxe suivante:
+Exemple E-2.
+Fonctions à nombre d 'arguments variable
+
+De type de chaque argument est stocké dans le champs pval.
+Ce champs peut prendre les valeurs suivantes:
+Tableau E-1.
+Types de données interne PHP
+
+Chaîne de caractères
+
+Nombre à virgule flottante, en précision double
+
+Entier long
+
+Tableau
+
+Aucune
+
+
+
+?? (Si ce type ne peut pas être passé à une fonction, effacez-le)
+
+
+
+
+Si vous recevez un argument d'un type, et que vous voulez l'utiliser avec un autre type, ou si vous voulez simplement forcer le type, vous pouvez utiliser l 'une des fonctions de conversion suivantes:
+convert_to_long( arg1); convert_to_double(arg1); convert_to_string(arg1); convert_to_boolean_long(arg1); / * Si la chaîne est "" ou "0 "elle devient 0, 1 sinon * / convert_string_to_number(arg1); / * Convertit une chaîne en LONG ou DOUBLE suivant la chaîne * /
+Ces fonctions convertissent sur place: elles ne retournent aucune valeur.
+La valeur de l 'argument est enregistrée dans une union.
+Les membres sont:
+
+
+
+Toute la mémoire nécessaire à une fonction doit être allouée avec emalloc() ou estrdup().
+Ces fonctions ont le goût et l'odeur des fonctions C classiques malloc() et strdup().
+La mémoire doit être libérée avec efree().
+Il y a deux types de mémoire dans ce programme: la mémoire qui est retournée à l 'analyseur, et la mémoire qui nécessaire pour le stockage temporaire dans la fonction.
+Lorsque vous assignez une chaîne dans une variable qui est retournée à l'analyseur, assurez-vous de bien allouer la mémoire avec emalloc() ou estrdup().
+Cette mémoire ne doit JAMAIS être libérée, sauf si vous réécrivez votre original plus loin, dans la même fonction (mais ce n'est pas de la programmation propre).
+Pour tous vos besoins en mémoire temporaire / permanante dont vous avez besoin dans vos fonctions / librairies, vous devez utiliser les fonctions emalloc(), estrdup() et efree().
+Elles se comportent EXACTEMENT comme leurs homologues.
+Tout ce qui est créé avec emalloc() ou estrdup() doit être libéré avec efree() à un moment ou un autre, à moins que ce ne soit utile ailleurs dans le programme; sinon, il va y avoir une fuite de mémoire.
+La signification de "Elles se comportent EXACTEMENT comme leurs homologues" est que si vous libérez une variable qui n'a pas été créée avec emalloc() ou estrdup(), vous courez droit à au crash ("segmentation fault").
+Soyez alors extrêmement prudent, et libérez toute votre mémoire inutilisée.
+Si vous compilez avec "-DDEBUG", PHP 3 affichera la liste de tous les appels à emalloc() et estrdup() mais jamais à efree() lorsque celui-ci intervient dans un script spécifié.
+Un grand nombre de macros sont disponibles pour rendre plus facile l 'insertion de variables dans la table des symboles:
+
+
+
+Gestion de la mémoire
+Soyez prudent.
+La valeur doit être placée dans une portion de mémoire créée avec malloc(), sinon le gestionnaire de mémoire essayera de libérer le pointeur plus tard.
+Ne passez aucune mémoire allouée statiquement à SET_VAR_STRING.
+Les tables des symboles de PHP 3 est une table de hash.
+A n'importe quel moment, symbol_table est un pointeur sur la table principale, et active_symbol_table pointe sur la table actuellement utilisée. (ces deux tables peuvent être identiques au démarrage, ou différent, suivant que vous êtes dans une fonction ou non).
+Les exemples suivants utilisent 'active_symbol_table'.
+Vous devriez la remplacer par symbol_table si vous voulez travailler sur la table principale.
+De plus, les mêmes fonctions peuvent être appliquées à des tableaux, comme expliqué ci-dessous.
+Exemple E-3.
+Vérification de l 'existence de $foo dans la table des symboles
+if (hash_exists(active_symbol_table ,"foo",sizeof("foo"))) {/ / existe...} else {/ / n'existe pas}
+Exemple E-4.
+Rechercher la taille d 'une variable dans la table des symboles
+
+Si vous voulez définir un nouveau tableau dans la table des symboles, utilisez le code suivant.
+D'abord, vous devez vérifier qu'il n'existe pas, avec hash_exists() ou hash_find().
+Puis, initialisez le tableau:
+Exemple E-5.
+Initialisation d 'un tableau
+pval arr; if (array_init (arr) == FAILURE) {/ *Initialiation échouée* /}; hash_update(active_symbol_table ,"foo",sizeof("foo"), arr,sizeof(pval),NULL);
+Voici comment ajouter deux nouvelles entrées dans ce tableau:
+Exemple E-6.
+Ajout d 'entrées dans un tableau.
+pval entry; entry.type = IS_LONG; entry.value.lval = 5; / * définit $foo["bar"] = 5 * / hash_update(arr.value.ht ,"bar",sizeof("bar"), entry,sizeof(pval),NULL); / * définit $foo[7] = 5 * / hash_index_update(arr.value.ht,7, entry,sizeof(pval),NULL); / * définit la prochaine place libre dans $foo[], * $foo[8], qui sera 5 (comme en php2) * / hash_next_index_insert(arr.value.ht, entry,sizeof(pval),NULL);
+hash_next_index_insert() utiliser plus ou moins la même logique que "$foo[] = bar; "in PHP 2.0.
+Si vous construisez un tableau, pour le retourner, vous pouvez l 'initialiser comme ceci:
+if (array_init(return_value) == FAILURE) {échec...;}
+puis ajouter les valeurs grâces aux macros:
+
+Bien sûr, si l'ajout n'est pas fait juste après l'initialisation, vous devrez d 'abord rechercher le tableau:
+pval *arr; if (hash_find(active_symbol_table ,"foo",sizeof("foo") ,(void **) arr)==FAILURE) {introuvable...} else {utilisez arr - value.ht...}
+Notez que hash_find reçoit un pointeur sur un pointeur sur pval, et pas un pointeur sur pval.
+Toutes les fonctions d'accès aux hash retourne TRUE (SUCCES) ou FALSE (FAILURE), excepté hash_exists(), qui retourne un booléen.
+Un grand nombre de macros sont disponible pour simplifier le retour des valeurs.
+La macro RETURN_* fixe la valeur de retour, et termine la fonction:
+
+
+
+
+RETURN_STRING( s,dup) Si dup est TRUE, duplique la chaîne.
+RETURN_STRINGL( s,l,dup) retourne la chaîne (s) en spécifiant la longueur (l).
+
+La macro RETVAL_* macros fixe la valeur de retour, mais ne termine pas la fonction.
+
+
+
+RETVAL_STRING( s,dup) Si dup est TRUE, duplique la chaîne
+RETVAL_STRINGL( s,l,dup) retourne la chaîne (s) en spécifiant la longueur (l).
+
+Les macros ci-dessus vont utiliser estrdup() sur les arguments passés.
+Cela vous permet de libérer tranquillement les arguments après avoir appelé cette fonction, ou bien, utiliser de la mémoire allouée statiquement.
+Si votre fonction retourne un booléen de succès / erreur, utilisez toujours RETURN_TRUE et RETURN_FALSE respectivement.
+Votre fonction peut aussi retourner des valeurs complexes, tels que des objets ou tableaux.
+Retourner un objet:
+Appeler object_init( return_value).
+Remplissez les valeurs.
+Les fonctions utilisables sont listées ci dessous.
+Eventuellement, enregistrez les fonctions pour cet objet.
+Afin de lire des valeurs de cet objet, la fonction doit lire dans "this", dans la table de symbole active active_symbol_table.
+Son type doit être IS_OBJECT, et c'est une table de hash basique. (i.e., vous pouvez utiliser les fonctions habituelles de .value.ht).
+L 'enregistrement reél peut être fait comme suit:
+
+Les fonctions d 'accès aux objets sont:
+add_property_long( return_value, property_name, l) - Ajoute un membre nommé 'property_name', de type long, égal à 'l '
+add_property_double( return_value, property_name, d) - Idem, ajoute un double
+add_property_string( return_value, property_name, str) - Idem, ajoute une chaîne
+add_property_stringl( return_value, property_name, str, l) - Idem, ajoute une chaîne de longueur 'l '.
+Retournez un tableau:
+Appelez array_init( return_value).
+Remplissez les valeurs.
+Les fonctions disponibles sont listées ci-dessous.
+Les fonctions utilisées pour accéder à un tableau sont:
+add_assoc_long( return_value,key,l) - Ajoute une entrée associative avec la clé 'key 'et la valeur 'l', de type long
+add_assoc_double( return_value,key,d) - Ajoute une entrée associative avec la clé 'key 'et la valeur 'l', de type double
+
+add_assoc_stringl( return_value,key,str,length,duplicate) spécifie la taille d 'une chaîne
+add_index_long( return_value,index,l) - Ajoute une entrée d'index index 'avec la valeur 'l', de type long
+
+
+add_index_stringl( return_value,index,str,length) - spécifie la longueur de la chaîne.
+add_next_index_long( return_value,l) - ajoute une entrée tableau, dans le prochain offset libre, de longueur 'l ', de type long
+
+
+add_next_index_stringl( return_value,str,length) - spécifie la taille d 'une chaîne
+PHP 3.0 dispose de standards pour traiter un certains nombre de ressources.
+Ils remplacent tous les listes de PHP 2.0.
+Fonctions accessibles:
+php3_list_insert( ptr, type) - retourne l'identifiant 'id 'de la nouvelle ressource insérée.
+php3_list_delete( id) - efface la ressource d 'identifiant id
+php3_list_find( id,*type) - retourne le pointeur de la ressource d'identifiant id, et modifie le type 'type '
+La liste standard de code ressemble à ceci:
+Exemple E-7.
+Ajouter une nouvelle ressource
+RESOURCE *resource; / * ...alloue de la mémoire pour la ressource, et l'acquiert... * / / * Ajoute la nouvelle ressource dans la liste * / return_value - value.lval = php3_list_insert((void *) resource, LE_RESOURCE_TYPE); return_value - type = IS_LONG;
+Exemple E-8.
+Utiliser une ressource existante
+pval *resource_id; RESOURCE *resource; int type; convert_to_long(resource_id); resource = php3_list_find(resource_id - value.lval, type); if (type != LE_RESOURCE_TYPE) {php3_error(E_WARNING ,"resource index %d has the wrong type",resource_id - value.lval); RETURN_FALSE;} / * ...utiliser la ressource... * /
+Exemple E-9.
+Effacer une ressource existante
+
+PHP 3.0 dispose d'une lieu de stockage des ressources persistantes (i.e., les ressources qui doivent être conservées d'un hit à l'autre).
+Le premier module a utiliser cette capacité a été MySQL, et mSQL suivi, ce qui fait que l 'on peut se faire une impression du fonctionnement de cette fonction avec mysql.c.
+Les fonctions ressemblent à ceci:
+
+
+
+L 'idée conductrice de ces modules est la suivante:
+Programmez tout votre module pour qu'il travaille avec les ressources standard, comme mentionné dans la section (9).
+Ajoutez une autre fonction de connexion, qui vérifie d 'abord que la ressource existe dans la liste des ressources persistantes.
+Si c'est le cas, enregistrez cette ressource comme pour les ressources standard (et grâce à la première étape, cela va fonctionner immédiatement).
+Si la ressource n 'existe pas, créez la, ajoutez la à la liste de ressources persistantes, et ajoutez la à la liste de ressources, ce qui fait que le code va fonctionner, et que le prochain appel renverra une ressource existante.
+Vous devez enregistrer ces fonctions avec un type différent (LE_MYSQL_LINK pour les liens non persistants, et LE_MYSQL_PLINK pour les liens persistants).
+Si vous jetez un oeil dans mysql.c, vous verrez que, hormis la fonction de connexion complexe, rien n 'a du être changé dans le module.
+La même interface existe pour la liste des ressources standard, et pour la liste des ressources persistantes, seule la 'list' est remplacée par 'plist ':
+php3_plist_insert( ptr, type) - retourne l'identifiant 'id 'de la nouvelle ressource insérée.
+php3_plist_delete( id) - efface la ressource d 'identifiant id
+php3_plist_find( id,*type) - retourne le pointeur de la ressource d'identifiant id, et modifie le type 'type '
+Cependant, il est probable que ces fonctions seront inutiles pour vous, lorsque vous essayerez d 'implémentez un module persistant.
+Typiquement, on utiliser le fait que la liste de ressources persistantes est une table de hash.
+Par exemple, dans les modules MySQL / mSQL, lors d'un appel à pconnect(), la fonction construit une chaîne avec l'hôte / utilisateur / mot_de_passe, et l 'utilise pour enregistrer dans la table de hash.
+Au prochain appel, avec les mêmes hôte / utilisateur / mot_de_passe, la même clé sera générée, et la ressource associée sera retrouvée.
+Jusqu'à ce que la documentation s 'étoffe, jetez un oeil aux fichiers mysql.c ou msql.c pour voir comment implémentez vos accès aux ressources persistantes.
+Une chose importante à noter: les ressources qui sont enregistrées dans la liste de ressource persistante ne DOIVENT PAS être allouée avec le gestionnaire de mémoire PHP, c'est-à-dire qu'elles ne doivent pas être créée avec emalloc(), estrdup(), etc.
+Au contraire, il faut utiliser les fonctions standard malloc(), strdup(), etc.
+La raison est for simple: à la fin de la requête, la mémoire sera supprimée par le gestionnaire.
+Etant donné que les liens persistants doivent être conservés, il ne faut pas utiliser le gestionnaire de mémoire.
+Lorsque vous enregistrez une ressource qui sera placé dans la liste de ressources persistantes, il faut ajouter les destructeurs dans les deux listes de ressources, persistantes ou pas.
+Le destructeur de la liste de ressources non persistantes ne doit rien faire du tout, tandis que celui de la liste de ressources persistantes doit libérer proprement toutes les ressources acquises (mémoire, lien SQL...).
+Commep pour les ressources non persistantes vous DEVEZ ajouter un destructeur, même s 'il ne fait rien.
+N'oubliez pas que emalloc() et compagnie ne doivent pas être utilisé en conjonction avec la liste de ressources persistantes, et donc, vous ne devez pas utiliser efree() non plus.
+De nombreuses caractéristiques de PHP 3 peuvent être configurée à l 'éxécution.
+Ces directives peuvent apparaître dans le fichier php3.ini, ou, dans le cas du module Apache, dans le fichier .conf.
+L'avantage de l 'avoir dans le fichier .conf, est que ces caractéristiques peuvent être configurées dossier par dossier.
+Cela signifie qu'un dossier peut avoir un safe mode exec dir, tandis qu 'un autre en aura un autre.
+Cette granularité de la configuration peut être extrêmement pratique lorsque le serveur supporte plusieurs serveurs virtuels.
+Les étapes de configuration d 'une nouvelle directive sont:
+Ajouter la directive à la structure php3_ini_structure dans le fichier mod_php3.h.
+Dans main.c, éditez la fonction php3_module_startup et ajoutez l'appel aproprié à cfg_get_string() ou cfg_get_long().
+Ajoutez la directive, ses restrictions et un commentaire dans la structure php3_commands du fichier mod_php3.c.
+Notez la partie restrictions RSRC_CONF sont des directives qui ne peuvent être disponibles que dans le fichier de configuration Apache.
+Toutes les directives OR_OPTIONS peuvent être placées n 'importe où, y compris dans un fichier .htaccess.
+Soit dans php3take1handler(), soit dans php3flaghandler(), ajoutez l 'entrée appropriée pour votre directive.
+Dans la section de configuration, de _php3_info(), dans le fichier functions / info.c, vous devez ajouter votre configuration.
+Finalement, vous devez utiliser votre configuration quelque part.
+Elle sera accessible par php3_ini.directive.
+Précédent
+Sommaire
+Suivant
+Protocole du débuggeur
+Niveau supérieur
+Appeler des fonctions utilisateurs

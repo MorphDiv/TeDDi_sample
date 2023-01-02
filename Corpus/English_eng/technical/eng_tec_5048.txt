@@ -1,0 +1,74 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 4 = 4.0.5)
+udm_load_ispell_data() loads ispell data.
+Returns TRUE on success, FALSE on error.
+agent - agent link identifier, received after call to udm_alloc_agent().
+var - parameter, indicating the source for ispell data.
+May have the following values:
+After using this function to free memory allocated for ispell data, please use udm_free_ispell_data(), even if you use UDM_ISPELL_TYPE_SERVER mode.
+The fastest mode is UDM_ISPELL_TYPE_SERVER.
+UDM_ISPELL_TYPE_TEXT is slower and UDM_ISPELL_TYPE_DB is the slowest.
+The above pattern is TRUE for mnoGoSearch 3.1.10 - 3.1.11.
+It is planned to speed up DB mode in future versions and it is going to be faster than TEXT mode.
+UDM_ISPELL_TYPE_DB - indicates that ispell data should be loaded from SQL.
+In this case, parameters val1 and val2 are ignored and should be left blank. flag should be equal to 1.
+In case of loading ispell data from files there may be several calls to udm_load_ispell_data(), and there is no sense to sort data after every call, but only after the last one.
+Since in db mode all the data is loaded by one call, this parameter should have the value 1.
+In this mode in case of error, e.g. if ispell tables are absent, the function will return FALSE and code and error message will be accessible through udm_error() and udm_errno().
+Example:
+if (! udm_load_ispell_data($udm,UDM_ISPELL_TYPE_DB ,'' ,'',1)) {printf("Error #%d: '%s'\n", udm_errno($udm), udm_error($udm)); exit;}
+UDM_ISPELL_TYPE_AFFIX - indicates that ispell data should be loaded from file and initiates loading affixes file.
+In this case val1 defines double letter language code for which affixes are loaded, and val2 - file path.
+Please note, that if a relative path entered, the module looks for the file not in UDM_CONF_DIR, but in relation to current path, i.e. to the path where the script is executed.
+In case of error in this mode, e.g. if file is absent, the function will return FALSE, and an error message will be displayed.
+Error message text cannot be accessed through udm_error() and udm_errno(), since those functions can only return messages associated with SQL.
+Please, see flag parameter description in UDM_ISPELL_TYPE_DB.
+Example:
+if ((! udm_load_ispell_data($udm,UDM_ISPELL_TYPE_AFFIX ,'en' ,' / opt / ispell / en.aff',0)) | | (! udm_load_ispell_data($udm,UDM_ISPELL_TYPE_AFFIX ,'ru' ,' / opt / ispell / ru.aff',0)) | | (! udm_load_ispell_data($udm,UDM_ISPELL_TYPE_SPELL ,'en' ,' / opt / ispell / en.dict',0)) | | (! udm_load_ispell_data($udm,UDM_ISPELL_TYPE_SPELL ,'ru' ,' / opt / ispell / ru.dict',1))) {exit;}
+UDM_ISPELL_TYPE_SPELL - indicates that ispell data should be loaded from file and initiates loading of ispell dictionary file.
+In this case val1 defines double letter language code for which affixes are loaded, and val2 - file path.
+Please note, that if a relative path entered, the module looks for the file not in UDM_CONF_DIR, but in relation to current path, i.e. to the path where the script is executed.
+In case of error in this mode, e.g. if file is absent, the function will return FALSE, and an error message will be displayed.
+Error message text cannot be accessed through udm_error() and udm_errno(), since those functions can only return messages associated with SQL.
+Please, see flag parameter description in UDM_ISPELL_TYPE_DB.
+if ((!
+Udm_Load_Ispell_Data( $udm,UDM_ISPELL_TYPE_AFFIX ,'en' ,' / opt / ispell / en.aff',0)) | | (!
+Udm_Load_Ispell_Data( $udm,UDM_ISPELL_TYPE_AFFIX ,'ru' ,' / opt / ispell / ru.aff',0)) | | (!
+Udm_Load_Ispell_Data( $udm,UDM_ISPELL_TYPE_SPELL ,'en' ,' / opt / ispell / en.dict',0)) | | (!
+Udm_Load_Ispell_Data( $udm,UDM_ISPELL_TYPE_SPELL ,'ru' ,' / opt / ispell / ru.dict',1))) {exit;}
+UDM_ISPELL_TYPE_SERVER - enables spell server support. val1 parameter indicates address of the host running spell server. val2 ` is not used yet, but in future releases it is going to indicate number of port used by spell server. flag parameter in this case is not needed since ispell data is stored on spellserver already sorted.
+Spelld server reads spell-data from a separate configuration file (/ usr / local / mnogosearch / etc / spelld.conf by default), sorts it and stores in memory.
+With clients server communicates in two ways: to indexer all the data is transferred (so that indexer starts faster), from search.cgi server receives word to normalize and then passes over to client (search.cgi) list of normalized word forms.
+This allows fastest, compared to db and text modes processing of search queries (by omitting loading and sorting all the spell data).
+udm_load_ispell_data() udm_load_ispell_data() function in UDM_ISPELL_TYPE_SERVER mode does not actually load ispell data, but only defines server address.
+In fact, server is automatically used by udm_find() function when performing search.
+In case of errors, e.g. if spellserver is not running or invalid host indicated, there are no messages returned and ispell conversion does not work.
+Note:
+This function is available in mnoGoSearch 3.1.12 or later.
+Example:
+if (!udm_load_ispell_data($udm,UDM_ISPELL_TYPE_SERVER ,'' ,'',1)) {printf("Error loading ispell data from server br \n"); exit;}
+Prev
+Home
+Next
+udm_get_res_param
+Up
+udm_open_stored

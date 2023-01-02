@@ -1,0 +1,33 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3, PHP 4)
+imap_createmailbox() creates a new mailbox specified by mbox.
+Names containing international characters should be encoded by imap_utf7_encode()
+Returns TRUE on success and FALSE on error.
+See also imap_renamemailbox(), imap_deletemailbox() and imap_open() for the format of mbox names.
+Example 1. imap_createmailbox() example
+$mbox = imap_open( "{your.imap.host}" ,"username" ,"password",OP_HALFOPEN) or die("can't connect: ".imap_last_error()); $name1 = "phpnewbox"; $name2 = imap_utf7_encode("phpnewb ouml;x"); $newname = $name1; echo "Newname will be '$name1 'br \n"; # we will now create a new mailbox "phptestbox "in your inbox folder, # check its status after creation and finaly remove it to restore # your inbox to its initial state if(@imap_createmailbox($mbox,imap_utf7_encode("{your.imap.host}INBOX.$newname"))) {$status = @imap_status($mbox ,"{your.imap.host}INBOX.$newname",SA_ALL); if($status) {print("your new mailbox '$name1' has the following status: br \n"); print("Messages:". $status - messages). "br \n"; print("Recent:". $status - recent). "br \n"; print("Unseen:". $status - unseen). "br \n"; print("UIDnext:". $status - uidnext). "br \n"; print("UIDvalidity :". $status - uidvalidity)." br \n"; if(imap_renamemailbox($mbox ,"{your.imap.host}INBOX.$newname" ,"{your.imap.host}INBOX.$name2")) {echo "renamed new mailbox from '$name1 'to '$name2' br \n"; $newname=$name2;} else {print "imap_renamemailbox on new mailbox failed: ".imap_last_error(). "br \n";}} else {print "imap_status on new mailbox failed: ".imap_last_error()." br \n";} if(@imap_deletemailbox($mbox ,"{your.imap.host}INBOX.$newname")) {print "new mailbox removed to restore initial state br \n";} else {print "imap_deletemailbox on new mailbox failed: ".implode( "br \n",imap_errors())." br \n";}} else {print "could not create new mailbox: ".implode( "br \n",imap_errors())." br \n";} imap_close($mbox);
+Prev
+Home
+Next
+imap_close
+Up
+imap_delete

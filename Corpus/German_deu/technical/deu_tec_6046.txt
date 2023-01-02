@@ -1,0 +1,209 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Das Handbuch zu & ksysv;
+Peter Putzer
+putzer@kde.org
+Volker Dose vpdose@cpmgut.toppoint.de Deutsche Übersetzung
+Peter Putzer
+Dieses Handbuch beschreibt den KDE System V Init Editor & ksysv;.
+KDE
+KSysV
+Runlevel
+Runlevel Editor
+System V Init
+Einführung
+Willkommen zum & kde; System V Init Editor, eher bekannt (und im folgenden auch so benannt) als & ksysv;. Dieser Abschnitt führt ein paar Konzepte ein und beschreibt, was Sie mit & ksysv; tun können.
+Eine kurze Beschreibung von System V Init
+Die folgende Erläuterung ist geliehen von tksysv (einer Inspirationsquelle für & ksysv;)
+Die System V Init entwickelt sich rasch zum Standard für die Kontrolle des Programmstarts beim Hochfahren des Systems in der & Linux; Welt. Und zwar deshalb, weil es leichter zu benutzen, leistungsfähiger und zugleich flexibler ist als die traditionelle BSD -Init.
+Ich werde hier nicht weiter auf geschichtliche Aspekte eingehen (u.a. weil ich darüber selbst nichts weiß :-).
+Die Init-Binärdatei liegt unter /sbin und nicht unter /etc. Dies ist deshalb wichtig, weil vielleicht jemand versuchen könnte, eine Maschine auf System V Init umzustellen, ohne eine Neuinstallation und Neuformatierung vorzunehmen. Der & Linux; Kernel sieht zuerst unter /etc nach einer Init-Datei. Deshalb müssen Sie sichergehen, dass die alte Init von dort entfernt wurde, falls es dort eine gab.
+Die SysV Init unterscheidet sich auch dadurch von der BSD Init, dass sich die Konfigurationsdateien in einem Unterordner von /etc befinden statt direkt in /etc. Dieser Ordner heißt rc.d. Dort finden Sie rc.sysinit und folgende weitere Ordner:
+init.d /
+rc0.d /
+rc1.d /
+rc2.d /
+rc3.d /
+rc4.d /
+rc5.d /
+rc6.d
+init.d enthält eine ganze Menge Skripte. Grundsätzlich benötigen Sie ein Skript für jeden Systemdienst, den Sie beim Hochfahren des Systems bzw. beim Wechsel auf einen anderen Runlevel starten möchten. Systemdienste beinhalten solche Dinge wie Netzwerk, NFS, & Sendmail;, httpd & etc; Systemdienste beinhalten dagegen nicht solche Sachen wie setserial, das nur einmal gestartet wird. Solche Aufrufe gehören nach rc.local.
+rc.local sollte seinerseits unter /etc/rc.d liegen, wenn Sie es benötigen. Die meisten Systeme besitzen diese Datei, auch wenn es eigentlich nicht viel Verwendung dafür gibt. Sie können ebenfalls ein rc.serial in /etc/rc.d anlegen, wenn Sie beim Hochfahren etwas ausführen lassen wollen, was mit dem seriellen Anschluss zu tun hat.
+Der Ablauf ist folgender:
+der Kernel sucht an verschiedenen Stellen nach dem Programm init und startet das erste, das er findet.
+init startet /etc/rc.d/rc.sysinit.
+rc.sysinit tut eine Menge notwendiger Dinge und startet dann rc.serial (wenn es existiert)
+init startet rc.local
+init startet alle Skripte für das voreingestellte Runlevel
+Der standardmäßige Runlevel ist in /etc/inittab eingetragen. Sie sollten im Anfangsbereich eine Zeile wie die folgende sehen:
+id:3:initdefault:
+An diesem Punkt können Sie einen Blick in die zweite Spalte werfen und wahrscheinlich feststellen, dass der voreingestellte Runlevel 3 ist. Wenn Sie das ändern möchten, dann können Sie /etc/inittab von Hand bearbeiten und die 3 ändern. Seien Sie sehr vorsichtig, wenn Sie an der inittab Änderungen durchführen. Falls Sie doch etwas durcheinandergebracht haben, dann kommen Sie es reparieren, indem Sie das System neu starten und folgendes ausführen:
+LILO boot: linux single
+Dies sollte Ihnen ermöglichen, in den Einzelnutzer-Modus zu kommen und die Reparatur vorzunehmen.
+Aber wie startet es nun all die richtigen Skripte? Wenn Sie ls -l eingeben in rc3.d, dann sehen Sie wahrscheinlich etwas wie das Folgende:
+lrwxrwxrwx 1 root root 13 13:11 S10network -gt; ../init.d/network lrwxrwxrwx 1 root root 16 13:11 S30syslog -gt; ../init.d/syslog lrwxrwxrwx 1 root root 14 13:32 S40cron -gt; ../init.d/cron lrwxrwxrwx 1 root root 14 13:11 S50inet -gt; ../init.d/inet lrwxrwxrwx 1 root root 13 13:11 S60nfs -gt; ../init.d/nfs lrwxrwxrwx 1 root root 15 13:11 S70nfsfs -gt; ../init.d/nfsfs lrwxrwxrwx 1 root root 18 13:11 S75keytable -gt; ../init.d/keytable lrwxrwxrwx 1 root root 23 13:11 S80sendmail -gt; ../init.d/sendmail.init lrwxrwxrwx 1 root root 18 13:11 S90lpd -gt; ../init.d/lpd.init lrwxrwxrwx 1 root root 11 13:11 S99local -gt; ../rc.local
+Sie werden bemerken, das sich in diesem Ordner keine richtigen Dateien befinden. Stattdessen ist jeder Eintrag hier eine Verknüpfung zu einem der Skripte im Verzeichnis init.d.
+Die Verknüpfungen haben auch ein S und eine Nummer am Anfang. Das S besagt, dass dieses bestimmte Skript gestartet werden soll, so wie umgekehrt ein K den Stopp bedeuten würde. Die Nummer dient der Sortierung. Tatsächlich startet init alle Systemdienste in der Reihenfolge, in der sie erscheinen. Sie können die Nummern also doppelt vergeben, aber es wird Sie nur selbst durcheinander bringen. Sie benötigen eine zweistellige Zahl, zusammen mit einem großgeschriebenen S oder K, um einen Systemdienst zu starten bzw. anzuhalten.
+Wie startet und stoppt init eigentlich Systemdienste? Ganz einfach: Jedes der Skripte ist so geschrieben, dass es ein Argument wie start und stop akzeptiert. Sie können diese Skripte tatsächlich von Hand auf der Befehlszeile folgendermaßen starten:
+/etc/rc.d/init.d/httpd.init stop
+Dies würde den httpd-Server anhalten. Init liest den Namen, und wenn der ein K beinhaltet, wird das Skript mit dem Argument stop aufgerufen. Wenn er ein S beinhaltet, wird das Skript mit dem Argument start aufgerufen.
+Warum all diese Runlevel?
+Manche Leute wünschen sich eine einfache Art, Maschinen für viele Zwecke einzurichten. Ich könnte & eg; ein server -Runlevel haben, das nur httpd, & Sendmail;, Netzwerk & etc; laufen lässt. Darüber hinaus könnte ich auch noch einen Benutzer -Runlevel haben, das & eg; & kdm;, Netzwerk & etc; startet.
+Grundlagen der Bildschirmabläufe
+Hier lernen Sie die Benutzung von & ksysv;. Sie sollte nicht sehr schwierig sein, weil das Programm so benutzerfreundlich wie möglich angelegt wurde.
+Maus
+Die Verwendung von & ksysv; mit einer Maus oder einem anderen Zeigegerät ist einfach, um nicht zu sagen trivial: Ziehen Sie einfach einen Eintrag aus dem Bereich der Verfügbaren Systemdienste auf einen der sechs Runlevel, um ihn auf diesem Level zu starten (bzw. zu stoppen).
+Sie können Skripte auch zwischen Runleveln verschieben oder die Position innerhalb eines Levels verändern, indem sie es woanders hin ziehen. Dabei wird der Eintrag von seinem ursprünglichen Runlevel (oder seiner Position) entfernt. Dies geschieht nur dann nicht, wenn sie einen Eintrag aus dem Bereich der Verfügbaren Systemdienste herausziehen.
+Beachten Sie: Einträge werden verschoben, wenn Sie diese in einen neuen Bereich ziehen. Um sie lediglich auf einen neuen Runlevel zu kopieren, müssen Sie ausdrücklich Kopieren aus dem Menü Bearbeiten oder aus dem Kontextmenü wählen und in den Zielbereich Einfügen -- sogar dann, wenn derselbe Eintrag bereits zuvor im Zielbereich der Aktion existiert hat.
+Die Sortiernummer eines Eintrags kann manchmal nicht berechnet werden. In so einem Fall müssen Sie die Sortiernummern der umgebenden Einträge bearbeiten, bevor Sie nochmals versuchen können, den Systemdienst einzufügen.
+Beachten Sie: Sortiernummern können von 00 bis 99 reichen, nicht höher.
+Sie können Einträge löschen, indem Sie sie in den Papierkorb ziehen.
+Beachten Sie: Gegenwärtig gibt es keine Möglichkeit, Einträge wiederherzustellen, die in den Papierkorb geworfen wurden. Seien Sie also vorsichtig.
+Tastatur
+Sie können die Tabulator -Taste benutzen, um die verschiedenen Arbeitsbereiche zu aktivieren (Verfügbare Systemdienste, Runlevel 1 Start, Runlevel 1 Stop & etc;) sowie die Cursor-Tasten, um eine Auswahl ober- oder unterhalb der bisherigen zu treffen.
+Um einen Eintrag in einen anderen Runlevel zu verschieben, verschieben Sie ihn mit Ausschneiden in die Zwischenablage (Sie können auch Ctrl; X benutzen) und fügen Sie ihn in den gewünschten Runlevel mit Einfügen (mit Ctrl; V) ein.
+Um die Sortiernummer oder den Namen eines Eintrags manuell zu ändern, drücken Sie die Eingabe -Taste, um den Eigenschaften-Dialog zu öffnen. Benutzen Sie die Tabulator -Taste, um zwischen verschiedenen Feldern zu wechseln. Schließen Sie den Dialog durch erneutes Drücken der Eingabe -Taste, um die Änderungen zu akzeptieren, oder drücken Sie Esc, um die Änderungen zu verwerfen.
+Die Menüeinträge
+Es folgt eine ausführliche Erläuterung der Menüs von & ksysv;.
+Das Menü Datei
+Wegen der Gefahr des Datenverlusts erfordern alle Einträge im Menü Datei eine Bestätigung, bevor sie ausgeführt werden.
+Datei Zuletzt gespeicherte Konfiguration...
+Alle durchgeführten Änderungen verwerfen und die letzte gespeicherte Konfiguration aufrufen.
+Ctrl; O Datei Öffnen...
+Eine gespeicherte Konfiguration laden.
+Ctrl; S Datei Einstellungen speichern...
+Macht Ihre Änderungen dauerhaft wirksam. Es werden keine Sicherungsdateien angelegt. Seien Sie also vorsichtig.
+Datei Speichern unter...
+Eine Kopie der neuen Konfiguration speichern.
+Ctrl; L Datei Protokolldatei speichern...
+Speichert den Ablauf der durchgeführten Änderungen.
+Ctrl; P Datei Protokolldatei drucken...
+Die Protokolldatei ausdrucken.
+Ctrl; Q Datei Beenden
+Beendet & ksysv;.
+Das Menü Bearbeiten
+Ctrl; Z Bearbeiten Rückgängig
+Macht die letzte nicht gespeicherte Änderung rückgängig.
+Ctrl;Shift; Z Bearbeiten Wiederherstellen
+Letzte rückgängig gemachte Aktion wieder herstellen.
+Ctrl; X Bearbeiten Ausschneiden
+Schneidet den gerade ausgewählten Systemdienst aus und kopiert den Eintrag in die Zwischenablage.
+Ctrl; C Bearbeiten Kopieren
+Kopiert den gerade ausgewählten Systemdienst in die Zwischenablage, ohne ihn zu löschen.
+Ctrl; V Bearbeiten Einfügen
+Fügt den Inhalt der Zwischenablage an der aktuellen Cursorposition ein.
+Bearbeiten Eigenschaften
+Öffnet den Dialog Eigenschaften für den gerade ausgewählten Systemdienst.
+Das Menü Extras
+Extras Systemdienst starten...
+Startet den angewählten Systemdienst.
+Extras Systemdienst anhalten...
+Den angewählten Systemdienst anhalten.
+Extras Systemdienst neu starten...
+Den angewählten Systemdienst neu starten.
+Extras Systemdienst bearbeiten...
+Den angewählten Systemdienst bearbeiten.
+Das Menü Einstellungen
+Einstellungen Werkzeugleiste anzeigen
+Anzeige der Werkzeugleiste ein- und ausschalten.
+Einstellungen Statusleiste anzeigen
+Anzeige der Statusleiste ein- und ausschalten.
+Einstellungen Protokolldatei anzeigen
+Schaltet die Anzeige der Protokolldatei in einem extra Fenster ein oder aus (alle Vorgänge, Fehlermeldungen & etc; werden in einer Protokolldatei gespeichert).
+Einstellungen Einstellungen speichern
+Alle bisher erwähnten Einstellungen gelten nur bis zum nächsten Systemstart, es sei denn, Sie wählen diesen Menüpunkt. Dies gilt einschließlich der Fenstergröße und -aufteilung.
+Einstellungen Kurzbefehle festlegen...
+Die Zuordnungen von Tastendrücken zu Aktionen verändern.
+Einstellungen Werkzeugleisten einrichten...
+Die Werkzeugleisten nach Ihren Wünschen anpassen.
+Einstellungen SysV-Init Editor einrichten...
+Das Verhalten von & ksysv; anpassen.
+Das Menü Hilfe
+& help.menu.documentation;
+Einrichtung
+Alle Einstellungen werden gespeichert in $KDEHOME /share/config/ksysvrc. Voreinstellungen werden der globalen Datei ($KDEDIR /share/config/ksysvrc) entnommen, falls sie verfügbar ist. Andernfalls werden sie von & ksysv; wiederhergestellt. Änderungen an den Voreinstellungen werden gespeichert in einer lokalen ksysvrc.
+Gültige Abschnitte der Konfigurationsdateien
+Abschnitte und Schlüsselwerte der Konfigurationsdateien, die vom Programm erkannt werden, sowie ihre Voreinstellungen:
+& lsqb;Path Settingsrsqb;
+Schlüsselwert
+Standard
+Beschreibung
+ScriptPath
+/etc/rc.d/init.d
+Pfad zu den Skripten für das Starten und Stoppen der Systemdienste.
+RunlevelPath
+/etc/rc.d
+Pfad zu den Unterordnern der Runlevel.
+& lsqb;Colorsrsqb;
+Geändert
+rot
+Farbe für geänderte Einträge
+Neu
+blau
+Farbe für neue Einträge
+& lsqb;Geometryrsqb;
+Width
+Breite des Fensters von & ksysv;
+Height
+Höhe des Fensters von & ksysv;
+& lsqb;Other Settingsrsqb;
+Werkzeugleiste
+true
+Ob die Werkzeugleiste ein- oder ausgeschaltet ist
+Statusleiste
+Ob die Statusleiste ein- oder ausgeschaltet ist
+ShowLog
+Ob das Protokollfenster an- oder ausgeschaltet ist
+PanningFactor
+80
+100 - PanningFactor = Prozentsatz des Fenster für die Anzeige der Protokolldatei
+Fragen und Antworten
+Ich habe mit den Standard-Runleveln herumexperimentiert, und jetzt startet die Maschine beständig neu. Was kann ich tun?
+Geben Sie am LILO -Prompt linux single ein und drücken Sie die Eingabe -Taste, um im Einzelnutzer-Modus zu starten. Dann bearbeiten Sie die Datei /etc/inittab und ändern der standardmäßige Runlevel auf einen vernünftigen Wert (3 sollte normalerweise in Ordnung sein).
+Meine Maschine hängt kurz nach dem Neustart.
+Bitte schauen Sie bei Frage 1 nach!
+Ich habe einige Systemdienste mit & ksysv; zur Ausführung unter Runlevel X vorgesehen, aber sie werden nicht ausgeführt.
+Wenn Sie & SuSE; oder Delix (DLD) benutzen, dann müssen Sie zusätzliche Dateien in /etc bearbeiten, die nur in diesen Distributionen vorhanden sind. Bitte lesen Sie die Details im Handbuch der Distribution nach.
+Die Art, wie Systemdienste in diesen Distributionen gestartet werden, vereinfacht die Konfiguration für die proprietären Einrichtungsprogramme dieser Distributionen, entspricht aber leider keinem Standard. Die Autoren von & ksysv; planen eine Erweiterung des Programms für diesen Ansatz.
+Falls Sie eine andere Distribution verwenden: Überprüfen Sie bitte, ob alle Konfigurationsdateien vorhanden sind, die vom jeweiligen Systemdienst benötigt werden (und auch, ob sie sich im richtigen Verzeichnis befinden). Manche Dienste (wie & eg; Apache bzw. httpd) beenden sich einfach ohne Nachricht, wenn ihre Konfigurationsdateien nicht vorhanden oder falsch eingerichtet sind.
+Standardbedeutung der Runlevel
+Die Bedeutung der & Linux;-Runlevel variiert von Distribution zu Distribution, kann sogar von Version zu Version unterschiedlich sein. Falls Sie eine andere Distribution benutzen, senden Sie mir bitte Informationen über die Runlevel, damit diese diesem Handbuch zugefügt werden können.
+& RedHat;
+Runlevel 0:
+Halt (fährt die Maschine runter)
+Runlevel 1:
+Einzelbenutzermodus
+Runlevel 2:
+Konsolenmodus, ohne NFS.
+Runlevel 3:
+Konsolenmodus mit allen Netzdiensten.
+Runlevel 4:
+Nicht verwendet.
+Runlevel 5:
+Mehrbenutzer-Modus -- mit X11 und vollem Netzwerk
+Runlevel 6:
+Neustart
+Lizenz
+& ksysv; Copyright & copy; 1997-1998 Peter Putzer
+Peter Putzer, putzer@kde.org - Entwickler
+Handbuch:
+Peter Putzer, putzer@kde.org
+Eric Bischoff, & Eric.Bischoff.mail; - Bearbeiter
+Übersetzer: Thomas Diehl th.diehl@gmx.net Übersetzer: Volker Dose vpdose@cpmgut.toppoint.de
+& underFDL; & underGPL;
+Installation

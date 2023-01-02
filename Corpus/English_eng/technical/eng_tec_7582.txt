@@ -1,0 +1,720 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+@@image: 'figures/GNOME_desktop_Accessibility.png'; md5=76a706b0a4d4e184d7951fce04ccec59
+@@image: 'figures/gaa.png'; md5=THIS FILE DOESN'T EXIST
+@@image: 'figures/nodrop.png'; md5=16b315fbe17b719998a057ba560c22e2
+@@image: 'figures/label_above.png'; md5=5b7a6f236b676802e62807b8d63bbf10
+@@image: 'figures/label_below.png'; md5=1ab1facdd4ace09c84b415eb0e581891
+@@image: 'figures/label_right.png'; md5=c0d4328a48ec9a6889b4b1ec8e5548d6
+@@image: 'figures/label_left.png'; md5=186cae86a97426a6c9034d0c2091b5d9
+@@image: 'figures/color_only.png'; md5=d4f964fc9b557eda6f4bfab0793d7964
+@@image: 'figures/color_and_arrows.png'; md5=a9a1eb5f1f902f388e717f4ef7882c22
+@@image: 'figures/badfocus1.png'; md5=48c81ba9110bcbbec7e2664658a8a4ef
+@@image: 'figures/badfocus2.png'; md5=5ced4392a665b97154f0b7b220d36351
+@@image: 'figures/goodfocus.png'; md5=5f8c020c3d8382bfd3e70448591ec0f4
+@@image: 'figures/badfocus3.png'; md5=bb0f9a1309bb05c0d9e9cd719625c8a0
+@@image: 'figures/goodfocus3.png'; md5=f95f59dcfb337d2f811ac04025141ae2
+@@image: 'figures/goodfocus2.png'; md5=86b2a96f4142edb59a3ef22f433a4504
+@@image: 'figures/at-arch.png'; md5=e429cadb2e11d42d7437e999de175c3f
+GNOME Accessibility Developers Guide
+The GNOME Accessibility Guide is for developers who want to ensure their programming efforts are accessible to the widest audience of users. This guide also covers many of the Section 508 requirements.
+2008
+Vincent Alexander
+2001, 2002
+Calum Benson, Brian Cameron, Bill Haneman, Padraig O'Briain, Sharon Snider
+GNOME Documentation Project
+Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License (GFDL), Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. You can find a copy of the GFDL
+This manual is part of a collection of GNOME manuals distributed under the GFDL. If you want to distribute this manual separately from the collection, you can do so by adding a copy of the license to the manual, as described in Section 6 of the license.
+Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and the members of the GNOME Documentation Project are made aware of those trademarks, then the names are in capital letters or initial capital letters.
+DOCUMENT IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, WITHOUT LIMITATION, WARRANTIES THAT THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS FREE OF DEFECTS MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE OR NON-INFRINGING. THE ENTIRE RISK AS TO THE QUALITY, ACCURACY, AND PERFORMANCE OF THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS WITH YOU. SHOULD ANY DOCUMENT OR MODIFIED VERSION PROVE DEFECTIVE IN ANY RESPECT, YOU (NOT THE INITIAL WRITER, AUTHOR OR ANY CONTRIBUTOR) ASSUME THE COST OF ANY NECESSARY SERVICING, REPAIR OR CORRECTION. THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS LICENSE. NO USE OF ANY DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS AUTHORIZED HEREUNDER EXCEPT UNDER THIS DISCLAIMER; AND
+UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY, WHETHER IN TORT (INCLUDING NEGLIGENCE), CONTRACT, OR OTHERWISE, SHALL THE AUTHOR, INITIAL WRITER, ANY CONTRIBUTOR, OR ANY DISTRIBUTOR OF THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT, OR ANY SUPPLIER OF ANY OF SUCH PARTIES, BE LIABLE TO ANY PERSON FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY CHARACTER INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF GOODWILL, WORK STOPPAGE, COMPUTER FAILURE OR MALFUNCTION, OR ANY AND ALL OTHER DAMAGES OR LOSSES ARISING OUT OF OR RELATING TO USE OF THE DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT, EVEN IF SUCH PARTY SHALL HAVE BEEN INFORMED OF THE POSSIBILITY OF SUCH DAMAGES.
+DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT ARE PROVIDED UNDER THE TERMS OF THE GNU FREE DOCUMENTATION LICENSE WITH THE FURTHER UNDERSTANDING THAT:
+Vincent
+Alexander
+Calum
+Benson
+Brian
+Cameron
+Bill
+Haneman
+Padraig
+O'Briain
+Sharon
+Snider
+GNOME 2.24 Accessibility Developers Guide V2.24.0
+September 2008
+This manual describes version 2.24 of the GNOME Desktop.
+Feedback
+To report a bug or make a suggestion regarding the GNOME Desktop or this manual, follow the directions in the
+What is Accessibility?
+Accessibility means helping people with disabilities to participate in substantial life activities. That includes work, and the use of services, products, and information. GNOME includes libraries and a support framework that allow people with disabilities to utilize all of the functionality of the GNOME user environment.
+In conjunction with assistive technologies if necessary - voice interfaces, screen readers, alternate input devices, and so on - people with permanent or temporary disabilities can therefore use the GNOME desktop and applications. Assistive technologies are also useful for people using computers outside their home or office. For example, if you're stuck in traffic, you might use voice input and output to check your email.
+Assistive technologies receive information from applications via the Accessibility Toolkit (ATK) API, which you can find in the atk module in the GNOME repositories. Because support for the accessibility API is built into the GNOME widgets, your GNOME program should function reasonably well with assistive technologies with no extra work on your part. For example, assistive technologies can automatically read the widget labels that you would normally set in your program anyway (e.g. with GTK function calls such as
+With a little extra effort, however, you can make your program function even more smoothly with assistive technologies. Besides helping individual users, this will also make your product more attractive to government and education markets, many of which now require their applications to be accessible by law.
+Types of Disability
+In the US alone, there are an estimated 30,000,000 people whose ability to use computers may be compromised by inaccessible design. Globally, around 8% of the people who use the worldwide web have some sort of disability. Disabilities fall into one of these categories:
+
+
+
+
+
+How Accessibility Works in GNOME
+The Accessibility Toolkit (ATK) describes a set of interfaces that need to be implemented by GUI components to make them accessible. The interfaces are toolkit-independent - implementations could be written for any widget set, such as GTK, Motif or Qt.
+The implementation for the GTK widgets is in a module called GAIL (GNOME Accessbility Implementation Library), which is dynamically loadable at runtime by a GTK application. Once loaded, those parts of your application that use standard GTK widgets will have a basic level of accessibility, without you having to modify your application at all. If GAIL is not loaded, GTK widgets will have a default accessibility implementation that essentially returns no information, though it nominally conforms to the ATK API. Applications which use Bonobo controls, particularly out-of-process ones, also load accessibility support code from module libgail-gnome. Whether or not applications on the GNOME desktop automatically load these accessibility support libraries depends on the value of a
+Most assistive technologies running on other desktops have historically found it necessary to maintain a complex off-screen model of the desktop applications, based on snooping of OS events, use of unsupported OS and application features and API, and other highly non-portable techniques. This has made assistive technology support somewhat "brittle" and highly OS- and application-specific, even application-version specific. In contrast, on the GNOME Desktop, all the information required by the ATs is provided by the running applications, via the GNOME Accessibility Framework, to a toolkit-independent Service Provider Interface (SPI). The SPI provides a means for UNIX-based ATs, such as screen readers and screen magnifiers, to obtain accessibility information from running applications via a consistent, stable API, and can eliminate the need for an off-screen model in many cases. Accessibility support for applications is "built in" to application toolkits via toolkit-appropriate APIs (for instance, ATK for most native C applications and the Java Accessibility API for Java apps), and exported to the common "AT-SPI" interface via the relevant "bridge" (see diagram below).
+GNOME Accessibility Architecture
+Diagram of GNOME's accessibility architecture
+GNOME's built-in accessibility support means that applications created using stock GNOME widgets get support for assistive technologies "for free", provided the widgets are not used in unusual ways which conflict with this built-in support.
+A gtk+/GNOME widget is accessible if its use follows the general accessibility guidelines elsewhere in this document, and it implements the ATK interfaces appropriate to its role in the user interface. ATK implementations are provided for the "stock" GNOME toolkit widgets (i.e. non-deprecated gtk+ and GNOME widgets), and in many cases new widgets which derive trivially from existing GTK+ or GNOME widgets will also inherit suitable accessibility support.
+Though GNOME's built-in accessibility support provides significant functionality without any accessibility-specific code changes on the part of the application, applications can often improve on the default descriptions provided for some of the widgets, and tailor them to that widget's specific purpose in your application, via straightforward calls to ATK methods in the application. For instance, in most cases applications should add or change the textual descriptions for these widgets with the appropriate ATK function call, so that an assisitive technology can describe their purpose or state to the user. See
+If your application uses custom widgets, you may have to do some work to expose those widgets' properties to assistive technologies. See
+For additional, in-depth information regarding GTK/GTK+, see the
+Developer Quick Start
+Here are some common starting points:
+How do I check to see if my application is accessible or not?
+To start right in, see
+What are the common pitfalls?
+The
+How do I do common ATK things?
+An abbreviated listing of common ATK calls can be found
+How do I do more complex ATK things?
+See
+Introducing ATK, AT-SPI, GAIL and GTK+
+ATK is the toolkit that GNOME uses to enable accessibility for users needing extra support to make the most of their computers. ATK is used by tools such as screen readers, magnifiers, and input devices to permit a rich interaction with the desktop through alternative means. See
+AT-SPI is the primary service interface by which assistive technologies query and receive notifications from running applications. The full API can be explored
+GAIL (GNOME Accessibility Implementation Library) is an implementation of the accessibility interfaces defined by ATK. GTK is a toolkit which is already mapped to ATK by the GAIL module. License, download and other information can be found
+GTK+ is a library for creating graphical user interfaces. It works on many UNIX-like platforms, Windows, and on framebuffer devices. GTK+ is released under the GNU Library General Public License (GNU LGPL), which allows for flexible licensing of client applications. GTK+ has a C-based object-oriented architecture that allows for maximum flexibility. Bindings for other languages have been written, including C++, Objective-C, Guile/Scheme, Perl, Python, TOM, Ada95, Free Pascal, and Eiffel.
+Making a GNOME Application Accessible - Overview
+If your application only uses standard GTK widgets, you will probably have to do little or nothing to make your application (reasonably) accessible. But do watch out for objects in your GUI that don't have a textual description associated with them, such as graphical buttons or status indicators that don't have labels or tooltips.
+You can probably also improve on the default descriptions provided for some of the widgets, and tailor them to that widget's specific purpose in your application. You should add or change the textual descriptions for these widgets with the appropriate ATK function call, so that an assisitive technology can describe their purpose or state to the user. See
+If your application uses custom widgets, you may have to do some work to expose those widgets' properties to assistive technologies. See
+Coding Guidelines for Supporting Accessibility
+Here are some things you can do in your code to make your program work as well as possible with assistive technologies. (You can find a list of things to consider when designing your GUI in the
+For components that don't display a short string (such as a graphical button), specify a name for it with
+If you can't provide a tooltip for a component, use
+Providing an accessible description for a GtkButton
+{
+ AtkObject *obj;
+ obj = gtk_widget_get_accessible(button);
+ atk_object_set_description(obj,_("Closes the window"));
+}
+Use
+If several components form a logical group, try to put them in one container.
+Whenever you have a label that describes another component, use
+Relating a GtkLabel to a GtkWidget
+{
+ GtkWidget *widget;
+ GtkLabel *label;
+
+ AtkObject *atk_widget, *atk_label;
+ AtkRelationSet *relation_set;
+ AtkRelation *relation;
+ AtkObject *targets[1];
+
+ atk_widget = gtk_widget_get_accessible(widget);
+ atk_label = gtk_widget_get_accessible (GTK_WIDGET(label));
+
+ relation_set = atk_object_ref_relation_set (atk_label);
+ targets[0] = atk_widget;
+
+ relation = atk_relation_new(targets,1, ATK_RELATION_LABEL_FOR);
+ atk_relation_set_add(relation_set,relation);
+ g_object_unref(G_OBJECT(relation));
+}
+If you create a custom widget, make sure it supports accessibility. Custom components that are descendants of other GTK widgets should override inherited accessibility information as necessary. For more information, see
+Don't break what you get for free! If your GUI has an inaccessible container, any components inside that container may become inaccessible.
+The Accessibility API
+Here are a few of the basic API calls you may need to use in your application to ensure it works well with assistive technologies. The full accessibility API is extensive, to allow you to write your own accessible custom widgets, for example.
+Commonly used ATK API calls
+API
+Description
+AtkObject* gtk_widget_get_accessible (GtkWidget*)
+Returns the accessible object that describes the specified GTK widget to an assistive technology.
+void atk_object_set_name (AtkObject*, const gchar*)
+Sets the name of the accessible object. For example, if the object is a graphical button that quits the application when pressed, the name might be "Quit".
+void atk_object_set_description (AtkObject*, const gchar*)
+Sets the textual description of the accessible object. For example, if the object is a graphical "Close" button, the description might be "Closes the window".
+AtkRelation* atk_relation_new (AtkObject**, gint, AtkRelationType)
+Creates a new relation between the specified key and the specified list of target objects. A relationship normally indicates to the assistive technology that one widget is somehow related to another. For example, that a particular GtkLabel widget is the caption for a GtkTreeView in the same window.
+void atk_image_set_description (AtkImage*, const gchar*)
+Sets the textual description of the accessible image object. For example, if the object is a thumbnail of a virtual desktop in a panel applet, the description might be "Image showing window arrangement on desktop 1".
+Examples that Use the Accessibility API
+As noted earlier, you should have little or no work to do to make your application accessible if you use the GTK widget set, or any other widget library that implements the ATK interfaces. The two most common things you may have to do in this case are:
+provide descriptions of some controls and images using
+Setting the accessible description for a button
+{
+ AtkObject *obj;
+ obj = gtk_widget_get_accessible(button);
+ atk_object_set_description(obj,_("Opens Preferences dialog"));
+}
+Specify relationships between any unusual groupings of widgets using
+Specifying accessible relationship between two controls
+{
+ GtkWidget *widget;
+ GtkLabel *label;
+
+ AtkObject *atk_widget, *atk_label;
+ AtkRelationSet *relation_set;
+ AtkRelation *relation;
+ AtkObject *targets[1];
+
+ atk_widget = gtk_widget_get_accessible (widget);
+ atk_label = gtk_widget_get_accessible (GTK_WIDGET(label));
+
+ relation_set = atk_object_ref_relation_set (atk_label);
+ targets[0] = atk_widget;
+
+ relation = atk_relation_new(targets,1, ATK_RELATION_LABEL_FOR);
+ atk_relation_set_add(relation_set,relation);
+ g_object_unref(G_OBJECT(relation));
+}
+The examples in the rest of this section are mostly to give you a flavor of the scope of the ATK. They cover techniques that you may never need to use as an application developer, although they may be of interest if you are writing your own custom widgets (see
+Gtk Modules
+Programs that make use of GAIL (the accessibility implementation library for GTK widgets) are written as GTK modules. GTK modules are loaded into the program space if the
+setenv GTK_MODULES "libgail:libtestprops"
+All GTK modules have a
+Gathering accessibility information from an application
+A program that wishes to make use of ATK calls would likely need to do one (or more) of the following things:
+Create an event watcher, for example with the
+atk_add_focus_tracker (_my_focus_tracker);
+where
+void _my_focus_tracker (AtkObject *aobject);
+Set up a global event listener, with atk_add_global_event_listener():
+mouse_watcher_focus_id = atk_add_global_event_listener(_my_global_listener,"Gtk:GtkWidget:enter_notify_event");
+where
+Access the ATK top-level object with the following function call.
+AtkObject *root_obj = atk_get_root();
+This returns an
+Querying an
+Having located the
+Use the supplied
+ATK_IS_ACTION(atkobj)
+ATK_IS_COMPONENT(atkobj)
+etc. (there is one for each interface)
+If the macro returns
+Test the role of the
+Setting up an ATK Signal Handler
+Using the
+table_column_inserted_id = g_signal_connect_closure_by_id(my_atk_obj, 
+g_signal_lookup("column_inserted", G_OBJECT_TYPE(my_atk_obj)),0,g_cclosure_new(G_CALLBACK (_my_table_column_inserted_func),NULL,NULL), FALSE);
+This will cause
+Connecting to a signal is slightly different if the signal supports detail. The
+child_added_id = g_signal_connect_closure (my_atk_obj,"children_changed::add", g_cclosure_new (G_CALLBACK(_my_children_changed_func),NULL,NULL),FALSE);
+This will cause
+Implementing an ATK Object
+You will need to implement your own ATK objects for any widgets that do not already have an accessible implementation in GAIL (or the equivalent library for other widget sets). This should be implemented as a GTK module, which, as before, should be included in the
+Registry
+For this example we will assume there is an object called GTK_TYPE_MYTYPE. The ATK implementation will be called
+To register an ATK implementation of a GTK object, these steps must be followed in the module's
+Access the default registry:
+default_registry = atk_get_default_registry();
+Register the ATK object in the
+atk_registry_set_factory_type (default_registry, GTK_TYPE_MYTYPE, MYATKIMP_TYPE_MYTYPE_FACTORY);
+This will register the AtkObject implementation of
+Factory
+The factory must be implemented as a child of class type
+ATK Implemetation for a Specific Object
+All
+In this function, you specify which interfaces your object implements. If the following logic were included in this
+Sample
+static const GInterfaceInfo atk_text_info = 
+{ 
+ (GInterfaceInitFunc) atk_text_interface_init, 
+ (GInterfaceFinalizeFunc) NULL, 
+ NULL 
+}; 
+
+g_type_add_interface_static (type, ATK_TYPE_TEXT, 
+ &atk_text_info);
+The function
+void atk_text_interface_init (AtkTextIface *iface);
+This function would connect the interface function calls to the specific implementation as follows:
+Connecting custom interface calls to an AtkObject implementation
+void 
+atk_text_interface_init (AtkTextIface *iface) 
+{ 
+ g_return_if_fail (iface != NULL); 
+ iface-gt;get_text = myatkimp_mytype_get_text; 
+ iface-gt;get_character_at_offset = myatkimp_mytype_get_character_at_offset; 
+ ... 
+}
+Then the functions
+
+
+Sample
+GType 
+myatkimp_mytype_get_type (void) 
+{ 
+ static GType type = 0; 
+
+ if (!type) 
+ { 
+ static const GTypeInfo tinfo = 
+ { 
+ sizeof (GailLabelClass), 
+ (GBaseInitFunc) NULL, /* base init */ 
+ (GBaseFinalizeFunc) NULL, /* base finalize */
+ (GClassInitFunc) myatkimp_mytype_class_init, /* class init */ 
+ (GClassFinalizeFunc) NULL, /* class finalize */ 
+ NULL, /* class data */ 
+ sizeof (GailLabel), /* instance size */ 
+ 0, /* nb preallocs */ 
+ (GInstanceInitFunc) myatkimp_mytype_instance_init, /* instance init */ 
+ NULL /* value table */ 
+ }; 
+
+ /* Set up atk_text_info structure used below */ 
+ static const GInterfaceInfo atk_text_info = 
+ { 
+ (GInterfaceInitFunc) atk_text_interface_init, 
+ (GInterfaceFinalizeFunc) NULL, 
+ NULL 
+ }; 
+
+ /* Set up typename and specify parent type */ 
+ type = g_type_register_static (MYATKIMP_MYPARENTTYPE, 
+ "MyatkimpMytype", &tinfo, 0); 
+
+ /* This class implements interface ATK_TYPE_TEXT */ 
+ g_type_add_interface_static (type, ATK_TYPE_TEXT, 
+ &atk_text_info); 
+ } 
+ return type; 
+}
+Class/Instance Initializers
+You will have to set up a class initializer for the
+Redefines any function calls defined by the object's parent. This is typically necessary when an object needs to implement a function like
+For example, if your ATK implementation needs to over-ride the
+Class initializer that overrides parent's
+myatkimp_mytype_class_init (GailLabelClass *klass) 
+{ 
+ AtkObjectClass *class = ATK_OBJECT_CLASS (klass); 
+ class-gt;get_name = myatkimp_mytype_get_name; 
+}
+Requires a
+Class initializer that defines its own
+static ParentObjectType *parent_class = NULL; 
+
+myatkimp_mytype_class_init (GailLabelClass *klass) 
+{ 
+ ParentObjectType *parent_class = (ParentObjectType*)klass; 
+
+ /* 
+ * Caching the parent_class is necessary if the init, 
+ * notify_gtk, or finalize functions are set up. 
+ */ 
+ parent_class = g_type_class_ref (MYATKIMP_TYPE_PARENT); 
+
+ parent_class-gt;init = myatkimp_mytype_widget_init; 
+ parent_class-gt;notify_gtk = myatkimp_mytype_real_notify_gtk; 
+ parent_class-gt;finalize = myatkimp_mytype_finalize; 
+}
+parent-gt;init
+A
+Cache any data obtained from a backing GTK widget.
+Listen to any signals from the backing GTK widget.
+Here is an example of both:
+A custom
+void 
+gail_tree_view_widget_init (MyatkimpMytype *mytype, 
+ GtkWidget *gtk_widget) 
+{ 
+ /* Make sure to call the parent's init function */ 
+ parent_class-gt;init (widget, gtk_widget); 
+ 
+ /* Cache a value in the ATK implementation */ 
+ mytype-gt;cached_value = gtk_widget_function_call(); 
+
+ /* Listen to a signal */ 
+ gtk_signal_connect (GTK_OBJECT (gtk_widget), 
+ "signal-type", 
+ GTK_SIGNAL_FUNC (_myatkimp_mytype_signal_type), 
+ NULL); 
+}
+In this example, if the specified
+parent-gt;notify_gtk
+If the ATK implementation needs to listen to any property notifications on the backing GTK object, a
+A custom
+void 
+myatkimp_mytype_real_notify_gtk (GObject *obj, 
+ GParamSpec *pspec) 
+{ 
+ GtkWidget *widget = GTK_WIDGET (obj); 
+ AtkObject* atk_obj = gtk_widget_get_accessible (widget); 
+
+ if (strcmp (pspec-gt;name, "property-of-interest") == 0) 
+ { 
+ /* Handle the property change. */ 
+ } 
+ else 
+ { 
+ parent_class-gt;notify_gtk (obj, pspec); 
+ } 
+}
+parent-gt;finalize
+If it is necessary to free any data when a
+A custom
+void 
+myatkimp_mytype_finalize (GObject *object) 
+{ 
+ MyAtkimpMyType *my_type = MYATKIMP_MYTYPE (object); 
+
+ g_object_unref (my_type-gt;cached_value); 
+ G_OBJECT_CLASS (parent_class)-gt;finalize (object); 
+}
+Making Custom Components Accessible
+Adding ATK support to your custom widget will assure its cooperation with the accessibility infrastructure. These are the general steps that are required:
+assess a custom widget according to the applicable
+determine which
+assess which
+implement the appropriate ATK interfaces for the widget class in one of two ways:
+directly by the custom widget, or
+in an
+If the second method is used, the appropriate factory type must be registered with the
+The
+User Interface Guidelines for Supporting Accessibility
+When designing your application's GUI, there are a number of simple guidelines you should follow to ensure that it can be used by as wide an audience as possible, whether in conjunction with assistive technologies or not. Don't be fooled into thinking that this is just a case of "making your GUI usable by people with disabilities", though, and that you shouldn't bother if you know a disabled person is never going to use your application. Following these guidelines will improve the overall usability of your application for everyone who uses it - including you!
+General
+We all get frustrated if we can't find a feature in an application, or make a mistake from which it takes a couple of minutes to recover, if it's possible to recover at all. If you have some sort of disability, the chances are the effort and time penalties involved will be several times worse. Following a few basic guidelines can help prevent these sorts of situations for all users.
+Provide Undo for every action that changes the user's data or the application's settings. If possible, provide more than one level of undo and redo, and a history list to allow preview of what actions will be undone.
+Provide commands to restore default settings. If a particular setting could make the application completely unusable for an individual, e.g. by making the fonts very small, it would be useful to provide an option to restore the default settings outside the application itself. This could be done using a command line switch, for example.
+Help prevent users from doing the wrong thing. This is particularly important for actions that could be done by accident (e.g. mouse actions) or that cannot easily be undone (e.g. overwriting a file). Consider using confirmation dialogs or forcing the user to go into a particular mode to perform potentially destructive actions.
+Minimize users' memory load. For example, let the user view multiple documents at the same time, and ensure online help or other instructions can remain visible while they carry out the procedure being described. Allow them to copy any information that is displayed, and paste it anywhere that data can be entered.
+Don't make users insert disks. Depending on a user's particular disability, they may find it difficult to physically insert or change a disk, or they may find it hard to identify the correct disk in the first place. If your application is installed from CD-ROM, provide an option to copy all the files that will be required onto the user's hard drive.
+Don't place frequently used functions deep in a menu structure. Whether you're using a mouse, keyboard or some other input device, deeply-nested menu items are best avoided. As well as the burden of remembering where to find them, they are always more difficult and time-consuming to access.
+Don't lead users through unnecessary steps. For example, wizards are useful for users who have trouble handling large numbers of options at one time, but other users may need to minimize the amount of time or keystrokes they use. Such users benefit from being able to skip unnecessary steps or go directly to the one they need. Consider providing a
+Keyboard Navigation
+A well-designed keyboard user interface plays a key role when you are designing accessible software. Blind users can navigate software more effectively using the keyboard, because using the mouse depends on visual feedback of the mouse pointer location. Also, mobility impairments can prevent a user from successfully navigating using the mouse, because of the fine motor control skills required.
+It is therefore important to make all mouse actions available from the keyboard, and include keyboard access to all toolbars, menus, links and buttons. Every function your application provides should be available using the keyboard alone. Hide your mouse while you're testing your application if you have to!
+Most functionality should be easy to make accessible by using keyboard mnemonics and accelerators, and the toolkit's built-in navigation features. However, operations that rely on drag-and-drop, for example, may require more thought.
+Provide efficient keyboard access to all application features. Some users may be unable to use a mouse, and many "power-users" prefer to use the keyboard anyway. Also, some specialized assistive technology input devices may simulate keyboard events rather than mouse events. Since typing is difficult or even painful for some users, it is important to provide a keyboard interface that minimizes the number of keystrokes required for any given task.
+Use a logical keyboard navigation order. When navigating around a window with the
+Ensure correct tab order for controls whose enabled state is dependent on checkbox, radio button or toggle button state. When such a button is selected, all its dependent controls should be enabled, and all the dependent controls of any other button in the group should be disabled. When the user selects a checkbox, radio button or toggle button that has dependent controls, do not automatically give focus to the first dependent control, but instead leave the focus on the button.
+Don't override existing system-level accessibility features. For example,
+Provide more than one method to perform keyboard tasks where possible. Some users may find some keys and key combinations easier to use than others.
+Provide both keyboard and mouse access to functions where possible. Some users may only be able to use either the mouse or the keyboard, but not both.
+Don't assign awkward reaches to frequently performed keyboard operations. Some people may only be able to use one hand on the keyboard, so shortcuts that can be easily used with one hand are preferable for common operations. In any case, having to frequently perform long or difficult reaches on the keyboard can increase muscle strain for all users, increasing the risk of pain or injury.
+Don't require repetitive use of simultaneous keypresses. Some users are only able to press and hold one key at a time. Assistive technologies such as AccessX may allow users to press the keys sequentially rather than simultaneously, but this of course means the operation will take longer for them.
+Ensure that any text that can be selected with the mouse can also be selected with the keyboard. This is a convenience for all users, but especially for those for whom fine control of the mouse is difficult.
+Ensure that objects that can be resized or moved by drag and drop can also be resized or moved with the keyboard. For example, icons and windows on the desktop. Where precision sizing and placement is potentially important, e.g. shapes in a diagram, also consider providing a dialog into which you can type co-ordinates, or a means of snapping objects to a user-definable grid.
+Don't use general navigation functions to trigger operations. For example, do not use basic
+Show keyboard-invoked menus, windows and tooltips near the object they relate to. In GNOME 2.0, users can call up popup menus with
+Mouse Interaction
+Remember that not everybody can use a mouse with equal dexterity, and that some users may have difficulty seeing or following the mouse pointer.
+Don't depend on input from mouse button 2 or button 3. As well as being physically more difficult to click, some pointing devices and many assistive technology devices only support button 1. Some assistive technologies may not emulate the mouse at all, but generate keyboard events instead.
+Allow all mouse operations to be cancelled. Pressing the
+Provide visual feedback throughout a drag and drop operation. As the mouse passes over valid targets, highlight them and change the mouse pointer. Use the "no drop" mouse pointer when passing over invalid drop targets. See
+Don't warp the mouse pointer, or restrict mouse movement to part of the screen. This can interfere with assistive technologies, and is usually confusing even for users who don't rely on ATs.
+Don't make mouse targets too small. In general, mouse targets should be at least the size of the "hot area" around the resizable window border in the current window manager/theme - bearing in mind that a user with impaired dexterity or vision may be using a window manager with larger areas than the default.
+Mouse Interaction Examples
+Example of "no-drop" pointer from CDE/Motif
+Example of an "invalid drop target" pointer shape
+Graphical Elements
+Provide options to customize the presentation of all the important graphical elements in your application. This will make it easier for people with visual or cognitive impairments to use.
+Don't hard-code graphic attributes such as line, border or shadow thickness. These elements should ideally be read from the GTK or window manager theme. If this is not possible, provide options within your application to change them.
+Provide descriptive names for all interface components. The GAIL library provides default accessible descriptions for many GTK widgets, but you will still need to add your own in some cases, such as for widgets that use graphics instead of text (e.g. a well in a color palette, or an icon without a label). Consider overriding the defaults with more helpful or application-specific descriptions where possible.
+Allow multi-color graphical elements (e.g. toolbar icons) to be shown in monochrome only, if possible. These monochrome images should be shown in the system foreground and background colors, which the user will have chosen for themselves (by their choice of GTK theme) for maximum legibility.
+Make interactive GUI elements easily identifiable. For example, do not make the user hover the mouse over an object to determine whether it is clickable or not. Leave sufficient space between objects and clearly delineate object boundaries. Don't show GUI elements that look pretty but don't actually do anything, unless you also provide an option to switch them off.
+Provide an option to hide graphics that don't convey essential information. Graphical images can be distracting to users with some cognitive disorders. The icons on the GNOME foot menu, for example, can be switched off whilst still leaving the menus fully functional.
+Fonts and Text
+Even to a user with normal vision, textual output provides the majority of the information and feedback in most applications. It is therefore critical to choose and position text carefully on the screen, and leave the choice of font and size to the user, to ensure that people with vision impaiments can also use your application effectively.
+Don't hard-code font styles and sizes. The user should be able to adjust all sizes and typefaces. If for some reason you cannot make this functionality available, never hardcode any font sizes smaller than 10 points.
+Provide options to turn off any graphical backdrops or "watermarks" behind text. Such images interfere with the contrast between the text and its background, which can cause difficulty for users with visual impairments.
+Label objects with names that make sense when taken out of context. Users relying on screen readers or similar assistive technologies will not necessarily be able to immediately understand the relationship between a control and those surrounding it.
+Don't use the same label more than once in the same window. If you use the same label in different windows, it will help if it means the same thing in both windows. Also, don't use labels that are spelled differently but sound the same, e.g. "Read" and "Red", as this could be confusing for users relying on screen-readers.
+Position labels consistently throughout your application. This normally means immediately below large icons, immediately to the right of small icons, and immediately above or to the left of other controls. See
+When you use static text to label a control, end the label with a colon. For example,
+When you use static text to label a control, ensure that the label immediately precedes that control in the Tab order. This will ensure that the mnemonic (underlined character) you assign to the label will move focus to or activate the correct control when pressed.
+Provide alternatives to WYSIWYG. Some users may need to print text in a small font but edit in a larger screen font, for example. Possible alternatives include displaying all text in the same font and size (both of which are chosen by the user); a "wrap-to-window" option that allows you to read all the text in a window without scrolling horizontally; a single column view that shows the window's contents in a single column even if they will be printed in multiple columns; and a text-only view, where graphics are shown as placeholders or text descriptions. If the application has panels with child controls, consider allowing the panels to resize along with the parent window.
+Fonts and Text Examples
+Correct label placement for various GUI elements
+List control with label above
+
+Large file manager icon with label underneath
+
+Small toolbar icon with label to its right
+
+Spinbox control with label to its left
+
+Color and Contrast
+Poor choice of colors on the screen can cause problems for users with color blindness (for whom hue is important) or low-vision (for whom brightness/contrast is important). Generally, you should allow the user to customize the colors in any part of your application that conveys important information.
+Users with visual impairments may require a high level of contrast between the background and text colors. Often a black background and white text is used to prevent the background from "bleeding" over. These settings are critical for users with visual impairments.
+Don't hard-code application colors. Some users need to use particular combinations of colors and levels of contrast to be able to read the screen comfortably. Therefore all the main colors you use in your GNOME application should be taken from the GTK theme, so the user can set the colors for all their applications to something legible just by changing the theme. If for some reason you do need to use colors that are not available in the theme, ensure they are customizable within the application itself.
+Don't use color as the only means to distinguish items of information. All such information should be provided by at least one other method, such as shape, position or textual description. See
+Support all the high contrast GNOME themes. Ensure that when one of these themes is selected, all the text in your application appears in the high contrast foreground and background colors specified by the theme.
+Ensure your application is not dependent on a particular high-contrast theme. Test it with different high-contrast themes to ensure your application respects the settings.
+Color and Contrast Examples
+Example illustrating redundant use of color
+Example showing changes in stock price using color only
+This display could cause problems for a red-green color-blind user (color-blindness affects as many as 1 in 7 males in some parts of the world). The lack of contrast between the red text and black background would also make it hard to read for a user with low vision, even with a screen magnifier.
+Example showing changes in stock price using both color and arrows
+Preferences
+This display reinforces the color-coding with arrows to show the stock price movement, and uses darker shades of green and red on a lighter background to provide higher contrast. This needn't be the default color scheme if testing were to show it to be too distracting for the majority of users, but it should be possible to customize it in this way either by theming or via the application's
+Magnification
+Many users, even those not visually impaired, benefit from magnification of text and graphics. However, without magnification, a visually impaired user may not be able to access and use the program at all.
+Provide the ability for the user to magnify the work area.
+Provide options in the application to scale the work area. Users need to have an option to magnify the work area 150% to 400% or more. Test the application to confirm the object you are viewing is not affected by changing the magnification settings.
+Audio
+People who have difficulty hearing, as well as those who work with the sound on their computers turned off, will be disadvantaged if your application relies on sound to convey information. In general, make sure that the user is able to have any audible information conveyed in other ways.
+Don't assume that a user will hear audio information. This applies as much to users with broken soundcards as it does to those with hearing impairments!
+Don't use audio as the only means of conveying information. Give the user the option to have all audio information provided in a visual way as well. This includes providing closed captioning or transcripts for any important spoken sound clips.
+Allow users to configure frequency and volume of all warning beeps and other sounds. This includes being able to turn off sound altogether.
+Animation
+Used sparingly, animation can be useful for drawing attention to important information in your application - and it can look cool, too. However, it can be problematic for some users, so make sure they can turn it off.
+Don't use flashing or blinking elements having a frequency greater than 2 Hz and lower than 55 Hz. This includes text as well as any graphical objects. Anything in this frequency range may cause particular problems for users susceptible to visually-induced seizures. Note that there is no "safe" frequency, though. If flashing is essential, you should use the system's cursor blink frequency (which should itself be customizable), or allow users to configure the frequency themselves.
+Don't flash or blink large areas of the screen. Small areas are less likely to trigger seizures in those susceptible to them.
+Make all animations optional. The animated information should be available in at least one non-animated format, at the user's request.
+Keyboard Focus
+Showing the keyboard focus position clearly at all times is important, both for users with vision impairments as well as "power-users" who prefer to use the keyboard rather than the mouse. There should never be any confusion as to which control on the desktop has focus at any given time. You ought to be able to leave your computer with the focus on any widget in your application, then go off and phone your girlfriend or walk the dog until you've forgotten which widget you left it on. When you return, you should be able to tell straight away exactly which widget it was.
+A visual focus indicator is an audio representation of the cursor position relative to the other objects on the desktop. This allows the user to move among objects interactively as the focus changes. The visual focus must be programatically exposed to assistive technologies. Note that in most cases, this is handled automatically by the ATK, without requiring you to do any additional work. However, you will need to be aware of this requirement when writing your own custom widgets, for example.
+Start focus at the most commonly used control. If no control in a window is deemed to be the "most" useful, start the focus at the first control in the window when that window is opened. Focus should not be started on the
+Show current input focus clearly at all times. Remember that in controls that include a scrolling element, it is not always sufficient to highlight just the selected element inside that scrolling area, as it may not be visible. See
+Show input focus only in the active window. Hide all primary visual focus indicators in all windows that do not have the focus and activation. If a single window has separate panes, only one pane should have the focus indicator, and focus indicators should be hidden in all other panes. If it's important to continue showing which item in an unfocused list is selected, for example, use a secondary focus indicator. See
+Provide appropriate feedback when the user attempts to navigate past the end of a group of related objects. When navigating a list, for example, stopping with audio feedback is usually preferable to moving the focus back to the first object in the list. Otherwise, users who are blind or have low vision may not realize they have returned to the beginning. In the case of a text search in a document, a dialog may pop up to indicate that the end of the document has been reached, and ask if you want to resume the search at the start of the document.
+Play the system default audio or visual warning signal when the user presses an inappropriate key, or when a navigation key fails to move the focus. For example, when the focus is on the first character in a text field and the user presses left arrow key, or the user tries to perform multiple selection in a single selection dialog. (Note that users with hearing difficulties should be able to configure a system-wide visual equivalent to the default warning sound.)
+Keyboard Focus Examples
+Example illustrating need to show focus clearly
+The focused item in this window cannot be seen because it has been scrolled off-screen
+One of the controls in this window has focus, but it's impossible to tell which...
+The focused item in the list has been brought into view by scrolling the list
+...until you scroll the list, which reveals that one of its items is currently selected.
+The list control in this example has a solid border indicating focus, whether its selected item is currently visible or not
+If the list control itself is given a "focused" border, it's easy to tell it has focus even when the currently-selected item isn't visible.
+Example illustrating use of secondary focus
+Split-paned window in which both panes seem to have focus
+In this example, it's impossible to tell just by looking which of the two panes actually has keyboard focus.
+Split-pane window in which secondary highlighting is used to show which pane has focus
+By using a secondary selection highlight color in the inactive pane, it's immediately obvious that the tree control has focus here...
+...and that the list control has focus here.
+Timing
+Interfaces in which things appear, disappear or happen according to some hard-coded time limit are often a hindrance to accessibility. Some users may read, type or react very slowly in comparison to others. If information they require is hidden before they are finished with it, or obscured by other information popping up which they didn't explicitly request, then your application will become very frustrating or even impossible to use.
+Don't hard-code timeouts or other time-based features. Examples include automatic scrolling when dragging an object towards the edge of a window, holding down a scrollbar button, or automatically expanding a tree node when an object is dragged over it and held for a short time. These should either be customizable in the application, the GNOME control center, or at worst, manually editable from the command line via a configuration file or GConf entry.
+Don't briefly show or hide information based on the movement of the mouse pointer. (Exception: system-provided features such as tooltips, which the user can configure on a system-wide level). If you must provide such features, make them optional so users can turn them off when a screen-review utility is installed.
+Documentation
+People with disabilities cannot use the application effectively if they do not have access to the required manuals and help files. Of particular importance is keyboard navigation, since this is the only way many users can navigate the application.
+Provide all documentation in an accessible format. ASCII text and HTML are both excellent formats for assistive technologies.
+Provide alternative text descriptions for all graphics in the documentation.
+Document all your application's accessibility features. Keyboard navigation and shortcuts are particularly important to document. Include an accessibility section in your documentation, where information on all the accessibility features can be found.
+Testing
+There are several points of review to conduct before declaring an application accessible. Over the course of development you may want to consider automated testing techniques.
+This section describes a number of tests you can perform manually on an application to test its accessibility. Passing all the tests does not necessarily imply that the application is fully accessible, but if the application fails any of these tests, then further work may need to be done to improve that aspect of its accessibility.
+The following keyboard operations should be tested. Do not use the mouse in any part of this test.
+Using only keyboard commands, move the focus through all menu bars in the application.
+Confirm that:
+Context sensitive menus display correctly.
+Any functions listed on the toolbar can be performed using the keyboard.
+You can operate every control in the client area of the application and dialog boxes.
+Text and objects within the client area can be selected.
+Any keyboard enhancements or shortcuts are working as designed.
+Test the application using a screen reader and confirm that:
+Labels and text are being read correctly, including menus and toolbars.
+Object information is read correctly.
+Visual Focus Indicator
+Verify that when moving among objects that the visual focus indicator is easy to identify.
+Keyboard navigation through the software and menus should be clearly visible when the focus moves.
+Confirm that the screen reader is tracking the visual focus indicator as you navigate using a keyboard.
+Run a screen magnification program (if available) and verify that the magnifier can track the visual focus indicator as you navigate using the keyboard and mouse.
+Change the font in the application and confirm that the settings are maintained.
+Test the application by changing colors and confirm that all settings are maintained.
+If magnification is available, test the font, color, and size using the magnification option.
+Print screenshots to a black and white printer and confirm that all information is visible.
+Test applications using only black and white, high-contrast settings and confirm that all information is conveyed correctly.
+Test that the application provides at least three combinations of color schemes and that high-contrast schemes are available (e.g. white on black or yellow on blue).
+Turn on high-contrast settings in the GNOME Control Center and confirm that the application respects these settings.
+Test various themes to ensure that the software is working for all the available settings.
+There should be an option in the application to show audio alerts visually.
+Test that the audio is working correctly by enabling sound in the GNOME Control Center and then perform the following actions:
+Perform an action that should generate an audio alert and confirm that the application is working as designed.
+Verify that the application works correctly when increasing or decreasing the volume.
+Confirm that warning messages and alerts can be heard correctly in a noisy work environment.
+Verify that an option is available to stop animation and that it is working as designed.
+Turn the animation off. Confirm that all information is still conveyed correctly.
+Test all messages to confirm that the user is notified before a message times out and is given the option to indicate that more time is needed.
+Make sure an option has been included to adjust the response time and confirm that it is working as designed.
+Test ASCII text documentation with a screen reader to confirm that it is clear and precise and can be read by assistive technologies.
+Test HTML applications using a web browser and screen reader to confirm that the documentation is accessible to assistive technologies.
+Note: There are web accessibility guidelines available at
+Confirm the following information is included in the documentation:
+State if the application does not support the standard keyboard access used by the OS.
+Identify if there are unique keyboard commands.
+Identify any unique accessibility features.
+If an action is documented for the mouse, make sure there is an alternative for using the keyboard.
+User Interface Checklist
+This section summarizes the guidelines given in
+When testing an application for accessibility, you should go through each of the items in the list. Note whether the application passes or fails each test, or does not apply to that application.
+General Principles checklist
+GP
+General Principles
+Pass/Fail/NA
+GP.1
+Every action that alters the user's data or application's settings can be undone.
+GP.2
+All application settings can be restored to their defaults without the user having to remember what those defaults were.
+GP.3
+After installation, the application can be used without the user having to insert a disk or CD at any time.
+GP.4
+The most frequently used functions are found at the top level of the menu structure.
+Keyboard navigation checklist
+KN
+KN.1
+Efficient keyboard access is provided to all application features.
+KN.2
+All windows have a logical keyboard navigation order.
+KN.3
+The correct tab order is used for controls whose enabled state is dependent on checkboxes, radio buttons or toggle buttons.
+KN.4
+Keyboard access to application-specific functions does not override existing system accessibility features.
+KN.5
+The application provides more than one method to perform keyboard tasks whenever possible.
+KN.6
+There are alternative key combinations wherever possible.
+KN.7
+There are no awkward reaches for frequently performed keyboard operations.
+KN.8
+The application does not use repetitive, simultaneous keypresses.
+KN.9
+The application provides keyboard equivalents for all mouse functions.
+KN.10
+Any text or object that can be selected with the mouse can also be selected with the keyboard alone.
+KN.11
+Any object that can be resized or moved with the mouse can also be resized or moved with the keyboard alone.
+KN.12
+The application does not use any general navigation functions to trigger operations.
+KN.13
+All keyboard-invoked menus, windows and tooltips appear near the object they relate to.
+Mouse Interaction checklist
+MI
+MI.1
+right
+middle
+No operations depend on input from the
+MI.2
+All mouse operations can be cancelled before they are complete.
+MI.3
+Visual feedback is provided throughout drag and drop operations
+MI.4
+The mouse pointer is never warped under application control, or its movement restricted to part of the screen by the application.
+Graphical Elements checklist
+GE
+GE.1
+There are no hard-coded graphical attributes such as line, border or shadow thickness.
+GE.2
+All multi-color graphical elements can be shown in monochrome only, where possible.
+GE.3
+All interactive GUI elements are easily distinguishable from static GUI elements.
+GE.4
+An option to hide non-essential graphics is provided.
+Fonts and Text checklist
+FT
+FT.1
+No font styles or sizes are hard-coded.
+FT.2
+An option to turn off graphical backdrops behind text is provided.
+FT.3
+All labels have names that make sense when taken out of context.
+FT.4
+No label names are used more than once in the same window.
+FT.5
+Label positioning is consistent throughout the application.
+FT.6
+All static text labels that identify other controls end in a colon (:).
+FT.7
+Static text labels that identify other controls immediately precede those controls in the tab order.
+FT.8
+An alternative to WYSIWYG is provided. For example, the ability to specify different screen and printer fonts in a text editor.
+Color and Contrast checklist
+CC
+CC.1
+Application colors are not hard-coded, but are drawn either from the current desktop theme or an application setting.
+CC.2
+Color is only used as an enhancement, and not as the only means to convey information or actions.
+CC.3
+The application supports all available high- contrast themes and settings.
+CC.4
+The software is not dependent on any particular high-contrast themes or settings.
+Magnification checklist
+MG
+MG.1
+The application provides the ability to magnify the work area.
+MG.2
+The application provides the option to scale the work area.
+MG.3
+The application's functionality is not affected by changing the magnification or scale settings.
+Audio checklist
+AU
+AU.1
+Sound is not used as the only means of conveying any items of information.
+AU.2
+The user can configure the frequency and volume of all sounds and warning beeps.
+Animation checklist
+AN
+AN.1
+There are no flashing or blinking elements with a frequency greater than 2Hz or lower than 55Hz.
+AN.2
+Any flashing or blinking is confined to small areas of the screen.
+AN.3
+If animation is used, an option is available to turn it off before it is first shown.
+Keyboard Focus checklist
+KF
+KF.1
+When a window is opened, focus starts at the most commonly-used control.
+KF.2
+Current input focus position is clearly displayed at all times.
+KF.3
+Input focus is shown in exactly one window at all times.
+KF.4
+Appropriate audio or visual feedback is provided when the user attempts to navigate past either end of a group of related objects.
+KF.5
+The default audio or visual warning signal is played when the user presses an inappropriate key.
+KF.6
+There is sufficient audio information for the visual focus that the user can figure out what to do next.
+KF.7
+When using assistive technologies, such as a screen reader or braille device, the current program indicates the position and content of the visual focus indicator.
+Timing checklist
+TM
+TM.1
+There are no hard-coded time-outs or time-based features in the application.
+TM.2
+The display or hiding of important information is not triggered solely by movement of the mouse pointer.
+Documentation checklist
+DC
+DC.1
+All documentation is in an accessible format, with textual alternate descriptions provided for all figures and diagrams.
+DC.2
+The documentation includes a section that covers all the application's accessibility features.
+GOK (GNOME Onscreen Keyboard)
+Your application should be usable via
+The
+Follow these steps to verify the correct operation of
+Login into the GNOME desktop
+Run
+Start your application
+Provide input to your application with a pointing device (e.g., mouse or head-tracker) and
+Work using the auto-completion and word prediction features of
+Verify that
+Verify that the
+Verify that the
+Verify that the
+Verify that the
+Verify that the
+Verify that the
+Accerciser
+Accerciser and the GNOME Accessibility Architecture
+
+
+translator-credits

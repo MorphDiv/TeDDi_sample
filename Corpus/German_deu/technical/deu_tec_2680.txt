@@ -1,0 +1,61 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+Die HTTP-Authentifizierung durch PHP ist nur verfügbar, wenn PHP als Apache-Modul läuft und funktioniert daher nicht mit der CGI-Version.
+In einem PHP-Skript für ein Apache-Modul kann man die Funktion header() benutzen, um die Nachricht "Authentifizierung notwendig "an den Client-Browser zu senden, damit dieser ein Fenster zur Eingabe von Benutzername / Passwort öffnet.
+Hat der Benutzer diese eingegeben, wird die URL des PHP-Scripts mit den Variablen $PHP_AUTH_USER, $PHP_AUTH_PW und $PHP_AUTH_TYPE, die den jeweiligen Benutzernamen, das Passwort und den Typ der Identifizierung enthalten, erneut aufgerufen.
+Momentan wird nur das Authentifizierungsmodell "basic" unterstützt.
+Näheres hierzu bei der header() Funktion.
+Ein Auszug aus einem Skript, das die Clientauthentifizierung auf einer Seite erzwingt, würde so aussehen:
+Beispiel 16-1.
+HTTP-Authentifizierung
+?php if( !isset($PHP_AUTH_USER)) {Header( "WWW-Authenticate:
+Basic realm=\" My Realm\""); Header("HTTP / 1.0 401 Unauthorized"); echo "Text to send if user hits Cancel button\n"; exit;} else {echo "Hello $PHP_AUTH_USER.
+P "; echo "You entered $PHP_AUTH_PW as your password.
+P ";}?
+Hinweis:
+Achten Sie bei den Header-Zeilen für maximale Kompatibilität auf die richtige Schreibweise!
+Das Schlüsselwort "Basic" sollte genau so geschrieben werden, der Realm-String muss in doppelte (nicht einfache) Anführungszeichen eingeschlossen sein, und in der "HTTP / 1.0 401 "-Zeile darf nur genau ein Leerzeichen vor dem 401-Code stehen.
+Anstatt $PHP_AUTH_USER und $PHP_AUTH_PW einfach nur auszugeben, werden Sie den Benutzernamen und das Passwort auf Gültigkeit überprüfen wollen.
+Dies kann durch die Abfrage einer Datenbank oder das Einlesen einer Textdatei geschehen.
+Vorsicht bei einigen Internet Explorer-Versionen - sie scheinen sehr wählerisch zu sein, was die Reihenfolge der Header angeht.
+Abhilfe schafft hier das Senden des WWW-Authenticate Headers vor dem HTTP / 1.0 401.
+Um zu unterbinden, dass ein Skript das Passwort einer durch einen traditionellen externen Mechanismus geschützten Seite ausliest, werden die PHP_AUTH Variablen nicht gesetzt, wenn eine externe Authentifizierung für diese bestimmte Seite aktiviert ist.
+In diesem Fall kann die $REMOTE_USER Variable benutzt werden, um den Benutzer durch die externe Zugriffskontrolle zu identifizieren.
+Konfigurationshinweis:
+PHP prüft das Vorhandensein einer AuthType PHP prüft das Vorhandensein einer AuthType Apache-Direktive, um zu entscheiden, ob eine externe Authentifizierung aktiv ist.
+Vermeiden Sie deshalb diese Konfigurationsdirektive im Kontext der PHP-Authentifizierung (anderenfalls wird jeder Authentifizierungsversuch misslingen).
+Zu beachten ist, dass obenstehendes keinesfalls jemanden, der die Kontrolle über eine nichtgeschützte URL hat, davon abhalten kann, Passwörter von geschützten URLs auf dem gleichen Rechner auszulesen.
+Sowohl Netscape als auch der Internet Explorer löschen den lokalen Authentifizierungscache des Browserfensters, wenn der Server eine 401-Meldung zurückgibt.
+Dies kann benutzt werden, um einen Benutzer "auszuloggen" und eine erneute Eingabe des Benutzernamens / Passworts zu erzwingen.
+Manchmal wird dieses Verhalten für das automatische Ausloggen nach Ablauf einer bestimmten Zeitspanne oder für einen Logout-Button genutzt.
+Beispiel 16-2.
+HTTP-Authentifizierung, mit erneuter Anforderung von Name / Passwort
+?php function authenticate() {Header ("WWW-Authenticate:
+Basic realm=\" Test Authentication System\""); Header ("HTTP / 1.0 401 Unauthorized"); echo "You must enter a valid login ID and password to access this resource\n"; exit;} if(!isset($PHP_AUTH_USER) | | ($SeenBefore == 1 !strcmp($OldAuth, $PHP_AUTH_USER))) {authenticate();} else {echo "Welcome: $PHP_AUTH_USER BR "; echo "Old: $OldAuth"; echo" FORM ACTION=\"$PHP_SELF\ "METHOD=POST \n"; echo" INPUT TYPE=HIDDEN NAME=\"SeenBefore\ "VALUE=\"1\" \n"; echo "INPUT TYPE=HIDDEN NAME=\"OldAuth\" VALUE=\"$PHP_AUTH_USER\ "\n"; echo" INPUT TYPE=Submit VALUE=\"Re Authenticate\ "\n"; echo" / FORM \n";}?
+Dieses Verhalten wird vom Authentifizierungsstandard HTTP Basic nicht gefordert, daher sollte man sich nie darauf verlassen.
+Tests mit Lynx haben gezeigt, dass Lynx die Authentifizierungsinformationen bei Erhalt einer 401-Meldung nicht löscht.
+Ein Klick auf den Zurück - Button und danach auf Vorwärts wird die angeforderte Adresse öffnen (und zwar so lange, bis die Identifizierung der Benutzer geändert wird).
+Weiterhin muss beachtet werden, dass dies unter dem Microsoft IIS mit der CGI-Version von PHP aufgrund einer Einschränkung des IIS nicht funktioniert.
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

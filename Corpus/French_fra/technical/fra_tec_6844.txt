@@ -1,0 +1,721 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	2014
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Claude Paroz <claude\@2xlibre\.net>, 2008-2010
+Bruno Brouard <annoa\.b\@gmail\.com>, 2009
+s@@image: 'figures/jhbuild_sample_dot_output.png'; md5=af9fe7edb29fcaefeadfb2f5987aa6e4
+Manuel de JHBuild
+JHBuild est un outil utilisé pour compiler l'ensemble du bureau GNOME à partir du gestionnaire de versions. Il peut aussi être configuré pour compiler d'autres projets.
+Introduction
+JHBuild est un outil conçu pour faciliter la compilation d'ensembles de paquets source, appelés
+JHBuild a été d'abord créé pour compiler
+JHBuild peut compiler des modules de sources diverses, y compris depuis des dépôts
+JHBuild n'est pas destiné à remplacer le système de gestion de paquets d'une distribution. Au contraire, il simplifie la compilation de logiciels à l'intérieur d'un préfixe d'installation distinct afin de ne pas interférer avec le reste du système.
+Premiers pas
+Quelques manipulations sont nécessaires pour configurer JHBuild avant de pouvoir compiler des logiciels. Certains logiciels sont nécessaires au fonctionnement de JHBuild, et il est aussi nécessaire d'installer des outils indispensables à l'obtention et à la construction des sources de logiciels.
+Installation de JHBuild
+JHBuild nécessite un moteur d'exécution Python. Vérifiez que Python &gt;= 2.3 est installé.
+La façon recommandée de télécharger JHBuild est d'utiliser le gestionnaire de versions
+Cela va télécharger JHBuild dans un nouveau dossier nommé
+Si les étapes ci-dessus se sont déroulées avec succès, un petit script shell sera installé dans
+Pour ajouter
+Configuration de JHBuild
+Le fichier
+Cette configuration modèle indique à JHBuild de construire le module
+Les variables de configuration sont documentées dans
+Un dictionnaire pouvant être utilisé pour indiquer un emplacement de dépôt alternatif pour un dépôt spécifique. Cette variable de configuration est utile pour les développeurs de modules. Par défaut, JHBuild extrait le code dans les dépôts par un accès anonyme. Les clés du dictionnaire sont des noms de dépôts courts et les valeurs sont des chaînes d'accès à des emplacements de dépôts alternatifs. Par exemple :
+repos['git.gnome.org'] = 'ssh://
+Une chaîne ou une liste de chaînes indiquant le ou les noms des jeux de modules à utiliser. Cela peut être le nom de fichier d'un jeu de modules inclus dans JHBuild (sans chemin ni extension) ou un URL HTTP complet d'un jeu de modules géré en externe. Les jeux de modules ayant un URL HTTP sont placés dans un cache local. Si le nom d'un module figure dans plus d'un jeu de modules, le dernier jeu de modules dans la liste est prioritaire. Les jeux de modules fournis avec JHBuild sont mis à jour au gré de la progression du développement de GNOME.
+Une liste de chaînes indiquant les modules à construire. La liste des modules réellement construits est étendue récursivement afin d'inclure toutes les dépendances, sauf si la commande
+Une chaîne indiquant le répertoire dans lequel décompresser les arborescences source. À moins que
+Une chaîne définissant le préfixe d'installation des modules. Ce répertoire doit être accessible en écriture. La valeur par défaut est
+Une chaîne contenant des paramètres passés au script
+Une chaîne énumérant des paramètres supplémentaires à passer à
+Prérequis pour la construction
+Avant de pouvoir construire un module, il faut avoir installé certains outils de construction. Les plus courants sont les autotools GNU (
+JHBuild peut vérifier si ces outils sont installés sur votre système à l'aide de la commande
+Installez le paquet requis à partir du dépôt de votre distribution. Une liste de
+Utilisation de JHBuild
+Après que tout a été configuré, JHBuild peut se mettre à construire des logiciels. Pour construire tous les modules indiqués dans le fichier
+JHBuild va télécharger, configurer, compiler et installer chaque module. Si une erreur se produit à n'importe quelle étape, JHBuild présente un menu pour savoir ce qu'il doit faire. Les choix possibles comprennent le passage dans un shell pour corriger l'erreur, une nouvelle passe de construction à différentes étapes, l'abandon de la construction du module ou la non prise en compte de l'erreur en continuant le processus.
+L'abandon d'un module provoque l'échec de construction de tout module dépendant de ce module.
+Voici un exemple de menu qui est affiché :
+[1] Relancer l'étape construction
+ [2] Ignorer l'erreur et continuer à l'étape installation
+ [3] Abandonner ce module
+ [4] Démarrer un shell
+ [5] Recharger la configuration
+ [6] Aller à l'étape « effacer le répertoire et recommencer »
+ [7] Aller à l'étape « configure »
+ [8] Aller à l'étape « clean »
+ [9] Aller à l'étape « distclean »
+Il est aussi possible de construire un jeu différent de modules (et leurs dépendances) en passant les noms des modules en paramètre de la commande
+Si JHBuild est interrompu en cours de construction d'un module, quelle qu'en soit la raison, il est possible de reprendre la construction à partir d'un module précis en utilisant l'option
+Pour construire un ou plusieurs modules en ignorant leurs dépendances, JHBuild fournit la commande
+Pour obtenir une liste ordonnancée des modules et des dépendances que JHBuild va construire, utilisez la commande
+Pour obtenir des informations sur un module particulier, utilisez la commande
+Pour télécharger ou mettre à jour toutes les sources de logiciels sans rien compiler, utilisez la commande
+Plus tard, JHBuild peut tout construire sans télécharger ni mettre à jour les sources :
+Pour lancer une commande précise dans le même environnement utilisé par JHBuild, utilisez la commande
+Pour lancer un shell avec l'environnement utilisé par JHBuild, utilisez la commande
+JHBuild et GNOME
+Cette section fournit des indications sur la compilation, l'installation et le fonctionnement de GNOME.
+Construction de GNOME
+Pour compiler GNOME, certains paquets de développement sont nécessaires, notamment :
+La DTD DocBook XML et les feuilles de styles XSLT. Elles doivent être enregistrées dans le catalogue XML (
+Les bibliothèques X
+
+
+
+Si vous installez des paquets de votre distribution et si cela s'applique à votre distribution, installez les paquets
+Lancement d'une application GNOME unique
+Cette section décrit comment lancer une seule application GNOME. L'application se lance dans l'environnement de bureau actuel. Pour lancer une application dans le contexte d'un GNOME JHBuild complet, consultez
+Exécutez un shell JHBuild. Ce shell dispose de toutes les variables d'environnement nécessaires déjà configurées.
+Vérifiez que la bonne application va être lancée. Par exemple :
+lancez l'application :
+Il est aussi possible de lancer l'application en utilisant la commande
+Lancement de l'environnement de bureau GNOME
+Créez un nouveau compte utilisateur pour faire fonctionner le GNOME JHBuild. Il est recommandé d'utiliser un compte utilisateur différent pour GNOME JHBuild, afin d'éviter des problèmes liés aux paramètres utilisateur stockés dans le dossier personnel. Ce manuel fait référence à ce nouveau compte par le nom
+Configurez JHBuild dans le nouveau compte
+Ouvrez un terminal en tant qu'utilisateur
+echo PATH=$PATH:~/.local/bin &gt;gt; ~/.bashrc
+Testez que JHBuild fonctionne :
+jhbuild run pkg-config gtk+-2.0 --modversion
+Configuration de GNOME en mode « gestionnaire d'affichage »
+Compilez et installez GNOME JHBuild.
+Activez les services système. GNOME JHBuild utilise le démon
+Créez un script de démarrage GNOME dans
+#!/bin/sh
+
+GNOME=
+Rendez exécutable le fichier
+chmod a+x /usr/bin/gnome-jhbuild-session
+Pour ajouter une nouvelle entrée de session dans le gestionnaire d'affichage, créez le fichier
+[Desktop Entry]
+Name=GNOME (JHBuild)
+Comment=Cette session vous connecte dans une session GNOME de test
+Exec=/usr/bin/gnome-jhbuild-session
+Icon=
+Type=Application
+Redémarrez
+Lancement de GNOME depuis le gestionnaire d'affichage
+Pour lancer GNOME JHBuild, sélectionnez la session GNOME (JHBuild) dans l'écran de bienvenue du gestionnaire d'affichage, avant de saisir les informations de connexion du compte
+Intégration à un robot de compilation (buildbot)
+Associé au projet
+Configuration d'un esclave de robot de compilation
+Un esclave de robot de compilation est une variante d'une installation JHBuild normale qui va servir les requêtes d'un maître de compilation. Il est conseillé de d'abord faire fonctionner JHBuild correctement en effectuant une compilation complète et réussie de la majorité des modules avant de le configurer en tant que robot de compilation.
+Les commandes des robots de compilation sont des options de la commande
+Après l'exécution réussie de cette étape, trois nouvelles variables de configuration sont nécessaires dans
+Il n'est pas possible d'utiliser un fichier de configuration différent, l'option
+jhbuildbot_master = 'build.gnome.org:9070'
+jhbuildbot_slavename = 'nom_esclave'
+jhbuildbot_password = 'mot_de_passe'
+
+Les administrateurs de
+Référence des commandes
+JHBuild utilise une syntaxe de ligne de commande similaire aux outils du style CVS :
+Les options globales de JHBuild sont :
+
+Utilise un fichier de configuration alternatif au lieu du fichier
+
+Utilise un autre jeu de modules que celui qui est indiqué dans le fichier de configuration. Cette option peut être un chemin relatif si le jeu de modules se trouve dans le dossier des jeux de modules de JHBuild, ou un chemin absolu s'il se trouve ailleurs.
+
+N'interroge jamais l'utilisateur quant à un choix à faire. Cette option est utile pour effectuer une construction sans intervention humaine, afin de s'assurer que la construction ne soit pas interrompue.
+
+Les options particulières à certaines commandes sont énumérées ci-dessous.
+autobuild
+La commande
+Les options
+
+Cette option indique l'URL de JhAutobuild où envoyer le rapport.
+
+Si indiquée, cette option produit des messages de JHBuild plus verbeux.
+bootstrap
+jhbuild bootstrap
+La commande
+Consultez la documentation de la commande
+build
+La commande
+Si aucun nom de module n'est indiqué dans la ligne de commande, c'est la liste des
+
+Exécute
+
+Exécute
+
+Exécute
+
+Exécute
+
+Exécute
+
+--ignore-suggests
+Ne compile pas les dépendances faibles.
+
+N'accède pas au réseau lors de la construction des modules. Cette option évite les étapes de téléchargement ou de mise à jour lors des constructions. Si un module ne peut pas être construit sans accès réseau, sa construction échouera.
+
+Ne compile pas les modules de la liste. Utilisé pour éviter la construction de dépendances spécifiques.
+
+Ignore les modules qui ne correspondent pas à
+
+Commence par le module indiqué plutôt qu'au début de la liste des dépendances. Cette option est utile quand la construction précédente a échoué.
+
+Si le système de gestion de version sous-jacent le prend en charge, met à jour l'arborescence source selon son état à la date indiquée, avant de commencer la construction. La date doit être indiquée au format ISO, par exemple
+
+Effectue les tests graphiques avec le serveur X réel au lieu d'utiliser une simulation Xvfb.
+
+Si la construction échoue et que le système de gestion de version le prend en charge, force une extraction et exécute
+
+Si l'une ou plusieurs des dépendances du module échouent, cette option force JHBuild à essayer tout de même de construire le module.
+
+Construit les modules même si la stratégie habituelle indique que ce n'est pas nécessaire.
+
+Certains modules énumérés comme dépendances facultatives ne sont pas absolument nécessaires pour construire le module. Cette option force JHBuild à construire aussi les dépendances facultatives.
+
+Ignore les modules installés plus récemment que l'intervalle de temps donné. Le format de la chaîne
+
+make
+L'option
+buildone
+La commande
+Les options
+Cette commande nécessite au minimum un module dans la ligne de commande.
+checkbranches
+La commande
+
+La branche à vérifier
+
+clean
+La commande
+
+Consultez la documentation de la commande
+dot
+La commande
+L'option
+La sortie de la commande dot peut être redirigée vers l'utilitaire dot pour générer un fichier PostScript :
+jhbuild dot
+Ou une image PNG :
+jhbuild dot
+Exemple de sortie dot de JHBuild
+gui
+La commande
+Redémarrez
+L'interface graphique est basée sur GTK, ce qui requiert des bibliothèques supplémentaires.
+info
+La commande
+Cette commande affiche le nom du module, son type, ses dépendances, les paquets qui en dépendent, le répertoire source et la date de sa dernière installation avec JHBuild. Le cas échéant, elle affiche également certaines informations spécifiques au type de module, telles que le dépôt CVS ou l'URL de téléchargement.
+Si aucun module n'est précisé dans la commande, des informations sont affichées au sujet de tous les modules définis dans le jeu de modules.
+list
+La commande
+Les options
+
+Énumère tous les modules du jeu de modules, sans tenir compte des dépendances de construction.
+
+Si un module est défini par une de ses branches, affiche le nom de la branche avec le nom de module.
+
+Cette option force JHBuild à énumérer les dépendances facultatives.
+rdepends
+La commande
+
+Affiche le chemin de dépendance à la suite des modules.
+
+Limite l'affichage aux modules dépendant directement du module indiqué.
+run
+La commande
+En cas d'utilisation de JHBuild pour construire GNOME, cette commande est utile dans les scripts de démarrage de X.
+
+Exécute la commande dans le répertoire de construction du module indiqué.
+
+Exécute la commande dans le répertoire source du module indiqué.
+sanitycheck
+La commande
+jhbuild sanitycheck
+Ces contrôles vérifient notamment que :
+les préfixes d'extraction et d'installation sont accessibles en écriture ;
+les outils de construction indispensables sont installés ;
+certaines macros couramment utilisées sont disponibles dans les chemins de recherche des commandes
+le catalogue XML contient les DTD et feuilles de style DocBook.
+shell
+La commande
+Redémarrez
+Cette commande est équivalente à ceci :
+La variable d'environnement
+ if [ -n "$UNDER_JHBUILD" ]; then
+ PS1="[jhbuild] $PS1"
+ fi
+En conséquence, vous verrez apparaître la séquence
+La commande
+
+Redémarrez
+tinderbox
+La commande
+Les options
+
+uninstall
+La commande
+update
+La commande
+Les options
+updateone
+La commande
+L'option
+Référence du fichier de configuration
+Le fichier
+Les variables de configuration booléennes sont définies avec une syntaxe correspondant à l'exemple suivant :
+use_local_modulesets = True
+Les variables de configuration « chaînes de caractères » sont définies avec une syntaxe correspondant à l'exemple suivant :
+autogenargs = '--disable-static --disable-gtk-doc'
+Les variables de configuration contenant des listes sont définies avec une syntaxe correspondant à l'exemple suivant :
+skip = ['mozilla', 'pulseaudio']
+Les variables de configuration contenant des dictionnaires sont définies avec une syntaxe correspondant à l'exemple suivant :
+repos['git.gnome.org'] = 'ssh://username@git.gnome.org/git/'
+Variables de configuration
+Une valeur booléenne. Si défini à
+Une chaîne contenant des paramètres passés au script
+Un dictionnaire pouvant servir à surcharger la branche utilisée pour un module particulier. C'est utile si vous effectuez certaines modifications sur la branche d'un module et que vous souhaitez que JHBuild construise cette branche au lieu de celle qui est indiquée dans le jeu de modules.
+La définition des branches dépend du gestionnaire de version du module :
+CVS : révision. Par ex.
+Bazaar : URI de la branche du module. Par ex.
+Git : tuple dont la première partie est un dépôt (facultatif, peut contenir la valeur None) et la seconde partie le nom de la branche. Par ex.
+Subversion : URI de la branche du module. Par ex.
+builddir_pattern
+Un motif de formatage du style
+Une chaîne indiquant le répertoire parent contenant les arborescences de construction. La valeur par défaut est
+Une chaîne indiquant le script de construction à utiliser. La valeur recommandée est la valeur par défaut,
+Une chaîne indiquant les modules à construire. Les trois options possibles sont
+Une chaîne indiquant le répertoire dans lequel décompresser les arborescences source. À moins que
+Une chaîne indiquant la méthode d'extraction des répertoires dans la gestion de versions. La valeur par défaut est
+Une chaîne indiquant le répertoire de copie, si le mode d'extraction « copy » est employé (
+Une chaîne indiquant le programme à utiliser pour la prise en charge de CVS. Cela peut être
+Une chaîne indiquant un programme à utiliser en remplacement de
+ignore_suggests
+Une valeur booléenne indiquant s'il faut ignorer les dépendances faibles lors de la génération de l'arbre des dépendances. La valeur par défaut est
+Une valeur booléenne indiquant si l'interaction avec l'utilisateur est autorisée. La définition de cette valeur à
+Une valeur booléenne indiquant s'il faut exécuter
+makecheck_advisory
+Une valeur booléenne indiquant si les échecs d'exécution de la commande
+Une valeur booléenne indiquant s'il faut exécuter
+Une valeur booléenne indiquant s'il faut exécuter
+Une valeur booléenne indiquant s'il faut exécuter
+module_autogenargs
+Un dictionnaire faisant correspondre les noms de modules à des chaînes donnant des paramètres à passer à
+module_checkout_mode
+Un dictionnaire indiquant le mode d'extraction à employer pour les modules. Ce paramètre écrase le paramètre global
+module_makeargs
+Un dictionnaire faisant correspondre les noms de modules à des chaînes indiquant les paramètres à passer à
+module_makecheck
+Un dictionnaire faisant correspondre les noms de modules à des valeurs booléennes indiquant s'il faut exécuter
+module_nopoison
+Un dictionnaire faisant correspondre les noms de modules à des valeurs booléennes. Si la valeur pour un module vaut
+module_extra_env
+Un dictionnaire faisant correspondre les noms de modules à des dictionnaires contenant des variables d'environnement supplémentaires à passer lors de l'exécution de commandes pour le module.
+Une chaîne indiquant le répertoire contenant les jeux de modules à utiliser. Par défaut, c'est le répertoire
+Une valeur booléenne qui si elle est définie à
+Une valeur booléenne indiquant si l'accès au réseau est autorisé. Cela affecte l'extraction ou la mise à jour de modules CVS, le téléchargement d'archives tar et la mise à jour des jeux de modules. Définir cette valeur à
+Une valeur booléenne indiquant s'il faut émettre des notifications au moyen du démon de notification. Si la valeur vaut
+Une valeur booléenne qui, si elle est définie à
+Une valeur booléenne indiquant s'il faut afficher une icône dans la zone de notifications via Zenity. Si la valeur vaut
+Une valeur booléenne qui, si elle est définie à
+Une valeur booléenne qui si elle est définie à
+Une valeur booléenne indiquant s'il s'agit d'améliorer la mise en forme de la sortie des sous-processus. Seules les sorties CVS gèrent la mise en forme améliorée. Cette option peut être désactivée si la mise en forme améliorée pose des problèmes. La valeur par défaut est
+Une valeur booléenne indiquant s'il faut afficher une barre de progression lorsque JHBuild fonctionne en
+Une valeur booléenne. Si définie à
+Un dictionnaire indiquant un emplacement de dépôt alternatif pour un dépôt spécifique. Cette variable de configuration est utile aux développeurs de modules. Par défaut, JHBuild extrait le code à partir des dépôts en utilisant des emplacements anonymes. Les clés du dictionnaire sont des noms de dépôts courts et les valeurs sont des chaînes d'emplacement des dépôts alternatifs. Par exemple :
+Une chaîne de caractères. Si définie et si le gestionnaire de versions sous-jacent le prend en charge, JHBuild met à jour l'arborescence source selon son état à la date indiquée. La date doit être fournie au format ISO, par ex.
+Une chaîne indiquant le programme à utiliser pour la prise en charge de Subversion. Cela peut être
+Une chaîne de caractères ; si définie, les archives tar sont téléchargées dans ce répertoire au lieu de
+tinderbox_outputdir
+Une chaîne indiquant le répertoire de stockage de la sortie de
+Une option booléenne qui, si elle est définie à
+use_local_modulesets
+Une valeur booléenne indiquant d'utiliser des jeux de modules qui ont été extraits parallèlement au code source de JHBuild, au lieu de les télécharger au fur et à mesure, à partir du dépôt du gestionnaire de versions de GNOME. La valeur par défaut est
+Une chaîne contenant des paramètres à passer à
+Autres structures du fichier de configuration
+En plus des variables ci-dessus, d'autres paramètres peuvent être définis dans le fichier de configuration :
+Un dictionnaire représentant l'environnement. Cet environnement est transmis aux processus générés par JHBuild.
+Certaines variables d'environnement ont un impact certain, comme
+os.environ['CFLAGS'] = '-O0 -g'
+
+Cela ajoute un répertoire à la variable d'environnement
+
+
+Après le traitement du fichier de configuration, JHBuild modifie certains chemins sur la base de variables telles que
+La fonction
+Syntaxe des fichiers de jeu de modules
+JHBuild utilise des fichiers XML pour décrire les dépendances entre modules. Un schéma RELAX-NG et une définition de type de document (DTD : Document Type Definition) sont inclus avec JHBuild dans le répertoire
+L'élément de premier niveau dans un fichier de jeu de modules est l'élément
+Sources de module
+Plutôt que d'énumérer l'emplacement exact de chaque module, plusieurs « sources de modules » sont listées dans le jeu de modules, puis référencées par leur nom dans les définitions de modules. En plus de réduire la quantité d'informations redondantes dans le jeu de modules, cela facilite l'indication d'une source alternative pour ces modules (avec CVS et Subversion, il arrive fréquemment que les développeurs et les utilisateurs utilisent des méthodes différentes pour accéder aux dépôts).
+L'élément
+&lt;repository name="
+L'attribut
+L'attribut
+L'attribut
+L'attribut
+L'élément
+&lt;branch
+ [ repo="
+Tous les attributs possèdent des valeurs par défaut convenables et dépendent des définitions de modules et de dépôts. Les attributs courants sont décrits ici.
+L'attribut
+L'attribut
+L'attribut
+D'autres attributs sont décrits ci-dessous
+Bazaar
+Ce type de dépôt permet de définir un dépôt Bazaar. Il est recommandé de posséder une version de Bazaar 1.16 ou plus élevée.
+&lt;repository type="bzr" name="launchpad.net"
+ href="lp:"/gt;
+Voici des attributs supplémentaires :
+Un élément
+Par exemple, un dépôt avec des attributs
+&lt;repository type="bzr" name="launchpad.net"
+ href="lp:"
+ trunk-template="~bzr-pqm/%(module)s/bzr.dev"
+ branches-template="~bzr-pqm/%(module)s/%(branch)s"/gt;
+Des exemples d'éléments
+&lt;branch repo="launchpad.net"
+ module="bzr"
+ checkoutdir="bzr-next"/gt;
+&lt;branch repo="launchpad.net"
+ module="bzr"
+ branch="2.2"
+ checkoutdir="bzr-beta"/gt;
+CVS
+Ce type de dépôt permet de définir un dépôt CVS.
+L'attribut
+L'attribut
+&lt;repository type="cvs" name="tango.freedesktop.org"
+ cvsroot=":pserver:anoncvs@anoncvs.freedesktop.org:/cvs/tango"
+ password=""/gt;
+Attributs supplémentaires :
+Darcs
+Ce type de dépôt permet de définir un dépôt Darcs.
+&lt;repository type="darcs" name="telepathy.freedesktop.org"
+ href="http://projects.collabora.co.uk/darcs/telepathy/"/gt;
+Git
+Ce type de dépôt permet de définir un dépôt Git.
+&lt;repository type="git" name="git.freedesktop.org"
+ href="git://anongit.freedesktop.org/git/"/gt;
+Il autorise les attributs suivants sur l'élément
+L'attribut
+L'attribut
+&lt;branch repo="git.freedesktop.org" module="swfdec/swfdec"
+ checkoutdir="swfdec"
+ revision="
+Mercurial
+Ce type de dépôt permet de définir un dépôt Mercurial.
+&lt;repository type="hg" name="hg.gtk-vnc"
+ href="http://gtk-vnc.codemonkey.ws/hg/" /gt;
+&lt;branch repo="hg.gtk-vnc" module="outgoing.hg" checkoutdir="gtk-vnc"/gt;
+Monotone
+Ce type de dépôt permet de définir un dépôt Monotone.
+L'attribut
+L'attribut
+L'attribut
+&lt;repository type="mtn" name="pidgin.im"
+ server="pidgin.im" database="pidgin.im.mtn"
+ defbranch="im.pidgin.pidgin"/gt;
+Subversion
+Ce type de dépôt permet de définir un dépôt Subversion.
+&lt;repository type="svn" name="svn.gnome.org" default="yes"
+ href="http://svn.gnome.org/svn/"/gt;
+Il autorise un attribut
+&lt;branch revision="gnome-2-20"/gt;
+Il est possible de définir un agencement
+L'attribut
+&lt;repository type="bzr" name="launchpad.net"
+ href="lp:"/gt;
+Tarballs (archives tar)
+Ce type de dépôt permet de définir un dépôt tarball.
+&lt;repository type="tarball" name="dbus/dbus-python"
+ href="http://dbus.freedesktop.org/releases/dbus-python/"/gt;
+L'attribut
+Les attributs
+L'élément
+Pour les jeux de modules livrés avec JHBuild, les fichiers de correctifs sont situés dans le répertoire
+&lt;branch module="dbus-python-0.80.2.tar.gz" version="0.80.2"
+ repo="dbus/dbus-python"
+ hash="md5:2807bc85215c995bd595e01edd9d2077" size="453499"gt;
+ &lt;patch file="dbus-glib-build.patch" strip="1" /gt;
+&lt;branchgt;
+L'élément
+Inclusion d'autres jeux de modules
+JHBuild autorise un jeu de modules à inclure le contenu d'un autre jeu de modules en le référençant au moyen de l'élément
+&lt;include href="
+L'attribut
+Seules les définitions de modules sont importées à partir du jeu de modules référencé, et non pas les sources de modules. Plusieurs niveaux d'imbrication sont autorisés, mais pas les inclusions en boucle (il n'y a pas de code de détection de boucle pour l'instant).
+Définitions de modules
+Il existe plusieurs types de définitions de modules utilisables dans un fichier de jeu de modules, et la liste peut facilement être augmentée. Seuls les types les plus courants sont mentionnés ici.
+À la base, ils sont tous formés d'un élément
+Tout module mentionné dans l'élément
+Après avoir généré la liste des modules, les modules mentionnés dans l'élément
+autotools
+L'élément
+&lt;autotools id="
+Les attributs
+L'attribut
+L'attribut
+L'attribut
+%(srcdir)s/%(autogen-sh)s --prefix %(prefix)s --libdir %(libdir)s %(autogenargs)s
+L'attribut
+cmake
+L'élément
+&lt;cmake id="
+distutils
+L'élément
+&lt;distutils id="
+linux
+L'élément
+&lt;linux id="
+perl
+L'élément
+L'attribut
+&lt;perl id="
+testmodule
+L'élément
+&lt;metamodule id="
+L'attribut
+&lt;testmodule id="
+waf
+L'élément
+L'attribut
+L'attribut
+&lt;waf id="
+testmodule
+L'élément
+&lt;testmodule id="
+L'attribut
+Tant que l'option de configuration noxvfb n'est pas définie, un serveur Xvfb est démarré pour y lancer les tests.
+metamodule
+L'élément
+Par exemple, meta-gnome-desktop dépend de tous les éléments clés du bureau GNOME. En conséquence, demander à JHBuild de l'installer revient à installer le bureau complet.
+&lt;metamodule id="
+L'attribut
+Éléments désapprouvés
+cvsroot
+L'élément
+L'élément
+&lt;cvsroot name="
+L'attribut
+L'attribut
+L'attribut
+svnroot
+L'élément
+L'élément
+&lt;svnroot name="
+L'attribut
+L'attribut
+L'attribut
+Types de modules désapprouvés
+Cette section présente des éléments désapprouvés. Il se peut qu'ils soient encore utilisés dans des jeux de modules existants, mais il est conseillé de ne plus les utiliser.
+tarball
+Cet élément désapprouvé est une simple couche fine autour du type de module
+L'élément
+&lt;tarball id="
+Les attributs
+L'élément
+L'élément
+Les autres attributs et les éléments
+James
+Henstridge
+C.J.
+Adams-Collier
+Frederic
+Peters
+David
+Turner
+2004, 2008
+James Henstridge
+Manuel de JHBuild v0.5
+Janvier 2008
+Manuel de JHBuild v0.1
+Août 2007
+$
+git clone git://git.gnome.org/jhbuild
+...
+cd jhbuild
+./autogen.sh
+make install
+Dans le cas où autotools ou gnome-doc-utils ne sont pas installés dans votre environnement, installez JHBuild de la façon suivante :
+make -f Makefile.plain
+make -f Makefile.plain install
+PATH=$PATH:~/.local/bin
+Avant de lancer JHBuild, il est nécessaire de paramétrer le fichier de configuration
+repos
+moduleset
+modules
+checkoutroot
+prefix
+autogenargs
+makeargs
+Si cette commande affiche un message, il est possible de corriger les erreurs de deux manières :
+Lancez la commande
+Lorsque l'opération est terminée, lancez la commande
+La commande
+Les dépendances des outils de construction comprennent notamment
+jhbuild build
+choix :
+jhbuild build gtk+
+jhbuild build --start-at=pango
+jhbuild buildone gtk+
+jhbuild list
+jhbuild info gtk+
+jhbuild update
+jhbuild build --no-network
+commande
+jhbuild run
+jhbuild shell
+which gedit
+
+gedit &
+jhbuild run gedit
+
+Il existe trois méthodes différentes pour exécuter GNOME JHBuild :
+Dans une fenêtre
+Par le gestionnaire d'affichage.
+Configuration de GNOME en mode « fenêtre »
+Installez l'application
+Testez que
+Xephyr -ac -screen 800x600 :1 2gt; /dev/null &
+Si tout marche bien, une fenêtre avec un fond noir apparaît. Fermez la fenêtre
+/opt/gnome
+rm -rf
+ln -s /var/run/dbus
+Créez un script de démarrage GNOME dans
+Rendez exécutable le fichier
+chmod u+x ~/.local/bin/gnome-jhbuild-xephyr-session
+Lancement de GNOME en mode « fenêtre »
+Ouvrez un terminal en tant qu'utilisateur
+Exécutez
+#
+Définissez la variable d'environnement
+export DISPLAY=:1
+Lancez GNOME :
+gnome-jhbuild-xephyr-session
+Si tout fonctionne correctement, GNOME JHBuild s'affiche dans la fenêtre Xephyr. Dans le cas contraire, inspectez la sortie affichée dans le fenêtre du terminal.
+jhbuild bot --setup
+jhbuild
+options-globales
+commande
+paramètres-de-commande
+--no-interact
+jhbuild autobuild
+--autogen
+--clean
+module
+--skip=
+--start-at=
+url-de-rapport
+--report-url=
+--verbose
+La commande
+--check
+--dist
+--distcheck
+--no-network
+étiquettes
+--tags=
+date
+-D
+--no-xvfb
+--try-checkout
+--no-poison
+--force
+--build-optional-modules
+temps
+--min-age=
+Exécute toujours
+-D
+jhbuild buildone
+jhbuild checkbranches
+branche
+--branch=
+jhbuild -m gnome-2.20 checkbranches
+jhbuild clean
+jhbuild dot
+--soft-deps
+--clusters
+jhbuild gui
+jhbuild info
+-a
+-r
+-s
+--list-optional-modules
+jhbuild rdepends
+--dependencies
+--direct
+jhbuild run
+--in-builddir
+--in-checkoutdir
+paramètre
+jhbuild run $SHELL
+jhbuild tinderbox
+répertoire
+--output=
+-C
+-N
+-f
+Le répertoire dans lequel écrire les fichiers HTML.
+jhbuild uninstall
+jhbuild updateone
+alwaysautogen
+branches
+buildroot
+buildscript
+build_policy
+checkout_mode
+copy_dir
+cvs_program
+installprog
+interact
+makecheck
+makeclean
+makedist
+makedistcheck
+modulesets_dir
+nobuild
+nonetwork
+nonotify
+nopoison
+notrayicon
+noxvfb
+pretty_print
+progress_bar
+quiet_mode
+skip
+Une liste de modules à ignorer. L'option de ligne de commande
+sticky_date
+svn_program
+tarballdir
+trycheckout
+use_lib64
+Une valeur booléenne qui indique s'il faut installer les bibliothèques dans les répertoires
+xvfbargs
+os.environ
+Arch
+Ce type de dépôt permet de définir un dépôt Arch.
+L'attribut
+&lt;repository type="arch" name="rhythmbox"
+ archive="rhythmbox-devel@gnome.org--2004"
+ href="http://web.rhythmbox.org/arch/2004"/gt;
+Ant
+L'élément
+&lt;ant id="
+Exemple d'un module construit avec ant
+arch-archive
+L'élément
+&lt;arch-archive name="
+L'attribut
+L'attribut

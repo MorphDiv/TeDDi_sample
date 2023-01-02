@@ -1,0 +1,62 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+Forms Data Format (FDF) is a format for handling forms within PDF documents.
+You should read the documentation at http: / /partners.adobe.com / asn / developer / acrosdk / forms.html for more information on what FDF is and how it is used in general.
+The general idea of FDF is similar to HTML forms.
+The difference is basically the format how data is transmitted to the server when the submit button is pressed (this is actually the Form Data Format) and the format of the form itself (which is the Portable Document Format, PDF).
+Processing the FDF data is one of the features provided by the fdf functions.
+But there is more.
+One may as well take an existing PDF form and populated the input fields with data without modifying the form itself.
+In such a case one would create a FDF document (fdf_create()) set the values of each input field (fdf_set_value()) and associate it with a PDF form (fdf_set_file()).
+Finally it has to be sent to the browser with MimeType application / vnd.fdf.
+The Acrobat reader plugin of your browser recognizes the MimeType, reads the associated PDF form and fills in the data from the FDF document.
+If you look at an FDF-document with a text editor you will find a catalogue object with the name FDF.
+Such an object may contain a number of entries like Fields, F, Status etc..
+The most commonly used entries are Fields which points to a list of input fields, and F which contains the filename of the PDF-document this data belongs to.
+Those entries are referred to in the FDF documentation as / F-Key or / Status-Key.
+Modifying this entries is done by functions like fdf_set_file() and fdf_set_status().
+Fields are modified with fdf_set_value(), fdf_set_opt() etc..
+You need the FDF toolkit SDK available from http: / /partners.adobe.com / asn / developer / acrosdk / forms.html.
+As of PHP 4.3 you need at least SDK version 5.0.
+The FDF toolkit library is available in binary form only, platforms supported by Adobe are Win32, Linux, Solaris and AIX.
+You must compile PHP with --with-fdftk[ =DIR].
+Note:
+If you run into problems configuring PHP with fdftk support, check whether the header file fdftk.h and the library libfdftk.so are at the right place.
+The configure script supports both the directory structure of the FDF SDK distribution and the usual DIR / include / DIR / lib layout, so you can point it either directly to the unpacked distribution directory or put the header file and the appropriate library for your platform into e.g. / usr / local / include and / usr / local / lib and configure with --with-fdftk= / usr / local.
+Note to Win32 Users:
+In order to enable this module on a Windows environment, you must copy fdftk.dll from the DLL folder of the PHP / Win32 binary package to the SYSTEM32 folder of your windows machine. (Ex:
+C:\WINNT\SYSTEM32 or C:\WINDOWS\SYSTEM32)
+This extension has no configuration directives defined in php.ini.
+Most fdf functions require a fdf resource as their first parameter.
+A fdf resource is a handle to an opened fdf file. fdf resources may be obtained using fdf_create(), fdf_open() and fdf_open_string().
+The constants below are defined by this extension, and will only be available when the extension has either been compiled into PHP or dynamically loaded at runtime.
+The following examples shows just the evaluation of form data.
+Example 1.
+Evaluating a FDF document
+?php / / Open fdf from input string provided by the extension / / The pdf form contained several input text fields with the names / / volume, date, comment, publisher, preparer, and two checkboxes / / show_publisher and show_preparer. $fdf = fdf_open_string( $HTTP_FDF_DATA); $volume = fdf_get_value($fdf, "volume"); echo "The volume field has the value 'B $volume / B' BR "; $date = fdf_get_value($fdf, "date"); echo "The date field has the value 'B $date / B' BR"; $comment = fdf_get_value($fdf, "comment"); echo "The comment field has the value 'B $comment / B' BR "; if(fdf_get_value($fdf, "show_publisher") == "On") {$publisher = fdf_get_value($fdf, "publisher"); echo "The publisher field has the value 'B $publisher / B' BR";} else echo "Publisher shall not be shown.
+BR "; if(fdf_get_value($fdf, "show_preparer") == "On") {$preparer = fdf_get_value($fdf, "preparer"); echo "The preparer field has the value 'B $preparer / B' BR";} else echo "Preparer shall not be shown.
+BR "; fdf_close($fdf);?
+Prev
+Home
+Next
+unlink
+Up
+fdf_add_doc_javascript

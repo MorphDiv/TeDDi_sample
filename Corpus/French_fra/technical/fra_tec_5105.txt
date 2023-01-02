@@ -1,0 +1,62 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Ce module donne accès aux fichiers compressés avec l'utilitaire gzip, grâce à des fonctions semblables aux fonctions d'accès aux fichiers, qui fonctionnent avec les fichiers compressés ou non (mais pas avec les sockets).
+
+La version 4.0.4 a introduit la version étendue de fopen() pour les fichiesr compressés avec GZ.
+Vous pouvez utiliser le préfixe spécial zlib: dans les URL pour accéder directement et de manière transparente aux fichiers compressés par GZ, avec toutes les fonctions f* habituelles.
+En version 4.3.0, ce préfixe spécial est remplacé par zlib: / / pour éviter les ambiguités avec les fichiers contenant des deux points:.
+Cette fonctionnalité requiert une librarie C qui fournisse la fonction fopencookie().
+A ma connaissance, la librairie GNU libc est la seule à fournir cette fonctionnalité.
+Ce module utilise les fonctions de la librairie zlib Ce module utilise les fonctions de la librairie zlib de Jean-loup Gailly et Mark Adler.
+Vous devez utiliser zlib version = 1.0.9 avec ce module.
+L'extension zlib offre l 'option de compresser à la volée les pages web, si le navigateur client le supporte.
+Il existe donc deux options dans le fichier de configuration php.ini.
+Tableau 1.
+Options de configuration Zlib
+Nom
+Défaut
+
+
+"0"
+
+
+
+
+Voici une explication rapide des directives de configuration.
+Compression à la volée des pages.
+Si cette option est mise à "On" dans php.ini ou dans la configuration d'Apache, les page sont compressées si le navigateur envoie un entête HTTP "Accept-Encoding: gzip "ou "deflate". "Content-Encoding: gzip "(respectivement "deflate") et "Vary: Accept-Encoding"
+Vous pouvez utiliser la fonction ini_set() pour désactiver cette configuration durant un script, si les entêtes HTTP n 'ont pas été envoyé.
+Si vous envoyez un entête "Content-Type: image /", alors la compression sera désactivée (afin d'éviter un bug de Netscape).
+Vous pouvez réactiver cette compression en utilisant la ligne ini_set( 'zlib.output_compression', 'On') après avoir appelé la fonction header qui fixe le type.
+Cette option accepte aussi des valeurs entières au lieu d'un booléen "On" / "Off ".
+Cela vous permet de modifier la taille du buffer de sortie.
+Niveau de compression utilisé pour la compression de sortie.
+Cette extension ne définit aucune ressource.
+Ces constantes sont définies par cette extension, et ne sont disponibles que si cette extension a été compilée avec PHP, ou bien chargée au moment de l 'exécution.
+Cet exemple ouvre un fichier temporaire, écrit une page de test dedans, puis affiche le contenu du fichier deux fois.
+Exemple 1.
+Exemple de l 'extension Zlib
+?php $filename = tempnam ('/ tmp', 'zlibtest') .'.gz'; print "html \n head / head \n body \n pre \n"; $s = "C'est juste un test, test, test, test, test, test, test, test!\n"; / / ouvre le fichier en eacute;criture avec la compression maximale $zp = gzopen($filename, "w9"); / / eacute;crit uen cha icirc;ne dans le fichier gzwrite($zp, $s); / / ferme le fichier gzclose($zp); / / ouvre le fichier en lecture $zp = gzopen($filename, "r"); / / lit 3 caract egrave;res print gzread($zp, 3); / / affiche le reste du fichier, puis le ferme gzpassthru($zp); print "\n"; / / ouvre le fichier et affiche le fichier une seconde fois if (readgzfile($filename) != strlen($s)) {echo "Erreur avec les fonctions zlib !";} unlink($filename); print" / pre \n / h1 / body \n / html \n";?
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

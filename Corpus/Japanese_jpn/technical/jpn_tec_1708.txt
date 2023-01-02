@@ -1,0 +1,57 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Line Input # ステートメント [実行時]
+/text/sbasic/shared/03020203.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+数式入力ボックス文
+mw changed index entry
+Line Input # ステートメント [実行時]
+順編成ファイルから文字列を読み取り、変数に格納します。
+構文:
+Line Input #FileNumber As Integer, Var As String
+パラメータ:
+FileNumber:
+読み取るデータを含むファイルの番号。 読み取るファイルは、Open ステートメントに INPUT キーワードを指定して、事前に開いておく必要があります。
+var:
+戻り値を格納する変数の名前。
+Line Input#
+ステートメントは、オープン済みのファイルから文字列を読み取って、その値を変数に格納します。文字列は、次に来るキャリッジリターン (ASC=13) かラインフィード (ASC=10) までのデータが、1 行ごとに読み取られます。行末の記号は読み取られません。
+例:
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; This is a line of text &quot;
+Print #iNumber, &quot; This is another line of text &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+Wend
+Close #iNumber
+Msgbox sMsg
+End Sub

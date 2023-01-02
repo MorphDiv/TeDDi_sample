@@ -1,0 +1,42 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+Liefert ein assoziatives Array, das den geholten entprechenden Datensatz enthält.
+Sind keine weiteren Datensätze vorhanden gibt diese Funktion FALSE zurück.
+mysql_fetch_assoc() entspricht in der Funktionsweise exakt dem Aufruf von mysql_fetch_array() mit Angabe von MYSQL_ASSOC als optionalen zweiten Parameter.
+Diese Funktion liefert Ihnen nur ein assoziatives Array.
+Das war das ursprüngliche Verhalten von mysql_fetch_array().
+Falls Sie sowohl numerische, als auch assoziative Indizes benötigen, verwenden Sie mysql_fetch_array().
+Falls zwei oder mehrere Felder des Ergebnisses den gleichen Feldnamen haben, dann wird nur der Wert des letzten Felds im Array unter diesem Feldnamen abgelegt.
+Um auch auf die anderen, gleichnamigen, Felder zugreifen zu können, müssen Sie entweder numerische Indizes und damit mysql_fetch_row() benutzen, oder Aliase für Ihre Felder anlegen.
+Zur Verwendung von Aliasen schauen Sie sich das Beispiel unter der Beschreibung von mysql_fetch_array() an.
+Zu betonen ist, dass der Gebrauch von mysql_fetch_assoc() nicht signifikant langsamer ist als mysql_fetch_row(), obwohl die Funktion einen sichtlichen Mehrwert bietet.
+Beispiel 1.
+Ein ausführliches Beispiel zu mysql_fetch_assoc()
+?php $conn = mysql_connect( "localhost", "mysql_user", "mysql_password"); if (!$conn) {echo "Keine Verbindung zur DB: ". mysql_error(); exit;} if (!mysql_select_db("mydbname")) {echo "Kann mydbname nicht auswählen:". mysql_error(); exit;} $sql = "SELECT id as userid, fullname, userstatus FROM sometable WHERE userstatus = 1"; $result = mysql_query($sql); if (!$result) {echo "Anfrage ($sql) konnte nicht ausgeführt werden: ". mysql_error(); exit;} if (mysql_num_rows($result) == 0) {echo "Keine Zeilen gefunden, nichts auszugeben, daher Abbruch"; exit;} / / Solange eine Zeile mit Daten existiert, wird dies in dem / / assoziativen Array $row abgelegt. / / Anmerkung:
+Wenn Sie nur eine Zeile erwarten, brauchen Sie keine Schleife. / / Anmerkung:
+Wenn Sie extract( $row) inner halb der folgenden / / Schleife verwenden, können Sie damit die Variablen / / $userid, $fullname und $userstatus erzeugen. while ($row = mysql_fetch_assoc($result)) {echo $row["userid"]; echo $row["fullname"]; echo $row["userstatus"];} mysql_free_result($result);?
+Für weitere Details, siehe auch mysql_fetch_row(), mysql_fetch_array(), mysql_query() und mysql_error()
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

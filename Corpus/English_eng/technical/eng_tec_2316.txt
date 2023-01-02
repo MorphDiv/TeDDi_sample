@@ -1,0 +1,60 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+Note:
+The following applies to 3.0.7 and later.
+Internally in PHP a connection status is maintained.
+There are 3 possible states:
+0 - NORMAL
+1 - ABORTED
+2 - TIMEOUT
+When a PHP script is running normally the NORMAL state, is active.
+If the remote client disconnects the ABORTED state flag is turned on.
+A remote client disconnect is usually caused by the user hitting his STOP button.
+If the PHP-imposed time limit (see set_time_limit()) is hit, the TIMEOUT state flag is turned on.
+You can decide whether or not you want a client disconnect to cause your script to be aborted.
+Sometimes it is handy to always have your scripts run to completion even if there is no remote browser receiving the output.
+The default behaviour is however for your script to be aborted when the remote client disconnects.
+This behaviour can be set via the ignore_user_abort php.ini directive as well as through the corresponding "php_value ignore_user_abort" Apache .conf directive or with the ignore_user_abort() function.
+If you do not tell PHP to ignore a user abort and the user aborts, your script will terminate.
+The one exception is if you have registered a shutdown function using register_shutdown_function().
+With a shutdown function, when the remote user hits his STOP button, the next time your script tries to output something PHP will detect that the connection has been aborted and the shutdown function is called.
+This shutdown function will also get called at the end of your script terminating normally, so to do something different in case of a client disconnect you can use the connection_aborted() function.
+This function will return TRUE if the connection was aborted.
+Your script can also be terminated by the built-in script timer.
+The default timeout is 30 seconds.
+It can be changed using the max_execution_time php.ini directive or the corresponding "php_value max_execution_time" Apache .conf directive as well as with the set_time_limit() function.
+When the timer expires the script will be aborted and as with the above client disconnect case, if a shutdown function has been registered it will be called.
+Within this shutdown function you can check to see if a timeout caused the shutdown function to be called by calling the connection_timeout() function.
+This function will return TRUE if a timeout caused the shutdown function to be called.
+One thing to note is that both the ABORTED and the TIMEOUT states can be active at the same time.
+This is possible if you tell PHP to ignore user aborts.
+PHP will still note the fact that a user may have broken the connection, but the script will keep running.
+If it then hits the time limit it will be aborted and your shutdown function, if any, will be called.
+At this point you will find that connection_timeout() and connection_aborted() return TRUE.
+You can also check both states in a single call by using the connection_status().
+This function returns a bitfield of the active states.
+So, if both states are active it would return 3, for example.
+Prev
+Home
+Next
+Using remote files
+Up
+Persistent Database Connections

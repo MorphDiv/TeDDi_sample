@@ -1,0 +1,61 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+ClibPDF Le permite crear documentos PDF con PHP.
+Está disponible en FastIO pero no es software libre.
+Debería leer la licencia antes de comenzar a utilizar ClibPDF.
+Si usted no puede cumplir el acuerdo de la licencia considere el utilizar la pdflib de Thomas Merz, que tambien es muy potente.
+La funcionalidad y la API de ClibPDF son similares a la pdflib de Thomas Merz pero, de acuerdo con FastIO, ClibPDF es mas rápida y crea documentos mas pequeños.
+Esto puede haber cambiado con la nueva versión 2.0 de pdflib.
+Un simple banco de pruebas (el ejemplo pdfclock.c de pdflib 2.0 trasformado en un script php) en realidad no muestra ninguna diferencia en velocidad.
+Por tanto, pruebe las dos y vea cual hace el mejor trabajo para usted.
+Esta documentación debería ser leída junto con el manual de ClibPDF ya que este explica la librería con mucho mas detalle.
+Muchas funciones en le ClibPDF nativa y el módulo PHP, así como en pdflib, tienen el mismo nombre.
+Todas las funciones excepto cpdf_open() toman el manejador del documento com el primer parámetro.
+Actualmente este manejador no se usa internamente desde que ClibPDF no soporta la creación de varios documentos PDF al mismo tiempo.
+Realmente, ni debería intentarlo, los resultados son impredecibles.
+No puedo supervisar cuales son las consecuencias en un sistema multihilo.
+De acuerdo con el autor de ClibPDF, esto cambiará en alguno de las próximas veriones (la versión actual, cuando eto fue escrito es 1.10).
+Si usted necesita esta capacidad, use el módulo pdflib.
+Nota:
+La función cpdf_set_font() ha cambiado desde que PHP3 soporta fuentes asiáticas.
+El parámetro que codifica ya no es un entero sino una cadena.
+Una gran ventaja de ClibPDF sobre pdflib es la posibilidad de crear el documento PDF completamente en memoria sin usar ficheros temporales.
+Esto también proporciona la capaciad de pasar coordenadas en una unidad de longitud predefinida.
+Esta es una cualidad útil pero puede ser simulada con pdf_translate().
+La mayoría de las funciones son fáciles de usar.
+La parte mas difícil es, probablemente, crear un documento PDF muy simple.
+El siguiente ejemplo debería ayudarle a comenzar.
+En él se crea un documento con una página.
+La página contiene el texto "Times-Roman" con una fuente de 30pt.
+El texto está subrayado.
+Ejemplo 1.
+Ejemplo simple de ClibPDF
+?php $cpdf = cpdf_open( 0); cpdf_page_init($cpdf, 1, 0, 595, 842); cpdf_add_outline($cpdf, 0, 0, 0, 1, "Page 1"); cpdf_set_font($cpdf, "Times-Roman", 30, "WinAnsiEncoding"); cpdf_set_text_rendering($cpdf, 1); cpdf_text($cpdf, "Times Roman outlined", 50, 750); cpdf_moveto($cpdf, 50, 740); cpdf_lineto($cpdf, 330, 740); cpdf_stroke($cpdf); cpdf_finalize($cpdf); Header("Content-type: application / pdf"); cpdf_output_buffer($cpdf); cpdf_close($cpdf);?
+La distribución de pdflib contiene un ejemplo mas comlejo que crea una serie de páginas con un reloj analógico.
+Aquí está ese ejemplo convertido en PHP usando la extensión ClibPDF:
+Ejemplo 2.
+Ejemplo con pdfclock de la distribución pdflib 2.0
+?php $radius = 200; $margin = 20; $pagecount = 40; $pdf = cpdf_open(0); cpdf_set_creator($pdf, "pdf_clock.php3"); cpdf_set_title($pdf, "Reloj Analógico"); while($pagecount- - 0) {cpdf_page_init($pdf, $pagecount+1, 0, 2 * ($radius + $margin), 2 * ($radius + $margin), 1.0); cpdf_set_page_animation($pdf, 4, 0.5, 0, 0, 0); / * limpiar * / cpdf_translate($pdf, $radius + $margin, $radius + $margin); cpdf_save($pdf); cpdf_setrgbcolor($pdf, 0.0, 0.0, 1.0); / * cambio de minuto * / cpdf_setlinewidth($pdf, 2.0); for ($alpha = 0; $alpha 360; $alpha += 6) {cpdf_rotate($pdf, 6.0); cpdf_moveto($pdf, $radius, 0.0); cpdf_lineto($pdf, $radius-$margin / 3, 0.0); cpdf_stroke($pdf);} cpdf_restore($pdf); cpdf_save($pdf); / * cambios de 5 minutos * / cpdf_setlinewidth($pdf, 3.0); for ($alpha = 0; $alpha 360; $alpha += 30) {cpdf_rotate($pdf, 30.0); cpdf_moveto($pdf, $radius, 0.0); cpdf_lineto($pdf, $radius-$margin, 0.0); cpdf_stroke($pdf);} $ltime = getdate(); / * dibujar la aguja de las horas * / cpdf_save($pdf); cpdf_rotate($pdf, -(($ltime['minutos'] / 60.0) + $ltime['horas'] - 3.0) * 30.0); cpdf_moveto($pdf, -$radius / 10, -$radius / 20); cpdf_lineto($pdf, $radius / 2, 0.0); cpdf_lineto($pdf, -$radius / 10, $radius / 20); cpdf_closepath($pdf); cpdf_fill($pdf); cpdf_restore($pdf); / * dibujar el minutero * / cpdf_save($pdf); cpdf_rotate($pdf, -(($ltime['segundos'] / 60.0) + $ltime['minutos'] - 15.0) * 6.0); cpdf_moveto($pdf, -$radius / 10, -$radius / 20); cpdf_lineto($pdf, $radius * 0.8, 0.0); cpdf_lineto($pdf, -$radius / 10, $radius / 20); cpdf_closepath($pdf); cpdf_fill($pdf); cpdf_restore($pdf); / * dibujar la seguna mano * / cpdf_setrgbcolor($pdf, 1.0, 0.0, 0.0); cpdf_setlinewidth($pdf, 2); cpdf_save($pdf); cpdf_rotate($pdf, -(($ltime['segundos'] - 15.0) * 6.0)); cpdf_moveto($pdf, -$radius / 5, 0.0); cpdf_lineto($pdf, $radius, 0.0); cpdf_stroke($pdf); cpdf_restore($pdf); / * dibujar un pequeño círculo en el centro * / cpdf_circle($pdf, 0, 0, $radius / 30); cpdf_fill($pdf); cpdf_restore($pdf); cpdf_finalize_page($pdf, $pagecount+1);} cpdf_finalize($pdf); Header("Content-type: application / pdf"); cpdf_output_buffer($pdf); cpdf_close($pdf);?
+Anterior
+Inicio
+Siguiente
+
+Subir

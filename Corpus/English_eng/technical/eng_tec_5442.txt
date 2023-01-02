@@ -1,0 +1,74 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 43.
+Streams API for PHP Extension Authors
+Next
+Using streams is very much like using ANSI stdio functions.
+The main difference is in how you obtain the stream handle to begin with.
+In most cases, you will use php_stream_open_wrapper() to obtain the stream handle.
+This function works very much like fopen, as can be seen from the example below:
+Example 43-1. simple stream example that displays the PHP home page
+php_stream * stream = php_stream_open_wrapper( "http: / /www.php.net", "rb", REPORT_ERRORS, NULL); if (stream) {while(!php_stream_eof(stream)) {char buf[1024]; if (php_stream_gets(stream, buf, sizeof(buf))) {printf(buf);} else {break;}} php_stream_close(stream);}
+The table below shows the Streams equivalents of the more common ANSI stdio functions.
+Unless noted otherwise, the semantics of the functions are identical.
+Table 43-1.
+ANSI stdio equivalent functions in the Streams API
+ANSI Stdio Function
+PHP Streams Function
+Notes
+fopen
+php_stream_open_wrapper
+Streams includes additional parameters
+fclose
+php_stream_close
+fgets
+php_stream_gets
+fread
+php_stream_read
+The nmemb parameter is assumed to have a value of 1, so the prototype looks more like read( 2)
+fwrite
+php_stream_write
+The nmemb parameter is assumed to have a value of 1, so the prototype looks more like write( 2)
+fseek
+php_stream_seek
+ftell
+php_stream_tell
+rewind
+php_stream_rewind
+feof
+php_stream_eof
+fgetc
+php_stream_getc
+fputc
+php_stream_putc
+fflush
+php_stream_flush
+puts
+php_stream_puts
+Same semantics as puts, NOT fputs
+fstat
+php_stream_stat
+Streams has a richer stat structure
+Prev
+Home
+Next
+Streams API for PHP Extension Authors
+Up
+Streams as Resources

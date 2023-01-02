@@ -1,0 +1,79 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+hw_modifyobject() permet d'effacer, d'ajouter ou de modifier les attributs d 'un objet.
+L 'objet est reperé par son identifiant object_to_change.
+Le premier tableau, remove, est la liste des attributs à effacer.
+Le deuxième tableau add est la liste des attributs à ajouter.
+Afin de modifier un attribut, il vous faudra dont l'effacer, puis l'ajouter à nouveau. hw_modifyobject() effacera toujours les attributs avant de les ajouter, à moins que la valeur de l 'attribut à effacer ne soit pas une chaîne, ou un tableau.
+Le dernier paramètre détermine si la modification est récursive ou pas.
+1 signifie que la modification est récursive.
+Si un objet ne peut pas être modifié, il sera ignoré. hw_error() n'indiquera alors pas toujours d'erreur, même si certains objets n 'ont pas pu être modifié.
+Les clés des deux tableaux sont les noms des attributs.
+La valeur de chaque élément peut être un tableau, ou une chaîne ou n'importe quoi d 'autre.
+Dans le cas du tableau, la valeur de l 'attribut est construite en séparant chaque élément par un point virgule.
+Dans le cas de la chaîne, elle sert directement de valeur.
+Une chaîne vide provoquera un effacement de l 'attribut.
+Dans le cas où la valeur n 'est ni un tableau, ni une chaîne, aucune opération ne sera effectuée.
+Cela est nécessaire si vous voulez ajouter un attribut complètement une nouvelle valeur pour un attribut existant.
+Si le tableau d'effacement contenait une chaîne vide comme attribut, le serveur tenterait d'effacer l'attribut, ce qui échouerai de toute manière, car cet attribut n 'existe pas.
+L 'ajout de cet attribut échouerai aussi.
+Affecter la valeur de 0 à cet attribut ne l'effacerait pas, et l 'ajout fonctionnerait.
+Si vous voulez changer l'attribut 'Nom 'de valeur courante 'livres' en 'articles 'vous devrez faire deux tableaux, et appeler hw_modifyobject().
+Exemple 1.
+Modification d 'un attribut
+?php / / $connect est une connexion valide / / $objid est l'identifiant de l'objet $remarr = array("Name "= "books"); $addarr = array("Name" = "articles"); $hw_modifyobject($connect, $objid, $remarr, $addarr);?
+Exemple 2.
+Ajouter un nouvel attribut
+?php / / $connect st une connexion Hyperwave valide / / $objid est l'identifiant de l'objet à modifier $remarr = array("Name "= 0); $addarr = array("Name" = "articles"); $hw_modifyobject($connect, $objid, $remarr, $addarr);?
+
+Les attributs multilingues, (tels que 'Title'), peuvent être modifiés de deux manières: soit en fournissant la valeur de ces attributs de manière native (langue :valeur), soit en fournissant un tableau avec les éléments de chaque langue, comme décrit ci-dessus.
+L 'exemple deviendrai alors:
+Exemple 3.
+Modifier l'attribut de Titre (Title)
+?php $remarr = array( "Title "= "en:Books"); $addarr = array("Title" = "en:Articles"); $hw_modifyobject($connect, $objid, $remarr, $addarr);?
+Exemple 4.
+Modifier l 'attribut Title
+?php $remarr = array( "Title "= array("en" = "Books")); $addarr = array("Title "= array("en" = "Articles", "ge"= "Artikel")); $hw_modifyobject($connect, $objid, $remarr, $addarr);?
+Exemple 5.
+Suppression d 'un attribut
+?php $remarr = array( "Title "= ""); $addarr = array("Title" = "en:Articles"); $hw_modifyobject($connect, $objid, $remarr, $addarr);?
+
+Cet exemple va effacer tous les attributs avec le nom 'Title' et ajouter un nouvel attribut 'Title '.
+Cela peut être pratique pour effacer des attributs récursivement.
+
+Si vous devez effacer tous les attributs avec un certains nom, vous devez passer une chaîne vide comme valeur.
+
+Seuls les attributs 'Title', 'Description' et 'Keyword 'gère correctement le préfixe de langue.
+Pour les autres attributs qui ne portent pas de préfixe de language, le préfixe 'xx' sera assigné.
+
+L'attribut 'Name 'est un peu particuluer.
+Dans certains cas, il ne peut pas être complétement effacé.
+Vous aurez alors le message 'Change of base attribute' (l'apparition de cette erreur n'est pas très claire).
+Ainsi, vous aurez à ajouter une nouvelle entrée pour Name puis, effacer l 'ancien.
+
+Il ne faut pas encadrer cette fonction par des appels à hw_getandlock() et hw_unlock(). hw_modifyobject() le fait de manière interne.
+Retourne TRUE si aucune erreur ne survient, et FALSE sinon.
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

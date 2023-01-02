@@ -1,0 +1,88 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Kapitel 3.
+
+Nach vorne
+Dieser Teil enthält Anmerkungen und Tipps zur Installation von Apache mit PHP, sowohl für die Unix als auch für die Windows Version.
+Aus der Kompletten Liste der Konfigurationsoptionen können Sie die weitere Argumente für configure in Zeile 8 wählen.
+Beispiel 3-5.
+Installationsanweisungen (Apache Modulversion)
+1. gunzip apache_1.3.x.tar.gz 2. tar xvf apache_1.3.x.tar 3. gunzip php-x.x.x.tar.gz 4. tar xvf php-x.x.x.tar 5. cd apache_1.3.x 6.. / configure --prefix= / www 7. cd.. / php-x.x.x 8.. / configure --with-mysql --with-apache=.. / apache_1.3.x --enable-track-vars 9. make 10. make install 11. cd.. / apache_1.3.x 12. für PHP 3:. / configure --activate-module=src / modules / php3 / libphp3.a für PHP 4:. / configure --activate-module=src / modules / php4 / libphp4.a 13. make 14. make install Statt diesem Schritt können Sie auch die httpd Binärdatei einfach über Ihre existierende Binärdatei kopieren.
+Stellen Sie jedoch sicher, dass der Server zuvor heruntergefahren wurde.
+15. cd.. / php-x.x.x 16. für PHP 3: cp php3.ini-dist / usr / local / lib / php3.ini für PHP 4: cp php.ini-dist / usr / local / lib / php.ini Sie können Ihre .ini Datei editieren, um PHP Optionen auszuwählen.
+Wenn Sie diese Datei an einer anderen Stelle haben möchten, verwenden Sie in Schritt 8 --with-config-file-path= / path 17.
+Editieren Sie Ihre httpd.conf oder srm.conf Datei, und fügen Sie hinzu:
+Für PHP 3:
+AddType application / x-httpd-php3 .php3 Für PHP 4:
+AddType application / x-httpd-php .php Sie können jede gewünschte Dateinamenserweiterung wählen, .php wird von uns einfach nur vorgeschlagen.
+Sie können selbst .html einbinden.
+18.
+Verwenden Sie Ihre normale Prozedur, um den Apache Server zu starten. (Sie müssen den Server stoppen und wieder starten, und ihn nicht nur mittels einem HUP oder USR1 Signal zu einem Reload veranlassen).
+Es gibt abhängig von Ihrer Apache Installation und Unix Variante viele mögliche Wege den Server zu stoppen und neu zu starten.
+Nachstehend finden Sie einige typische Zeilen für einen Server Restart auf verschiedenen apache / unix Installationen.
+Ersetzen Sie / path / to / mit dem Pfad zu diesen Applikationen auf Ihrem System.
+
+Verschiedene Linux und SysV Varianten: / etc / rc.d / init.d / httpd restart 2.
+Verwendung von apachectl Skripten: / path / to / apachectl stop / path / to / apachectl start 3. httpdctl und httpsdctl (Verwendet OpenSSL), ähnlich zu apachectl: / path / to / httpsdctl stop / path / to / httpsdctl start 4.
+Verwenden von mod_ssl oder einem anderen SSL Server, vielleicht möchten Sie manuell stoppen und wieder starten: / path / to / apachectl stop / path / to / apachectl startssl
+Verschiedene Beispiele zum Kompilieren von PHP für Apache:
+
+Dies erstellt eine libphp4.so Shared Library, welche in den Apache geladen wird, wenn eine LoadModule Zeile in der httpd.conf von Apache existiert.
+Die PostgreSQL Unterstützung ist in der libphp4.so Bibliothek eingelagert.
+
+Dies erstellt ebenfalls eine libphp4.so Shared Library, jedoch wird zusätzlich auch eine pgsql.so Shared Library erstellt.
+Diese wird entweder aufgrund der Extension Option in der php.ini, oder durch die Verwendung der Funktion dl() in einem Skript von PHP geladen.
+
+Dies erstellt eine libmodphp4.a Bibliothek, eine mod_php4.c und einige begleitende Dateien, und kopiert diese in das src / modules / php4 Dies erstellt eine libmodphp4.a Bibliothek, eine mod_php4.c und einige begleitende Dateien, und kopiert diese in das src / modules / php4 Verzeichnis im Apache Source Tree.
+Dann kompilieren Sie Apache mit --activate-module=src / modules / php4 / libphp4.a, und das Apache Build System erstellt libphp4.a, und linkt es statisch in die httpd Binary.
+Die PostgreSQL Unterstützung ist in dieser httpd Binary inkludiert, was in einer einzigen httpd Binary inkl. komplettem Apache und komplettem PHP resultiert.
+
+Wie vorher, außer dass die PostgreSQL Unterstützung nicht direkt in die httpd inkludiert, sondern eine pgsql.so Wie vorher, außer dass die PostgreSQL Unterstützung nicht direkt in die httpd inkludiert, sondern eine pgsql.so Shared Library erstellt wird.
+Diese können Sie entweder mittels der Extension Option in der php.ini, oder direkt mittels dl() in PHP laden.
+Bevor Sie sich für einen Weg PHP zu kompilieren entscheiden, sollten Sie die Vor - und Nachteile der jeweiligen Methode bedenken.
+Die Kompilation als verteiltes Objekt heißt, dass Sie Apache separat kompilieren können, und nicht für alles in PHP hinzugefügte bzw. geänderte neu kompilieren müssen.
+PHP direkt in Apache einzukompilieren (statische Methode) heißt, dass PHP schneller lädt, und schneller läuft.
+Weitere Informationen finden Sie auf der Apache webpage on DSO support.
+Es gibt zwei Arten, PHP mit Apache 1.3.x unter Windows aufzusetzen.
+Eine ist die Verwendung des CGi Moduls (php.exe), die andere ist der Einsatz der Apache Modul dll.
+In beiden Fällen müssen Sie den Apache Server stoppen, und Ihre srm.conf oder httpd.conf editieren, um Apache für die Zusammenarbeit mit PHP zu konfigurieren.
+Obwohl einige Variationen in der Konfiguration von PHP unter Apache möglich sind, sollten diese auch für Neulinge einfach genug sein.
+Für weitere Konfigurationsmöglichkeiten konsultieren Sie bitte die Apache Dokumentation.
+Wenn Sie die PHP Distribution wie im Teil Manuelle Installationsschritte beschrieben nach c:\php\ entpackt haben, müssen Sie die folgenden Zeilen in Ihrer Apache Konfigurationsdatei einfügen, um das CGI-Modul aufzusetzen:
+
+
+
+Wenn Sie PHP als Apache Modul einsetzen möchten, kopieren Sie die php4ts.dll in Ihr windows / system (für Windows 9x / Me) oder winnt / system32 (für Windows NT / 2000) Verzeichnis, und überschreiben die dort eventuell bereits existierende Datei.
+Dann sollten Sie die folgenden zwei Zeilen in Ihrer Apache conf Datei einfügen:
+
+
+Anmerkung:
+Apache 1.3.22 für Windows hat in seiner Konfigurationsdatei (httpd.conf-dist-win) die ClearModuleList Direktive standardmäßig inkludiert.
+Wird diese Direktive verwendet, muss eine AddModule mod_php4.c in die AddModule Liste aufgenommen werden, da PHP sonst nicht als ein Apache Modul registriert wird.
+Um das Source Code Highlighting Feature verwenden zu können, erstellen Sie einfach eine PHP Skriptdatei, und fügen diesen Code ein: ?php show_source ("original_php_script.php");?.
+Ersetzen Sie original_php_script.php durch den Dateinamen der Datei, dessen Sourcecode Sie anzeigen lassen möchten (Das ist der einzige Weg, dies zu tun, da unter Windows kein Feature wie .phps existiert).
+Anmerkung:
+Auf Win-Apache müssen alle Backslashes "\" in einer Pfadangabe, wie z.B. "c:\directory\file.ext", in Slashes "/" umgewandelt werden, wie z.B. "c: / directory / file.ext ".
+Zurück
+Zum Anfang
+Nach vorne
+Installation auf Windows Systemen
+Nach oben
+Server - CGI / Commandline

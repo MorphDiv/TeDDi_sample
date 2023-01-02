@@ -1,0 +1,135 @@
+# language_name_wals:	Hebrew (Modern)
+# language_name_glotto:	Modern Hebrew
+# iso639_3:	heb
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hebr
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/he.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+מדריך PHP
+קודם
+הבא
+
+
+
+
+
+
+
+
+
+
+
+
+הערה:
+
+הערה:
+As of PHP 4.1.0, $_SESSION is available as global variable just like $_POST, $_GET, $_REQUEST and so on.
+Not like $HTTP_SESSION_VARS, $_SESSION is always global.
+Therefore, global should not be used for $_SESSION.
+If track_vars is enabled and register_globals is disabled, only members of the global associative array $HTTP_SESSION_VARS can be registered as session variables.
+The restored session variables will only be available in the array $HTTP_SESSION_VARS.
+דוגמה 1.
+Registering a variable with track_vars enabled
+?php session_start(); if (isset($HTTP_SESSION_VARS['count'])) {$HTTP_SESSION_VARS['count']++;} else {$HTTP_SESSION_VARS['count'] = 0;}?
+Use of $_SESSION (or $HTTP_SESSION_VARS with PHP 4.0.6 or less) is recommended for security and code readablity.
+With $_SESSION or $HTTP_SESSION_VARS, there is no need to use session_register() / session_unregister() / session_is_registered() functions.
+Users can access session variable like a normal variable.
+דוגמה 2.
+
+
+דוגמה 3.
+Unregistering a variable with $_SESSION.
+
+If register_globals is enabled, then all global variables can be registered as session variables and the session variables will be restored to corresponding global variables.
+Since PHP must know which global variables are registered as session variables, users must register variables with session_register() function while $HTTP_SESSION_VARS / $_SESSION does not need to use session_register().
+זהירות
+If you are using $HTTP_SESSION_VARS / $_SESSION and disable register_globals, do not use session_register(), session_is_registered() and session_unregister().
+If you enable register_globals, session_unregister() should be used since session variables are registered as global variables when session data is deserialized.
+Disabling register_globals is recommended for both security and performance reason.
+דוגמה 4.
+
+
+If both track_vars and register_globals are enabled, then the globals variables and the $HTTP_SESSION_VARS / $_SESSION entries will reference the same value for already registered variables.
+If user use session_register() to register session variable, $HTTP_SESSION_VARS / $_SESSION will not have these variable in array until it is loaded from session storage. (i.e. until next request)
+
+
+
+
+Cookies are optimal, but since they are not reliable (clients are not bound to accept them), we cannot rely on them.
+
+PHP is capable of doing this transparently when compiled with --enable-trans-sid.
+If you enable this option, relative URIs will be changed to contain the session id automatically.
+Alternatively, you can use the constant SID which is defined, if the client did not send the appropriate cookie.
+SID is either of the form session_name=session_id or is an empty string.
+
+דוגמה 5.
+
+
+Hello visitor, you have seen this page ?php echo $count;? times. p; ?php # the ?php echo SID? (?=SID? can be used if short tag is enabled) # is necessary to preserve the session id # in the case that the user has disabled cookies?
+To continue, A HREF=" nextpage.php? ?php echo SID? "click here / A
+
+הערה:
+
+
+
+
+session.save_handler session.save_handler defines the name of the handler which is used for storing and retrieving data associated with a session.
+
+
+
+
+
+אזהרה
+
+session.name specifies the name of the session which is used as cookie name.
+
+
+session.auto_start session.auto_start specifies whether the session module starts a session automatically on request startup.
+
+session.cookie_lifetime session.cookie_lifetime specifies the lifetime of the cookie in seconds which is sent to the browser.
+The value 0 means "until the browser is closed." Defaults to 0.
+
+
+
+
+session.gc_probability session.gc_probability specifies the probability that the gc (garbage collection) routine is started on each request in percent.
+
+
+session.referer_check session.referer_check contains the substring you want to check each HTTP Referer for.
+
+
+session.entropy_file session.entropy_file gives a path to an external resource (file) which will be used as an additional entropy source in the session id creation process.
+
+session.entropy_length session.entropy_length specifies the number of bytes which will be read from the file specified above.
+
+
+
+
+Defaults to /.
+session.cookie_domain session.cookie_domain specifies domain to set in session_cookie.
+
+
+
+
+
+session.use_trans_sid whether transparent sid support is enabled or not if enabled by compiling with --enable-trans-sid.
+
+url_rewriter.tags spefifies which html tags are rewritten to include session id if transparent sid support is enabled.
+
+הערה:
+
+קודם
+ראשי
+הבא
+
+למעלה

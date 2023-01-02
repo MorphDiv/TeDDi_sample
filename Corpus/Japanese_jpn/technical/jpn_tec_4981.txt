@@ -1,0 +1,37 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+このモジュールによりgzip (.gz)で圧縮されたファイルを読み書きする ことが可能となります。 この際、 ファイルシステム 関 数のgzip圧縮対応版(非圧縮ファイルも扱えますが、ソケットは扱えませ ん)を使用します。
+注意 バージョン4.0.4-devで.gzファイルに対応したfopen-wrapperを導入しました。 これにより fopen() に'zlib:'をプレフィクスとした ファイル名又はパス名を渡すことで、通常のf*()関数で圧縮されたファイルに 透過的にアクセスすることが出来ます。
+4.3.0において、';'を含むファイル名との曖昧さを避けるためこの特別 なプレフィックスは'zlib://'に変更されました。
+この機能を利用するには fopencookie() 関数を提供する Cのランタイムライブラリが必要です。現在私の知る限りでは、GNU libcが この機能を提供する唯一のライブラリです。
+このモジュールは、Jean-loup Gailly および Mark Adler による zlib の関数を使用します。 このモジュールを使用するには、zlib バージョン 1.0.9 以上を 使用する必要があります。
+Zlib support in PHP is not enabled by default. You will need to configure PHP --with-zlib[=DIR]
+Windows版の PHP にはこの拡張モジュールのサポートが組み込まれています。これらの関数を使用するために拡張モジュールを追加でロードする必要はありません。
+注意 Builtin support for zlib is available with PHP 4.3.0.
+これらの関数の動作は、 php.ini の設定により変化します。
+zlib拡張モジュールは、ブラウザがサポートする場合にページを透過的に圧 縮するオプションを提供します。 ここで、 設定ファイル php.ini のオプションには、以下の3種類があります。
+表 1Zlib設定オプション
+以下に設定ディレクティブに関する簡単な説明を示します。
+透過的なページ圧縮を行うかどうか。 php.ini またはApacheの設定で このオプションが、"On"に設定された場合、 ブラウザが"Accept-Encoding: gzip"または"deflate"ヘッダを送信する 場合に、ページは圧縮されます。 "Content-Encoding: gzip" (および"deflate")と"Vary: Accept-Encoding"ヘッダが出力に追加されます。
+ヘッダが未送信の場合、スクリプト内でこのオプションを無効にするた めに ini_set() を使用することが可能です。 "Content-Type: image/"ヘッダを出力した場合、(Netscapeのバグのせ いで)圧縮が無効となります。 image content-typeを追加するヘッダコールの後、 "ini_set('zlib.output_compression', 'On')"を追加した場合、 再度有効にすることができます。
+このオプションも論理値"On"/"Off"のかわりに整数値をとることができ、 これを用いて出力のバッファサイズ(デフォルトは4KB)を設定すること ができます。
+注意 このオプションに'On'を設定した場合、 output_handler を空に する必要があります! かわりにzlib.output_handlerを使用する必要が あります。
+透過的出力圧縮で使用される圧縮レベル。
+zlib.output_compressionが有効な場合に他の出力ハンドラを指定する ことはできません。この設定は、 output_handler と同じですが、順番が異なります。
+テンポラリファイルをオープンし、テスト用文字列を書きこみ、 続いて、このファイルの内容を2回出力します。
+例 1簡単な Zlib の例

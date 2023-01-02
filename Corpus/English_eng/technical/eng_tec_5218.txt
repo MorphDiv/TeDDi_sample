@@ -1,0 +1,103 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 3.
+Installation
+Next
+This section contains notes and hints specific to IIS (Microsoft Internet Information Server).
+Installing PHP for PWS / IIS 3, PWS 4 or newer and IIS 4 or newer versions.
+Important for CGI users:
+Read the faq on cgi.force_redirect for important details.
+This directive needs to be set to 0.
+The recommended method for configuring these servers is to use the REG file included with the distribution (pws-php4cgi.reg).
+You may want to edit this file and make sure the extensions and PHP install directories match your configuration.
+Or you can follow the steps below to do it manually.
+Warning
+These steps involve working directly with the Windows registry.
+One error here can leave your system in an unstable state.
+We highly recommend that you back up your registry first.
+The PHP Development team will not be held responsible if you damage your registry.
+Run Regedit.
+Navigate to:
+HKEY_LOCAL_MACHINE / System / CurrentControlSet / Services / W3Svc / Parameters / ScriptMap.
+On the edit menu select:
+New - String Value.
+Type in the extension you wish to use for your php scripts.
+For example .php
+Double click on the new string value and enter the path to php.exe in the value data field. ex: c:\php\php.exe.
+Repeat these steps for each extension you wish to associate with PHP scripts.
+The following steps do not affect the web server installation and only apply if you want your php scripts to be executed when they are run from the command line (ex. run c:\myscripts est.php) or by double clicking on them in a directory viewer window.
+You may wish to skip these steps as you might prefer the PHP files to load into a text editor when you double click on them.
+Navigate to:
+HKEY_CLASSES_ROOT
+On the edit menu select:
+New - Key.
+Name the key to the extension you setup in the previous section. ex: .php
+Highlight the new key and in the right side pane, double click the "default value" and enter phpfile.
+Repeat the last step for each extension you set up in the previous section.
+Now create another New - Key under HKEY_CLASSES_ROOT and name it phpfile.
+Highlight the new key phpfile and in the right side pane, double click the "default value" and enter PHP Script.
+Right click on the phpfile key and select New - Key, name it Shell.
+Right click on the Shell key and select New - Key, name it open.
+Right click on the open key and select New - Key, name it command.
+Highlight the new key command and in the right side pane, double click the "default value" and enter the path to php.exe. ex: c:\php\php.exe -q %1. (don't forget the %1).
+Exit Regedit.
+If using PWS on Windows, reboot to reload the registry.
+PWS and IIS 3 users now have a fully operational system.
+IIS 3 users can use a nifty tool from Steven Genusa to configure their script maps.
+When installing PHP on Windows with PWS 4 or newer version, you have two options.
+One to set up the PHP CGI binary, the other is to use the ISAPI module DLL.
+If you choose the CGI binary, do the following:
+Edit the enclosed pws-php4cgi.reg file (look into the SAPI dir) to reflect the location of your php.exe.
+Backslashes should be escaped, for example: [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\w3svc\parameters\Script Map] ".php"="c:\\php\\php.exe "Now merge this registery file into your system; you may do this by double-clicking it.
+In the PWS Manager, right click on a given directory you want to add PHP support to, and select Properties.
+Check the 'Execute' checkbox, and confirm.
+If you choose the ISAPI module, do the following:
+Edit the enclosed pws-php4isapi.reg file (look into the SAPI dir) to reflect the location of your php4isapi.dll.
+Backslashes should be escaped, for example: [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\w3svc\parameters\Script Map] ".php"="c:\\php\\sapi\\php4isapi.dll "Now merge this registery file into your system; you may do this by double-clicking it.
+In the PWS Manager, right click on a given directory you want to add PHP support to, and select Properties.
+Check the 'Execute' checkbox, and confirm.
+To install PHP on an NT / 2000 / XP Server running IIS 4 or newer, follow these instructions.
+You have two options to set up PHP, using the CGI binary (php.exe) or with the ISAPI module.
+In either case, you need to start the Microsoft Management Console (may appear as'Internet Services Manager', either in your Windows NT 4.0 Option Pack branch or the Control Panel= Administrative Tools under Windows 2000 / XP).
+Then right click on your Web server node (this will most probably appear as'Default Web Server'), and select'Properties'.
+If you want to use the CGI binary, do the following:
+Under 'Home Directory', 'Virtual Directory', or'Directory', click on the'Configuration' button, and then enter the App Mappings tab.
+Click Add, and in the Executable box, type: c:\php\php.exe (assuming that you have unziped PHP in c:\php\).
+In the Extension box, type the file name extension you want associated with PHP scripts.
+Leave 'Method exclusions' blank, and check the Script engine checkbox.
+You may also like to check the 'check that file exists' box - for a small performance penalty, IIS (or PWS) will check that the script file exists and sort out authentication before firing up php.
+This means that you will get sensible 404 style error messages instead of cgi errors complaining that php did not output any data.
+You must start over from the previous step for each extension you want associated with PHP scripts. .php and .phtml are common, although .php3 may be required for legacy applications.
+Set up the appropriate security. (This is done in Internet Service Manager), and if your NT Server uses NTFS file system, add execute rights for I_USR_ to the directory that contains php.exe.
+To use the ISAPI module, do the following:
+If you don' t want to perform HTTP Authentication using PHP, you can (and should) skip this step.
+Under ISAPI Filters, add a new ISAPI filter.
+Use PHP as the filter name, and supply a path to the php4isapi.dll.
+Under 'Home Directory', click on the'Configuration' button.
+Add a new entry to the Application Mappings.
+Use the path to the php4isapi.dll as the Executable, supply .php as the extension, leave Method exclusions blank, and check the Script engine checkbox.
+Stop IIS completely (NET STOP iisadmin)
+Start IIS again (NET START w3svc)
+Prev
+Home
+Next
+Servers-fhttpd
+Up
+Servers-Netscape and iPlanet

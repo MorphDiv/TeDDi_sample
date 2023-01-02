@@ -1,0 +1,344 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Extending & quantaplus;
+Christopher Hornbaker
+chrishornbaker@earthlink. net
+Andr#225; s Mantia
+amantia@kde. org
+ROLES_OF_TRANSLATORS
+This chapter describes how to customize & quantaplus; to your particular needs and how you can help & quantaplus; become better.
+Document Type Editing Package (DTEP;)
+Document Type Editing Packages (DTEP; s) are used in & quantaplus; to add support for markup, scripting languages, and & CSS;. They allow & quantaplus; to provide features like auto-completion and node trees. Their simplicity and flexibility are what make & quantaplus; a fast, developer friendly & IDE; for web developers. They are what make & quantaplus; an easy-to-use, productive environment.
+& DTEP; s come in two flavors, Family 1, which are markups, and Family 2, which are scripting and & CSS;. & DTEP; s are made up of two parts, the Tag Folder and the Toolbars. Tag Folders are composed of two types of files, the & descriptionrc; and TagXML files, which carry the extension. tag. Toolbars are the handy, icon-oriented tabs of buttons (above the editing window) which place text into a document faster than the user can type.
+& DTEP; s can be created manually (see below), downloaded or automatically created from an existing DTD. See for details about the conversion.
+This document describes how to make TagXML files, the & descriptionrc;, and toolbars. In short, a & DTEP;.
+TagXML files (. tag) define both the attributes specific to a tag and the layout and contents of the properties dialog & quantaplus; shows for the tag. The & descriptionrc; file provides rules and information on the & DTEP; itself. Toolbars provide a quick means for adding tags into a document without worry of mis-spellings and such.
+Packaging
+Tag Folders are just that, folders. They are composed only of the & descriptionrc; and TagXML files. Tag Folders carry the name of the mark-up language and version, if applicable. (For example, html-4.01-strict)
+TagXML
+The table below lists the elements defined in TagXML and declares whether they are required or not. While not all are required, it is recommended that you use as many as you can so that other users can have a better experience and more information to work with.
+Element
+Default Usage
+Case Usage
+TAGS
+required
+always
+tag
+label
+optional
+required to create a properties dialog
+attr
+required to define an attribute
+tooltip
+required to have the properties dialog display a tooltip
+whatsthis
+required to have the properties dialog display a What's This
+list
+required when an attr is of the type list
+item
+required when & lt; list > is used
+textlocation
+location
+required when label is used
+text
+children
+list of tags that can appear within the tag being defined
+child
+a children entry
+stoppingtags
+list of tags that tell another tag to end
+stoppingtag
+a stoppingtags entry
+TagXML Element Descriptions
+The following sections will describe, in detail, each element. Everything from where they can go to what goes in them is layed out in an easy-to-follow manner.
+TAGS
+This is the root element of a TagXML document. It may appear in a document only once. It can contain the definition of multiple tags. This is an element-only type element.
+Parent(s)
+Children
+NONE
+tag
+Wrapper for tag being defined. This is an element-only type element.
+label, attr, stoppingtags
+Attribute
+Type
+Values
+Default
+Use
+Description
+name
+string
+Specifies the name of the tag being defined.
+single
+boolean
+Specifies whether or not the tag requires a closing tag & lt; /(tagname) >.
+type
+xmltag
+Specifies the type of tag being defined.
+Type of tag is XML-based. (Family 1 only.)
+entity
+The tag describes an entity. (Family 1 only.)
+property
+Type of tag is & CSS; related. (Family 2 only.)
+function
+Type of tag is a script function. When used, & lt; attr > becomes arguments of the function. (Family 2 only.)
+class
+Type of tag is a script class. (Family 2 only.)
+method
+Type of tag is a class method. (Family 2 only.)
+returnType
+void
+Specifies the return type of tag being defined. (Family 2 only.)
+Type of tag returns void.
+int
+Type of tag returns int.
+float
+Type of tag returns float.
+long
+Type of tag returns long.
+Type of tag returns string.
+version
+Specifies the version of the language for which this tag is valid
+extends
+Valid only if the type of the tag is "class". The name of the base class for this class. (Family 2 only.)
+Valid only if the type is "method". Specifies the name of the class to where this method belongs. (Family 2 only.)
+common
+if "yes", the tag specifies a common attribute group and the attributes inside this tag can be attached to any other tag. (Family 1 only.)
+comment
+the comment string appears near the tag name in the completion box
+label
+Place a label in the dialog. The text is specified by the & lt; text > tag. This is an element-only type element.
+text, location
+attr
+Defines an attribute of the tag. This element occurs once for each attribute. It defines the name and type of attribute. It also contains additional tags that specify how this attribute should be displayed, et cetera. This is an element-only type element.
+location, list, tooltip, whatsthis, textlocation
+Specifies the name of the attribute being defined.
+input
+Specifies the type of the attribute being defined.
+Field supports free text entries (text field).
+check
+Field value is boolean (check box).
+color
+Field value is a color.
+url
+Field value is a & URL;. (Local file to refer to.)
+Field value is an item from a specified list.
+status
+Specifies whether or not the argument is required. (Family 2 only.)
+Argument is optional.
+Argument is required.
+implied
+Argument is implied.
+source
+Specifies the sources used to fill the entry for the attribute in the tag editor dialog and the attribute tree
+selection
+The selected text is used as source
+dcop
+The result of a dcop method is used as source
+interface
+Requires source="dcop ". The dcop interface from inside & quantaplus; used to get the source data.
+Requires source="dcop "and an interface name. The dcop method name from inside & quantaplus; used to get the source data.
+arguments
+Requires source="dcop ", an interface and a method name. The arguments passed to the method. It can be empty or" %tagname% ", meaning the current tags name.
+tooltip
+Defines the tooltip for a field in the dialog. This element is text-only.
+Currently only plain text is supported (you cannot use any markup).
+whatsthis
+Defines the'What's This' help for a field in the dialog. This element is text-only.
+list
+A container tag that groups together the items in a list. It may appear only once for each attribute description. This is an element-only type element.
+item
+Defines an item in a list. This element is text-only.
+textlocation
+Specifies the position of a tag's attribute text within a dialog. This tag can only occur once for each attribute in the dialog (ie; one for each & lt; attr > tag). This element is empty.
+row
+nonNegativeInteger
+Specifies the row in the dialog layout of a field or label.
+col
+Specifies the column in the dialog layout of a field or label.
+rowspan
+Specifies the number of rows a field should span.
+colspan
+Specifies the number of columns a field should span.
+location
+Specifies the position and size of a field in the dialog. This tag should occur once for each field in the dialog (ie; one for each & lt; attr > and & lt; label > tag). This element is empty.
+label, attr
+text
+Define the text for a label or check box. This element is text-only.
+children
+Defines a list of elements that can appear within the tag being specified. This element is an element-only type element.
+child
+Defines a child tag. This element is empty.
+Specifies a tag that can appear within the a certain tag.
+usage
+Specifies the relation with the parent.
+The parent must have at least one child with this name.
+stoppingtags
+Defines a list of elements that force a tag to end. This element is an element-only type element.
+stoppingtag
+Defines a stopping tag. This element is empty.
+Specifies which tags force the ending of another tag.
+TagXML Usage
+All TagXML files must begin with the & XML; declaration: & lt; ?xml version="1.0 "encoding="UTF-8"? > and must be properly nested and closed.
+White space does not adversely affect anything, but watch out for & and & lt; characters. These should likely be replaced with an & amp; and & lt;, respectively, in elements such as & lt; tooltip >, & lt; whatsthis >, and & lt; text >. Not doing so will not cause a crash, but you will have chunks of your work disappear if you do not.
+TagXML Validation
+To validate your TagXML files, simply click the Tools pop-up dialog at the top of & quantaplus; and select Validate TagXML. A dialog will present itself and you need only to follow the simple directions.
+This feature is currently not present. Currently validation occurs when the TagXML files are loaded into & quantaplus;.
+TagXML Examples
+Family 1
+The following will show you a valid Family 1 TagXML file. This file happens to describe & W3C; & XML; Schema's & lt; schema > element. The file name for this TagXML file would be schema. tag. Simple, eh?
+& lt; ?xml version="1.0 "encoding="UTF-8"? > & lt; !DOCTYPE TAGS > & lt; TAGS > & lt; tag name="schema "> & lt; label > & lt; text > idlt; /text > & lt; location col="0" row="0"/ > & lt; /label > & lt; attr name="id "type="input" > & lt; tooltip > A unique ID for the element. lt; /tooltip > & lt; whatsthis > A unique ID for the element. lt; /whatsthis > & lt; location col="1 "row="0"/ > & lt; /attr > & lt; label > & lt; text > versionlt; /text > & lt; location col="0" row="1"/ > & lt; /label > & lt; attr name="version "type="input" > & lt; tooltip > Version of the schema. lt; /tooltip > & lt; whatsthis > Version of the schema. lt; /whatsthis > & lt; location col="1 "row="1"/ > & lt; /attr > & lt; label > & lt; text > targetNamespacelt; /text > & lt; location col="0" row="2"/ > & lt; /label > & lt; attr name="targetNamespace "type="input" > & lt; tooltip > URI; reference of the namespace of this schema. lt; /tooltip > & lt; whatsthis > URI; reference of the namespace of this schema. lt; /whatsthis > & lt; location col="1 "row="2"/ > & lt; /attr > & lt; label > & lt; text > xmlnslt; /text > & lt; location col="0" row="3"/ > & lt; /label > & lt; attr name="xmlns "type="input" > & lt; tooltip > URI; reference for one or more namespaces for use in this schema. If no prefix is used, then components of that namespace may be used unqualified. lt; /tooltip > & lt; whatsthis > URI; reference for one or more namespaces for use in this schema. If no prefix is used, then components of that namespace may be used unqualified. lt; /whatsthis > & lt; location col="1 "row="3"/ > & lt; /attr > & lt; label > & lt; text > attributeFormDefaultlt; /text > & lt; location col="0" row="4"/ > & lt; /label > & lt; attr name="attributeFormDefault "type="list" > & lt; items > & lt; item > qualifiedlt; /item > & lt; item > unqualifiedlt; /item > & lt; /items > & lt; tooltip > Default form for all attributes within this schema. lt; /tooltip > & lt; whatsthis > Default form for all attributes within this schema. lt; /whatsthis > & lt; location col="1 "row="4"/ > & lt; /attr > & lt; label > & lt; text > elementFormDefaultlt; /text > & lt; location col="0" row="5"/ > & lt; /label > & lt; attr name="elementFormDefault "type="list" > & lt; items > & lt; item > qualifiedlt; /item > & lt; item > unqualifiedlt; /item > & lt; /items > & lt; tooltip > Default form for all elements within this schema. lt; /tooltip > & lt; whatsthis > Default form for all elements within this schema. lt; /whatsthis > & lt; location col="1 "row="5"/ > & lt; /attr > & lt; label > & lt; text > blockDefaultlt; /text > & lt; location col="0" row="6"/ > & lt; /label > & lt; attr name="blockDefault "type="input" > & lt; location col="1 "row="6"/ > & lt; /attr > & lt; label > & lt; text > finalDefaultlt; /text > & lt; location col="0" row="7"/ > & lt; /label > & lt; attr name="finalDefault "type="input" > & lt; location col="1 "row="7"/ > & lt; /attr > & lt; /tag > & lt; /TAGS >
+Family 2
+The following will show you a valid Family 2 TagXML file. This file happens to describe & PHP; 's overload function. The file name for this TagXML file would be overload. tag.
+& lt; ?xml version="1.0 "encoding="UTF-8"? > & lt; !DOCTYPE tags > & lt; tags > & lt; tag name="overload "type="function" returnType="void "> & lt; attr name="class_name" type="string "status="optional"/ > & lt; /tag > & lt; /tags >
+& descriptionrc;
+The & descriptionrc; file is, also, quite simple and there is an editor for it accessible from DTD Edit DTD Settings. This will edit the & descriptionrc; for a & DTEP; you can select from a list. In order to edit the & descriptionrc; for a newly created & DTEP; you should create a simple & descriptionrc; with the following entries:
+[General] Version = Use 1 for & quantaplus; version & lt; =3.1.2 and 2 for any version greater. Name = DTD definition string. (-/ /W3C; // DTD HTML 4.01 Transitional/ /EN) NickName = The beautified name of the DTD. (HTML 4.01 Transitional). If not defined, Name is used as NickName.
+Once you have created it at put aside of the tag files, load the newly created & DTEP; with DTD Load DTD Package (DTEP) and after it is loaded you can proceed with editing the settings of the & DTEP;. Check the tooltips and the whatsthis text of the entries in the editor dialog to understand the meaning of each entry. Alternatively you can read the quanta/ data/ dtep/ dtd-description. txt from the source tarball containing a description about the format.
+User Defined Actions
+Actions are very common in every application. You need them often when you use any application. Clicking on a toolbar icon, selecting a menu item or using a shortcut usually executes an action. In & quantaplus; actions are taken to the next level. Instead of hardcoded actions (that are created by the application programmer at the source code level) it is possible for the ordinary user to create and modify actions and by this way adding new functionality to & quantaplus;. These are the user defined actions, and many of the standard & quantaplus; actions are user defined (and user modifiable) actions as well.
+There are three types of user definable actions:
+Text actions
+Tag actions
+Script actions
+Creating actions
+You can create an action by going to Settings Configure Actions. Click on New Action and you will face a similar dialog:
+Type
+Specifies the action's type (Text, Tag, Script).
+Text
+The user visible name of the action.
+The button near the Text label
+The icon assigned to this action. Click on it in order to change the current icon.
+Tool tip
+Short description of what the action does.
+Shortcut
+The shortcut assigned to this action. Click on Custom or the button near Custom to assign a shortcut; click on None to remove the currently assigned shortcut.
+Container toolbars
+The user defined toolbars where this action appears. See.
+Detailed Settings
+Specific settings for the different type of actions. See below.
+Text actions
+The simplest actions. You can enter some text in the Detailed Settings area and whenever the action is executed this text will be inserted in your document at the current cursor position. See the below example.
+Tag actions
+Useful to insert XML tags, but of course you can use them for other purposes as well. lt; taggt; The name of the tag. lt; /taggt; If checked when the action is executed this text will be inserted as a closing tag. If there is a selected area in the document before you execute the action, the & lt; taggt; will be inserted before the selected area and the & lt; /taggt; after. Run "Edit tag" dialog if available If checked and there is a tagXML file for this tag, a tag editing dialog will be shown prior of inserting the tag inside the document, so you can fine-tune the tag attributes. The & lt; taggt; and & lt; /taggt; will be inserted as you've typed there. The & lt;, & gt; or the / sign wo n't be automatically appended.
+Script actions
+The most powerful action type. With the help of this action you can run external applications (usually scripts, but it's not limited to scripts), which can alter your document or use your document (or part of your document) as input. Examples from & quantaplus; itself are the Quick Start dialog, the various View In... actions for the (X)HTML DTEPs.
+First you have to enter the name of your script with the interpreter as well. Example: sh / home/ myHome/ myScript. sh.
+Although you can use full paths, the recommended way is to use the %scriptdir variable in the command line, like sh %scriptdir/ myScript. sh. This way & quantaplus; will try to locate your script in the following places: global script folder: $KDEDIR / share/ apps/ quanta/ scripts local script folder: $KDEHOME / share/ apps/ quanta/ scripts your path: $PATH There are other special variables that you can use in the command line:
+%f: will be replaced with the URL of the current document. In case of local documents, file: / will be stripped from the document.
+%input: will be replaced with the selected input. See below.
+%projectbase: will be replaced with the URL of the current project. It is empty if no project is loaded.
+%pid: will be replaced with the PID of the running & quantaplus; process. If & quantaplus; is running in unique mode, the "unique" text will be prepended to the PID number. Useful when you use DCOP to control & quantaplus; from the external script.
+%userarguments: useful in case of events. This entry will be replaced by the event properties in the following order:
+First argument
+The unique id of the script
+Second argument
+the event name
+Third argument
+the parameters for the event, usually the file name of the current document or the path to the project file.
+Aside of the above methods the script can receive input from & quantaplus; on the standard input. In the Input combobox you can select what to send to the standard input. Choices are:
+None: nothing is sent to the script.
+Current document: the whole document is sent to the script.
+Selected text: the selected area of the document is sent to the script. Using the %input variable usually makes sense only when using this setting.
+Similar to the Input you can catch the output of the executed application. There are two kind of outputs: normal output, printed to the standard output; error messages, printed to the standard error. You can specify what should happen with the text printed to the standard output. This can be done by modifying the value of the Output combobox:
+None: the output of the application is ignored.
+Insert in cursor position: the output will be inserted in the current document and the cursor position.
+Replace selection: the selected area of the document will be replaced with the output.
+Create a new document: a new document will be created and will contain all the output of the script.
+Replace current document: the entire document will be replaced with the output.
+Message window: the output will appear in the Messages toolview.
+The choices for the standard error output (Error) are the same as for the normal output.
+Creating Toolbars
+The following will show you how to create toolbars for a & DTEP;. Toolbars are graphical elements that are assigned to actions. Actions, in & quantaplus;, are the basis for nearly all the extensions that & quantaplus; has and will acquire in the future. The same mechanism that defines an action in & quantaplus; also enables auto-completion and tag dialogs. With actions, the limit of what you can do is virtually limitless. For means of an example, we will use HTML; tidy on our web pages.
+From Scratch to Complete
+To begin, you will need to create a user toolbar. Select Toolbars Add User Toolbar.
+If there are many tags for the markup language, it is recommended that you split up the tags into logical groups. You will need to create a new user toolbar for each group. In this case, there are not many, so we will be making one toolbar and naming it with the name of the markup.
+Once all your toolbars are created, you must add and configure the actions. To do this, select Settings Configure Actions.
+The parts of this window are pretty straight forward. Press the New action button at the bottom of the window to enter the editing mode.
+Fill in all of the necessary fields and add the tag to the appropriate toolbar(s).
+Complete the rest and, if the tag has attributes and you always plan to use them, check the Run "Edit tag" dialog if available box so that you will be prompted every time the action is used.
+You should now have something much like the following.
+Press the Apply button and you will see the action added to the toolbar(s) you have selected.
+Egad! That's an awful icon. How will yourself and others remember that icon goes with that action? Let's replace it before trouble arises.
+To create an icon that more accurately describes that action, we will be using & kiconedit;. Select it from the & kmenu;, Graphics More Programs (or where ever your distribution placed it).
+& kiconedit; defaults to the size 32x32 pixels, but we need 22x22. To change this, select Edit Resize.
+Keep in mind that you are creating an icon that will assist in helping not only yourself to remember which action does what, but also other users of the & DTEP;.
+Since the tag I am creating the icon for is called start, I have decided to create a Start sign. Using the color green (green often interpreted as go, start, or proceed) will, or, at least, should, convey a message to the user that clicking this action will place the & lt; startgt; tag in the current document.
+Now that I am finished with the creation of the icon, I will save it.
+Once you are done with creating the icon(s), you must associate the icon with the action. To do this, open Settings Configure Actions again (in & quantaplus;) and select the action you made the icon for. Beside the Text field, you will see a button, click it.
+Select Other Icons and then click the Browse button.
+Goto the folder in which you saved the icon, select the icon, and click OK.
+Press the Apply button and either continue to do the same with the other tags, if any, or click OK to finish.
+Let us say you would like to add some common & quantaplus; functions to your toolbar or maybe you think the toolbar would be better off organized in a different manner with some separators to group the actions. Open the Configure Toolbars dialog by going Settings Configure Toolbars. Make sure your toolbar is selected.
+I will be choosing the separator (top of the left column) for my toolbar. Once you have selected the item you wish to add to your toolbar, press the right arrow button. This will add it to your toolbar.
+I think I would like a quick way to access the Konqueror Preview. I will select it and add it to the toolbar.
+Note how the separator helps in grouping. Someone new to my toolbar might have thought that the & konqueror; button was like or the opposite of the start button.
+Apply your changes and, when you are done, press OK to finish.
+Ah, look at the fantastic new toolbar! Much more handy now.
+Remember to test your toolbar, by clicking all the buttons, so that you know the output is correct.
+Now to save the toolbar, we will select Toolbars Save Toolbars Save as Local Toolbar.
+Save it to the correct folder. Since NeXML does not exist, I will just have it to the top-level folder, but your toolbar(s) should be saved to the correct folder. Make sure to adjust your & descriptionrc; to have it load your toolbar(s) when a new file of that type is created.
+Creating Your Own Documentation
+Robert Nickel
+robert@artnickel. com
+Probably the most notable additions to & quantaplus; for the general user will be the addition of documentation for the markup or scripting language that you like best. To that end, this chapter will explain how I create the & PHP; documentation tree for my personal use.
+Before starting on creating your own documentation, you may wish to check out the & quantaplus; repository to see if someone else has already done this set.
+There are two parts to this process. First, you must obtain the existing documentation for the markup/ scripting/ etc; language that you prefer. Second, you have to create the docrc file. The first is up to you, the second is what we will cover here.
+The general form of the docrc file is as follows:
+#KDE Config File [Tree] Doc dir= path, relative to this file, of the documentation html files & eg; php42/ #top level elements Top Element= Your description for these documentation & eg; & PHP; 4.2 documentation Section 1=Section1. html Section 2=#Sec2.1, #Sec2.2, #Sec2.3 Sec2.1=Sec2.1. html Sec2.2=Sec2.2. html Sec2.3=Sec2.3. html... [Context] ContextList=func1, func2, tag1, tag2, tag3 func1=func1. html func2=func2. html tag1=tag1. html tag2=tag2. html tag3=tag3. html
+The docrc is broken down into two sections: Tree and Context.
+The Tree section defines the presentation aspect of the documentation in the documentation tab. For example, you will see that in the & PHP; documentation you have something akin to this:
+Relating this to the above, my & PHP; docrc looks like this:
+#KDE Config File [Tree] Doc dir=php42/ #top level elements Top Element=PHP 4.2 documentation PHP 4.2 documentation=Table of Contents, #Getting Started, #Language Reference Table of Contents=index. html Getting Started=Introduction,... Introduction=introduction. html... Language Reference=Basic syntax,... Basic syntax=language. basic-syntax. html...
+Notice the # in front of Getting Started and Language Reference. This indicates that these are sub containers in the tree and have content of their own. I do not believe that there is a set limit to the depth here (other than that driven by sanity) & mdash; use your judgment.
+For the Table of Contents, you will notice that it is referenced directly to a file (and consequently shows up at the bottom of the tree view & mdash; folders first!).
+Spaces do not adversely affect anything, but watch out for & and & lt; characters. These should likely be replaced by & amp; and & lt; respectively in all of the & XML; based & quantaplus; resource files.
+The Context section is the section of the docrc file that is used to facilitate context sensitive help. For example, you are writing a & PHP; script and you would like to see the documentation for the mysql_fetch_array function. You simply highlight the function and then press Ctrl; H for context help. The documentation on mysql_fetch_array will immediately display. There are only two entry types here: the ContextList and the file association lines.
+ContextList
+Really simple, this is just a comma separated list of the context items you wish to have available (for & PHP;, these are the functions for & PHP;).
+File association lines
+These are of the form context item=html doc page. & eg; acos=function. acos. html
+A pared down version of my docrc Context section is as follows:
+#Keywords for context help [Context] ContextList=abs, acos, acosh, addcslashes, addslashes,... abs=function. abs. html acos=function. acos. html acosh=function. acosh. html addcslashes=function. addcslashes. html addslashes=function. addslashes. html...
+Now you can just save your docrc file, save it in $HOME /. kde/ share/ apps/ quanta/ doc or $KDEDIR / share/ apps/ quanta/ doc for local or global use respectively. Then create a folder (the one specified in your docrc file) in the same folder as your docrc file and copy your & HTML; pages in there.
+You will need to restart & quantaplus; to see your documentation.
+Once you are sure that they are good and worth sharing, send the docrc file along with a description of any pertinent information on what documentation you used to the quantaplus; repository for use by the & quantaplus; community. You will not get rich, but you will feel great knowing that you contributed to the best web development platform around.
+Sharing Resources
+With & quantaplus; you are not alone. It is possible to share the various resources (DTEP packages, toolbars with actions, scripts, templates) with others. There are two ways to do it:
+Sending in Email
+The resources can be sent in email to your friends, partners or to whomever you want. You will see the Send in Email menu entries in various places, like DTD Send DTD Package (DTEP) in Email, Toolbars Send Toolbar in Email, in the context menu of the files and folders in the Templates and Scripts tree.
+Uploading to the main server
+The resources can be uploaded to our main repository, from where all other & quantaplus; users can download them. The submissions are reviewed and made available only if our team considers correct and useful will be published. In order to make a valid submission it is suggested to sign the resources, thus you need a GPG/ PGP key. This information is used to verify the origin of the resources both by our team and by the downloaders.
+About getting the resources from the main server see.
+When uploading you will be asked to enter the passphrase for your secret GPG key (the passphrase will not be stored), or in the case of having more secret keys, you will be able to pick up the one you want to use. In the Share Hot New Stuff dialog fill the input fields (the Preview URL may remain empty) and start the upload by clicking OK.
+The upload can be initiated from DTD Upload DTD Package (DTEP), Toolbars Upload Toolbar, in the context menu of the files and folders in the Templates and Scripts tree.
+Getting Resources
+It is possible to upgrade your & quantaplus; without getting a new version, by getting new resources like DTEP packages, toolbars with actions, templates, scripts and documentation. One possibility is that you got the resources in email or have downloaded from a web server, in which cases you usually need to manually install them. In lucky case you also got an install script when you have downloaded the resources. But & quantaplus; has a dedicated server holding resources that were either not included in the main distribution because of their sizes or infrequent usage, or they were contributed later by users, and these resources are automatically installed. Do download such resources use the various Download menu entries. You can find them at DTD Download DTD Package (DTEP), Toolbars Download Toolbar, in the context menu of an empty area or toplevel item in the Templates, Scripts and Documentation trees.
+After a resource was downloaded, but before it is installed, & quantaplus; verifies if the resource is valid, by checking the integrity and the signature. In case of problems it warns you and you can decide if you want to continue or not. Please read the warning dialogs carefully. In the case when the integrity is correct and the resource is correctly signed, you will still get an information dialog, so you can see who created the resource.
+Be sure that you install resources, especially toolbars and scripts, only from trusted sources!
+Converting a DTD to a & DTEP;
+It is possible to work on XML languages currently not supported by & quantaplus; by creating a DTEP package. But the creation can be time consuming, as you may need to write hundreds of tag files in tagXML format. Of course, there is a nicer way to go, by converting the DTD automatically into a DTEP package.
+The conversion can be started from the DTD Load & Convert DTD menu. Select the. dtd file which defines the DTD you want to use, and after that you will see the following dialog:
+The entries are:
+Target directory name: the newly created & DTEP; will go under this name to the $KDEHOME / share/ apps/ quanta/ dtep folder.
+Name: the name (definition string) of the DTD
+Nickname: the user visible name of the & DTEP;
+! DOCTYPE definition line: the string that should appear in the! DOCTYPE tag, like HTML PUBLIC "-/ /W3C/ /DTD HTML 4.01 Transitional/ /EN" "http: / /www. w3. org/ TR/ html4/ loose. dtd"
+DTD URL: the URL pointing to the DTD file
+Default extension: the extension usually used for files that were written in this DTD
+Case-sensitive tags and attributes: self explaining, usually true for XML language variants
+Fine-tune the DTEP after conversion: if checked, after the conversion is done, & quantaplus; will bring up the & descriptionrc; editor, so you can fine tune the newly created & DTEP;. It is recommended to leave this options checked.

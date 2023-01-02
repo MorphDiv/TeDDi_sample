@@ -1,0 +1,111 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Exemples de programmation pour les contrôles dans l'éditeur de boîte de dialogue
+/text/sbasic/guide/sample_code.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+Exemples de programmation de contrôles
+Boîtes de dialogue;chargement (exemple)
+Boîtes de dialogue;affichage (exemple)
+Contrôles;lecture ou édition des propriétés (exemple)
+Zones de liste;suppression d'entrées (exemple)
+Zones de liste;ajout d'entrées (exemple)
+Exemples;programmation de contrôles
+Éditeur de boîte de dialogue;exemples de programmation de contrôles
+Exemples de programmation pour les contrôles dans l'éditeur de boîte de dialogue
+boîte de dialogue
+appelée &quot; Dialog1 &quot; .
+Utilisez les outils de la
+barre de contrôles
+dans l'éditeur de boîte de dialogue pour créer la boîte de dialogue et les contrôles suivants : une
+case à cocher
+appelée &quot; CheckBox1 &quot; , un
+champ d'étiquettes
+appelé &quot; Label1 &quot; , un
+bouton
+appelé &quot; CommandButton1 &quot; , et une
+zone de Liste
+appelée &quot; ListBox1 &quot; .
+Respectez la casse lorsque vous joignez un contrôle à une variable d'objet.
+Fonctions globales pour le chargement des boîtes de dialogue
+Function LoadDialog(Libname as String, DialogName as String, Optional oLibContainer)
+Dim oLib as Object
+Dim oLibDialog as Object
+Dim oRuntimeDialog as Object
+If IsMissing(oLibContainer ) then
+oLibContainer = DialogLibraries
+End If
+oLibContainer.LoadLibrary(LibName)
+oLib = oLibContainer.GetByName(Libname)
+oLibDialog = oLib.GetByName(DialogName)
+oRuntimeDialog = CreateUnoDialog(oLibDialog)
+LoadDialog() = oRuntimeDialog
+End Function
+Affichage d'une boîte de dialogue
+rem Définition globale de variables
+Dim oDialog1 AS Object
+Sub StartDialog1
+BasicLibraries.LoadLibrary( &quot; Outils &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+oDialog1.Execute()
+end sub
+Lecture ou édition des propriétés des contrôles dans le programme
+Sub Sample1
+BasicLibraries.LoadLibrary( &quot; Outils &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM Obtenir un modèle de boîte de dialogue
+oDialog1Model = oDialog1.Model
+REM Afficher le texte de Label1
+oLabel1 = oDialog1.GetControl( &quot; Label1 &quot; )
+MsgBox oLabel1.Text
+REM Définir un nouveau texte pour le contrôle Label1
+oLabel1.Text = &quot; Nouveaux fichiers &quot;
+REM Afficher les propriétés du modèle pour le contrôle CheckBox1
+oCheckBox1Model = oDialog1Model.CheckBox1
+MsgBox oCheckBox1Model.Dbg_Properties
+REM Définir un nouveau statut pour CheckBox1 pour le modèle de contrôle
+oCheckBox1Model.State = 1
+REM Afficher les propriétés du modèle pour le contrôle CommandButton1
+oCMD1Model = oDialog1Model.CommandButton1
+MsgBox oCMD1Model.Dbg_Properties
+REM Afficher les propriétés du contrôle CommandButton1
+oCMD1 = oDialog1.GetControl( &quot; CommandButton1 &quot; )
+MsgBox oCMD1.Dbg_Properties
+REM Exécuter la boîte de dialogue
+oDialog1.Execute()
+End Sub
+Ajout d'une entrée à ListBox
+Sub AddEntry
+BasicLibraries.LoadLibrary( &quot; Outils &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM Ajouter une nouvelle entrée au contrôle ListBox
+oDialog1Model = oDialog1.Model
+oListBox = oDialog1.GetControl( &quot; ListBox1 &quot; )
+dim iCount as integer
+iCount = oListbox.ItemCount
+oListbox.additem( &quot; Nouvel élément &quot; & iCount,0)
+end sub
+Suppression d'une entrée du contrôle ListBox
+Sub RemoveEntry
+BasicLibraries.LoadLibrary( &quot; Outils &quot; )
+oDialog1 = LoadDialog( &quot; Standard &quot; , &quot; Dialog1 &quot; )
+REM Supprimer la première entrée du contrôle ListBox
+oDialog1Model = oDialog1.Model
+oListBox = oDialog1.GetControl( &quot; ListBox1 &quot; )
+oListbox.removeitems(0,1)
+end sub

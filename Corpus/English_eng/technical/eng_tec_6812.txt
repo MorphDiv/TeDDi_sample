@@ -1,0 +1,36 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDE4
+# source:	https://object.pouta.csc.fi/OPUS-KDE4/v2/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/KDE4.php
+# copyright_long:	http://opus.nlpl.eu/KDE4.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+& kppp; and security issues
+This section is mainly for superusers (root) people with high security demands, or simply technically interested people. It is not necessary to read this if you only use & Linux; at home for yourself, although you may learn a thing or two in any case.
+Restricting access to & kppp;
+A system administrator might want to restrict access as to who is allowed to use & kppp;. There are two ways to accomplish this.
+Restricting access with group permissions
+Create a new group (you might want to name it dialout or similar), and put every user that should be allowed to use & kppp; into that group. Then type at the prompt:
+# chown root. dialout / opt/ kde/ bin/ kppp # chmod 4750 / opt/ kde/ bin/ kppp
+This assumes that & kde; was installed in / opt/ kde/ and that your new group is named dialout.
+Restricting access & kppp; 's way
+Before doing anything, & kppp; checks if there is a file named / etc/ kppp. allow. If such a file exists, only users named in this file are allowed to dial out. This file must be readable by everyone (but of course NOT writable.) Only login names are recognized, so you cannot use UID's in this file. Here is a short example:
+# / etc/ kppp. allow # comment lines like this are ignored # as well as empty lines fred karl daisy
+In the example above, only the users fred, karl and daisy are allowed to dial out, as well as every user with a UID of 0 (so you do n't have to explicitly list root in the file).
+& kppp; has the SUID bit on? What about security?
+It's virtually impossible to write a dialer without the SUID bit that is both safe and easy to use for inexperienced users. & kppp; addresses the security issues with the following strategy.
+Immediately after the program starts, & kppp; forks.
+The master process, which handles all the GUI operations (such as user interaction), drops the SUID state after the fork, and runs with normal user privileges.
+The slave process keeps its privileges, and is responsible for all actions that need root privileges. To keep this part safe, no & kde; or & Qt; library calls are used here, just simple library calls. The source code for this process is short (around 500 lines) and well documented, so it's easy for you to check it for security holes.
+Master and slave processes communicate with standard & UNIX; IPC.
+Special thanks to Harri Porten for writing this excellent piece of code. It was thought to be impossible, but he managed it within a week.

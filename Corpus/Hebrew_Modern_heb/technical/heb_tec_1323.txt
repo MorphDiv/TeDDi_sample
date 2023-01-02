@@ -1,0 +1,37 @@
+# language_name_wals:	Hebrew (Modern)
+# language_name_glotto:	Modern Hebrew
+# iso639_3:	heb
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hebr
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/he.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+מדריך PHP
+קודם
+פרק 13.
+
+הבא
+הערה: ב PHP 3, אוביקטים יאבדו את השיוך למחלקה שלהם במהלך התהליך של "פרסום בהמשכים" (serializatio) ו "אי פרסום בהמשכים "(unserialization). התוצאה היא משתנה מסוג אובייקט, אבל ללא מחלקה וללא מתודות (פונקציות של המחלקה), לכן זה ממש לא שימושי (זה למעשה נהיה ממש כמו מערך עם תחביר משעשע).
+זהירות
+המידע בהמשך תקף ל - PHP 4 בלבד.
+serialize() מחזיר מחרוזת שמכילה "שטף בתים "שמייוצגות על ידי ערך כלשהו שיכול להיות שמור ב PHP. unserialize() משתמשים במחרוזת זו ליצירה מחדש של הערכים המקורים של משתנה. שימוש ב serialize לשמרית האובייקט תשמור תשמור את כל המשתנים שבאובייקט. הפונקציות שבאובייקט לא ישמרו, רק השם של המחלקה הוא זה שישמר.
+על מנת להשתמש ב unserialize() על אובייקט, המחלקה של אותו אובייקט צריכה להיות ממומשת. ולפיכך, אם יש את האובייקט $a של המחלקה A שבדף page1.php ובוצע serialize עליה, תתקבל מחרוזת שתייחס למחלקה A ואשר תכיל את כל הערכים של המשתנים הקיימים $a. כשיש צורך להשתמש ב unserialize שב page2.php, יצירה מחדש של הובייקט $a של המחלקה A, ההגדקה של המחלקה A חייבת להיות מיוצגת ב - page2.php. זה יכול להעשות לדוגמא על ידי איכסון של הגדרת המחלקה A בתוך קובץ מוכלל והכללת קובץ זה גם ב page1.php וגם ב page2.php.
+classa.inc: class A {var $one = 1; function show_one() {echo $this - one;}} page1.php: include("classa.inc"); $a = new A; $s = serialize($a); / / איכסון $s במקום כשלהו כש page2.php יכול למצוא אותו. $fp = fopen("store", "w"); fputs($fp, $s); fclose($fp); page2.php: / / זה נדרש על מנת לבצע unserialize בצורה הנכונה. include("classa.inc"); $s = implode("", @file("store")); $a = unserialize($s); / / עכשיו הפונקציה show_one() בשימוש של האובייקט $a. $a - show_one();
+אם אתה משתמש ב session ומשתמש ב session_register() על מנת לאגור משתנה, אובייקטים אלו באופן אוטומטי serialized בסוף כל עמוד PHP, והם unserialized אוטומטית באחד מכל הדפים הבאים. הכוונה הבסיסית היא שהאובייקט יכול להופיע בדף כלדשהו ברגע שהם הופעים להיות חלק מתוך ה session.
+מאוד מומלץ להכליל את הגדרת המחלקה של כל האובייקטים המוזמנים של כל אותם דפים, גם אם אתה לא באמת משתמש באותם מחלקות בכל אותם דפים. אם אתה לא משתמש באובייקט הוא unserialized ללא הגדרת המחלקה הנוכחית, הוא יאבד את השיוך למחלקה ויהפוך לאובייקט של המחלקה stdClass ללא פונקציה כשלהי שמתקיימת בכלל, לפיכך, הוא יהפך ללא שימושי כלל.
+אם בדוגמא שמעל $a הופך לחלק מ session עךל ידי שימוש ב session_register( "a"), יש צורך להכליל את הקובץ classa.inc בכל הדפים, לא רק בדפים page1.php ו page2.php.
+קודם
+ראשי
+הבא
+הורה
+למעלה
+"פונקציות הקסם": __sleep ו __wakeup

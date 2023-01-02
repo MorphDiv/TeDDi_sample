@@ -1,0 +1,1227 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	2014
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Programmierung mit
+Murray
+Cumming
+Bernhard
+Rieder
+Jonathon
+Jongsma
+Ole
+Laursen
+Marko
+Anastasov
+Kapitel zum »Drucken«
+Daniel
+Elstner
+David
+King
+Abschnitt zu Gtk::Grid.
+Pedro
+Ferreira
+Kapitel zum »Drucken«
+Kjell
+Ahlstedt
+2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+Murray Cumming
+Das vorliegende Dokument kann gemäß den Bedingungen der GNU Free Documentation License (GFDL), Version 1.2 oder jeder späteren, von der Free Software Foundation veröffentlichten Version ohne unveränderbare Abschnitte sowie ohne Texte auf dem vorderen und hinteren Buchdeckel kopiert, verteilt und/oder modifiziert werden. Eine Kopie der GFDL erhalten Sie auf der Webseite der Free Software Foundation, oder schreiben Sie an: Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+Einführung
+Dieses Buch
+Dieses Buch setzt gutes Verständnis von C++ und in der Erstellung von C++-Programmen voraus.
+gtkmm
+
+Installation
+Abhängigkeiten
+libsigc++ 2.0
+GTK+ 3.0
+glib
+cairomm
+pangomm
+atkmm
+pkg-config
+glib
+ATK
+Pango
+Cairo
+gdk-pixbuf
+Unix und Linux
+Vorkompilierte Pakete
+Installieren aus den Quellen
+# ./configure
+# make
+# make install
+Microsoft Windows
+Grundlagen
+Einfaches Beispiel
+Am Anfang unserer Einführung in
+Quelltext
+Erklärung der einzelnen Zeilen des Beispiels
+#include &lt;gtkmm.hgt;
+Glib::RefPtrlt;Gtk::Applicationgt; app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
+Die nächsten zwei Codezeilen erzeugen ein Fenster und stellen es dar:
+return app-gt;run(window);
+g++ simple.cc -o simple `pkg-config gtkmm-3.0 --cflags --libs`
+PKG_CHECK_MODULES([MYAPP], [gtkmm-3.0 &gt;= 3.0.0])
+Widgets
+m_box.pack_start(m_Button1);
+m_box.pack_start(m_Button2);
+m_frame.add(m_box);
+Signale
+m_button1.signal_clicked().connect( sigc::mem_fun(*this,
+ &HelloWorld::on_button_clicked) );
+Detailliertere Informationen über Signale finden Sie im
+Glib::ustring
+Referenz
+Mischen der APIs von C und C++
+Gtk::Button* button = new Gtk::Button("example");
+gtk_button_do_something_new(button-gt;gobj());
+GtkButton* cbutton = get_a_button();
+Gtk::Button* button = Glib::wrap(cbutton);
+»Hello World« in
+Hello World
+class HelloWorld : public Gtk::Window
+{
+
+public:
+ HelloWorld();
+ virtual ~HelloWorld();
+
+protected:
+ //Signal handlers:
+ virtual void on_button_clicked();
+
+ //Member widgets:
+ Gtk::Button m_button;
+};
+HelloWorld::HelloWorld()
+:
+ m_button ("Hello World")
+{
+ set_border_width(10);
+ m_button.signal_clicked().connect(sigc::mem_fun(*this,
+ &HelloWorld::on_button_clicked));
+ add(m_button);.
+ m_button.show();
+}
+int main(int argc, char** argv)
+{
+ Glib::RefPtrlt;Gtk::Applicationgt; app = Gtk::Application::create(argc, argv, "org.gtkmm.example");
+
+ HelloWorld helloworld;
+ return app-gt;run(helloworld);
+}
+Änderungen in
+
+Knöpfe
+
+Umschaltknöpfe
+Ankreuzfelder
+Radioknöpfe
+Knopf
+Konstruktoren
+Gtk::Button* pButton = new Gtk::Button("_Something", true);
+Beispiel
+Dieses Beispiel erzeugt einen Knopf mit einer Grafik und einer Beschriftung.
+Beispiel für Knöpfe
+Das
+pressed
+Wird ausgegeben, wenn der Knopf gedrückt wird.
+released
+Wird ausgegeben, wenn der Knopf losgelassen wird.
+clicked
+Wird ausgegeben, wenn der Knopf angeklickt und losgelassen wird.
+enter
+Wird ausgegeben, wenn sich der Mauszeiger über dem Fenster mit dem Knopf befindet.
+leave
+Wird ausgegeben, wenn der Mauszeiger das Fenster mit dem Knopf verlässt.
+ToggleButton
+CheckButton
+RadioButton
+Gruppen
+m_rb2.set_group(m_rb1.get_group()); //doesn't work
+class RadioButtons : public Gtk::Window
+{
+public:
+ RadioButtons();
+};
+
+RadioButtons::RadioButtons()
+{
+ Gtk::RadioButton::Group group;
+ Gtk::RadioButton *m_rb1 = Gtk::manage(
+ new Gtk::RadioButton(group,"button1"));
+ Gtk::RadioButton *m_rb2 = manage(
+ new Gtk::RadioButton(group,"button2"));
+ Gtk::RadioButton *m_rb3 = manage(
+ new Gtk::RadioButton(group,"button3"));
+}
+Methoden
+Das folgende Beispiel demonstriert die Verwendung von Radioknöpfen (
+Rollbalken-Widgets
+Nützliche Methoden
+Verschiedene Widgets
+Bezeichnung
+Eintrag
+Vervollständigung des Eintrags
+Beispiel für die Vervollständigung eines Eintrags
+SpinButton
+ProgressBar
+Aktivitätsmodus
+InfoBar
+Minihilfen
+Widget-Referenz
+Minihilfen-Referenz
+Minihilfe
+Container-Widgets
+Rahmen
+ScrolledWindow
+AspectFrame
+Alignment
+Packen
+Ein verbessertes »Hello World«
+Hello World 2
+Hinzufügen von Widgets
+void pack_start(Gtk::Widgetamp; child,
+ PackOptions options = PACK_EXPAND_WIDGET,
+ guint padding = 0);
+ButtonBoxes
+ButtonBox
+Tabelle
+Reitermappe
+Assistent
+Das TreeView-Widget
+Das Modell
+ListStore, für Zeilen
+TreeView - ListStore
+TreeStore, für eine Hierarchie
+TreeView - TreeStore
+Glib::RefPtrlt;Gtk::ListStoregt; refListStore =
+ Gtk::ListStore::create(m_Columns);
+Hinzufügen von Zeilen
+Gtk::TreeModel::iterator iter = m_refListStore-gt;append();
+Gtk::TreeModel::Row row = *iter;
+Hinzufügen von Unterzeilen
+Gtk::TreeModel::iterator iter_child =
+ m_refListStore-gt;append(row.children());
+Festlegen von Werten
+Ermitteln von Werten
+Glib::ustring strText = row[m_Columns.m_col_text];
+int number = row[m_Columns.m_col_number];
+»Verborgene« Spalten
+Die Ansicht
+Verwendung eines Modells
+m_TreeView.set_model(m_refListStore);
+m_TreeView.append_column("Messages", m_Columns.m_col_text);
+Gtk::TreeView::Column* pColumn =
+ Gtk::manage( new Gtk::TreeView::Column("Symbol") );
+
+// m_columns.icon and m_columns.symbol are columns in the model.
+// pColumn is the column in the TreeView:
+pColumn-gt;pack_start(m_columns.icon, false); //false = don't expand.
+pColumn-gt;pack_start(m_columns.symbol);
+
+m_TreeView.append_column(*pColumn);
+Gtk::CellRendererToggle* pRenderer =
+ Gtk::manage( new Gtk::CellRendererToggle() );
+int cols_count = m_TreeView.append_column("Alex", *pRenderer);
+Gtk::TreeViewColumn* pColumn = m_TreeView.get_column(cols_count-1);
+if(pColumn)
+{
+ pColumn-gt;add_attribute(pRenderer-gt;property_active(),
+ m_columns.alex);
+ pColumn-gt;add_attribute(pRenderer-gt;property_visible(),
+ m_columns.visible);
+ pColumn-gt;add_attribute(pRenderer-gt;property_activatable(),
+ m_columns.world);
+Gtk::CellRendererToggle* pRenderer =
+ Gtk::manage( new Gtk::CellRendererToggle() );
+pRenderer-gt;signal_toggled().connect(
+ sigc::bind( sigc::mem_fun(*this,
+ &Example_TreeView_TreeStore::on_cell_toggled), m_columns.dave)
+);
+Bearbeitbare Zellen
+cell.property_editable() = true;
+Gtk::TreeModel::Children children = row.children();
+Die Auswahl
+Glib::RefPtrlt;Gtk::TreeSelectiongt; refTreeSelection =
+ m_TreeView.get_selection();
+Einfache oder mehrfache Auswahl
+refTreeSelection-gt;set_mode(Gtk::SELECTION_MULTIPLE);
+Die ausgewählten Zeilen
+TreeModel::iterator iter = refTreeSelection-gt;get_selected();
+if(iter) //If anything is selected
+{
+ TreeModel::Row row = *iter;
+ //Do something with the row.
+}
+Das »changed«-Signal
+refTreeSelection-gt;signal_changed().connect(
+ sigc::mem_fun(*this, &Example_StockBrowser::on_selection_changed)
+);
+Verhindern der Zeilenauswahl
+m_refTreeSelection-gt;set_select_function( sigc::mem_fun(*this,
+ &DemoWindow::select_function) );
+Ändern der Auswahl
+Gtk::TreeModel::Row row = m_refModel-gt;children()[5]; //The fifth row.
+if(row)
+ refTreeSelection-gt;select(row);
+oder
+Gtk::TreeModel::iterator iter = m_refModel-gt;children().begin()
+if(iter)
+ refTreeSelection-gt;select(iter);
+Sortierung
+TreeSortable-Referenz
+Sortierung durch Anklicken von Spalten
+Gtk::TreeView::Column* pColumn = treeview.get_column(0);
+if(pColumn)
+ pColumn-gt;set_sort_column(m_columns.m_col_id);
+Glib::RefPtrlt;Gtk::TreeModelSortgt; sorted_model =
+ Gtk::TreeModelSort::create(model);
+sorted_model-gt;set_sort_column(columns.m_col_name, Gtk::SORT_ASCENDING);
+treeview.set_model(sorted_model);
+void ExampleWindow::on_button_delete()
+{
+ Glib::RefPtrlt;Gtk::TreeSelectiongt; refTreeSelection =
+ m_treeview.get_selection();
+ if(refTreeSelection)
+ {
+ Gtk::TreeModel::iterator sorted_iter =
+ m_refTreeSelection-gt;get_selected();
+ if(sorted_iter)
+ {
+ Gtk::TreeModel::iterator iter =
+ m_refModelSort-gt;convert_iter_to_child_iter(sorted_iter);
+ m_refModel-gt;erase(iter);
+ }
+ }
+}
+TreeModelSort-Referenz
+Ziehen und Ablegen
+Neu sortierbare Zeilen
+Popup-Kontextmenü
+Beispiele
+ListStore
+TreeStore
+TreeView - Bearbeitbare Zellen
+TreeView - Ziehen und Ablegen
+TreeView - Aufklappendes Kontextmenü
+Kombinierte Auswahlfelder
+Das Modell
+ModelColumns()
+{ add(m_col_id); add(m_col_name); }
+
+ Gtk::TreeModelColumnlt;intgt; m_col_id;
+ Gtk::TreeModelColumnlt;Glib::ustringgt; m_col_name;
+};
+
+ModelColumns m_columns;
+Das gewählte Objekt
+Gtk::TreeModel::iterator iter = m_Combo.get_active();
+if(iter)
+{
+ Gtk::TreeModel::Row row = *iter;
+
+ //Get the data for the selected row, using our knowledge
+ //of the tree model:
+ int id = row[m_Columns.m_col_id];
+ set_something_id_chosen(id); //Your own function.
+}
+else
+ set_nothing_chosen(); //Your own function.
+Reaktion auf Änderungen
+m_combo.signal_changed().connect( sigc::mem_fun(*this,
+ &ExampleWindow::on_combo_changed) );
+Vollständiges Beispiel
+ComboBox
+Einfaches Textbeispiel
+ComboBoxEntryText
+ComboBox mit Eingabe
+Die Textspalte
+m_combo.set_text_column(m_columns.m_col_name);
+Der Eintrag
+ComboBox mit Eingabe
+ComboBox mit Eingabe
+TextView
+Der Puffer
+Tags und Formatierung
+Tags
+Glib::RefPtrlt;Gtk::TextBuffer::Taggt; refTagMatch =
+ Gtk::TextBuffer::Tag::create();
+refTagMatch-gt;property_background() = "orange";
+Glib::RefPtrlt;Gtk::TextBuffer::TagTablegt; refTagTable =
+ Gtk::TextBuffer::TagTable::create();
+refTagTable-gt;add(refTagMatch);
+//Hopefully a future version of
+Anwenden von Tags
+refBuffer-gt;apply_tag(refTagMatch, iterRangeStart, iterRangeStop);
+Markierungen
+Glib::RefPtrlt;Gtk::TextBuffer::Markgt; refMark =
+ refBuffer-gt;create_mark(iter);
+Standardformatierung
+Rollen
+Widgets und ChildAnchors
+Glib::RefPtrlt;Gtk::TextChildAnchorgt; refAnchor =
+ refBuffer-gt;create_child_anchor(iter);
+m_TextView.add_child_at_anchor(m_Button, refAnchor);
+Menüs und Werkzeugleisten
+Aktionen
+Zum Beispiel:
+m_refActionGroup = Gtk::ActionGroup::create();
+
+m_refActionGroup-gt;add( Gtk::Action::create("MenuFile", "_File") );
+m_refActionGroup-gt;add( Gtk::Action::create("New", Gtk::Stock::NEW),
+ sigc::mem_fun(*this, &ExampleWindow::on_action_file_new) );
+m_refActionGroup-gt;add( Gtk::Action::create("ExportData", "Export Data"),
+ sigc::mem_fun(*this, &ExampleWindow::on_action_file_open) );
+m_refActionGroup-gt;add( Gtk::Action::create("Quit", Gtk::Stock::QUIT),
+ sigc::mem_fun(*this, &ExampleWindow::on_action_file_quit) );
+UIManager
+Zum Beispiel,
+Glib::RefPtrlt;Gtk::UIManagergt; m_refUIManager =
+ Gtk::UIManager::create();
+m_refUIManager-gt;insert_action_group(m_refActionGroup);
+add_accel_group(m_refUIManager-gt;get_accel_group());
+Glib::ustring ui_info =
+ "lt;uigt;"
+ " &lt;menubar name='MenuBar'gt;"
+ " &lt;menu action='MenuFile'gt;"
+ " &lt;menuitem action='New'/gt;"
+ " &lt;menuitem action='Open'/gt;"
+ " &lt;separator/gt;"
+ " &lt;menuitem action='Quit'/gt;"
+ " &lt;/menugt;"
+ " &lt;menu action='MenuEdit'gt;"
+ " &lt;menuitem action='Cut'/gt;"
+ " &lt;menuitem action='Copy'/gt;"
+ " &lt;menuitem action='Paste'/gt;"
+ " &lt;/menugt;"
+ " &lt;/menubargt;"
+ " &lt;toolbar name='ToolBar'gt;"
+ " &lt;toolitem action='Open'/gt;"
+ " &lt;toolitem action='Quit'/gt;"
+ " &lt;/toolbargt;"
+ "lt;/uigt;";
+
+m_refUIManager-gt;add_ui_from_string(ui_info);
+Gtk::Widget* pMenubar = m_refUIManager-gt;get_widget("/MenuBar");
+pBox-gt;add(*pMenuBar, Gtk::PACK_SHRINK);
+Kontextmenüs
+Hauptmenü-Beispiel
+Hauptmenü
+Kontextmenü-Beispiel
+Kontextmenü
+ToolPalette
+Gtk::ToolItemGroup* group_brushes =
+ Gtk::manage(new Gtk::ToolItemGroup("Brushes"));
+m_ToolPalette.add(*group_brushes);
+Gtk::ToolButton* button = Gtk::manage(new Gtk::ToolButton(icon, "Big"));
+button-gt;set_tooltip_text("Big Brush);
+group_brushes-gt;insert(*button);
+Beispiel für ToolPalette
+Anpassungen
+void cb_rotate_picture (Gtk::Widget *picture)
+{
+ picture-gt;set_rotation (adj-gt;value);
+...
+adj.value_changed.connect(sigc::bindlt;Widget*gt;(sigc::mem_fun(*this,
+ &cb_rotate_picture), picture));
+adjustment-gt;changed();
+Widgets ohne X-Windows
+Es folgt eine Liste einiger dieser Widgets:
+Gtk::Alignment
+Gtk::Arrow
+Gtk::AspectFrame
+Gtk::Bin
+Gtk::Box
+Gtk::Button
+Gtk::CheckButton
+Gtk::Fixed
+Gtk::Frame
+Gtk::Grid
+Gtk::Image
+Gtk::Label
+Gtk::MenuItem
+Gtk::Notebook
+Gtk::Paned
+Gtk::RadioButton
+Gtk::Range
+Gtk::ScrolledWindow
+Gtk::Separator
+Gtk::Table (deprecated from
+EventBox
+Gtk::EventBox();
+event_box.add(child_widget);
+Dialoge
+MessageDialog
+FileChooserDialog
+FileChooser
+ColorChooserDialog
+FontChooserDialog
+Dialoge
+Das Zeichenbereich-Widget
+Cairo und Pango
+Das Cairo-Zeichenmodell
+Gtk::DrawingArea myArea;
+Cairo::RefPtrlt;Cairo::Contextgt; myContext = myArea.get_window()-gt;create_cairo_context();
+myContext-gt;set_source_rgb(1.0, 0.0, 0.0);
+myContext-gt;set_line_width(2.0);
+void doSomething(const Cairo::RefPtrlt;Cairo::Contextgt;amp; context, int x)
+{
+ context-gt;save();
+ // change graphics state
+ // peform drawing operations
+ context-gt;restore();
+}
+Zeichnen gerader Linien
+Zeichenbereich - Linien
+Zeichnen mit relativen Koordinaten
+Linienstile
+Verschiedene Verbindungstypen in Cairo
+Zeichnen dünner Linien
+Zeichenbereich - Dünne Linien
+Zeichnen von gebogenen Linien
+Zeichnen von Kreisbögen und Kreisen
+context-gt;save();
+context-gt;translate(x, y);
+context-gt;scale(width / 2.0, height / 2.0);
+context-gt;arc(0.0, 0.0, 1.0, 0.0, 2 * M_PI);
+context-gt;restore();
+Zeichenbereich - Bögen
+Zeichnen von Text
+Zeichnen von Text mit Pango
+Zeichenbereich - Text
+Zeichnen von Grafiken
+Zeichenbereich - Bild
+Quellen und Ziele
+Kopieren
+Verschieben
+DragContext
+Die Zwischenablage
+Ziele
+Glib::RefPtrlt;Gtk::Clipboardgt; refClipboard = Gtk::Clipboard::get();
+
+//Targets:
+std::listlt;Gtk::TargetEntrygt; listTargets;
+listTargets.push_back( Gtk::TargetEntry("example_custom_target") );
+listTargets.push_back( Gtk::TargetEntry("UTF8_STRING") );
+
+refClipboard-gt;set( listTargets,
+ sigc::mem_fun(*this, &ExampleWindow::on_clipboard_get),
+ sigc::mem_fun(*this, &ExampleWindow::on_clipboard_clear) );
+void ExampleWindow::on_clipboard_get(
+ Gtk::SelectionDataamp; selection_data, guint info)
+{
+ const Glib::ustring target = selection_data.get_target();
+
+ if(target == "example_custom_target")
+ selection_data.set("example_custom_target", m_ClipboardStore);
+}
+Einfügen
+refClipboard-gt;request_contents("example_custom_target",
+ sigc::mem_fun(*this, &ExampleWindow::on_clipboard_received) );
+void ExampleWindow::on_clipboard_received(
+ const Gtk::SelectionDataamp; selection_data)
+{
+ Glib::ustring clipboard_data = selection_data.get_data_as_string();
+ //Do something with the pasted data.
+}
+refClipboard-gt;request_targets( sigc::mem_fun(*this,
+ &ExampleWindow::on_clipboard_received_targets) );
+void ExampleWindow::on_clipboard_received_targets(
+ const Glib::StringArrayHandleamp; targets_array)
+{
+ // Get the list of available clipboard targets:
+ std::listlt;std::stringgt; targets = targets_array;
+
+ const bool bPasteIsPossible =
+ std::find(targets.begin(), targets.end(),
+ example_target_custom) != targets.end();
+
+ // Enable/Disable the Paste button appropriately:
+ m_Button_Paste.set_sensitive(bPasteIsPossible);
+}
+Einfach
+Zwischenablage - Einfach
+Ideal
+Zwischenablage - Ideal
+Drucken
+PrintOperation
+Für jede darzustellende Seite werden folgende Signale ausgegeben:
+Seite einrichten
+//Within a class that inherits from Gtk::Window and keeps m_refPageSetup and m_refSettings as members...
+Glib::RefPtrlt;Gtk::PageSetupgt; new_page_setup = Gtk::run_page_setup_dialog(*this, m_refPageSetup, m_refSettings);
+m_refPageSetup = new_page_setup;
+Zum Beispiel,
+Darstellen von Text
+Asynchrone Vorgänge
+// in class ExampleWindow's method...
+Glib::RefPtrlt;PrintOperationgt; op = PrintOperation::create();
+// ...set up op...
+op-gt;signal_done().connect(sigc::bind(sigc::mem_fun(*this, &ExampleWindow::on_printoperation_done), op));
+// run the op
+void ExampleWindow::on_printoperation_done(Gtk::PrintOperationResult result, const Glib::RefPtrlt;PrintOperationgt;amp; op)
+{
+ if (result == Gtk::PRINT_OPERATION_RESULT_ERROR)
+ //notify user
+ else if (result == Gtk::PRINT_OPERATION_RESULT_APPLY)
+ //Update PrintSettings with the ones used in this PrintOperation
+
+ if (! op-gt;is_finished())
+ op-gt;signal_status_changed().connect(sigc::bind(sigc::mem_fun(*this, &ExampleWindow::on_printoperation_status_changed), op));
+}
+void ExampleWindow::on_printoperation_status_changed(const Glib::RefPtrlt;PrintFormOperationgt;amp; op)
+{
+ if (op-gt;is_finished())
+ //the print job is finished
+ else
+ //get the status with get_status() or get_status_string()
+
+ //update UI
+}
+PDF-Export
+Glib::RefPtrlt;Gtk::PrintOperationgt; op = Gtk::PrintOperation::create();
+// ...set up op...
+op-gt;set_export_filename("test.pdf");
+Gtk::PrintOperationResult res = op-gt;run(Gtk::PRINT_OPERATION_ACTION_EXPORT);
+Erweitern des Druckdialogs
+Gtk::Widget* CustomPrintOperation::on_create_custom_widget()
+{
+ set_custom_tab_label("My custom tab");
+
+ Gtk::Box* hbox = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 8);
+ hbox-gt;set_border_width(6);
+
+ Gtk::Label* label = Gtk::manage(new Gtk::Label("Enter some text: "));
+ hbox-gt;pack_start(*label, false, false);
+ label-gt;show();
+
+ hbox-gt;pack_start(m_Entry, false, false);
+ m_Entry.show();
+
+ return hbox;
+}
+
+void CustomPrintOperation::on_custom_widget_apply(Gtk::Widget* /* widget */)
+{
+ Glib::ustring user_input = m_Entry.get_text();
+ //...
+}
+Vorschau
+// in a class that inherits from Gtk::Window...
+Glib::RefPtrlt;PrintOperationgt; op = PrintOperation::create();
+// ...set up op...
+op-gt;run(Gtk::PRINT_OPERATION_ACTION_PREVIEW, *this);
+Der native GTK+-Druckdialog verfügt über einen Vorschauknopf, aber Sie können die Vorschau auch direkt aus der Anwendung starten:
+Drucken - Einfach
+Kürzlich geöffnete Dokumente
+RecentManager
+Hinzufügen von Objekten zur Liste der kürzlich geöffneten Dateien
+Im einfachsten Fall müssen Sie zum Hinzufügen einer Datei zur Liste der kürzlich geöffneten Dateien nur deren Adresse angeben. Zum Beispiel:
+Glib::RefPtrlt;Gtk::RecentManagergt; recent_manager = Gtk::RecentManager::get_default();
+recent_manager-gt;add_item(uri);
+
+std::vectorlt; Glib::RefPtrlt;Gtk::RecentInfogt; &gt; info_list = recent_manager-gt;get_items();
+Anpassen der Liste der kürzlich geöffneten Dateien
+RecentChooser
+Einfaches Beispiel für RecentChooserDialog
+Filtern kürzlich geöffneter Dateien
+Plugs und Sockets
+Übersicht
+Sockets
+Plugs
+Verbinden von Plugs und Sockets
+Beispiel für Plugs und Sockets
+$ ./plug &
+The window ID is: 69206019
+$ ./socket
+Hier ist ein einfaches Beispiel:
+Zwischenablage - Einfach
+Vervollständigung des Eintrags
+sigc::connection Glib::SignalTimeout::connect(const sigc::slotlt;boolgt;amp; slot, unsigned int interval, int priority = Glib::PRIORITY_DEFAULT);
+my_connection.disconnect();
+bool MyCallback() { std::cout &lt;lt; "Hello World!\
+" &lt;lt; std::endl; return true; }
+Hier ein Beispiel für diese Technik:
+Überwachung von Ein- und Ausgaben
+sigc::connection Glib::SignalInput::connect(const sigc::slotlt;bool,Glib::IOConditiongt;amp; slot,
+ int fd, Glib::IOCondition condition,
+ int priority = Glib::PRIORITY_DEFAULT);
+bool input_callback(Glib::IOCondition condition);
+Untätigkeitsfunktionen
+sigc::connection Glib::SignalIdle::connect(const sigc::slotlt;boolgt;amp; slot, int priority = Glib::PRIORITY_DEFAULT_IDLE);
+bool idleFunc();
+Speicherverwaltung
+Normale C++-Speicherverwaltung
+#include &lt;gtkmm/button.hgt;
+class Foo
+{
+private:
+ Gtk::Button theButton;
+ // will be destroyed when the Foo object is destroyed
+};
+{
+ Gtk::Button aButton;
+ aButton.show();
+ ...
+ kit.run();
+}
+Dynamische Zuweisung mit new und delete
+Gtk::Button* pButton = new Gtk::Button("Test");
+
+// do something useful with pButton
+
+delete pButton;
+Verwaltete Widgets
+Dynamische Zuweisung mit manage() und add()
+MyWidget::MyWidget()
+{
+ Gtk::Button* pButton = manage(new Gtk::Button("Test"));
+ add(*pButton); //add aButton to MyWidget
+}
+Gemeinsame Ressourcen
+Glib::RefPtrlt;Gdk::Pixbufgt; pixbuf = Gdk::Pixbuf::create_from_file(filename);
+int width = 0;
+if(pixbuf)
+{
+ width = pixbuf-gt;get_width();
+}
+Glib::RefPtrlt;Gdk::Pixbufgt; pixbuf2 = pixbuf;
+Bjarne Stroustrup, »The C++ Programming Language« - Abschnitt 14.4.2
+Nicolai M. Josuttis, »The C++ Standard Library« - Abschnitt 4.2
+Glade und Gtk::Builder
+Es wird weniger C++-Code benötigt.
+Designer ohne Programmierkenntnisse können grafische Benutzeroberflächen entwerfen und bearbeiten.
+Dies hat folgende Vorteile:
+Laden der .glade-Datei
+Glib::RefPtrlt;Gtk::Buildergt; builder = Gtk::Builder::create_from_file("basic.glade");
+Glib::RefPtrlt;Gtk::Buildergt; builder = Gtk::Builder::create_from_file("basic.glade", "treeview_products");
+Zugriff auf Widgets
+Gtk::Dialog* pDialog = 0;
+builder-gt;get_widget("DialogBasic", pDialog);
+Verwenden abgeleiteter Widgets
+DerivedDialog* pDialog = 0;
+builder-gt;get_widget_derived("DialogBasic", pDialog);
+Verwenden Sie
+DerivedDialog::DerivedDialog(BaseObjectType* cobject, const Glib::RefPtrlt;Gtk::Buildergt;amp; builder)
+: Gtk::Dialog(cobject)
+{
+}
+DerivedDialog::DerivedDialog(BaseObjectType* cobject, const Glib::RefPtrlt;Gtk::Buildergt;amp; builder)
+: Gtk::Dialog(cobject),
+ m_builder(builder),
+ m_pButton(0)
+{
+ //Get the Glade-instantiated Button, and connect a signal handler:
+ m_builder-gt;get_widget("quit_button", m_pButton);
+ if(m_pButton)
+ {
+ m_pButton-gt;signal_clicked().connect( sigc::mem_fun(*this, &DerivedDialog::on_button_quit) );
+ }
+}
+Internationalisierung und Lokalisierung
+Einrichten Ihres Projekts
+# keep this file sorted alphabetically, one language code per line
+de
+ja
+src/main.cc
+src/other.cc
+IT_PROG_INTLTOOL([0.35.0])
+
+GETTEXT_PACKAGE=programname
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"],
+ [The domain to use with gettext])
+AM_GLIB_GNU_GETTEXT
+
+PROGRAMNAME_LOCALEDIR=[${datadir}/locale]
+AC_SUBST(PROGRAMNAME_LOCALEDIR)
+INTLTOOL_FILES = intltool-extract.in \\
+ intltool-merge.in \\
+ intltool-update.in
+DISTCLEANFILES = ... intltool-extract \\
+ intltool-merge \\
+ intltool-update \\
+ po/.intltool-merge-cache
+AM_CPPFLAGS = ... -DPROGRAMNAME_LOCALEDIR=\\"${PROGRAMNAME_LOCALEDIR}\\"
+Markieren von Zeichenketten für die Übersetzung
+display_message("Getting ready for i18n.");
+display_message(_("Getting ready for i18n."));
+xgettext -a -o my-strings --omit-header *.cc *.h
+bindtextdomain(GETTEXT_PACKAGE, PROGRAMNAME_LOCALEDIR);
+bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+textdomain(GETTEXT_PACKAGE);
+Funktionsweise von Gettext
+Testen und Hinzufügen von Übersetzungen
+intltool-update --pot
+Ressourcen
+Intltool-README
+Nutzung des GNOME-CVS als Übersetzer
+Gettext-Handbuch
+gtkmm_hello
+
+gnomemm_hello
+Glib::ustring und std::iostreams
+std::ostringstream output;
+output.imbue(std::locale("")); // use the user's locale for this stream
+output &lt;lt; percentage &lt;lt; " % done";
+label-gt;set_text(Glib::locale_to_utf8(output.str()));
+Fallstricke
+Es gibt einige typische Fehler, denen Sie möglicherweise auch selbst begegnen werden. Dieser Abschnitt könnte Ihnen dabei helfen, dies zu vermeiden.
+Gleiche Zeichenketten, unterschiedliche Semantik
+// note to translators: don't translate the "[noun]" part - it is
+// just here to distinguish the string from another "jumps" string
+text = strip(gettext("jumps[noun]"), "[noun]");
+Zusammenstellung der Zeichenketten
+Folgendes könnte beispielsweise problematisch sein:
+std::cout &lt;lt; _("Current amount: ") &lt;lt; amount
+ &lt;lt; _(" Future: ") &lt;lt; future &lt;lt; std::endl;
+
+label.set_text(_("Really delete ") + filename + _(" now?"));
+std::cout &lt;lt; _("Current amount: ") &lt;lt; amount
+ &lt;lt; _(" Future: ") &lt;lt; future &lt;lt; std::endl;
+
+label.set_text(_("Really delete ") + filename + _(" now?"));
+Einschätzen der Anzeigegröße von Zeichenketten
+Unübliche Wörter
+Sie sollten kryptische Abkürzungen, Slang oder Jargon vermeiden. So etwas ist recht schwierig zu übersetzen und oft selbst für Muttersprachler nur schwer verständlich. Beispielsweise sollten Sie »application« gegenüber »app« bevorzugen.
+Verwendubg von Nicht-ASCII-Zeichen in Zeichenketten
+Hilfe zu Übersetzungen erhalten
+Benutzerdefinierte Widgets
+Benutzerdefinierte Container
+
+
+Benutzerdefinierter Container
+
+
+Benutzerdefiniertes Widget
+Das gewählte Objekt
+Der Puffer
+Empfohlene Techniken
+Lebensdauer einer Anwendung
+Die meisten unserer Beispiele verwenden diese Technik.
+Verwendung eines
+Kopieren
+Glib::RefPtrlt;Gdk::Pixbufgt; refPixbuf = Gdk::Pixbuf::create_from_file(filename);
+Glib::RefPtrlt;Gdk::Pixbufgt; refPixbuf2 = refPixbuf;
+std::listlt; Glib::RefPtrlt;Gdk::Pixbufgt; &gt; listPixbufs;
+Glib::RefPtrlt;Gdk::Pixbufgt; refPixbuf = Gdk::Pixbuf::create_from_file(filename);
+listPixbufs.push_back(refPixbuf);
+Dereferenzierung
+Glib::RefPtrlt;Gdk::Pixbufgt; refPixbuf = Gdk::Pixbuf::create_from_file(filename);
+int width = refPixbuf-gt;get_width();
+Glib::RefPtrlt;Gdk::Pixbufgt; refPixbuf = Gdk::Pixbuf::create_from_file(filename);
+Gdk::Pixbufamp; underlying = *refPixbuf; //Syntax error - will not compile.
+Glib::RefPtrlt;Gtk::TreeStoregt; refStore = Gtk::TreeStore::create(columns);
+Glib::RefPtrlt;Gtk::TreeModelgt; refModel = refStore;
+Glib::RefPtrlt;Gtk::TreeStoregt; refStore =
+Glib::RefPtrlt;Gtk::TreeStoregt;::cast_dynamic(refModel);
+Glib::RefPtrlt;Gtk::TreeStoregt; refStore2 =
+Glib::RefPtrlt;Gtk::TreeStoregt;::cast_static(refModel);
+Glib::RefPtrlt;Gtk::TreeModelgt; refModel = m_TreeView.get_model();
+if(refModel)
+{
+ int cols_count = refModel-gt;get_n_columns();
+ ...
+}
+Verbinden von Signal-Handlern
+#include &lt;gtkmm/button.hgt;
+
+void on_button_clicked()
+{
+ std::cout &lt;lt; "Hello World" &lt;lt; std::endl;
+}
+
+main()
+{
+ Gtk::Button button("Hello World");
+ button.signal_clicked().connect(sigc::ptr_fun(amp;on_button_clicked));
+}
+...
+ button.signal_clicked().connect(sigc::ptr_fun(amp;on_button_clicked));
+ ...
+void on_button_clicked();
+
+class some_class
+{
+ void on_button_clicked();
+};
+
+some_class some_object;
+
+main()
+{
+ Gtk::Button button;
+ button.signal_clicked().connect( sigc::ptr_fun(amp;on_button_clicked) );
+ button.signal_clicked().connect( sigc::mem_fun(some_object, &some_class::on_button_clicked) );
+}
+Schreiben von Signal-Handlern
+Glib::SignalProxy1lt;bool, Gtk::DirectionTypegt; signal_focus()
+Glib::SignalProxy3lt;void, const Glib::ustringamp;, int, int*gt; signal_insert_text()
+void on_insert_text(const Glib::ustringamp; text, int length, int* position);
+Verbindungen von Signal-Handlern trennen
+sigc::signallt;void,intgt;::iterator signallt;void,intgt;::connect( const sigc::slotlt;void,intgt;amp; );
+Überschreiben von Standard-Signalhandlern
+#include &lt;gtkmm/button.hgt;
+
+class OverriddenButton : public Gtk::Button
+{
+protected:
+ virtual void on_clicked();
+}
+
+void OverriddenButton::on_clicked()
+{
+ std::cout &lt;lt; "Hello World" &lt;lt; std::endl;
+
+ // call the base class's version of the method:
+ Gtk::Button::on_clicked();
+}
+Binden weiterer Argumente
+m_button1.signal_clicked().connect( sigc::bindlt;Glib::ustringgt;( sigc::mem_fun(*this, &HelloWorld::on_button_clicked), "button 1") );
+virtual void on_button_clicked(Glib::ustring data);
+X-Ereignissignale
+bool on_button_press(GdkEventButton* event);
+Gtk::Button button("label");
+button.signal_button_press_event().connect( sigc::ptr_fun(amp;on_button_press) );
+Signalhandler-Sequenz
+button.signal_button_press_event().connect( sigc::ptr_fun(amp;on_mywindow_button_press), false );
+Schreiben von Signal-Handlern
+int main(int argc, char** argv)
+{
+ Glib::RefPtrlt;Gtk::Applicationgt; app = Gtk::Application::create(argc, argv, "org.gtkmm.example");
+
+ HelloWorld helloworld;
+ return app-gt;run(helloworld);
+}
+Erzeugen Ihrer eigenen Signale
+sigc::signallt;void, bool, intgt; signal_something;
+class Server
+{
+public:
+ //signal accessor:
+ typedef sigc::signallt;void, bool, intgt; type_signal_something;
+ type_signal_something signal_something();
+
+protected:
+ type_signal_something m_signal_something;
+};
+
+Server::type_signal_something Server::signal_something()
+{
+ return m_signal_something;
+}
+server.signal_something().connect(
+ sigc::mem_fun(client, &Client::on_server_something) );
+Dies ist ein voll funktionsfähiges Beispiel, welches ein benutzerdefiniertes Signal definiert und nutzt.
+Vergleich mit anderen Signalsystemen
+
+Erstellen von
+Arbeiten mit dem Quelltext von gtkmm
+Einrichten von jhbuild
+moduleset = 'gnome-suites-core-deps-3.4'
+modules = [ 'gtkmm' ]
+Festlegen eines Präfix
+Installation von
+Die Erstellungsstruktur
+kopieren des Projektgerüsts
+$ git clone git://git.gnome.org/mm-common
+ $ cp -a mm-common/skeletonmm libsomethingmm
+
+
+
+
+$ for f in $(find libsomethingmm -depth -name '*skeleton*'); do \\
+ d="${f%/*}"; b="${f##*/}"; mv "$f" "$d/${b//skeleton/libsomething}"; \\
+ done
+Anpassen der Erstellungsdateien
+configure.ac
+In
+Makefile.am-Dateien
+binding_name
+Der Name der Bibliothek, wie libsomethingmm.
+wrap_init_flags
+lib_LTLIBRARIES
+AM_CPPFLAGS
+Die an den C-Präprozessor übergebenen Befehlszeilenoptionen.
+AM_CXXFLAGS
+Die an den C++-Compiler übergebenen Befehlszeilenoptionen.
+Erstellen der .hg- und .ccg-Dateien
+Erstellen der .defs-Dateien.
+functions
+enums
+signals
+properties
+vfuncs
+gtk.defs
+Beinhaltet die andren Dateien.
+gtk_methods.defs
+Objekte und Funktionen.
+gtk_enums.defs
+Aufzählungen.
+gtk_signals.defs
+Signale und Eigenschaften.
+gtk_vfuncs.defs
+Erzeugen der methods.defs
+$ ./h2def.py /usr/include/gtk-3.0/gtk/*.h &gt; gtk_methods.defs
+Erzeugen der enums.defs
+$ ./enum.pl /usr/include/gtk-3.0/gtk/*.h &gt; gtk_enums.defs
+$ cd tools/extra_defs_gen
+$ ./generate_extra_defs &gt; gtk_signals.defs
+#include &lt;libsomething.hgt;
+
+int main(int, char**)
+{
+ something_init();
+
+ std::cout &lt;lt; get_defs(EXAMPLE_TYPE_SOMETHING)
+ &lt;lt; get_defs(EXAMPLE_TYPE_THING);
+ return 0;
+}
+Schreiben der vfuncs.defs
+Die .hg- und .ccg-Dateien
+#include &lt;gtkmm/bin.hgt;
+#include &lt;gtkmm/activatable.hgt;
+#include &lt;gtkmm/stockid.hgt;
+_DEFS(gtkmm,gtk)
+_PINCLUDE(gtkmm/private/bin_p.h)
+
+namespace Gtk
+{
+
+class Button
+ : public Bin,
+ public Activatable
+{
+ _CLASS_GTKOBJECT(Button,GtkButton,GTK_BUTTON,Gtk::Bin,GtkBin)
+ _IMPLEMENTS_INTERFACE(Activatable)
+public:
+
+ _CTOR_DEFAULT
+ explicit Button(const Glib::ustringamp; label, bool mnemonic = false);
+ explicit Button(const StockIDamp; stock_id);
+
+ _WRAP_METHOD(void set_label(const Glib::ustringamp; label), gtk_button_set_label)
+
+ ...
+
+ _WRAP_SIGNAL(void clicked(), "clicked")
+
+ ...
+
+ _WRAP_PROPERTY("label", Glib::ustring)
+};
+
+} // namespace Gtk
+_DEFS()
+_PINCLUDE()
+_CLASS_GTKOBJECT()
+_IMPLEMENTS_INTERFACE()
+_CTOR_DEFAULT
+$ cd gtk/src
+$ /usr/lib/glibmm-2.4/proc/gmmproc -I ../../tools/m4 --defs . button . ./../gtkmm
+m4-Umwandlungen
+_CONVERSION(`GtkTreeView*',`TreeView*',`Glib::wrap($3)')
+_CONVERSION(`PrintSettingsamp;',`GtkPrintSettings*',__FR2P)
+_CONVERSION(`const PrintSettingsamp;',`GtkPrintSettings*',__FCR2P)
+_CONVERSION(`const Glib::RefPtrlt;Printergt;amp;',`GtkPrinter*',__CONVERT_REFPTR_TO_P($3))
+m4-Initialisierungen
+_INITIALIZATION(`Gtk::Widgetamp;',`GtkWidget*',`$3 = Glib::wrap($4)')
+Klassen-Makros
+_CLASS_GOBJECT
+_CLASS_GOBJECT(AccelGroup, GtkAccelGroup, GTK_ACCEL_GROUP, Glib::Object, GObject)
+_CLASS_GTKOBJECT
+_CLASS_GTKOBJECT(Button, GtkButton, GTK_BUTTON, Gtk::Bin, GtkBin)
+_CLASS_BOXEDTYPE
+_CLASS_BOXEDTYPE(Color, GdkColor, NONE, gdk_color_copy, gdk_color_free)
+Beispielsweise in
+_CLASS_BOXEDTYPE_STATIC
+_CLASS_BOXEDTYPE_STATIC( C++-Klasse, C-Klasse )
+_CLASS_OPAQUE_COPYABLE
+_CLASS_OPAQUE_COPYABLE(StockItem, GtkStockItem, NONE, gtk_stock_item_copy, gtk_stock_item_free)
+Beispielsweise in
+_CLASS_OPAQUE_REFCOUNTED
+_CLASS_OPAQUE_REFCOUNTED(Coverage, PangoCoverage, pango_coverage_new, pango_coverage_ref, pango_coverage_unref)
+_CLASS_GENERIC
+_CLASS_GENERIC( C++-Klasse, C-Klasse )
+_CLASS_GENERIC(AttrIter, PangoAttrIterator)
+_CLASS_INTERFACE
+_CLASS_INTERFACE(CellEditable, GtkCellEditable, GTK_CELL_EDITABLE, GtkCellEditableIface)
+_CLASS_INTERFACE(LoadableIcon, GLoadableIcon, G_LOADABLE_ICON, GLoadableIconIface, Icon, GIcon)
+Konstruktor-Makros
+class ActionGroup : public Glib::Object
+{
+ _CLASS_GOBJECT(ActionGroup, GtkActionGroup, GTK_ACTION_GROUP, Glib::Object, GObject)
+
+protected:
+ _WRAP_CTOR(ActionGroup(const Glib::ustringamp; name = Glib::ustring()), gtk_action_group_new)
+
+public:
+ _WRAP_CREATE(const Glib::ustringamp; name = Glib::ustring())
+_WRAP_CTOR
+errthrow
+Es gibt nur ein optionales zusätzliches Argument:
+Handgeschriebene Konstruktoren
+Button::Button(const Glib::ustringamp; label, bool mnemonic)
+:
+ _CONSTRUCT("label", label.c_str(), "use_underline", gboolean(mnemonic))
+{}
+Methoden-Makros
+_WRAP_METHOD
+_WRAP_METHOD(void set_text(const Glib::ustringamp; text), gtk_entry_set_text)
+refreturn
+deprecated
+constversion
+ifdef
+custom_c_callback
+#m4 _CONVERSION(`GSList*',`std::vectorlt;Widget*gt;',`Glib::SListHandlerlt;Widget*gt;::slist_to_vector($3, Glib::OWNERSHIP_SHALLOW)')
+_WRAP_METHOD_DOCS_ONLY
+_WRAP_METHOD_DOCS_ONLY(C-Funktionsname)
+_WRAP_METHOD_DOCS_ONLY(gtk_container_remove)
+_IGNORE / _IGNORE_SIGNAL
+_IGNORE(C-Funktionsname 1, C-Funktionsname2, usw.)
+_IGNORE_SIGNAL(C signal name 1, C signal name2, etc)
+_IGNORE(gtk_button_box_set_spacing, gtk_button_box_get_spacing)
+_WRAP_SIGNAL
+_WRAP_SIGNAL( C++ signal handler signature, C signal name)
+_WRAP_SIGNAL(void clicked(),"clicked")
+no_default_handler
+custom_default_handler
+custom_c_callback
+_WRAP_PROPERTY
+_WRAP_PROPERTY(C-Eigenschaftsname, C++-Typ)
+_WRAP_PROPERTY("label", Glib::ustring)
+_WRAP_VFUNC
+_WRAP_VFUNC( C++ method signature, C function name)
+_WRAP_VFUNC(SizeRequestMode get_request_mode() const, get_request_mode)
+refreturn_ctype
+custom_vfunc
+custom_vfunc_callback
+Weitere Makros
+_IMPLEMENTS_INTERFACE
+_IMPLEMENTS_INTERFACE(C++ interface name)
+_IMPLEMENTS_INTERFACE(Activatable)
+Es gibt nur ein optionales zusätzliches Argument:
+_WRAP_ENUM
+_WRAP_ENUM(WindowType, GdkWindowType)
+Beispielsweise in
+_WRAP_ENUM(IconLookupFlags, GtkIconLookupFlags, NO_GTYPE)
+Zum Beispiel in
+_WRAP_METHOD_DOCS_ONLY
+_WRAP_GERROR
+_WRAP_GERROR(PixbufError, GdkPixbufError, GDK_PIXBUF_ERROR)
+_MEMBER_GET / _MEMBER_SET
+_MEMBER_GET(C++-Name, C-Name, C++-Typ, C-Typ)
+_MEMBER_SET(C++-Name, C-Name, C++-Typ, C-Typ)
+_MEMBER_GET(x, x, int, int)
+Beispielsweise in
+_MEMBER_GET_PTR / _MEMBER_SET_PTR
+_MEMBER_GET_PTR(C++-Name, C-Name, C++-Typ, C-Typ)
+_MEMBER_SET_PTR(C++ name, C name, C++ type, C type)
+// _MEMBER_GET_PTR(engine_lang, lang_engine, EngineLang*, PangoEngineLang*)
+// It's just a comment. It's difficult to find a real-world example.
+Zum Beispiel in
+_MEMBER_GET_GOBJECT / _MEMBER_SET_GOBJECT
+_MEMBER_GET_GOBJECT(C++-Name, C-Name, C++-Typ, C-Typ)
+_MEMBER_SET_GOBJECT(C++ name, C name, C++ type, C type)
+_MEMBER_GET_GOBJECT(layout, layout, Pango::Layout, PangoLayout*)
+Zum Beispiel in
+void gtk_widget_set_device_events(GtkWidget* widget, GdkDevice* device, GdkEventMask events);
+_WRAP_METHOD(void set_device_events(Gdk::EventMask events{events}, const Glib::RefPtrlt;const Gdk::Devicegt;amp; device{device}), gtk_widget_set_device_events)
+_WRAP_METHOD(void set_device_events(Gdk::EventMask events{.}, const Glib::RefPtrlt;const Gdk::Devicegt;amp; device{.}), gtk_widget_set_device_events)
+GtkToolItem* gtk_tool_button_new(GtkWidget* icon_widget, const gchar* label);
+_WRAP_CTOR(ToolButton(Widgetamp; icon_widget, const Glib::ustringamp; label{?}), gtk_tool_button_new)
+GtkSizeRequestMode gtk_widget_get_request_mode(GtkWidget* widget);
+_WRAP_METHOD(void get_request_mode(SizeRequestModeamp; mode{OUT}) const, gtk_widget_get_request_mode)
+_INITIALIZATION(`SizeRequestModeamp;',`GtkSizeRequestMode',`$3 = (SizeRequestMode)($4)')
+_INITIALIZATION(`SizeRequestModeamp;',`GtkSizeRequestMode',`$3 = ($1)($4)')
+_INITIALIZATION(`Gtk::Widgetamp;',`GtkWidget*',`$3 = Glib::wrap($4)')
+Grundlegende Typen
+Grundlegende Typ-Äquivalente
+C-Typ
+C++-Typ
+gboolean
+bool
+gint
+int
+guint
+gdouble
+double
+gunichar
+gchar*
+std::string
+
+Handgeschriebene Quelldateien
+Initialisierung
+void init()
+{
+ Gtk::Main::init_gtkmm_internals(); //Sets up the g type system and the Glib::wrap() table.
+ wrap_init(); //Tells the Glib::wrap() table about the libsomethingmm classes.
+}
+Probleme in der C-API.
+typedef struct _ExampleWidget ExampleWidget;
+
+struct _ExampleWidget
+{
+ ...
+};
+example-widget.h:56: error: using typedef-name 'ExampleWidget' after 'struct'
+../../libexample/libexamplemm/example-widget.h:34: error: 'ExampleWidget' has a previous declaration here
+make[4]: *** [example-widget.lo] Error 1
+example-widget.h:60: error: '_ExampleWidget ExampleWidget' redeclared as different kind of symbol
+../../libexample/libexamplemm/example-widget.h:34: error: previous declaration of 'typedef struct _ExampleWidget ExampleWidget'
+Fehlende Eigenschaften
+GtkWidget* example_widget_new(int something, const char* thing)
+{
+ return g_object_new (EXAMPLE_TYPE_WIDGET, "something", something, "thing", thing, NULL);
+}
+GtkWidget* example_widget_new(int something, const char* thing)
+{
+ ExampleWidget* widget;
+ widget = g_object_new (EXAMPLE_TYPE_WIDGET, NULL);
+ example_widget_construct(widget, "something", something, "thing", thing);
+}
+
+void example_widget_construct(ExampleWidget* widget, int something, const char* thing)
+{
+ //Do stuff that uses private API:
+ widget-gt;priv-gt;thing = thing;
+ do_something(something);
+}
+Dokumentation
+Die C-Dokumentation wiederverwenden
+./docextract_to_xml.py -s ~/checkout/gnome/gtk+/gtk/ -s ~/checkout/gnome/gtk+/docs/reference/gtk/ &gt; gtk_docs.xml
+Struktur zur Dokumentationserstellung
+Mario Blättermann <mario\.blaettermann\@gmail\.com>, 2010-2012
+Gtk::Window window;
+Gtk::Button* pButton = new Gtk::Button(Gtk::Stock::OK);
+Gtk::Box(bool homogeneous = false, int spacing = 0);
+ComboBoxEntry
+Gtk::Adjustment(float value,
+ float lower,
+ float upper,
+ float step_increment = 1,
+ float page_increment = 10,
+ float page_size = 0);
+foo.add( (w=new Gtk::Label("Hello"), w-gt;set_manage(), &w) );
+ist das gleiche wie
+foo.add( manage(new Gtk::Label("Hello")) );
+Internationalisierung von GNOME-Anwendungen
+label.set_text(compose(_("Really delete %1 now?"), filename));
+_WRAP_CTOR(ToolButton(const Glib::ustringamp; label{label}, Widgetamp; icon_widget{icon_widget}), gtk_tool_button_new)
+_WRAP_CTOR(ToolButton(const Glib::ustringamp; label{.}, Widgetamp; icon_widget{.}), gtk_tool_button_new)
+_WRAP_METHOD(void get_preferred_size(Requisitionamp; minimum_size, Requisitionamp; natural_size{?}) const, gtk_widget_get_preferred_size)

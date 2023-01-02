@@ -1,0 +1,49 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+ifx_query() retourne un identifiant positif de résultat Informix en cas de succès, et FALSE en cas d 'erreur.
+L'entier de type "identifiant de résultat "est utilisé par4 d 'autres fonctions pour lire les résultats.
+Pour un exemple, reportez-vous à ifx_affected_rows() pour connaître le nombre de lignes affectées.
+ifx_query() envoie une requête au serveur actif courant, associé à l 'identifiant de connexion link_identifier.
+Si link_identifier n 'est pas fourni, la dernière connexion ouverte sera utilisée.
+Si aucune connexion n'a été ouverte, ifx_query() va essayer d'en créer une, en appelant ifx_connect().
+Exécute la requête query sur la connexion conn_id.
+Pour les requêtes de type SELECT, un pointeur est déclaré, et ouvert.
+L'option cursor_type permet de choisir le type de pointeur, "scroll "et / ou "hold". cursor_type accepte les deux valeurs séparées, et leur combinaison.
+Les requêtes d 'autre type sont à exécution immédiate.
+Le nombre de lignes affectées (estimé ou exact) est enregistré pour être lu avec ifx_affected_rows().
+Si vous avez une colonne de type BLOB (BYTE ou TEXT) dans une requête de modification, vous pouvez passer un paramètre BLOBidarray qui contiendra les identifiants des BLOB à modifier, et vous devrez remplacer cette colonne par un point d'interrogation (?) dans la requête.
+Si le contenu d'une colonne de type TEXT (ou BYTE) vous pouvez aussi utiliser les fonctions ifx_textasvarchar() et ifx_byteasvarchar().
+Cela vous permettra d'utiliser les colonnes TEXT (ou BYTE) comme des colonnes de type VARCHAR (mais plus long, tout de même), et vous n'aurez pas besoin de l 'identifiant de BLOB.
+Avec les fonctions ifx_textasvarchar() et ifx_byteasvarchar() (valeurs par défaut), les requêtes SELECT retourneront des identifiants de BLOB.
+Cet identifiant peut être une chaîne ou un fichier, suivant la configuration (voir plus loin).
+Voir aussi ifx_connect().
+Exemple 1.
+Afficher toutes les lignes de la table "ordres" sous la forme html
+ifx_textasvarchar( 1); / / Utilisation du mode "text mode "pour les BLOBs $res_id = ifx_query("select * from orders", $conn_id); if (! $res_id) {printf("Impossible de sélectionner des lignes dans: %s\n br %s br \n", ifx_error()); ifx_errormsg(); die;} ifx_htmltbl_result($res_id, "border=\"1\""); ifx_free_result($res_id);
+Exemple 2.
+Insertion de valeurs dans la table "catalogue"
+?php / / créer un identifiant de BLOB pour une colonne de type BYTE et une de type TEXT $textid = ifx_create_blob( 0, 0, "Colonne Text en mémoire"); $byteid = ifx_create_blob(1, 0, "Colonne Byte en mémoire"); / / Stocke l'identifiant du BLOB dans le tableau BLOBid $BLOBidarray[] = $textid; $BLOBidarray[] = $byteid; / / éxécute la requête $query = "insert into catalog (stock_num, manu_code, ". "cat_descr,cat_picture) values(1 ,'HRO',?, ?)"; $res_id = ifx_query($query, $conn_id, $BLOBidarray); if (! $res_id) {/ /... erreur...} / / libération du résultat ifx_free_result($res_id);?
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

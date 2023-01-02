@@ -1,0 +1,47 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+As long as allow_url_fopen is enabled in php.ini, you can use HTTP and FTP URLs with most of the functions that take a filename as a parameter.
+In addition, URLs can be used with the include(), include_once(), require() and require_once() statements.
+See Appendix I for more information about the protocols supported by PHP.
+Note:
+In PHP 4.0.3 and older, in order to use URL wrappers, you were required to configure PHP using the configure option --enable-url-fopen-wrapper.
+Note:
+The Windows versions of PHP earlier than PHP 4.3 did not support remote file accessing for the following functions: include(), include_once(), require(), require_once(), and the imagecreatefromXXX functions in the Reference XLI, Image functions extension.
+For example, you can use this to open a file on a remote web server, parse the output for the data you want, and then use that data in a database query, or simply to output it in a style matching the rest of your website.
+Example 19-1.
+Getting the title of a remote page
+?php $file = fopen ("http: / /www.example.com / ", "r"); if (!$file) {echo" p Unable to open remote file.\n"; exit;} while (!feof ($file)) {$line = fgets ($file, 1024); / * This only works if the title and its tags are on one line * / if (eregi ("title (.*) / title", $line, $out)) {$title = $out[1]; break;}} fclose($file);?
+You can also write to files on an FTP server (provided that you have connected as a user with the correct access rights).
+You can only create new files using this method; if you try to overwrite a file that already exists, the fopen() call will fail.
+To connect as a user other than 'anonymous', you need to specify the username (and possibly password) within the URL, such as'ftp: / /user:password@ftp.example.com / path / to / file'. (You can use the same sort of syntax to access files via HTTP when they require Basic authentication.)
+Example 19-2.
+Storing data on a remote server
+?php $file = fopen ("ftp: / /ftp.example.com / incoming / outputfile", "w"); if (!$file) {echo "p Unable to open remote file for writing.\n"; exit;} / * Write the data here. * / fputs ($file, $_SERVER['HTTP_USER_AGENT']. "\n"); fclose ($file);?
+Note:
+You might get the idea from the example above that you can use this technique to write to a remote log file.
+Unfortunately that would not work because the fopen() call will fail if the remote file already exists.
+To do distributed logging like that, you should take a look at syslog().
+Prev
+Home
+Next
+PUT method support
+Up
+Connection handling

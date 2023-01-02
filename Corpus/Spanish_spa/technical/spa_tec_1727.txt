@@ -1,0 +1,74 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Instrucción MkDir [Ejecución]
+/text/sbasic/shared/03020411.xhp
+MkDir;instrucción
+Declaración MkDir [Runtime]
+Crea un directorio nuevo en un soporte de datos.
+Sintaxis:
+MkDir Texto As String
+Parámetros:
+Texto:
+Cualquier expresión de cadena que especifique el nombre y ruta del directorio que se desea crear.
+También se puede usar la
+notación URL
+.
+Si la ruta de acceso no se determina, se crea el directorio en el directorio actual.
+Ejemplo:
+Sub EjemploFileIO
+' Ejemplo de funciones par una organización de archivos.
+Const sArchivo1 as String = &quot; file://c|/autoexec.bat &quot;
+Const sDir1 as String = &quot; file://c|/Temp &quot;
+Const sSubDir1 as String = &quot; Test &quot;
+Const sArchivo2 as String = &quot; Copiado.tmp &quot;
+Const sArchivo3 as String = &quot; NuevoNombre.tmp &quot;
+Dim sArchivo As String
+sArchivo = sDir1 + &quot; / &quot; + sSubDir1
+ChDir( sDir1 )
+If Dir(sSubDir1,16)= &quot; &quot; then ' ¿Existe el directorio?
+MkDir sSubDir1
+MsgBox sArchivo,0, &quot; Crear directorio &quot;
+End If
+sArchivo = sArchivo + &quot; / &quot; + sArchivo2
+FileCopy sArchivo1 , sArchivo
+MsgBox fSysURL(CurDir()),0, &quot; Directorio actual &quot;
+MsgBox sArchivo & Chr(13) & FileDateTime( sArchivo ),0, &quot; Fecha de creación &quot;
+MsgBox sArchivo & Chr(13) & FileLen( sArchivo ),0, &quot; Tamaño del archivo &quot;
+MsgBox sArchivo & Chr(13) & GetAttr( sArchivo ),0, &quot; Atributos del archivo &quot;
+Name sArchivo as sDir1 + &quot; / &quot; + sSubDir1 + &quot; / &quot; + sArchivo3
+' Cambiar el nombre en el mismo directorio
+sArchivo = sDir1 + &quot; / &quot; + sSubDir1 + &quot; / &quot; + sArchivo3
+SetAttr( sArchivo, 0 ) 'Borrar todos los atributos
+MsgBox sArchivo & Chr(13) & GetAttr( sArchivo ),0, &quot; Atributos del archivo nuevo &quot;
+Kill sArchivo
+RmDir sDir1 + &quot; / &quot; + sSubDir1
+end sub
+' Convierte una ruta del sistema en una URL
+Function fSysURL( fSysFp as String ) as String
+Dim iPos As String
+iPos = 1
+iPos = Instr(iPos,fSysFp, getPathSeparator())
+do while iPos > 0
+mid( fSysFp, iPos , 1, &quot; / &quot; )
+iPos = Instr(iPos+1,fSysFp, getPathSeparator())
+loop
+' los dos puntos con DOS
+iPos = Instr(1,fSysFp, &quot; : &quot; )
+if iPos > 0 then mid( fSysFp, iPos , 1, &quot; | &quot; )
+fSysURL = &quot; file:// &quot; & fSysFp
+End Function

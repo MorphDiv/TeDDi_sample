@@ -1,0 +1,54 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3, PHP 4)
+Initiates a stream connection in the Internet (AF_INET, using TCP or UDP) or Unix (AF_UNIX) domain.
+For the Internet domain, it will open a TCP socket connection to hostname on port port. hostname may in this case be either a fully qualified domain name or an IP address.
+For UDP connections, you need to explicitly specify the protocol by prefixing hostname with 'udp: / /'.
+For the Unix domain, hostname will be used as the path to the socket, port must be set to 0 in this case.
+The optional timeout can be used to set a timeout in seconds for the connect system call.
+Note:
+If you need to set a timeout for reading / writing data over the socket, use socket_set_timeout(), as the timeout parameter to fsockopen() only applies while connecting the socket.
+As of PHP 4.3.0, if you have compiled in OpenSSL support, you may prefix the hostname with either 'ssl: / /' or 'tls: / /' to use an SSL or TLS client connection over TCP / IP to connect to the remote host.
+fsockopen() returns a file pointer which may be used together with the other file functions (such as fgets(), fgetss(), fputs(), fclose(), and feof()).
+If the call fails, it will return FALSE and if the optional errno and errstr arguments are present they will be set to indicate the actual system level error that occurred in the system-level connect() call.
+If the value returned in errno is 0 and the function returned FALSE, it is an indication that the error occurred before the connect() call.
+This is most likely due to a problem initializing the socket.
+Note that the errno and errstr arguments will always be passed by reference.
+Depending on the environment, the Unix domain or the optional connect timeout may not be available.
+The socket will by default be opened in blocking mode.
+You can switch it to non-blocking mode by using socket_set_blocking().
+Example 1. fsockopen() Example
+?php $fp = fsockopen ("www.example.com", 80, $errno, $errstr, 30); if (!$fp) {echo "$errstr ($errno) br \n";} else {fputs ($fp, "GET / HTTP / 1.0\r\nHost: www.example.com\r\n\r\n"); while (!feof($fp)) {echo fgets ($fp,128);} fclose ($fp);}?
+Example 2.
+Using UDP connection
+?php $fp = fsockopen( "udp: / /127.0.0.1", 13, $errno, $errstr); if (!$fp) {echo "ERROR: $errno - $errstr br \n";} else {fwrite($fp ,"\n"); echo fread($fp, 26); fclose($fp);}?
+Warning
+UDP sockets will sometimes appear to have opened without an error, even if the remote host is unreachable.
+The error will only become apparent when you read or write data to / from the socket.
+The reason for this is because UDP is a "connectionless" protocol, which means that the operating system does not try to establish a link for the socket until it actually needs to send or receive data.
+Note:
+The timeout parameter was introduced in PHP 3.0.9 and UDP support was added in PHP 4.
+Prev
+Home
+Next
+dns_get_record
+Up
+gethostbyaddr

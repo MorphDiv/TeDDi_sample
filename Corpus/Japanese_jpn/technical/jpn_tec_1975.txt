@@ -1,0 +1,61 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+空白のセルの処理
+/text/scalc/05/empty_cells.xhp
+空白のセル;処理
+i86303
+空白のセルの処理
+OpenOffice.org 3.0 および StarSuite 9 以降、空白のセルの処理が変わりました。
+以前は空白のセルに対して、一部のコンテキストでは強制的に数値 0 が設定され、そのほかのコンテキストでは空白文字列が設定されていました。例外的に、A1 が空白の場合、=A1=0 と =A1= &quot; &quot; の両方の結果は、TRUE でした。空白は使用されるまで継承されるようになったので、ルックアップの結果として空白のセルが返される場合、=VLOOKUP(...)=0 と =VLOOKUP(...)= &quot; &quot; は両方 TRUE を返します。
+空白のセルへの単純な参照は、依然として数値 0 として表示されますが、必ずしも数値型ではないので、参照元のセルとの比較が予想どおりに行われます。
+次の例では、A1 は数値を含み、B1 は空白で、C1 は B1 への参照を含みます。
+A1:1 B1:(値なし) C1:=B1 (0 を表示)
+=B1=0 = > TRUE
+=B1= &quot; &quot; = > TRUE
+=C1=0 = > TRUE
+=C1= &quot; &quot; = > TRUE (以前は FALSE)
+=ISNUMBER(B1) = > FALSE
+=ISNUMBER(C1) = > FALSE (以前は TRUE)
+=ISNUMBER(VLOOKUP(1;A1:C1;2)) = > FALSE (B1)
+=ISNUMBER(VLOOKUP(1;A1:C1;3)) = > FALSE (C1、以前は TRUE)
+=ISTEXT(B1) = > FALSE
+=ISTEXT(C1) = > FALSE
+=ISTEXT(VLOOKUP(1;A1:C1;2)) = > FALSE (B1、以前は TRUE)
+=ISTEXT(VLOOKUP(1;A1:C1;3)) = > FALSE (C1)
+=ISBLANK(B1) = > TRUE
+=ISBLANK(C1) = > FALSE
+=ISBLANK(VLOOKUP(1;A1:C1;2)) = > TRUE (B1、以前は FALSE)
+=ISBLANK(VLOOKUP(1;A1:C1;3)) = > FALSE (C1)
+Microsoft Excel は動作が異なり、空白のセルまたは空白のセルの結果を含む数式セルへの参照の結果を常に数値として返します。たとえば、次のようになります。
+A1:
+(値なし)
+B1:=A1 = > 0 を表示しますが、空白のセルへの単なる参照です
+=ISNUMBER(A1) = > FALSE
+=ISTEXT(A1) = > FALSE
+=A1=0 = > TRUE
+=A1= &quot; &quot; = > TRUE
+=ISNUMBER(B1) = > FALSE (MS-Excel:TRUE)
+=ISTEXT(B1) = > FALSE
+=B1=0 = > TRUE
+=B1= &quot; &quot; = > TRUE (MS-Excel:FALSE)
+C1: 結果が空白セルの =VLOOKUP(...) = > 空白を表示します (MS-Excel:
+0 を表示)
+=ISNUMBER(VLOOKUP(...)) = > FALSE
+=ISTEXT(VLOOKUP(...)) = > FALSE
+=ISNUMBER(C1) = > FALSE (MS-Excel:TRUE)
+=ISTEXT(C1) = > FALSE

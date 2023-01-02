@@ -1,0 +1,43 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Cette extension offre à PHP l 'interface avec les produits YAZ, qui implémentent le protocole Z39.50.
+Avec cette extension, vous pouvez facilement implémenter un client Z39.50 qui analyse ou scanne des serveurs Z39.50 en paralléle.
+YAZ est disponible à http: / /www.indexdata.dk / yaz /.
+Vous pouvez trouvez des informations, des scripts d 'exemples, etc... pour cette extension à http: / /www.indexdata.dk / phpyaz /.
+Le module masque l 'essentiel de la complexité de Z39.50, ce qui le rend très facile à utiliser.
+Il supporte les connexions peristantes de manière similaire à celle supportés par les serveurs SQL: cela signifie qu 'une connexion est partagée entre plusieurs scripts PHP, ce qui évite les opérations de connexions.
+Compilez YAZ et installez le.
+Compilez PHP avec vos modules et ajoutez l 'option --with-yaz.
+Les instructions sont:
+gunzip -c yaz-1.6.tar.gz| tar xf - gunzip -c php-4.0.X.tar.gz |tar xf - cd yaz-1.6. / configure --prefix= / usr make make install cd.. / php-4.0.X. / configure --with-yaz= / usr / bin make make install
+PHP / YAZ conserve les connexions aux serveurs.
+Un entier positif représente l'ID d 'une connexion particulière.
+Le script ci-dessous montre comment effectuer une recherche paralléle.
+Lorsqu 'il est appelé sans paramètre, ce script affiche la requête.
+Sinon, il effectue la recherche sur les serveurs.
+Exemple 1.
+Recherche paralléle utilisant YAZ
+?php $num_hosts = count ($host); if (empty($term) | | count($host) == 0) {echo 'form method="get "input type="checkbox" name="host[] "value="bagel.indexdata.dk / gils" GILS test input type="checkbox "name="host[]" value="localhost:9999 / Default "local test input type="checkbox" checked="1 "name="host[]" value="z3950.bell-labs.com / books "BELL Labs Library br RPN Query: input type="text" size="30 "name="term" input type="submit "name="action" value="Search "';} else {echo 'Vous avez recherché '.htmlspecialchars($term). 'br'; for ($i = 0; $i $num_hosts; $i++) {$id[] = yaz_connect($host[$i]); yaz_syntax($id[$i] ,"sutrs"); yaz_search($id[$i] ,"rpn",$term);} yaz_wait(); for ($i = 0; $i $num_hosts; $i++) {echo 'hr '.$host[$i] .":"; $error = yaz_error($id[$i]); if (!empty($error)) {echo "Erreur: $error";} else {$hits = yaz_hits($id[$i]); echo "Nombre de résultats: $hits";} echo' dl '; for ($p = 1; $p = 10; $p++) {$rec = yaz_record($id[$i],$p ,"string"); if (empty($rec)) continue; echo" dt B $p / B / dt dd "; echo ereg_replace("\n"," br \n",$rec); echo "/ dd";} echo' / dl ';}}?
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

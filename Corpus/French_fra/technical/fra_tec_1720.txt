@@ -1,0 +1,69 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Fonction Dir [Exécution]
+/text/sbasic/shared/03020404.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe; bug fix: i29276
+Dir, fonction
+Fonction Dir [Exécution]
+Renvoie le nom d'un fichier ou d'un répertoire, ou encore de tous les fichiers et répertoires existant dans une unité ou un répertoire correspondant au chemin de recherche spécifié.
+Syntaxe :
+Dir [(Text As String) [, Attrib As Integer]]
+Valeur de retour :
+Chaîne de caractères
+Paramètres :
+Text :
+expression au format chaîne de caractères spécifiant le chemin de recherche, le répertoire ou le fichier.
+Cet argument peut uniquement être spécifié lorsque vous appelez la fonction Dir pour la première fois.
+Vous pouvez aussi saisir le chemin en
+notation URL
+.
+Attrib :
+expression au format nombre entier spécifiant les attributs de fichier au niveau du bit.
+La fonction Dir renvoie uniquement les fichiers ou répertoires correspondant aux attributs spécifiés.
+Vous pouvez combiner plusieurs attributs en ajoutant les valeurs de ceux-ci :
+0 : fichiers normaux.
+16 : renvoie le nom du répertoire uniquement.
+Cet attribut permet de savoir si un fichier ou un répertoire existe, ou bien de déterminer les fichiers et dossiers présents dans un répertoire spécifique.
+Pour savoir si un fichier existe, saisissez son chemin complet et son nom.
+Si le nom du fichier ou du répertoire n'existe pas, la fonction Dir renvoie une chaîne de longueur zéro ( &quot; &quot; ).
+Pour générer la liste complète des fichiers existant dans un répertoire spécifique, procédez comme suit :
+La première fois que vous appelez la fonction Dir, indiquez le chemin de recherche complet des fichiers, par exemple &quot; D:\Files\*.sxw &quot; .
+Si le chemin est correct et que la recherche trouve au moins un fichier, la fonction Dir renvoie le nom du premier fichier correspondant au chemin.
+Pour obtenir les autres noms de fichiers correspondant au chemin, appelez à nouveau la fonction Dir, mais sans argument.
+Pour que la fonction renvoie uniquement des répertoires, utilisez le paramètre &quot; attribut &quot; .
+La même règle s'applique pour déterminer le nom d'un volume (partition de disque dur, par exemple)
+Exemple :
+Sub ExampleDir
+REM Affiche tous les fichiers et répertoires
+Dim sPath As String
+Dim sDir as String, sValue as String
+sDir= &quot; Répertoires : &quot;
+sPath = CurDir
+sValue = Dir$(sPath + getPathSeparator + &quot; * &quot; ,16)
+Do
+If sValue < > &quot; . &quot; and sValue < > &quot; .. &quot; Then
+if (GetAttr( sPath + getPathSeparator + sValue) AND 16) > 0 then
+REM Obtenir les répertoires
+sDir = sDir & chr(13) & sValue
+End If
+End If
+sValue = Dir$
+Loop Until sValue = &quot; &quot;
+MsgBox sDir,0,sPath
+End sub

@@ -1,0 +1,35 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# iso639_3:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+include() 문은 지정한 파일을 읽고 실행한다.
+If "URL fopen wrappers" are enabled in PHP (which they are in the default configuration), you can specify the file to be include() ed using an URL instead of a local pathname. See Remote files and fopen() for more information.
+include() 되거나 require() 되어 읽혀지는 파일은 포함된 파일의 처음에 PHP모드에서 빠져나와 HTML모드로 들어가고, 마지막에 PHP모드로 복귀한다. 따라서 포함될 파일의 PHP 코드는 적절한 PHP 시작, 종료 택 에 둘러싸여 있어야 한다.
+해당 파일을 읽어들이는 동작은 실행중 include() 문을 만날 때 마다 일어난다. 따라서 include() 문을 루프 구조 안에 두어 매번 다른 파일을 읽어 들이도록 할 수 있다.
+include() 는 이 문장을 만날 때 마다 매번 새로 읽어들이고 실행된다는 점에서 require() 와 다르다. 반면에 require()문은 지정된 파일의 내용이 실행되는가에 관계없이 (예를들어 if 문 안에 들어있고 상태가 거짓인 경우에도), 이 문장을 처음 만났을 때 지정된 파일로 대체된다.
+include() 는 특별한 구조이므로, 만약 이것이 조전절 안에 놓여있다면 반드시 {}(statement block)으로 둘러싸야 한다.
+PHP3, PHP4 모두 include() 된 파일 내에서, 이 파일내의 수행을 종료하고, 이 파일을 부른 스크립트로 복귀하기 위해 return 문을 사용할 수 있다. 약간 다른점이 있기는하다. 우선, PHP3에서는 해당 블록이 함수의 블록이 아닌한 return 문이 블록안에 올 수 없다. (함수의 블록 안에 있는 경우는 해당 함수에서 return 하는 것이지 현재 파일에서 return 하는 것은 아니다.) 반드시 Global scope에 위치해야 한다. 그러나, PHP4에서는 이 제한이 없다. 또한 PHP4에서는 include() 파일의 return 시에 리턴값을 사용할 수 있다. include() 문을 일반 함수처럼 사용하여 반환값을 받을 수 있다. PHP3에서는 이렇게 사용하면 구문에러를 발생시킨다.
+예 12-1. include() in PHP 3 and PHP 4
+다음의 test.inc 라는 파일이 메인 파일과 동일한 디렉토리에 있다고 가정한다.:
+main.html 이라는 메인파일의 내용은 다음과 같다.:
+main.html 이 PHP3에서 불려지면, 이 파일은 두 번째 줄에서 "you can't take the value of an include() "라는 구문 에러를 발생시킨다. 그러나, PHP4에서는 다음돠 같은 결과를 출력한다.:
+이제 main.html 을 다음과 같은 내용으로 고쳐서 실행해 보자.:
+PHP4에서는 다음과 같은 결과가 출력된다.:
+위의 구문 에러는 test.inc 에서 return 문이 함수블록이외의 블록안에 사용되었기 때문에 생긴다. return 문을 블록 밖으로 꺼내면 다음과 같은 경과가 출력된다.:
+위의 '27'이 출력된 것은 PHP3가 include파일로 부터의 값의 반환을 지원하지 않기 때문이다.
+When a file is include() ed, the code it contains inherits the variable scope of the line on which the include() occurs. Any variables available at that line in the calling file will be available within the called file. If the include() occurs inside a function within the calling file, then all of the code contained in the called file will behave as though it had been defined inside that function.
+If the include() ed file is called via HTTP using the fopen wrappers, and if the target server interprets the target file as PHP code, variables may be passed to the include() ed file using an URL request string as used with HTTP GET. This is not strictly speaking the same thing as include() ing the file and having it inherit the parent file's variable scope; the script is actually being run on the remote server and the result is then being included into the local script.
+See also require(), require_once(), include_once(), readfile(), and virtual().

@@ -1,0 +1,56 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+When exchanging data from your own extensions with PHP scripts, one of the most important issues is the creation of variables.
+This section shows you how to deal with the variable types that PHP supports.
+To create new variables that can be seen "from the outside" by the executing script, you need to allocate a new zval container, fill this container with meaningful values, and then introduce it to Zend's internal symbol table.
+This basic process is common to all variable creations:
+zval *new_variable; / * allocate and initialize new container * / MAKE_STD_ZVAL(new_variable); / * set type and variable contents here, see the following sections * / / * introduce this variable by the name "new_variable_name "into the symbol table * / ZEND_SET_SYMBOL(EG(active_symbol_table), "new_variable_name", new_variable); / * the variable is now accessible to the script by using $new_variable_name * /
+The macro MAKE_STD_ZVAL allocates a new zval container using ALLOC_ZVAL and initializes it using INIT_ZVAL.
+As implemented in Zend at the time of this writing, initializing means setting the reference count to 1 and clearing the is_ref flag, but this process could be extended later - this is why it 's a good idea to keep using MAKE_STD_ZVAL instead of only using ALLOC_ZVAL.
+If you want to optimize for speed (and you don't have to explicitly initialize the zval container here), you can use ALLOC_ZVAL, but this isn't recommended because it doesn't ensure data integrity.
+ZEND_SET_SYMBOL takes care of introducing the new variable to Zend 's symbol table.
+This macro checks whether the value already exists in the symbol table and converts the new symbol to a reference if so (with automatic deallocation of the old zval container).
+This is the preferred method if speed is not a crucial issue and you 'd like to keep memory usage low.
+Note that ZEND_SET_SYMBOL makes use of the Zend executor globals via the macro EG.
+By specifying EG( active_symbol_table), you get access to the currently active symbol table, dealing with the active, local scope.
+The local scope may differ depending on whether the function was invoked from within a function.
+If you need to optimize for speed and don' t care about optimal memory usage, you can omit the check for an existing variable with the same value and instead force insertion into the symbol table by using zend_hash_update():
+zval *new_variable; / * allocate and initialize new container * / MAKE_STD_ZVAL(new_variable); / * set type and variable contents here, see the following sections * / / * introduce this variable by the name "new_variable_name "into the symbol table * / zend_hash_update (EG(active_symbol_table), "new_variable_name", strlen("new_variable_name") + 1, new_variable, sizeof(zval *), NULL);
+The variables generated with the snippet above will always be of local scope, so they reside in the context in which the function has been called.
+To create new variables in the global scope, use the same method but refer to another symbol table:
+zval *new_variable; / / allocate and initialize new container MAKE_STD_ZVAL(new_variable); / / / / set type and variable contents here / / / / introduce this variable by the name "new_variable_name "into the global symbol table ZEND_SET_SYMBOL (EG(symbol_table), "new_variable_name", new_variable);
+Note:
+The active_symbol_table variable is a pointer, but symbol_table is not.
+This is why you have to use EG( active_symbol_table) and EG(symbol_table) as parameters to ZEND_SET_SYMBOL - it requires a pointer.
+Similarly, to get a more efficient version, you can hardcode the symbol table update:
+zval *new_variable; / / allocate and initialize new container MAKE_STD_ZVAL(new_variable); / / / / set type and variable contents here / / / / introduce this variable by the name "new_variable_name "into the global symbol table zend_hash_update (EG(symbol_table), "new_variable_name", strlen("new_variable_name") + 1, new_variable, sizeof(zval *), NULL);
+Note:
+You can see that the global variable is actually not accessible from within the function.
+This is because it' s not imported into the local scope using global $global_variable; in the PHP source.
+Example 33-1.
+Creating variables with different scopes.
+ZEND_FUNCTION( variable_creation) {zval *new_var1, *new_var2; MAKE_STD_ZVAL(new_var1); MAKE_STD_ZVAL(new_var2); ZVAL_LONG(new_var1, 10); ZVAL_LONG(new_var2, 5); ZEND_SET_SYMBOL(EG(active_symbol_table), "local_variable", new_var1); ZEND_SET_SYMBOL (EG(symbol_table), "global_variable", new_var2); RETURN_NULL();}
+Prev
+Home
+Next
+Assuring Write Safety for Other Parameters
+Up
+Longs (Integers)

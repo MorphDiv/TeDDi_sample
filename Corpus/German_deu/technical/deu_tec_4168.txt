@@ -1,0 +1,41 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+Rückgabewerte: ein SESAM "result identifier" oder FALSE im Fehlerfall.
+Von anderen Funktionen wird "result_id" für Abfrage-Ergebnisse verwendet.
+sesam_query() schickt eine Abfrage an die aktuelle Datenbank auf dem Server.
+Sie kann sowohl "immediate" SQL-Anweisungen als auch "select type "Abfragen ausführen.
+Bei der Ausführung einer "immediate" Anweisung ist kein Cursor aktiv und bei jedem folgenden sesam_fetch_row() oder sesam_fetch_result() call will return an empty Aufruf wird ein leeres Ergebnis (zero columns, indicating end-of-result) zurückgeliefert.
+Für "select type" Anweisungen wird ein Ergebnis-Deskriptor und ein Cursor (scrollable oder sequential, abhängig vom optionalen bool scrollable -Parameter) zugewiesen.
+Wenn scrollable nicht angegeben wird, ist der Cursor sequentiell.
+Bei der Verwendung von "scrollable" Cursors kann der Cursor im Ausgabesatz beliebig positioniert werden.
+Für jede "scrollable" Abfrage gibt es globale Standardwerte für den "scrolling"-Typ (Initial-Wert:
+SESAM_SEEK_NEXT) und den scrolling offset, der entweder einmal durch sesam_seek_row() oder bei jedem Lesen einer Zeile mit sesam_fetch_row().
+Für "immediate" Befehle wird die Anzahl der betroffenen Zeilen für Abfragen von der Funktion sesam_affected_rows() gesichert.
+Siehe auch: sesam_fetch_row() und sesam_fetch_result().
+Beispiel 1.
+Zeige alle Zeilen der Tabelle "Telefon" als HTML-Tabelle
+?php if (!sesam_connect("phonedb", "demo", "otto")) die("cannot connect"); $result = sesam_query("select * from phone"); if (!$result) {$err = sesam_diagnostic(); die($err["errmsg"]);} echo "TABLE BORDER \n"; / / Add title header with column names above the result: if ($cols = sesam_field_array($result)) {echo" TR TH COLSPAN=".$cols["count"]. "Result: / TH / TR \n"; echo" TR \n"; for ($col = 0; $col $cols["count"]; ++$col) {$colattr = $cols[$col]; / * Span the table head over SESAM's "Multiple Fields": * / if ($colattr["count"] 1) {echo "TH COLSPAN=".$colattr["count"]." ".$colattr["name"]. "(1. .".$colattr["count"] .") / TH \n"; $col += $colattr["count"] - 1;} else echo "TH". $colattr["name"]. "/ TH \n";} echo" / TR \n";} do {/ / Fetch the result in chunks of 100 rows max. $ok = sesam_fetch_result($result,100); for ($row=0; $row $ok["rows"]; ++$row) {echo "TR \n"; for ($col = 0; $col $ok["cols"]; ++$col) {if (isset($ok[$col][$row])) echo" TD ". $ok[$col][$row]." / TD \n"; else echo "TD -empty - / TD \n";} echo" / TR \n";}} while ($ok["truncated"]); / / while there may be more data echo "/ TABLE \n"; / / free result id sesam_free_result($result);?
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben

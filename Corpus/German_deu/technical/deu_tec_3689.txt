@@ -1,0 +1,52 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+mysql_affected_rows() liefert die Anzahl betroffener Datensätze durch die letzte INSERT, UPDATE oder DELETE Anfrage an den Server, die mit der angegebenen Verbindungs-Kennung mysql_affected_rows() liefert die Anzahl betroffener Datensätze durch die letzte INSERT, UPDATE oder DELETE Anfrage an den Server, die mit der angegebenen Verbindungs-Kennung assoziiert wird.
+Wird die Verbindungskennung nicht angegeben, wird die letzte durch mysql_connect() geöffnete Verbindung angenommen.
+Anmerkung:
+Falls Sie Transaktionen verwenden, müssen Sie mysql_affected_rows() unmittelbar nach Ihrer INSERT, UPDATE, oder DELETE Anfrage aufrufen, nicht nach dem Commit.
+War die letzte Anfrage ein DELETE-Anweisung ohne WHERE Bedingung, wurden alle Datensätze aus der Tabelle gelöscht.
+Diese Funktion wird aber trotzdem Null (0) zurückliefern.
+Anmerkung:
+Benutzen Sie UPDATE wird MySQL keine Spalten aktualisieren, bei denen der neue dem alten Wert entpspricht.
+Das kann dazu führen, dass mysql_affected_rows() nicht die tatsächliche Anzahl der betroffenen Zeilen liefert, sondern nur die, die wörtlich durch die Anfrage betroffen sind.
+Diese Funktion arbeitet nicht in Verbindung mit SELECT-Anfragen, sondern nur bei Anweisungen, die Datensätze verändern.
+Um die Anzahl der gelieferten Datensätze einer SELECT-Anfrage zu erhalten, benutzen Sie die Funktion mysql_num_rows().
+Falls die letze Anfrage fehlschlägt, liefert diese Funktion -1 zurück.
+Beispiel 1.
+
+?php / * Verbindung zur Datenabank * / mysql_pconnect( "localhost", "mysql_user", "mysql_password") or die ("Keine Verbindung möglich: ":. mysql_error()); / * Das sollte die korrekte Anzahl gelöschter Datensätze liefern * / mysql_query("DELETE FROM mytable WHERE id 10"); printf ("Datensätze gelöscht: %d\n", mysql_affected_rows()); / * Ohne where Bedingung in einer Delete-Anweisung sollte 0 zurückgegeben werden * / mysql_query("DELETE FROM mytable"); printf ("Datensätze gelöscht: %d\n", mysql_affected_rows());?
+Das obige Beispiel gibt folgendes aus:
+Datensätze gelöscht:
+10 Datensätze gelöscht:
+
+Beispiel 2.
+
+?php / * Verbindung zur Datenabank * / mysql_pconnect( "localhost", "mysql_user", "mysql_password") or die ("Keine Verbindung möglich: ":. mysql_error()); / * Update von Datensätzen * / mysql_query("UPDATE mytable SET used=1 WHERE id 10"); printf ("Veränderte Datensätze: %d\n", mysql_affected_rows()); mysql_query("COMMIT");?
+Das obige Beispiel gibt folgendes aus:
+Veränderte Datensätze:
+
+Siehe auch: mysql_num_rows(), mysql_info().
+Zurück
+Zum Anfang
+Nach vorne
+MySQL Funktionen
+Nach oben

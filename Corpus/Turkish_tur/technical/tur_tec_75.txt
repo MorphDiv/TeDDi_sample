@@ -1,0 +1,78 @@
+# language_name_wals:	Turkish
+# language_name_glotto:	Turkish
+# iso639_3:	tur
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/tr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Kullanım Kılavuzu
+Önceki
+Sonraki
+Bölüm 19.
+Dosya yükleme yönetimi
+POST metodu ile dosya yükleme
+PHP, RFC-1867 uyumlu tüm tarayıcılardan (Netscape Navigator 3 ve daha üst sürümler, Mücrosoft'un yayınladığı bir yama ile Microsoft Internet Explorer 3, veya diğer üst sürümleri) dosya yüklemek için yeteneklidir.
+Bu özellik kullanıcıların binary veya metinsel dosya yükleyebilmelerini sağlamaktadır.
+PHP 'nin yetkilendirme ve dosya işleme özellikleri ile, dosyaları kimin yükleybileceği ve yüklendikten sonra ne yapılacağı konusunda tam kontrol sahibisinizdir.
+PHP, Netscape Composer ve W3C 'nin Amaya üyeleri tarafından kullanılan PUT yöntemi ile de dosya yükleme işlemini destekler.
+PUT Yöntemi hakkında detaylı bilgi için tıklayınız.
+Dosya yükleme ekranı, aşağıdaki gibi özel bir form hazırlamakla oluşturulur:
+Örnek 19-1.
+Dosya Yükleme Formu
+form enctype=" multipart / form-data "action="_URL_" method="post "input type="hidden" name="MAX_FILE_SIZE "value="1000" Bu dosyay inodot; gönder: input name="userfile "type="file" input type="submit "value="Gönder" / form
+Uyarý
+MAX_FILE_SIZE sadece tarayıcıya, bu boyutu aşmamasını söyler.
+Bunu aşmak çok kolaydır.
+Bu yüzden buna pek fazla güvenmeyin.
+PHP 'nin ayarlarındaki maximum-size ise aşılamaz.
+PHP' de, php.ini içindeki register_globals 'ın on olduğu varsayılırsa, başarılı bir dosya yükleme anında aşağıdaki değişkenler tanımlanır.
+Eğer track_vars on ise, bu değişkenler PHP 'nin $HTTP_POST_VARS dizinleri olarak da alınabilir.
+Aşağıdaki değişken adları, yukarıdaki örnekteki 'userfile' alan adının kullanıldığı varsayılarak verilmiştir:
+$userfile - Dosyanın, sunucuda saklanan geçici adı.
+$userfile_name - Dosyayı gönderen kişinin bilgisayarındaki dosyanın orijinal adı veya sistem yolu.
+$userfile_size - Gönderilen dosyanın byte cinsinden boyutu.
+$userfile_type - Tarayıcının bu bilgiyi vermesine bağlı olarak, dosyanın mime tipi.
+Örneğin "image / gif".
+PHP 4 'de durum bir parça farklı.
+Yüklenen dosya bilgileri $HTTP_POST_FILES Yüklenen dosya bilgileri $HTTP_POST_FILES dizinlerine yüklenmiştir.
+Bu PHP 3 'de olduğu gibi, eğer track_vars on olarak tanımlanmış ise geçerlidir.
+Fakat PHP 4.0.2 ve üst sürümlerinde track_vars on olarak tanımlı gelir.
+$HTTP_POST_FILES 'ın içeriği aşağıdaki gibidir.
+Bu örnekte de, formdaki dosya yükleme alanının adının "userfile" olduğu varsayılmıştır:
+Dosyanın, dosyayı gönderenin bilgisayarındaki orijinal adı.
+Tarayıcının bu bilgiyi vermesine bağlı olarak, dosyanın mime tipi.
+Örneğin "image / gif".
+Gönderilen dosyanın byte cinsinden boyutu.
+Dosyanın, sunucuda saklanan geçici adı.
+php.ini içindeki upload_tmp_dir php.ini içindeki upload_tmp_dir tanımlamasına farklı bir yer tanımlanmadıkça, dosyalar, sunucuda tanımlı olan geçici klasör de saklanır.
+Sunucunun tanımlı geçici klasörü, TMPDIR Sunucunun tanımlı geçici klasörü, TMPDIR değişkeni tanımlanarak değiştirilebilir.
+Bu tanımlamayı, PHP dosyası içinde putenv() fonksiyonunu kullanarak tanımlamak geçerli olmayacaktır.
+Bu değişkeni, gönderilen dosya üzerindeki başka işlemlerin çalışırlığından emin olmak içinde kullanabilirsiniz.
+Örnek 19-2.
+Dosya Yükleme Kontrolü
+Aşağıdaki örnek, PHP 3' ün, 3.0.16'den ve PHP 4'ün 4.0.2 'den yüksek sürümleri içindir.
+Fonksiyon özellikleri için is_uploaded_file() ve move_uploaded_file() sayfalarına bakınız.
+?php if (is_uploaded_file($userfile)) {copy($userfile, "/ place / to / put / uploaded / file");} else {echo "Possible file upload attack: filename '$userfile' .";} / * ...or... * / move_uploaded_file($userfile," / place / to / put / uploaded / file");?
+PHP 'nin daha önceki sürümleri için, aşağıdaki gibi bir seye ihtiyacınız var.
+Not:
+Bu örnek PHP' nin 4.0.2 'den sonraki sürümlerinde çalışmaz.
+?php / * Userland test for uploaded file. * / function is_uploaded_file( $filename) {if (!$tmp_file = get_cfg_var('upload_tmp_dir')) {$tmp_file = dirname(tempnam('', ''));} $tmp_file .= '/'. basename($filename); / * User might have trailing slash in php.ini... * / return (ereg_replace(' / +', '/', $tmp_file) == $filename);} if (is_uploaded_file($userfile)) {copy($userfile, "/ place / to / put / uploaded / file");} else {echo "Possible file upload attack: filename '$userfile' .";}?
+Gönderilen dosyayı alan PHP dosyanız, gönderilen dosyanın ne yapılacağına karar vermek için programlanmalıdır.
+Örneğin, dosya boyutu çok büyük veya çok küçük olan dosyaları kabul etmemek için $file_size değişkenini kullanabilirsiniz. $file_type değişkenini, belirlediğiniz kriterlerdeki dosya tipine uymayan dosyaları kabul etmemek için kullanabilirsiniz. İstemediğiniz bu dosyaları, geçici klasörden silebilir veya farklı bir klasöre taşıyabilirsiniz.
+İşlem sonunda, dosya taşınmadı veya adı değiştirilmedi ise, geçici klasörden silinir.
+Önceki
+Baþlangýç
+Sonraki
+Çerezler
+Yukarý
+Genel Tehlikeler

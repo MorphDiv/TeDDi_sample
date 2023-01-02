@@ -1,0 +1,65 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Chapitre 12.
+Les structures de contrôle
+Suivant
+La fonction include() inclus et évalue le fichier spécifié en argument.
+Il est important de noter que lorsqu'un fichier est include() ou require(), les erreurs d'analyse apparaîtront en HTML tout au début du fichier, et l 'analyse du fichier parent ne sera pas interrompue.
+Pour cette raison, le code qui est dans le fichier doit être placé entre les balises habituelles de PHP.
+Cela se produit à chaque fois que la fonction include() Cela se produit à chaque fois que la fonction include() est rencontrée.
+Donc, vous pouvez utiliser la fonction include() dans une boucle pour inclure un nombre infini de fois un fichier, ou même des fichiers différents.
+?php $files = array ('premier.inc', 'second.inc', 'troisieme.inc'); for ($i = 0; $i count($files); $i++) {include $files[$i];}?
+include() diffère de require() car le fichier inclus est ré-évaluée à chaque fois que la commande est exécutée, tandis que require() est remplacée par le fichier cible lors de la première exécution, que son contenu soit utilisé ou non.
+De plus, cela se fait même s'il est placé dans une structure conditionnelle, comme dans un if).
+Parceque la fonction include() nécessite une construction particulière, vous devez l 'inclure dans un bloc si elle est incluse dans une structure conditionnelle.
+?php / * Ceci est faux, et ne fonctionnera pas comme on l'attend. * / if ($condition) include($file); else include($other); / * Ceci est CORRECT. * / if ($condition) {include($file);} else {include($other);}?
+En PHP 3, il est possible d 'exécuter une commande return depuis un fichier inclus, tant que cette commande intervient au niveau global du fichier inclus.
+Elle ne doit intervenir dans aucun bloc (entre accolade {}).
+En PHP 4, cette possibilité a été supprimée.
+Cependant, PHP 4 vous autorise à retourner des valeurs d 'un fichier inclus.
+Vous pouvez traiter include() Vous pouvez traiter include() comme une fonction normale, qui retourne une valeur.
+Mais cela génère une erreur d 'analyse en PHP 3.
+Exemple 12-1. include() en PHP 3 et PHP 4
+On suppose que le fichier test.inc existe, et est placé dans le même dossier que le fichier principal:
+?php echo "Avant le retour br \n"; if (1) {return 27;} echo "Apr egrave;s le retour br \n";?
+On suppose que le fichier main.html contient ceci:
+?php $retval = include ('test.inc'); echo "Fichier inclus: '$retval 'br \n";?
+Lorsque main.html est appelé en PHP 3, il va générer une erreur d'analyse (parse error) à la ligne 2; vous ne pouvez pas vous attendre à un retour sur une fonction include() en PHP 3.
+En PHP 4, cependant,le résultat sera:
+Avant le retour Ficher inclus: '27'
+Supposons maintenant que main.html a été modifié et contient maintenant le code suivant:
+?php include ('test.inc'); echo "Retour dans le main.html br \n";?
+En PHP 4, l 'affichage sera:
+Avant le retour Retour dans le main.html
+Avant le retour 27Retour dans le main.html Parse error: parse error in / home / torben / public_html / phptest / main.html on line 5
+L'erreur d'analyse ci-dessus est le résultat du fait que la commande return est dans un bloc qui n 'est pas une fonction, dans test.inc.
+Lorsque le return est sorti du bloc, l 'affichage devient:
+Avant le retour 27Retour dans le main.html
+Le '27' est du au fait que PHP 3 ne supporte pas le return dans ces fichiers.
+Il est important de noter que lorsqu'un fichier est include() ou require(), les erreurs d'analyse apparaîtront en HTML tout au début du fichier, et l 'analyse du fichier parent ne sera pas interrompue.
+Pour cette raison, le code qui est dans le fichier doit être placé entre les balises habituelles de PHP.
+?php include ("file.inc?varone=1 amp;vartwo=2"); / * ne fonctionne pas. * / $varone = 1; $vartwo = 2; include ("file.inc"); / * $varone et $vartwo sont accessibles dans file.inc * /?
+Ne vous laissez pas abuser par le fait que vous pouvez requérir ou inclure des fichiers via HTTP en utilisant la fonctionnalité de gestion des fichiers distants ce qui est au dessus reste vrai.
+Voir aussi readfile(), require() et virtual().
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

@@ -1,0 +1,35 @@
+# language_name_wals:	Hebrew (Modern)
+# language_name_glotto:	Modern Hebrew
+# iso639_3:	heb
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hebr
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/he.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+מדריך PHP
+קודם
+פרק 19. טיפול בהעלאת קבצים
+הבא
+PHP מספקת תמיכה בשיטת HTTP PUT שבה משתמשים netscape composer ו-W3C Amaya. בקשת PUT פשוטות יותר מהעלאת קבצים, והן נראות בערך ככה:
+
+בדרך כלל זה יציין שהלקוח רוצה לשמור את התוכן שבא אחרי, כמו: / path / filename.html בעץ הרשת שלך. מובן מאליו שזה לא רעיון טוב עבור Apache או PHP לאשר לכולם באופן אוטומטי לכתוב על קבצים קיימים בעץ הרשת שלך. כדי לטפל בבקשות כאלה, צריך להגיד לשרת שברצונך להפנות בקשות כאלה לסקריפט PHP. על Apache הדבר נעשה על ידי ספריית Script. אפשר לשים את זה כמעט בכל מקום בקובץ הקונפיגורציה של Apache. מקום נפוץ הוא בתוך הבלוק Directory או אולי בתוך הבלוק Virtualhost. שורה כזו תעשה את הטריק:
+
+זה אומר ל-Apache לשלוח את כל בקשות PUT ל-URI שתואם את המיקום בו שמתם את השורה שמציינת את מיקום הסקריפט put.php. זה בהנחה, כמובן, ש-PHP מאפשרת סיומות .php וש-PHP פעילה.
+בתוך הקובץ put.php צריך לכתוב משהו כזה:
+
+זה יעתיק את הקובץ למיקום המבוקש על ידי הלקוח. בטח יתעורר בך הרצון לבצע כמה בדיקות ו / או לאמת את המשתמש לפני ביצוע העתקת הקובץ. הטריק היחיד כאן הוא שכש-PHP רואה בבקשה בשיטת PUT, היא מאחסנת את הקובץ שהועלה בקובץ זמני ממש כמו אלה שטופלו מלבד שיטת POST. כשהבקשה מסתיימת, הקובץ הזמני הזה נמחק. לכן, סקריפט ה-PHP שמטפל ב-PUT צריך להעתיק את הקובץ למיקום כלשהו. שם הקובץ של הקובץ הזמני נמצא בתוך המשתנה $PHP_PUT_FILENAME, וניתן לראות את שם הקובץ המוצע בתוך $REQUEST_URI (יכול להשתנות על שרתים שאינם Apache). שם הקובץ המוצע הוא שם שמגדיר הלקוח. הלקוח שולח בקשה ולא פקודה. לכן אפשר, לדוגמה, להעתיק את כל הקבצים שהועלו לספריית העלאות מיוחדת.
+קודם
+ראשי
+הבא
+העלאת קבצים מרובים
+למעלה
+שימוש בקבצים מרוחקים

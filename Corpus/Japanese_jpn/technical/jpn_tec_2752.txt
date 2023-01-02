@@ -1,0 +1,37 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 4 = 4.2.0)
+関数 exif_read_data() はJPEGまたはTIFFイメージファ イルからEXIFヘッダを読みこみます。この関数は、キーがヘッダ名、値 がヘッダに関連するの値となる連想配列を返します。返すデータがない 場合、 FALSE が返されます。
+filename は読みこむファイル名です。これは、 URLとして使用することはできません。
+sections は、結果の配列を生成する際に含める カンマ区切りのセクションのリストです。
+arrays は、各セクションを配列とするかどうか を指定します。セクション FILE 、 COMPUTED 、 THUMBNAIL は、 常に配列となります。これは、これらのセクションに含まれる値の名前 が他のセクションと衝突するためです。
+thumbnail は、サムネイルのタグ付きのデータ だけでなく、サムネイル本体を読みこむかどうかを指定します。
+注意 Exifヘッダはデジタルカメラにより生成されたJPEG/TIFFイメージで使 用される傾向がありますが、残念なことに、各デジタルカメラメーカー は、個々のイメージに関するタグ付けの方法について異なった考えを持っ ており、特定のExifヘッダの存在を仮定することはできません。
+
+例 1 exif_read_data() の例
+最初のコールは、失敗します。これは、イメージがヘッダ情報を有していないためです。
+注意 イメージに何らかのIFDOデータが含まれている場合、COMPUTEDにはエン トリByteOrderMotorolaが含まれます。このエントリは、バイトオーダ がリトルインディアン(インテル)の場合に0、ビッグインディアン(モト ローラ)の場合に1となります。これは、PHP 4.3で追加されました。
+ExifヘッダにCopyrightが含まれる場合、これには2つの値が含まれる可 能性があります。これはExif 2.10の規約に沿っていないため、 COMPUTEDセクションは、エントリ Copyright.Photographer および Copyright.Editor をともに返しますが、 IFD0セクションには両方のエントリをNULL文字で分割した型式のバイト 配列が含まれます。さもなくば、(Exifのデフォルト処理に基づき)デー タ型式に誤りがあるとして最初のエントリのみを返します。 COMPUTEDには、エントリ Copyright も含まれます。 これは、元のcopyright文字列またはphotoおよびeditor copyrightのカ ンマ区切りのリストとなります。
+注意 UserCommentタグにはCopyrightタグと同様の問題があります。 このタグには2つの値を保存する可能性があり、この場合、使用される エンコーディングが最初に、値自体が2番目にきます。この場合、IFDセ クションにはエンコーディングまたはバイト配列のみが含まれます。 COMPUTEDセクションには、エントリ UserCommentEncoding と UserComment の両方を保存します。 エントリ UserComment はどちらの場合でも取得可 能です。このため、FD0セクションの値の識別に使用されます。
+ユーザコメントがUnicodeまたはJISエンコーディングを使用しており、 モジュールmbstringが利用できる場合、このエンコーディングはexifの 初期設定に基づき自動的に変更されます。この機能は、PHP 4.3で追加 されました。
+注意 Height と Width は、 getimagesize() と同じ方法 で計算されます。このため、これらの値はヘッダの一部として返す際に 使用するべきではありません。また、htmlは通常の HTML で使用されるheight/widthテキスト文字列です。
+注意 PHP 4.3以降、この関数は配列を含む埋めこまれた IFD データを全て読むことが可能となっています。 また、埋めこみのサムネイルの大きさもサブ配列 THUMBNAIL に返されます。 関数 exif_read_data() は TIFF 型式のサムネイルを返すことが可能です。 最後に返り値の(メモリリミットに達するまでではない)最大長はもはや ないことを追記しておきます。
+注意 この関数は、 --enable-exif を指 定してPHP 4をコンパイルした場合のみ使用可能です。この機能と動作 は、PHP 4.2で変更されています。これより以前のバージョンは非常に 不安定です。
+PHP 4.3以降、 --enable-mbstring を指定してPHP 4がコ ンパイルされている場合、ユーザコメントのエンコーディングは自動 的に変換されます。
+この関数は、GDイメージライブラリを必要としません。
+exif_thumbnail() および getimagesize() も参照ください。

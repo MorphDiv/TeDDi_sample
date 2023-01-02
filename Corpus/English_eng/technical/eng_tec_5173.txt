@@ -1,0 +1,68 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 4 = 4.0.1)
+yaz_search() prepares for a search on the connection given by id.
+The type represents the query type - only "rpn" is supported now in which case the third argument specifies a Type-1 query in prefix query notation.
+Like yaz_connect() this function is non-blocking and only prepares for a search to be executed later when yaz_wait() is called.
+The RPN query is a textual represenation of the Type-1 query as defined by the Z39.50 standard.
+However, in the text representation as used by YAZ a prefix notation is used, that is the operater precedes the operands.
+The query string is a sequence of tokens where white space is ignored is ignored unless surrounded by double quotes.
+Tokens beginning with an at-character (@) are considered operators, otherwise they are treated as search terms.
+Table 1.
+RPN Operators
+Construct
+Description
+@and query1 query2
+intersection of query1 and query2
+@or query1 query2
+union of query1 and query2
+@not query1 query2
+query1 and not query2
+@set name
+result set reference
+@attrset set query
+specifies attribute-set for query.
+This construction is only allowed once - in the beginning of the whole query
+@attr [set] type=value query
+applies attribute to query.
+The type and value are integers specifying the attribute-type and attribute-value respectively.
+The set, if given, specifies the attribute-set.
+Example 1.
+Query Examples
+You can search for simple terms, like this
+computer
+The Query
+"knuth donald"
+This query applies two attributes for the same phrase.
+@attr 1=1003 @attr 4=1 "knuth donald"
+This query
+@and @or a b @not @or c d e
+Another, more complex, one:
+@attrset gils @and @attr 1=4 art @attr 1=2000 company
+You can find information about attributes at the Z39.50 Maintenance Agency site.
+Note:
+If you would like to use a more friendly notation, use the CCL parser - functions yaz_ccl_conf() and yaz_ccl_parse().
+Prev
+Home
+Next
+yaz_schema
+Up
+yaz_set_option

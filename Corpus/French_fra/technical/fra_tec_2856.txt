@@ -1,0 +1,88 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+date() retourne une date sous forme d 'une chaîne, au format donné par la chaîne format.
+La date est fournie par le paramètre timestamp, sous la forme d 'un timestamp.
+Par défaut, la date courante est utilisée.
+
+L'intervalle de validité d'un timestamp va généralement du Vendredi 13 Décembre 1901 20:45:54 GMT au Mardi 19 Janvier 2038 03:14:07 GMT. (Ces dates correspondent aux valeurs minimales et maximales des entiers 32 bits non-signés).
+Pour générer un timestamp à partir d'une représentation de date, pour pouvez utiliser la fonction strtotime().
+De plus, certaines bases de données disposent de fonctions pour convertir leurs propres formats de date en timestamps (comme par exemple, MySQL et sa fonction UNIX_TIMESTAMP()).
+Les caractères suivants sont utilisés pour spécifier le format:
+a - "am" (matin) ou "pm "(après-midi)
+A - "AM" (matin) ou "PM "(après-midi)
+B - Heure Internet Swatch
+d - Jour du mois, sur deux chiffres (éventuellement avec un zéro): "01 "à "31"
+D - Jour de la semaine, en trois lettres (et en anglais): par exemple "Fri "(pour Vendredi)
+F - Mois, textuel, version longue; en anglais, i.e. "January "(pour Janvier)
+g - Heure, au format 12h, sans les zéros initiaux i.e. "1" à "12 "
+G - Heure, au format 24h, sans les zéros initiaux i.e. "0" à "23 "
+h - Heure, au format 12h, "01" à "12 "
+H - heure, au format 24h, "00" à "23 "
+i - Minutes; "00 "à "59"
+I (i majuscule) - "1 "si l'heure d'été est activée, "0" si l'heure d 'hiver.
+j - Jour du mois sans les zéros initiaux: "1" à "31 "
+l - ('L 'minuscule) - Jour de la semaine, textuel, version longue; en anglais, i.e. "Friday "(pour Vendredi)
+L - Booléen pour savoir si l'année est bissextile ("1") ou pas ("0")
+m - Mois; i.e. "01 "à "12"
+M - Mois, en trois lettres (et en anglais): par exemple "Apr "(pour Avril)
+n - Mois sans les zéros initiaux; i.e. "1 "à "12"
+O - Différence d'heures avec l'heure de Greenwich, exprimée en heures; i.e. "+0200 "
+r - Format de date RFC 822; i.e. "Thu, 21 Dec 2000 16:01:07 +0200 "(ajouté en PHP 4.0.4)
+s - Secondes; i.e. "00 "à "59"
+S - Suffixe ordinal d'un nombre, en anglais, sur deux lettres: i.e. "th", "nd "
+t - Nombre de jours dans le mois donné, i.e. "28" à "31 "
+T - Fuseau horaire de la machine; i.e. "MET "
+U - Secondes depuis une époque
+w - Jour de la semaine, numérique, i.e. "0" (Dimanche) to "6 "(Samedi)
+W - Numéro de semaine dans l'année ISO-8601: les semaines commencent le lundi (ajouté en PHP 4.1.0)
+Y - Année, 4 chiffres; i.e. "1999 "
+y - Année, 2 chiffres; i.e. "99 "
+z - Jour de l'année; i.e. "0 "à "365"
+Z - Décalage horaire en secondes (i.e. "-43200 "à "43200")
+Exemple 1.
+Exemple avec date()
+?php echo (date("l dS of F Y h:i:s A")); echo ("Le 14 Juillet 2002 tombe un ". date("l", mktime(0,0,0,7,14,2002)));?
+Vous pouvez faire afficher un caractère spécial dans la chaîne de format en le protégeant par un anti-slash.
+Si le caractère est lui-même une séquence incluant un anti-slash, vous devrez protéger aussi l 'anti-slash.
+Exemple 2.
+Protection des caractères avec date()
+?php echo date( "l \ \h\e jS"); / / affiche 'Saturday the 8th '/ / repr eacute ;sente une tabulation?
+Il est possible d'utiliser date() et mktime() ensemble pour générer des dates dans le futur ou dans le passé.
+Exemple 3.
+Exemples avec date() et mktime()
+?php $demain = mktime( 0,0,0,date("m") ,date("d") + 1,date("Y")); $le_mois_dernier = mktime(0,0,0,date("m")-1,date("d") ,date("Y")); $l_an_prochain = mktime(0,0,0,date("m"), date("d") ,date("Y") + 1);?
+
+Cette méthode est plus sûre que simplement ajouter ou retrancher le nombre de secondes dans une journée ou un mois à un timestamp, à cause des heures d'hivers et d 'été.
+Voici maintenant quelques exemples de formatage avec date().
+Notez que vous devriez échapper tous les autres caractères, car s 'ils ont une signification spéciale, ils risquent de produire des effets secondaires indésirables.
+Notez aussi que les versions futures de PHP peuvent attribuer une signification à des lettres qui sont actuellement inertes.
+Lorsque vous échappez les caractères, pensez à utiiser des guillemets simples, pour que les séquences \n ne deviennent pas des nouvelles lignes.
+Exemple 4.
+Formatage avec date()
+?php / * Aujourd'hui, le 12 Mars 2001, 10:16:18 pm * / $aujourdhui = date("F j, Y, g:i a"); / / March 12, 2001, 10:16 pm $aujourdhui = date("m.d.y"); / / 03.12.01 $aujourdhui = date("j, m, Y"); / / 12, 3, 2001 $aujourdhui = date("Ymd"); / / 20010312 $aujourdhui = date('h-i-s, j-m-y, it is w Day z '); / / 05-16-17, 12-03-01, 1631 1618 6 Monpm01 $aujourdhui = date('\C\'\e\s \ \l\e\ jS \j\o\u\r\ .'); / / C'est le 12th jour. $aujourdhui = date("D M j G:i:s T Y"); / / Mon Mar 12 15:16:08 MST 2001 $aujourdhui = date('H:m:s \m \e\s \ \l\e\ \m\o\i\s'); / / 17:03:18 m est le mois $aujourdhui = date("H:i:s"); / / 10:16:18 / / notation fran ccedil;aise $aujourdhui = date("d / m/y"); / / 12 / 03 / 01 $aujourdhui = date("d / m/Y"); / / 12 / 03 / 2001?
+Pour formater des dates dans d'autres langues, utilisez les fonctions setlocale() et strftime().
+Voir aussi getlastmod(), time(), strftime(), gmdate() et mktime().
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

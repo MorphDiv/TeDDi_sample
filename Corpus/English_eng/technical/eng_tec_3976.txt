@@ -1,0 +1,52 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3, PHP 4)
+mysql_query() sends a query to the currently active database on the server that's associated with the specified link identifier.
+If link_identifier isn 't specified, the last opened link is assumed.
+If no link is open, the function tries to establish a link as if mysql_connect() was called with no arguments, and use it.
+The optional result_mode parameter can be MYSQL_USE_RESULT and MYSQL_STORE_RESULT.
+It defaults to MYSQL_STORE_RESULT, so the result is buffered.
+See also mysql_unbuffered_query() for the counterpart of this behaviour.
+Note:
+The query string should not end with a semicolon.
+Only for SELECT,SHOW,EXPLAIN or DESCRIBE statements mysql_query() returns a resource identifier or FALSE if the query was not executed correctly.
+For other type of SQL statements, mysql_query() returns TRUE on success and FALSE on error.
+A non - FALSE return value means that the query was legal and could be executed by the server.
+It does not indicate anything about the number of rows affected or returned.
+It is perfectly possible for a query to succeed but affect no rows or return no rows.
+The following query is syntactically invalid, so mysql_query() fails and returns FALSE:
+Example 1. mysql_query()
+php $result = mysql_query( "SELECT * WHERE 1=1") or die("Invalid query: ". mysql_error());?
+The following query is semantically invalid if my_col is not a column in the table my_tbl, so mysql_query() fails and returns FALSE:
+Example 2. mysql_query()
+?php $result = mysql_query( "SELECT my_col FROM my_tbl") or die("Invalid query: ". mysql_error());?
+mysql_query() will also fail and return FALSE if you don't have permission to access the table(s) referenced by the query.
+Assuming the query succeeds, you can call mysql_num_rows() to find out how many rows were returned for a SELECT statment or mysql_affected_rows() to find out how many rows were affected by a DELETE, INSERT, REPLACE, or UPDATE statement.
+Only for SELECT,SHOW,DESCRIBE or EXPLAIN statements, mysql_query() returns a new result identifier that you can pass to mysql_fetch_array() and other functions dealing with result tables.
+When you are done with the result set, you can free the resources associated with it by calling mysql_free_result().
+Although, the memory will automatically be freed at the end of the script 's execution.
+See also: mysql_num_rows(), mysql_affected_rows(), mysql_unbuffered_query(), mysql_free_result(), mysql_fetch_array(), mysql_fetch_row(), mysql_fetch_assoc(), mysql_result(), mysql_select_db(), and mysql_connect().
+Prev
+Home
+Next
+mysql_ping
+Up
+mysql_real_escape_string

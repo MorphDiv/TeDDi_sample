@@ -1,0 +1,27 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+ユーザー関数を内部関数からコールするには、 call_user_function() 関数を 使用する必要があります。
+call_user_function() は成功時に SUCCESS、 関数を見つけられなかった場合に FAILURE を返します。 返り値を確認する必要があります! SUCCESS が返された場合、 retval pval 自体(または関数からの返り値として それを返す)を破棄する責任があります。 FAILURE が返された場合、retval の値は未定義であり、参照することは できません。
+ユーザー関数をコールする全ての内部関数は、再入可能(reentrant) である 必要があります 。 特に、このことは、グローバルまたは静的変数を使用するべきでは ないということを意味します。
+call_user_function() は次の 6個の引数をとります。
+これは、関数を参照できるハッシュテーブルです。
+これは、関数がコールされるオブジェクトへのポインタです。 グローバル関数がコールされた場合、このポインタは、 NULL で ある必要があります。 NULL でない (すなわち、オブジェクトを指している)場合、 function_table 引数は無視され、かわりにオブジェクトのハッシュから とられます。 オブジェクトは、コールした関数により修正可能な場合があります。 (関数は、$this によりアクセスすることが可能です。) 何らかの理由で、こうしたことを避けたい場合、 オブジェクトのコピーを代わりに送付します。
+コールする関数の名前。 function_name.str.val および function_name.str.len に適当な 値を設定した IS_STRING 型の pval である必要があります。 function_name は、call_user_function() により修正されます。 この時、function_name は、小文字に変換されます。 大文字・小文字を保存する必要がある場合、関数名のコピーを代わりに 送って送ってください。
+コールされた関数の返り値が保存された pval 構造体へのポインタ。 構造体は、事前に確保されたものである必要があります。 call_user_function() はそれ自体では リソースの確保を行いません。
+関数に渡されたパラメータの数
+関数の引数として渡される値へのポインタの配列、最初の引数は オフセット 0 にあり、2番目はオフセット 1 にあります。 配列は、pval へのポインタの配列です。 ポインタは、関数にそのまま送られます。 このことは、関数が引数を修正した場合、元の値が変更される(参照渡し) ことを意味します。 この動作が好ましくない場合、コピーを代わりに渡してください。

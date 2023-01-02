@@ -1,0 +1,47 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3 = 3.0.5, PHP 4)
+unserialize() takes a single serialized variable (see serialize()) and converts it back into a PHP value.
+The converted value is returned, and can be an integer, float, string, array or object.
+In case the passed string is not unserializeable, FALSE is returned.
+unserialize_callback_func directive:
+It' s possible to set a callback-function which will be called, if an undefined class should be instantiated during unserializing. (to prevent getting an incomplete object "__PHP_Incomplete_Class".) Use your php.ini, ini_set() or .htaccess It's possible to set a callback-function which will be called, if an undefined class should be instantiated during unserializing. (to prevent getting an incomplete object "__PHP_Incomplete_Class".) Use your php.ini, ini_set() or .htaccess to define'unserialize_callback_func '.
+Everytime an undefined class should be instantiated, it 'll be called.
+To disable this feature just empty this setting.
+Also note that the directive unserialize_callback_func directive became available in PHP 4.2.0.
+Note:
+The callback parameter was added in PHP 4.2.0
+If the variable being unserialized is an object, after successfully reconstructing the object PHP will automatically attempt to call the __wakeup() member function (if it exists).
+Example 1. unserialize_callback_func example
+?php $serialized_object=' O:1 :"a":1 :{s:5 :"value";s:3 :"100" ;}'; / / unserialize_callback_func directive available as of PHP 4.2.0 ini_set('unserialize_callback_func' ,'mycallback'); / / set your callback_function function mycallback($classname) {/ / just include a file containing your classdefinition / / you get $classname to figure out which classdefinition is required}?
+Note:
+In PHP 3, methods are not preserved when unserializing a serialized object.
+PHP 4 removes that limitation and restores both properties and methods.
+Please see the Serializing Objects section of Classes and Objects or more information.
+Example 2. unserialize() example
+?php / / Here, we use unserialize() to load session data to the / / $session_data array from the string selected from a database. / / This example complements the one described with serialize(). $conn = odbc_connect ("webdb", "php", "chicken"); $stmt = odbc_prepare ($conn, "SELECT data FROM sessions WHERE id = ?"); $sqldata = array ($PHP_AUTH_USER); if (!odbc_execute ($stmt, $sqldata) | | !odbc_fetch_into ($stmt, $tmp)) {/ / if the execute or fetch fails, initialize to empty array $session_data = array();} else {/ / we should now have the serialized data in $tmp[0]. $session_data = unserialize ($tmp[0]); if (!is_array ($session_data)) {/ / something went wrong, initialize to empty array $session_data = array();}}?
+See Also: serialize().
+Prev
+Home
+Next
+strval
+Up
+unset

@@ -1,0 +1,78 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Trucos del módem
+Esta sección debería introducir a los temerosos en el (no tan) ancestral arte de la configuración del módem.
+Todos los comandos utilizados pertenecen al estándar Hayes AT, pero no todos los módems son iguales, así que los resultados podrían variar.
+Sesiones del módem
+Una sesión del módem le permite interaccionar con el módem directamente.
+Usted teclea comandos y el módem responderá.
+Para obtener una sesión del módem, cuando no haya ninguna conexión activa, vaya al diálogo Configuración, después a Módem Terminal.
+Se abrirá una ventana para configuración interactiva del módem.
+Pruebe a teclear ATZ (que reiniciará el módem).
+Debería obtener OK como respuesta.
+Perfiles del módem
+Una de las razones por las razones por las que puede querer enviar comandos al módem directamente es si tiene un conjunto de configuraciones del módem que desea mantener, y no tenerlas que especificar en cada conexión.
+Un buen método para hacer esto es a través de los perfiles del módem.
+Los módems puede tener almacenados varios perfiles numerados 0,1,...
+Se puede utilizar AT&V para verlos todos.
+El perfil por defecto normalmente es 0 (esto se puede cambiar mediante AT&Y).
+El perfil en uso se denomina perfil activo.
+Cuando cambie un parámetro, se modificará el perfil activo.
+El comando ATZ hará que el módem cargue el perfil por defecto, borrando todos los cambios que se hayan hecho.
+Para que kppp utilice el perfil que usted desee, cambie la cadena de inicialización del módem (Configuración Módem Comandos del módem Cadena de inicialización).
+Por ejemplo ATZ1 hará que kppp reinicie el módem y utilice el perfil almacenado número 1.
+Si desea reiniciar su módem para volver al punto de inicio, utilice AT&F&W para establecer en el perfil activo los valores predeterminados en fábrica, y almacenarlos como perfil predeterminado.
+Los ejemplos de cambios de perfiles se encuentran en la siguiente sección
+Hacer que el módem cuelgue
+En ocasiones puede encontrase con que kppp tiene dificultades para colgar el módem.
+Esto se debe con casi total seguridad al una incoherencia entre los parámetros de kppp y los del módem.
+Un módem normal utiliza dos métodos para decidir colgar la línea: comando, y DTR.
+El método comando implica el envío de una secuencia de escape al módem, que lo deja en modo de comandos, y depués envía el comando de colgado (ATH).
+A parte de kppp, al configurar el paquete pppd manualmente, es muy útil utilizar el método comando, ya que puede abandonar una sesión de terminal, y después iniciar pppd sin que el módem cuelgue.
+En la mayoría de otras situaciones, se prefiere el método DTR, ya que es más sencillo.
+Método DTR (AT&Dn)
+El método DTR hará que el módem cuelgue en cualquier situación en la que kppp deje de utilizarlo.
+Si obtiene una sesión del módem, hace una petición del estado a través de AT&V, y puede encontrar entre las opciones del perfil mostradas el texto &D0, significa que el método del colgado DTR está desactivado.
+Para activarlo utilice el botón Terminal para abrir una sesión con el módem, y después:
+Cómo funciona el método DTR
+Cada vez que la línea Data Terminal Ready (DTR), que va entre el ordenador y el módem, sube, el módem cuelga.
+Cuando kppp abre el puerto serie, la línea DTR se baja.
+En un módem externo se puede apreciar cómo el indicador DTR (o TR) se ilumina cuando ocurre esto.
+Cuando se apaga el indicador de TR (porque kppp ha cerrado el puerto serie, o algo peor), el módem cuelga.
+Método de comandos
+Para que cuelgue adecuadamente, abra una sesión del módem, y establezca el tiempo de guarda a un intervalo corto:
+Después utilice el deslizador Tiempo de guarda, en la sección de comandos del módem, para que coincida con el registro (S12 a este valor 5).
+El módem debe colgar adecuadamente.
+Cómo funciona el método de comandos
+Cuando el módem local está conectado al módem remoto, se encuentra en estado connect, en el que pasa todos los caracteres que recibe al módem remoto, sin interpretarlos.
+Para hacer que el módem acepte los caracteres como comandos, es necesario establecer el módem en modo de comandos.
+El código de escape lo hace.
+El código de escape se define como tres intervalos del tiempo cuya logitud está definida por S12 en cincuentaavos de segundo.
+Tranquilo (debe durar más que S12 / 50 segundos)
+Carácter de escape (definido por el registro S2, el predeterminado es +), repetido tres veces (menos de S12 / 50 segundos entre cada una).
+Tranquilo (debe durar más que S12 / 50 segundos)
+Una vez que el módem se encuentra en estado de comandos, se le pueden enviar estos.
+Para colgarlo, envíe el comando ATH.
+Los códigos de escape y la secuencia de colgado utilizados por kppp se muestran en el diálogo Comandos del módem.
+Deben ajustarse a la configuración de su módem.
+Cómo hacer más rápida la marcación por tonos
+Si puede utilizar marcación por tonos, el tiempo que tarda en marcar se puede modificar utilizando el registro S11.
+Determina la duración (en centésimas de segundo) de cada uno de los tonos al marcar.
+El valor predeterminado es normalmente 95 (casi un segundo).
+La velocidad máxima depende de la tecnología de conmutación que utilice su operadora telefónica.
+La duración mínima es de 50, velocidad que es casi la mitad y que normalmente funciona.

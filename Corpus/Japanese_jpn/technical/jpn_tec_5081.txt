@@ -1,0 +1,26 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Now that you have declared the functions to be exported, you also have to introduce them to Zend. Introducing the list of functions is done by using an array of zend_function_entry. This array consecutively contains all functions that are to be made available externally, with the function's name as it should appear in PHP and its name as defined in the C source. Internally, zend_function_entry is defined as shown in 例31-1.
+
+例 31-1Internal declaration of zend_function_entry.
+注意 You cannot use the predefined macros for the end marker, as these would try to refer to a function named "NULL"!
+The macro ZEND_FE (short for 'Zend Function Entry') simply expands to a structure entry in zend_function_entry. Note that these macros introduce a special naming scheme to your functions - your C functions will be prefixed with zif_, meaning that ZEND_FE(first_module) will refer to a C function zif_first_module(). If you want to mix macro usage with hand-coded entries (not a good practice), keep this in mind.
+Tip: Compilation errors that refer to functions named zif_*() relate to functions defined with ZEND_FE.
+表31-2 shows a list of all the macros that you can use to define functions.
+表 31-2Macros for Defining Functions
+Note: You can't use ZEND_FE in conjunction with PHP_FUNCTION, or PHP_FE in conjunction with ZEND_FUNCTION. However, it's perfectly legal to mix ZEND_FE and ZEND_FUNCTION with PHP_FE and PHP_FUNCTION when staying with the same macro set for each function to be declared. But mixing is not recommended; instead, you're advised to use the ZEND_* macros only.

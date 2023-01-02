@@ -1,0 +1,72 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Instruction Open [Exécution]
+/text/sbasic/shared/03020103.xhp
+Sun Microsystems, Inc.
+converted from old format - fpe
+Open, instruction
+Instruction Open [Exécution]
+Ouvre un canal de données.
+Syntaxe :
+Open FileName As String [For Mode] [Access IOMode] [Protected] As [#]FileNumber As Integer [Len = DatasetLength]
+Paramètres :
+Nom de fichier :
+nom et chemin du fichier à ouvrir.
+Si vous essayez de lire un fichier qui n'existe pas (Access = Read), un message d'erreur s'affiche.
+Si vous essayez d'écrire dans un fichier qui n'existe pas (Access = Write), un nouveau fichier est créé.
+Mode :
+mot-clé spécifiant le mode de fichier.
+Valeurs correctes :
+Append (ajout dans un fichier séquentiel), Binary (accès aux données par blocs d'octets au moyen de Get et Put), Input (ouverture d'un canal de données pour lecture), Output (ouverture d'un canal de données pour écriture) et Random (édition de fichiers relatifs).
+IOMode :
+mot-clé définissant le type d'accès.
+Valeurs valides :
+Read (lecture seule), Write (écriture seule), Read Write (lecture et écriture).
+Protected : mot-clé définissant l'état de sécurisation d'un fichier après son ouverture.
+Valeurs correctes :
+Shared (fichier pouvant être ouvert par d'autres applications), Lock Read (fichier protégé contre la lecture), Lock Write (fichier protégé contre l'écriture), Lock Read Write (aucun accès au fichier).
+FileNumber : expression au format nombre entier comprise entre 0 et 511 indiquant le numéro d'un canal de données libre.
+Vous pouvez ensuite accéder au fichier en transmettant les commandes par ce canal.
+Le numéro de fichier doit être déterminé par la fonction FreeFile juste avant l'instruction Open.
+DatasetLength :
+permet de définir la longueur des enregistrements pour les fichiers à accès aléatoire.
+Vous ne pouvez modifier le contenu d'un fichier que si celui-ci a été ouvert avec l'instruction Open.
+Si vous tentez d'ouvrir un fichier déjà ouvert, un message d'erreur s'affiche.
+Exemple :
+Sub ExampleWorkWithAFile
+Dim iNumber As Integer
+Dim sLine As String
+Dim aFile As String
+Dim sMsg as String
+aFile = &quot; c:\data.txt &quot;
+iNumber = Freefile
+Open aFile For Output As #iNumber
+Print #iNumber, &quot; Ceci est une ligne de texte. &quot;
+Print #iNumber, &quot; Ceci est une autre ligne de texte. &quot;
+Close #iNumber
+iNumber = Freefile
+Open aFile For Input As iNumber
+While not eof(iNumber)
+Line Input #iNumber, sLine
+If sLine < > &quot; &quot; then
+sMsg = sMsg & sLine & chr(13)
+end if
+wend
+Close #iNumber
+Msgbox sMsg
+End Sub

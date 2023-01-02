@@ -1,0 +1,57 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 5 CVS only)
+stream_register_filter() allows you to implement your own filter on any registered stream used with all the other filesystem functions (such as fopen(), fread() etc.).
+To implement a filter, you need to define a class as an extension of php_user_fitler with a number of member functions as defined below.
+When performing read / write opperations on the stream to which your filter is attached, PHP will pass the data through your filter (and any other filters attached to that stream) so that the data may be modified as desired.
+You must implement the methods exactly as described below - doing otherwise will lead to undefined behaviour.
+stream_register_filter() will return FALSE if the filtername is already defined.
+This method is called whenever data is written to the attached stream (such as with fwrite()).
+After modifying data as needed your filter should issue: return parent::write( $data); so that the next filter in the chain can perform its filter.
+When no filters remain, the stream will write data in its final form.
+Note:
+If your filter alters the length of data, for example by removing the first character, before passing onto parent::write( $data); it must be certain to include that stolen character in the return count.
+class myfilter extends php_user_filter {function write($data) {$data = substr($data,1); $written_by_parent = parent::write($data); return ($written_by_parent + 1);}}
+This method is called whenever data is read from the attached stream (such as with fread()).
+A filter should first call parent::read( $maxlength); to retrieve the data from the previous filter who, ultimately, retrieved it from the stream.
+Your filter may then modify the data as needed and return it.
+Your filter should never return more than maxlength bytes.
+Since parent::read( $maxlength); will also not return more than maxlength bytes this will ordinarily be a non-issue.
+However, if your filter increases the size of the data being returned, you should either call parent::read( $maxlength-$x); where x is the most your filter will grow the size of the data read.
+Alternatively, you can build a read-buffer into your class.
+This method is called in response to a request to flush the attached stream (such as with fflush() or fclose()).
+The closing parameter tells you whether the stream is, in fact, in the process of closing.
+The default action is to simply call: return parent::flush( $closing);, your filter may wish to perform additional writes and / or cleanup calls prior to or directly after a successful flush.
+This method is called during instantiation of the filter class object.
+If your filter allocates or initializes any other resources (such as a buffer), this is the place to do it.
+This method is called upon filter shutdown (typically, this is also during stream shutdown), and is executed after the flush method is called.
+If any resources were allocated or initialzed during oncreate this would be the time to destroy or dispose of them.
+The example below implements a filter named rot13 on the foo-bar.txt stream which will perform ROT-13 encryption on all letter characters written to / read from that stream.
+Example 1.
+Filter for ROT13 encoding data on foo-bar.txt stream
+?php / * Define our filter class * / class rot13_filter extends php_user_filter {function read($length) {$tempstr = parent::read($length); for($i = 0; $i strlen($tempstr); $i++) if (($tempstr[$i] = 'A 'AND $tempstr[$i] = 'M') OR ($tempstr[$i] = 'a' AND $tempstr[$i] = 'm')) $tempstr[$i] = chr(ord($tempstr[$i]) + 13); else if (($tempstr[$i] = 'N 'AND $tempstr[$i] = 'Z') OR ($tempstr[$i] = 'n' AND $tempstr[$i] = 'z')) $tempstr[$i] = chr(ord($tempstr[$i]) - 13); return $tempstr;} function write($data) {for($i = 0; $i strlen($data); $i++) if (($data[$i] = 'A 'AND $data[$i] = 'M') OR ($data[$i] = 'a' AND $data[$i] = 'm')) $data[$i] = chr(ord($data[$i]) + 13); else if (($data[$i] = 'N 'AND $data[$i] = 'Z') OR ($data[$i] = 'n' AND $data[$i] = 'z')) $data[$i] = chr(ord($data[$i]) - 13); return parent::write($data);}} / * Register our filter with PHP * / stream_register_filter("rot13", "rot13_filter") or die("Failed to register filter"); $fp = fopen("foo-bar.txt", "w"); / * Attach the registered filter to the stream just opened * / stream_filter_append($fp, "rot13"); fwrite($fp, "Line1\n"); fwrite($fp, "Word - 2\n"); fwrite($fp, "Easy As 123\n"); fclose($fp); / * The filter only applies to the $fp stream * so this readfile will read -without - applying * a second pass of rot13 encoding * / readfile("foo-bar.txt"); / * Output * ----- - Yvar1 Jbeq - 2 Rnfl Nf 123 * /?
+See Also: stream_register_wrapper(), stream_filter_prepend(), and stream_filter_append()
+Prev
+Home
+Next
+stream_get_wrappers
+Up
+stream_register_wrapper

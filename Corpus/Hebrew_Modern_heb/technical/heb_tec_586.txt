@@ -1,0 +1,48 @@
+# language_name_wals:	Hebrew (Modern)
+# language_name_glotto:	Modern Hebrew
+# iso639_3:	heb
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Hebr
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/he.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+מדריך PHP
+קודם
+פרק 11. מבני-בקרה
+הבא
+פקודת include() מספחת ומריצה או מעריכה קובץ מסויים.
+הפקודות require() ו - include() זהות בכל מובן חוץ מאשר האופן בו הן מטפלות בשגיאות או בחוסר הצלחה בסיפוח הקובץ. פקודת include() מייצרת אזהרה בעוד שפקודת require() מייצרת Fatal Error - שגיאה שתגרום לעצירת הריצה של הסקריפט. אם ברצונך למנוע את ריצת הסקריפט במקרה שקובץ לא נמצא, יש להשתמש ב - require(). פקודת include() אינה מתנהגת באופן כזה.כמו כן, מומלץ לקבוע את ערכו של include_path.
+כאשר קובץ מסופח בעזרת include הוא יורש את מערך המשתנים ברגע הסיפוח. כלומר, כל משתנה שהיה זמין בסקריפט הראשי בנקודת הסיפוח, יהי זמין בתחילת קוד ה-include גם כן.
+דוגמה 11-3. דוגמה בסיסית ל - include()
+
+אם הסיפוח מתבצע מתוך פונקציה בסקריפט הראשי, כל הקוד המוכל יתנהג כאילו הוא חלק מהפונקציה עצמה כך שהוא יירש את מערך המשתנים של הפונקציה בלבד.
+דוגמה 11-4. סיפוח מתוך פונקציה
+?php function foo() {global $color; include 'vars.php'; echo "A $color $fruit";} / * vars.inc is in the scope of foo() so * * $fruit is NOT available outside of this * * scope. $color is because we declared it * * as global. * / foo(); / / A green apple echo "A $color $fruit"; / / A green?
+כאשר קובץ מסופח, המפרש יוצא מ" מצב "PHP ועובר ל"מצב "HTML בתחילת הקובץ. כפועל יוצא, כל קוד מסופח צריך להיות ב תגיות פתיחה וסגירה תקניות.
+אם מאופשרת אופציית "URL fopen wrappers" (שהיא ברירת מחדל בהגדרות), יש באפשרותינו לציין קישור HTTP במקום שם קובץ מקומי. אם שרת המטרה מפרש קבצי PHP, תיתכן העברת משתנים לקישור בשיטת HTTP GET. זה שונה במקצת מסיפוח של קובץ מקומי היורש את המשתנים מהסקריפט הראשי. הסקריפט המרוחק בעצם מורץ ותוצאתו מסופחת לסקריפט המקומי.
+דוגמה 11-5. שימוש ב - include() דרך HTTP
+
+
+מאחר והפקודות include() ו - require() הן מבנה מיוחד בשפה, חובה לעטוף אותן בסוגריים מסולסלים כאשר רוצים להתנות את ביצוען.
+דוגמה 11-6. התנייה של פקודת include()
+
+ניתן להפעיל פקודת return מתוך קובץ מסופח במטרה לקטוע את הסיפוח ולהחזיר את השליטה לסקריפט הקורא. כמו כן, ניתן להחזיר מידע מקובץ מסופח ולהשתמש במידע בדומה לשימוש בפונקציה רגילה.
+הערה: בגרסה 3 של PHP לא תיתכן קריאה ל - return() אלא מתוך פונקציה בלבד ולא מתיוך קובץ ראשי או קובץ מסופח.
+דוגמה 11-7. פקודות include() ו - return()
+
+המשתנה $bar יקבל את הערך 1 כי הסיפוח התבצע בהצלחה. שימו לב להבדל בין הדוגמאות הקודמות. הראשונה משתמשת בפקודת return() מקובץ מסופח והשנייה - לא. דרכים נוספות לסיפוח קובץ לתוך משתנים ניתן לממש תוך שימוש ב - fopen(), file() או תוך שימוש ב - include() בשילוב עם פונקציות לשליטה בפלט.
+עיין גם בפרקים על require(), require_once(), include_once(), readfile(), virtual() ו - include_path.
+קודם
+ראשי
+הבא
+
+למעלה

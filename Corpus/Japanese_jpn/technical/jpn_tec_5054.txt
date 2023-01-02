@@ -1,0 +1,42 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+New parameter parsing API This chapter documents the new Zend parameter parsing API introduced by Andrei Zmievski. It was introduced in the development stage between PHP 4.0.6 and 4.1.0.
+Parsing parameters is a very common operation and it may get a bit tedious. It would also be nice to have standardized error checking and error messages. Since PHP 4.1.0, there is a way to do just that by using the new parameter parsing API. It greatly simplifies the process of receiving parameteres, but it has a drawback in that it can't be used for functions that expect variable number of parameters. But since the vast majority of functions do not fall into those categories, this parsing API is recommended as the new standard way.
+The prototype for parameter parsing function looks like this:
+zend_parse_parameters() also performs type conversions whenever possible, so that you always receive the data in the format you asked for. Any type of scalar can be converted to another one, but conversions between complex types (arrays, objects, and resources) and scalar types are not allowed.
+If the parameters could be obtained successfully and there were no errors during type conversion, the function will return SUCCESS, otherwise it will return FAILURE. The function will output informative error messages, if the number of received parameters does not match the requested number, or if type conversion could not be performed.
+Here are some sample error messages:
+Here is the full list of type specifiers:
+
+
+s - string (with possible null bytes) and its length
+
+r - resource, stored in zval*
+a - array, stored in zval*
+o - object (of any class), stored in zval*
+O - object (of class specified by class entry), stored in zval*
+
+| - indicates that the remaining parameters are optional. The storage variables corresponding to these parameters should be initialized to default values by the extension, since they will not be touched by the parsing function if the parameters are not passed.
+/ - the parsing function will call SEPARATE_ZVAL_IF_NOT_REF() on the parameter it follows, to provide a copy of the parameter, unless it's a reference.
+! - the parameter it follows can be of specified type or NULL (only applies to a, o, O, r, and z). If NULL value is passed by the user, the storage pointer will be set to NULL.
+The best way to illustrate the usage of this function is through examples:
+Note that in the last example we pass 3 for the number of received parameters, instead of ZEND_NUM_ARGS(). What this lets us do is receive the least number of parameters if our function expects a variable number of them. Of course, if you want to operate on the rest of the parameters, you will have to use zend_get_parameters_array_ex() to obtain them.
+The parsing function has an extended version that allows for an additional flags argument that controls its actions.
+The only flag you can pass currently is ZEND_PARSE_PARAMS_QUIET, which instructs the function to not output any error messages during its operation. This is useful for functions that expect several sets of completely different arguments, but you will have to output your own error messages.
+For example, here is how you would get either a set of three longs or a string:
+With all the abovementioned ways of receiving function parameters you should have a good handle on this process. For even more example, look through the source code for extensions that are shipped with PHP - they illustrate every conceivable situation.

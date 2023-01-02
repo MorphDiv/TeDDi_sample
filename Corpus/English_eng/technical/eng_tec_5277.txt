@@ -1,0 +1,175 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 7.
+Types
+Next
+A string is series of characters.
+In PHP, a character is the same as a byte, that is, there are exactly 256 different characters possible.
+This also implies that PHP has no native support of Unicode.
+See utf8_encode() and utf8_decode() for some Unicode support.
+Note:
+It is no problem for a string to become very large.
+There is no practical bound to the size of strings imposed by PHP, so there is no reason at all to worry about long strings.
+A string literal can be specified in three different ways.
+single quoted
+double quoted
+heredoc syntax
+The easiest way to specify a simple string is to enclose it in single quotes (the character ').
+To specify a literal single quote, you will need to escape it with a backslash (\), like in many other languages.
+If a backslash needs to occur before a single quote or at the end of the string, you need to double it.
+Note that if you try to escape any other character, the backslash will also be printed!
+So usually there is no need to escape the backslash itself.
+Note:
+In PHP 3, a warning will be issued at the E_NOTICE level when this happens.
+Note:
+Unlike the two other syntaxes, variables will not be expanded when they occur in single quoted strings.
+?php echo 'this is a simple string'; echo'You can also have embedded newlines in strings this way as it is okay to do'; / / Outputs: "I'll be back "echo'Arnold once said: "I\'ll be back"'; / / Outputs:
+You deleted C:\*.*? echo 'You deleted C:\\*.* ?'; / / Outputs:
+You deleted C:\*.*? echo 'You deleted C:\*.* ?'; / / Outputs:
+This will not expand: \n a newline echo 'This will not expand: \n a newline'; / / Outputs:
+Variables do not $expand $either echo 'Variables do not $expand $either';?
+If the string is enclosed in double-quotes ("), PHP understands more escape sequences for special characters:
+Table 7-1.
+Escaped characters
+sequence
+meaning
+\n
+linefeed (LF or 0x0A (10) in ASCII)
+\r
+carriage return (CR or 0x0D (13) in ASCII)
+ 
+horizontal tab (HT or 0x09 (9) in ASCII)
+\\
+backslash
+\$
+dollar sign
+\ "
+double-quote
+\[ 0-7]{1,3}
+the sequence of characters matching the regular expression is a character in octal notation
+\x[ 0-9A-Fa-f]{1,2}
+the sequence of characters matching the regular expression is a character in hexadecimal notation
+Again, if you try to escape any other character, the backslash will be printed too!
+But the most important feature of double-quoted strings is the fact that variable names will be expanded.
+See string parsing for details.
+Another way to delimit strings is by using heredoc syntax ("").
+One should provide an identifier after, then the string, and then the same identifier to close the quotation.
+The closing identifier must begin in the first column of the line.
+Also, the identifier used must follow the same naming rules as any other label in PHP: it must contain only alphanumeric characters and underscores, and must start with a non-digit character or underscore.
+Warning
+It is very important to note that the line with the closing identifier contains no other characters, except possibly a semicolon (;).
+That means especially that the identifier may not be indented, and there may not be any spaces or tabs after or before the semicolon.
+It 's also important to realize that the first character before the closing identifier must be a newline as defined by your operating system.
+This is \r on Macintosh for example.
+If this rule is broken and the closing identifier is not "clean" then it's not considered to be a closing identifier and PHP will continue looking for one.
+If in this case a proper closing identifier is not found then a parse error will result with the line number being at the end of the script.
+Heredoc text behaves just like a double-quoted string, without the double-quotes.
+This means that you do not need to escape quotes in your here docs, but you can still use the escape codes listed above.
+Variables are expanded, but the same care must be taken when expressing complex variables inside a here doc as with strings.
+Example 7-2.
+Heredoc string quoting example
+?php $str = EOD Example of string spanning multiple lines using heredoc syntax.
+EOD; / * More complex example, with variables. * / class foo {var $foo; var $bar; function foo() {$this - foo = 'Foo'; $this - bar = array('Bar1', 'Bar2', 'Bar3');}} $foo = new foo(); $name = 'MyName'; echo EOT My name is "$name ".
+I am printing some $foo - foo.
+Now, I am printing some {$foo - bar[1]}.
+This should print a capital 'A': \x41 EOT;?
+Note:
+Heredoc support was added in PHP 4.
+When a string is specified in double quotes or with heredoc, variables are parsed within it.
+There are two types of syntax, a simple one and a complex one.
+The simple syntax is the most common and convenient, it provides a way to parse a variable, an array value, or an object property.
+The complex syntax was introduced in PHP 4, and can be recognised by the curly braces surrounding the expression.
+If a dollar sign ($) is encountered, the parser will greedily take as much tokens as possible to form a valid variable name.
+Enclose the variable name in curly braces if you want to explicitly specify the end of the name.
+?php $beer = 'Heineken'; echo "$beer's taste is great"; / / works, "'"is an invalid character for varnames echo "He drank some $beers"; / / won't work, 's' is a valid character for varnames echo "He drank some ${beer}s"; / / works echo "He drank some {$beer}s"; / / works?
+Similarly, you can also have an array index or an object property parsed.
+With array indices, the closing square bracket (]) marks the end of the index.
+For object properties the same rules apply as to simple variables, though with object properties there doesn 't exist a trick like the one with variables.
+?php / / These examples are specific to using arrays inside of strings. / / When outside of a string, always quote your array string keys / / and do not use {braces} when outside of strings either. / / Let's show all errors error_reporting(E_ALL); $fruits = array('strawberry '= 'red', 'banana' = 'yellow'); / / Works but note that this works differently outside string-quotes echo "A banana is $fruits[banana] ."; / / Works echo "A banana is {$fruits['banana']} ."; / / Works but PHP looks for a constant named banana first / / as described below. echo "A banana is {$fruits[banana]} ."; / / Won't work, use braces.
+This results in a parse error. echo "A banana is $fruits['banana'] ."; / / Works echo "A banana is". $fruits['banana']. "."; / / Works echo "This square is $square - width meters broad ."; / / Won't work.
+For a solution, see the complex syntax. echo "This square is $square - width00 centimeters broad .";?
+For anything more complex, you should use the complex syntax.
+This isn 't called complex because the syntax is complex, but because you can include complex expressions this way.
+In fact, you can include any value that is in the namespace in strings with this syntax.
+You simply write the expression the same way as you would outside the string, and then include it in {and}.
+Since you can' t escape '{', this syntax will only be recognised when the $is immediately following the {. (Use "{\$ "or "\{$" to get a literal "{$").
+Some examples to make it clear:
+?php / / Let' s show all errors error_reporting(E_ALL); $great = 'fantastic'; / / Won't work, outputs:
+This is {fantastic} echo "This is {$great}"; / / Works, outputs:
+This is fantastic echo "This is {$great}"; echo "This is ${great}"; / / Works echo "This square is {$square - width}00 centimeters broad ."; / / Works echo "This works: {$arr[4][3]}"; / / This is wrong for the same reason as $foo[bar] is wrong / / outside a string.
+In otherwords, it will still work but / / because PHP first looks for a constant named foo, it will / / throw an error of level E_NOTICE (undefined constant). echo "This is wrong: {$arr[foo][3]}"; / / Works.
+When using multi-dimensional arrays, always use / / braces around arrays when inside of strings echo "This works: {$arr['foo'][3]}"; / / Works. echo "This works:". $arr['foo'][3]; echo "You can even write {$obj - values[3] - name}"; echo "This is the value of the var named $name: {${$name}}";?
+Characters within strings may be accessed by specifying the zero-based offset of the desired character after the string in curly braces.
+Note:
+For backwards compatibility, you can still use array-braces for the same purpose.
+However, this syntax is deprecated as of PHP 4.
+Example 7-3.
+Some string examples
+?php / / Get the first character of a string $str = 'This is a test .'; $first = $str{0}; / / Get the third character of a string $third = $str{2}; / / Get the last character of a string. $str = 'This is still a test .'; $last = $str{strlen($str)-1};?
+Strings may be concatenated using the '.' (dot) operator.
+Note that the '+' (addition) operator will not work for this.
+Please see String operators for more information.
+There are a lot of useful functions for string modification.
+See the string functions section for general functions, the regular expression functions for advanced find replacing (in two tastes:
+Perl and POSIX extended).
+There are also functions for URL-strings, and functions to encrypt / decrypt strings (mcrypt and mhash).
+Finally, if you still didn' t find what you're looking for, see also the character type functions.
+You can convert a value to a string using the (string) cast, or the strval() You can convert a value to a string using the (string) cast, or the strval() function.
+String conversion is automatically done in the scope of an expression for you where a string is needed.
+This happens when you use the echo() or print() This happens when you use the echo() or print() functions, or when you compare a variable value to a string.
+Reading the manual sections on Types and Type Juggling will make the following clearer.
+See also settype().
+A boolean TRUE value is converted to the string "1", the FALSE value is represented as "" (empty string).
+This way you can convert back and forth between boolean and string values.
+An integer or a floating point number (float) is converted to a string representing the number with its digits (including the exponent part for floating point numbers).
+Arrays are always converted to the string "Array", so you cannot dump out the contents of an array with echo() or print() to see what is inside them.
+To view one element, you' d do something like echo $arr['foo'].
+See below for tips on dumping / viewing the entire contents.
+Objects are always converted to the string "Object".
+If you would like to print out the member variable values of an object If you would like to print out the member variable values of an object for debugging reasons, read the paragraphs below.
+If you would like to find out the class name of which an object is an instance of, use get_class().
+Resources are always converted to strings with the structure "Resource id #1" where 1 is the unique number of the resource assigned by PHP during runtime.
+If you would like to get the type of the resource, use get_resource_type().
+NULL is always converted to an empty string.
+As you can see above, printing out the arrays, objects or resources does not provide you any useful information about the values themselfs.
+Look at the functions print_r() and var_dump() for better ways to print out values for debugging.
+You can also convert PHP values to strings to store them permanently.
+This method is called serialization, and can be done with the function serialize().
+You can also serialize PHP values to XML structures, if you have WDDX support in your PHP setup.
+When a string is evaluated as a numeric value, the resulting value and type are determined as follows.
+The string will evaluate as a float if it contains any of the characters' .', 'e', or'E '.
+Otherwise, it will evaluate as an integer.
+The value is given by the initial portion of the string.
+If the string starts with valid numeric data, this will be the value used.
+Otherwise, the value will be 0 (zero).
+Valid numeric data is an optional sign, followed by one or more digits (optionally containing a decimal point), followed by an optional exponent.
+The exponent is an 'e' or'E 'followed by one or more digits.
+?php $foo = 1 + "10.5"; / / $foo is float (11.5) $foo = 1 + "-1.3e3"; / / $foo is float (-1299) $foo = 1 + "bob-1.3e3"; / / $foo is integer (1) $foo = 1 + "bob3"; / / $foo is integer (1) $foo = 1 + "10 Small Pigs"; / / $foo is integer (11) $foo = 4 + "10.2 Little Piggies"; / / $foo is float (14.2) $foo = "10.0 pigs" + 1; / / $foo is float (11) $foo = "10.0 pigs "+ 1.0; / / $foo is float (11)?
+For more information on this conversion, see the Unix manual page for strtod( 3).
+If you would like to test any of the examples in this section, you can cut and paste the examples and insert the following line to see for yourself what 's going on:
+?php echo "\$foo==$foo; type is". gettype ($foo). "br / \n";?
+Do not expect to get the code of one character by converting it to integer (as you would do in C for example).
+Use the functions ord() and chr() to convert between charcodes and characters.
+Prev
+Home
+Next
+Floating point numbers
+Up
+Arrays

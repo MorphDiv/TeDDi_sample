@@ -1,0 +1,48 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+These functions are intended for work with WDDX.
+In order to use WDDX, you will need to install the expat library (which comes with Apache 1.3.7 or higher).
+After installing expat compile PHP with --enable-wddx.
+The windows version of PHP The windows version of PHP has built in support for this extension.
+You do not need to load any additional extension in order to use these functions.
+This extension has no configuration directives defined in php.ini.
+This extension has no resource types defined.
+This extension has no constants defined.
+All the functions that serialize variables use the first element of an array to determine whether the array is to be serialized into an array or structure.
+If the first element has string key, then it is serialized into a structure, otherwise, into an array.
+Example 1.
+Serializing a single value
+?php print wddx_serialize_value( "PHP to WDDX packet example", "PHP packet");?
+This example will produce:
+wddxPacket version=' 1.0 'header comment='PHP packet' / data string PHP to WDDX packet example / string / data / wddxPacket
+Example 2.
+Using incremental packets
+?php $pi = 3.1415926; $packet_id = wddx_packet_start("PHP"); wddx_add_vars($packet_id, "pi"); / * Suppose $cities came from database * / $cities = array("Austin", "Novato", "Seattle"); wddx_add_vars($packet_id, "cities"); $packet = wddx_packet_end($packet_id); print $packet;?
+This example will produce:
+wddxPacket version=' 1.0 'header comment='PHP' / data struct var name='pi' number 3.1415926 / number / var var name='cities' array length='3 'string Austin / string string Novato / string string Seattle / string / array / var / struct / data / wddxPacket
+Note:
+If you want to serialize non-ASCII characters you have to set the appropriate locale before doing so (see setlocale()).
+Prev
+Home
+Next
+w32api_set_call_method
+Up
+wddx_add_vars

@@ -1,0 +1,74 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+stream_register_wrapper() vous permet d'implémenter vos propres gestionnairs de protocoles et de flôts, à utiliser avec toutes les autres fonctions de fichiers, comme fopen(), fread() etc...
+Pour implémenter une enveloppe, vous devez définir une classe avec la liste des membres définie ci-dessous.
+Lorsque quelqu 'un ouvre votre flôt, PHP va créer une instance de la classe classname et appeler les méthodes de cette instance.
+Vous devez implémenter ces méthodes exactement comme décrit ci-dessous: sinon, vous risquez de rencontrer des comportements indéfinis.
+stream_register_wrapper() retourne FALSE si le protocole protocol a déjà un gestionnaire attitré.
+Cette méthode est appelée immédiatement après la création de votre flôt. path spécifie l'URL qui doit être passée à la fonction fopen() et ce que cet objet est supposé y lire.
+Vous pouvez utiliser parse_url() pour l 'analyser.
+mode est le mode d'ouverture du fichier, comme expliqué dans fopen().
+Vous êtes responsable de la vérification de la validité du paramètre mode avec le chemin path fourni.
+options contient des options supplémentaires, utilisées par les API de flôts.
+Il peut contenir une ou plusieurs des options suivantes, combinées par des OR.
+Option
+
+
+Si path est relatif, recherche la ressources en utilisant la configuration de l 'include_path.
+
+Si cette option est activée, vous êtes responsable pour lever les erreurs avec trigger_error() durant l 'ouverture du flôt.
+Si cette option n 'est pas activée, vous ne devez lever aucune erreur.
+Si le paramètre path est ouvert avec succès, et que STREAM_USE_PATH est activé dans le paramètre options, vous devez affecter à opened_path le chemin complet de la ressource ou du fichier que vous avez réellement ouvert.
+Si la ressource demandée a été ouverte, vous devez retourner TRUE, ou sinon, vous devez retourner FALSE
+Cette méthode est appelée lors que flôt est fermée, grâce à la fonction fclose().
+Vous devez libérez toutes les ressources réservées par le flôt.
+Cette méthod est appelée suite à l'utilisation des fonctions fread() et fgets().
+Vous devez lire jusqu'à count octets de données à partir de la position courante d 'écriture ou de lecture, sous la forme de chaîne de caractères.
+Si il y a moins que count octets disponibles, vous devez en retourner autant que possible.
+Si aucune autre données n 'est disponible, retournez soit FALSE soit une chaîne vide.
+Vous devez aussi tenir à jour la position du pointeur d'écriture / lecture dans le flôt, en ajoutant ou retranchant le nombre d 'octets lus.
+Cette méthode est appelée lorsque la fonction fwrite() Cette méthode est appelée lorsque la fonction fwrite() est utilisée.
+Vous devez stocker les données data dans le flôt.
+Si il n'y a pas assez de place, essayez d 'en stocker le maximum.
+Vous devriez aussi retourner le nombre d'octets que vous avez réussi à écrire, ou bien 0 si aucun n 'a pu être stocké.
+Vous devez aussi tenir à jour la position du pointeur d'écriture / lecture dans le flôt, en ajoutant ou retranchant le nombre d 'octets lus.
+Cette méthode est appelée lorsque la fonction feof() est utilisée.
+Vous devez retourner TRUE si la position de lecture se situe a la fin du fichier et si il n 'y a plus de données disponibles pour la lecture, ou bien FALSE sinon.
+Cette méthode est appelée lorsque la fonction ftell() est utilisée.
+Vous devez retourner la position actuelle du pointeur de lecture / écriture.
+Cette méthode est appelée lorsque la fonction fseek() est utilisée.
+Vous devez modifier la position du pointeur de lecture / écriture en fonction des paramètres d 'offset offset et de direction whence.
+Reportez-vous à la fonction fseek() pour plus de détails sur ces paramètres.
+Retournez TRUE si la position a été modifiée, et FALSE sinon.
+Cette méthode est appelée lorsque la fonction fflush() Cette méthode est appelée lorsque la fonction fflush() est utilisée.
+Si vous avez mis des données dans un système de cache pour votre flôt, mais qu'ils ne sont pas encore stockés de manière pérenne, c 'est le moment de le faire.
+Retournez TRUE si les données cachées ont pu être stockées avec succès (il n'y a plus de données à stocker), ou bien FALSE si les données n 'ont pu être stockées.
+L'exemple ci-dessous implémente un gestionnaire de protocole pour le protocole var: / /, qui permet l'écriture et la lecture de variables globales en utilisant un flôt de fichier standard, et les fonctions classiques telles que fread().
+Le protocole var: / / implémenté ci-dessous, étant donné l'URL "var: / /foo "va écrire ou lire les données dans $GLOBALS["foo"].
+Exemple 1.
+
+
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

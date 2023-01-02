@@ -1,0 +1,53 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Siguiente
+Estas funciones son la base para el acceso a bases de datos del estilo Berkeley DB.
+Este es un nivel de abstraccion general para varias bases de datos.
+Como tal su funcionalidad esta limitada a un grupo de modernas bases de datos como Sleepycat Software' s DB2. (Esta no debe confundirse con IBM DB2 software, la cual es soportada mediante las funciones ODBC.)
+El comportamiento de varios aspectos depende de la implementacion de la base de datos.
+Funciones como dba_optimize() y dba_sync() cumpliran su funcionalidad con unas bases de datos pero no con otras.
+Los siguientes manejadores (handlers) estan soportados:
+dbm es el mas antiguo (original) tipo de base de datos de la familia de Berkeley DB.
+Se debe evitar su uso, si es posible.
+Nosotros no soportamos las funciones de compatibilidad de DB2 y gdbm, porque ellas solo son compatibles a nivel de codigo fuente, pero no pueden manejar el formato original dbm.
+ndbm es un tipo mas nuevo y mas flexible que dbm.
+Todavia tiene la mayoria de las limitaciones de dbm (Por lo tanto es descartado).
+gdbm es el gestor de bases de datos de GNU (database manager).
+db2 es Sleepycat Software 's DB2.
+Es descrito como "un conjunto de herramientas de programacion que proveen acceso de alto nivel a bases de datos en aplicaciones standalone o en el modelo cliente / servidor."
+cdb es "una rapida, de confianza, sencilla herramienta para la creacion y lectura de bases de datos constantes." Fue creada por el autor de qmail y puede encontrarse en here.
+Como la base es constante solo se soportan las operaciones de lectura.
+Ejemplo 1.
+Ejemplo de DBA
+?php $id = dba_open( "/ tmp / test.db", "n", "db2"); if(!$id) {echo "dba_open failed\n"; exit;} dba_replace("key", "This is an example !", $id); if(dba_exists("key", $id)) {echo dba_fetch("key", $id); dba_delete("key", $id);} dba_close($id);?
+DBA es "binary safe" y no tiene ningun limite arbitrario.
+Hereda todas sus limitaciones de la implementacion de base de datos que tenga.
+Todos las bases de datos basadas en ficheros deben proveer un mecanismo para establecer el modo a la hora de crear nuevas bases de datos, si ello es posible.
+Habitualmente este modo es pasado como el cuarto argumento en dba_open() o en dba_popen().
+Se puede acceder a todas las entradas de una base de datos de modo secuencial (lineal) usando las funciones dba_firstkey() y dba_nextkey().
+No se puede cambiar la base de datos mientras se recorre (traversing) por ella.
+Ejemplo 2.
+Recorriendo una base de datos
+?php # ...open database... $key = dba_firstkey( $id); while($key != false) {if(...) {# remember the key to perform some action later $handle_later[] = $key;} $key = dba_nextkey($id);} for($i = 0; $i count($handle_later); $i++) dba_delete($handle_later[$i], $id);?
+Anterior
+Inicio
+Siguiente
+
+Subir

@@ -1,0 +1,2205 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Das aRts -Handbuch
+Dieses Handbuch beschreibt aRts, den analogen Echtzeit-Synthesizer.
+Einleitung
+Was ist aRts?
+Der analoge Echtzeit-Synthesizer (aRts) ist ein modulares System zur Synthetisierung von Kl\xE4ngen und Musik auf einem Computer.
+Mit Hilfe von kleinen Bausteinen namens Modulen kann der Benutzer leicht komplexe Audio-Werkzeuge zusammenstellen.
+Module stellen typische Funktionen wie H\xFCllkurvengeneratoren, Filter, Audioeffekte, Mixer und Wiedergabe digitaler Kl\xE4nge in verschiedenen Dateiformaten zur Verf\xFCgung.
+Der artsd Soundserver mixt Kl\xE4nge aus unterschiedlichen Quellen in Echtzeit.
+Damit k\xF6nnen sich verschiedene Anwendungen transparent die zur Verf\xFCgung stehende Hardware teilen.
+Durch Verwendung von MCOP, dem Multimedia-Kommunikationsprotokoll, k\xF6nnen Multimediaprogramme netzwerktransparent (aus Sicherheitsgr\xFCnden mit Authentifizierung) und plattform\xFCbergreifend durch die Verwendung von Schnittstellen programmiert werden, die sprachunabh\xE4ngig mit Hilfe von IDL festgelegt werden k\xF6nnen.
+Es gibt auch eine Unterst\xFCtzung f\xFCr sonstige und \xE4lter Anwendungen, die nicht aRts verwenden. aRts stellt einen Kernbestandteil der KDE 2-Umgebung dar und ist die Basis der KDE -Multimedia-Architektur. aRts wird zuk\xFCnftig noch weitere Medien unterst\xFCtzen, unter anderem Video.
+Wie auch KDE, kann aRts auf einigen Betriebssystemen, einschlie\xDFlich Linux und BSD-Varianten eingesetzt werden. aRts kann auch unabh\xE4ngig von KDE verwendet werden.
+Verwendung dieses Dokuments
+Dieses Dokument ist eine umfassende Dokumentation f\xFCr Benutzer unterschiedlicher Vorkenntnisse f\xFCr aRts.
+Falls Sie ein gelegentlicher Nutzer von Multimediaprogrammen sind, sollten Sie einen anderen Weg durch dieses Dokument w\xE4hlen als ein Entwickler von aRts -Anwendungen.
+Sollten Sie bereits ein funktionierendes System haben (h\xE4ufig als Teil ihrer Distribution) k\xF6nnen Sie diesen Abschnitt \xFCberspringen.
+Diese Abschnitte helfen Ihnen bei der optimalen Nutzung von aRts.
+Wenn Sie weitergehende Arbeiten mit aRts planen, lesen Sie das Kapitel \xFCber aRts-builder und \xFCberfliegen Sie die Schritt-f\xFCr-Schritt-Einf\xFChrung.
+Das sollte Ihnen einen Eindruck der gro\xDFen M\xF6glichkeiten von aRts und den ohne Programmierung nutzbaren Modulen geben.
+Das sollte Ihnen ein Verst\xE4ndnis der Konzepte von aRts erm\xF6glichen, die f\xFCr eine erfolgreiche Programmentwicklung notwendig sind.
+Wenn Sie besonders an den MIDI -F\xE4higkeiten von aRts interessiert sind, sollten Sie das Kapitel MIDI lesen.
+Die zuk\xFCnftige Planung f\xFCr aRts erfahren Sie im Kapitel Zuk\xFCnftige Arbeiten.
+Dort finden Sie auch Verkn\xFCpfungen zu weiteren Informationen.
+Wir haben das Hanbuch mit einigem Zusatzmaterial abgerundet:
+Das sind im Einzelnen Antworten auf h\xE4ufig gestellte Fragen, eine Liste der Mitarbeiter, detailierte Informationen zu Copyright und Lizenz von aRts und einige Hintergrundinformationen zu digitalem Audio und MIDI.
+Weiterhin ist ein Glossar der verwendeten Begriffe enthalten.
+Dieses Handbuch ist noch keineswegs vollst\xE4ndig.
+Falls Sie Teile hinzuf\xFCgen m\xF6chten, sind Sie sehr willkommen.
+Kontaktieren Sie in diesem Fall zuerstt Jeff Tranter tranter@kde.org oder Stefan Westerfeld stefan@space.twc.de, um Dopplungen zu vermeiden.
+Entwicklungsgeschichte
+Sp\xE4t in 1997 begann Stefan Westerfeld mit der Arbeit an einem modularen Echtzeit-System zur Klang-Synthese.
+Das Programm war urspr\xFCnglich f\xFCr einen Power-PC unter AIX bestimmt.
+Die erste Version war einfach, unterst\xFCtzte aber ein vollst\xE4ndiges Flusssystem, das solche Aufgaben wie die Wiedergabe einer MP3-Datei oder eines Audio-Datenstroms durch Effektmodule durchf\xFChren konnte.
+Der n\xE4chste Schritt war die Implementation eines GUI, so dass die Modules grafisch bearbeitet werden konnten.
+Stefan hatte einige Erfahrung mit KDE und dieseUmgebung wurde daher als GUI -System (in dem Bewu\xDFtsein, das eine GNOME/Gtk+-Version ebenfalls erforderlich sein k\xF6nnte) benutzt.
+Sp\xE4ter f\xFChrte das dazu, das Linux die Hauptentwicklungsplattform wurde.
+Vom urspr\xFCnglichen Namen ksynth wurde das Projekt in aRts umbenannt und die Entwicklungsgeschwindigkeit nahm zu.
+Das Projekt war zu dieser Zeit mit einem CORBA -basierten Protokoll, dutzenden von Modulen, einem grafischen Moduleditor, C- und C++- API -Dokumentation, Hilfsprogrammen und einer Mailingsliste und Internetseite mit einer kleinen Entwicklergruppe bereits recht vollst\xE4ndig.
+Diese ganze Entwicklung fand in der sehr kurzen Zeit von nur einem Jahr statt.
+Bei der Planung von KDE 2.0 wurde es dem KDE -Team klar, das KDE eine bessere Klaninfrastruktur und Unterst\xFCtzung f\xFCr Kl\xE4nge und andere Stream-Medien ben\xF6tigte.
+Man entschied sich, aRts f\xFCr diese Zwecke anzupassen, da bereits eine fundierte Architektur vorhanden war.
+Es wurde gro\xDFe M\xFChe in eine neue Version von aRts investiert, die umfangreichtse Entwicklung war die Ersetzung des CORBA -Protokolls durch ein v\xF6llig neues Subsystem mit dem Namen MCOP, das f\xFCr Multimedia optimiert ist.
+Die Version 0.4 von aRts wurde Bestandteil der Version 2.0 von KDE.
+Die Arbeit an aRts geht weiter.
+Die Arbeitsgeschwindigkeit wird verbessert und neue Funktionen werden hinzugef\xFCgt.
+Obwohl aRts ein Kernbestandteil von KDE ist, kann es auch ohne KDE verwendet werden.
+Es findet auch Verwendung in Anwendungen, die \xFCber das traditionelle Multimedia hinausgehen.
+Das Projekt hat auch beim GNOME-Team einiges Interesse hervorgerufen, so dass die M\xF6glichkeit besteht, das es eines Tages die Standard-Multimedia-Architektur f\xFCr UNIX -Arbeitsplatzrechner wird.
+artscontrol
+KControl
+Wenn Sie aRts unter KDE einsetzen, stellt KDE-Kontrollzentrum einige Einstellm\xF6glichkeiten in dem Abschnitt Kl\xE4nge bereit.
+Einige dieser Einstellungen werden von aRts verwendet.
+Das Handbuch zu KControl gibt genauere Informationen \xFCber diese Einstellungen.
+artsd
+Zur Verwendung von aRts darf nur eine Instanz von artsd aktiv sein.
+Sie wird normalerweise beim Start von KDE gestartet, wenn der zugeh\xF6rige Eintrag in KControl im Abschnitt Soundserver aktiviert ist.
+-r Sampling-Rate
+Setzt die zu verwendende Sampling-Rate.
+-h
+Verwendungshinweise anzeigen.
+-n
+Netzwerk-Transparenz aktivieren.
+-p Port
+Legt den zu verwendenden TCP -Port fest (setzt -n voraus).
+-u
+\xD6ffentlich, keine Authentifizierung (unsicher).
+-d
+Volle Duplex-F\xE4higkeit aktivieren.
+-D Ger\xE4tename
+Audioger\xE4t festlegen (normalerweise /dev/dsp).
+-F Fragmente
+Anzahl der Fragmente festlegen.
+-S Gr\xF6\xDFe
+Legt die Fragmentgr\xF6\xDFe in Byte fest.
+-s Sekunden
+Legt die Zeit bis zum automatischen Aussetzen in Sekunden fest.
+Der Wert Null deaktiviert das automatische Aussetzen.
+-m appName
+Gibt den Namen der Anwendung an, die f\xFCr die Ausgabe von Fehler-, Warn- und Informationsmeldungen verwendet wird.
+Wenn Sie KDE verwenden, k\xF6nnen Sie das Hilfsprogramm artsmessage verwenden.
+-N
+Erh\xF6ht die Gr\xF6\xDFe der Netzwerkpuffer auf einen Wert, der f\xFCr ein 10 mbps LAN erforderlich ist.
+Diese Einstellung ist \xE4quivalent zur Option -w 5 (weiter unten).
+-w n
+Wenn Sie artsd \xFCber eine Netzwerkverbindung zu einem anderen Rechner betreiben, sollten Sie die Puffer vergr\xF6\xDFern, um Aussetzer zu vermeiden. aRts stellt Anwendungen eine Standardpuffergr\xF6\xDFe bereit.
+Ohne diese Option basiert die Gr\xF6\xDFe auf Abschnittgr\xF6\xDFe * Abschnittanzahl.
+Durch die Option k\xF6nnen Sie diese Gr\xF6\xDFe vom Standardwert um einen Faktor von n erh\xF6hen.
+-l Ebene
+Legt die Informationsebene fest - 3 (keine), 2 (Warnungen), 2 (Informationen), 0 (Debug).
+-v
+Versionsnummer anzeigen.
+In den meisten F\xE4llen reicht das Kommando artsd zum Start.
+artswrapper
+F\xFCr ein gutes Echtzeit-Antwortverhalten, sollte artsd normalerweise als Echtzeit-Prozess (auf Systemen, die solche Prozesse unterst\xFCtzen) gestartet werden.
+Das erfordert root-Rechte, daher kann artsd aus Sicherheitsgr\xFCnden durch ein kleines Startprogramm namens artswrapper gestartet werden, das Echtzeitpriorit\xE4t setzt (es arbeitet als root) und dann artsd als Nicht-root startet.
+artsshell
+Die Befehlszeile zum Start hat das folgende Format:
+artsshell [options] Befehl [Befehlsoptionen]
+-q
+Ausgabe unterdr\xFCcken.
+-h
+Verwendungshinweise anzeigen.
+suspend
+Der Soundserver schaltet sich aus.
+status
+Statusinformationen des Soundservers anzeigen.
+terminate
+Den Soundserver beenden.
+Das kann Programme, die den Soundserver verwenden, zum Absturz bringen.
+autosuspend Sekunden
+Setzt die Zeit bis zum Aussetzen auf die angegebene Anzahl von Sekunden.
+Der Soundserver setzt automatisch aus, wenn er die angegebene Zeit unbesch\xE4ftigt ist.
+Der Wert Null deaktiviert das automatische Aussetzen.
+networkbuffers n
+Setzt die Gr\xF6\xDFe der Netzwerkpuffer auf das n -fache der Standardgr\xF6\xDFe.
+volume [Lautst\xE4rke]
+Legt die Lautst\xE4rkeskalierung f\xFCr die Soundserver Audioausgabe fest.
+Das Argument Lautst\xE4rke ist eine Kommazahl.
+Bei Aufruf ohne Argument wird der aktuelle Wert angezeigt.
+Liste der Stereoeffekte
+Liste aller verf\xFCgbaren Stereoeffektmodule
+stereoeffect insert [top|bottom] Name
+F\xFCgt einen Stereoeffekt in einen Stereoeffektstapel ein.
+Gibt einen Namen zur\xFCck, der f\xFCr ein sp\xE4teres L\xF6schen erforderlich ist.
+Der Effekt kann oben oder unten (Standardeinstellung) hinzugef\xFCgt werden.
+stereoeffect remove Id
+L\xF6scht den Stereoeffekt mit dem Namen Id vom Effektstapel.
+artsplay
+Der Befehl artsplay ist ein einfaches Hilfsprogramm zum Abspielen einer Klangdatei.
+Der Befehl hat ein einziges Argument, n\xE4mlich den Namen der an den Soundserver zu schickenden Datei.
+Die Klangdatei kann zu jedem der \xFCblichen Typen geh\xF6ren, also wav oder au.
+Mit diesem Befehl kann man testen, ob der Soundserver funktioniert.
+Indem man zwei Befehl parallel oder in schneller Folge gibt, kann man demonstrieren, wie der Soundserver mehrere Ausgaben mixen kann.
+artsdsp
+Wenn ein Programm unter artsdsp ausgef\xFChrt wird, werden alle Zugriffe auf das Audioger\xE4t /dev/dsp abgefangen und in aRts API -Aufrufe umgewandelt.
+Diese Emulation ist nicht perfekt, aber die meisten Anwendungen funktionieren auf diese Weise mit einer kleinen Einbu\xDFe an Geschwindigkeit und Antwortverhalten.
+artsdsp [Optionen] Anwendung Parameter
+-h, --help
+Zeigt eine kurze Hilfe.
+-n --name = Name
+Verwendet Name um den Spieler gegen\xFCber artsd .zu identifizieren.
+-m --mmap
+Speicher-Mapping emulieren (z.B. f\xFCr Quake).
+-v --verbose
+Zeigt Parameter an.
+artscat
+Dieses kleine Hilfsprogramm kann Audion-Rohdaten zum Soundserver schicken.
+Sie m\xFCssen das Datenformat (Samplingrate, Samplegr\xF6\xDFe und Anzahl der Kan\xE4le) angeben.
+Es ist ein Programm, das Sie vermutlich nicht oft ben\xF6tigen, das aber f\xFCr Testzwecke recht praktisch ist.
+Die Aufrufsyntax ist:
+artscat [Optionen] [Dateiname]
+Wenn Sie keinen Dateinamen angeben, wird von der Standardeingabe gelesen.
+Folgende Optionen werden unterst\xFCtzt:
+-v --verbose
+Setzt die zu verwendende Sampling-Rate.
+-b Bits
+Setzt die Sample-Gr\xF6\xDFe fest (8 oder 16).
+-c Kan\xE4le
+Setzt die Anzahl der Kan\xE4le fest (1 oder 2).
+-h
+Nur Verwendungshinweise anzeigen.
+artscontrol
+FFT-Anzeige
+\xD6ffnet ein Fenster mit einer Echtzeit-Spektrumanalysator-Anzeige.
+Audio-Manager
+Zeigt die aktiven Klangquellen an und erlaubt die Zuordnung zu einem der verf\xFCgbaren Busse.
+aRts-Statusanzeige
+Zeigt an, ob der Soundserver l\xE4uft und Echtzeitpriorit\xE4t besitzt.
+Au\xDFerdem wird angezeigt, wann der Soundserver automatisch aussetzt.
+Durch einen Knopf kann er auch sofort ausgeschaltet werden.
+Midi-Manager
+Zeigt aktive MIDI -Ein- und Ausgabeger\xE4te an und erlaubt die Herstellung von Verkn\xFCpfungen [TODO:
+Funktioniert vermutlich noch nicht!
+Mehr Details ben\xF6tigt].
+FreeVerb
+Verbindet einen FreeVerb-Echoeffekt mit dem Stapel von aRts Ausgabeeffekten und erlaubt eine graphische Kontrolle der Effektparameter.
+Lautst\xE4rkeanzeige im LED-Stil
+\xC4ndert die Lautst\xE4rkeanzeige des Hauptfensters auf eine farbige LED -Anzeige anstatt Fortschrittsbalken.
+artsc-config
+Dieses Hilfsprogramm unterst\xFCtzt Entwickler bei der Verwendung des aRts C- API.
+Es gibt die geeignete Compiler- und Linker-Optionen aus, die zur Kompilierung und zum Linken von Programmen mit aRts ben\xF6tigt werden.
+Es ist gedacht zur Verwendung innerhalb von make-Dateien zur Unterst\xFCtzung von Portabilit\xE4t.
+Das Programm kennt drei Optionen:
+--cflags
+Zeigt die Kompiler-Flags an, die zur Kompilierung mit dem aRts C- API ben\xF6tigt werden.
+--libs
+Zeigt die Linker-Flags an, die zum Linken mit dem aRts C- API ben\xF6tigt werden.
+--version
+Zeigt die Versionsnummer des artsc-config Befehles an.
+Eine typische Ausgabe dieses Befehls sieht folgenderma\xDFen aus:
+Sie k\xF6nnen dieses Programm in einer Make-Datei z.B. in einer solchen Regel verwenden:
+mcopidl
+mcopidl [Optionen] Dateiname
+-I Verzeichnis
+Suche in Verzeichnis nach Include-Dateien.
+-e Name
+Schlie\xDFe die Struktur, das Interface oder den Aufz\xE4hlungstyp Name von der Erzeugung aus.
+-t
+Erzeuge zus\xE4tzlich die Dateien .mcoptype / .mcopclass, die Informationen f\xFCr die IDL -Datei enthalten.
+aRts-builder
+\xDCberblick
+Wenn Sie aRts-builder verwenden wollen, sollten Sie zuerste den Klangserver (artsd) starten.
+Normalerweise ist er bereits gestartet, wenn Sie KDE 2.1 verwenden.
+Wenn Sie aRts verwenden, startet es kleine Module. aRts-builder ist ein Werkzeug zur Erstellung neuer Strukturen von kleinen verbundenen Modulen.
+Sie k\xF6nnen die Module einfach innerhalb des Gitters anordnen.
+W\xE4hlen Sie dazu aus dem Men\xFC Module aus und klicken Sie dann irgendwo im gr\xFCn-grauen Bereich.
+Module habe \xFCblicherweise Kan\xE4le (durch die Audiosignale hinein und hinaus gelangen).
+Um zwei Kan\xE4le zu verbinden, klicken Sie auf den Ersten (dadurch wird er orange) und dann auf den Zweiten.
+Sie k\xF6nnen einen Eingabekanal (auf der oberen Modulseite) nur mit einem Ausgabekanal (auf der unteren Modulseite) verbinden.
+Wenn Sie einem Kanal einen festen Werte geben wollen (oder einen Kanal trennen wollen) so doppelklicken Sie auf diesen.
+Einf\xFChrung
+Schritt 1
+Starten Sie aRts-builder.
+Um die Ausgabe zu h\xF6ren, ben\xF6tigen Sie ein Synth_AMAN_PLAY-Modul.
+Platzieren Sie das Modul unterhalb der f\xFCnften Linie, da wir noch einige Module oberhalb einf\xFCgen werden.
+Das Modul hat die Parameter title und autoRestoreID (in der N\xE4he des linken Kanals) zur Identifikation.
+Um diese auszuf\xFCllen, doppelklicken Sie auf diese Kan\xE4le, w\xE4hlen Sie konstanter Wert und tippen Sie tutorial in das Eingabefeld.
+Klicken Sie auf OK zur Best\xE4tigung.
+Sie h\xF6ren bisher nichts.
+Das Abspielmodul ben\xF6tigt irgendetwas als Eingabe.
+Wenn Sie der Stille eine Weile gelauscht haben, klicken Sie auf OK und gehen Sie zu Schritt 2
+Schritt 2
+Wie Sie sehen, produziert dieses Modul eine Ausgabe, erfordert aber eine Position pos als Eingabe.
+Verbinden Sie zuerst die Ausgabe mit den Lautsprechern.
+Klicken Sie auf den Kanal out des Synth_WAVE_SIN-Modules und dann auf den Kanal left des Synth_AMAN_PLAY-Modules.
+Damit sind diese zwei Module verbunden.
+Keiner der Oszillatoren in aRts ben\xF6tigt eine Frequenz als Eingabe, sondern nur eine Position innerhalb der Welle.
+Die Position muss zwischen 0 und 1 liegen.
+Das wird f\xFCr ein Standard-Synth_WAVE_SIN-Modul auf den Bereich 0 bis 2*Pi umgerechnet.
+Um eine bestimmte Frequenz zu erzeugen, ben\xF6tigen Sie ein Synth_FREQUENCY-Modul.
+Legen Sie den Frequenzeingang des Frequenzgenerators auf den konstanten Wert 440.
+Sie sollten einen Sinuston von 440 Hz in einem von Ihren Lautsprechern h\xF6ren.
+Wenn Sie genug zugeh\xF6rt haben, klicken Sie auf OK und gehen Sie zu Schritt 3.
+Schritt 3
+Es w\xFCrde sich besser anh\xF6ren, wenn der Sinuston aus beiden Lautsprechern zu h\xF6ren w\xE4re.
+Verbinden Sie den rechten Eingang von Synth_PLAY auch mit dem Ausgang von Synth_WAVE_SIN.
+Es sollte am oberen Rand platziert werden.
+Wenn Sie mehr Platz ben\xF6tigen, k\xF6nnen Sie die anderen Module verschieben, indem Sie sie ausw\xE4hlen (um mehrere auszuw\xE4hlen, verwenden Sie Shift) und mit der Maus bewegen.
+Nun verbinden Sie den Frequenzausgaben von Synth_SEQUENCE mit dem Frequenzeingang des Synth_FREQUENCY-Moduls.
+Stellen Sie die Geschwindigkeit der Sequenz auf den konstanten Wert 0.13 (der Geschwindigkeitseingang ist der linke).
+Geben Sie nun f\xFCr den rechten Eingang (Sequenz) von Synth_SEQUENCE als konstanten Wert A-3;C-4;E-4;C-4 ein.
+Das legt eine Sequenz fest.
+Mehr dazu finden Sie im Abschnitt Modulreferenz.
+Synth_SEQUENCE ben\xF6tigt unbedingt eine Sequenz und eine Geschwindigkeit.
+Ohne diese Angaben wird das Programm vermutlich abst\xFCrzen.
+Sie sollten nun eine nette Sequenz h\xF6ren.
+Klicken Sie auf OK und gehen Sie zu Schritt 4.
+Schritt 4
+Trennen Sie den Ausgang der SIN-Welle durch doppelklicken und ausw\xE4hlen von nicht verbunden.
+Verbinden Sie
+den SIN-Ausgang mit dem Eingang (inval) von PSCALE
+Den Ausgang von PSCALE mit dem linken Eingang von AMAN_PLAY
+den Ausgang von PSCALE mit dem rechten Eingang von AMAN_PLAY
+den SEQUENCE-Ausgang (pos) mit dem PSCAL-Eingang (pos).
+Setzen Sie schlie\xDFlich den Eingang top von PSCALE auf einen konstanten Wert, z.B.
+0.1.
+Das funktioniert folgenderma\xDFen:
+Das Modul Synth_SEQUENCE gibt zus\xE4tzliche Informationen \xFCber die Position der gerade erklingenden Note, wobei 0 gerade gestartet und 1 beendet bedeutet.
+Das Modul Synth_PSCALE skaliert die Lautst\xE4rke des Audiostroms von 0 (Ruhe) \xFCber 1 (Originallautst\xE4rke) zur\xFCck zu 0 (Ruhe) abh\xE4ngig von der Position.
+Die Position, an der die Maximallautst\xE4rke erklingen soll, kann als Positionswert (pos) angegeben werden.
+0.1 bedeutet, das nach 10% der Note die Lautst\xE4rke ihren Maximalwert erreicht und danach der Ausklingvorgang startet.
+Sie sollten nun eine nette Sequenz h\xF6ren.
+Klicken Sie auf OK und gehen Sie zu Schritt 4.
+Schritt 5:
+Daten sollen \xFCbertragen werden ;-)
+Starten Sie aRts-builder ein zweites Mal
+Erstellen Sie ein Synth_AMAN_PLAY-Modul und benennen Sie es sinnvoll.
+Erstellen Sie ein Synth_BUS_DOWNLINK-Modul und:
+benennen Sie den Synth_BUS_DOWNLINK-Bus mit dem Namen Audio (das ist nur ein Name, man k\xF6nnte auch jeden anderen Name verwenden)
+Verbinden Sie den linken Ausgang von Synth_BUS_DOWNLINKmit dem linken Eingang von Synth_AMAN_PLAY
+Verbinden Sie den rechten Ausgang von Synth_BUS_DOWNLINK mit dem rechten Eingang von Synth_AMAN_PLAY
+Wenn Sie die Struktur jetzt ausf\xFChren, h\xF6ren Sie noch nichts.
+Gehen Sie zur\xFCck zur ersten Struktur in der ersten Instanz von aRts-builder mit dem Synth_WAVE_SIN-Modul und ersetzen Sie das Modul Synth_AMAN_PLAY durch ein Synth_BUS_UPLINK,-Modul und benennen Sie es Audio (oder den Namen, den Sie f\xFCr die entsprechende Komponente in der zweiten Instanz von aRts-builder verwendet haben).
+Sie h\xF6ren die Notensequenz wiedergegeben \xFCber die Bus-Verbindung.
+Wenn Sie herausfinden wollen, wozu eine solche Funktion n\xFCtzlich ist, klicken Sie auf OK (in der Instanz, die das Synth_SEQUENCE-Modul enth\xE4lt, die andere Struktur wird nicht ver\xE4ndert) und gehen Sie zu Schritt 6.
+Schritt 6 \xDCbertragung f\xFCr Fortgeschrittene
+Best\xE4tigen Sie mit OK.
+Sie h\xF6ren nun die gleiche Struktur zweimal.
+Abh\xE4ngig von der Zeitverschiebung wird es mehr oder weniger gl\xFCcklich klingen.
+Schritt 7:
+Midi-Synthese
+Jetzt wollen wir den Sinusgenerator in ein wirkliches Musikinstrument verwandeln.
+Dazu ben\xF6tigen Sie ein Ger\xE4t, das MIDI -Ereignisse an aRts senden kann.
+Sie k\xF6nnen ein externes Keyboard (wie im folgenden beschrieben wird) aber auch einen Sequenzer, der den Midi-bus unterst\xFCtzt, wie Brahms verwenden.
+Beenden Sie zuerst alle \xFCberfl\xFCssigen Instanzen von aRts-builder.
+Sie ben\xF6tigen lediglich die Instanz mit dem Sinusgenerator.
+Sie k\xF6nnen nun das Modul Synth_SEQUENCE l\xF6schen und stattdessen den Frequenzeingangskanal mit dem Modul Synth_FREQUENCY-Eingang verbinden.
+Was soll nun mit dem pos-Eingang passieren?
+Dieser Eingang bleibt unbesetzt, da es keinen Algorithmus der Welt gibt, der vorausberechnen kann, wann ein Spieler die Taste des Keyboards, die er gerade gedr\xFCckt hat, wieder loslassen wird.
+Daher haben wir nur einen Parameter gedr\xFCckt stattdessen, der anzeigt, ob der Spieler die Taste noch gedr\xFCckt h\xE4lt (gedr\xFCckt=1:
+Taste immer noch heruntergehalten; gedr\xFCckt=0:
+Taste losgelassen)
+Das Synth_PSCALE-Objekt muss nun auch ersetzt werden.
+Verbinden Sie:
+den Struktureingang mit dem Ausgang active von ADSR
+den SIN-Ausgang mit dem Eingang (inval) von ADSR
+den Ausgang (outvalue) von ADSR mit dem linken Strukturausgang
+den ADSR-Ausgang (outvalue) mit dem rechten Strukturausgang
+Setzen Sie die Parameter attack auf 0.1, decay auf 0.2, sustain auf 0.7 und release auf 0.1.
+Weiterhin m\xFCssen wir daran denken, das die Instrumentenstruktur wissen muss, wenn der Spieler mit spielen fertig ist, da sonst der letzte Klang nicht beendet wird, auch wenn die letzte Taste losgelassen worden ist.
+Gl\xFCcklicherweise wei\xDF die ADSR-H\xFCllkurve (envelope), wann nichs mehr zu h\xF6ren ist, da das Signal nach dem Loslassen der letzten Taste irgendwann auf Null reduziert wird.
+Das wird erreicht, indem der Ausgang done auf 1 gesetzt wird.
+Verbinden Sie diesen Ausgang mit dem Ausgangskanal stopp.
+Damit wird die Struktur beendet, sobald dieser Ausgang auf 1 wechselt.
+Speichern Sie die Struktur nun (der vorgegebene Name sollte jetzt Instrument_Anleitung sein).
+Hier sollten Sie in der Lage sein, ihr Instrument (Anleitung) auszuw\xE4hlen.
+Wenn Sie jetzt ein Terminal \xF6ffnen und midisend eintippen, sollte midisend und das Instrument im aRts MIDI -Manager angezeigt werden.
+W\xE4hlen Sie beides aus und klicken Sie auf Verbinden.
+Damit sind die Vorbereitungen abgeschlossen.
+Nehmen Sie nun ihr Keyboard und beginnen Sie zu spielen (selbstverst\xE4ndlich nachdem Sie es mit dem Computer verbunden haben).
+Hinweise
+Sie sind nun in der Lage, aRts zu verwenden.
+Hier sind noch einige Tipps, die den Umgang mit Strukturen verbessern k\xF6nnen:
+Versuchen Sie andere Module anstelle von SIN.
+Wenn Sie eine TRI-Wellenform verwenden, werden Sie vermutlich feststellen, das diese Wellenform nicht besonders h\xFCbsch klingt.
+H\xE4ngen Sie einen SHELVE_CUTOFF-Filter an das TRI-Modul, um alle Frequenzen oberhalb einer bestimmten Grenzfrequenz (versuchen Sie etwa 1000 Hz oder besser noch die doppelte Eingabefrequenz +200 Hz oder einen \xE4hnlichen Wert).
+Verwenden Sie mehrere Oszillatoren zusammen.
+Synth_XFADE kann zum kreuzweisen mixen (cross fade) von zwei Signalen verwendet werden, Synth_ADD zum Addieren von zwei Signalen.
+Verstimmen Sie die Oszillatoren geringf\xFCgig gegeneinander.
+Das erzeugt nette Schwebungen.
+Experimentieren Sie mit mehreren H\xFCllkurven (envelopes) gleichzeitig.
+Stellen Sie Instrumente zusammen, die verschiedene Signale auf den linken und rechten Ausgang legen.
+Verarbeiten Sie das Signal, das aus dem Downlink-Bus kommt, weiter.
+Sie k\xF6nnen f\xFCr einen Echo-Effekt das urspr\xFCngliche Signal etwas verz\xF6gert dazumischen.
+Verwenden Sie die Lautst\xE4rkeeinstellung (die St\xE4rke, mit der die Taste gedr\xFCckt worden ist).
+Ein besonderer Effekt entsteht, wenn der Lautst\xE4rkewert nicht nur die Ausgabelautst\xE4rke sondern auch den Klang des Instrumentes ver\xE4ndert (zum Beispiel die Grenzfrequenz).
+...
+Wenn Sie eine besondere Struktur konstruiert haben, schicken Sie sie an die aRts -Internetseite.
+Sie kann dann der n\xE4chsten Version beigelegt werden.
+Beispiele
+Einige befinden sich im angezeigten Verzeichnis, einige (die in der aktuellen Version aus irgendwelchen Gr\xFCnden nicht funktionieren) befinden sich im todo-Verzeichnis.
+Die Beispiele k\xF6nnen in mehrere Kategorien eingeteilt werden:
+Modulbeispiele demonstrieren jeweils eines der in arts enthaltenen Modules (example_*.arts benannt).
+Sie senden \xFCblicherweise irgendwelche Ausgaben an die Soundkarte.
+Instrumente (mit Namen instrument_*.arts) sind aus den grundlegenden arts-Modulen zusammengesetzt.
+Sie haben standardisierte Ein- und Ausgabekan\xE4le, so dass sie mit dem MIDI -Manager aus artscontrol verwendet werden k\xF6nnen.
+Vorlagen (mit Namen template_*.arts) zur Erstellung neuer Module.
+Effekte (mit Namen effect_*.arts) k\xF6nnen als Bausteine verwendet werden [momentan alle im todo-Verzeichnis]
+Mixer-Elemente (mit Namen mixer_element_*.arts) k\xF6nnen zur Erstellung von Mixern mit graphischen Kontrollelementen verwendet werden [momentan alle im todo-Verzeichnis]
+Verschiedene Module, die in keine der angegebenen Kategorien passen.
+Detailierte Beschreibung der einzelnen Module:
+example_stereo_beep.arts
+Sendet einen 440Hz-Sinuston an den linken und einen 880Hz-Sinuston an den rechten Kanal der Soundkarte.
+Dieses Modul wird in der aRts -Dokumentation erw\xE4hnt.
+example_sine.arts
+Erzeugt einen 440Hz-Sinuston.
+example_pulse.arts
+Erzeugt einen 440Hz-Impulston mit 20%-Arbeitswiederholung (duty cycle).
+example_softsaw.arts
+Erzeugt eine 440Hz-S\xE4gezahnschwingung.
+example_square.arts
+Erzeugt eine 440Hz-Rechteckschwingung.
+example_tri.arts
+Erzeugt eine 440Hz-Dreieckschwingung.
+example_noise.arts
+Erzeugt wei\xDFen L\xE4rm.
+example_dtmf1.arts
+Erzeugt einen Doppelton aus einer 697Hz- und 1209Hz-Sinusschwingung, die mit 0.5 skaliert und addiert werden.
+Es entsteht der DTMF-Ton f\xFCr die Ziffer "1" einer Telefontastatur.
+example_atan_saturate.arts
+Eine Dreieckschwingung wird mit einem atan-S\xE4ttigungsfilter ver\xE4ndert.
+example_autopanner.arts
+Verwendet ein Autopan-Modul, um einen 400Hz-Sinuston mit einer Frequenz von 2 Hz zwischen dem linken und rechten Lautsprecher hin- und herzubewegen.
+example_brickwall.arts
+Skaliert eine Sinusschwingung mit dem Faktor 5 und ver\xE4ndert sie mit einem brickwall-Begrenzer.
+example_bus.arts
+Vom Bus mit dem Namen Bus wird zum Bus out_soundcard eine Verbindung mit vertauschten Kan\xE4len hergestellt.
+example_cdelay.arts
+Verbindet von einem Bus namens Delay zum rechten Ausgangskanal mit einer Verz\xF6gerung von 0.5 Sekunden (cdelay), w\xE4hrend der linke Kanal unver\xE4ndert bleibt.
+Mit artscontrol k\xF6nnen Sie diesen Effekt mit einem Abspieler verbinden.
+Das Resultat ist h\xF6renswert.
+example_delay.arts
+Das gleiche Beispiel wie example_cdelay.arts, mit dem Unterschied, dass der delay-Effekt anstelle von cdelay verwendet wird.
+example_capture_wav.arts
+Mit dem Modul Synth_CAPTURE_WAV wird ein 400Hz-Sinuston als wav-Datei gespeichert.
+Lassen Sie das Modul f\xFCr 2 Sekunden laufen und untersuchen Sie die in /tmp erzeugte Datei.
+Sie k\xF6nnen Sie mit einem Spieler wie kaiman abspielen.
+example_data.arts
+Mit einem Data-Modul wird ein konstanter Strom mit dem Wert 3 erzeugt und f\xFCr die periodische Anzeige an ein Debug-Modul gesendet.
+Das Beispiel enth\xE4lt weiterhin ein Nil-Modul, das demonstriert, wie man eine Struktur erzeugt, die gar nichts tut.
+example_adsr.arts
+Demonstriert, wie man mit dem Envelope-Adsr-Modul einen einfachen Instrumentenklang erzeugt, der durch eine Rechteckschwingung geschaltet wird.
+example_fm.arts
+Ein FM-Quellmodul erzeugt einen 440Hz-Sinuston, der dann mit 5 Hz frequenzmoduliert wird.
+example_freeverb.arts
+Verbindet den Freeverb-Effekt von einem Bus downlink zu einem Bus outlink.
+Sie k\xF6nnen mit artscontrol diesen Effekt mit einem Spieler verbinden und sich das Resultat anh\xF6ren.
+example_flanger.arts
+Implementiert einen einfachen Flanger-Effekt (scheint bisher nicht zu funktionieren).
+example_moog.arts
+Diese Struktur kombiniert zwei Kan\xE4le von einem Bus, schickt das Signal durch einen Moog-VCF-Filter und das Ergebnis auf den out_soundcard-Bus.
+example_pitch_shift.arts
+Diese Struktur schickt den linken Kanal von Soundkartendaten durch einen H\xF6henverschiebungseffekt (pitch shift).
+Mit dem Speed-Parameter kann der Effekt modifiziert werden.
+example_rc.arts
+Diese Struktur sendet wei\xDFen L\xE4rm durch einen RC-Filter und dann an die Soundkarte.
+Betrachten Sie das Ergebnis in der FFT-Anzeige von artscontrol, um den Unterschied zu ungefiltertem L\xE4rm zu sehen.
+example_sequence.arts
+Demonstriert die Verwendung des Sequencer-Moduls durch das Abspielen einer Notensequenz.
+example_shelve_cutoff.arts
+Diese Struktur schickt wei\xDFen L\xE4rm durch einen Shelve-Cutoff-Filter und dann an die Soundkarte.
+Das Ergebnis k\xF6nnen Sie in der FFT-Anzeige von artscontrol betrachten.
+example_equalizer.arts
+Demonstriert das Std_Equalizer-Modul.
+Es hebt die H\xF6hen und Tiefen um 6dB an.
+example_tremolo.arts
+Demonstriert den Tremolo-Effekt.
+Der rechte und linke Kanal werden mit einem 10Hz-Tremolo moduliert.
+example_xfade.arts
+Dieses Beispiel mixt einen 440Hz- und einen 880Hz-Sinuston mit einem "cross fader".
+Ver\xE4ndern Sie die Prozentanzeige von -1 bis 1, um die Mischung der zwei Signale zu beeinflussen.
+example_pscale.arts
+Demonstriert das Pscale-Modul (ich zweifle, dass dieses Beipiel aussagekr\xE4ftig ist).
+example_play_wav.arts
+Illustriert das Play_Wave-Modul.
+Sie m\xFCssen den kompletten Pfad zur wav -Datei als Parameter filename angeben.
+example_multi_add.arts
+Zeigt, wie das Multi_Add-Modul eine beliebige Anzahl Eingangssignale aufsummiert.
+Drei Eing\xE4nge mit den Werten 1,2 und 3 erzeugen den Ausgangswert 6.
+Details zu aRts
+Architektur
+Module & Kan\xE4le
+aRts beruht auf einem Synthesemodell, bei dem aus kleinen Modulen, die jedes f\xFCr sich eine spezialisierte Aufgabe haben, komplexe Strukturen aufgebaut werden.
+Die Module haben normalerweise Eing\xE4nge, \xFCber die Signale und Parameter \xFCbergeben werden, und Ausg\xE4nge, an denen die Ergebnissignale anliegen.
+Das Modul Synth_ADD zum Beispiel addiert die zwei Eingangssignal zu einem Summensignal, das als Ausgangssignal verf\xFCgbar ist.
+Die Stellen, mit denen die Ein-/Ausgangssignale verbunden werden hei\xDFen Kan\xE4le (ports).
+Strukturen
+aRts-builder dient zur Beschreibung dieser Strukturen.
+Sie beschreiben, welche Module in welcher Weise verbunden werden sollen.
+Wenn Sie damit fertig sind, k\xF6nnen Sie die Beschreibung speichern oder aRts zu der Erzeugung der Struktur veranlassen (Struktur ausf\xFChren).
+Aussetzer
+Was bedeutet Verz\xF6gerung?
+Angenommen Sie haben ein Programm mit Namen Mausklick, das ein Klicken von sich geben soll, wenn Sie eine Maustaste bet\xE4tigen.
+Die Verz\xF6gerungszeit ist die Zeit zwischen dem Bet\xE4tigen der Maustaste und dem Ert\xF6nen des Klicken.
+Die Einstellung der Verz\xF6gerungszeit besteht aus mehreren Verz\xF6gerungszeiten, die unterschiedliche Ursachen haben.
+Verz\xF6gerungszeit in einfachen Anwendungen
+In dieser einfachen Anwendung werden an folgenden Stellen Verz\xF6gerungen verursacht:
+Zeit, die der Betriebssystemkern ben\xF6tigt, um dem X11-Server den Mausklick mitzuteilen.
+Zeit, die der X11-Server ben\xF6tigt, um der Anwendung den Mausklick mitzuteilen.
+Zeit, die die Anwendung ben\xF6tigt, um aufgrund des Mausklicks einen Klick-Ton auszul\xF6sen.
+Zeit, die die Anwendung ben\xF6tigt, um dem Soundserver den Befehl zum Klick-Ton zu geben.
+Zeit, die der Klick-Ton ben\xF6tigt (den der Soundserver sofort in den Ausgabestrom einmischt), um den Datenpuffer zu passieren, bis er die Stelle erreicht, an der die Soundkarte gerade Daten wiedergibt.
+Zeit, die der Klick-Ton von den Lautsprechern bis zu Ihrem Ohr ben\xF6tigt.
+Die ersten drei Verz\xF6gerungszeiten sind extern f\xFCr aRts.
+Sie sind wichtig, aber nicht Gegenstand dieser Dokumentation.
+Sie sollten sich dennoch dieser Verz\xF6gerungen bewusst sein, denn selbst wenn Sie alle anderen Verz\xF6gerungen sehr gering halten, erhalten Sie vielleicht dennoch nicht exakt die erwarteten Resultate.
+Ein Spielbefehl an den Server besteht normalerweise aus einem MCOP -Funktionsaufruf.
+Es gibt Geschwindigkeitstests,die belegen, dass ein solcher Befehl auf einem Rechner bei der jetzigen Implementation etwa 9000 mal pro Sekunde ausgef\xFChrt werden kann.
+Ich denke, das meiste der Zeit wird Kernel-Overhead f\xFCr die Umschaltung zwischen verschiedenen Anwendungen sein.
+Nat\xFCrlich h\xE4ngen diese Werte von den exakten Parametertypen des Aufrufs ab.
+Die \xDCbergabe eines vollst\xE4ndigen Bildes in einem Aufruf dauert l\xE4nger als die \xDCbergabe eines einzigen Werte.
+Das Gleiche gilt f\xFCr den R\xFCckgabewert.
+F\xFCr normale Zeichenketten (wie der Dateiname der zu spielenden wav -Datei) sollte das aber kein Problem darstellen.
+Das bedeutet, diese Zeit kann mit 1/9000 Sekunde abgesch\xE4tzt werden.
+Das ist weniger als 0,15 ms.
+Sie werden sehen, das diese Zeitspanne unwichtig ist.
+Die n\xE4chste Verz\xF6gerungszeit ist die Zeit vom Starten des Soundservers und der Ankunft dieses Beginns auf der Soundkarte.
+Der Server muss einen Puffer verwenden, damit man keine Aussetzer h\xF6rt, wenn eine andere Anwendung wie der X11-Server oder das Mausklick -Programm aktiv sind.
+Das wird unter Linux verwirklicht, indem eine Anzahl Bruchst\xFCcke einer bestimmte Gr\xF6\xDFe erzeugt werden.
+Der Server f\xFCllt die Bruchst\xFCcke und die Soundkarte spielt die Bruchst\xFCcke ab.
+Angenommen es gibt drei Bruchst\xFCcke.
+Der Server f\xFCllt das Erste, die Soundkarte beginnt mit dem Abspielen.
+Der Server f\xFCllt das Zweite.
+Der Server f\xFCllt das Dritte.
+Der Server ist fertig, andere Anwendungen k\xF6nnen nun aktiviert werden.
+Nach dem ersten Bruchst\xFCck spielt die Soundkarte das Zweite ab und der Server f\xFCllt das erste Bruchst\xFCck wieder.
+Das geht immer so weiter.
+Damit ergibt sich eine maximale Verz\xF6gerungszeit von (Anzahl der Bruchst\xFCcke)*(Gr\xF6\xDFe eines Bruchst\xFCckes)/(Samplingrate * (Gr\xF6\xDFe eines Samples)).
+Bei 44kHz Stereo und 7 Bruchst\xFCcken von je 1024 Byte Gr\xF6\xDFe (die aktuellen Standardwerte von aRts) entspricht das einer Verz\xF6gerungszeit von 40 ms.
+Diese Werte k\xF6nnen Sie Ihren Anforderungen anpassen.
+Allerdings steigt die CPU -Belastung mit kleineren Verz\xF6gerungszeiten, da der Soundserver die Puffer h\xE4ufiger und in kleineren Bruchst\xFCcken f\xFCllen muss.
+Es ist au\xDFerdem meistens unm\xF6glich, bessere Werte zu erreichen, ohne das Aussetzer zu h\xF6ren sind, es sei denn, sie versehen den Soundserver mit Echtzeit-Priorit\xE4t.
+Dennoch ist eine Einstellung von 3 Bruchst\xFCcken mit je 256 Bytes, die einer Verz\xF6gerung von 4,4 ms entsprechen, realistisch.
+Mit 4,4 ms Verz\xF6gerungszeit belastet aRts die CPU im Ruhezustand mit 7,5%.
+Mit einer Verz\xF6gerung von 40 ms betr\xE4gt die Belastung etwa 3% (bei einem PII-350, diese Werte k\xF6nnen abh\xE4ngig von der Soundkarte, Kernel-Version und anderen Faktoren variieren).
+Jetzt zu der Zeit, die der Klick-Ton von den Lautsprechern bis zum Ohr ben\xF6tigt.
+Bei einer angenommenen Distanz von 2 Metern ergibt sich bei einer Schallgeschwindigkeit von 330 Meter pro Sekunde eine Verz\xF6gerung von etwa 6 ms.
+Verz\xF6gerungszeit in Streaming-Anwendungen
+Streaming-Anwendungen produzieren ihre Kl\xE4nge selbst.
+Angenommen, ein Spiel, das einen konstanten Strom von Samples erzeugt, soll nun f\xFCr die Wiedergabe durch aRts verwendet werden.
+Als Beispiel:
+Wenn ich eine Taste dr\xFCcke, h\xFCpft die Spielfigur und es ert\xF6nt ein Boing-Klang.
+Als Erstes muss man wissen, wie aRts Streaming realisiert.
+Der Ablauf ist \xE4hnlich wie bei der Ausgabe auf einer Soundkarte.
+Das Spiel sendet einige Pakete mit Samples zum Soundserver.
+Angenommen, es sinc drei Pakete.
+Sobald der Soundserver das erste Paket wiedergegeben hat, schickt er eine Best\xE4tigung zur\xFCck zum Spiel.
+Das Spiel erzeugt ein neues Paket und schickt es zum Server.
+W\xE4hrenddessen verarbeitet der Server das zweite Paket und so weiter.
+Die Verz\xF6gerungszeiten hier sind \xE4hnlich wie bei dem einfachen Beispiel:
+Zeit, bis der Betriebssystemkern dem X11-Server den Tastendruck mitgeteilt hat.
+Zeit, bis der X11-Server dem Spiel den Tastendruck mitgeteilt hat.
+Zeit, bis das Spiel entschieden hat, das aufgrund des Tastendrucks ein Boing-Ton auszugeben ist.
+Zeit, bis das Paket mit dem Anfang des Boing-Tons den Soundserver erreicht hat.
+Zeit, bis der Boing-Ton (den der Soundserver sofort in die Ausgabe einmischt) den Datenpuffer passiert hat bis zu der Stelle, an der die Soundkarte gerade wiedergibt.
+Zeit, die der Boing-Ton von den Lautsprechern bis zum Ohr ben\xF6tigt.
+Die externen Verz\xF6gerungen sind gehen wiederum \xFCber den Inhalt dieses Dokumentes hinaus.
+Offensichtlich h\xE4ngt die Streaming-Verz\xF6gerung von der Zeit ab, die alle Pakete ben\xF6tigen, einmal wiedergegeben zu werden.
+Also ist diese Zeit (Anzahl der Pakete)*(Gr\xF6\xDFe eines Paketes)/(Samplingrate * (Gr\xF6\xDFe eines Samples))
+Wie man sieht, ist das die gleiche Formel, wie sie bei den Bruchst\xFCcken verwandt wird.
+F\xFCr Spiele sind solch geringer Verz\xF6gerungszeiten wie oben \xFCberfl\xFCssig.
+Eine realistische Festlegung f\xFCr Spiekle w\xE4ren 2046 Bytes pro Paket bei drei Paketen.
+Die resultierende Verz\xF6gerung ist dann etwa 35 ms.
+Diese Berechnung basiert auf folgenden Annahmen: das Spiel rendert 25 Bilder pro Sekunde (f\xFCr die Anzeige).
+Einen Verschiebung zwischen Ton und Film von einem Bild nimmt man nicht wahr.
+Daher ist eine Verz\xF6gerung von 1/25 Sekunde f\xFCr Streaming akzeptabel, was wiederum bedeutet, das 40ms in Ordnung sind.
+Au\xDFerdem werden die meisten Leute ihre Spiele nicht mit Echtzeit-Priorit\xE4t spielen und daher ist die Gefahr von Aussetzern nicht zu vernachl\xE4ssigen.
+Bei 3 Paketen je 256 Bytes ist Streaming m\xF6glich (nach eigenen Tests) - es verbraucht aber eine Menge CPU -Zeit.
+F\xFCr die Serververz\xF6gerungszeiten k\xF6nnen Sie genau wie oben rechnen.
+Einige \xDCberlegungen zu CPU -Zeit
+Es gibt eine Menge Faktoren, die in komplexen Situationen mit einigen Streaming-Anwendungen und einigen Anderen sowie einigen Plugins auf dem Server einen Einflu\xDF auf die CPU -Zeit haben.
+Um einige zu nennen:
+CPU -Zeit f\xFCr die notwendigen Berechnungen.
+aRts interner Scheduler-Aufwand - wie aRts entscheidet, wann welches Modul was berechnen soll.
+Aufwand zur Konvertierung von Ganzzahlen in Kommazahlen.
+MCOP -Protokoll-Aufwand.
+Kernel:
+Proze\xDF-/Kontextumschaltung.
+Kernel:
+Kommunikationsaufwand.
+F\xFCr die CPU -Berechnungszeit bei zwei gleichzeitig abgespielten Datenstr\xF6men muss man Additionen durchf\xFChren.
+Falls man einen Filter verwendet, sind einige weitere Berechnungen notwendig.
+Ein einfaches Beispiel mit zwei Str\xF6men mit vier CPU -Zyklen pro Addition f\xFChren auf einem 350MHz-Prozessor zu 44100*2*4/350000000 = 0,1% CPU -Auslastung.
+aRts internes Scheduling: aRts muss bestimmen, welches Plugin wann was berechnet.
+Das ben\xF6tigt Zeit.
+Wenn man Genaueres wissen will, sollte man einen Profiler zu Rate ziehen.
+Generell l\xE4sst sich Folgendes sagen: je weniger Wert man auf Echtzeit legt (also je gr\xF6\xDFer die zu berechnenden Bl\xF6cke sind) um so wenig Scheduling Zeit wird ben\xF6tigt.
+Bei mehr als 128 Samples in einem St\xFCck (also einer Bruchst\xFCckgr\xF6\xDFe von 512 Bytes) ist der Scheduling-Aufwand wahrscheinlich nicht einmal nennenswert.
+Aufwand zur Konvertierung von Ganzzahlen in Kommazahlen: aRts verwendet intern Kommazahlen als Datenformat.
+Sie sind einfach zu verarbeiten und auf zeitgem\xE4\xDFen Prozessoren kaum langsamer als Ganzzahlen.
+Wenn aber Programme ihre Daten nicht in Kommazahlen abspielen (wie ein Spiel, das seine K\xE4nge \xFCber aRts ausgibt), m\xFCssen diese Daten konvertiert werden.
+Das Gleiche gilt f\xFCr die Ausgabe auf einer Soundkarte.
+Soundkarten ben\xF6tigen Ganzzahlen, also muss eine Konvertierung durchgef\xFChrt werden.
+Die folgenden Zahlen geh\xF6ren zu einem Celeron, ungef\xE4hre ticks pro Sample, mit -O2 +egcs 2.91.66 (berechnet von Eugene Smith hamster@null.ru).
+Diese Zahlen sind naturgem\xE4\xDF sehr prozessorabh\xE4ngig.
+Das bedeutet 1% CPU -Zeit f\xFCr die Konvertierung und 5% f\xFCr die Interpolation auf diesem 350 MHz-Prozessor.
+MCOP Protokoll-Aufwand:
+MCOP vertr\xE4gt ungef\xE4hr 9000 Aufrufe pro Sekunde.
+Das hat wenige mit MCOP als mit den zwei Kernelgr\xFCnden zu tun, die weiter unten beschrieben werden.
+Dennoch gibt das einen Anhaltspunkt f\xFCr die Berechnung der Kosten von Streaming.
+Jedes \xFCbertragene Datenpaket erfordert einen MCOP -Aufruf.
+Nat\xFCrlich ist das nur ein Richtwert, da gro\xDFe Pakete langsamer als 9000 Pakete/s sind.
+Angenommen man verwendet als Paketgr\xF6\xDFe 1024 Bytes.
+F\xFCr einen Stream mit 44kHz Stereo muss man also 44100*4/1024 = 172 Pakete pro Sekunde \xFCbertragen.
+Weiter angenommen, 9000 Pakete pro Sekunde entspricht einer CPU -Auslastung von 100%, dann erh\xE4lt man (172*100)/9000 = 2% CPU -Auslastung bei einem Streaming mit 1024 Bytes pro Paket.
+Das sind nur N\xE4herungen.
+Sie zeigen aber deutlich, dass man viel besser dran ist (wenn man die Verz\xF6gerungszeit tolerieren kann) mit einer Paketgr\xF6\xDFe von 4096 Bytes.
+Wir k\xF6nnen eine kompakte Rechnung durchf\xFChren, wenn wir die Paketgr\xF6\xDFe f\xFCr 100% CPU -Auslastung berechnen mit 44100*4/9000 = 19,6 Samples; daraus erhalten wir folgende Formel:
+Streaming CPU -Auslastung in Prozent = 1960/(Paketgr\xF6\xDFe)
+das ergibt 0,5% CPU -Auslastung bei Streaming mit einer Paketgr\xF6\xDFe von 4096 Bytes.
+Kernel Proze\xDF-/Kontextumschaltung: dieser Aufwand ist ein Teil des MCOP -Protokolls.
+Die Umschaltung zwischen zwei Prozessen ben\xF6tigt Zeit.
+Es wird der Speicher neu aufgeteilt, der Cache wird ung\xFCltig, und vieles mehr (falls ein Kernel-Experte dieses liest - teilen Sie mir bitte die genauen Gr\xFCnde mit).
+Das bedeutet: es ben\xF6tigt Zeit.
+Ich wei\xDF nicht wie viele Kontextwechsel Linux vertr\xE4gt, aber sicher nur eine endliche Zahl.
+Daher nehme ich an, das ein erheblicher Teil des MCOP Protokollaufwandes durch Kontextumschaltung zu Stande kommt.
+Ich f\xFChrte einige Tests mit MCOP -Kommunikation innerhalb eines Prozesses durch.
+Sie war wesentlich schneller (etwa viermal so schnell).
+Kernel:
+Kommunikationsaufwand:
+Das ist ebenfalls ein Bestandteil des MCOP Protokollaufwandes.
+Die Daten\xFCbertragung zwischen Prozessen wird momentan mittels Sockets durchgef\xFChrt.
+Das ist praktisch, da die \xFCblichen select()-Methoden verwendet werden k\xF6nnen, um die Ankunft einer Nachricht zu \xFCberpr\xFCfen.
+Das kann leicht mit anderen Ein-/Ausgabequellen wie Audio Ein-/Ausgabe, X11-Server-Kommunikation und einigem Anderen kombiniert werden.
+Diese Lese- und Schreibaufrufe kosten mit Sicherheit Prozessorzeit.
+Kleine Aufrufe (um ein Midi-Ereignis zu \xFCbertragen) sind vermutlich nicht so schlimm, gro\xDFe Aufrufe (z.B. um ein Videobild mit einigen Megabytes zu \xFCbertragen) stellen sicherlich ein Problem dar.
+In MCOP sollte daher m\xF6glichst gemeinsam genutzter Speicher verwendet werden.
+Das sollte aber keine \xC4nderungen f\xFCr die Anwendungsprogrammierer mit sich bringen.
+Durch einen Profiler kann man herausbekommen, in welchem Ma\xDFe genau heutiges Audio Streaming unter der Nichtverwendung von gemeinsam genutztem Speicher leidet.
+Da Audio Streaming mit artsd und artscat mit 6% CPU -Auslastung (Wiedergabe von mp3) durchgef\xFChrt werden kann (und 5% f\xFCr den mp3-Dekoder), kann es nicht so schlimm sein.
+Das enth\xE4lt alles einschlie\xDFlich der notwendigen Berechnungen und dem Socket-Aufwand, daher vermute ich, durch gemeinsam genutzten Speicher k\xF6nnten vielleicht 1% CPU -Auslastung gespart werden.
+Einige genaue Zahlen
+Diese Zahlen wurden mit der aktuellen CVS-Version ermittelt.
+Au\xDFerdem wollte ich Grenzf\xE4lle testen, also sind das F\xE4lle, die in normalen Anwendungen nicht auftreten sollten.
+Ich habe ein Programm namens streamsound geschrieben, das Streaming Daten an aRts sendet.
+Die Anwendung l\xE4uft hier mit Echtzeit-Priorit\xE4t (ohne Probleme) und einem kleinen Plugin (f\xFCr Laustst\xE4rkeskalierung und Clipping) auf seiten des Servers:
+Das Streaming wird jeweils mit 3 Bruchst\xFCcken je 1024 Bytes (18 ms) durchgef\xFChrt.
+Drei Programme laufen gleichzeitig.
+Das scheint ein bisschen zu viel zu sein; mit einem Profiler kann man versuchen, den Aufwand zu verbessern.
+Das ist ein nicht realistisches Testbeispiel.
+Als weiteren Test wurde versucht, die minimal m\xF6gliche Verz\xF6gerungszeit herauszufinden.
+Resultat: man kann Streaming ohne Unterbrechungen mit einem Anwendungsprogramm bei zwei Bruchst\xFCcken je 128 Bytes zwischen aRts und der Soundkarte sowie zwischen der Anwendung und aRts durchf\xFChren.
+Das entspricht einer maximalen Verz\xF6gerung von 128*4/44100*4 = 3 ms, wobei 1,5 ms von der Soundkarte und 1,5 ms durch die Kommunikation mit aRts entstehen.
+Beide Anwendungen ben\xF6tigen Echtzeit-Priorit\xE4t.
+Das ben\xF6tigt allerdings einen erheblichen Anteil der CPU.
+Das Beispiel liegt bei etwa 45% auf meinem P-II/350.
+Es wird ein Klicken h\xF6rbar, wenn man Fenster in X11 bewegt oder Festplattenaktivit\xE4t verursacht.
+Das h\xE4ngt mit dem Kernel zusammen.
+Das Problem ist, das zwei Echtzeitanwendungen einen erheblichen Aufwand verursachen, mehr noch, wenn Sie auch noch miteinander kommunizieren.
+Schlie\xDFlich ein realistischeres Beispiel.
+Es besteht aus aRts mit artsd und einem artscat (ein Streaming Programm) bei 16 Bruchst\xFCcken mit je 4096 Bytes:
+Busse
+Busse existieren momentan nur in Stereo.
+Wenn Sie Mono-Daten transportieren wollen, senden Sie sie \xFCber einen Kanal und setzen Sie den anderen auf Null.
+Zur Verwendung erstellen Sie einen oder mehrere Synth_BUS_UPLINK-Module und benennen Sie sie mit dem Busnamen, auf dem Sie senden sollen (z.B. audio oder drums).
+Dann senden Sie die Daten an diese Uplinks.
+Die Uplinks und Downlinks k\xF6nnen zu unterschiedlichen Strukturen geh\xF6ren.
+Sie k\xF6nnen sogar zwei Instanzen von aRts-builder verwenden und in einer davon einen Uplink und in der Anderen den passenden Downlink haben.
+Nat\xFCrlich sollte kein Teil ausgeklinkt werden, w\xE4hrend sein Signalpegel h\xF6her als Null ist, da sonst nat\xFCrlich ein Klicken zu h\xF6ren sein wird.
+Trader
+aRts / MCOP basiert sehr auf der Aufteilung von Aufgaben in kleine Komponenten.
+Das System wird dadurch sehr flexibel, da man das System auf einfache Weise durch das Hinzuf\xFCgen neuer Komponenten, die neue Effekte, Dateiformate, Oszillatoren, GUI-Elemente,... bereitstellen, erweitert werden kann.
+Da beinahe alles als Komponente programmiert ist, kann beinahe alles einfach erweitert werden, ohne die existierenden Quellen zu ver\xE4ndern.
+Neue Komponenten, die das System erweitern, werden einfach dynamisch geladen.
+F\xFCr einen reibungslosen Ablauf sind zwei Dinge erforderlich:
+Komponenten m\xFCssen sich bekannt machen - sie m\xFCssen ihre Funktionen beschreiben, damit andere Programme sie verwenden k\xF6nnen.
+Anwendungen m\xFCssen aktiv nach verwendbaren Komponenten suchen, anstatt immer die gleichen DInge f\xFCr eine Aufgabe zu verwenden.
+Die Kombination davon:
+Komponenten, die sagen:
+Hier bin ich, verwende mich, und Anwendungen (oder, wenn man so will, andere Komponenten), die nach verwendbaren Komponenten suchen, um eine Aufgabe zu erledigen, nennt man Handel.
+In aRts beschreiben Komponenten sich selbst, indem sie Werte festlegen, die sie als Eigenschaften unterst\xFCtzen.
+Eine typische Eigenschaft einer Komponente zum Laden einer Datei k\xF6nnte die Dateinamenerweiterung sein, die sie verarbeiten kann.
+Typische Werte k\xF6nnten wav, aiff oder mp3 sein.
+Jede Komponente kann viele verschiedene Werte f\xFCr eine Eigenschaft anbieten.
+Eine einzige Komponente kann somit sowohl das Einlesen von wav als auch aiff -Dateien anbieten, indem sie diese Werte f\xFCr die Eigenschaft Extension angibt.
+Um das durchzuf\xFChren, muss die Komponente eine .mcopclass -Datei an geeigneter Stelle platzieren, in der sie die unterst\xFCtzten Eigenschaften festlegt.
+It is important that the filename of the .mcopclass -file also says what the interface of the component is called like.
+The trader doesn't look at the contents at all, if the file (like here) is called Arts/WavPlayObject.mcopclass, the component interface is called Arts::WavPlayObject (modules map to directories).
+To look for components, there are two interfaces (which are defined in core.idl, so you have them in every application), called Arts::TraderQuery and Arts::TraderOffer.
+You to go on a shopping tour for components like this:
+Create a query object:
+Specify what you want.
+As you saw above, components describe themselves using properties, for which they offer certain values.
+So specifying what you want is done by selecting components that support a certain value for a property.
+This is done using the supports method of a TraderQuery:
+Finally, perform the query using the query method.
+Then, you'll (hopefully) get some offers:
+Now you can examine what you found.
+Important is the interfaceName method of TraderOffer, which will tell you the name of the component, that matched the query.
+You can also find out further properties by getProperty.
+The following code will simply iterate through all components, print their interface names (which could be used for creation), and delete the results of the query again:
+For this kind of trading service to be useful, it is important to somehow agree on what kinds of properties components should usually define.
+It is essential that more or less all components in a certain area use the same set of properties to describe themselves (and the same set of values where applicable), so that applications (or other components) will be able to find them.
+Author (type string, optional):
+This can be used to ultimately let the world know that you wrote something.
+You can write anything you like in here, e-mail adress is of course helpful.
+Buildable (type boolean, recommended):
+This indicates whether the component is usable with RAD tools (such as aRts-builder) which use components by assigning properties and connecting ports.
+It is recommended to set this value to true for almost any signal processing component (such as filters, effects, oscillators,...), and for all other things which can be used in RAD like fashion, but not for internal stuff like for instance Arts::InterfaceRepo.
+Extension (type string, used where relevant):
+Everything dealing with files should consider using this.
+You should put the lowercase version of the file extension without the. here, so something like wav should be fine.
+Interface (type string, required):
+This should include the full list of (useful) interfaces your components supports, probably including Arts::Object and if applicable Arts::SynthModule.
+Language (type string, recommended):
+If you want your component to be dynamically loaded, you need to specify the language here.
+Currently, the only allowed value is C++, which means the component was written using the normal C++ API.
+If you do so, you'll also need to set the Library property below.
+Library (type string, used where relevant):
+Components written in C++ can be dynamically loaded.
+To do so, you have to compile them into a dynamically loadable libtool (.la) module.
+Here, you can specify the name of the .la -File that contains your component.
+Remember to use REGISTER_IMPLEMENTATION (as always).
+MimeType (type string, used where relevant):
+Everything dealing with files should consider using this.
+You should put the lowercase version of the standard mimetype here, for instance audio/x-wav.
+URL (type string, optional):
+If you like to let people know where they can find a new version of the component (or a homepage or anything), you can do it here.
+This should be standard HTTP or FTP URL.
+Namespaces in aRts
+Einleitung
+How aRts uses namespaces
+There is one global namespace called Arts, which all programs and libraries that belong to aRts itself use to put their declarations in.
+This means, that when writing C++ code that depends on aRts, you normally have to prefix every class you use with Arts::, like this:
+The other alternative is to write a using once, like this:
+In IDL files, you don't exactly have a choice.
+If you are writing code that belongs to aRts itself, you'll have to put it into module aRts.
+If you write code that doesn't belong to aRts itself, you should not put it into the Arts namespace.
+However, you can make an own namespace if you like.
+In any case, you'll have to prefix classes you use from aRts.
+Internals:
+How the Implementation Works
+Note this even applies if inside the IDL text the namespace qualifiers were not given, since the context made clear which namespace the interface A was meant to be used in.
+Threads in aRts
+Basics
+Using threads isn't possible on all platforms.
+This is why aRts was originally written without using threading at all.
+For almost all problems, for each threaded solution to the problem, there is a non-threaded solution that does the same.
+For instance, instead of putting audio output in a seperate thread, and make it blocking, aRts uses non-blocking audio output, and figures out when to write the next chunk of data using select().
+However, aRts (in very recent versions) at least provides support for people who do want to implement their objects using threads.
+For instance, if you already have code for an mp3 player, and the code expects the mp3 decoder to run in a seperate thread, it's usally the easiest thing to do to keep this design.
+The aRts / MCOP implementation is built along sharing state between seperate objects in obvious and non-obvious ways.
+A small list of shared state includes:
+The Dispatcher object which does MCOP communication.
+The Reference counting (Smartwrappers).
+The IOManager which does timer and fd watches.
+The ObjectManager which creates objects and dynamically loads plugins.
+The FlowSystem which calls calculateBlock in the appropriate situations.
+All of the above objects don't expect to be used concurrently (d.h. called from seperate threads at the same time).
+Generally there are two ways of solving this:
+Require the caller of any functions on this objects to acquire a lock before using them.
+Making these objects really threadsafe and/or create per-thread instances of them.
+aRts follows the first approach: you will need a lock whenever you talk to any of these objects.
+The second approach is harder to do.
+A hack which tries to achieve this is available at http://space.twc.de/~stefan/kde/download/arts-mt.tar.gz, but for the current point in time, a minimalistic approach will probably work better, and cause less problems with existing applications.
+When/how to acquire the lock?
+You can get/release the lock with the two functions:
+Arts::Dispatcher::lock()
+Arts::Dispatcher::unlock()
+Generally, you don't need to acquire the lock (and you shouldn't try to do so), if it is already held.
+A list of conditions when this is the case is:
+You receive a callback from the IOManager (timer or fd).
+You get call due to some MCOP request.
+You are called from the NotificationManager.
+You are called from the FlowSystem (calculateBlock)
+There are also some exceptions of functions. which you can only call in the main thread, and for that reason you will never need a lock to call them:
+Constructor/destructor of Dispatcher/IOManager.
+Dispatcher::run() / IOManager::run()
+IOManager::processOneEvent()
+But that is it.
+For everything else that is somehow related to aRts, you will need to get the lock, and release it again when done.
+Always.
+Here is a simple example:
+Threading related classes
+The following threading related classes are currently available:
+Arts::Thread - which encapsulates a thread.
+Arts::Mutex - which encapsulates a mutex.
+Arts::ThreadCondition - which provides support to wake up threads which are waiting for a certain condition to become true.
+Arts::SystemThreads - which encapsulates the operating system threading layer (which offers a few helpful functions to application programmers).
+See the links for documentation.
+References and Error Handling
+Basic properties of references
+An MCOP reference is not an object, but a reference to an object:
+Even though the following declaration Arts::Synth_PLAY p; looks like a definition of an object, it only declares a reference to an object.
+As C++ programmer, you might also think of it as Synth_PLAY *, a kind of pointer to a Synth_PLAY object.
+This especially means, that p can be the same thing as a NULL pointer.
+You can create a NULL reference by assigning it explicitly
+Invoking things on a NULL reference leads to a core dump
+will lead to a core dump.
+Comparing this to a pointer, it is essentially the same as QWindow* w = 0; w->show(); which every C++ programmer would know to avoid.
+Uninitialized objects try to lazy-create themselves upon first use
+is something different than dereferencing a NULL pointer.
+You didn't tell the object at all what it is, and now you try to use it.
+The guess here is that you want to have a new local instance of a Arts::Synth_PLAY object.
+Of course you might have wanted something else (like creating the object somewhere else, or using an existing remote object).
+However, it is a convenient short cut to creating objects.
+Lazy creation will not work once you assigned something else (like a null reference).
+The equivalent C++ terms would be QWidget* w; w->show(); which obviously in C++ just plain segfaults.
+So this is different here.
+This lazy creation is tricky especially as not necessarily an implementation exists for your interface.
+For instance, consider an abstract thing like a Arts::PlayObject.
+There are certainly concrete PlayObjects like those for playing mp3s or wavs, but Arts::PlayObject po; po.play(); will certainly fail.
+The problem is that although lazy creation kicks in, and tries to create a PlayObject, it fails, because there are only things like Arts::WavPlayObject and similar.
+Thus, use lazy creation only when you are sure that an implementation exists.
+References may point to the same object
+creates two references referring to the same object.
+It doesn't copy any value, and doesn't create two objects.
+All objects are reference counted So once an object isn't referred any longer by any references, it gets deleted.
+There is no way to explicitely delete an object, however, you can use something like this Arts::Synth_PLAY p; p.start(); [...] p = Arts::Synth_PLAY::null(); to make the Synth_PLAY object go away in the end.
+Especially, it should never be necessary to use new and delete in conjunction with references.
+The case of failure
+A crash doesn't change whether a reference is a null reference.
+This means that if foo.isNull() was true before a server crash then it is also true after a server crash (which is clear).
+It also means that if foo.isNull() was false before a server crash (foo referred to an object) then it is also false after the server crash.
+Invoking methods on a valid reference stays safe Suppose the server containing the object calc crashed.
+Still calling things like int k = calc.subtract(i,j) are safe.
+Obviously subtract has to return something here, which it can't because the remote object no longer exists.
+In this case (k == 0) would be true.
+Generally, operations try to return something neutral as result, such as 0.0, a null reference for objects or empty strings, when the object no longer exists.
+Checking error() reveals whether something worked.
+In the above case, int k = calc.subtract(i,j) if(k.error()) {printf("k is not i-j!\n ");} would print out k is not i-j whenever the remote invocation didn't work.
+Otherwise k is really the result of the subtract operation as performed by the remote object (no server crash).
+However, for methods doing things like deleting a file, you can't know for sure whether it really happened.
+Of course it happened if .error() is false.
+However, if .error() is true, there are two possibilities:
+The file got deleted, and the server crashed just after deleting it, but before transferring the result.
+The server crashed before beeing able to delete the file.
+Using nested invocations is dangerous in crash resistent programs
+Using something like window.titlebar().setTitle("foo "); is not a good idea.
+Suppose you know that window contains a valid Window reference.
+Suppose you know that window.titlebar() will return a Titlebar reference because the Window object is implemented properly.
+However, still the above statement isn't safe.
+What could happen is that the server containing the Window object has crashed.
+Then, regardless of how good the Window implementation is, you will get a null reference as result of the window.titlebar() operation.
+And then of course invoking setTitle on that null reference will lead to a crash as well.
+So a safe variant of this would be Titlebar titlebar = window.titlebar(); if(!window.error()) titlebar.setTitle("foo "); add the appropriate error handling if you like.
+If you don't trust the Window implementation, you might as well use Titlebar titlebar = window.titlebar(); if(!titlebar.isNull()) titlebar.setTitle("foo "); which are both safe.
+Overall, it is of course a consideration of policy how strictly you try to trap communcation errors throughout your application.
+You might follow the if the server crashes, we need to debug the server until it never crashes again method, which would mean you need not bother about all these problems.
+Internals:
+Distributed Reference Counting
+An object, to exist, must be owned by someone.
+If it isn't, it will cease to exist (more or less) immediately.
+Internally, ownership is indicated by calling _copy(), which increments an reference count, and given back by calling _release().
+As soon as the reference count drops to zero, a delete will be done.
+As a variation of the theme, remote usage is indicated by _useRemote(), and dissolved by _releaseRemote().
+These functions lead a list which server has invoked them (and thus owns the object).
+This is used in case this server disconnects (d.h. crash, network failure), to remove the references that are still on the objects.
+This is done in _disconnectRemote().
+Now there is one problem.
+Consider a return value.
+Usually, the return value object will not be owned by the calling function any longer.
+It will however also not be owned by the caller, until the message holding the object is received.
+So there is a time of ownershipless objects.
+Now, when sending an object, one can be reasonable sure that as soon as it is received, it will be owned by somebody again, unless, again, the receiver dies.
+However this means that special care needs to be taken about object at least while sending, probably also while receiving, so that it doesn't die at once.
+The way MCOP does this is by tagging objects that are in process of being copied across the wire.
+Before such a copy is started, _copyRemote is called.
+This prevents the object from being freed for a while (5 seconds).
+Once the receiver calls _useRemote(), the tag is removed again.
+So all objects that are send over wire are tagged before transfer.
+If the receiver receives an object which is on his server, of course he will not _useRemote() it.
+For this special case, _cancelCopyRemote() exists to remove the tag manually.
+Other than that, there is also timer based tag removal, if tagging was done, but the receiver didn't really get the object (due to crash, network failure).
+This is done by the ReferenceClean class.
+GUI -Elemente
+GUI -Elemente sind augenblicklich in einem experimentellen Stadium.
+Dieser Abschnitt beschreibt also, wie aRts sp\xE4ter einmal mit GUI -Elementen umgehen soll.
+Au\xDFerdem ist ein gewisser Teil an Programmzeilen bereits vorhanden.
+GUI -Elemente dienen der Interaktion eines Benutzers mit synthetisierten Strukturen.
+Im einfachsten Fall soll der Benutzer in der Lage sein, einige Parameter der Struktur direkt zu ver\xE4ndern (z.B. einen Verst\xE4rkungsfaktor, der vor dem Abspielmodul verwendet wird).
+In einem komplexeren Fall w\xE4re vorstellbar, das ein Benutzer Parameter einer ganzen Gruppe von Strukturen oder noch nicht ausgef\xFChrten Strukturen \xE4ndert, wie z.B. die ADSR -H\xFCllkurve (envelope) des aktiven MIDI -Instrumentes.
+Eine andere denkbare Einstellung w\xE4re der Dateiname eines Instrumentes, das auf einem Sample basiert.
+Auf der anderen Seite k\xF6nnte der Benutzer \xFCberwachen wollen, was innerhalb des Synthesizers passiert.
+Dazu k\xF6nnte es Oszilloskope, Spektrumanalysatoren, Lautst\xE4rkeanzeigen und Experimente geben, um z.B. in der Lage zu sein, den Frequenzgang eines bestimmten Filtermodules zu analysieren.
+Schlie\xDFlich sollte es m\xF6glich sein, mit GUI -Elementen die gesamte Struktur zu kontrollieren, die in aRts ausgef\xFChrt wird.
+Der Benutzer sollte in der Lage sein, Instrumente MIDI -Kan\xE4len zuzuordnen, neue Effekte zu starten und zu seinem Hauptmischpult (das ebenfalls aus aRts -Strukturen besteht) einen weiteren Kanal hinzuzuf\xFCgen und eine neue Strategie f\xFCr seine Equalizer einzustellen.
+Die GUI -Elemente bieten dem Benutzer damit Zugriff auf alle M\xF6glichkeiten, die das virtuelle Studio aRts bietet.
+Nat\xFCrlich sollen die GUI -Elemente auch mit MIDI -Eingaben interagieren k\xF6nnen (ein Schieberegler soll sich selbstst\xE4ndig in eine neue Position bewegen, wenn ein Midi-Ereignis gerade diesen Parameter ge\xE4ndert hat), weiterhin sollen die Elemente selbst Ereignisse generieren k\xF6nnen, um die Aufnahme der Benutzereingaben zu erm\xF6glichen.
+Technisch gesprochen ben\xF6tigt man eine IDL -Basisklasse f\xFCr alle Kontrollelemente (Arts::Widget) und kann von dieser eine Anzahl h\xE4ufig verwendeter Kontrollelemente (wie Arts::Poti, Arts::Panel, Arts::Window,...) ableiten.
+Diese Kontrollelemente sollten mit einer Bibliothek wie Qt oder Gtk implementiert werden.
+Schlie\xDFlich sollten die GUI s der Effekte aus diesen Elementen gebildet werden.
+Ein Freeverb-Effekt k\xF6nnte z.B. aus f\xFCnf Arts::Poti - und einem Arts::Window -Element gebildet werden.
+Wenn es also eine Qt -Implementation dieser grundlegenden Elemente gibt, kann der Effekt sich mit Hilfe von Qt darstellen.
+Wenn es eine Gtk-Implementation gibt, funktioniert das f\xFCr Gtk ebenfalls (die Funktionsweise sollte mehr oder weniger gleichwertig sein).
+Da wir IDL benutzen, sollte aRts-builder (oder andere Programme) in der Lage sein, GUI s optisch zusammenzuf\xFChren oder mit einigen Parametern basierend auf den Schnittstellen selbst zusammenzustellen.
+Es sollte relativ einfach sein, eine GUI nach Beschreibung erstellen -Klasse zu programmieren, die eine GUI -Beschreibung (in der Form Parameter und Kontrollelement) in ein GUI -Objekt umsetzt.
+Basierend auf IDL und dem aRts / MCOP -Komponentenmodell sollte es genau so leicht sein, ein neues GUI -Objekt zu erstellen, wie es ist, ein neues Plugin f\xFCr aRts zu schreiben, das einen weiteren Filter bereitstellt.
+MIDI
+\xDCberblick
+Die MIDI -Unterst\xFCtzung in aRts hat verschiedene Aufgaben.
+Erstens erm\xF6glicht sie die Kommunikation von verschiedenen Programmteilen, die MIDI -Ereignisse erzeugen oder verarbeiten.
+Wenn Sie z.B. \xFCber einen Sequenzer und einen Sampler verf\xFCgen, die beide aRts unterst\xFCtzen, kann aRts MIDI -Ereignisse vom Sequenzer zum Sampler senden.
+Auf der anderen Seite kann aRts f\xFCr ein Programm die Interaktion mit Ger\xE4ten \xFCbernehmen.
+Wenn ein Programm (z.B. ein Sampler) aRts unterst\xFCtzt, kann es genau so gut MIDI -Ereignisse von einem externen MIDI -Keyboard empfangen.
+Schlie\xDFlich ist aRts ein hervorragender modularer Synthesizer.
+Er ist genau daf\xFCr entworfen worden.
+Sie k\xF6nnen mit artsbuilder aus den kleinen Modulen Instrumente zusammenstellen und diese Instrumente dann f\xFCr Kompositionen oder zum Abspielen von Musik verwenden.
+Synthese hei\xDFt nicht notwendigerweise reine Synthese, es gibt Module, die Sie zum Abspielen von Samples verwenden k\xF6nnen.
+Also kann aRts ein Sampler, ein Synthesizer und mehr sein; aRts ist vollst\xE4ndig modular, also leicht zum Erweitern und Experimentieren geeignet, m\xE4chtig und flexibel.
+Der MIDI -Manager
+Die zentrale Komponente f\xFCr Midi-Ereignisse innerhalb von aRts ist der Midi-Manager.
+Er kontrolliert, welche Anwendungen verbunden sind und wie Midi-Ereignisse zwischen ihnen \xFCbertragen und verarbeitet werden sollen.
+Der Midi-Manager wird durch artscontrol gesteuert.
+Auf der linken Seite sehen Sieh Midi-Eing\xE4nge.
+Hier werden alle Ger\xE4te aufgelistet, die MIDI -Ereignisse produzieren.
+Das k\xF6nnen externe MIDI -Kan\xE4le sein, die mit einem externen Keyboard verbunden sind, ein Sequenzer, der ein Musikst\xFCck abspielt, oder eine andere MIDI -Quelle.
+Alle Ger\xE4te oder Programme, die MIDI -Ereignisse verarbeiten, sind hier aufgelistet.
+Das k\xF6nnen simulierte Sampler (als Programme) oder externe MIDI -Kan\xE4le, an denen ein Hardware-Sampler angeschlossen ist, sein.
+Neue Programme, wie z.B.
+Sequenzer, registrieren sich bei dem Midi-Manager, daher kann sich der Listeninhalt von Zeit zu Zeit \xE4ndern.
+Sie k\xF6nnen Ein- und Ausg\xE4nge verbinden, indem Sie den gew\xFCnschten Eingang auf der linken und den Ausgang auf der rechten Seite markieren und auf Verbinden klicken.
+Eine Trennung erreichen Sie mit dem Knopf Trennen.
+Die bestehenden Verbindungen werden durch g\xFCnne Linien zwischen den Listen angezeigt.
+Sie k\xF6nnen einen Midi-Eingang mit mehreren Midi-Ausg\xE4ngen verbinden und umgekehrt.
+Programme (wie der Sequenzer Brahms) f\xFCgen sich beim Start selbstst\xE4ndig zur entsprechenden Liste hinzu und entfernen sich beim Beenden selbstst\xE4ndig.
+Sie k\xF6nnen aber auch von Hand Eintr\xE4ge hinzuf\xFCgen, indem Sie im Men\xFC Hinzuf\xFCgen w\xE4hlen.
+System-Midi-Kanal (OSS)
+Dadurch wird ein neues aRts -Objekt erzeugt, das einen externen Midi-Kanal repr\xE4sentiert.
+Da externe Midi-Kan\xE4le sowohl senden als auch empfangen k\xF6nnen, wird zu beiden Listen ein Eintrag hinzugef\xFCgt.
+Unter Linux ben\xF6tigen Sie entweder einen OSS - (OSS/Free liegt Ihrem Linux -Kernel bei) oder einen ALSA -Treiber f\xFCr Ihre Soundkarte installiert haben.
+Sie werden nach dem Ger\xE4tenamen gefragt.
+Er lautet normalerweise /dev/midi oder /dev/midi00.
+Wenn Sie allerdings mehr als ein MIDI -Ger\xE4t oder einen MIDI -Loopback-Treiber installiert haben, ist die Auswahl gr\xF6\xDFer.
+aRts Synthese Midi-Ausgang
+F\xFCgt einen neuen MIDI -Ausgang mit einem aRts -Synthese-Instrument hinzu.
+Wenn Sie diesen Men\xFCeintrag w\xE4hlen, erscheint ein Dialog, der Ihnen die Wahl eines Instrumentes erm\xF6glicht.
+Mit artsbuilder k\xF6nnen Sie neue Instrumente erstellen.
+Alle .arts -Dateien, die mit instrument_ beginnen, werden hier aufgelistet.
+Verwendung von aRts & Brahms
+Zuerst ben\xF6tigen Sie eine KDE 2.1-taugliche Version von Brahms.
+Sie finden Sie im kmusic CVS -Modul.
+Weitere Informationen zu Brahms finden Sie auf der aRts-Internetseite im Bereich Download.
+Wenn man die Anwendung startet, wird zun\xE4chst der MIDI -Manager angezeigt.
+Man w\xE4hlt ein Instrument (zum Beispiel organ2).
+Man verbindet das Instrument \xFCber den Knopf Verbinden.
+Danach kann man mit Brahms komponieren und die Ausgabe wird durch aRts synthetisiert.
+Man sollte das artscontrol -Fenster ge\xF6ffnet lassen und die Lautst\xE4rkeeinstellung kontrollieren (die Qualit\xE4t wird schlecht, wenn die Lautst\xE4rkeanzeige an die obere Grenze st\xF6sst).
+Nun kann man einneues Demolied f\xFCr aRts erstellen und es, wenn es fertig ist, unter aRts-project.org ver\xF6ffentlichen ;-).
+midisend
+midisend ist ein kleines Programm, das MIDI -Ereignisse von der Kommandozeile senden kann.
+Es registriert sich als MIDI -Eingang wie alle anderen Anwendungen.
+Damit wird etwa das gleiche erreicht, wie durch das Hinzuf\xFCgen eines System-Midikanals in artscontrol (nicht ganz, da midisend nur MIDI -Ereignisse senden aber nicht empfangen kann).
+Der Unterschied ist, das midisend auf unterschiedlichen Computern gestartet werden kann (und damit Netzwerktransparenz erm\xF6glicht).
+Sie k\xF6nnen midisend auch Daten von stdin senden lassen.
+Instrumente erstellen
+aRts synthetisiert Midi-Kl\xE4nge auf folgende Weise.
+Es gibt eine Struktur, die einige Eingabekan\xE4le, aus denen Frequenz und Lautst\xE4rke (velocity) und ein Parameter gelesen wird.
+Der Parameter zeigt an, ob die Taste noch heruntergedr\xFCckt ist.
+Die Struktur soll nun diese eine Note mit dieser Lautst\xE4rke und Frequenz erzeugen.
+Au\xDFerdem soll die Struktur auf den Wert des Parameters gedr\xFCckt reagieren (dabei bedeutet gedr\xFCckt=1 der Benutzer dr\xFCckt die Taste immer noch herunter und gedr\xFCckt=0 die Taste wurde losgelassen).
+Eingehende MIDI -Ereignisse veranlassen aRts, neue Strukturen f\xFCr jede gedr\xFCckte Taste zu generieren, ihnen die entsprechenden Parameter mitzugeben und sie wieder zu entfernen, sobald sie nicht mehr ben\xF6tigt werden.
+Eine Struktur wird auf folgende Art erzeugt und verwendet:
+Zum Beginn ist es am einfachsten, ein template_Instrument.arts in aRts-builder zu \xF6ffnen.
+Damit haben Sie eine leere Struktur mit den erforderlichen Parametern erzeugt, die Sie nur noch "ausf\xFCllen" m\xFCssen.
+F\xFCr den Parameter pressed(gedr\xFCckt) benutzen Sie entweder Synth_ENVELOPE_ADSR oder, f\xFCr eine Schlagzeug wav-Datei, spielen sie einfach ab und ignorieren den Parameter.
+Die Struktur sollte am Ausgang done anzeigen, das Sie nicht mehr ben\xF6tigt wird.
+Wenn doneauf 1 gesetzt wird, nimmt aRts an, das er die Struktur l\xF6schen kann.
+Angenehmerweise stellt das ADSR-H\xFCllkurven-Modul einen Parameter bereit, der anzeigt, wenn das Modul fertig ist.
+Sie m\xFCssen diesen Ausgang lediglich mit dem done-Ausgang Ihrer Struktur verbinden.
+Schlie\xDFlich, nachdem die Struktur gespeichert ist, k\xF6nnen Sie sie im MIDI -Manager von artscontrol verwenden.
+Und Sie m\xFCssen nat\xFCrlich die Struktur so einrichten, das Sie ihre Audiodaten an den linken und rechten Ausgangskanal sendet, so dass sie schlie\xDFlich durch den Audio-Manager (ein Teil von artscontrol) h\xF6rbar werden (oder sie mit Effekten weiterverarbeiten).
+gemappte Instrumente
+Gemappte Instrumente sind Instrumente, die sich abh\xE4ngig von der Tonh\xF6he (pitch), dem Programm, dem Kanal und der Lautst\xE4rke (velocity) unterschiedlich verhalten.
+Sie k\xF6nnten z.B. einen Klavierklang von 5 Oktaven bilden, indem Sie ein Sample f\xFCr jede Oktave verwenden (entsprechende H\xF6henverschiebungen (pitchshifting) vorausgesetzt).
+Dieser Klang wird besser klingen als ein Sample f\xFCr alle Oktaven.
+Sie k\xF6nnen auch eine Schlagzeug-Map bilden, die jeder Taste ein bestimmtes Schlaginstrument zuordnet.
+Es ist sehr n\xFCtzlich, wenn Sie einige unterschiedliche Kl\xE4nge in ein gemapptes Instrument f\xFCr verschiedene Programme zusammenf\xFCgen.
+Auf diese Weise k\xF6nnen Sie Ihren Sequenzer, externes Keyboard oder andere MIDI -Quelle verwenden, um zwischen den Kl\xE4ngen umzuschalten, ohne das Sie aRts um\xE4ndern m\xFCssen.
+Ein gutes Beispiel daf\xFCr ist das Instrument arts_all.
+Es f\xFCgt alle Instrumente in einer Map zusammen.
+Auf diese Weise m\xFCssen Sie lediglich einmal in artscontrol dieses instrument registrieren und schon k\xF6nnen Sie ein komplettes Musikst\xFCck in einem Sequenzer komponieren, ohne aRts umzuschalten.
+Wenn Sie einen anderen Klang ben\xF6tigen, wechseln Sie einfach im Sequenzer das Programm und aRts erzeugt einen anderen Klang.
+Solche Maps k\xF6nnen Sie auf einfache Weise erstellen.
+Sie m\xFCssen lediglich eine Textdatei anlegen, die einige Regeln enth\xE4lt:
+Die Bedingungen k\xF6nnen eine oder mehrere der folgenden sein:
+pitch (Tonh\xF6he)
+Beim pitch handelt es sich um die gespielte Tonh\xF6he.
+Diese Bedingung verwenden Sie, wenn Sie den Instrumentenklang abh\xE4ngig von der Tonh\xF6he aufteilen wollen.
+Von den Anfangsbeispielen w\xFCrde ein Piano, das verschiedene Kl\xE4nge f\xFCr verschiedene Oktaven verwendet, mit einer solchen Bedingung erstellt.
+Sie k\xF6nnen eine bestimmte Tonh\xF6he angeben, wie z.B. pitch= 62 oder einen Bereich wie pitch= 60 - 72.
+Die m\xF6glichen Tonh\xF6hen liegen zwischen 0 und 127.
+program (Programm)
+Das Programm, das auf dem Midi-Kanal aktiv ist, auf dem die Note gesendet wird.
+\xDCblicherweise kann man bei einem Sequenzer das Instrument \xFCber die Programmeinstellung ausw\xE4hlen.
+Die m\xF6glichen Programmeinstellungen reichen von 0 bis 127.
+channel (Kanal)
+Der Kanal, auf dem die Note gesendet wird.
+Die m\xF6glichen Werte liegen zwischen 0 und 15.
+velocity (Lautst\xE4rke)
+Die Lautst\xE4rke, die die Note hat.
+Die m\xF6glichen Werte liegen zwischen 0 und 127.
+Ein komplettes Beispiel f\xFCr eine Map sieht folgenderma\xDFen aus (das Beispiel stammt aus instrument_arts_all.arts-map):
+Wie Sie sehen, wird die Struktur abh\xE4ngig vom Programm ausgew\xE4hlt, beispielsweise sehen Sie als Programm 11 eine Schlagzeug-Map (mit zwei Eintr\xE4gen), die eine tiefe Trommel auf C-5 (pitch=60) und eine Snare-Trommel auf C#-5 (pitch=61) spielt.
+Strukturen, die von dieser Map verwendet werden, k\xF6nnen mit einem absoluten Pfad oder relativ zur Position der Map-Datei angegeben werden.
+Es ist eine gute Ide, die arts_all.map zu erweitern oder vielleicht sogar eine General- MIDI -Map f\xFCr aRts zu erstellen.
+Das w\xFCrde die Verwendung von aRts vereinfachen.
+Bitte denken Sie dar\xFCber nach, ob Sie nicht interessante Instrumente f\xFCr zuk\xFCnftige Versionen von aRts zur Verf\xFCgung stellen k\xF6nnen.
+MCOP:
+Objekt Modell und Streaming
+\xDCberblick
+Kommunikation zwischen Objekten.
+Netzwerk-Transparenz.
+Beschreibung von Objekt-Schnittstellen.
+Programmiersprachenunabh\xE4ngigkeit.
+IDL -Schnittstellen werden durch den IDL -\xDCbersetzer in C++-Quelltexte \xFCbersetzt.
+Wenn Sie eine Schnittstelle implementieren, verwenden Sie als Grundlage das Klassenskelett, das der IDL -\xDCbersetzer erstellt hat.
+Wenn Sie eine Schnittstelle verwenden, benutzen Sie einen Wrapper.
+Auf diese Weise kann MCOP ein Protokoll verwenden, wenn das Objekt, das Sie verwenden nicht lokal ist - Sie haben also volle Netzwerk-Transparenz.
+Interfaces and IDL
+Many of the services provided by aRts, such as modules and the sound server, are defined in terms of interfaces.
+Interfaces are specified in a programming language independent format:
+IDL.
+This allows many of the implementation details such as the format of multimedia data streams, network transparency, and programming language dependencies, to be hidden from the specification for the interface.
+A tool, mcopidl, translates the interface definition into a specific programming language (currently only C++ is supported).
+The tool generates a skeleton class with all of the boilerplate code and base functionality.
+You derive from that class to implement the features you want.
+The IDL used by aRts is similar to that used by CORBA and DCOM.
+IDL files can contain:
+C-style #include directives for other IDL files.
+Definitions of enumerated and struct types, as in C/C++.
+Definitions of interfaces.
+In IDL, interfaces are defined much like a C++ class or C struct, albeit with some restrictions.
+Like C++, interfaces can subclass other interfaces using inheritance.
+Interface definitions can include three things: streams, attributes, and methods.
+Streams
+Streams define multimedia data, one of the most important components of a module.
+Streams are defined in the following format:
+[async] in|out [multi] type stream name [, name];
+Streams have a defined direction in reference to the module, as indicated by the required qualifiers in or out.
+The type argument defines the type of data, which can be any of the types described later for attributes (not all are currently supported).
+Many modules use the stream type audio, which is an alias for float since that is the internal data format used for audio stream.
+Multiple streams of the same type can defined in the same definition uisng comma separated names.
+Streams are by default synchronous, which means they are continuous flows of data at a constant rate, such as PCM audio.
+The async qualifier specifies an asynchronous stream, which is used for non-continuous data flows.
+The most common example of an async stream is MIDI messages.
+The multi keyword, only valid for input streams, indicates that the interface supports a variable number of inputs.
+This is useful for implementing devices such as mixers that can accept any number of input streams.
+Attributes
+Attributes are data associated with an instance of an interface.
+They are declared like member variables in C++, and can can use any of the primitive types boolean, byte, long, string, or float.
+You can also use user-defined struct or enum types as well as variable sized sequences using the syntax sequence<type>.
+Attributes can optionally be marked readonly.
+Methods
+As in C++, methods can be defined in interfaces.
+The method parameters are restricted to the same types as attributes.
+The keyword oneway indicates a method which returns immediately and is executed asynchronously.
+Standard Interfaces
+Several standard module interfaces are already defined for you in aRts, such as StereoEffect, and SimpleSoundServer.
+Example
+A simple example of a module taken from aRts is the constant delay module, found in the file kdemultimedia/arts/modules/artsmodules.idl.
+The interface definition is listed below.
+This modules inherits from SynthModule.
+That interface, defined in artsflow.idl, defines the standard methods implemented in all music synthesizer modules.
+The CDELAY effect delays a stereo audio stream by the time value specified as a floating point parameter.
+The interface definition has an attribute of type float to store the delay value.
+It defines two input audio streams and two output audio streams (typical of stereo effects).
+No methods are required other than those it inherits.
+More About Streams
+Stream Types
+There are various requirements for how a module can do streaming.
+To illustrate this, consider these examples:
+Scaling a signal by a factor of two.
+Performing sample frequency conversion.
+Decompressing a run-length encoded signal.
+Reading MIDI events from /dev/midi00 and inserting them into a stream.
+The first case is the simplest: upon receiving 200 samples of input the module produces 200 samples of output.
+It only produces output when it gets input.
+The second case produces different numbers of output samples when given 200 input samples.
+It depends what conversion is performed, but the number is known in advance.
+The third case is even worse.
+From the outset you cannot even guess how much data 200 input bytes will generate (probably a lot more than 200 bytes, but...).
+The last case is a module which becomes active by itself, and sometimes produces data.
+In aRts s-0.3.4, only streams of the first type were handled, and most things worked nicely.
+This is probably what you need most when writing modules that process audio.
+The problem with the other, more complex types of streaming, is that they are hard to program, and that you don't need the features most of the time.
+That is why we do this with two different stream types: synchronous and asynchronous.
+Synchronous streams have these characteristics:
+Modules must be able to calculate data of any length, given enough input.
+All streams have the same sampling rate.
+The calculateBlock() function will be called when enough data is available, and the module can rely on the pointers pointing to data.
+There is no allocation and deallocation to be done.
+Asynchronous streams, on the other hand, have this behaviour:
+Modules may produce data sometimes, or with varying sampling rate, or only if they have input from some filed escriptor.
+They are not bound by the rule must be able to satisfy requests of any size.
+Asynchronous streams of a module may have entirely different sampling rates.
+Outgoing streams: there are explicit functions to allocate packets, to send packets - and an optional polling mechanism that will tell you when you should create some more data.
+Incoming streams: you get a call when you receive a new packet - you have to say when you are through with processing all data of that packet, which must not happen at once (you can say that anytime later, and if everybody has processed a packet, it will be freed/reused)
+When you declare streams, you use the keyword async to indicate you want to make an asynchronous stream.
+So, for instance, assume you want to convert an asynchronous stream of bytes into a synchronous stream of samples.
+Your interface could look like this:
+Using Asynchronous Streams
+Here it is in terms of code.
+First we allocate a packet:
+The we fill it:
+Now we send it:
+This is quite simple, but if we want to send packets exactly as fast as the receiver can process them, we need another approach, the pull delivery method.
+You ask to send packets as fast as the receiver is ready to process them.
+You start with a certain amount of packets you send.
+As the receiver processes one packet after another, you start refilling them with fresh data, and send them again.
+Then, you need to implement a method which fills the packets, which could look like this:
+Thats it.
+When you don't have any data any more, you can start sending packets with zero size, which will stop the pulling.
+We just discussed sending data.
+Receiving data is much much simpler.
+Suppose you have a simple ToLower filter, which simply converts all letters in lowercase:
+This is really simple to implement; here is the whole implementation:
+Here is an implenetation tip: if processing takes longer (d.h. if you need to wait for soundcard output or something like that), don't call processed immediately, but store the whole data packet and call processed only as soon as you really processed that packet.
+That way, senders have a chance to know how long it really takes to do your work.
+Default Streams
+Suppose you have 2 objects, for example an AudioProducer and an AudioConsumer.
+The AudioProducer has an output stream and AudioConsumer has an input one.
+Each time you want to connect them, you will use those 2 streams.
+The first use of defaulting is to enable you to make the connection without specifying the ports in that case.
+Now suppose the teo objects above can handle stereo, and each have a left and right port.
+You'd still like to connect them as easily as before.
+But how can the connecting system know which output port to connect to which input port?
+It has no way to correctly map the streams.
+Defaulting is then used to specify several streams, with an order.
+Thus, when you connect an object with 2 default output streams to another one with 2 default input streams, you don't have to specify the ports, and the mapping will be done correctly.
+Of course, this is not limited to stereo.
+Any number of streams can be made default if needed, and the connect function will check that the number of defaults for 2 object match (in the required direction) if you don't specify the ports to use.
+The syntax is as follows: in the IDL, you can use the default keyword in the stream declaration, or on a single line.
+For example:
+In this example, the object will expect its two input ports to be connected by default.
+The order is the one specified on the default line, so an object like this one:
+Will make connections from couic to input1, and bzzt to input2 automatically.
+Note that since there is only one output for the mixer, it will be made default in this case (see below).
+The syntax used in the noise generator is useful to declare a different order than the declaration, or selecting only a few ports as default.
+The directions of the ports on this line will be looked up by mcopidl, so don't specify them.
+You can even mix input and output ports in such a line, only the order is important.
+There are some rules that are followed when using inheritance:
+If a default list is specified in the IDL, then use it.
+Parent ports can be put in this list as well, whether they were default in the parent or not.
+Otherwise, inherit parent's defaults.
+Ordering is parent1 default1, parent1 default2..., parent2 default1...
+If there is a common ancestor using 2 parent branches, a virtual public -like merging is done at that default's first occurrence in the list.
+If there is still no default and a single stream in a direction, use it as default for that direction.
+Attribute change notifications
+Attribute change notifications are a way to know when an attribute changed.
+They are a bit comparable with Qt 's or Gtk's signals and slots.
+For instance, if you have a GUI element, a slider, which configures a number between 0 and 100, you will usually have an object that does something with that number (for instance, it might be controlling the volume of some audio signal).
+So you would like that whenever the slider is moved, the object which scales the volume gets notified.
+A connection between a sender and a receiver.
+MCOP deals with that by being able to providing notifications when attributes change.
+Whatever is declared as attribute in the IDL, can emit such change notifications, and should do so, whenever it is modified.
+Whatever is declared as attribute can also receive such change notifications.
+So for instance if you had two IDL interfaces, like these:
+You can connect them using change notifications.
+It works using the normal flowsystem connect operation.
+In this case, the C++ code to connect two objects would look like this:
+It is important to know that change notifications and asynchronous streams are compatible.
+They are also network transparent.
+So you can connect a change notification of a float attribute of a GUI widget has to an asynchronous stream of a synthesis module running on another computer.
+This of course also implies that change notifications are not synchronous, this means, that after you have sent the change notification, it may take some time until it really gets received.
+Sending change notifications
+When implementing objects that have attributes, you need to send change notifications whereever an attribute changes.
+The code for doing this looks like this:
+It is strongly recommended to use code like this for all objects you implement, so that change notifications can be used by other people.
+You should however void sending notifications too often, so if you are doing signal processing, it is probably the best if you keep track when you sent your last notification, so that you don't send one with every sample you process.
+Applications for change notifications
+It will be especially useful to use change notifications in conjunction with scopes (things that visualize audio data for instance), gui elements, control widgets, and monitoring.
+Code using this is in kdelibs/arts/tests, and in the experimental artsgui implementation, which you can find under kdemultimedia/arts/gui.
+The .mcoprc file
+The .mcoprc file (in each user's home directory) can be used to configure MCOP in some ways.
+Currently, the following is possible:
+GlobalComm
+The name of an interface to be used for global communication.
+Global communication is used to find other objects and obtain the secret cookie.
+Multiple MCOP clients/servers that should be able to talk to each other need to have a GlobalComm object which is able to share information between them.
+TraderPath
+Specifies where to look for trader information.
+You can list more than one directory here, and separate them with commas, like
+ExtensionPath
+Specifies from which directories extensions (in the form of shared libraries) are loaded.
+Multiple values can be specified comma seperated.
+An example which uses all of the above is:
+MCOP for CORBA Users
+If you have used CORBA before, you will see that MCOP is much the same thing.
+In fact, aRts prior to version 0.4 used CORBA.
+The basic idea of CORBA is the same: you implement objects (components).
+By using the MCOP features, your objects are not only available as normal classes from the same process (via standard C++ techniques) - they also are available to remote servers transparently.
+For this to work, the first thing you need to do is to specify the interface of your objects in an IDL file - just like CORBA IDL.
+There are only a few differences.
+CORBA Features That Are Missing In MCOP
+In MCOP there are no in and out parameters on method invocations.
+Parameters are always incoming, the return code is always outgoing, which means that the interface:
+is written as
+in MCOP.
+There is no exception support.
+MCOP doesn't have exceptions - it uses something else for error handling.
+There are no union types and no typedefs.
+I don't know if that is a real weakness, something one would desperately need to survive.
+There is no support for passing interfaces or object references
+CORBA Features That Are Different In MCOP
+There is no need for a typedef.
+For example, instead of:
+you would write
+MCOP Features That Are Not In CORBA
+You can declare streams, which will then be evaluated by the aRts framework.
+Streams are declared in a similar manner to attributes.
+For example:
+This says that your object will accept two incoming synchronous audio streams called signal1 and signal2.
+Synchronous means that these are streams that deliver x samples per second (or other time), so that the scheduler will guarantee to always provide you a balanced amount of input data (z.B.
+200 samples of signal1 are there and 200 samples signal2 are there).
+You guarantee that if your object is called with those 200 samples signal1 + signal2, it is able to produce exactly 200 samples to outvalue.
+The MCOP C++ Language Binding
+This differs from CORBA mostly:
+Strings use the C++ STL string class.
+When stored in sequences, they are stored plain, that means they are considered to be a primitive type.
+Thus, they need copying.
+longs are plain long's (expected to be 32 bit).
+Sequences use the C++ STL vector class.
+Structures are all derived from the MCOP class Type, and generated by the MCOP IDL compiler.
+When stored in sequences, they are not stored plain, but as pointers, as otherwise, too much copying would occur.
+Implementing MCOP Objects
+After having them passed through the IDL compiler, you need to derive from the _skel class.
+For instance, consider you have defined your interface like this:
+To implement it, you need to define a C++-class that inherits the skeleton:
+Finally, you need to implement the methods as normal C++
+Once you do that, you have an object which can communicate using MCOP.
+Just create one (using the normal C++ facilities to create an object):
+And as soon as you give somebody the reference
+and go to the MCOP idle loop
+People can access the thing using
+and invoke methods:
+MCOP Security Considerations
+Since MCOP servers will listen on a TCP port, potentially everybody (if you are on the Internet) may try to connect MCOP services.
+Thus, it is important to authenticate clients.
+MCOP uses the md5-auth protocol.
+The md5-auth protocol does the following to ensure that only selected (trusted) clients may connect to a server:
+It assumes you can give every client a secret cookie.
+Every time a client connects, it verifies that this client knows that secret cookie, without actually transferring it (not even in a form that somebody listening to the network traffic could find it out).
+Of course, you can copy it to other computers.
+However, if you do so, use a secure transfer mechanism, such as scp (from ssh).
+The authentication of clients uses the following steps:
+[SERVER] generate a new (random) cookie R
+[SERVER] send it to the client
+[CLIENT] read the "secret cookie" S from a file
+[CLIENT] mangle the cookies R and S to a mangled cookie M using the MD5 algorithm
+[CLIENT] send M to the server
+[SERVER] verify that mangling R and S gives just the same thing as the cookie M received from the client.
+If yes, authentication is successful.
+This algorithm should be secure, given that
+The secret cookies and random cookies are random enough and
+The MD5 hashing algorithm doesn't allow to find out the original text, that is the secret cookie S and the random cookie R (which is known, anyway), from the mangled cookie M.
+The MCOP protocol will start every new connection with an authentication process.
+Basically, it looks like this:
+Server sends a ServerHello message, which describes the known authentication protocols.
+Client sends a ClientHello message, which includes authentication info.
+Server sends an AuthAccept message.
+To see that the security actually works, we should look at how messages are processed on unauthenticated connections:
+Before the authentication succeeds, the server will not receive other messages from the connection.
+Instead, if the server for instance expects a ClientHello message, and gets an mcopInvocation message, it will drop the connection.
+If the client doesn't send a valid MCOP message at all (no MCOP magic in the message header) in the authentication phase, but something else, the connection is dropped.
+If the client tries to send a very very large message (> 4096 bytes in the authentication phase, the message size is truncated to 0 bytes, which will cause that it isn't accepted for authentication) This is to prevent unauthenticated clients from sending z.B.
+100 megabytes of message, which would be received and could cause the server to run out of memory.
+If the client sends a corrupt ClientHello message (one, for which demarshalling fails), the connection is dropped.
+If the client send nothing at all, then a timeout should occur (to be implemented).
+MCOP Protocol Specification
+Einleitung
+It has conceptual similarities to CORBA, but it is intended to extend it in all ways that are required for real time multimedia operations.
+It provides a multimedia object model, which can be used for both: communication between components in one adress space (one process), and between components that are in different threads, processes or on different hosts.
+All in all, it will be designed for extremely high performance (so everything shall be optimized to be blazingly fast), suitable for very communicative multimedia applications.
+For instance streaming videos around is one of the applications of MCOP, where most CORBA implementations would go down to their knees.
+The interface definitions can handle the following natively:
+Continous streams of data (such as audio data).
+Event streams of data (such as MIDI events).
+Real reference counting.
+and the most important CORBA gimmicks, like
+Synchronous method invocations.
+Asynchronous method invocations.
+Constructing user defined data types.
+Multiple inheritance.
+Passing object references.
+The MCOP Message Marshalling
+Design goals/ideas:
+Marshalling should be easy to implement.
+Demarshalling requires the receiver to know what type he wants to demarshall.
+The receiver is expected to use every information - so skipping is only in the protocol to a degree that:
+If you know you are going to receive a block of bytes, you don't need to look at each byte for an end marker.
+If you know you are going to receive a string, you don't need to read it until the zero byte to find out it's length while demarshalling, however,
+If you know you are going to receive a sequence of strings, you need to look at the length of each of them to find the end of the sequence, as strings have variable length.
+But if you use the strings for something useful, you'll need to do that anyway, so this is no loss.
+As little overhead as possible.
+Marshalling of the different types is show in the table below:
+are marshalled like long s
+is marshalled as a single byte, so the byte 0x42 would be marshalled as:
+is marshalled as a long, containing the length of the following string, and then the sequence of characters strings must end with one zero byte (which is included in the length counting).
+include the trailing 0 byte in length counting!
+hello would be marshalled as:
+is marshalled as a byte, containing 0 if false or 1 if true, so the boolean value true is marshalled as:
+is marshalled after the four byte IEEE754 representation - detailed docs how IEEE works are here: http://twister.ou.edu/workshop.docs/common-tools/numerical_comp_guide/ncg_math.doc.html and here: http://java.sun.com/docs/books/vmspec/2nd-edition/html/Overview.doc.html.
+So, the value 2.15 would be marshalled as:
+A structure is marshalled by marshalling it's contents.
+There are no additional prefixes or suffixes required, so the structure
+would be marshalled as
+a sequence is marshalled by listing the number of elements that follow, and then marshalling the elements one by one.
+So a sequence of 3 longs a, with a[0] = 0x12345678, a[1] = 0x01 and a[2] = 0x42 would be marshalled as:
+If you need to refer to a type, all primitive types are referred by the names given above.
+Structures and enums get own names (like Header).
+Sequences are referred as * normal type, so that a sequence of longs is *long and a sequence of Header struct's is *Header.
+Messages
+The MCOP message header format is defined as defined by this structure:
+The possible messageTypes are currently
+A few notes about the MCOP messaging:
+Every message starts with a Header.
+Some messages types should be dropped by the server, as long as the authentication is not complete.
+After receiving the header, the protocol (connection) handling can receive the message completely, without looking at the contents.
+The messageLength in the header is of course in some cases redundant, which means that this approach is not minimal regarding the number of bytes.
+However, it leads to an easy (and fast) implementation of non-blocking messaging processing.
+With the help of the header, the messages can be received by protocol handling classes in the background (non-blocking), if there are many connections to the server, all of them can be served parallel.
+You don't need to look at the message content, to receive the message (and to determine when you are done), just at the header, so the code for that is pretty easy.
+Once a message is there, it can be demarshalled and processed in one single pass, without caring about cases where not all data may have been received (because the messageLength guarantees that everything is there).
+Invocations
+To call a remote method, you need to send the following structure in the body of an MCOP message with the messageType = 1 (mcopInvocation):
+after that, you send the parameters as structure, z.B. if you invoke the method string concat(string s1, string s2), you send a structure like
+if the method was declared to be oneway - that means asynchronous without return code - then that was it.
+Otherwise, you'll receive as answer the message with messageType = 2 (mcopReturn)
+where <resulttype> is the type of the result.
+As void types are omitted in marshalling, you can also only write the requestID if you return from a void method.
+So our string concat(string s1, string s2) would lead to a returncode like
+Inspecting Interfaces
+To do invocations, you need to know the methods an object supports.
+To do so, the methodID 0, 1, 2 and 3 are hardwired to certain functionalities.
+That is
+to read that, you of course need also
+the parameters field contains type components which specify the types of the parameters.
+The type of the returncode is specified in the MethodDef's type field.
+Strictly speaking, only the methods _lookupMethod() and _interfaceName() differ from object to object, while the _queryInterface() and _queryType() are always the same.
+What are those methodIDs?
+If you do an MCOP invocation, you are expected to pass a number for the method you are calling.
+The reason for that is, that numbers can be processed much faster than strings when executing an MCOP request.
+So how do you get those numbers?
+If you know the signature of the method, that is a MethodDef that describes the method, (which contains name, type, parameter names, parameter types and such), you can pass that to _lookupMethod of the object where you wish to call a method.
+As _lookupMethod is hardwired to methodID 0, you should encounter no problems doing so.
+On the other hand, if you don't know the method signature, you can find which methods are supported by using _interfaceName, _queryInterface and _queryType.
+Type Definitions
+User defined datatypes are described using the TypeDef structure:
+Why aRts Doesn't Use DCOP
+Since KDE dropped CORBA completely, and is using DCOP everywhere instead, naturally the question arises why aRts isn't doing so.
+After all, DCOP support is in KApplication, is well-maintained, supposed to integrate greatly with libICE, and whatever else.
+Since there will be (potentially) a lot of people asking whether having MCOP besides DCOP is really necessary, here is the answer.
+First, you need to understand what exactly DCOP was written for.
+Created in two days during the KDE -TWO meeting, it was intended to be as simple as possible, a really lightweight communication protocol.
+Especially the implementation left away everything that could involve complexity, for instance a full blown concept how data types shall be marshalled.
+Even although DCOP doesn't care about certain things (like: how do I send a string in a network-transparent manner?) - this needs to be done.
+So, everything that DCOP doesn't do, is left to Qt in the KDE apps that use DCOP today.
+This is mostly type management (using the Qt serialization operator).
+So DCOP is a minimal protocol which perfectly enables KDE applications to send simple messages like open a window pointing to http://www.kde.org or your configuration data has changed.
+However, inside aRts the focus lies on other things.
+The idea is, that little plugins in aRts will talk involving such data structures as midi events and songposition pointers and flow graphs.
+These are complex data types, which must be sent between different objects, and be passed as streams, or parameters.
+MCOP supplies a type concept, to define complex data types out of simpler ones (similar to structs or arrays in C++).
+DCOP doesn't care about types at all, so this problem would be left to the programmer - like: writing C++ classes for the types, and make sure they can serialize properly (for instance: support the Qt streaming operator).
+But that way, they would be inaccessible to everything but direct C++ coding.
+Specifically, you could not design a scripting language, that would know all types plugins may ever expose, as they are not self describing.
+Much the same argument is valid for interfaces as well.
+DCOP objects don't expose their relationships, inheritance hierarchies, etc. - if you were to write an object browser which shows you what attributes has this object got, you'd fail.
+While Matthias told me that you have a special function functions on each object that tells you about the methods that an object supports, this leaves out things like attributes (properties), streams and inheritance relations.
+This seriously breaks applications like aRts-builder.
+But remember:
+DCOP was not so much intended to be an object model (as Qt already has one with moc and similar), nor to be something like CORBA, but to supply inter-application communication.
+Why MCOP even exists is: it should work fine with streams between objects. aRts makes heavily use of small plugins, which interconnect themselves with streams.
+MCOP does.
+Look at the code (something like simplesoundserver_impl.cc).
+Way better!
+Streams can be declared in the interface of modules, and implemented in a natural looking way.
+One can't deny it.
+One of the reasons why I wrote MCOP was speed.
+Here are some arguments why MCOP will definitely be faster than DCOP (even without giving figures).
+An invocation in MCOP will have a six- long -header.
+That is:
+magic MCOP
+message type (invocation)
+size of the request in bytes
+request ID
+target object ID
+target method ID
+After that, the parameters follow.
+Note that the demarshalling of this is extremely fast.
+You can use table lookups to find the object and the method demarshalling function, which means that complexity is O(1) [it will take the same amount of time, no matter how many objects are alive, or how many functions are there].
+Comparing this to DCOP, you'll see, that there are at least
+a string for the target object - something like myCalculator
+a string like addNumber(int,int) to specify the method
+several more protocol info added by libICE, and other DCOP specifics I don't know
+These are much more painful to demarshall, as you'll need to parse the string, search for the function, etc..
+In DCOP, all requests are running through a server (DCOPServer).
+That means, the process of a synchronous invocation looks like this:
+Client process sends invocation.
+DCOPserver (man-in-the-middle) receives invocation and looks where it needs to go, and sends it to the real server.
+Server process receives invocation, performs request and sends result.
+DCOPserver (man-in-the-middle) receives result and... sends it to the client.
+Client decodes reply.
+In MCOP, the same invocation looks like this:
+Client process sends invocation.
+Server process receives invocation, performs request and sends result.
+Client decodes reply.
+Say both were implemented correctly, MCOP s peer-to-peer strategy should be faster by a factor of two, than DCOP s man-in-the-middle strategy.
+Note however that there were of course reasons to choose the DCOP strategy, which is namely: if you have 20 applications running, and each app is talking to each app, you need 20 connections in DCOP, and 200 with MCOP.
+However in the multimedia case, this is not supposed to be the usual setting.
+I tried to compare MCOP and DCOP, doing an invocation like adding two numbers.
+I modified testdcop to achieve this.
+However, the test may not have been precise on the DCOP side.
+I invoked the method in the same process that did the call for DCOP, and I didn't know how to get rid of one debugging message, so I used output redirection.
+The test only used one object and one function, expect DCOP s results to decrease with more objects and functions, while MCOP s results should stay the same.
+Also, the dcopserver process wasn't connected to other applications, it might be that if many applications are connected, the routing performance decreases.
+The result I got was that while DCOP got slightly more than 2000 invocations per second, MCOP got slightly more than 8000 invocations per second.
+That makes a factor of 4.
+I know that MCOP isn't tuned to the maximum possible, yet. (Comparision:
+CORBA, as implemented with mico, does something between 1000 and 1500 invocations per second).
+If you want harder data, consider writing some small benchmark app for DCOP and send it to me.
+CORBA had the nice feature that you could use objects you implemented once, as seperate server process, or as library.
+You could use the same code to do so, and CORBA would transparently descide what to do.
+With DCOP, that is not really intended, and as far as I know not really possible.
+MCOP on the other hand should support that from the beginning.
+So you can run an effect inside artsd.
+But if you are a wave editor, you can choose to run the same effect inside your process space as well.
+While DCOP is mostly a way to communicate between apps, MCOP is also a way to communicate inside apps.
+Especially for multimedia streaming, this is important (as you can run multiple MCOP objects parallely, to solve a multimedia task in your application).
+Although MCOP does not currently do so, the possibilities are open to implement quality of service features.
+Or something like needs to be there in time.
+On the other hand, stream transfer can be integrated in the MCOP protocol nicely, and combined with QoS stuff.
+Given that the protocol may be changed, MCOP stream transfer should not really get slower than conventional TCP streaming, but: it will be easier and more consistent to use.
+Well, whatever. aRts was always intended to work with or without KDE, with or without Qt, with or without X11, and maybe even with or without Linux (and I have even no problems with people who port it to a popular non-free operating systems).
+It is my position that non- GUI -components should be written non- GUI -dependant, to make sharing those among wider amounts of developers (and users) possible.
+I see that using two IPC protocols may cause inconveniences.
+Even more, if they are both non-standard.
+However, for the reasons given above, switching to DCOP is no option.
+If there is significant interest to find a way to unite the two, okay, we can try.
+We could even try to make MCOP speak IIOP, then we'd have a CORBA ORB;).
+I talked with Matthias Ettrich a bit about the future of the two protocols, and we found lots of ways how things could go on.
+For instance, MCOP could handle the message communication in DCOP, thus bringing the protocols a bit closer together.
+So some possible solutions would be:
+Write an MCOP - DCOP gateway (which should be possible, and would make interoperation possible) - note: there is an experimental prototype, if you like to work on that.
+Integrate everything DCOP users expect into MCOP, and try to only do MCOP - one could add an man-in-the-middle-option to MCOP, too;)
+Base DCOP on MCOP instead of libICE, and slowly start integrating things closer together.
+However, it may not be the worst possibility to use each protocol for everything it was intended for (there are some big differences in the design goals), and don't try to merge them into one.
+aRts Application Programming Interfaces
+\xDCberblick
+aRts is not only a piece of software, it also provides a variety of APIs for a variety of purposes.
+In this section, I will try to describe the "big picture", a brief glance what those APIs are supposed to do, and how they interact.
+There is one important distinction to make: most of the APIs are language and location independant because they are specified as mcopidl.
+That is, you can basically use the services they offer from any language, implement them in any language, and you will not have to care whether you are talking to local or remote objects.
+Here is a list of these first:
+core.idl
+Basic definitions that form the core of the MCOP functionality, such as the protocol itself, definitions of the object, the trader, the flow system and so on.
+artsflow.idl
+These contain the flow system you will use for connecting audio streams, the definition of Arts::SynthModule which is the base for any interface that has streams, and finally a few useful audio objects
+kmedia2.idl
+Here, an object that can play a media, Arts::PlayObject gets defined.
+Media players such as the KDE media player noatun will be able to play any media for which a PlayObject can be found.
+So it makes sense to implement PlayObjects for various formats (such as mp3, mpg video, midi, wav,...) on that base, and there are a lot already.
+soundserver.idl
+Here, an interface for the system wide sound server artsd is defined.
+The interface is called Arts::SoundServer, which implements functionality like accepting streams from the network, playing samples, creating custom other aRts objects and so on.
+Network transparency is implied due to the use of MCOP (as for everything else here).
+artsbuilder.idl
+This module defines basic flow graph functionality, that is, combining simpler objects to more complex ones, by defining a graph of them.
+It defines the basic interface Arts::StructureDesc, Arts::ModuleDesc and Arts::PortDesc which contain a description of a structure, module, and port.
+There is also a way to get a "living network of objects" out of these connection and value descriptions, using a factory.
+artsmidi.idl
+This module defines basic midi functionality, like objects that produce midi events, what is a midi event, an Arts::MidiManager to connect the producers and consumers of midi events, and so on.
+As always network transparency implied.
+artsmodules.idl
+Here are various additional filters, oscillators, effects, delays and so on, everything required for real useful signal processing, and to build complex instruments and effects out of these basic building blocks.
+artsgui.idl
+This cares about visual objects.
+It defines the basic type Arts::Widget from which all GUI modules derive.
+This will produce toolkit independency, and... visual GUI editing, and serializable GUIs.
+Also, as the GUI elements have normal attributes, their values can be straight forward connected to some signal processing modules. (I.e. the value of a slider to the cutoff of a filter).
+As always: network transparent.
+Where possible, aRts itself is implemented using IDL.
+On the other hand, there are some language specific APIs, using either plain C++ or plain C.
+It is usually wise to use IDL interfaces where possible, and the other APIs where necessary.
+Here is a list of language specific APIs:
+KNotify, KAudioPlayer (included in libkdecore)
+These are convenience KDE APIs for the simple and common common case, where you just want to play a sample.
+The APIs are plain C++, Qt/KDE optimized, and as easy as it can get.
+libartsc
+Plain C interface for the sound server.
+Very useful for porting legacy applications.
+libmcop
+Here all magic for MCOP happens.
+The library contains the basic things you need to know for writing a simple MCOP application, the dispatcher, timers, iomanagement, but also the internals to make the MCOP protocol itself work.
+libartsflow
+Besides the implementation of artsflow.idl, some useful utilities like sampling rate conversion.
+libqiomanager
+Integration of MCOP into the Qt event loop, when you write Qt applications using MCOP.
+knotify
+kaudioplayer
+libkmid
+kmedia2
+sound server
+artsflow
+C API
+Einleitung
+The aRts C API was designed to make it easy to writing and port plain C applications to the aRts sound server.
+It provides streaming functionality (sending sample streams to artsd), either blocking or non-blocking.
+For most applications you simply remove the few system calls that deal with your audio device and replace them with the appropriate aRts calls.
+I did two ports as a proof of concept: mpg123 and quake.
+You can get the patches from here.
+Feel free to submit your own patches to the maintainer of aRts or of multimedia software packages so that they can integrate aRts support into their code.
+Quick Walkthrough
+Sending audio to the sound server with the API is very simple:
+include the header file using #include <artsc.h>
+initialize the API with arts_init()
+create a stream with arts_play_stream()
+configure specific parameters with arts_stream_set()
+write sampling data to the stream with arts_write()
+close the stream with arts_close_stream()
+free the API with arts_free()
+Here is a small example program that illustrates this:
+Compiling and Linking: artsc-config
+To easily compile and link programs using the aRts C API, the artsc-config utility is provided which knows which libraries you need to link and where the includes are.
+It is called using
+to find out the libraries and
+to find out additional C compiler flags.
+The example above could have been compiled using the command line:
+Library Reference
+[TODO: generate the documentation for artsc.h using kdoc]
+aRts -Module
+Einleitung
+Die Module sind in Kategorien eingeteilt.
+Synthese-Module werden zur Implementation von Verbindungen ben\xF6tigt, die Multimedia-Datenstr\xF6me f\xFCr neue Effekte, Instrumente, Mischer und Anwendungen zusammenf\xFCgen.
+Visuelle Module erlauben die Erzeugung einer graphischen Benutzeroberfl\xE4che zur Kontrolle der Klangstrukturen, die mit den Synthese-Modulen aufgebaut werden.
+Synthese-Modul Referenz
+Arithmetisch + Mix
+Synth_ADD
+Addiert zwei Signale
+Synth_MUL
+Multiplizert ein Signal mit einem Faktor.
+Sie k\xF6nnen dieses Modul verwenden, um ein Signal zu reduzieren (0 < Faktor < 1) oder zu verst\xE4rken (Faktor > 1), oder um ein Signal zu invertieren (Faktor < 0).
+Der Faktor kann ebenfalls ein Signal sein und muss keine Konstante sein (z.B. eine H\xFCllkurve oder ein reales Signal).
+Synth_MULTI_ADD
+Addiert eine beliebige Anzahl von Signalen.
+Wenn Sie die Wellenformen von viert verschiedenen Oszillatoren addieren m\xFCssen, k\xF6nnen Sie alle Ausg\xE4nge mit einem Synth_MULTI_ADD-Modul verbinden.
+Das ist effektiver als die Verwendung von drei Synth_ADD-Modulen.
+Synth_XFADE
+Hiermit werden zwei Signale \xFCber Kreuz gemischt (crossfading).
+Wenn der Prozentsatz -1 betr\xE4gt, dann ist nur das linke, bei 1 nur das rechte und bei 0 sind beide Signale gleichstark h\xF6rbar.
+Damit wird es m\xF6glich, ein Signal in einem definierten Bereich zu halten.
+Wenn Sie zwei Signale haben, die beide zwischen -1 und 1 vor dem Mischen waren, befindet sich das gemischte Signal ebenfalls zwischen -1 und 1.
+Synth_AUTOPANNER
+Das Gegenteil eines crossfaders.
+Hier wird ein Monosignal aufgeteilt in ein Stereosignal:
+Das Modul kann das Signal automatisch zwischen dem rechten und linken Kanal aufteilen.
+Das macht lebendigere Mischungen m\xF6glich.
+Eine Standardanwendung w\xE4re ein Gitarren- oder Gesangsklang.
+Verbinden Sie einen LFO, eine Sinus- oder S\xE4gezahnschwingung mit inlfo und w\xE4hlen Sie eine Frequenz zwischen 0.1 und 5Hz f\xFCr einen traditionellen Effekt oder eine h\xF6here Frequenz f\xFCr einen Special FX.
+Busse
+Synth_BUS_UPLINK
+Ein Uplink zu einem Bus.
+Legen Sie ein Signal auf den linken und rechten Eingang und geben Sie dem Bus einen Namen, auf den die Daten gesendet werden sollen.
+Das kombinierte Signal von allen Uplinks mit dem gleichen Namen wird auf jedem Downlink mit diesem Namen anliegen.
+Synth_BUS_DOWNLINK
+Empf\xE4ngt (Summe) alle Daten, die auf einen bestimmten Bus (der Name, den Sie beim Kanal bus festlegen) gesendet werden.
+Verz\xF6gerungen
+Synth_DELAY
+Verz\xF6gert das Eingangssignal um eine bestimmte Zeit.
+Die Zeit muss zwischen 0 und maxdelay f\xFCr eine Verz\xF6gerung zwischen 0 und maxdelay Sekunden liegen.
+Diese Art von Verz\xF6gerungen darf nicht in r\xFCckgekoppelten Strukturen verwendet werden, weil es sich um eine variable Verz\xF6gerungszeit handelt.
+Sie k\xF6nnen die Zeit \xE4ndern, w\xE4hrend das Modul l\xE4uft und sie auch auf Null setzen.
+Da aber in einer r\xFCckgekoppelten Struktur das eigene Ausgangssignal f\xFCr die Berechnung des n\xE4chsten Eingangssignals notwendig ist, k\xF6nnte eine Verz\xF6gerung, die auf Null abf\xE4llt, zu einem Einfrieren f\xFChren.
+In einem solchen Fall k\xF6nnen Sie aber CDELAY verwenden.
+Nehmen Sie eine geringe konstante Verz\xF6gerung (z.B.
+0.001 Sekunden) zusammen mit einer einstellbaren Verz\xF6gerung.
+Au\xDFerdem k\xF6nnen Sie CDELAY und DELAY kombinieren, um eine variable Verz\xF6gerung mit einem positiven Minimalwert in einem r\xFCckgekoppelten System zu erhalten.
+Wichtig ist nur, das ein CDELAY-Modul vorhanden ist.
+Synth_CDELAY
+Verz\xF6gert das Eingangssignal um eine bestimmte Zeitspanne.
+Die Zeit muss gr\xF6\xDFer als 0 f\xFCr eine Verz\xF6gerung von mehr als 0 Sekunden sein.
+Die Verz\xF6gerung ist konstant w\xE4hrend der Berechnung, kann also nicht ver\xE4ndert werden.
+Das spart Rechenzeit, da keine Interpolation notwendig ist, und ist n\xFCtzlich f\xFCr rekursive Strukturen.Siehe weiter oben (Synth_DELAY).
+H\xFCllkurven
+Synth_ENVELOPE_ADSR
+Dies ist eine klassische ADSR -H\xFCllkurve, das hei\xDFt Sie k\xF6nnen folgendes festlegen:
+active
+Ob die Taste gerade vom Benutzer gedr\xFCckt wird.
+invalue
+Das Eingangssignal.
+attack
+Die Zeit zwischen dem Niederdr\xFCcken der Taste und dem Zeitpunkt zu dem das Signal seine maximale Amplitude erreicht (in Sekunden).
+decay
+Die Zeit, bis das Signal nach dem Maximalwert einen konstanten Dauerwert annimmt (in Sekunden).
+sustain
+Der konstante Dauerwert, bei dem das Signal gehalten wird, nachdem der Benutzer die Taste wieder losgelassen hat.
+release
+Die Zeit vom Loslassen der Taste bis das Signal den Wert Null wiedererreicht hat (in Sekunden).
+Das skalierte Signal liegt am Ausgang (outvalue) an.
+Wenn die ADSR -H\xFCllkurve beendet ist, wird der Ausgang done auf 1 gesetzt.
+Das k\xF6nnen Sie verwenden, um f\xFCr ein Instrument das Signal done zu generieren (das dazu f\xFChrt, das die Struktur vom MIDI -Router nach dem Ende der Release-Phase gel\xF6scht wird).
+Synth_PSCALE
+Das Synth_PSCALE-Modul skaliert einen Audiostrom von der Lautst\xE4rke 0 (Stille) bis 1 (Maximallautst\xE4rke) und zur\xFCck zu 0 (Stille).
+Gesteuert wird das durch den Eingang Position (pos) (dieser Eingang kann mit dem entsprechenden Ausgang von Synth_SEQUENCE belegt werden).
+Die Stelle, an der der Maximalwert erreicht werden soll, kann als Eingang pos angegeben werden.
+Beispiel:
+Setzen Sie top auf 0.1.
+Das bedeutet, nach 10% der Note erreicht die Lautst\xE4rke ihren Maximalwert und klingt danach aus.
+Effekte
+Synth_FREEVERB
+Dies ist ein Nachhall-Effekt.
+In der augenblicklichen Implementation kann ein Stereosignal durch diesen Effekt geschickt werden.
+Dabei wird der Nachhall zum urspr\xFCnglichen Signal addiert.
+Das bedeutet, Sie k\xF6nnen das Modul ein innerhalb eines Stereo-Effektstapels verwenden.
+Das Eingangssignal wird mit inleft und inright verbunden, das Ausgangssignal liegt bei outleft und outright an.
+Sie k\xF6nnen folgende Parameter festlegen:
+roomsize
+Die Gr\xF6\xDFe des Raumes, f\xFCr den der Nachhall simuliert wird (Bereich:
+0..1, wobei 1 demgr\xF6\xDFtm\xF6glichen Raum entspricht).
+damp
+Das bezeichnet einen Filter, der den simulierten Raum hohe Frequenzen absorbieren l\xE4sst (Bereich 0..1, wobei 1 die hohen Frequenzen sehr effektiv absorbiert).
+wet
+der Anteil des Nachhall-Signals (das ist der Anteil des Signals, das durch die Filter ver\xE4ndert und zu einer nicht trockenen Akustik, also einem halligen Klang f\xFChrt.
+dry
+der Anteil des urspr\xFCnglichen Signals, der durchgelassen werden soll.
+Er f\xFChrt eher zu einem Echo (oder kombinierter Verz\xF6gerung) anstatt einem Nachhall-Effekt (Bereich:
+0..1)
+width
+Der Anteil an Stereo-Magie, den der Nachhall-Effekt hinzuf\xFCgt und zu einem breiteren Klang im Stereo-Panorama f\xFChrt (Bereich:
+0..1).
+mode
+[TODO:
+Ich glaube, wenn mode 1 ist, wird das urspr\xFCngliche Klangbild beibehalten, w\xE4hrend mode 0 der normale Arbeitsmodus ist]
+Synth_TREMOLO
+Das Tremolo-Modul ver\xE4ndert die Amplitude entsprechend einer LFO -Welle.
+\xDCblicherweise verwendet man dazu eine Sinusschwingung, aber das ist nicht zwingend notwendig.
+Man erh\xE4lt einen intensiven Effekt, der in vielen Arrangements wegen seiner gro\xDFen Dynamik sehr durchdringend ist.
+Der Tremolo-Effekt ist einer der liebsten Effekte f\xFCr Gittaristen, wenn er auch nicht mehr so popul\xE4r wie in den 1960ern ist.
+[TODO: augenblicklich ist dieser Effekt als invalue + abs(inlfo) implementiert - vielleicht w\xE4re es sinnvoller, diesen als invalue * (1+inlfo*depth) zu implementieren, wobei depth den Bereich 0..1 hat - das wird nach KDE2.1 entschieden.
+Falls Sie Anmerkungen haben, schicken Sie eine Mail an die aRts -Liste;).]
+Synth_FX_CFLANGER
+Ein Flanger ist ein zeitver\xE4nderlicher Verz\xF6gerungseffekt.
+Um die Entwicklung von umfangreichen Flanger-Effekten einfacher zu gestalten, wurde dieses Modul hinzugef\xFCgt, das den Kern eines Ein-Kanal-Flangers darstellt.
+Folgende Kan\xE4le sind vorhanden:
+invalue
+Das Signal, das verarbeitet werden soll.
+lfo
+M\xF6glichst eine Sinusschwingung, die die Verz\xF6gerungszeit (delay) innerhalb des Flangers moduliert (-1..
+1).
+mintime
+Der minimale Wert f\xFCr die Verz\xF6gerung (delay) innerhalb des Flangers in Millisekunden.
+Empfohlene Werte: versuchen sie etwa 1 ms.
+Bitte verwenden Sie Werte < 1000 ms.
+maxtime
+Der minimale Wert f\xFCr die Verz\xF6gerung (delay) innerhalb des Flangers in Millisekunden.
+Empfohlene Werte: versuchen sie etwa 5 ms.
+Bitte verwenden Sie Werte < 1000 ms.
+outvalue
+Das Ausgangssignal.
+F\xFCr den Effekt ist es wichtig, dass dieses Signal mit dem urspr\xFCnglichen (nicht ver\xE4nderten) Signal gemischt wird.
+Sie k\xF6nnen dieses als die Basis f\xFCr einen Choreffekt verwenden.
+Filter
+Synth_PITCH_SHIFT
+Dieser H\xF6henverschiebungseffekt ver\xE4ndert die Frequenz des Eingangssignals ohne die Geschwindigkeit des Signals zu ver\xE4ndern.
+Eine Anwendung f\xFCr diesen Effekt ist die Ver\xE4nderung Ihrer Stimme, w\xE4hrend Sie sie aufnehmen (und abspielen) in Echtzeit
+Der Parameter speed gibt die relative Geschwindigkeit wieder, mit der das Signal wiedergegeben wird.
+Eine Geschwindigkeit von 2 w\xFCrde den Klang auf die doppelte Frequenz anheben (z.B. w\xFCrde eine Eingangsfrequenz von 440Hz zu einer Ausgangsfrequenz von 880Hz f\xFChren).
+Der Parameter frequency(Frequenz) wird intern verwendet, um zwischen unterschiedlichen Signalg\xFCten umzuschalten.
+Abh\xE4ngig von Ihrer Wahl wird der erzeugte Klang mehr oder weniger realistisch sein.
+Ein guter Startwert liegt zwischen 5 und 10.
+Synth_SHELVE_CUTOFF
+Filtert alle Frequenzen oberhalb einer Grenzfrequenz heraus.
+Synth_BRICKWALL_LIMITER
+Dieses Modul beschneidet ein Signal, um es in den Bereich von [-1;1] einzupassen.
+Es werden keine Ma\xDFnahmen gegen die St\xF6rungen getroffen, die beim Abschneiden lauter Signale entstehen.
+Sie k\xF6nnen das als Effekt verwenden (z.B. um eine leicht abgeschnittene Sinusschwingung zu erzeugen).
+Es ist wahrscheinlich meistens eine gute Idee, das Resultat durch einen Tiefpassfilter zu schicken, damit es nicht so aggressiv klingt.
+Synth_STD_EQUALIZER
+Ein h\xFCbsches Modul eines parametrischen Equalizers.
+Folgende Parameter sind vorhanden:
+invalue, outvalue
+Das Signal, das durch den Equalizer gefiltert wird.
+low
+Wie tiefe Frequenzen ver\xE4ndert werden sollen.
+Der Wert ist in dB, wobei 0 keine \xC4nderung der tiefen Frequenzen bedeutet, -6 bedeutet Absenkung um 6dB und +6 bedeutet Anhebung um 6dB.
+mid
+Wie mittlere Frequenzen durch den Equalizer ver\xE4ndert werden sollen in dB (siehe auch low).
+high
+Wie hohe Frequenzen durch den Equalizer ver\xE4ndert werden sollen in dB (siehe auch low).
+frequency
+Dies ist die zentral Frequenz des Equalizers in Hz, die mittleren Frequenzen befinden sich in diesem Bereich, die hohen und tiefen Frequenz oberhalb und unterhalb.
+Anmerkung: die Frequenz kann nicht h\xF6her als die halbe Samplingrate sein, also normalerweise 22050Hz, und nicht tiefer als 1 Hz.
+q
+Beeinflusst die Breite des Frequenzspektrums.
+Es sind nur positive Zahlen (> 0) erlaubt.
+Der Wert Eins ist sinnvoll, h\xF6here Werte von q bedeuten ein schmaleres Frequenzband der mittleren Frequenzen, geringere Werte ein breiteres Band.
+Synth_RC
+Ein ged\xE4mpfter Schwingkreis, der alle Frequenzen um seine Resonanzfrequenz filtert.
+Es gibt keine leichte M\xF6glichkeit, die Resonanzfrequenz festzulegen (die nicht herausgefiltert wird), da es nur zwei ungew\xF6hnliche Konstanten f und b gibt.
+Der Programmteil stammt noch aus den ersten Tagen von Synthesizern und wird vermutlich durch einen neuen Filter ersetzt werden, bei dem man die Frequenz und den Resonanzwert als Parameter hat.
+Versuchen Sie etwa b=5, f=5 oder b=10, f=10 oder b=15, f=15.
+Synth_MOOG_VCF
+Filtert alle Frequenzen oberhalb einer Grenzfrequenz heraus (es handelt sich um einen 24db 4pole-Filter, der -24db pro Oktave oberhalb der Grenzfrequenz absenkt), es gibt einen zus\xE4tzlichen Parameter, um die Resonanz einzustellen, 0 bedeutet keine Resonanz und 4 bedeutet selbstoszillierend.
+Midi + Sequenzer
+Synth_MIDI_TEST
+Dieses Modul l\xE4dt eine Instrumentenstruktur aus einer Datei und registriert sich als MIDI -Ausgangskanal beim aRts - MIDI -Manager.
+Noten, die an diesen Ausgang gesendet werden, erzeugen T\xF6ne dieses Instrumentes.
+Sie k\xF6nnen so etwas mit artscontrol leichter einrichten als manuell in aRts-builder.
+Synth_SEQUENCE
+Spielt eine Sequenz von Noten immer wieder.
+Die Noten werden in Tracker Notation angegeben und durch Semikolons voneinander getrennt.
+Ein Beispiel ist A-3;C-4;E-4;C-4;.
+Die Geschwindigkeit wird in Sekunden pro Note angegeben, wenn Sie also 120 BPM anvisieren, legen Sie die Geschwindigkeit auf 0.5 Sekunden fest, da 60 Sekunden / 0.5 Sekunden pro Note auf 120 BPM f\xFChrt.
+Sie k\xF6nnen f\xFCr jede Note eine individuelle L\xE4nge relativ zur Grundl\xE4nge festlegen durch einen Doppelpunkt gefolgt von der L\xE4nge hinter der Notenbezeichnung.
+Ein Beispiel daf\xFCr ist A-3:2;C-4:0.5;D-4:0.5;E-4;.
+Midi-Kompositionsprogramme ist ein wenig komfortabler;)
+Das Synth_SEQUENCE-Modul gibt zus\xE4tzliche Informationen \xFCber die Position innerhalb der gerade wiedergegebenen Note aus, wobei 0 gerade begonnen und 1 gerade beendet bedeutet.
+Diese Informationen k\xF6nnen im Synth_PSCALE-Modul verwendet werden (siehe unten).
+Samples
+Synth_PLAY_WAV
+Dieser Men\xFCpunkt spielt eine wav -Datei ab.
+Er ist nur dann verf\xFCgbar, wenn Sie libaudiofile auf Ihrem Computer installiert haben.
+Die wave-Datei startet, sobald das Modul erstellt wird.
+Sie stoppt, sobald das Ende der wav-Datei erreicht ist.
+Zus\xE4tzlich wird der Parameter finished (beendet) auf 1 gesetzt.
+Der Geschwindigkeitsparameter (speed) kann verwendet werden, um die Datei schneller oder langsamer wiederzugeben, wobei 1.0 der normalen (aufgenommenen) Geschwindigkeit entspricht.
+Klang-IO
+Synth_PLAY
+Sie werden dieses Modul normalerweise nicht ben\xF6tigen, wenn Sie nicht selbstst\xE4ndige Anwendungen erstellen.
+Innerhalb von artsd existiert bereits ein Modul Synth_PLAY und ein zweites wird nicht funktionieren.
+Das Synth_PLAY-Modul gibt ein Audio-Signal auf die Soundkarte aus.
+Die linken und rechten Kan\xE4le sollten die normalisierten Eingangssignale f\xFCr die Kan\xE4le enthalten.
+Wenn sich das Eingangssignal nicht zwischen -1 und 1 befindet, werden zu hohe Amplituden abgeschnitten (clipping).
+Wie bereits gesagt, darf es nur ein Synth_PLAY-Modul geben, da es direkt auf die Soundkarte zugreift.
+Verwenden Sie Busse, wenn Sie mehr als einen Audiostrom mischen wollen.
+Verwenden Sie das Modul Synth_AMAN_PLAY, um eine Ausgabe innerhalb von artsd zu erzeugen.
+Anmerkung:
+Das Synth_PLAY-Modul \xFCbernimmt das gesamte Timing f\xFCr die Struktur.
+Das bedeutet:
+Wenn Sie kein Synth_PLAY-Modul haben, haben Sie kein Timing und damit auch keine Klangausgabe.
+Sie ben\xF6tigen also (genau) ein Synth_PLAY-Objekt.
+Synth_RECORD
+Sie werden dieses Modul vermutlich niemals ben\xF6tigen, es sei denn, Sie schreiben selbstst\xE4ndige Anwendungen.
+Innerhalb von artsd befindet sich bereits ein Synth_RECORD-Modul und ein zweites funktioniert nicht.
+Das Synth_RECORD-Modul nimmt ein Signal von Ihrer Soundkarte auf.
+Die Eingangskan\xE4le left (links) und right (rechts) enthalten die Eingangssignale von der Soundkarte (zwischen -1 und 1).
+Wie bereits gesagt kann nur ein Synth_RECORD-Modul verwendet werden, da es direkt auf die Soundkarte zugreift.
+Verwenden Sie Busse, wenn Sie einen Audiodatenstrom an mehr als einer Stelle verwenden m\xF6chten.
+Verwenden Sie das Modul Synth_AMAN_RECORD, um einen Eingang innerhalb von artsd zu erzeugen.
+Damit das funktioniert, muss artsd mit Full-Duplex aktiviert gestartet werden.
+Synth_AMAN_PLAY
+Das Modul Synth_AMAN_PLAY gibt ein Ausgangssignal aus.
+Es sollte (nicht notwendigerweise) normalisiert (zwischen -1 und 1) sein.
+Dieses Modul verwendet den Audiomanager, um festzulegen, wo das Signal wiedergegeben wird.
+Der Audiomanager kann mit Hilfe von artscontrol gesteuert werden.
+Um die Verwendung intuitiver zu gestalten, sollten Sie dem Signal einen Namen geben.
+Das k\xF6nnen Sie, indem Sie den Parameter title (Titel) verwenden.
+Eine weitere Besonderheit des Audiomanagers ist die F\xE4higkeit, den letzten Wiedergabekanal eines Signals zu speichern.
+Dazu muss er die Signale unterscheiden k\xF6nnen.
+Aus diesem Grund sollten Sie autoRestoreID einen eindeutigen Wert geben.
+Synth_AMAN_RECORD
+Das Modul Synth_AMAN_RECORD kann Daten einer externen Quelle (z.B.
+Line In / Mikrofon) innerhalb von artsd aufnehmen.
+Die Ausgabe ist ein normalisiertes Signal (zwischen -1 und 1).
+\xDCber den Audiomanager kann festgelegt werden, von wo das Signal aufgenommen wird.
+Der Audiomanager kann mit Hilfe von artscontrol gesteuert werden.
+Um die Verwendung intuitiver zu gestalten, sollten Sie dem Signal einen Namen geben.
+Das k\xF6nnen Sie, indem Sie den Parameter title (Titel) verwenden.
+Eine weitere Besonderheit des Audiomanagers ist die F\xE4higkeit, den letzten Wiedergabekanal eines Signals zu speichern.
+Dazu muss er die Signale unterscheiden k\xF6nnen.
+Aus diesem Grund sollten Sie autoRestoreID einen eindeutigen Wert geben.
+Synth_CAPTURE
+Das Synth_CAPTURE-Modul kann ein Audiosignal in eine wav-Datei auf Ihrer Festplatte schreiben.
+Tests
+Synth_NIL
+Macht gar nichts.
+Das Modul ist sinnvoll zum Testen.
+Synth_DEBUG
+Kann zum debuggen verwendet werden.
+Es gibt den Wert des Signals invalue in gleichbleibenden Abst\xE4nden (etwa 1 Sekunde) zusammen mit einem von Ihnen festgelegten Kommentar aus.
+Auf diese Weise k\xF6nnen Sie herausfinden, ob gewisse Signale in gewissen Bereichen bleiben oder ob sie \xFCberhaupt vorhanden sind.
+Synth_MIDI_DEBUG
+Hiermit k\xF6nnen Sie \xFCberpr\xFCfen, ob Ihre MIDI -Ereignisse aRts \xFCberhaupt erreichen.
+Wenn ein MIDI_DEBUG aktiv ist, druckt artsserver etwa die folgenden Angaben:
+Die erste Zeile teilt mit, das 100753ms (das sind 100 Sekunden) nach dem Start von MIDI_DEBUG das MIDI -Ereignis "Note an" auf Kanal 0 eingetroffen ist.Dieses Ereignis hatte die Lautst\xE4rke (velocity) 127, also den lautest m\xF6glichen Wert.
+Die n\xE4chste Zeile zeigt das zugeh\xF6rige "Note aus"-Ereignis.[ TODO:
+Das funktioniert momentan noch nicht.
+Reparieren und durch den MIDI -Manager leiten].
+Synth_DATA
+Erzeugt ein Signal mit einer konstanten Nummer.
+Oszillation & Modulation
+Synth_FREQUENCY
+Keiner der Oszillatoren in aRts ben\xF6tigt eine Frequenz als Eingabe, sondern nur eine Position innerhalb der Welle.
+Die Position muss zwischen 0 und 1 liegen.
+Das wird f\xFCr ein Standard-Synth_WAVE_SIN-Modul auf den Bereich 0 bis 2*Pi umgerechnet.
+Um eine bestimmte Frequenz zu erzeugen, ben\xF6tigen Sie ein Synth_FREQUENCY-Modul.
+Synth_FM_SOURCE
+Dieses Modul wird f\xFCr Frequenzmodulation ben\xF6tigt.
+Legen Sie die Grundfrequenz an den Frequenzeingang und ein anderes Signal an den Modulationseingang.
+Setzen Sie den Modulationswert (modlevel) etwa auf 0.3.
+Die Frequenz wird mit dem Modulationssignal moduliert.
+Ein interessantes Signal entsteht, wenn man ein r\xFCckgekoppeltes Signal verwendet, d.h. eine Kombination des verz\xF6gerten Ausgangssignals von Synth_FM_SOURCE (sie m\xFCssen es mit einem Oszillator verbinden, da es nur die Rolle von Synth_FREQUENCY \xFCbernimmt), und irgendein anderes Signal.
+Arbeitet gut mit Synth_WAVE_SIN-Oszillatoren zusammen.
+Wellenformen
+Synth_WAVE_SIN
+Sinusgenerator.
+Legen Sie ein Signal (pos) von Synth_FREQUENCY oder Synth_FM_SOURCE an den Eingang und am Ausgang liegt eine Sinusschwingung an.
+Das pos-Signal legt die Position in der Schwingung (Phasenverschiebung) im Bereich von 0..1 fest, was intern 0..2*Pi entspricht.
+Synth_WAVE_TRI
+Dreieckgenerator.
+Legen Sie ein Signal (pos) von Synth_FREQUENCY oder Synth_FM_SOURCE an den Eingang und am Ausgang liegt eine Dreieckschwingung an.
+Das pos-Signal legt die Position in der Schwingung (Phasenverschiebung) im Bereich von 0..1 fest, was intern 0..2*Pi entspricht.
+Vorsicht:
+Das Eingangssignal muss im Bereich von 0..1 sein, damit ein gutes Ausgangssignal entsteht.
+Synth_NOISE
+L\xE4rmgenerator.
+Dieser Generator erzeugt ein zuf\xE4lliges Signal zwischen -1 und 1.
+Synth_WAVE_SQUARE
+Rechteckgenerator.
+Legen Sie ein Signal (pos) von Synth_FREQUENCY oder Synth_FM_SOURCE an den Eingang und am Ausgang liegt eine Rechteckschwingung an.
+Das pos-Signal legt die Position in der Schwingung (Phasenverschiebung) im Bereich von 0..1 fest, was intern 0..2*Pi entspricht.
+Vorsicht:
+Das Eingangssignal muss im Bereich von 0..1 sein, damit ein gutes Ausgangssignal entsteht.
+Synth_WAVE_SOFTSAW
+Abgeschw\xE4chte S\xE4gezahnoszillation.
+Dieses Signal ist \xE4hnlich zum Signal des Dreieckgenerators.
+Legen Sie ein Signal (pos) von Synth_FREQUENCY oder Synth_FM_SOURCE an den Eingang und am Ausgang liegt eine weiche S\xE4gezahnschwingung an.
+Das pos-Signal legt die Position in der Schwingung (Phasenverschiebung) im Bereich von 0..1 fest, was intern 0..2*Pi entspricht.
+Vorsicht:
+Das Eingangssignal muss im Bereich von 0..1 sein, damit ein gutes Ausgangssignal entsteht.
+Synth_WAVE_PULSE
+Impulsgenerator - dieses Modul ist grunds\xE4tzlich \xE4hnlich zum Rechteckgenerator (Synth_WAVE_RECT), bietet aber zus\xE4tzlich eine M\xF6glichkeit, das Verh\xE4ltnis von Maximumzeit zu Minimumzeit mit dem Eingang dutycycle einzustellen.
+Legen Sie ein Signal (pos) von Synth_FREQUENCY oder Synth_FM_SOURCE an den Eingang und am Ausgang liegt eine Impulsschwingung an.
+Das pos-Signal legt die Position in der Schwingung (Phasenverschiebung) im Bereich von 0..1 fest, was intern 0..2*Pi entspricht.
+Vorsicht:
+Das Eingangssignal muss im Bereich von 0..1 sein, damit ein gutes Ausgangssignal entsteht.
+Verschiedenes
+Synth_COMPRESSOR
+Dieses Modul reduziert den Dynamikbereich des Signals.
+Ein Kompressor ist n\xFCtzlich, um die gro\xDFen Lautst\xE4rkeschwankungen einer \xFCber ein Mikrophon redenden Person zu verringern.
+Sobald das Eingangssignal einen bestimmten Pegel (den Grenzpegel) \xFCberschreitet, wird der Pegel reduziert.
+Jeder Pegelwert oberhalb des Grenzpegels wird mit einem Faktor, eine Zahl zwischen 0 und 1, multipliziert.
+Zum Abschlu\xDF wird das gesamte Signal mit dem Ausgangsfaktor multipliziert.
+Die Argumente attack und release verz\xF6gern den Start und das Ende der Kompression.
+Das kann verwendet werden, um z.B. den lauten Beginn einer Basedrum zu h\xF6ren.
+Das Argument wird in Millisekunden angegeben und ein Wert von 0 ms ist m\xF6glich, kann aber zu einem leichten Nebenger\xE4usch f\xFChren.
+Visuelle Modul-Referenz
+Anwendungen auf aRts portieren
+artsdsp verwenden
+Die Anwendung artsdsp, die weiter oben beschrieben wird, erlaubt den meisten Standardanwendungen, die direkt auf die Audio-Ger\xE4te zugreifen, unter aRts problemlos zu funktionieren.
+Die meisten Anwendungen, die den Enlightenment Sound Daemon (esd) verwenden, funktionieren ebenfalls, indem esd unter artsdsp gestartet wird.
+Damit existiert eine gute \xDCbergangsl\xF6sung, um Anwendungen auf KDE zu portieren.
+Es erlaubt nat\xFCrlich keiner Anwendung, direkt von aRts zu profitieren und alle F\xE4higkeiten von aRts, wie z.B. die Verwendung von Modulen und Multimediastr\xF6men, zu verwenden.
+Wenn die Anwendung mehr k\xF6nnen soll, als nur einfache Audiodateien abzuspielen, sollte man Unterst\xFCtzung f\xFCr aRts hinzuf\xFCgen.
+Die Anwendung kann dann viele Aufgaben an aRts \xFCbertragen -- sie kann die in aRts enthaltenen Funktionen verwenden, um Dinge wie unterschiedliche Codecs, Medienformate oder die Kontrolle der Audioger\xE4te.
+aRts -Unterst\xFCtzung hinzuf\xFCgen
+Die Entscheidung wird unter anderem davon abh\xE4ngen, welche Art von Medienstrom (Klang, MIDI, CD -Audio, u.s.w.) Sie verwenden wollen, welche API -F\xE4higkeiten Sie ben\xF6tigen und ob Sie in C++ programmieren.
+In den meisten F\xE4llen sollte die Entscheidung abh\xE4ngig von den ben\xF6tigten F\xE4higkeiten klar sein
+Anwendungen, die auf anderen Architekturen als KDE funktionieren sollen, k\xF6nnen nicht davon ausgehen, das aRts immer vorhanden ist.
+Durch eine Plugin-Architektur k\xF6nnen Sie geschickt verschiedene Multimediaumgebungen unterst\xFCtzen.
+Wenn Sie das Plugin- API au\xDFerdem ver\xF6ffentlichen und gut dokumentieren (besonders f\xFCr nicht als Quelltext verf\xFCgbare Anwendungen), erm\xF6glichen Sie auch anderen Entwicklern, ein aRts -Plugin f\xFCr Ihre Anwendung zu schreiben.
+aRts unterst\xFCtzen
+Wie Sie helfen k\xF6nnen
+Mailinglisten
+Viele Diskussionen zur Entwicklung von aRts finden in einer von zwei Mailinglisten statt.
+Hier werden neue F\xE4higkeiten und Umsetzungsideen diskutiert, hierhin kann man sich bei Problemen wenden.
+Die KDE -Multimedia-Mailingliste ist f\xFCr allgemeine Multimediathemen sowohl aRts als auch andere Multimediaprogramme wie Noatun und aKtion betreffend.
+Die Liste wird unter http://lists.kde.org archiviert.
+In der aRts -Mailingliste geht es um aRts -spezifische Themen einschlie\xDFlich der Nutzung von aRts au\xDFerhalb von KDE.
+Die Liste wird unter http://space.twc.de/~stefan/arts-archive archiviert.
+Programmierstandards (in Englisch)
+Naming of member functions
+Qt / Java style, that means capitalization on word breaks, and first letter always without capitalization; no underscores.
+This means for instance:
+Class members
+Class members are not capitalized, such as menubar or button.
+When there are accessing functions, the standard should be the MCOP way, that is, when having an long member foo, which shouldn't be visible directly, you create:
+functions to get and set the value.
+In that case, the real value of foo should be stored in _foo.
+Class names
+All classes should be wordwise capitalized, that means ModuleView, SynthModule.
+All classes that belong to the libraries should use the aRts namespace, like Arts::Soundserver.
+The implementations of MCOP classes should get called Class_impl, such as SoundServer_impl.
+Parameters
+Parameters are always uncapitalized.
+Local variables
+Local variables are always uncapitalized, and may have names like i, p, x, etc. where appropriate.
+Tab width (Shift width)
+One tab is as long as 4 spaces.
+Naming of source files
+Source files should have no capitalization in the name.
+They should have the name of the class when they implement a single class.
+Their extension is .cc if they refer to Qt / GUI independant code, and .cpp if they refer to Qt / GUI dependant code.
+IDL files should be called in a descriptive way for the collection of interfaces they contain, also all lower case.
+Especially it is not good to call an IDL file like the class itself, as the .mcopclass trader and type info entries will collide, then.
+K\xFCnftige Arbeiten
+aRts entwickelt sich zu schnell, als das an dieser Stelle eine aktuelle Liste m\xF6glich w\xE4re.
+Informationen zu Pl\xE4nen finden Sie in der Datei TODO und in den Mailinglisten.
+Sie sind eingeladen, sich bei der weiteren Planung und Implementation zu beteiligen.
+Dieses in der Entwicklung befindliche Dokument versucht einen \xDCberblick dar\xFCber zu geben, wie neue Technologien in aRts integriert werden.
+Es behandelt folgende Themen:
+Wie Schnittstellen funktionieren.
+Codecs:
+Dekodierung von mp3-Str\xF6men in eine Form, so dass sie als Daten verwendet werden k\xF6nnen.
+Video.
+Threading.
+Synchronisation.
+Dynamische Erweiterung / Maskierung.
+Dynamische Komposition.
+GUI
+MIDI
+Dieses befindet sich in Arbeit.
+Es ist die Grundlage daf\xFCr, wie neue Technologien in aRts integriert werden k\xF6nnen.
+Man kann einen ungef\xE4hren Eindruck davon bekommen, wie solche Probleme gel\xF6st werden.
+Sie k\xF6nnen alles, was Sie hier sehen, korrigieren.
+Programme, die aRts -Technologie verwenden (bitte: koordinieren Sie IhrerAnstrengungen):
+KPhone (Voice over IP)
+Noatun (Video- / Audiospieler)
+artscontrol (Kontrollprogramm des Soundservers)
+Brahms (Musiksequencer)
+Kaiman (KDE 2-Medienspieler - kmedia2-kompatibel)
+mpglib / kmpg (mpg Audio- und Videowiedergabetechnologie)
+SDL (direkte Medienschicht f\xFCr Spiele, noch nicht begonnen, aber wohl sinnvoll)
+electric ears (Der Autor hat mich kontaktiert - Status unbekannt)
+Wie Schnittstellen (interfaces) funktionieren
+MCOP -Schnittstellen sind die Grundlage des Konzeptes von aRts.
+Sie sind das netzwerktransparente \xC4quivalent zu C++-Klassen.
+Sie sollten Ihre Programmentwicklung mit Schnittstellen durchf\xFChren.
+Die Schnittstellen bestehen aus vier Teilen:
+Synchrone Str\xF6me
+Asynchrone Str\xF6me
+Methods
+Attributes
+Diese k\xF6nnen beliebig kombiniert werden.
+Neue Technologien sollten als Schnittstellen definiert werden.
+Lesen Sie die Abschnitte \xFCber asynchrone Str\xF6me und synchrone Str\xF6me, sowie den \xFCber die KMedia2-Schnittstelle.
+Es sind gute Beispiele f\xFCr ihre Funktionsweise
+Schnittstellen werden als .idl -Code spezifiziert und mit dem mcopidl -Compiler \xFCbersetzt.
+Codecs - Datendekodierung
+Die kmedia2-Schnittstellen erlauben Ihnen zu ignorieren, dass wav-Dateien, mp3-Dateien und viele andere Formate aus Datenstr\xF6men bestehen.
+Stattdessen k\xF6nnen Sie Methoden implementieren, um sie abzuspielen.
+Sie k\xF6nnen eine Routine zum Laden von wav-Dateien schreiben, um wav-Dateien abzuspielen (als PlayObject), aber niemand sonst kann Ihren Code verwenden.
+Asynchrone Str\xF6me sind eine Alternative.
+Sie definieren eine Schnittstelle, die die \xDCbergabe von Datenbl\xF6cken erm\xF6glichen.
+So sieht das in MCOP aus:
+Nat\xFCrlich k\xF6nnen Codecs Attribute verwenden, um zus\xE4tzliche Daten, wie Formatinformationen bereitzustellen.
+Dieser ByteAudioCodec kann zum Beispiel mit einem ByteStreamToAudio -Objekt verbunden werden, um einen Audio-Strom zu formen.
+Andere Codec-Typen k\xF6nnen stattdessen Video-Daten direkt ausgeben, wie
+Meistens sollte ein Codec-Konzept verwendet werden anstatt einem Sie wissen, wie man es abspielt und ich nicht -Konzept, wie zum Beispiel WavPlayObject es praktiziert.
+Nat\xFCrlich muss sich jemand hinsetzen und einige Versuche durchf\xFChren, bevor ein API festgeschrieben werden kann.
+Video
+Mein Vorschlag ist, Video als asynchronen Strom eines MCOP -Datentypen, der Bilder enth\xE4lt, zu implementieren.
+Dieser Datentyp muss noch kreiert werden.
+Auf diese Weise k\xF6nnten Plugins, die Video-Bilder verarbeiten in der gleichen Art wie Audio-Plugins verbunden werden.
+Auf einige Dinge muss dabei geachtet werden:
+Es gibt die Farbmodelle RGB und YUV.
+Das Format sollte dem Strom aufgepr\xE4gt werden.
+Synchronisation ist wichtig.
+Es sollte m\xF6glich sein, die VideoFrame -Klasse so zu reimplementieren, das Daten im gemeinsam genutzten Speicher gespeichert werden k\xF6nnen.
+Damit w\xFCrde auch Video-Streaming zwischen verschiedenen Prozessen ohne gro\xDFe Probleme m\xF6glich.
+Bisher befindet sich f\xFCr Videodaten von der Dekodierung bis zum Rendern alles im gleichen Prozess.
+Ich habe einen Prototyp f\xFCr ein Videostreaming-Programm implementiert, man kann ihn von hier herunterladen.
+Er muss nach einigen Experimenten in MCOP integriert werden.
+Eine Render-Komponente, die XMITSHM (mit RGB und YUV) unterst\xFCtzt, sollte programmiert werden.
+Martin Vogt arbeitet derzeit an so etwas.
+Threading
+Bisher ist MCOP Singel-Threaded.
+F\xFCr Video werden wir allerdings wohl nicht um Threading herum kommen.
+Dabei ist auf einige Dinge zu achten.
+SmartWrappers - sie sind nicht threadsicher wegen nicht abgesicherter Referenzz\xE4hlung und \xE4hnlichen Dingen.
+Dispatcher / I/O - nicht threadsicher.
+Ich k\xF6nnte mir allerdings vorstellen, einzelne Modules sowohl f\xFCr synchrones als auch asynchrone Streaming threadsicher zu machen.
+Auf diese Weise - mit einem threadtauglichen Flusssystem - k\xF6nnte der Signalfluss auf zwei oder mehr Prozessoren verteilt werden.
+Damit w\xE4re dem Audiosystem in Bezug auf Mehrprozessorsysteme erheblich geholfen.
+Wie es funktionieren k\xF6nnte:
+Das Flusssystem entscheidet, welche Module was berechnen sollen - das sind:
+Video-Frames (mit der process_indata-Methode)
+Synchrone Audio-Str\xF6me (calculateBlock)
+oder asynchrone Str\xF6me, haupts\xE4chlich Byte-Str\xF6me
+Module k\xF6nnen diese Dinge in eigenen Threads berechnen.
+F\xFCr Audio ist es sinnvoll, Threads wiederholt zu benutzen (z.B. rendern in vier Threads auf vier Prozessoren, unabh\xE4ngig davon, ob 100 Module ausgef\xFChrt werden).
+F\xFCr Video und Byte-Dekomprimierung k\xF6nnte es sinnvoll sein, eine blockierende Implementierung in einem eigenen Thread zu haben, der mit dem Rest das MCOP -Systems durch das Flusssystem synchronisiert wird.
+Module d\xFCrfen die Funktionen von MCOP (wie entfernte Aufrufe) w\xE4hrend Thread-Operationen nicht verwenden
+Synchronisation
+Video und MIDI (und Audio) m\xFCssen m\xF6glicherweise synchronisiert werden.
+Das funktioniert \xFCber Zeitmarken.
+Zeitmarken k\xF6nnten zu asynchronen Str\xF6men hinzugef\xFCgt werden, indem jedes Paket mit einer Zeitmarke versehen wird.
+Zwei Video-Frames m\xFCssen als zwei Pakete gesendet werden (sie sind sowieso recht gro\xDF), damit sie unterschiedliche Zeitmarken haben k\xF6nnen.
+Audio sollte implizit Zeitmarken haben, da Audiodaten synchron wiedergegeben werden.
+Dynamische Zusammenstellung (Composition)
+Es sollte folgendes m\xF6glich sein:
+Ein FX-Effekt ist zusammengesetzt aus mehreren einfachen Modulen.
+Ein FX-Effekt sollte aussehen wie ein normales MCOP -Modul (siehe auch Maskierung (masquerading)), obwohl er aus anderen Modulen besteht.
+Das ist f\xFCr aRts-builder erforderlich.
+GUI
+Alle GUI -Komponenten werden MCOP -Module sein.
+Sie sollten Attribute wie Gr\xF6\xDFe (size), Name (label), Farbe (color),... haben.
+Ein RAD -Builder (aRts-builder) sollte in der Lage sein, sie visuell zusammenzusetzen.
+Das GUI sollte durch Sicherung der Attribute speicherbar sein.
+MIDI
+MIDI sollte als asynchroner Strom implementiert werden.
+Es sollte zwei M\xF6glichkeiten geben, zum Einen die Verwendung von normalen MCOP -Strukturen f\xFCr die Typen und zum Anderen die Einf\xFChrung von weiteren angepassten Typen.
+Normale Strukturen sollten ausreichen, also etwas wie:
+Asynchrone Str\xF6me sollten angepasste Typen unterst\xFCtzen.
+Referenz
+http://multimedia.kde.org
+Das ist die Hauptseite f\xFCr Informationen zum Thema KDE -Multimedia.
+http://www.arts-project.org
+Das ist die Internetseite des aRts -Projektes.
+KDE 2.0 Development (KDE 2.0 Entwicklung)
+Kapitel 14 dieses ver\xF6ffentlichten Buches besch\xE4ftigt sich mit Multimedia allgemein und mit aRts.
+Es ist gedruckt oder im Internet mit Kommentaren verf\xFCgbar unter http://www.andamooka.org.
+http://sound.condorow.net
+Diese Internetseite hat eine umfangreiche List zu Kl\xE4ngen und MIDI -Anwendungen unter Linux.
+Fragen und Antworten
+In diesem Abschnitt finden Sie die Antworten auf einige h\xE4ufig gestellte Fragen zu aRts.
+Allgemeine Fragen
+Unterst\xFCtzt KDE die Ausgabe von Audio \xFCber meine Soundkarte?
+Ich kann keine wav -Dateien mit artsd abspielen!
+Falls das nicht der Fall ist, laden Sie das Paket kdesupport herunter und \xFCbersetzen Sie alles neu.
+Ich kann Kl\xE4nge h\xF6ren, wenn ich mich als root anmelde, aber kein anderer Benutzer kann Kl\xE4nge h\xF6ren!
+Die Berechtigungen f\xFCr die Datei /dev/dsp entscheiden, welche Benutzer Kl\xE4nge erhalten.
+Um jedem die erforderlichen Berechtigungen zu geben, m\xFCssen Sie Folgendes machen:
+Melden Sie sich als root an.
+\xD6ffnen Sie ein Konqueror -Fenster.
+Gehen Sie in das Verzeichnis /dev.
+Klicken Sie mit der rechten Maustaste auf dsp und w\xE4hlen Sie Eigenschaften.
+Klicken Sie auf die Karteikarte Berechtigungen.
+Markieren Sie Lesen und Schreiben in allen Bereichen.
+Klicken Sie auf OK.
+Um den Zugriff auf Kl\xE4nge auf bestimmte Benutzer einzuschr\xE4nken, k\xF6nnen Sie Gruppenrechte verwenden.
+Bei einige Linux -Distributionen, z.B.
+Debian/Potato, geh\xF6rt /dev/dsp bereits zur Gruppe audio.
+Sie m\xFCssen die gew\xFCnschten Benutzer lediglich zu dieser Gruppe hinzuf\xFCgen.
+Das hilft f\xFCr artsd, aber wie sieht es mit KMix, KMid, Kscd, etc. aus?
+Es gibt verschiedene andere Ger\xE4te, auf die Multimedia-Anwendungen zugreifen.
+Sie k\xF6nnen sie alle genau so behanden; Sie k\xF6nnen sie entweder f\xFCr alle Benutzer freigeben oder Gruppenrechte zur Zugriffskontrolle verwenden.
+Hier ist eine Liste der beteiligten Ger\xE4te, die aber unvollst\xE4ndig sein kann (falls es mehrere Ger\xE4te einer Art gibt, sind sie in der Form midi0, midi1,... benannt, nur das erste dieser Ger\xE4te ist in der folgenden Liste aufgef\xFChrt):
+/dev/admmidi0
+/dev/adsp0
+/dev/amidi0
+/dev/amixer0
+/dev/audio
+/dev/audio0
+/dev/cdrom
+/dev/dmfm0
+/dev/dmmidi0
+/dev/dsp
+/dev/dsp0
+/dev/midi0
+/dev/midi0
+/dev/midi00
+/dev/midi00
+/dev/mixer
+/dev/mixer0
+/dev/mpu401data
+/dev/mpu401stat
+/dev/music
+/dev/rmidi0
+/dev/rtc
+/dev/sequencer
+/dev/smpte0
+/dev/sndstat
+Was kann ich tun, wenn artsd nicht startet oder w\xE4hrend der Ausf\xFChrung abst\xFCrzt?
+Besonders die Einstellung Volle Duplexf\xE4higkeit aktivieren funktioniert bei einigen Treibern nicht.
+Eine gute Methode, Problemen mit artsd auf den Grund zu gehen, ist, artsd manuell zu starten.
+\xD6ffnen Sie dazu ein Konsole -Fenster und geben Sie folgenden Befehl:
+Sie k\xF6nnen au\xDFerdem die Option -l0 hinzuf\xFCgen.
+Sie sorgt f\xFCr umfangreichere Statusmeldungen:
+Sie erhalten bestimmt einige n\xFCtzliche Informationen \xFCber die Startprobleme.
+Oder, wenn artsd abst\xFCrzt, w\xE4hrend etwas Bestimmtes passiert, k\xF6nnen Sie auch dieses ausprobieren und Informationen erhalten wie artsd abst\xFCrzt.
+Wenn Sie einen Fehlerbericht einsenden wollen, kann ein Backtrace mit gdb und/oder ein strace hilfreich sein.
+Kann ich artsd verschieben (die \xFCbersetzten Dateien in ein anderes Verzeichnis verschieben)?
+Das funktioniert nicht perfekt.
+Das Problem ist, das artswrapper die Position von artsd aus Sicherheitsgr\xFCnden fest einkompiliert hat.
+Sie k\xF6nnen allerdings die .mcoprc -Datei (Eintr\xE4ge f\xFCr Trader-Pfad/Erweiterungspfad) verwenden, damit ein verschobener artsd wenigstens seine Komponenten findet.
+Kann man aRts mit gcc-3.0 kompilieren?
+Kurze Antwort:
+Nein, aRts funktioniert nicht, wenn er mit GCC 3.0 kompiliert wird.
+Lange Antwort:
+In der offiziellen Version von GCC 3.0 gibt es zwei Fehler, die aRts betreffen.
+Der Erste, GCC-Fehler c++/2733 ist relativ harmlos (und betrifft Probleme mit \xA0Assembleranweisungen).
+Die Kompilation von convert.cc wird dadurch verhindert.
+Dieser Fehler ist im GCC-3.0-CVS bereits beseitigt und wird in einer Version GCC-3.0.1 oder h\xF6her beseitigt sein.
+Ein Notbehelf wurde zur CVS-Version von KDE/arts hinzugef\xFCgt.
+Der zweite GCC-3.0-Fehler, c++/3145 (Erzeugung falscher Anweisungen in einigen F\xE4llen von mehrfacher virtueller Vererbung) ist kritisch.
+Anwendng wie artsd st\xFCrzen ab beim Start ab, wenn sie mit GCC-3.0 kompiliert werden.
+Auch wenn bereits kleine Fortschritte zur Beseitigung dieses Problems erzielt wurden, st\xFCrzt artsd immer noch oft und unerwartet ab.
+Welche Anwendungen funktionieren unter aRts?
+Offensichtlich sind alle KDE -Anwendungen f\xFCr aRts vorbereitet.
+Das schlie\xDFt Folgende ein:
+Noatun
+aRts-builder
+aKtion
+KMid
+KMidi
+KMix
+Kscd
+KDE -Spiele wie KPoker und KTuberling
+Einige KDE -Anwendungen, die bisher nicht Teil von KDE -Ver\xF6ffentlichungen sind (z.B. aus kdenonbeta) unterst\xFCtzen aRts auch.
+Das sind unter anderen:
+Brahms
+Kaboodle
+Kdao
+Die folgenden Nicht- KDE -Anwendungen funktionieren ebenfalls mit aRts:
+xmms (mit aRts -Plugin)
+Real Networks RealPlayer 8.0 (funktioniert mit artsdsp; vollst\xE4ndige aRts -Unterst\xFCtzung wird \xFCberlegt)
+Die folgenden Anwendungen funktionieren nicht mit aRts:
+keine
+Dieser Abschnitt ist unvollst\xE4ndig -- wenn Sie Informationen zu weiteren unterst\xFCtzten und nicht unterst\xFCtzten Anwendungen haben, senden Sie sie an den Autor, damit sie eingef\xFCgt werden k\xF6nnen.
+Nicht- aRts -Anwendungen
+Sobald KDE l\xE4uft, kann keine andere Anwendung auf die Klangger\xE4te zugreifen!
+W\xE4hrend der aRts -Soundserver von KDE l\xE4uft, verwendet er die Klangger\xE4te.
+Wenn der Server f\xFCr 60 Sekunden unbesch\xE4ftigt ist, setzt er aus und gibt die Ger\xE4te automatisch frei.
+Angeblich soll er nach 60 Sekunden aussetzen, er tut es aber nicht!
+Wenn man artsd vom KDE Kontrollzentrum aus startet, betr\xE4gt die Standardeinstellung f\xFCr das Aussetzen 60 Sekunden.
+Wenn man artsd dagegen von der Befehlszeile aus startet, muss man die Option -s verwenden, um die Zeit bis zum Aussetzen festzulegen, ansonsten wird das Aussetzen deaktiviert.
+Augenblicklich funktioniert das Aussetzen nicht im Zusammenhang mit Full-Duplex.
+Schalten Sie in KControl Full-Duplex-F\xE4higkeit aus und das Aussetzen wird funktionieren.
+Full-Duplex deaktivieren, ist immer einer gute Idee, wenn Sie aRts nur zum Abspielen und nicht zum Aufnehmen verwenden.
+Wie kann ich alte Nicht- aRts -Anwendungen ausf\xFChren?
+Starten Sie sie mit Hilfe von artsdsp.
+Wenn Sie z.B. normalerweise eingeben w\xFCrden:
+verwenden Sie stattdessen:
+Dadurch wird die Klangausgabe an aRts umgeleitet.
+Diese Methode erfordert keine Ver\xE4nderung der Anwendungen.
+Diese \xDCbergangsl\xF6sung unterst\xFCtzt allerdings bisher nicht alle F\xE4higkeiten der Klangger\xE4te, daher werden einige Anwendungen dennoch nicht funktionieren.
+Ich kann artsdsp mit keiner Anwendung ausf\xFChren, es st\xFCrzt immer ab!
+Sie ben\xF6tigen eine aktuelle Version der glibc-Bibliothek; artsdsp funktioniert auf einigen \xE4lteren Linux -Distributionen nicht zuverl\xE4ssig.
+Z.B. funktioniert das Programm unter Debian 2.1 (mit glibc 2.0) nicht, w\xE4hrend es unter Debian 2.2 (mit glibc 2.1.3) funktioniert.
+Gibt es prinzipielle Hindernisse, sodass einige Anwendungen grunds\xE4tzlich nicht mit artsdsp funktionieren k\xF6nnen?
+Nein.
+Das Programm artsdsp f\xFChrt zu einer etwas h\xF6heren CPU -Belastung als die direkte Verwendung des aRts - API s.
+Dar\xFCber hinaus kann jede nicht funktionierende Anwendung als Fehler in artsdsp betrachtet werden.
+Die Technik von artsdsp sollte bei richtiger Implementation jeder Anwendung eine Zusammenarbeit mit arts erm\xF6glichen (einschlie\xDFlich gro\xDFer Anwendungen wie Quake 3).
+Was kann ich tun, wenn eine Anwendung nicht mit artsdsp funktioniert?
+Sie k\xF6nnen den Server nur dann abschalten, wenn keine Anwendung aRts verwendet und w\xE4hrend aRts abgeschaltet ist, k\xF6nnen Sie keine Anwendungen starten, die den Server verwenden.
+Wenn der Server besch\xE4ftigt ist, gibt es einen brutalen Weg, ihn abzuschalten:
+Damit st\xFCrtzt allerdings jede aRts -Anwendung ab, sobald Sie den Server so abschalten.
+Wie sieht es mit KDE -1.x-Anwendungen aus?
+Wenn Sie KDE -1.x-Anwendungen benutzen, die den KDE -1-Audioserver zur Ausgabe verwenden, m\xFCssen Sie das Programm kaudioserver starten.
+Sie k\xF6nnen kaudioserver wie jede andere Nicht- aRts -Anwendung behandeln:
+Sie m\xFCssen kaudioserver installiert haben (aus der gleichen Quelle, von der Sie Ihre KDE -1.x-Anwendungen bekommen haben) - er geh\xF6rt zu KDE 1.x, nicht KDE 2.
+Wie sieht es mit Anwendungen aus, die den Enlightened Sound Daemon, ESD, verwenden?
+Der Fall ist \xE4hnlich zu kaudioserver.
+Solche Anwendungen ben\xF6tigen den Server esd.
+Sie k\xF6nnen esd mit Hilfe von artsdsp starten und jede ESD -Anwendung sollte so funktionieren:
+Aussetzer
+Manchmal h\xF6re ich kurze Aussetzer in der Musik, ist das ein Fehler?
+Das ist h\xF6chstwahrscheinlich kein Fehler sondern durch die Tatsache verursacht, das der Linux -Kernel keine guten Echtzeit-F\xE4higkeiten besitzt.
+Es gibt Situationen, in denen aRts nicht mit der Wiedergabe mithalten kann.Sie k\xF6nnen allerdings Echtzeit-Priorit\xE4t aktivieren (in KControl) und eine gro\xDFe Antwortzeit verwenden (wie 250ms oder so gro\xDF wie m\xF6glich).
+Das sollte die Situation verbessern.
+Wie wirkt sich der Antwortzeitwert aus?
+Der Hilfetext f\xFCr diese Einstellung in KControl kann verwirren.
+Ein kleinerer Wert bedeutet, das aRts eine k\xFCrzere Antwortzeit auf externe Ereignisse (d.h. die Zeit, die ben\xF6tigt wird zwischen dem Schlie\xDFen eines Fensters und dem von artsd abgespielten zugeh\xF6rigen Klang) verwendet.
+Das bedeutet, das mehr CPU -Zeit ben\xF6tigt wird und die Wahrscheinlichkeit von Aussetzern gr\xF6\xDFer wird.
+Gibt es andere Einstellungen, die Aussetzer verhindern k\xF6nnen?
+Benutzer von IDE -Laufwerken, k\xF6nnen das Programm hdparm verwenden, um ihr IDE -Laufwerk in den DMA -Modus umzuschalten.
+Eine Warnung:
+Dieser Modus funktioniert nicht auf jedem Computer und kann zu einem Systemgesamtabsturz und in seltenen F\xE4llen zu Datenverlust f\xFChren.
+Lesen Sie die Dokumentation zu hdparm f\xFCr genauere Informationen.
+Ich habe das folgende Kommando erfolgreich verwendet:
+Sie m\xFCssen dieses Kommando nach jedem Neustart ausf\xFChren, es ist also in einem Start-Skript am besten aufgehoben (wo genau ist unterschiedlich, auf Debian Linux \xFCblicherweise in /etc/rc.boot).
+Die Verwendungvon Echtzeit-Priorit\xE4t scheint keinen Einfluss zu haben?
+\xDCberpr\xFCfen Sie, ob artswrapper als "suid root" installiert ist.
+Viele Distributionen (wie z.B.
+SuSE7.x) installieren artswrapper nicht mit den richtigen Berechtigungen.
+Zur \xDCberpr\xFCfung tippen Sie: ls -l $(which artswrapper).
+Warum ben\xF6tigt artsd so viel CPU -Zeit?
+\xDCberpr\xFCfen Sie Ihre Antwortzeit-Einstellung.
+Die aktuelle Version ist au\xDFerdem noch nicht optimiert.
+Das wird sich in Zukunft verbessern.
+Bis dahin ist keine richtige Vorhersage m\xF6glich, wie schnell artsd sein kann oder nicht sein kann.
+Netzwerk-Transparenz
+Was ben\xF6tige ich f\xFCr Netzwerk-Transparenz?
+Sie m\xFCssen Netzwerk-Transparenz in den Soundserver -Einstellungen von KControl aktivieren (Sicherheits- und Transparenzinfo mittels X11-Server austauschen und Netzwerk-Transparenz aktivieren).
+Kopieren Sie Ihre .mcoprc -Datei auf alle Computer, von denen Sie diese F\xE4higkeit verwenden wollen.
+Melden Sie sich neu an.
+Stellen Sie sicher, das die Namensaufl\xF6sung zwischen den interagierenden Computern funktioniert (d.h. sie m\xFCssen aufl\xF6sbare Namen haben oder in der Datei /etc/hosts eingetragen sein).
+Das sollte alles sein.
+Falls immer noch Probleme bestehen, sind hier noch weitere Informationen.
+Der aRts Soundserver-Proze\xDF, artsd, sollte nur auf einem Computer laufen, demjenigen mit der Soundkarte, auf dem die Ausgabe erfolgen soll.
+Der Proze\xDF kann automatisch beim Anmelden von KDE gestartet werden (wenn Sie das in KControl einstellen), oder manuell durch Eingabe von:
+Die Option -n ist f\xFCr Netzwerk-Transparenz, die anderen steuern die Antwortzeit.
+Ihre .mcoprc -Datei sollte folgenden Eintrag haben:
+auf allen beteiligten Computern, damit die Netzwerk-Transparenz funktioniert.
+Das wird aktiviert durch die Kontrollzentrumseinstellung Sicherheits- und Transparenzinfo mittels X11-Server austauschen.
+Schlie\xDFlich gibt es in jeder KDE -Version aus der 2.0.x-Serie einen Fehler, der sich auswirkt, wenn kein Domain-Name eingetragen ist.
+Wenn Ihr Domain-Name leer ist, wird hostname. (beachten Sie den zus\xE4tzlichen Punkt).
+F\xFCgen Sie einen solchen Eintrag in die Datei /etc/hosts (d.h. orion. wenn Ihr Host-Name orion lautet) ein, um das Problem zu umgehen.
+Wie kann ich Fehler suchen, falls die Netzwerk-Transparenz nicht funktioniert?
+F\xFChren Sie dann
+aus.
+Die Ausgabe zeigt den Hostnamen und die von aRts verwendeten Kan\xE4le (ports) an.
+Die Ausgabe tcp:orion:1698 bedeutet, das jeder Klient, der Netzwerk-Transparenz verwenden will, sollte wissen, wie der Computer orion zu finden ist.
+Andere Themen
+Ich kann aRts-builder nicht verwenden.
+Er st\xFCrzt ab, wenn ich eine Struktur ausf\xFChren lassen will!
+Der wahrscheinlichste Grund f\xFCr dieses Problem ist die Verwendung von alten Strukturen oder Modulen, die von KDE 2-Version nicht mehr unterst\xFCtzt werden.
+Ungl\xFCcklicherweise bezieht sich die im Internet verf\xFCgbare Version auf aRts -0.3.4.1, die lange \xFCberholt ist.
+Der am h\xE4ufigsten berichtete Fehler ist der folgende:
+Audio-Subsystem wird schon verwendet.
+Sie sollten Synth_AMAN_PLAY an Stelle von Synth_PLAY verwenden und das Problem verschwindet.
+Weitere Informationen finden Sie in der Hilfedatei zu aRts-builder (bet\xE4tigen Sie F1 in aRts-builder).
+Aktuelle Versionen von aRts-builder (KDE 2.1 Beta 1 und sp\xE4ter) haben eine Menge von Beispielen, die Sie verwenden k\xF6nnen.
+aRts Copyright und Lizensierung
+Dokumentation Copyright 1999-2001 Stefan Westerfeld stefan@space.twc.de und Jeff Tranter tranter@kde.org.
+Alle Bibliotheken in aRts stehen unter der GNU Lesser General Public Lizenz.
+Die \xFCberwiegende Menge des aRts -Programms befindet sich in den Bibliotheken, einschlie\xDFlich des gesamten MCOP und ArtsFlow.
+Damit k\xF6nnen die Bibliotheken auch f\xFCr nicht-freie/nicht-offene Anwendungen verwendet werden, falls gew\xFCnscht.
+aRts installieren
+Um aRts benutzen zu k\xF6nnen, m\xFCssen Sie es zuerst installieren und starten.
+Dazu gibt es zwei M\xF6glichkeiten, die in den n\xE4chsten beiden Abschnitten beschrieben werden.
+Ein vorkompiliertes Bin\xE4rpaket installieren
+Der schnellste und einfachste Weg, um aRts auf Ihrem System zu installieren ist ein vorkompiliertes Bin\xE4rpaket.
+Aktuelle Versionen von Linux -Distributionen beinhalten KDE, und wenn es sich um KDE 2.0 oder sp\xE4ter handelt, enthalten Sie aRts.
+Wenn KDE nicht in Ihrer Distribution enthalten ist, k\xF6nnen Sie sie vielleicht von Ihrem H\xE4ndler herunterladen.
+Alternativ sind manche Bin\xE4rpakete auch von dritter Seite erh\xE4ltlich.
+Achten Sie darauf, das die verwendeten Pakete kompatibel mit Ihrer Betriebssystemversion sind.
+Eine grundlegende Installation von KDE enth\xE4lt den Soundserver, damit die meisten Anwendungen Kl\xE4nge abspielen k\xF6nnen.
+Wenn Sie das gesamte Paket der Multimedia-Werkzeuge und -Anwendungen haben wollen, m\xFCssen Sie vermutlich noch einige optionale Pakete installieren.
+Der Nachteil an vorkompilierten Bin\xE4rpaketen ist, das sie vermutlich nicht die aktuellste Version von aRts enthalten.
+Das ist noch wahrscheinlicher, wenn Sie auf CD-ROM bereitstehen, da die Entwicklungsgeschwindigkeit von aRts und KDE so gro\xDF ist, das Medien wie die CD-ROM in der Regel nicht mithalten k\xF6nnen.
+Sie werden auch feststellen, das, wenn Sie eine ungebr\xE4uchliche Distribution oder eine ungew\xF6hnliche Konfiguration haben, Bin\xE4rpakete nicht verf\xFCgbar sind.
+In solchen F\xE4llen sind Sie auf die zweite Methode angewiesen.
+Erstellen aus den Quelltexten
+Der zeitaufwendigste aber flexibelste Weg ist, aRts aus den Quelltexten selbst zu kompilieren.
+Das sichert, dass die kompilierte Version optimal f\xFCr Ihre Systemeinrichtung geeignet ist und erlaubt Ihnen, die jeweils aktuelle Version zu verwenden.
+Sie haben zwei M\xF6glichkeiten -- entweder Sie installieren die letzte stabile Version, die zu KDE geh\xF6rt, oder Sie nehmen die aktuellste (aber vielleicht instabile) Version direkt aus dem CVS -Repository des KDE -Projektes.
+Die meisten Benutzer, die nicht f\xFCr aRts entwickeln, sollten die stabile Version verwenden.
+Sie k\xF6nnen sie von ftp://ftp.kde.org oder von einem der vielen Mirrors herunterladen.
+Wenn Sie f\xFCr aRts entwickeln, sollten Sie die CVS -Version verwenden.
+Wenn Sie aRts ohne KDE verwenden wollen, k\xF6nnen Sie einen selbstst\xE4ndigen Entwicklugsschnappschu\xDF (Snapshot) von http://space.twc.de/~stefan/kde/arts-snapshot-doc.html herunterladen.
+Weiterhin gilt, wenn Sie aus dem CVS kompilieren, es befinden sich einige Komponenten von aRts (d.h. die grundlegenden Komponenten einschlie\xDFlich des Soundservers) in dem CVS -Modul kdelibs, w\xE4hrend weitere Komponenten (z.B. artsbuilder) sich im Modul kdemultimedia befinden.
+Das kann sich in Zukunft \xE4ndern.
+Im Modul kmusic finden Sie ebenfalls ein Version; es handelt sich dabei um die alte (vor- KDE 2.0) Version, die jetzt \xFCberholt ist.
+Die Vorbedingungen f\xFCr die Kompilierung von aRts sind die gleichen wie f\xFCr den Rest von KDE.
+Die configure-Skripte sollten Ihr Sytem identifizieren und anzeigen, falls ben\xF6tigte Komponenten fehlen.
+Vergewissern Sie sich, das Ihr Sound-Treiber funktioniert (entweder der OSS /Free Kerneltreiber, der OSS -Treiber von 4Front Technologies oder der ALSA -Treiber mit OSS -Emulation).
+Einf\xFChrung in digitale Audiobearbeitung
+Einf\xFChrung in MIDI
+Advanced Linux Sound Architecture; ein Linux -Soundkartentreiben, der aktuell nicht Bestandteil des Standard-Kernel-Quelltextes ist.
+Analog-Real-Time Synthesizer, der Name der Multimedia-Architektur/der Multimedia-Bibliothek/des Multimedia-Werkzeuges, das vom KDE -Projekt verwendet wird (beachten Sie die Gro\xDFschreibung)
+Berkeley Software Distribution; bezieht sich auf jedes von einigen freien UNIX -kompatiblen Betriebssystemen, die von BSD UNIX abstammen.
+Common Object Request Broker Architecture;, ein Standard f\xFCr objektorientierte entfernte Programmausf\xFChrung.
+Concurrent Versions System;, ein Software-Managementsystem, das von vielen Softwareprojekten einschlie\xDFlich KDE und aRts verwendet wird.
+Fast Fourier Transformation, ein Algorithmus, um Daten aus dem Zeitraum in den Frequenzraum zu transformieren; das wird f\xFCr Signalverarbeitung h\xE4ufig ben\xF6tigt.
+Die F\xE4higkeit einer Soundkarte gleichzeitig Daten abzuspielen und aufzunehmen.
+GNU General Public Lzenz, die von der Free Software Foundation festgelegt wurde f\xFCr die Ver\xF6ffentlichung von freier Software.
+Graphische Benutzeroberfl\xE4che
+Interface Definition Language, ein programmiersprachenunabh\xE4ngiges Format zur Definition von Schnittstellen (Methoden und Daten).
+K Desktop Environment, ein Projekt zur Entwicklung einer freien graphischen Benutzeroberfl\xE4che f\xFCr UNIX -kompatible Systeme.
+GNU Lesser General Public Lizenz, eine Programmlizenz, die von der Free Software Foundation aufgeschrieben wurde, um die Bedingungen f\xFCr die Ver\xF6ffentlichung von freier Software festzulegen.
+Sie ist weniger restriktiv als die GPL und wird h\xE4ufig f\xFCr Programmbibliotheken verwendet.
+Multimedia COmmunication Protocol, das Protokoll, das f\xFCr die Kommunikation der Teile von aRts verwendet wird, \xE4hnlich zu CORBA, aber einfacher und f\xFCr Multimedia optimiert.
+Musical Instrument Digital Interface, ein Standardprotokoll zur Kommunikation von elektronischen Musikinstrumenten, h\xE4ufig auch das Dateifomat zur Speicherung von MIDI -Befehlen.
+Open Sound System, die Soundtreiber, die zum Linux -Kernel geh\xF6ren (manchmal auch OSS /Free) oder eine kommerzielle Version, die von 4Front Technologies vertrieben werden.

@@ -1,0 +1,41 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Chapter 5.
+Security
+Next
+One feature of PHP that can be used to enhance security is configuring PHP with register_globals = off.
+By turning off the ability for any user-submitted variable to be injected into PHP code, you can reduce the amount of variable poisoning a potential attacker may inflict.
+They will have to take the additional time to forge submissions, and your internal variables are effectively isolated from user submitted data.
+While it does slightly increase the amount of effort required to work with PHP, it has been argued that the benefits far outweigh the effort.
+Example 5-14.
+Working with register_globals=on
+?php if ($username) {/ / can be forged by a user in get / post / cookies $good_login = 1;} if ($good_login == 1) {/ / can be forged by a user in get / post / cookies, fpassthru (" / highly / sensitive / data / index.html");}?
+Example 5-15.
+Working with register_globals = off
+?php if( $_COOKIE['username']) {/ / can only come from a cookie, forged or otherwise $good_login = 1; fpassthru (" / highly / sensitive / data / index.html");}?
+Example 5-16.
+Detecting simple variable poisoning
+?php if ($_COOKIE['username'] !$_POST['username'] !$_GET['username']) {/ / Perform other checks to validate the user name... $good_login = 1; fpassthru (" / highly / sensitive / data / index.html");} else {mail("admin@example.com", "Possible breakin attempt", $_SERVER['REMOTE_ADDR']); echo "Security violation, admin has been alerted ."; exit;}?
+Prev
+Home
+Next
+Error Reporting
+Up
+User Submitted Data

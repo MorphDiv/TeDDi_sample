@@ -1,0 +1,73 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3, PHP 4)
+mail() automatically mails the message specified in message to the receiver specified in to.
+Multiple recipients can be specified by putting a comma between each address in to.
+Email with attachments and special types of content can be sent using this function.
+This is accomplished via MIME-encoding - for more information, see this Zend article or the PEAR Mime Classes.
+The following RFC 's may also be useful:
+RFC 1896, RFC 2045, RFC 2046, RFC 2047, RFC 2048, and RFC 2049.
+mail() returns TRUE if the mail was successfully accepted for delivery, FALSE otherwise.
+Warning
+The Windows implementation of mail() differs in many ways from the Unix implementation.
+First, it doesn' t use a local binary for composing messages but only operates on direct sockets which means a MTA is needed listening on a network socket (which can either on the localhost or a remote machine).
+Second, the custom headers like From:, Cc:, Bcc: and Date: are not interpreted by the MTA in the first place, but are parsed by PHP.
+PHP 4.3 only supported the Cc: header element (and was case-sensitive).
+PHP = 4.3 supports all the mentioned header elements and is no longer case-sensitive.
+Example 1.
+Sending mail.
+mail( "joecool@example.com", "My Subject", "Line 1\nLine 2\nLine 3");
+If a fourth string argument is passed, this string is inserted at the end of the header.
+This is typically used to add extra headers.
+Multiple extra headers are separated with a carriage return and newline.
+Note:
+You must use \r\n to separate headers, although some Unix mail transfer agents may work with just a single newline (\n).
+Example 2.
+Sending mail with extra headers.
+mail( "nobody@example.com", "the subject", $message, "From: webmaster@$SERVER_NAME\r\n "."Reply-To: webmaster@$SERVER_NAME\r\n". "X-Mailer:
+PHP / ". phpversion());
+The additional_parameters parameter can be used to pass an additional parameter to the program configured to use when sending mail using the sendmail_path The additional_parameters parameter can be used to pass an additional parameter to the program configured to use when sending mail using the sendmail_path configuration setting.
+For example, this can be used to set the envelope sender address when using sendmail.
+You may need to add the user that your web server runs as to your sendmail configuration to prevent a 'X-Warning' header from being added to the message when you set the envelope sender using this method.
+Example 3.
+Sending mail with extra headers and setting an additional command line parameter.
+mail( "nobody@example.com", "the subject", $message, "From: webmaster@$SERVER_NAME", "-fwebmaster@$SERVER_NAME");
+Note:
+This fifth parameter was added in PHP 4.0.5.
+Since PHP 4.2.3 this parameter is disabled in safe_mode and the mail() function will expose a warning message and return FALSE if you're trying to use it.
+You can also use simple string building techniques to build complex email messages.
+Example 4.
+Sending complex email.
+/* recipients * / $to = "Mary mary@example.com". ","; / / note the comma $to .= "Kelly kelly@example.com "; / * subject * / $subject = "Birthday Reminders for August"; / * message * / $message = 'html head title Birthday Reminders for August / title / head body p Here are the birthdays upcoming in August! / p table tr th Person / th th Day / th th Month / th th Year / th / tr tr td Joe / td td 3rd / td td August / td td 1970 / td / tr tr td Sally / td td 17th / td td August / td td 1973 / td / tr / table / body / html'; / * To send HTML mail, you can set the Content-type header. * / $headers = "MIME-Version:
+1.0\r\n"; $headers .= "Content-type: text / html; charset=iso-8859-1\r\n"; / * additional headers * / $headers .= "From:
+Birthday Reminder birthday@example.com \r\n"; $headers .= "Cc: birthdayarchive@example.com\r\n"; $headers .= "Bcc: birthdaycheck@example.com\r\n"; / * and now mail it * / mail($to, $subject, $message, $headers);
+Note:
+Make sure you do not have any newline characters in the to or subject, or the mail may not be sent properly.
+Note:
+The to The to parameter cannot be an address in the form of "Something someone@example.com".
+The mail command will not parse this properly while talking with the MTA.
+See also imap_mail().
+Prev
+Home
+Next
+ezmlm_hash
+Up
+mailparse functions

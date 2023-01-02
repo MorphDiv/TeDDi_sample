@@ -1,0 +1,55 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manual de PHP
+Anterior
+Capítulo 12.
+Estructuras de Control
+Siguiente
+La sentencia require() se sustituye a sí misma con el archivo especificado, tal y como funciona la directiva #include de C.
+Un punto importante sobre su funcionamiento es que cuando un archivo se incluye con include() o se requiere con require()), el intérprete sale del modo PHP y entra en modo HTML al principio del archivo referenciado, y vuelve de nuevo al modo PHP al final.
+Por esta razón, cualquier código dentro del archivo referenciado que debiera ser ejecutado como código PHP debe ser encerrado dentro de etiquetas válidas de comienzo y fin de PHP.
+require() no es en realidad una función de PHP; es más una construcción del lenguaje.
+Está sujeta a algunas reglas distintas de las de funciones.
+Por ejemplo, require() no esta sujeto a ninguna estructura de control contenedora.
+Por otro lado, no devuelve ningún valor; intentar leer un valor de retorno de una llamada a un require() resulta en un error del intérprete.
+A diferencia de include(), require() siempre leerá el archivo referenciado, incluso si la línea en que está no se ejecuta nunca.
+Si se quiere incluir condicionalmente un archivo, se usa include().
+La sentencia conditional no afecta a require().
+No obstante, si la línea en la cual aparece el require() no se ejecuta, tampoco se ejecutará el código del archivo referenciado.
+De forma similar, las estructuras de bucle no afectan la conducta de require().
+Aunque el código contenido en el archivo referenciado está todavía sujeto al bucle, el propio require() sólo ocurre una vez.
+Esto significa que no se puede poner una sentencia require() dentro de una estructura de bucle y esperar que incluya el contenido de un archivo distinto en cada iteración.
+Para hacer esto, usa una sentencia include().
+require( 'header.inc ');
+When a file is require() ed, the code it contains inherits the variable scope of the line on which the require() When a file is require() ed, the code it contains inherits the variable scope of the line on which the require() occurs.
+Any variables available at that line in the calling file will be available within the called file.
+If the require() occurs inside a function within the calling file, then all of the code contained in the called file will behave as though it had been defined inside that function.
+If the require() ed file is called via HTTP using the fopen wrappers, and if the target server interprets the target file as PHP code, variables may be passed to the require() ed file using an URL request string as used with HTTP GET.
+This is not strictly speaking the same thing as require() ing the file and having it inherit the parent file's variable scope; the script is actually being run on the remote server and the result is then being included into the local script.
+/* This example assumes that someserver is configured to parse .php * files and not .txt files.
+Also, 'works' here means that the variables * $varone and $vartwo are available within the require()ed file. * / / * Won't work; file.txt wasn't handled by someserver. * / require ("http: / /someserver / file.txt?varone=1 vartwo=2"); / * Won't work; looks for a file named 'file.php?varone=1 vartwo=2 '* on the local filesystem. * / require ("file.php?varone=1 vartwo=2"); / * Works. * / require ("http: / /someserver / file.php?varone=1 vartwo=2"); $varone = 1; $vartwo = 2; require ("file.txt"); / * Works. * / require ("file.php"); / * Works. * /
+En PHP3, es posible ejecutar una sentencia return dentro de un archivo referenciado con require(), en tanto en cuanto esa sentencia aparezca en el ámbito global del archivo requerido (require()).
+No puede aparecer dentro de ningún bloque (lo que siginifica dentro de llaves({})).
+En PHP4, no obstante, esta capacidad ha sido desestimada.
+Si se necesita esta funcionalidad, véase include().
+Ver tambien include(), require_once(), include_once(), readfile(), y virtual().
+Anterior
+Inicio
+Siguiente
+switch
+Subir

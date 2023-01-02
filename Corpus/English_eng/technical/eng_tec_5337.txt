@@ -1,0 +1,219 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+These are functions dealing with error handling and logging.
+They allow you to define your own error handling rules, as well as modify the way the errors can be logged.
+This allows you to change and enhance error reporting to suit your needs.
+With the logging functions, you can send messages directly to other machines, to an email (or email to pager gateway!), to system logs, etc., so you can selectively log and monitor the most important parts of your applications and websites.
+The error reporting functions allow you to customize what level and kind of error feedback is given, ranging from simple notices to customized functions returned during errors.
+No external libraries are needed to build this extension.
+There is no installation needed to use these functions; they are part of the PHP core.
+The behaviour of these functions is affected by settings in php.ini.
+Table 1.
+Errors and Logging Configuration Options
+Name
+Default
+Changeable
+error_reporting
+E_ALL ~E_NOTICE
+PHP_INI_ALL
+display_errors
+"1"
+PHP_INI_ALL
+display_startup_errors
+"0"
+PHP_INI_ALL
+log_errors
+"0"
+PHP_INI_ALL
+log_errors_max_len
+"1024"
+PHP_INI_ALL
+ignore_repeated_errors
+"0"
+PHP_INI_ALL
+ignore_repeated_source
+"0"
+PHP_INI_ALL
+report_memleaks
+"1"
+PHP_INI_SYSTEM
+track_errors
+"0"
+PHP_INI_ALL
+html_errors
+"1"
+PHP_INI_ALL
+docref_root
+"http: / /www.php.net /"
+PHP_INI_ALL
+docref_ext
+".html"
+PHP_INI_ALL
+error_prepend_string
+NULL
+PHP_INI_ALL
+error_append_string
+NULL
+PHP_INI_ALL
+error_log
+NULL
+PHP_INI_ALL
+warn_plus_overloading
+NULL
+PHP_INI??
+Here is a short explanation of the configuration directives.
+Set the error reporting level.
+The parameter is either an integer representing a bit field, or named constants.
+The error_reporting levels and constants are described in Predefined Constants, and in php.ini.
+To set at runtime, use the error_reporting() To set at runtime, use the error_reporting() function.
+See also the display_errors directive.
+In PHP 4 the default value does not show E_NOTICE level errors.
+You may want to show them during development.
+Note:
+Enabling E_NOTICE during development has some benefits.
+For debugging purposes:
+NOTICE messages will warn you about possibls bugs in your code.
+For example, use of unassigned values are warned.
+It is extremely useful to find typos and to save time for debugging.
+NOTICE messages will warn you about bad style.
+For example, $arr[ item] is better to be written as $arr['item'] since PHP tries to treat "item "as constant.
+If it is not a constant, PHP assumes it is a string index for the array.
+In PHP 3, the default setting is (E_ERROR | E_WARNING | E_PARSE), meaning the same thing.
+Note, however, that since constants are not supported in PHP 3' s php3.ini, the error_reporting setting there must be numeric; hence, it is 7.
+This determines whether errors should be printed to the screen as part of the HTML output or not.
+Even when display_errors is on, errors that occur during PHP 's startup sequence are not displayed.
+It 's strongly recommended to keep display_startup_errors off, except for debugging.
+Tells whether script error messages should be logged to the server 's error log or error_log.
+This option is thus server-specific.
+Note:
+You 're strongly advised to use error logging in place of error displaying on production web sites.
+Set the maximum length of log_errors in kbytes.
+In error_log In error_log information about the source is added.
+The default is 1024 and 0 allows to not apply any maximum length at all.
+Do not log repeated messages.
+Repeated errors must occur in the same file on the same line until ignore_repeated_source is set true.
+Ignore source of message when ignoring repeated messages.
+When this setting is On you will not log errors with repeated messages from different files or sourcelines.
+If this parameter is set to Off, then memory leaks will not be shown (on stdout or in the log).
+This has only effect in a debug compile, and if error_reporting includes E_WARNING in the allowed list
+If enabled, the last error message will always be present in the variable $php_errormsg.
+Turn off HTML tags in error messages.
+The new format for html errors produces clickable messages that direct the user to a page describing the error or function in causing the error.
+These references are affected by docref_root and docref_ext.
+The new error format contains a reference to a page describing the error or function in causing the error.
+In case of manual pages you can download the manual in your language and set this ini directive to the url of your local copy.
+If your local copy of the manual can be reached by '/ manual /' you can simply use docref_root= / manual /.
+Additional you have to set docref_ext to match the fileextensions of your copy docref_ext=.html.
+It is possible to use external references.
+For example you can use docref_root=http: / /manual / en / or docref_root=" http: / /landonize.it / ?how=url theme=classic filter=Landon url=http%3A%2F%2Fwww.php.net%2F "
+Most of the time you want the docref_root value to end with a slash '/'.
+But see the second example above which does not have nor need it.
+See docref_root.
+Note:
+The value of docref_ext must begin with a dot '.'.
+String to output before an error message.
+String to output after an error message.
+Name of the file where script errors should be logged.
+If the special value syslog is used, the errors are sent to the system logger instead.
+On UNIX, this means syslog( 3) and on Windows NT it means the event log.
+The system logger is not supported on Windows 95.
+See also: syslog().
+If enabled, this option makes PHP output a warning when the plus (+) operator is used on strings.
+This is to make it easier to find scripts that need to be rewritten to using the string concatenator instead (.).
+The constants below are always available as part of the PHP core.
+Note:
+You may use these constant names in php.ini but not outside of PHP, like in httpd.conf, where you 'd use the bitmask values instead.
+Table 2.
+Errors and Logging
+Value
+Constant
+Description
+Note
+1
+E_ERROR (integer)
+Fatal run-time errors.
+These indicate errors that can not be recovered from, such as a memory allocation problem.
+Execution of the script is halted.
+2
+E_WARNING (integer)
+Run-time warnings (non-fatal errors).
+Execution of the script is not halted.
+4
+E_PARSE (integer)
+Compile-time parse errors.
+Parse errors should only be generated by the parser.
+8
+E_NOTICE (integer)
+Run-time notices.
+Indicate that the script encountered something that could indicate an error, but could also happen in the normal course of running a script.
+16
+E_CORE_ERROR (integer)
+Fatal errors that occur during PHP 's initial startup.
+This is like an E_ERROR, except it is generated by the core of PHP.
+PHP 4 only
+32
+E_CORE_WARNING (integer)
+Warnings (non-fatal errors) that occur during PHP's initial startup.
+This is like an E_WARNING, except it is generated by the core of PHP.
+PHP 4 only
+64
+E_COMPILE_ERROR (integer)
+Fatal compile-time errors.
+This is like an E_ERROR, except it is generated by the Zend Scripting Engine.
+PHP 4 only
+128
+E_COMPILE_WARNING (integer)
+Compile-time warnings (non-fatal errors).
+This is like an E_WARNING, except it is generated by the Zend Scripting Engine.
+PHP 4 only
+256
+E_USER_ERROR (integer)
+User-generated error message.
+This is like an E_ERROR, except it is generated in PHP code by using the PHP function trigger_error().
+PHP 4 only
+512
+E_USER_WARNING (integer)
+User-generated warning message.
+This is like an E_WARNING, except it is generated in PHP code by using the PHP function trigger_error().
+PHP 4 only
+1024
+E_USER_NOTICE (integer)
+User-generated notice message.
+This is like an E_NOTICE, except it is generated in PHP code by using the PHP function trigger_error().
+PHP 4 only
+2047
+E_ALL (integer)
+All errors and warnings, as supported.
+The above values (either numerical or symbolic) are used to build up a bitmask that specifies which errors to report.
+You can use the bitwise operators You can use the bitwise operators to combine these values or mask out certain types of errors.
+Note that only '|', '~',' !', and '' will be understood within php.ini, however, and that no bitwise operators will be understood within php3.ini.
+Below we can see an example of using the error handling capabilities in PHP.
+We define a error handling function which logs the information into a file (using an XML format), and e-mails the developer in case a critical error in the logic happens.
+Example 1.
+Using error handling in a script
+?php / / we will do our own error handling error_reporting( 0); / / user defined error handling function function userErrorHandler ($errno, $errmsg, $filename, $linenum, $vars) {/ / timestamp for the error entry $dt = date("Y-m-d H:i:s (T)"); / / define an assoc array of error string / / in reality the only entries we should / / consider are 2,8,256,512 and 1024 $errortype = array (1 = "Error", 2 = "Warning", 4 = "Parsing Error", 8 = "Notice", 16 = "Core Error", 32 = "Core Warning", 64 = "Compile Error", 128 = "Compile Warning", 256 = "User Error", 512 = "User Warning", 1024= "User Notice "); / / set of errors for which a var trace will be saved $user_errors = array(E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE); $err =" errorentry \n"; $err .= " datetime ".$dt. "/ datetime \n"; $err .= " errornum ".$errno." / errornum \n"; $err .= " errortype ".$errortype[$errno]. "/ errortype \n"; $err .= " errormsg ".$errmsg." / errormsg \n"; $err .= " scriptname ".$filename. "/ scriptname \n"; $err .= " scriptlinenum ".$linenum." / scriptlinenum \n"; if (in_array($errno, $user_errors)) $err .= " vartrace ".wddx_serialize_value($vars ,"Variables"). "/ vartrace \n"; $err .=" / errorentry \n\n"; / / for testing / / echo $err; / / save to the error log, and e-mail me if there is a critical user error error_log($err, 3, "/ usr / local / php4 / error.log"); if ($errno == E_USER_ERROR) mail("phpdev@example.com" ,"Critical User Error",$err);} function distance ($vect1, $vect2) {if (!is_array($vect1) | | !is_array($vect2)) {trigger_error("Incorrect parameters, arrays expected", E_USER_ERROR); return NULL;} if (count($vect1) != count($vect2)) {trigger_error("Vectors need to be of the same size", E_USER_ERROR); return NULL;} for ($i=0; $i count($vect1); $i++) {$c1 = $vect1[$i]; $c2 = $vect2[$i]; $d = 0.0; if (!is_numeric($c1)) {trigger_error("Coordinate $i in vector 1 is not a number, using zero", E_USER_WARNING); $c1 = 0.0;} if (!is_numeric($c2)) {trigger_error("Coordinate $i in vector 2 is not a number, using zero", E_USER_WARNING); $c2 = 0.0;} $d += $c2*$c2 - $c1*$c1;} return sqrt($d);} $old_error_handler = set_error_handler("userErrorHandler"); / / undefined constant, generates a warning $t = I_AM_NOT_DEFINED; / / define some "vectors" $a = array(2,3 ,"foo"); $b = array(5.5, 4.3, -1.6); $c = array (1,-3); / / generate a user error $t1 = distance($c,$b) ."\n"; / / generate another user error $t2 = distance($b ,"i am not an array") ."\n"; / / generate a warning $t3 = distance($a,$b) ."\n";?
+See also syslog().
+Prev
+Home
+Next
+dotnet_load
+Up
+debug_backtrace

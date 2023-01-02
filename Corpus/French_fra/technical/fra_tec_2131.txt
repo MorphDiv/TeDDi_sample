@@ -1,0 +1,630 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	OpenOffice
+# source:	https://object.pouta.csc.fi/OPUS-OpenOffice/v3/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/OpenOffice.php
+# copyright_long:	http://opus.nlpl.eu/OpenOffice.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Fonctions de classeur
+/text/scalc/01/04060109.xhp
+Classeurs;fonctions
+Assistant Fonctions;classeurs
+Fonctions;classeurs
+Fonctions de classeur
+classeur
+ainsi qu'un exemple.
+ADRESSE, fonction
+ADRESSE
+Renvoie une adresse de cellule (référence) en tant que texte, en fonction des numéros de ligne et de colonne spécifiés.
+Vous pouvez déterminer si l'adresse doit être interprétée en tant qu'adresse absolue (par exemple $A$1), ou en tant qu'adresse relative (par exemple A1) ou sous forme mixte (A$1 ou $A1).
+Vous pouvez également spécifier le nom de la feuille.
+Pour des raisons d'interopérabilité, les fonctions ADRESSE et INDIRECT supportent un paramètre facultatif afin de spécifier si la notation d'adresse L1C1 doit être utilisée à la place de la notation A1 habituelle.
+Pour ADRESSE, le paramètre est inséré comme le quatrième paramètre, renvoyant le paramètre facultatif de nom de feuille à la cinquième position.
+Pour INDIRECT, le paramètre est ajouté comme le second paramètre.
+Pour les deux fonctions, si l'argument est inséré avec la valeur 0, alors la notation L1C1 est utilisée.
+Si l'argument n'est pas donné ou a une valeur autre que 0, alors la notation A1 est utilisée.
+Dans le cas de la notation L1C1, ADRESSE renvoie les chaînes d'adresse en utilisant le point d'exclamation '!' comme séparateur de noms de feuilles, et INDIRECT attend le point d'exclamation comme séparateur de noms de feuilles.
+Les deux fonctions utilisent toujours le point '.' séparateur de noms de feuilles avec la notation A1.
+À l'ouverture de documents au format ODF 1.0/1.1, les fonctions ADRESSE qui affichent un nom de feuille comme quatrième paramètre renverront ce nom de feuille pour qu'il devienne le cinquième paramètre.
+Un nouveau quatrième paramètre ayant la valeur 1 sera inséré.
+Lors du stockage d'un document au format ODF 1.0/1.1, si des fonctions ADRESSE ont un quatrième paramètre, ce paramètre sera supprimé.
+N'enregistrez pas un classeur dans l'ancien format ODF 1.0/1.1 si le nouveau quatrième paramètre de la fonction ADRESSE a été utilisé avec une valeur de 0.
+La fonction INDIRECT est enregistrée sans conversion au format ODF 1.0/1.1.
+Si le second paramètre était présent, une version plus ancienne de Calc renverra une erreur pour cette fonction.
+Syntaxe
+ADRESSE(ligne;colonne,ABS;A1; &quot; feuille &quot; )
+ligne
+représente le numéro de ligne pour la référence de cellule
+colonne
+représente le numéro de colonne pour la référence de cellule (le numéro, pas la lettre)
+ABS
+détermine le type de référence :
+1: absolue ($A$1)
+2 : ligne absolue, colonne relative (A$1)
+3 : ligne relative, colonne absolue ($A1)
+4 : relatif (A1)
+A1
+(facultatif) - si paramétré sur 0, la notation L1C1 est utilisée.
+Si ce paramètre est absent ou paramétré sur une autre valeur que 0, la notation A1 est utilisée.
+feuille
+représente le nom de la feuille.
+Il doit être placé entre des guillemets doubles.
+Exemple :
+=ADRESSE(1;1;2; &quot; feuille2 &quot; )
+renvoie :
+Feuille2.A$1
+-6
+, vous pouvez référer indirectement à la cellule référencée en utilisant la fonction en B2 en saisissant
+=ABS(INDIRECT(B2))
+.
+Le résultat est la valeur absolue de la cellule référencée spécifiée en B2, qui dans ce cas est 6.
+ZONES, fonction
+ZONES
+Calcule le nombre de plages individuelles appartenant à une plage multiple.
+Une plage peut contenir des cellules contiguës ou individuelles.
+La fonction attend un argument unique.
+Si vous définissez des plages multiples, vous devez les entourer de parenthèses supplémentaires.
+Les plages multiples peuvent être saisies en utilisant un point-virgule (;) comme séparateur, mais il sera converti automatiquement en opérateur tilde (~).
+Le tilde est utilisé pour joindre les plages.
+Syntaxe
+ZONES(référence)
+Référence représente la référence à une cellule ou à une plage de cellules.
+Exemples
+=ZONES(A1:B3;F2;G1)
+renvoie 3 car c'est la référence de trois cellules/ou zones.
+=ZONES(Toutes)
+renvoie 1 si vous avez défini une zone nommée Toutes sous
+Données - Définir une plage
+.
+DDE, fonction
+DDE
+Renvoie le résultat d'un lien DDE.
+Si le contenu de la plage ou de la section liée est modifié, la valeur renvoyée change également.
+Vous devez charger à nouveau la feuille de calcul ou choisir
+Édition - Liens
+pour visualiser les liens mis à jour.
+Les liens multi-plateforme ne sont pas autorisés, par exemple entre une installation
+%PRODUCTNAME
+fonctionnant sur une machine équipée de Windows et un document créé sur Linux.
+Syntaxe
+DDE( &quot; serveur &quot; ; &quot; fichier &quot; ; &quot; plage &quot; ; mode)
+serveur
+est le nom d'une application de serveur ; dans le cas des applications
+%PRODUCTNAME
+, il s'agit de &quot; Soffice &quot; .
+fichier
+est le nom du fichier avec le chemin complet.
+plage
+est la zone contenant les données à évaluer.
+mode
+est un paramètre facultatif définissant la méthode par laquelle le serveur DDE convertit ses données en nombres.
+Mode
+Effet
+0 ou manquant
+Format numérique à partir du style de cellule &quot; Par défaut &quot;
+1
+Les données sont toujours interprétées sur la base du format par défaut pour l'anglais US
+2
+Les données sont appliquées comme du texte, sans conversion en nombres
+Exemples
+=DDE( &quot; soffice &quot; ; &quot; c:\office\document\données1.sxc &quot; ; &quot; feuille1.A1 &quot; )
+lit le contenu de la cellule A1 de la feuille 1 du classeur
+%PRODUCTNAME
+Calc données1.sxc.
+=DDE( &quot; soffice &quot; ; &quot; c:\office\document\devinette.sxw &quot; ; &quot; Devinette du jour &quot; )
+renvoie une devinette dans la cellule contenant cette formule.
+Vous devez d'abord saisir une ligne dans le document devinette.sxw contenant le texte de la devinette et la définir comme la première ligne d'une section nommée
+Devinette du jour
+(dans
+%PRODUCTNAME
+Writer sous
+Insertion - Section
+).
+Si la devinette est modifiée (et enregistrée) dans le document
+%PRODUCTNAME
+Writer, la devinette est mise à jour dans toutes les cellules
+%PRODUCTNAME
+Calc dans lesquelles ce lien DDE est défini.
+TYPE.ERREUR, fonction
+TYPE.ERREUR
+valeur d'erreur
+survenue dans une autre cellule.
+Grâce à ce nombre, vous pourrez générer le texte d'un message d'erreur.
+%PRODUCTNAME
+prédéfini si vous cliquez sur la cellule comportant l'erreur.
+Syntaxe
+TYPE.ERREUR(référence)
+référence
+est la référence à une cellule comportant une indication d'erreur.
+Exemple
+=TYPE.ERREUR(A1)
+renvoie le nombre 518.
+INDEX, fonction
+INDEX
+INDEX renvoie une sous plage, spécifiée par le numéro de colonne et de ligne, ou un index de plage facultatif.
+En fonction du contexte, INDEX renvoie une référence ou du contenu.
+Syntaxe
+INDEX(référence;ligne;colonne;plage)
+référence
+est une référence, saisie soit directement ou en spécifiant le nom d'une plage.
+Si la référence consiste en des plages multiples, vous devez mettre la référence ou le nom de la plage entre parenthèses.
+ligne
+(facultatif) représente l'index de la ligne de la plage de référence pour laquelle une valeur est renvoyée.
+Dans le cas de zéro (pas de ligne spécifique) toutes les lignes référencées sont renvoyées.
+colonne
+(facultatif) représente l'index de la colonne de la plage de références pour laquelle une valeur est renvoyée.
+Dans le cas de zéro (pas de colonne spécifique) toutes les colonnes référencées sont renvoyées.
+plage
+(facultatif) représente l'index de la sous plage si elle réfère à une plage multiple.
+Exemples
+=INDEX(Prix;4;1)
+renvoie la valeur de la ligne 4 et de la colonne 1 de plage de base de données définie dans
+Données - Définir
+comme
+Prix
+.
+=INDEX(SommeX;4;1)
+renvoie la valeur de la plage
+SommeX
+dans la ligne 4 et la colonne 1 comme définie dans
+Insertion - Noms - Définir
+.
+=INDEX(A1:B6;1)
+renvoie une référence à la première ligne de A1:B6.
+=INDEX(A1:B6;0;1)
+renvoie une référence à la première colonne de A1:B6.
+=INDEX((multi);4;1)
+indique la valeur contenue dans la ligne 4 et la colonne 1 de la plage (multiple) que vous avez nommée
+multi
+sous
+Insertion - Noms - Définir
+.
+La plage multiple peut consister en plusieurs plages rectangulaires, chacune avec une ligne 4 et une colonne 1.
+Si vous voulez maintenant appeler le second bloc de cette plage multiple, saisissez le nombre
+2
+comme paramètre de la
+plage
+.
+=INDEX(A1:B6;1;1)
+indique la valeur en haut à gauche de la plage A1:B6.
+=INDEX((multi);0;0;2)
+renvoie une référence à la seconde plage d'une plage multiple.
+INDIRECT, fonction
+INDIRECT
+référence
+spécifiée par une chaîne de texte.
+Cette fonction peut également renvoyer la zone d'une chaîne correspondante.
+Syntaxe
+INDIRECT(réf;A1)
+réf
+représente la référence à une cellule ou à une zone (dans un formulaire de texte) dont le contenu doit être renvoyé.
+A1
+(facultatif) - si paramétré sur 0, la notation L1C1 est utilisée.
+Si ce paramètre est absent ou paramétré sur une autre valeur que 0, la notation A1 est utilisée.
+Pour des raisons d'interopérabilité avec Microsoft Excel, le séparateur d'adresse de feuille ! est autorisé comme dans INDIRECT( &quot; nomfichier!nomfeuille &quot; & B1).
+INDIRECT ne peut pas résoudre les noms de plage comme dans INDIRECT( &quot; nom_de_plage &quot; ).
+Exemple
+=INDIRECT(A1)
+égale 100 si A1 contient C108 comme référence et la cellule C108 contient la valeur
+100
+.
+=SOMME(INDIRECT( &quot; a1: &quot; & ADRESSE(1;3)))
+totalise les cellules dans la zone A1 jusqu'à la cellule dont l'adresse est définie par la ligne 1 et la colonne 3.
+Cela signifie que la zone A1:C1 est totalisée.
+COLONNE, fonction
+COLONNE
+Renvoie le numéro de colonne d'une référence à une cellule.
+Si la référence est une cellule, le numéro de colonne de la cellule est renvoyé.
+Si le paramètre est une zone de cellule, les numéros de colonne correspondants sont renvoyés dans une
+matrice
+à ligne unique si la formule est saisie
+en tant que formule de matrice
+.
+Si la fonction COLONNE n'est pas utilisée avec un paramètre de référence de zone pour une formule de matrice, seul le numéro de colonne de la première cellule de la zone est déterminé.
+Syntaxe
+COLONNE(référence)
+référence
+est la référence à une plage de cellules dont les numéros de colonnes doivent être déterminés.
+L'argument peut également correspondre à une cellule unique.
+%PRODUCTNAME
+Calc définit automatiquement la référence à la cellule active.
+Exemples
+=COLONNE(A1)
+égale 1.
+Colonne A est la première colonne de la table.
+=COLONNE(C3:E3)
+égale 3.
+La colonne C est la troisième colonne de la table.
+=COLONNE(D3:G10)
+renvoie 4 parce que la colonne D est la quatrième colonne de la table et la fonction COLONNE n'est pas utilisée comme une formule matricielle (dans ce cas, la première valeur de la matrice est toujours utilisée comme résultat).
+{=COLONNE(B2:B7)}
+et
+=COLONNE(B2:B7)
+renvoient toutes deux 2 parce que la référence contient seulement la colonne B comme seconde colonne de la table.
+Parce que les zones à une seule colonne n'ont qu'un numéro de colonne, il n'y a pas de différence que la formule soit ou non utilisée dans une formule matricielle.
+=COLONNE()
+renvoie 3 si la formule a été saisie dans la colonne C.
+{=COLONNE(Lapin)}
+renvoie la seule ligne de matrice (3, 4) si &quot; Lapin &quot; est la zone nommée (C1:D3).
+COLONNES, fonction
+COLONNES
+Renvoie le nombre de colonnes dans la référence donnée.
+Syntaxe
+COLONNES(matrice)
+matrice
+est la référence à une plage de cellules dont le nombre total de colonnes doit être trouvé.
+L'argument peut aussi être une seule cellule.
+Exemple
+=COLONNES(B5)
+renvoie 1 parce qu'une seule cellule contient une colonne.
+=COLONNES(A1:C5)
+égale 3.
+La référence comprise entre trois colonnes.
+=COLONNES(Lapin)
+renvoie 2 si
+Lapin
+est la plage nommée (C1:D3).
+Recherche verticale, fonction
+RECHERCHEV, fonction
+RECHERCHEV
+Recherche verticale avec référence aux cellules adjacentes à droite.
+Cette fonction vérifie si une valeur spécifique est contenue dans la première colonne d'une matrice.
+La fonction renvoie alors la valeur dans la même ligne de la colonne nommée par
+Index
+.
+Si le paramètre
+ordre_de_tri
+est omis ou paramétré sur VRAI ou un, on assume que les données sont triées en ordre croissant.
+Dans ce cas, si le
+critère_de_recherche
+exact n'est pas trouvé, la dernière valeur qui est inférieure au critère est renvoyée.
+Si
+ordre_de_tri
+est paramétré sur FAUX ou zéro, une correspondance exacte doit être trouvée, sinon il en résulte l'erreur
+Erreur: valeur non disponible
+.
+Ainsi, avec une valeur de zéro, les données n'ont pas besoin d'être triées dans l'ordre croissant.
+Syntaxe
+=RECHERCHEV(critère_de_recherche;matrice;index;ordre_de_tri)
+critère_de_recherche
+est la valeur recherchée dans la première colonne de la matrice.
+matrice
+est la référence qui doit comprendre au moins deux colonnes.
+index
+est le numéro de la colonne dans la matrice qui contient les valeurs devant être renvoyées.
+La première colonne a le numéro 1.
+ordre_de_tri
+est un paramètre facultatif qui indique si la première colonne de la matrice est triée en ordre croissant.
+Saisissez la valeur logique FAUX ou zéro si la première colonne n'est pas triée en ordre croissant.
+Les colonnes triées peuvent être recherchées plus rapidement et la fonction renvoie toujours une valeur, même si la valeur de recherche ne correspond pas exactement.
+Dans les listes non triées, la valeur de recherche doit correspondre exactement.
+Sinon la fonction renvoie ce message
+Erreur : valeur non disponible
+.
+Exemple
+100
+, E1 contient le nom
+Soupe de légumes
+et ainsi pour 100 éléments du menu.
+Les nombres en colonnes D sont triés en ordre croissant ainsi, le paramètre facultatif
+ordre_de_tri
+n'est pas nécessaire.
+Insérez la formule suivante dans B1 :
+=RECHERCHEV(A1;D1:E100;2)
+Dès que vous saisissez un numéro dans A1, le texte correspondant, figurant dans la deuxième colonne de la référence D1:E100, apparaît dans B1.
+Si vous spécifiez un numéro qui n'existe pas, c'est le texte du numéro inférieur le plus proche qui s'affiche.
+Pour éviter ce genre d'opération, insérez FAUX comme dernier paramètre de la formule : la saisie d'un numéro inexistant entraînera alors un message d'erreur.
+Nombres des feuilles;recherche
+FEUILLE, fonction
+FEUILLE
+Renvoie le nombre de feuilles d'une référence ou d'une chaîne représentant le nom d'une feuille.
+Si aucun paramètre n'est spécifié, le résultat est le numéro de la feuille de calcul dans laquelle figure la formule.
+Syntaxe
+FEUILLE(référence)
+référence
+est facultatif et constitue la référence à une cellule, à une zone ou à une chaîne de nom de feuille.
+Exemple
+=FEUILLE(Feuille2.A1)
+renvoie 2 si feuille2 est la seconde feuille du document feuille de calcul.
+Nombre de feuilles;fonction
+FEUILLES, fonction
+FEUILLES
+Détermine le nombre de feuilles dans une référence.
+Si vous ne saisissez aucun de ces paramètres, le résultat correspondra au nombre de feuilles du document actif.
+Syntaxe
+FEUILLES(référence)
+référence
+est la référence à une feuille ou à une zone.
+Ce paramètre est facultatif.
+Exemples
+=FEUILLES(feuille1.A1:feuille3.G12)
+renvoie 3 si feuille1, feuille2 et feuille3 existent dans la séquence indiquée.
+EQUIV, fonction
+EQUIV
+Renvoie la position relative d'un élément dans une matrice correspondant à une valeur spécifiée.
+La fonction renvoie la position de la valeur trouvée en tant que nombre dans M_recherche.
+Syntaxe
+EQUIV(critère_de_recherche;matrice_cherchée;type)
+critère_de_recherche
+est la valeur qui doit être recherchée pour une ligne seule ou une colonne seule de la matrice.
+matrice_cherchée
+est la référence recherchée.
+Une matrice recherchée peut être une ligne ou une colonne seule, ou partie d'une ligne ou d'une colonne seule.
+Type
+peut prendre la valeur 1, 0 ou -1.
+Si Type = 1 ou si ce paramètre facultatif est manquant, il est supposé que la première colonne de la matrice de recherche est triée par ordre croissant.
+Si Type = -1, il est supposé que la colonne est triée par ordre décroissant.
+Cela correspond à la même fonction dans Microsoft Excel.
+Si Type = 0, seules les correspondances exactes sont trouvées.
+Si le critère de recherche est trouvé plus d'une fois, la fonction renvoie l'index de la première valeur correspondante.
+Vous pouvez rechercher des expressions régulièrement uniquement si Type = 0.
+Si Type = 1 ou que le troisième paramètre est manquant, l'index de la dernière valeur qui est inférieure ou égale au critère de recherche est renvoyé.
+Cela s'applique quand la matrice recherchée n'est pas triée.
+Pour Type = -1, la première valeur qui est supérieure ou égale est renvoyée.
+Exemple
+=EQUIV(200;D1:D100)
+recherche la valeur 200 dans la zone D1:D100 qui est stockée dans la colonne D.
+Aussitôt que la valeur est atteinte, le numéro de la ligne dans laquelle elle a été trouvée est renvoyé.
+Si une valeur supérieure est trouvée pendant la recherche dans la colonne, le numéro de la ligne précédente est renvoyé.
+DECALER, fonction
+DECALER
+Renvoie la valeur correspondant à un décalage de cellule d'un certain nombre de lignes et de colonnes à partir d'un point de référence donné.
+Syntaxe
+DECALER(référence;lignes;colonnes;hauteur;largeur)
+référence
+est la référence à partir de laquelle la fonction recherche la nouvelle référence.
+lignes
+est le nombre de lignes par lequel la référence a été corrigée au-dessus (valeur négative) ou en-dessous.
+colonnes
+(facultatif) est le nombre de colonnes par lequel la références a été corrigées vers la gauche (valeur négative) ou vers la droite.
+hauteur
+(facultatif) est la hauteur verticale pour une zone qui débute à la nouvelle position de la référence.
+largeur
+(facultatif) est la largeur horizontale pour une zone qui débute à la nouvelle position de la référence.
+lignes
+et
+colonnes
+ne doivent pas mener à zéro ou à un début négatif de colonne ou de ligne
+hauteur
+et
+largeur
+ne doivent pas mener à zéro ou à un compte négatif de colonnes ou de lignes.
+Exemples
+=DECALER(A1;2;2)
+renvoie la valeur de la cellule C3 (A1 déplacé de deux lignes et deux colonnes vers le bas).
+Si C3 contient la valeur
+100
+cette fonction renvoie la valeur 100.
+=DECALER(B2:C3;1;1)
+renvoie une référence à B2:C3 déplacée vers le bas d'une ligne et d'une colonne vers la droite (C3:D4).
+=DECALER(B2:C3;-1;-1)
+renvoie une référence à B2:C3 déplacée vers le haut d'une ligne et d'une colonne vers la gauche (A1:B2).
+=DECALER(B2:C3;0;0;3;4)
+renvoie une référence à B2:C3 redimensionnée de 3 lignes et 4 colonnes (B2:E4).
+=DECALER(B2:C3;1;0;3;4)
+renvoie une référence à B2:C3 déplacée vers le bas d'une ligne redimensionnée de 3 lignes et 4 colonnes (B2:E4).
+=SOMME(DECALER(A1;2;2;5;6))
+détermine le total de la zone qui démarre en cellule C3 et a une hauteur de 5 lignes et une largeur de 6 colonnes (zone = C3:H7).
+RECHERCHE, fonction
+RECHERCHE
+Renvoie le contenu d'une cellule aussi bien pour une plage d'une colonne seule ou d'une ligne seule.
+Optionnellement, la valeur assignée (du même index) est renvoyée dans une colonne et une ligne différente.
+À l'opposé de
+RECHERCHEV
+et
+RECHERCHEH
+, le vecteur de recherche et de résultat peuvent être à des positions différentes ; ils n'ont pas à être adjacents.
+De plus, le vecteur de recherche pour RECHERCHE doit être trié en ordre croissant, sinon la recherche ne renvoie aucun résultat exploitable.
+Si la fonction RECHERCHE ne trouve pas le critère de recherche, elle renvoie la valeur la plus grande (inférieure ou égale au critère de recherche) trouvée dans le vecteur de recherche.
+Syntaxe
+RECHERCHE(critère_de_recherche;vecteur_cherché;vecteur_résultat)
+critère_de_recherche
+est la valeur recherchée ; saisie soit directement soit comme une référence.
+vecteur_cherché
+est la zone d'une ligne seule ou d'une colonne seule à rechercher.
+vecteur_résultat
+est une autre plage d'une ligne seule ou d'une colonne seule d'où le résultat de la fonction est pris.
+Le résultat est la cellule du vecteur de résultat avec le même index que l'instance trouvée dans le vecteur de recherche.
+Exemple
+=RECHERCHE(A1;D1:D100;F1:F100)
+recherche la cellule correspondante dans la plage D1:D100 pour le nombre saisit en A1.
+Pour l'instance trouvée, l'index est déterminé, par exemple, la douzième cellule dans la plage.
+Puis, le contenu de la douzième cellule est renvoyé comme la valeur de la fonction (dans le vecteur de résultat).
+STYLE, fonction
+STYLE
+Applique un style à la cellule contenant la formule.
+Au bout d'une durée définie, vous pourrez appliquer un autre style.
+Cette fonction renvoie toujours la valeur 0 ; vous pouvez ainsi l'ajouter à une autre fonction sans en modifier la valeur.
+En l'associant à la fonction ACTUELLE, vous pouvez appliquer une couleur à une cellule, quelle que soit sa valeur.
+Exemple : =...+STYLE(SI(ACTUELLE() > 3; &quot; rouge &quot; ; &quot; vert &quot; )) applique le style &quot; rouge &quot; à la cellule si sa valeur est supérieure à 3 ; sinon, c'est le style &quot; vert &quot; qui est appliqué.
+Les deux styles de cellule doivent être définis au préalable.
+Syntaxe
+STYLE( &quot; style &quot; ;temps; &quot; style_2 &quot; )
+style
+est le nom d'un style de cellule assigné à la cellule.
+Les noms de style doivent être saisis entre guillemets.
+Temps
+(facultatif) correspond à une période indiquée en secondes.
+Si ce paramètre fait défaut, le style est conservé.
+style2
+est le nom facultatif d'un style de cellule assigné à la cellule après qu'un certain temps soit écoulé.
+Si le paramètre est manquant le style &quot; Standard &quot; est adopté.
+Exemple
+=STYLE( &quot; Invisible &quot; ;60; &quot; Standard &quot; )
+formate la cellule en transparent pendant 60 secondes après que le document ait été recalculé ou chargé, puis le format Standard est assigné.
+Les deux formatages de cellules doivent être définis auparavant.
+Dans la mesure où STYLE renvoie une valeur numérique de zéro, cette valeur retournée est annexée à une chaîne.
+Ceci peut être évité en utilisant T() comme dans l'exemple suivant
+= &quot; Texte &quot; & T(STYLE( &quot; monStyle &quot; ))
+Voir également ACTUELLE() pour un autre exemple.
+CHOISIR, fonction
+CHOISIR
+Utilise un index qui renvoie la valeur à partir d'une liste de 30 valeurs.
+Syntaxe
+CHOISIR(indice;valeur_1;...;valeur_30)
+Index
+est une référence ou un nombre entre 1 et 30 indiquant quelle valeur doit être prise dans la liste.
+valeur1;...;valeur30
+représente la liste des valeurs saisies chaque fois comme référence à une cellule ou à une valeur spécifique.
+Exemple
+=CHOISIR(A1;B1;B2;B3; &quot; Aujourd'hui &quot; ; &quot; Hier &quot; ; &quot; Demain &quot; )
+, par exemple, renvoie le contenu de la cellule B2 pour A1 = 2; pour A1 = 4, la fonction renvoie le texte &quot; Aujourd'hui &quot; .
+RECHERCHEH, fonction
+RECHERCHEH
+Effectue la recherche d'une valeur et d'une référence aux cellules situées sous la zone sélectionnée.
+Cette fonction vérifie si la première ligne d'une matrice comporte une valeur spécifique.
+La fonction renvoie alors la valeur dans une ligne de la matrice, nommée dans la même colonne de l'
+index
+.
+Syntaxe
+RECHERCHEH(critère_de_recherche;matrice;indice;trié)
+RECHERCHEV
+(les colonnes et lignes sont inversées)
+LIGNE, fonction
+LIGNE
+Renvoie le numéro de ligne d'une référence à une cellule.
+Si la référence est une cellule, le numéro de ligne de la cellule est renvoyé.
+Si la référence est une plage de cellules, les numéros de ligne correspondants sont renvoyés dans une
+matrice
+à colonne unique si la formule est saisie
+en tant que formule de matrice
+.
+Si la fonction LIGNE contenant une référence à une plage n'est pas utilisée dans une formule de matrice, seul le numéro de ligne de la première cellule de la plage est renvoyé.
+Syntaxe
+LIGNE(référence)
+Référence
+est une cellule, une zone ou le nom d'une zone.
+%PRODUCTNAME
+Calc définit automatiquement la référence à la cellule active.
+Exemples
+=LIGNE(B3)
+renvoie 3 parce que la référence réfère à la troisième ligne de la table.
+{=LIGNE(D5:D8)}
+renvoie la matrice d'une colonne seule (5, 6, 7, 8) parce que la référence spécifiée contient 5 lignes par 8.
+=LIGNE(D5:D8)
+renvoie 5 parce que la fonction LIGNE n'est pas utilisée comme formule matricielle et seul le numéro de la première ligne de la référence est renvoyé.
+{=LIGNE(A1:E1)}
+et
+=LIGNE(A1:E1)
+renvoie toutes deux 1 parce que la référence contient uniquement la ligne 1 comme première colonne dans la table (parce seules les zones à une ligne unique ont un numéro de ligne, cela ne fait pas de différence que la formule soit utilisée comme formule matricielle ou non).
+=LIGNE()
+renvoie 3 si la formule a été saisie dans la ligne 3.
+{=LIGNE(Lapin)}
+renvoie la matrice d'une seule ligne (1, 2, 3) si &quot; Lapin &quot; est la zone nommée (C1:D3).
+LIGNES, fonction
+LIGNES
+Renvoie le nombre de lignes dans une référence ou dans une matrice.
+Syntaxe
+LIGNES(matrice)
+matrice
+est la référence ou la zone nommée dont le nombre total de lignes doit être déterminé.
+Exemples
+=LIGNES(B5)
+renvoie 1 parce qu'une seule cellule contient seulement une ligne.
+=LIGNES(A10:B12)
+renvoie 3.
+=LIGNES(Lapin)
+renvoie 3 si &quot; Lapin &quot; est la zone nommée (C1:D3).
+LIEN_HYPERTEXTE, fonction
+LIEN_HYPERTEXTE
+Lorsque vous cliquez sur une cellule qui contient la fonction LIEN.HYPERTEXTE, l'hyperlien s'ouvre.
+textecellule
+, la formule localise l'URL et affiche le texte.
+Ouvrir l'hyperlien
+.
+Syntaxe
+LIEN.HYPERTEXTE( &quot; URL &quot; ) ou LIEN.HYPERTEXTE( &quot; URL &quot; ; &quot; texte_cellule &quot; )
+URL
+spécifie la cible du lien.
+Le paramètre facultatif
+texte_cellule
+est le texte qui est affiché dans la cellule et le résultat de la fonction.
+Si le paramètre
+textecellule
+n'est pas spécifié, l'
+URL
+est affiché dans le texte de la cellule et dans le résultat de la fonction.
+Le chiffre 0 est renvoyé pour les cellules vides et les éléments de matrice.
+Exemple
+=LIEN.HYPERTEXTE( &quot; http://www.exemple.org &quot; )
+affiche le texte &quot; http://www.exemple.org &quot; dans la cellule et exécute le lien hypertexte http://www.exemple.org lorsqu'il est cliqué.
+=LIEN.HYPERTEXTE( &quot; http://www.exemple.org &quot; ; &quot; Cliquer ici )
+affiche le texte &quot; Cliquer ici &quot; dans la cellule et exécute le lien hypertexte http://www.exemple.org lorsqu'il est cliqué.
+=LIEN.HYPERTEXTE( &quot; http://www.exemple.org &quot; ;12345) affiche le nombre 12345 et exécute le lien hypertexte http://www.exemple.org lorsqu'il est cliqué.
+=LIEN.HYPERTEXTE($B4)
+où la cellule B4 contient
+http://www.exemple.org
+.
+La fonction ajoute http://www.exemple.org à l'URL de la cellule contenant le lien et renvoie le même texte qui est utilisé comme résultat de la formule.
+=LIEN.HYPERTEXTE( &quot; http://www. &quot; ; &quot; Cliquer sur &quot; ) & &quot; exemple.org &quot;
+affiche le texte Cliquer exemple.org dans la cellule et exécute le lien hypertexte http://www.exemple.org lorsque cliqué.
+=LIEN.HYPERTEXTE( &quot; #Feuille1.A1 &quot; ; &quot; Aller en haut &quot; )
+affiche le texte Aller en haut et saute à la cellule Feuille1.A1 dans le document.
+=LIEN.HYPERTEXTE( &quot; file:///C:/writer.odt#Spécification &quot; ; &quot; Aller au repère de texte Writer &quot; )
+affiche le texte Aller au repère de texte Writer, charge le document texte spécifié et atteint le repère de texte &quot; Spécification &quot; .
+EXTRAIRE.DONNEES.PILOTE, fonction
+EXTRAIRE.DONNEES.PILOTE
+La fonction EXTRAIRE.DONNEES.PILOTE renvoie une valeur de résultat d'une table de pilote de données.
+Cette valeur est adressée en utilisant les noms de champ et d'élément, de façon à ce qu'elle reste valide si l'affichage de la table du pilote de données est modifié.
+Syntaxe
+Deux définitions de syntaxe différentes peuvent être utilisées :
+EXTRAIRE.DONNEES.PILOTE(champ_cible;pilote_de_données;[champ_1;élément_1; ... ])
+EXTRAIRE.DONNEES.PILOTE(pilote de données;contraintes)
+La seconde syntaxe est supposée si deux paramètres exactement sont donnés, dans lesquels le premier paramètre est une cellule ou une référence de plage de cellule.
+La première syntaxe est assumée dans tous les autres cas.
+L'assistant de fonctions montre la première syntaxe.
+Première syntaxe
+champ_cible
+est une chaîne qui sélectionne un des champs de données de la table du pilote de données.
+La chaîne peut être le nom de la colonne source, ou le nom du champ de données comme affiché dans la table (comme &quot; Somme - Ventes &quot; ).
+pilote_de_données
+est une référence à une cellule ou une plage de cellules qui est positionnée dans la table du pilote de données ou contient une table du pilote de données.
+Si la plage de cellules contient plusieurs tables de pilote de données, la dernière table créée est utilisée.
+champ_n / élément_n
+n'est donnée, le grand total est renvoyé.
+Sinon, chaque paire ajoute une contrainte que le résultat doit satisfaire.
+champ_n
+est le nom d'un champ de la table du pilote de données.
+élément_n
+est le nom d'un élément de ce champ.
+Si la table du pilote de données contient une seule valeur de résultat qui répond à toutes les contraintes, ou un résultat de sous-total qui regroupe toutes les valeurs correspondantes, ce résultat est renvoyé.
+S'il n'y a pas de résultat correspondant, ou plusieurs d'entre eux sans sous-total, une erreur est renvoyée.
+Ces conditions s'appliquent aux résultats qui sont inclus dans la table du pilote de données.
+Si les données sources contiennent des entrées qui sont cachées par des paramètres de la table du pilote de données, elles sont ignorées.
+L'ordre des paires champ/élément n'est pas important.
+Les noms des champs et des éléments ne sont pas sensibles à la casse.
+Si aucune contrainte n'est donnée pour un champ de page, la valeur du champ sélectionnée est implicitement utilisée.
+Si une contrainte est donnée pour un champ de page, la valeur du champ sélectionnée doit correspondre sinon une erreur sera renvoyée.
+Les champs de page sont les champs en haut à gauche de la table du pilote de données, peuplés en utilisant la zone &quot; Champs de page &quot; dans la boîte de dialogue de mise en page du pilote de données.
+À partir de chaque champ de page, un élément (valeur) peut être sélectionné, ce qui signifie que seul cet élément est inclus dans le calcul.
+Seconde syntaxe
+ci-dessous).
+Seconde syntaxe
+pilote_de_données
+a la même signification que dans la première syntaxe.
+contraintes
+est une liste séparée par des espaces.
+Les entrées peuvent contenir des guillemets (guillemets simples).
+Toute la chaîne doit être entre guillemets (guillemets doubles), à moins de référencer la chaîne à partir d'une autre cellule.
+Une des entrées peut correspondre au nom du champ de données.
+Le nom du champ de données peut être omis si la table du pilote de données contient seulement un champ de données, sinon il doit être présent.
+champ[élément]
+(avec les caractères [ et ]), ou seulement
+élément
+si le nom de l'élément est unique à travers tous les champs qui sont utilisés dans la table du pilote de données.
+Champ[élément;fonction]
+qui provoquera la contrainte de faire correspondre seulement les valeurs de sous-total qui utilisent cette fonction.
+Les noms possibles de la fonction sont Somme, Nombre, Moyenne, Max, Min, Produit, Nombre (seulement), BDECARTYPE (échantillon), BDECARTYPEP (population), VAR (échantillon) et VARP (population), la casse n'est pas sensible.
+UFI:
+Example from spec doc is quite difficult to localize.
+Try to find other one

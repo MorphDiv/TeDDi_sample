@@ -1,0 +1,39 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 3 = 3.0.7, PHP 4)
+OCINewDescriptor() allocates storage to hold descriptors or LOB locators.
+Valid values for type are OCI_D_FILE, OCI_D_LOB, OCI_D_ROWID.
+For LOB descriptors, the methods load, save, and savefile are associated with the descriptor, for BFILE only the load method exists.
+See the second example usage hints.
+Example 1.
+OCINewDescriptor
+?php / * This script is designed to be called from a HTML form. * It expects $user, $password, $table, $where, and $commitsize * to be passed in from the form.
+The script then deletes * the selected rows using the ROWID and commits after each * set of $commitsize rows. (Use with care, there is no rollback) * / $conn = OCILogon($user, $password); $stmt = OCIParse($conn ,"select rowid from $table $where"); $rowid = OCINewDescriptor($conn,OCI_D_ROWID); OCIDefineByName($stmt ,"ROWID", $rowid); OCIExecute($stmt); while (OCIFetch($stmt)) {$nrows = OCIRowCount($stmt); $delete = OCIParse($conn ,"delete from $table where ROWID = :rid"); OCIBindByName($delete ,":rid", $rowid,-1,OCI_B_ROWID); OCIExecute($delete); print "$nrows\n"; if (($nrows% $commitsize) == 0) {OCICommit($conn);}} $nrows = OCIRowCount($stmt); print "$nrows deleted...\n"; OCIFreeStatement($stmt); OCILogoff($conn);?
+?php / * This script demonstrates file upload to LOB columns * The formfield used for this example looks like this * form action=" upload.php "method="post" enctype="multipart / form-data "* input type="file" name="lob_upload "*... * / if(!isset($lob_upload) | | $lob_upload == 'none') {? form action="upload.php" method="post "enctype="multipart / form-data" Upload file: input type="file "name="lob_upload" br input type="submit "value="Upload" - input type="reset "/ form ?php} else {/ / $lob_upload contains the temporary filename of the uploaded file / / see also the features section on file upload, / / if you would like to use secure uploads $conn = OCILogon($user, $password); $lob = OCINewDescriptor($conn, OCI_D_LOB); $stmt = OCIParse($conn ,"insert into $table (id, the_blob) values(my_seq.NEXTVAL, EMPTY_BLOB()) returning the_blob into :the_blob"); OCIBindByName($stmt, ':the_blob', $lob, -1, OCI_B_BLOB); OCIExecute($stmt, OCI_DEFAULT); if($lob - savefile($lob_upload)) {OCICommit($conn); echo "Blob successfully uploaded\n"; }else {echo "Couldn't upload Blob\n";} OCIFreeDesc($lob); OCIFreeStatement($stmt); OCILogoff($conn);}?
+Example 2.
+OCINewDescriptor
+?php / * Calling PL / SQL stored procedures which contain clobs as input * parameters (PHP 4 = 4.0.6). * Example PL / SQL stored procedure signature is: * * PROCEDURE save_data * Argument Name Type In / Out Default? * ----------------------------- - ---------------------- - ----- - ------- - * KEY NUMBER(38) IN * DATA CLOB IN * * / $conn = OCILogon($user, $password); $stmt = OCIParse($conn, "begin save_data(:key, :data); end ;"); $clob = OCINewDescriptor($conn, OCI_D_LOB); OCIBindByName($stmt, ':key', $key); OCIBindByName($stmt, ':data', $clob, -1, OCI_B_CLOB); $clob - WriteTemporary($data); OCIExecute($stmt, OCI_DEFAULT); OCICommit($conn); $clob - close(); $clob - free(); OCIFreeStatement($stmt);?
+Prev
+Home
+Next
+OCINewCursor
+Up
+OCINLogon

@@ -1,0 +1,72 @@
+# language_name_wals:	Turkish
+# language_name_glotto:	Turkish
+# iso639_3:	tur
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/tr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Kullanım Kılavuzu
+Önceki
+Sonraki
+Bölüm 22.
+Kalıcı Veritabanı Bağlantıları
+Kalıcı bağlantılar, betiğiniz sonlandığında kapatılmayan SQL bağlantılarına denir.
+Kalıcı bir bağlantı istendiğinde, PHP daha önceden tamamen aynı özelliklerde başka bir kalıcı bağlantı açılıp açılmadığına bakar (daha önceden kalan) - ve eğer varsa, onu kullanır.
+Eğer yoksa, yeni bağlantı kurar. 'Tamamen aynı' bağlantılar, aynı sunucuya, aynı kullanıcı ismi ve (gerekliyse) şifreyle açılmış bağlantılardır.
+HTTP sunucularının çalışma mantığına aşina olmayanlar, kalıcı bağlantıları gerçekte olmadıkları şeyler sanabilirler.
+Özellikle, aynı SQL bağlantısı üzerinde 'kullanıcı oturumları' açmazlar, transaction 'ları daha etkili bir şekilde yapmanızı sağlamazlar ve başka pek çok şeyi gerçekleştirmezler.
+Konu hakkında daha açık olmak gerekirse, kalıcı bağlantılar size kardeşleri kalıcı olmayan bağlantıların sunmadığı hiç bir ek özellik sunmazlar.
+Neden?
+Bu daha çok HTTP sunucularının çalışma mantığıyla alakalı.
+Sunucunun PHP 'yi kullanarak web sayfaları oluşturmasının üç yöntemi var.
+İlk yöntem PHP' yi CGI "sargısı "olarak kullanmak.
+Bu şekilde çalıştığında, sunucuya gelen her sayfa isteği için ayrı bir PHP yorumlayıcısı yaratılır ve yokedilir (PHP sayfaları için). İşlemler sonunda yokedildikleri için, yarattıkları her kaynak da (SQL sunucusuna bağlantılar gibi) onlarla birlikte yokolur.
+Bu durumda, kalıcı bağlantılar kurmayı denemekle elinize hiçbirşey geçmez - - basitçe, kalıcı olamazlar.
+İkinci, ve en popüler, yöntem PHP' yi çok işlemli (multiprocess) bir sunucuda modül olarak kullanmak, şu an sadece Apache 'de olduğu gibi.
+Çok işlemli bir sunucu genellikle bir ana işlemden (parent) ve onun kontrolündeki gerçekte işlemleri yapan çocuk işlemlerden (children) oluşur.
+Ne zaman bir alıcıdan istek gelse, istek o anda başka bir isteğe cevap vermeyen bir çocuk işleme devredilir.
+Bu demektir ki, aynı alıcı ikinci bir istek yolladığında, başka bir çocuk işlem tarafından karşılanabilir.
+Kalıcı bağlantıların sizin için burada yaptığı iş, her çocuk işlemin sadece ilk seferde SQL sunucusuna bağlanmasıdır.
+Başka bir sayfanın aynı bağlantıya ihtiyaç duyması durumunda önceden kurulmuş bağlantı kullanılır.
+Son yöntem PHP' yi çok iş parçacıklı (multithreaded) sunucularda eklenti olarak kullanmak. Şu anda PHP 4'ün Netscape FastTrack (iPlanet), Microsoft Internet Information Server (IIS), ve O'Reilly Website Pro gibi çok iş parçacıklı sunucularda çalışmasını sağlayan ISAPI, WSAIP, ve NSAPI (Windows'ta) için desteği var.
+Bu çalışma şekli az önce anlatılan çok işlemli modelle aynı.
+SAPI desteğinin PHP 3 'te olmadığına dikkat edin.
+Eğer kalıcı bağlantıların ek özellikleri yoksa, neye yararlar?
+Buradaki cevap oldukça basit - - etkinlik.
+Kalıcı bağlantılar, SQL sunucunuza yeni bağlantı açmak performans açısından hesaplı değilse çok işe yararlar.
+Performans hesaplılığı pek çok şeye bağlıdır.
+Örneğin, ne tür bir veritabanı olduğu, HTTP sunucusuyla aynı bilgisayarda olup olmayışı, SQL sunucusunun çalıştığı bilgisayarın işlem yoğunluğu ve benzeri.
+Sonuç şu ki, yeni bağlantı performansı düşükse, kalıcı bağlantılar işe yarar.
+Her çocuk işlemin her seferinde yeni bağlantı açması yerine hayatı boyunca sadece bir kere bağlantı yapmasını ve sürekli onu kullanmasını sağlarlar.
+Bu demektir ki, kalıcı bağlantı açan her çocuk işlemin kendisine ait SQL sunucusuna kalıcı bir bağlantısı olacaktır.
+Örneğin, 20 tane kalıcı bağlantı açan betik çalıştırmış farklı çocuk işlem varsa, SQL sunucusuna, her çocuk işlemden bir tane olmak üzere, 20 tane bağlantı olacaktır.
+Ancak dikkat edin ki, SQL sunucusunun bağlantı limiti kalıcı bağlantılarla aşıldığında bunun bir takım götürüleri olacaktır.
+Eğer veritabanı sunucunuz ayni anda 16 bağlantıya izin veriyorsa, ve yoğun bir çalışma anında 17 çocuk işlem kalıcı bağlantı açmaya kalkarsa, bunlardan biri bağlantıyı açamaz.
+Eğer betiklerinizde bağlantıların kapanabilmesine olanak tanımayan hatalar varsa (kısır döngüler gibi), 32 bağlantıya izin veren bir veritabanı sunucusu çok çabuk bir şekilde kullanım dışı olur.
+Boş duran (idle) bağlantılarla nasıl ilgileneceğiniz konusunda veritabanınızın dökümanlarına başvurun.
+Uyarý
+Kalıcı bağlantı kullanırken akılda tutulması gereken birkaç ek götürü daha var.
+Örneğin kalıcı bir bağlantı üzerinden bir tablo kitlendiyse (LOCK), ve betik herhangi bir sebepten dolayı kilidi kaldıramıyorsa, ardısıra gelen ve aynı bağlantıyı kullanacak betikler süresiz olarak bloke olacak, ve sizin ya HTTP sunucusunu ya da veritabanı sunucusunu baştan çalıştırmanız gerekecektir.
+Başka bir götürü transaction kullanırken oluşabilir.
+Bir transaction bloğu, betiğin çalışma süresi bloğun ömründen kisaysa, bir sonraki betiğe taşınacaktır. İki durumda da register_shutdown_function() ile transaction 'i geri alacak ya da tablo kilitlerini kaldıracak bir temizlik fonksiyonu kaydedebilirsiniz.
+Daha iyisi, problemleri tümüyle önlemek için tablo kilitleri veya transaction kullanan betiklerde kalıcı bağlantıları kullanmamaktır (başka yerlerde hala kullanabilirsiniz).
+Önemli bir özet.
+Kalıcı bağlantılar normal bağlantılarla birebir eşlenebilecek şekilde tasarlandı.
+Bu demektir ki her zaman kalıcı bağlantıları normal olanlarla değiştirebilirsiniz, ve bu betiklerin davranışlarını etkilemeyecektir.
+Betiklerin etkinliklerini belki değiştirebilirler, fakat davranışını değiştirmezler!
+Önceki
+Baþlangýç
+Sonraki
+Bağlantı İşleme
+Yukarý
+Güvenli Kip

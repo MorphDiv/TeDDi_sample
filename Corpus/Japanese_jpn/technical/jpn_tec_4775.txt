@@ -1,0 +1,42 @@
+# language_name_wals:	Japanese
+# language_name_glotto:	Japanese
+# iso639_3:	jpn
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Jpan
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ja.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+本節では、PHPをApacheにインストールする際の注意事項とコツについて 説明します。 Unix 版と Windows 版の両方につ いて説明します。
+以下の手順の8行目で configure に追加する引数を configureのオプションの全て から選択可能です。ここではバージョン番号が意図的に省略 されています。'xxx'の部分を貴方が使用するファイルに対応するものに 置き換えてください。
+例 3-5 PHP 4インストール手順 (Apache共有モジュール版)
+Apache のインストールやUNIXの種類によりサーバを停止し、再起動する 方法はいくつもあります。複数のApache/UNIXの組合せについてサーバを 再起動する際に使用される典型的な方法を以下に示します。 /path/to/ を使用するシステムのアプリケーション へのパスに置き換えて読んで下さい。
+PHPをApache用にコンパイルする別の例を以下に示します。
+これにより、共有ライブラリ libphp4.so が作成 されます。Apacheの httpd.conf ファイルにおいて LoadModuleを使用してApacheにこのライブラリをロードすることが可能 です。上の例では、PostgreSQLサポートがこの libphp4.so ライブラリに埋め込まれます。
+
+この例でも Apache用 libphp4.so 共有ライブラリ が作成されます。しかし、共有ライブラリ pgsql.so も作成されます。この共有ライブラリ は、 php.ini ファイルのextensionディレクティ ブまたはスクリプト内で dl() 関数を使用して明示的 にロードすることが可能です。
+
+これにより、 libmodphp4.a ライブラリと mod_php4.c およびいくつかの付属ファ イルが作成され、Apacheにソースツリーのディレクトリ src/modules/php4 にコピーされます。続いて、 --activate-module=src/modules/php4/libphp4.a を指定してApacheをコンパイルして下さい。これにより、Apache構築シ ステムは、 libphp4.a を作成し、 httpd バイナリに静的にリンクされます。 PostgreSQL サポートはこの httpd バイナリに直接 インクルードされるため、最終的な結果は、Apache全体とPHP全体を含む 単一の httpd バイナリになります。
+
+上と同じですが、最終的な httpd に PostgreSQLサポートを直接インクルードする代わりに、共有ライブラリ pgsql.so をファイル php.ini または dl() により直 接的にPHPにロードすることが可能です。
+異なったPHPの構築法を選択する際、各方法の利点と欠点を考慮する必要 があります。共有オブジェクトとして構築する場合、Apacheと分割して コンパイルすることが可能で、PHPを追加または変更する際に全体を再コ ンパイルする必要がありません。PHPをApacheに(静的に)組み込む場合に は、PHPはより高速にロード/実行することが可能です。詳細な情報につ いては、Apacheの DSOサポートのWebペー ジ を参照下さい。
+PHP を Windows 上の Apache 1.3.x で動作させるには、2種類の方法が あります。一つは、CGIバイナリ (php.exe) を使用する方法、もう一つ は Apache モジュールdll を使用する方法です。どちらの場合も Apache サーバを停止し、PHP と組み合むように Apache を設定するために srm.conf または httpd.conf を編集します。
+Apache用にPHPを設定する手順にはいくつかありますが、この手順は入門 者にも使用可能な程簡単です。設定用ディレクティブに関する詳細につ いては、Apacheのドキュメントを参照下さい。
+マニュアルインストール手順 のセクションに説明されたようにPHPパッケージをunzipで c:\php\に展開した場合、CGIバイナリを設定するには以下の行をApache の設定ファイルに追加する必要があります。
+ScriptAlias /php/ "c:/php/"
+AddType application/x-httpd-php .php .phtml
+Action application/x-httpd-php "/php/php.exe"
+PHPをApacheのモジュールとして使用したい場合、必ず php4ts.dll をwindows/system (Windows 9x/Meの場 合)またはwinnt/system32 (Windows NT/2000/XPの場合)ディレクトリに移 動し、以前のファイルを上書きするようにして下さい。 次に以下の2行をApacheの設定ファイルに追加して下さい。
+LoadModule php4_module c:/php/sapi/php4apache.dll
+AddType application/x-httpd-php .php .phtml
+注意 Windows版のApache 1.3.22において、デフォルトの設定ファイル (httpd.conf-dist-win) には、デフォルトで ClearModuleList ディレクティブが含まれています。 このディレクティブが使用された場合、 AddModule mod_php4.c を AddModule リストに追加する必要があります。 さもないと、PHPはApacheモジュールとして登録されなくなります。
+ソースコードハイライト機能を使用するには、PHPスクリプトファイルを 作成し、次のようなコードを加えてください。 ?php show_source ("original_php_script.php");? original_php_script.php の部分を ソースを見たいと思うファイルの名前に置き換えてください。 (これがこの機能を使用するための唯一の手段です。)
+注意 Windows版のApache においては、"c:\directory\file.ext" のようなパ ス設定におけるバックスラッシュは、"c:/directory/file.ext"のよう に全てスラッシュに変換する必要があります。

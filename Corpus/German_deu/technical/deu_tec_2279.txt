@@ -1,0 +1,80 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Modem Tricks & Hinweise
+Dieser Abschnitt soll den schwierigen Einstieg in die (nicht so) hohe Kunst der Modemeinstellung bieten.
+Die Befehle hier sind alle Hayes-AT-Standard, aber nicht alle Modems sind gleich, so dass Ihre Vorgangsweise unterschiedlich sein kann.
+Modemsitzungen
+Eine Modemsitzung gibt Ihnen die M\xF6glichkeit, direkt mit dem Modem zu interagieren.
+Sie geben Befehle ein und es antwortet.
+Um eine Modemsitzung zu erhalten, wenn keine Verbindung aktiv ist, gehen Sie in den "Einstellungen/Modem/Terminal"-Dialog.
+Das \xF6ffnet ein Fenster zur interaktiven Konfiguration des Modems.
+Versuchen Sie, ATZ einzugeben (das setzt Ihr Modem zur\xFCck).
+Sie sollten eine OK -Antwort erhalten.
+Benutzen Sie "Datei/Beenden", um die Sitzung zu beenden.
+Modemprofile
+Ein Grund, weshalb Sie dem Modem direkt Befehle senden m\xF6chten, k\xF6nnte sein, dass Sie mehrere Modemeinstellungen haben, die Sie behalten und nicht f\xFCr jede Verbindung eingeben m\xF6chten.
+Ein guter Weg, dies zu tun, f\xFChrt \xFCber Modemprofile.
+Modems k\xF6nnen mehrere gespeicherte Profile haben, numeriert mit 0,1,....
+AT&V kann zur genutzt werden, um alle anzusehen.
+Das Standardprofil ist \xFCblicherweise 0 (das kann \xFCber AT&Y ge\xE4ndert werden).
+Das derzeit verwendete Profil wird aktives Profil genannt.
+Wenn Sie eine Einstellung \xE4ndern, wird das aktive Profil ver\xE4ndert.
+Der ATZ -Befehl veranlasst das Modem, das Standardprofil zu laden und alle Ihre \xC4nderungen zu verwerfen.
+Damit kppp das von Ihnen gew\xFCnschte Profil nutzt, \xE4ndern Sie den Initialisierungs-String (Einstellungen/Modem/Modembefehle/Init-String).
+Zum Beispiel bewirkt ATZ1, dass kppp das Modem zur\xFCcksetzt und das gespeicherte Profil 1 l\xE4dt.
+Falls Sie Ihr Modem auf einen bekannten Urzustand zur\xFCcksetzen m\xF6chten, benutzen Sie AT&F&W, um das aktive Profil auf die Fabrikeinstellungen zu setzen, und diese im Standardprofil zu sichern.
+Beispiele von Profil\xE4nderungen finden Sie im n\xE4chsten Abschnitt.
+Das Modem zum Auflegen bewegen
+Manchmal k\xF6nnte kppp Schwierigkeiten beim Auflegen des Modem haben.
+Das ist vermutlich die Folge eines Unterschieds zwischen den Einstellungen von kppp und denen des Modems.
+Ein Standardmodem nutzt zwei Methoden, um sich zum Auflegen zu entscheiden:
+Befehl und DTR.
+Die Befehlsmethode besteht aus dem Senden einer Abbruchsequenz an das Modem, das es in den Befehlsmodus versetzt, und dann dem Senden des Auflegen-Befehls (ATH).
+Au\xDFerhalb von kppp, wenn Sie das pppd -Paket manuell konfigurieren, ist es oft hilfreich die Befehlsmethode zu nutzen, so dass Sie eine Terminalsitzung verlassen k\xF6nnen, und dann pppd starten, ohne das Modem auflegen zu lassen.
+In den meisten anderen Situationen wird die DTR -Methode bevorzugt, weil sie einfacher ist.
+DTR (AT&Dn )-Methode
+Die DTR -Methode l\xE4sst das Modem immer dann auflegen, wenn kppp es nicht mehr nutzt.
+Wenn Sie eine Modemsitzung starten und den Zustand \xFCber AT&V abfragen, und unter den angezeigten Einstellungen f\xFCr das aktive Profil ist auch &D0, dann ist die DTR -auflegen-Methode abgeschaltet.
+Um DTR einzuschalten, benutzen Sie Terminal, um eine Modemsitzung zu starten.
+Dann:
+Wie die DTR -Methode funktioniert
+Jedesmal wenn die Data Terminal Ready (DTR )-Leitung der seriellen Verbindung zwischen dem Computer und dem Modem Spannung f\xFChrt, legt das Modem auf.
+Wenn kppp die serielle Schnittstelle \xF6ffnet, wird dir DTR -Leitung auf niedrige Spannung gesetzt, und bei einem externen Modem k\xF6nnen Sie das DTR (oder TR )-L\xE4mpchen angehen sehen, wenn das passiert.
+Wenn das TR -L\xE4mpchen ausgeht (weil kppp die serielle Schnittstelle geschlossen hat, oder Schlimmeres!), legt das Modem auf.
+Befehlsmethode
+Um es richtig auflegen zu lassen, starten Sie eine Modemsitzung und stellen Sie die Guardzeit auf ein kleines Intervall ein, wie folgt:
+Dann benutzen Sie den Einstellungen/Modem/Modembefehle/Guard-Zeit -Regler, um den Wert aus Register (S12) auf (5) einzustellen.
+Das Modem sollte dann richtig auflegen.
+Wie die Befehlsmethode funktioniert
+Wenn das lokale Modem mit einem entfernten Modem verbunden ist, ist es im connect -Zustand, in dem es alle empfangenen Zeichen, ohne sie auszuwerten, an das entfernte Modem weitergibt.
+Damit das Modem Befehle f\xFCr sich selbst annimmt, muss man das Modem in den Befehlszustand versetzen.
+Der Abbruchcode macht dies.
+Der Abbruchcode ist definiert als drei Zeitintervalle, deren L\xE4nge durch S12 definiert wird (in f\xFCnfzigstel Sekunden).
+Ruhe (muss mindestens S12 /50 Sekunden dauern)
+Abbruchzeichen (definiert durch Register S2, Standard ist +) drei Mal wiederholt (weniger als S12 /50 Sekunden zwischen jedem)
+Ruhe (muss mindestens S12 /50 Sekunden dauern)
+Sobald das Modem im Befehlsmodus ist, k\xF6nnen Sie ihm Befehle senden.
+Um es auflegen zu lassen, senden Sie ATH.
+Die Abbruchcodes und die Auflegenfolge, die kppp nutzt, werden im Einstellungen/Modem/Modembefehle -Dialog angezeigt.
+Diese sollten zu Ihrem Modem passen.
+Tonwahl beschleunigen
+Falls Sie Tonwahl nutzen k\xF6nnen, kann die Zeit, die zum W\xE4hlen ben\xF6tigt wird, mit dem S11 -Register ver\xE4ndert werden.
+Es gibt die Dauer (in hundertstel Sekunden) an, um einen Ton w\xE4hrend der Wahl zu senden.
+Der Standard ist \xFCblicherweise 95 (fast eine Sekunde).
+Wie schnell Sie w\xE4hlen k\xF6nnen, h\xE4ngt von den Ger\xE4ten Ihrer Telefongesellschaft ab.
+Die minimale Dauer ist 50, fast doppelt so schnell, und diese Geschwindigkeit funktioniert h\xE4ufig.

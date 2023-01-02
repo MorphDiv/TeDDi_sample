@@ -1,0 +1,374 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+Warning
+This extension is EXPERIMENTAL.
+The behaviour of this extension - - including the names of its functions and anything else documented about this extension - - may change without notice in a future release of PHP.
+Use this extension at your own risk.
+The DOM XML extension has been overhauled in PHP 4.3.0 to better comply with the DOM standard.
+The extension still contains many old functions, but they should no longer be used.
+In particular, functions that are not object-oriented should be avoided.
+The extension allows you to operate on an XML document with the DOM API.
+It also provides a function domxml_xmltree() to turn the complete XML document into a tree of PHP objects.
+Currently, this tree should be considered read-only — you can modify it, but this would not make any sense since DomDocument_dump_mem() Currently, this tree should be considered read-only — you can modify it, but this would not make any sense since DomDocument_dump_mem() cannot be applied to it.
+Therefore, if you want to read an XML file and write a modified version, use DomDocument_create_element(), DomDocument_create_text_node(), set_attribute(), etc. and finally the DomDocument_dump_mem() function.
+This extension makes use of the GNOME XML library.
+Download and install this library.
+You will need at least libxml-2.4.14.
+To use DOM XSLT features you can use the libxslt library and EXSLT enhancements from http: / /www.exslt.org /.
+Download and install these libraries if you plan to use (enhanced XSLT features.
+You will need at least libxslt-1.0.18.
+This extension is only available if PHP was configured with --with-dom[ =DIR].
+Add --with-dom-xslt[ =DIR] to include DOM XSLT support.
+DIR is the libxslt install directory.
+Add --with-dom-exslt[ =DIR] to include DOM EXSLT support, where DIR is the libexslt install directory.
+Note to Win32 Users:
+In order to enable this module on a Windows environment, you must copy libxml2.dll from the DLL folder of the PHP / Win32 binary package to the SYSTEM32 folder of your windows machine. (Ex:
+C:\WINNT\SYSTEM32 or C:\WINDOWS\SYSTEM32)
+There are quite a few functions that do not fit into the DOM standard and should no longer be used.
+These functions are listed in the following table.
+The function DomNode_append_child() The function DomNode_append_child() has changed its behaviour.
+It now adds a child and not a sibling.
+If this breaks your application, use the non-DOM function DomNode_append_sibling().
+Table 1.
+Deprecated functions and their replacements
+Old function
+New function
+xmldoc
+domxml_open_mem()
+xmldocfile
+domxml_open_file()
+domxml_new_xmldoc
+domxml_new_doc()
+domxml_dump_mem
+DomDocument_dump_mem()
+domxml_dump_mem_file
+DomDocument_dump_file()
+DomDocument_dump_mem_file
+DomDocument_dump_file()
+DomDocument_add_root
+DomDocument_create_element() followed by DomNode_append_child()
+DomDocument_dtd
+DomDocument_doctype()
+DomDocument_root
+DomDocument_document_element()
+DomDocument_children
+DomNode_child_nodes()
+DomDocument_imported_node
+No replacement.
+DomNode_add_child
+Create a new node with e.g.
+DomDocument_create_element() und add it with DomNode_append_child().
+DomNode_children
+DomNode_child_nodes()
+DomNode_parent
+DomNode_parent_node()
+DomNode_new_child
+Create a new node with e.g.
+DomDocument_create_element() and add it with DomNode_append_child().
+DomNode_set_content
+Create a new node with e.g.
+DomDocument_create_text_node() and add it with DomNode_append_child().
+DomNode_get_content
+Content is just a text node and can be accessed with DomNode_child_nodes().
+DomNode_set_content
+Content is just a text node and can be added with DomNode_append_child().
+The constants below are defined by this extension, and will only be available when the extension has either been compiled into PHP or dynamically loaded at runtime.
+Table 2.
+XML constants
+Constant
+Value
+Description
+XML_ELEMENT_NODE (integer)
+1
+Node is an element
+XML_ATTRIBUTE_NODE (integer)
+2
+Node is an attribute
+XML_TEXT_NODE (integer)
+3
+Node is a piece of text
+XML_CDATA_SECTION_NODE (integer)
+4
+XML_ENTITY_REF_NODE (integer)
+5
+XML_ENTITY_NODE (integer)
+6
+Node is an entity like nbsp;
+XML_PI_NODE (integer)
+7
+Node is a processing instruction
+XML_COMMENT_NODE (integer)
+8
+Node is a comment
+XML_DOCUMENT_NODE (integer)
+9
+Node is a document
+XML_DOCUMENT_TYPE_NODE (integer)
+10
+XML_DOCUMENT_FRAG_NODE (integer)
+11
+XML_NOTATION_NODE (integer)
+12
+XML_GLOBAL_NAMESPACE (integer)
+1
+XML_LOCAL_NAMESPACE (integer)
+2
+XML_HTML_DOCUMENT_NODE (integer)
+XML_DTD_NODE (integer)
+XML_ELEMENT_DECL_NODE (integer)
+XML_ATTRIBUTE_DECL_NODE (integer)
+XML_ENTITY_DECL_NODE (integer)
+XML_NAMESPACE_DECL_NODE (integer)
+XML_ATTRIBUTE_CDATA (integer)
+XML_ATTRIBUTE_ID (integer)
+XML_ATTRIBUTE_IDREF (integer)
+XML_ATTRIBUTE_IDREFS (integer)
+XML_ATTRIBUTE_ENTITY (integer)
+XML_ATTRIBUTE_NMTOKEN (integer)
+XML_ATTRIBUTE_NMTOKENS (integer)
+XML_ATTRIBUTE_ENUMERATION (integer)
+XML_ATTRIBUTE_NOTATION (integer)
+XPATH_UNDEFINED (integer)
+XPATH_NODESET (integer)
+XPATH_BOOLEAN (integer)
+XPATH_NUMBER (integer)
+XPATH_STRING (integer)
+XPATH_POINT (integer)
+XPATH_RANGE (integer)
+XPATH_LOCATIONSET (integer)
+XPATH_USERS (integer)
+XPATH_NUMBER (integer)
+The API of the module follows the DOM Level 2 standard as closely as possible.
+Consequently, the API is fully object-oriented.
+It is a good idea to have the DOM standard available when using this module.
+Though the API is object-oriented, there are many functions which can be called in a non-object-oriented way by passing the object to operate on as the first argument.
+These functions are mainly to retain compatibilty to older versions of the extension, and should not be used when creating new scripts.
+This API differs from the official DOM API in two ways.
+First, all class attributes are implemented as functions with the same name.
+Secondly, the function names follow the PHP naming convention.
+This means that a DOM function lastChild() will be written as last_child().
+This module defines a number of classes, which are listed — including their method — in the following tables.
+Classes with an equivalent in the DOM standard are named DOMxxx.
+Table 3.
+List of classes
+Class name
+Parent classes
+DomAttribute
+DomNode
+DomCData
+DomNode
+DomComment
+DomCData:
+DomNode
+DomDocument
+DomNode
+DomDocumentType
+DomNode
+DomElement
+DomNode
+DomEntity
+DomNode
+DomEntityReference
+DomNode
+DomProcessingInstruction
+DomNode
+DomText
+DomCData:
+DomNode
+Parser
+Currently still called DomParser
+XPathContext
+Table 4.
+DomDocument class (DomDocument:
+DomNode)
+Method name
+Function name
+Remark
+doctype
+DomDocument_doctype()
+document_elemnent
+DomDocument_document_element()
+create_element
+DomDocument_create_element()
+create_text_node
+DomDocument_create_text_node()
+create_comment
+DomDocument_create_comment()
+create_cdata_section
+DomDocument_create_cdata_section()
+create_processing_instruction
+DomDocument_create_processing_instruction()
+create_attribute
+DomDocument_create_attribute()
+create_entity_reference
+DomDocument_create_entity_reference()
+get_elements_by_tagname
+DomDocument_get_elements_by_tagname()
+get_element_by_id
+DomDocument_get_element_by_id()
+dump_mem
+DomDocument_dump_mem()
+not DOM standard
+dump_file
+DomDocument_dump_file()
+not DOM standard
+html_dump_mem
+DomDocument_html_dump_mem()
+not DOM standard
+xpath_init
+xpath_init
+not DOM standard
+xpath_new_context
+xpath_new_context
+not DOM standard
+xptr_new_context
+xptr_new_context
+not DOM standard
+Table 5.
+DomElement class (DomElement:
+DomNode)
+Method name
+Function name
+Remark
+tagname
+DomElement_tagname()
+get_attribute
+DomElement_get_attribute()
+set_attribute
+DomElement_set_attribute()
+remove_attribute
+DomElement_remove_attribute()
+get_attribute_node
+DomElement_get_attribute_node()
+get_elements_by_tagname
+DomElement_get_elements_by_tagname()
+has_attribute
+DomElement_has_attribute()
+Table 6.
+DomNode class
+Method name
+Remark
+DomNode_node_name()
+DomNode_node_value()
+DomNode_node_type()
+DomNode_last_child()
+DomNode_first_child()
+DomNode_child_nodes()
+DomNode_previous_sibling()
+DomNode_next_sibling()
+DomNode_parent_node()
+DomNode_owner_document()
+DomNode_insert_before()
+DomNode_append_child()
+DomNode_append_sibling()
+Not in DOM standard.
+This function emulates the former behaviour of DomNode_append_child().
+DomNode_remove_child()
+DomNode_has_child_nodes()
+DomNode_has_attributes()
+DomNode_clone_node()
+DomNode_attributes()
+DomNode_unlink_node()
+Not in DOM standard
+DomNode_replace_node()
+Not in DOM standard
+DomNode_set_content()
+Not in DOM standard, deprecated
+DomNode_get_content()
+Not in DOM standard, deprecated
+DomNode_dump_node()
+Not in DOM standard
+DomNode_is_blank_node()
+Not in DOM standard
+Table 7.
+DomAttribute class (DomAttribute:
+DomNode)
+Method name
+Remark
+name
+DomAttribute_name()
+value
+DomAttribute_value()
+specified
+DomAttribute_specified()
+Table 8.
+DomProcessingInstruction class (DomProcessingInstruction:
+DomNode)
+Method name
+Function name
+Remark
+target
+DomProcessingInstruction_target()
+data
+DomProcessingInstruction_data()
+Table 9.
+Parser class
+Method name
+Function name
+Remark
+add_chunk
+Parser_add_chunk()
+end
+Parser_end()
+Table 10.
+XPathContext class
+Method name
+Function name
+Remark
+eval
+XPathContext_eval()
+eval_expression
+XPathContext_eval_expression()
+register_ns
+XPathContext_register_ns()
+Table 11.
+DomDocumentType class (DomDocumentType:
+DomNode)
+Method name
+Function name
+Remark
+name
+DomDocumentType_name()
+entities
+DomDocumentType_entities()
+notations
+DomDocumentType_notations()
+public_id
+DomDocumentType_public_id()
+system_id
+DomDocumentType_system_id()
+internal_subset
+DomDocumentType_internal_subset()
+The classes DomDtd is derived from DomNode.
+DomComment is derived from DomCData.
+Many examples in this reference require an XML string.
+Instead of repeating this string in every example, it will be put into a file which will be included by each example.
+This include file is shown in the following example section.
+Alternatively, you could create an XML document and read it with DomDocument_open_file().
+Example 1.
+Include file example.inc with XML string
+?php $xmlstr = "?xml version='1.0 'standalone='yes'? !DOCTYPE chapter SYSTEM' / share / sgml / Norman_Walsh / db3xml10 / db3xml10.dtd '[!ENTITY sp \"spanish\"] !- - lsfj - - chapter language='en' title language='en 'Title / title para language='ge' amp;sp; !- - comment - - informaltable ID='findme 'language=' amp;sp; 'tgroup cols='3' tbody row entry a1 / entry entry morerows='1 'b1 / entry entry c1 / entry / row row entry a2 / entry entry c2 / entry / row row entry a3 / entry entry b3 / entry entry c3 / entry / row / tbody / tgroup / informaltable / para / chapter ";?
+Prev
+Home
+Next
+rewinddir
+Up
+DomAttribute - name

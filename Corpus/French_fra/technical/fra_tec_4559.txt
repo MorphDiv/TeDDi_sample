@@ -1,0 +1,57 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+(PHP 4 CVS only)
+stream_register_filter() vous permet d'implémenter votre propre filtre de flôt, à utiliser avec les fonctions d'accès aux données externes (comme fopen(), fread(), etc...).
+Pour ce faire, vous devez définir une classe qui étend la classe php_user_fitler avec les membres et méthodes définies ci-dessous.
+Lorsque vous réalisez des opérations de lecture et d'écriture dans le flôt auquel votre filtre est attaché, PHP Lorsque vous réalisez des opérations de lecture et d'écriture dans le flôt auquel votre filtre est attaché, PHP passera les données à travers votre filtre (et tous les autres filtres attachés), de façon à ce que les données soient modifiées telles que désiré.
+Vous devez implémenter les méthodes telles que décrit ci-dessous, sous peine de comportement indéfini.
+stream_register_filter() retourne FALSE si le nom de filtre filtername est déjà utilisé.
+Cette méthode est appelée dès que les données sont écrite dans le flôt, comme avec la fonction fwrite().
+Après la modification des données data, cette méthode doit utiliser la ligne suivante return parent::write( $data); pour que le prochain filtre puisse s 'exécuter.
+Lorsqu 'il ne reste plus de filtres, le flôt va écrire les données data dans leur forme finale.
+
+Si votre filtre modifie la taille de la chaîne data, par exemple en supprimant le premier caractère, il faut, avant d'utiliser la fonction parent::write($data);, s'assurer d 'inclure le caractère supprimé dans la valeur de retour.
+
+Cette méthode est appelée dès que des données sont lues dans le flôt (comme avec la fonction fread()).
+Un filtre doit commencer par utiliser la ligne parent::read( $maxlength); pour lire les données issue du filtre précédent.
+Ultimement, ce sera le flôt qui lira les données.
+Votre filtre peut alors modifier cette valeur et retourner la valeur finale.
+Votre filtre ne doit jamais retourner plus de maxlength octets.
+Comme parent::read( $maxlength); ne retournera aussi pas plus de maxlength, ce ne sera pas un problème en règle général.
+Cependant, si votre filtre accroit la taille des données retournées, il faut alors appeler cette ligne avec parent::read( $maxlength-$x); où x est l 'accroissement maximal de vos données.
+Alternativement, vous pouvez bâtir un buffer de lecture dans votre classe.
+Cette méthode est appelée en réponse à une requête de vidage des buffers du flôt (comme avec la fonction fflush() ou fclose()).
+Le paramètre closing vous indique si le flôt est, en réalité, dans un processus de fermeture.
+L'action par défaut est d'appeler simplement return parent::flush($closing);, mais votre filtre peut souhaiter exécuter des écritures supplémentaires, ou bien nettoyer des ressources avant de réaliser le vidage en règle.
+Cette méthode est appelée durant l 'instantiation du filtre.
+Si votre filtre alloue ou initialise d'autres ressources (comme des buffers), c 'est le moment de le faire.
+Cette méthode est appelée durant l'extinction du filtre (généralement, lorsque le flôt est fermé), et est exécuté après l 'appel de la fonction flush.
+Si aucune ressource a été allouée ou créée durant oncreate(), c 'est le moment de les libérer.
+L 'exemple ci-dessous implémente un filtre appelé rot13, sur le flôt foo-bar.txt, qui réalise un chiffrement de type ROT-13 sur toutes les lettres lue ou écrite dans le flôt.
+Exemple 1.
+Filtre ROT13 pour les flôts
+?php / * Definition de notre classe de filtre * / class rot13_filter extends php_user_filter {function read($length) {$tempstr = parent::read($length); for($i = 0; $i strlen($tempstr); $i++) if (($tempstr[$i] = 'A 'AND $tempstr[$i] = 'M') OR ($tempstr[$i] = 'a' AND $tempstr[$i] = 'm')) $tempstr[$i] = chr(ord($tempstr[$i]) + 13); else if (($tempstr[$i] = 'N 'AND $tempstr[$i] = 'Z') OR ($tempstr[$i] = 'n' AND $tempstr[$i] = 'z')) $tempstr[$i] = chr(ord($tempstr[$i]) - 13); return $tempstr;} function write($data) {for($i = 0; $i strlen($data); $i++) if (($data[$i] = 'A 'AND $data[$i] = 'M') OR ($data[$i] = 'a' AND $data[$i] = 'm')) $data[$i] = chr(ord($data[$i]) + 13); else if (($data[$i] = 'N 'AND $data[$i] = 'Z') OR ($data[$i] = 'n' AND $data[$i] = 'z')) $data[$i] = chr(ord($data[$i]) - 13); return parent::write($data);}} / * Enregistrement du filtre avec PHP * / stream_register_filter("rot13", "rot13_filter") or die("Impossible d'enregistrer le filtre"); $fp = fopen("foo-bar.txt", "w"); / * Liaison du filtre avec le fl ocirc;t * / stream_filter_append($fp, "rot13"); fwrite($fp, "Line1\n"); fwrite($fp, "Word - 2\n"); fwrite($fp, "Easy As 123\n"); fclose($fp); / * Le filtre ne s'applique qu'au fl ocirc;t $fp * ce qui fait que cette lecture se fait sans d eacute;chiffrement * / readfile("foo-bar.txt"); / * affichage * ----- - Yvar1 Jbeq - 2 Rnfl Nf 123 * /?
+Voir aussi stream_register_wrapper(), stream_filter_prepend() et stream_filter_append()
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

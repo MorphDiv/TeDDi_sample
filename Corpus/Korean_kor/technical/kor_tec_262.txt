@@ -1,0 +1,30 @@
+# language_name_wals:	Korean
+# language_name_glotto:	Korean
+# iso639_3:	kor
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Kore
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/ko.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+(PHP 3, PHP 4)
+crypt() 은 유닉스 표준인 DES 암호화 기법을 사용하여 문자열을 암호화 한다. 인수로는 암호화 될 문자열과 선택적으로 암호화의 기본이 될 두 문자 salt 문자열이 올 수 있다. 더 많은 정보를 위해 유닉스의 crypt 함수에 대한 man page를 참조하라.
+만약 salt 인자가 주어지지 않는다면, PHP에 의해 무작위로 생성된다.
+몇몇 운영체제는 한가지 타입 이상의 암호화를 제공한다. 실제로 표준 DES 암호화는 MD5에 기초한 암호화 알고리즘으로 대체되기도 한다. 암호화 타입은 slat 인수에 의해 유발된다. 인스톨시, PHP는 암호화 함수의 가용 여부를 결정하고, 다른 암호화 타입을 위한 salt를 채택할 것이다. 만약 slat가 제공되지 않으면, PHP는 기본적으로 두글자 DES salt를 자동 생성하고, 그렇지 않다면 이는 MD5 호환 salt가 생성되는 경우로 시스템의 기본 암호화 타입은 MD5가 된다. PHP는 CRYPT_SALT_LENGTH 라는 상수를 설정하는데 이는 시스템에 2문자 salt를 적용할 것인지 혹은 더 긴 12문자 MD5 salt를 적용할 것인지를 알려준다.
+만약 제공된 salt를 사용한다면, salt는 한번만 생성된다는 점을 주의하라. 만약 이 함수를 재귀적으로 호출한다면, 이는 겉모습(appearance)과 더쩌면 좀 더 확장된 의미에서 본다면 보안에도 영향을 끼칠 수도 있다.
+기본적인 DES 암호화인 crypt() 는 처음 두 문자가 salt 인 문자열을 출력한다.
+crypt() 함수가 다양한 암호화 타입을 지원하는 시스템에서, 주어진 타입이 가능하느냐에 따라 다음 상수는 0 이나 1 로 지정된다.
+CRYPT_STD_DES - 2-문자 SALT를 가지는 기본 DES 암호화
+CRYPT_EXT_DES - 9문자 SALT 를 가지는 확장된 DES 암화화
+CRYPT_MD5 - $1$로 시작하는 12문자 SALT를 가지는 MD5 암호화
+CRYPT_BLOWFISH - $2$로 시작하는 16문자 SALT를 갖는 확장된 DES 암호화
+crypt() 는 one-way 알고리즘을 사용하므로 decrypt 함수는 존재하지 않는다.
+md5() 을 참고하라.

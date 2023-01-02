@@ -1,0 +1,43 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Ces fonctions permettent de gérer les classes et les objets.
+Vous pouvez notamment connaître le nom de la classe d'un objet, ses membres et ses méthodes, et tous les objets parents (les classes qui sont étendues par la classe d'un objet).
+Dans cet exemple, on définit une classe de base, et une extension.
+La classe de base définit un légume, s 'il est mangeable ou pas, et sa couleur.
+La sous-classe epinard ajoute une méthode pour le cuisiner, et une autre pour savoir s 'il est cuisiné.
+Exemple 1. classes.inc
+?php / / classe de base, avec ses membres et ses méthodes class Legume {var $mangeable; var $couleur; function legume ($mangeable, $couleur="green ") {$this - mangeable = $mangeable; $this - couleur = $couleur;} function est_mangeable() {return $this - mangeable;} function quelle_couleur() {return $this - couleur;}} / / fin de la classe Legume / / extend la classe de base class Epinard extends Legume {var $cuit = FALSE; function Epinard() {$this - Legume (TRUE, "green");} function cuisine() {$this - cuit = TRUE;} function est_cuit() {return $this - cuit;}} / / fin de la classe Epinard?
+Lorsqu'on instantie deux objets de ces classes, et qu 'on affiche leurs informations, on affiche aussi leur héritage.
+On définit ici des utilitaires qui servent essentiellement à afficher ces informations proprement.
+Exemple 2. test_script.php
+pre ?php include "classes.inc"; / / utilitaires function print_vars($obj) {$arr = get_object_vars($obj); while (list($prop, $val) = each($arr)) echo " $prop = $val\n";} function print_methods($obj) {$arr = get_class_methods(get_class($obj)); foreach ($arr as $method) echo " function $method()\n";} function class_parentage($obj, $class) {global $$obj; if (is_subclass_of($$obj, $class)) {echo "L'objet $obj belongs to class ".get_class($$obj); echo" est une sous-classe de $class\n";} else {echo "L'objet $obj n'est pas une sous classe $class\n";}} / / instantie 2 objets $legume = new Legume(TRUE ,"blue"); $feuilles = new Epinard(); / / affiche les informations sur ces objets echo "legume:
+CLASS ".get_class($legume) ."\n"; echo "feuilles:
+CLASS ".get_class($feuilles); echo", PARENT ".get_parent_class($feuilles) ."\n"; / / affiche les propriétés du légume echo "\nlégume:
+Propriétés \n"; print_vars($legume); / / et les méthodes de "feuilles "echo "\nfeuilles:
+Methods\n"; print_methods($feuilles); echo "\nParentée:\n"; class_parentage("feuilles", "Epinard"); class_parentage("feuilles", "Legume");? / pre
+Il est important de noter que dans les exemples ci-dessus, les objets $feuilles sont une instance de Epinard qui est une sous-classe de Legume, donc la dernière partie du script va afficher:
+[...] Parentée:
+L'objet feuilles n'est pas une sous classe Spinach L 'objet feuilles est une sous-classe de Legume
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

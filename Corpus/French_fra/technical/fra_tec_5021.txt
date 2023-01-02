@@ -1,0 +1,66 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Ces fonctions sont l 'interface avec les bases de type Berkeley.
+C 'est une couche générale pour plusieurs bases de données sur fichiers.
+En tant que tel, les fonctionnalités sont limitées à une partie des fonctionnalités des bases de données modernes, comme Sleepycat Software's DB2 (A ne pas confondre avec IBM's DB2 software, qui fonctionne avec ODBC).
+Le comportement de certaines fonctions dépends de la base de données utilisée.
+Par exemple dba_optimize() et dba_sync() n'auront pas le même effet d'une base à l 'autre.
+Lors de l'utilisation de la fonction dba_open() ou de dba_popen(), une des librairies suivante doit être fournie comme argument.
+La liste complète des librairies supportées par votre configuration est disponible avec la fonction phpinfo(). (Pour ajouter le support de l'une de ces librairies, ajouter l'option de configuration --with-XXXX).
+Tableau 1.
+Liste des librairies DBA
+Librairie
+
+
+Dbm est la plus ancienne des base de données de type Berkeley.
+Il vaut mieux l 'éviter si possible.
+Les fonctions de compatibilités codées dans DB2 et gdbm ne sont pas supportées, car elles ne sont compatibles qu'au niveau du code source, et ne peuvent pas gérer le format dbm originel. (--with-dbm).
+
+ndbm est un nouveau type de dbm plus flexible.
+Il a cependant la majorité des limitations du genre. (--with-ndbm).
+
+gdbm est la base dbm GNU. (--with-gdbm).
+
+db2 est DB2 de Sleepycat Software.
+Elle se décrit comme un "ensemble d'outils qui fournissent une base de données performante, tant pour les applications indépendantes que pour le client / serveur". (--with-db2).
+
+DB3 est le DB3 de Sleepycat Software. (--with-db3).
+
+cdb est "un package rapide, robuste, léger, pour créer et lire des bases de données constantes".
+C'est l'auteur de qmail qui l 'a écrit, et elle est disponible ici.
+Puisque c'est une base constante, elle ne supporte que la lecture. (--with-cdb).
+Exemple 1.
+Exemple DBA
+?php $id = dba_open( "/ tmp / test.db", "n", "db2"); if(!$id) {echo "dba_open a échoué\n"; exit;} dba_replace("key", "Ceci est un exemple !", $id); if(dba_exists("key", $id)) {echo dba_fetch("key", $id); dba_delete("key", $id);} dba_close($id);?
+DBA gère les données binaires, et n 'a pas de limites arbitraires.
+Elle hérite de toutes les limites de la base sous-jacentes.
+Toutes les bases de données sur fichiers doivent fournir un moyen de changer le mode d'accès au fichier d 'une base, et si possible, de toutes les bases.
+Le mode d'accès est généralement passé en 4ème argument à dba_open() ou dba_popen().
+Vous pouvez accéder à toutes les entrées d'une base d'une manière linéaire, avec les fonctions dba_firstkey() et dba_nextkey().
+Vous ne devez pas modifier une base lorsque vous la traversez ainsi.
+Exemple 2.
+Passer en revue une base
+?php / / ...ouverture de la base... $key = dba_firstkey( $id); while($key != FALSE) {if(...) {/ / conserver la clé pour faire d'autres opérations plus tard $handle_later[] = $key;} $key = dba_nextkey($id);} for($i = 0; $i count($handle_later); $i++) dba_delete($handle_later[$i], $id);?
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

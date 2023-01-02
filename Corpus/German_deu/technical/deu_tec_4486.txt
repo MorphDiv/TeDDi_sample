@@ -1,0 +1,128 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Kapitel 7.
+Typen
+Nach vorne
+Ein Array in PHP ist eigentlich eine geordnete Abbildung.
+Eine Abbildung ist ein Typ der Werte auf Schlüssel Eine Abbildung ist ein Typ der Werte auf Schlüssel abbildet.
+Dieser Typ ist auf mehrere Arten optimiert, so dass Sie ihn auf verschiedene Weise benutzen können: als reales Array, als Liste (Vektor), als Hash-Tabelle (das ist eine praktische Anwendung einer Abbildung), als Verzeichnis, als Sammlung, als Stapel (Stack), als Warteschlange (Queue) und möglicherweise mehr.
+Da Sie ein weiteres PHP-Array als Wert benutzen können, ist es ziemlich einfach möglich Baumstrukturen zu simulieren.
+Die Erklärung dieser Strukturen sprengt den Rahmen dieses Handbuchs, aber Sie finden zumindest ein Beispiel für jede dieser Strukturen.
+Für weitergehende Informationen verweisen wir auf externe Literatur zu diesem breit gefächerten Thema.
+Ein array kann mit Hilfe des Sparchkonstrukts array() erzeugt werden.
+Es benötigt eine bestimmte Anzahl von Komma-getrennten Schlüssel = Wert Paaren.
+Ein Schlüssel ist entweder eine Zahl vom Typ integer oder ein string.
+Wenn ein Schlüssel die Standard-Darstellung einer integer Zahl ist, wird es als solche interpretiert werden, (z.B. "8 "wird als 8 interpretiert, während "08" als "08 "interpretiert werden wird).
+Ein Wert kann irgendetwas sein.
+Falls Sie einen Schlüssel weglassen, wird das Maximum des Integer - Indizes genommen und der neue Schlüssel wird dieses Maximum + 1 sein.
+Das gilt auch für negative Indizes, da ein integer negativ sein kann.
+Ist zum Beispiel der höchste Index -6 wird der neue Schlüssel den Wert -5 haben.
+Falls es bis dahin keine Integer-Indizes gibt, wird der Schlüssel zu 0 (Null).
+Falls Sie einen Schlüssel angeben dem schon ein Wert zugeordnet wurde, wird dieser Wert überschrieben.
+Wenn Sie true als Schlüssel benutzen, wird dies als Schlüssel vom Typ integer 1 ausgewertet.
+Benutzen Sie false als Schlüssel wird dies als Schlüssel vom Typ integer 0 ausgewertet.
+Die Benutzung von NULL als Schlüssel führt dazu, dass der Schlüssel als leerer String gewertet wird.
+Verwenden Sie einen leeren String als Schlüssel wird ein Schlüssel mit einem leeren String und seinem Wert erzeugt (oder überschrieben).
+Das entspricht nicht der Verwendung von leeren Klammern.
+Sie können keine Arrays oder Objekte als Schlüssel benutzen.
+Der Versuch wird mit einer Warnung enden:
+
+array( [Schlüssel =] Wert,...) / / Schlüssel ist entweder ein string oder integer / / Wert kann irgendetwas sein.
+Sie können ein bestehendes Array durch explizites Zuweisen von Werten verändern.
+Weisen Sie dem Array Werte zu indem Sie den Schlüssel in eckigen Klammern angeben.
+Sie können den Schlüssel auch weglassen.
+In diesem Fall schreiben Sie einfach ein leeres Klammerpaar ("[]") hinter den Variablennamen.
+$arr[ Schlüssel] = Wert; $arr[] = Wert; / / Schlüssel ist entweder ein string oder ein nicht-negativer integer / / Wert kann irgendetwas sein.
+Es gibt viele nützliche Funktionen um mit Arrays zu arbeiten.
+Schauen Sie unter dem Abschnitt Array Funktionen nach.
+Anmerkung:
+Mit unset() können Sie Schlüssel eines Arrays löschen.
+Halten Sie sich vor Augen, dass das Array NICHT neu indiziert wird.
+$a = array( 1 = 'eins', 2 = 'zwei', 3 = 'drei '); unset ($a[2]); / * erzeugt ein Array das wie folgt definiert worden wäre: $a = array (1= 'eins', 3= 'drei'); und NICHT $a = array (1 = 'eins', 2 = 'drei'); * /
+Die foreach Kontrollstruktur gibt es speziell für Arrays.
+Damit ist es leicht ein Array zu durchlaufen.
+Sie sollten immer Anführungszeichen für einen assoziativen Index eines Arrays benutzen.
+Zum Beispiel sollten Sie $foo[ 'bar'] und nicht $foo[bar] benutzen.
+Aber warum ist $foo[ bar] falsch?
+Vieleicht kennen Sie folgende Syntax aus alten Skripts:
+$foo[ bar] = 'Feind'; echo $foo[bar]; / / usw
+Wie im Abschnitt Syntax ausgeführt, muss zwischen den eckigen Klammern ('[' und ']') ein Ausdruck stehen.
+Das heißt, dass Sie Dinge ähnlich diesen schreiben können:
+echo $arr[ foo(true)];
+$error_descriptions[ E_ERROR] = "Ein schwerwiegender Fehler ist aufgetreten"; $error_descriptions[E_WARNING] = "PHP hat eine Warnung ausgegeben"; $error_descriptions[E_NOTICE] = "Das ist nur eine informelle Notiz";
+$error_descriptions[ 1] = "Ein schwerwiegender Fehler ist aufgetreten"; $error_descriptions[2] = "PHP hat eine Warnung ausgegeben"; $error_descriptions[8] = "Das ist nur eine informelle Notiz";
+Aber wie ist es dann möglich dass $foo[ bar] funktioniert?
+Es funktioniert, weil bar aufgrund seiner Syntax als Konstante ausgewertet wird.
+In diesem Fall jedoch existiert keine Konstane mit dem Namen bar.
+PHP nimmt an, dass Sie bar wörtlich gemeint haben, wie den String 'bar', aber vergessen haben, die Anführungszeichen zu setzen.
+Eines Tages könnte sich das PHP Team entscheiden eine weitere Konstante oder ein Schlüsselwort hinzuzufügen und dann geraten Sie in Schwierigkeiten.
+Zum Beispiel können Sie bereits die Wörter empty und default auf diese Art nicht benutzen, weil es speziele Schlüsselwörter sind.
+Anmerkung:
+Wenn Sie error_reporting auf E_ALL setzen, werden Sie bemerken, dass PHP jedesmal Notices ausgibt, wenn Sie einen index benutzen, der nicht definiert wurde. (Fügen Sie die Zeile error_reporting(E_ALL); in Ihr Skript ein).
+Anmerkung:
+Innerhalb eines string in doppelten Anführunfszeichen gilt eine andere Syntax.
+Für mehr Details schauen Sie unter Variablen-Analyse in Strings nach.
+Der Array-Typ in PHP ist sehr vielseitig.
+Hier folgen einige Beispiele um Ihnen die Mächtigkeit von Arrays zu veranschaulichen.
+/ / Das hier $a = array( 'Farbe '= 'rot' ,'Geschmack '= 'süß' ,'Form '= 'rund' ,'Name '= 'Apfel' ,4 / / Schlüssel ist 0); / / ist komplett gleichwertig mit $a['Farbe'] = 'rot'; $a['Geschmack'] = 'süß'; $a['Form'] = 'rund'; $a['Name'] = 'Apfel'; $a[] = 4; / / Schlüssel ist 0 $b[] = 'a'; $b[] = 'b'; $b[] = 'c'; / * ergibt das Array: array (0 = 'a ', 1 = 'b', 2 = 'c '), oder einfacher: array('a', 'b', 'c') * /
+Beispiel 7-4.
+Verwenden von array()
+/ / Array als (Eigenschafts -)Abbildung $map = array('version '= 4 ,'OS' = 'Linux ','Sprache' = 'englisch ','short_tags' = true); / / strikt numerische Schlüssel $array = array(7 ,8 ,0 ,156 ,-10); / / Dies entspricht: array (0 = 7, 1 = 8,...) / / wechselnde Schlüssel $wechselnd = array (10 / / Schlüssel:
+0 ,5 = 6 ,3 = 7 ,' a '= 4 ,11 / / Schlüssel:
+6 (Maximum der Integer-Indices war 5) ,'8 '= 2 / / Schlüssel:
+8 (integer!) ,'02 '= 77 / / Schlüssel: '02' ,0 = 12 / / 10 wird mit dem neuen Wert 12 überschrieben); / / leeres Array $leer = array();
+Beispiel 7-5.
+Sammlung
+$farben = array( 'rot' ,'blau' ,'grün' ,'gelb'); foreach ($farben as $farbe) {echo "Gefällt Ihnen $farbe?\n";} / * Ausgabe:
+Gefällt Ihnen rot?
+Gefällt Ihnen blau?
+Gefällt Ihnen grün?
+Gefällt Ihnen gelb? * /
+Beachten Sie, dass es gegenwärtig nicht möglich ist die Werte eines Arrays direkt in einer solchen Schleife zu ändern.
+Eine Lösung ist folgendes:
+Beispiel 7-6.
+Sammlung
+foreach ($farben as $key = $farbe) {/ / funktioniert nicht: / /$farbe = strtoupper($farbe); / /funktioniert: $farben[$key] = strtoupper($farbe);} print_r($farben); / * Ausgabe:
+Array ([0] = ROT [1] = BLAU [2] = GRÜN [3] = GELB) * /
+Dieses Beispiel erzeugt ein Array, dessen Schlüssel bei eins beginnt.
+Beispiel 7-7.
+1-basierter Index
+$erstes_viertel = array( 1 = 'Januar', 'Februar', 'März'); print_r($erstes_viertel); / * Ausgabe:
+Array ([1] = 'Januar '[2] = 'Februar' [3] = 'März ') * /
+Beispiel 7-8.
+Füllen eines realen Arrays
+/ / Füllen eines Arrays mit allen Inhalten eines Verzeichnisses $handle = opendir( '.'); while ($file = readdir($handle)) {$files[] = $file;} closedir($handle);
+Arrays sind geordnet.
+Diese Ordnung können Sie mit Hilfe verschiedener Sortierfunktionen verändern.
+Für mehr Informationen schauen Sie unter dem Abschnitt zu den Array Funktionen nach.
+Beispiel 7-9.
+Sortien eines Array
+sort( $files); print_r($files);
+Weil der Wert eines Arrays irgendetwas sein kann, kann dieser Wert wiederum ein Array sein.
+Somit können Sie rekursive und multidimensionale Arrays erzeugen.
+Beispiel 7-10.
+Rekursive and multidimensionale Arrays
+$fruits = array ("früchte "= array("a" = "Orange ","b" = "Banane ","c" = "Apfel "), "nummern" = array(1 ,2 ,3 ,4 ,5 ,6), "löcher "= array("erstens" ,5 = "zweitens ","drittens"));
+Zurück
+Zum Anfang
+Nach vorne
+Strings / Zeichenketten
+Nach oben
+Objekte

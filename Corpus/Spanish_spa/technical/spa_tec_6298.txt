@@ -1,0 +1,766 @@
+# language_name_wals:	Spanish
+# language_name_glotto:	Spanish
+# iso639_3:	spa
+# year_composed:	NA
+# year_published:	2007
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	GNOME
+# source:	https://object.pouta.csc.fi/OPUS-GNOME/v1/raw/es.zip
+# copyright_short:	http://opus.nlpl.eu/GNOME.php
+# copyright_long:	http://opus.nlpl.eu/GNOME.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Se concede permiso para copiar, distribuir o modificar este documento según las condiciones de la GNU Free Documentation License (GFDL), Versión 1.1 o cualquier versión posterior publicada por la Free Software Foundation sin Secciones invariantes, Textos de portada y Textos de contraportada. Encontrará una copia de la GFDL en este
+Este manual forma parte de una colección de documentos de GNOME distribuidos según la GFDL. Si desea distribuir este manual de forma independiente de la colección, puede hacerlo agregando una copia de la licencia al documento, según se describe en la sección 6 de la misma.
+Muchos de los nombres utilizados por las empresas para distinguir sus productos y servicios se consideran marcas comerciales. Cuando estos nombres aparezcan en la documentación de GNOME, y siempre que se haya informado a los miembros del Proyecto de documentación de GNOME de dichas marcas comerciales, los nombres aparecerán en mayúsculas o con las iniciales en mayúsculas.
+EL DOCUMENTO SE ENTREGA "TAL CUAL", SIN GARANTÍA DE NINGÚN TIPO, NI EXPLÍCITA NI IMPLÍCITA INCLUYENDO, SIN LIMITACIÓN, GARANTÍA DE QUE EL DOCUMENTO O VERSIÓN MODIFICADA DE ÉSTE CAREZCA DE DEFECTOS EN EL MOMENTO DE SU VENTA, SEA ADECUADO A UN FIN CONCRETO O INCUMPLA ALGUNA NORMATIVA. TODO EL RIESGO RELATIVO A LA CALIDAD, PRECISIÓN Y UTILIDAD DEL DOCUMENTO O SU VERSIÓN MODIFICADA RECAE EN USTED. SI CUALQUIER DOCUMENTO O VERSIÓN MODIFICADA DE AQUÉL RESULTARA DEFECTUOSO EN CUALQUIER ASPECTO, USTED (Y NO EL REDACTOR INICIAL, AUTOR O AUTOR DE APORTACIONES) ASUMIRÁ LOS COSTES DE TODA REPARACIÓN, MANTENIMIENTO O CORRECCIÓN NECESARIOS. ESTA EXENCIÓN DE RESPONSABILIDAD SOBRE LA GARANTÍA ES UNA PARTE ESENCIAL DE ESTA LICENCIA. NO SE AUTORIZA EL USO DE NINGÚN DOCUMENTO NI VERSIÓN MODIFICADA DE ÉSTE POR EL PRESENTE, SALVO DENTRO DEL CUMPLIMIENTO DE LA EXENCIÓN DE RESPONSABILIDAD;Y
+EN NINGUNA CIRCUNSTANCIA NI BAJO NINGUNA TEORÍA LEGAL, SEA POR ERROR (INCLUYENDO NEGLIGENCIA) CONTRATO O DOCUMENTO DE OTRO TIPO, EL AUTOR, EL ESCRITOR INICIAL, EL AUTOR DE APORTACIONES NI NINGÚN DISTRIBUIDOR DEL DOCUMENTO O VERSIÓN MODIFICADA DEL DOCUMENTO, NI NINGÚN PROVEEDOR DE NINGUNA DE ESAS PARTES, SERÁ RESPONSABLE ANTE NINGUNA PERSONA POR NINGÚN DAÑO DIRECTO, INDIRECTO, ESPECIAL, INCIDENTAL O DERIVADO DE NINGÚN TIPO, INCLUYENDO, SIN LIMITACIÓN DAÑOS POR PÉRDIDA DE FONDO DE COMERCIO, PARO TÉCNICO, FALLO INFORMÁTICO O AVERÍA O CUALQUIER OTRO POSIBLE DAÑO O AVERÍA DERIVADO O RELACIONADO CON EL USO DEL DOCUMENTO O SUS VERSIONES MODIFICADAS, AUNQUE DICHA PARTE HAYA SIDO INFORMADA DE LA POSIBILIDAD DE QUE SE PRODUJESEN ESOS DAÑOS.
+ESTE DOCUMENTO Y LAS VERSIONES MODIFICADAS DEL MISMO SE OFRECEN SEGÚN LAS CONDICIONES ESTABLECIDAS EN LA LICENCIA DE DOCUMENTACIÓN LIBRE DE GNU (GFDL) Y TENIENDO EN CUENTA QUE:
+Manual de referencia del Gestor pantallas de Gnome
+2001
+GDM es el Gestor de Pantallas de GNOME, un programa gráfico de entrada.
+Martin
+K.
+Petersen
+mkp@mkp.net
+George
+Lebl
+jirka@5z.com
+Brian
+Cameron
+Brian.Cameron@Sun.COM
+Bill
+Haneman
+Bill.Haneman@Sun.COM
+1998
+1999
+Martin K. Petersen
+2001
+2003
+2004
+George Lebl
+Red Hat, Inc.
+Sun Microsystems, Inc.
+Este manual describe la versión 2.13.0.8 del Gestor de entrada de Gnome. Se actualizó por última vez en 13/02/2006.
+Términos y convenciones usados en este manual
+Selector - Un programa que se usa para seleccionar un equipo remoto para gestionar una pantalla remotamente en la pantalla local (
+Configurador - La aplicación de configuración (
+GDM - Gestor de pantallas de Gnome. Se usa para describir el paquete de software como un todo. algunas veces también se refiere a él como GDM2.
+dgm - El demonio del gestor de pantallas (
+Interfaz de entrada - La venta de de entrada gráfica (
+Interfaz de entrada GTK+ - La ventana de entrada estándar (
+PAM - Pluggable Authentication Mechanism
+Interfaz de entrada con temas - La ventana de entrada con temas intercambiables (
+XDMCP - X Display Manage Protocol
+Las rutas que comienzan con una palabra entre los símbolos paréntesis angulosos son relativas al prefijo de instalación. Ej:
+Vista general
+Introducción
+El Gestor de pantallas de GNOME (GDM) es un gestor de pantallas que implementa todas las características significantes requeridas para gestionar pantallas remotas y locales. GDM se ha escrito desde cero y no contiene nada de código de XDM / X Consortium.
+Para más información acerca de GDM, vea
+Estabilidad de interfaces
+Los valores de pares de clave/valor definidos en los archivos de configuración de GDM y la ubicación de estos archivos se consideran «estables» y deberían cambiar sólo de formas compatibles hacia atrás. Note que esto incluye funcionalidad como los scripts de GDM (Init, PreSession, PostSession, PostLogin, XKeepsCrashing, etc), ubicaciones de directorios (ServAuthDir, PidFile, etc), aplicaciones del sistema (SoundProgram), etc. Algunos valores de configuración dependen de interfaces del SO y quizá necesiten ser modificados para que funcionen en un determinado SO. Los ejemplos típicos son HaltCommand, RebootCommand, SuspendCommand, StandardXServer, Xnest, SoundProgram, y el valor del «comando» para cada «server-tal».
+Nota: las distribuciones a menudo cambian los valores predeterminados de las claves para soportar su plataforma. Los interfaces de línea de comandos para los programas GDM instalados en
+Si se descubrieran problemas que rompiesen la compatibilidad, por favor envíe un error con una prioridad «urgente».
+El demonio GDM
+El demonio GDM es responsable de gestionar pantallas en el sistema. Esto incluye la autenticación de usuarios, iniciar la sesión del usuario y terminar la sesión del usuario. GDM es configurable y las formas en que puede configurarse se describen en la sección «Configurar GDM» de este documento. Los scripts
+El demonio de GDM soporta un protocolo de sockets de dominio UNIX que puede usarse para controlar aspectos de su comportamiento y para solicitarle información. Este protocolo se describe en la sección «Controlar GDM» de este documento.
+A GDM se le puede pedir que gestione una pantalla de varias formas. Las pantallas locales las gestiona siempre GDM cuando se inicia y serán reiniciadas cuando la sesión de un usuario termine. Las pantallas pueden pedirse además por XDMCP, se pueden pedir pantallas flexibles ejecutando el comando
+Cuando se le pide al demonio GDM que gestione una pantalla, bifurcará un proceso servidor de X, después ejecutará el script
+La pantalla del GUI de la entrada permite al usuario seleccionar qué sesión quiere iniciar y qué idioma quiere usar. Las sesiones se definen por archivos que terminan con la extensión .desktop y puede encontrar más información sobre estos archivos en la sección de «Configuración». El usuario ontroduce su nombre y contraseña y si éstos le autentican con éxito, GDM iniciará la sesión solicitada para el usuario. Es posible configurar GDM para evitar el proceso de autenticación activando las características de Entrada automática o Entrada temporizada en la configuración de GDM. El IGU de entrada puede configurarse además para para proporcionar características adicionales al usuario, como un visor de rostros, la capacidad de detener, reiniciar o suspender el sistema; y o editar la configuración de entrada (tras introducir la contraseña de root).
+GDM, por omisión, usará Pluggable Authentication Modules (PAM) para autenticar, pero puede usar además contraseñas crypt y shadow en sistemas legados. Tras autenticar al usuario, el demonio ejecuta el script
+Tipos de pantalla diferentes
+GDM soporta tres tipos de pantalla diferentes: pantallas estática (local), pantallas flexibles (bajo demanda), y pantallas remotas (XDMCP). Las subsecciones «Definiciones del servidor X» y «Configuración de pantalla X local estática» de la sección «Configuración» explican cómo estos tipos de pantallas se definen en el archivo de configuración de GDM.
+Las pantallas locales estáticas siempre se inician por el demonio, y cuando mueren o se les mata, se reinician. GDM puede ejecutar tantos como se necesiten. GDM puede gestionar además servidores en los cuales no gestiona la entrada él mismo, permitiendo usar GDM para soportar terminales X.
+Las pantallas flexibles o bajo demanda, se inician por medio del protocolo socket con el comando
+El último tipo es la pantalla remota XDMCP que se describe en la siguiente sección. Los equipos remotos pueden conectarse a GDM y presentar la pantalla de entrada si esto está activado. Algunas cosas son diferentes para las sesiones remotas. Por ejemplo, el menú Acciones que permite apagar, reiniciar o configurar GDM no se mostrará.
+Las pantallas iniciadas por medio del comando
+XDMCP
+El demonio GDM puede configurase para escuchar y gestionar las solicitudes del protocolo X Display Manage Protocol (XDMCP) de las pantallas remotas. Por omisión el soporte para XDMCP está desactivado, pero puede activarse si se desea. Si GDM está construido con soporte TCP Wrapper, entonces el demonio sólo permitirá acceder a hosts especificados en la sección de servicio GDM en el archivo de configuración de TCP Wrappers.
+GDM incluye varias medidas para hacerlo más resistente a ataques de denegación de servicio en el servicio XDMCP. Muchos de los parámetros del protocolo, tiempos de espera negociación, etc pueden ajustarse finamente. Sin embargo la configuración de fábrica debería funcionar en la mayoría de sistemas. No la cambie a menos que sepa lo que está haciendo.
+GDM escucha en el puerto UDP 177 y responderá a las peticiones QUERY y BROADCAST_QUERY enviando un paquete WILLING al originador.
+GDM también puede configuarse para confiar en solicitudes INDIRECT y presentar un selector de equipos al display remoto. GDM recordará la selección del usuario y reenviará las peticiones subsiguiente al gestor seleccionado. GDM también soporta una extensión al protocolo que hará que se olvide de la redirección una vez que la conexión del usuario tiene éxito. Esta extensión está soportada sólo si ambos demonios son GDM. Es transparente y será ignorada por XDM u otros demonios que implementan XDMCP.
+Refiérase a la seccion «Seguridad» para información acerca de las preocupaciones de seguridad al usar XDMCP.
+Securización de la conexión remota a través de SSH
+Tal como se explica en la sección «Seguridad», XDMCP no usa ninguna clase de encriptación y debido a esto es inherentemente inseguro. Como XDMCP usa UDP como capa de transporte de red, no es posible simplemente securizarla por medio de un túnel SSH.
+Para remediar este problema, gdm puede configurarse en tiempo de compilación con la opción .--enable-secureremote, con la cual gdm propone como una sesión integrada una sesión llamada «Conexión remota segura». Iniciando dicha sesión permite al usuario introducir el nombre o la dirección del equipo en el que quiere conectarse, siempre que dicho host ejecute un servidor SSH, el usuario entonces obtiene una conexión al servidor en la cual la sesión X predeterminada se inicia y muestra en el host local.
+Usar esta sesión permite una conexión de red mucho más segura y sólo necesita tener un servidor SSH ejecutándose en el host remoto.
+El interfaz GTK+
+El interfaz GTK+ es el interfaz gráfico de usuario predeterminado que se presenta al usuario. El interfaz contiene un menú en la parte superior, un visor de rostros opcional, un logo opcional y un widget para entrada de texto. Este interfaz tiene soporte de accesibilidad completo, y debería usarse por los usuarios con necesidades de accesibilidad.
+El campo de entrada de texto se usa para introducir nombres de usuario, contraseñas, etc.
+La barra del menú en la parte superior del interfaz de entrada permite al usuario seleccionar el tipo sesión/entorno de escritorio solicitado, seleccionar un idioma/configuración regional apropiada y opcionalmente apagar/reiniciar/suspender el equipo, configurar GDM (siempre que el usuario conozca la contraseña de administrador), cambiar el tema GTK+ o iniciar un selector XDMCP.
+El interfaz de entrada puede mostrar opcionalmente un logotipo en la ventana de entrada. La imagen debe estar en un formato legible por la biblioteca gdk-pixbuf (GIF, JPG, PNG, TIFF, XPM y posiblemente otros), y debe tener permiso de lectura para el usuario de GDM. Vea la opción
+El interfaz con temas
+El interfaz con temas es un interfaz que ocupa la pantalla completa y es muy "temable". Los temas pueden seleccionarse e instalarse por medio de la aplicación de configuración o estableciendo la clave de configuración
+La apariencia de este interfaz está controlada realmente por el tema y así los elementos del interfaz de usuario que están presentes pueden ser diferentes. La única cosa que debe estar presente siempre es el campo de entrada de texto tal como se describe arriba en el interfaz GTK+. El tema puede incluir botones que permitan al usuario seleccionar la configuración reginal o idioma adecuado, detener/reiniciar/suspender el equipo, configurar GDM (siempre que el susuario conozca la contraseña de root), o iniciar un selector XDMCP.
+Puede obtener siempre un menú de las acciones disponibles pulsando la tecla F10. Esto puede ser útil si el tema no proporciona ciertos botones cuando realmente quiere hacer alguna acción permitida por la configuración de GDM.
+El visor de rostros de GDM
+GDM soporta un visor de rostros que mostrará una lista de usuarios que pueden entrar y un icono para cada usuario. Esta característica puede usarse con el interfaz GTK+ si la opción de configuración
+Por omisión, el visor de rostros está desactivado debido a que revelar nombres de usuario en la pantalla de entrada no es apropiado en muchos sistemas por razones de seguridad. Además GDM requiere alguna configuración para especificar qué usuarios deberían ser visibles. La configuración puede hacerse en la solapa «Usuarios» en
+Los iconos usados por GDM pueden instalarse globalmente por el administrador del sistema o pueden colocarse en los directorios personales de los usuarios. Si se instalan globalmente deberían estar en el directorio
+Los usuarios pueden ejecutar el comando
+GDM primero buscará la imagen de la cara del usuario en
+Si un usuario no tiene una imagen de rostro definida, GDM usará el icono "stock_person" definido en el tema GTK+ actual. Si dicha imagen no está definida, entonces usará la imagen especificada en la opción de configuración
+Note que cargar y escalar los iconos de rostros situados en los directorios personales de los usuarios puede ser una tarea que consuma mucho tiempo. Debido a que no es práctico cargar imágenes sobre NIS o NFS, GDM no intenta cargar imágenes de rostros desde directorios personales remotos. Además, GDM parará de cargar imágenes de rostros después de 5 segundos de actividad y sólo mostrará los usuarios cuyas imágenes haya obtenido hasta entonces. La opción
+Para controlar qué usuarios se muestran en el examinador de rostros, hay varias opciones de configuración que pueden usarse. Si se establece a true la opción
+Cuando el examinador está activado, los nombres de usuario válidos en el equipo están expuestos inherentemente a un intruso potencial. Esto puede ser una mala idea si no sabe quién puede acceder a una pantalla de entrada. Esto es especialmente cierto si ejecuta XDMCP (desactivado por omisión).
+Registro de actividad
+GDM por sí mismo usará syslog para registrar los errores o el estado. También puede registrar información de depuración, que puede ser útil para encontrar problemas si GDM no funciona apropiadamente. Esto puede activarse en el archivo de configuración.
+La salida de varios servidores X está almacenada en el directorio de registros de GDM, el cual es configurable, pero normalmente es
+La salida de la sesión de usuario está redirigida a
+Puede suprimir la advertencia de los 10 segundos devolviendo un código 66 desde el script
+La salida de la sesión se encauza a través del demonio gdm y así el archivo
+Note que algunos distribuidores parecen ignorar la redirección de
+Note que si la sesión es una sesión a prueba de fallos, o si GDM no puede abrir este archivo por alguna razón, entonces se creará un archivo de apoyo en el directorio
+Si ejecuta un sistema sin cuotas activadas, será bueno borrar el archivo
+Acceder a archivos
+En general GDM es muy reluctante respecto a leer/escribir archivos del usuario (como
+Todas las operaciones en los archivos de usuario se realizan con el id efectivo del usuario. Si el control de sanidad falla en el archivo
+Finalmente, el administrador del sistema puede especificar el tamaño máximo del archivo que GDM debería aceptar y, en el caso de que el visor de rostros esté activado, se fuerza un tamaño máximo del icono. En sistemas grandes se avisa además que desactive el visor de rostros por razones de rendimiento. Mirar iconos en directorios personales, escalarlos y renderizarlos puede llevar mucho tiempo.
+Rendimiento de GDM
+Para acelerar el rendimiento es posible construir GDM para que precargue las bibliotecas cuando el GDM muestre un programa de entrada por primera vez. Esto se ha mostrado para acelerar el primer inicio de sesión debido a que estas bibliotecas pueden cargarse en memoria mientras el usuario teclea su nombre y contraseña.
+Para usar esta característica, configura GDM con la opción
+Seguridad
+PAM
+GDM usa PAM para autenticación/usuario, aunque si su máquina no soporta PAM puede compilar GDM para que funcione con contraseñas shadow y crypt.
+PAM significa Pluggable Authentication Module, y se usan por la mayoría de los programas que piden autenticación de usuario/contraseña en su equipo. Permite al usuario configurar diferente comportamiento de autenticación para distintos programas.
+Algunas características de GDM (como activar la entrada automática) quizá requieran que actualice su configuración PAM. PAM tiene interfaces distintos, pero similares, en diferentes sistemas operativos, así que compruebe su página man de pam.d o pam.conf para los detalles acerca de cómo configurarlo. Asegúrese de leer la documentación de PAM (eg: página man de pam.d/pam.conf) y tenga cuidado con las implicaciones de seguridad de cualquier cambio que intente hacer a su configuración.
+Si no hay ninguna entrada para GDM en su archivo de configuración de PAM, entonces las características como la entrada automática quizá no funcionen. No tener una entrada hace que GDM use el comportamiento predeterminado. Su distribución probablemente use configuraciones conservadoras.
+Si desea que GDM funciona con otros tipos de mecanismos de autenticación (como una SmartCard), entonces debe implementar esto escribiendo un módulo PAM en vez de intentando modificar el código de GDM directamente. Refiérase a la documentación de PAM de su sistema. Esta cuestión se ha discutido en la lista de correo
+El usuario GDM
+Por razones de seguridad se requieren un usuario y grupo dedicado para un funcionamiento correcto. La necesidad de ser capaz de escribir archivos Xauth es el porqué el usuario «nobody» no es apropiado para gdm.
+El demonio GDM normalmente se ejecuta como root, y hace de esclavo. Sin embargo GDM debería también tener un id de usuario y un id de grupo dedicado que se usa para sus interfaces gráficas
+Este id de usuario se usa para ejecutar los programas del IGU de GDM requeridos para la entrada. Toda la funcionalidad que requiere la autorización de root la realiza el proceso del demonio GDM. Este diseño asegura que si los programas del IGU son comprometidos, sólo los privilegios del usuario dedicado están disponibles.
+Debería notarse sin embargo que el usuario y el grupo de GDM tienen algunos privilegios que los hacen de alguna manera peligrosos. Por una parte tienen acceso al directorio de autorización del servidor X. Debe ser capaz de leer y escribir claves Xauth en
+El peligro es que alguien que gane privilegios del usuario/grupo GDM puede entonces conectarse a cualquier sesión. Así que no debería bajo ninguna circunstancia, hacer esto a algún usuario/grupo que pueda ser fácil obtener acceso, como el usuario
+Se espera que las distribuciones y los administradores de sistemas que usen GDM configuren el usuario dedicado de forma apropiada. Se recomienda que este id de usuario se configure para no permitirle iniciar sesión y no tener un intérprete de comandos predeterminado. Las distribuciones y los administradores del sistema deberían configurar el sistema de archivos para asegurarse de que el usuario GDM no tenga permiso de lectura o escritura a los archivos sensibles.
+Esquema de autenticación del servidor X
+El directorio de autorización del servidor (el
+GDM por omisión no confía en el directorio de autorización del servidor y lo trata de la misma manera que el directorio temporal respecto a crear archivos. De esta manera, alguien que rompa al usuario de GDM no puede montar ataques creando enlaces en este directorio. Similarmente el directorio de registros del servidor X se trata de forma segura, pero ese directorio debería ser propiedad y escribible sólo por el usuario root.
+GDM sólo soporta el sistema de autenticación MIT-MAGIC-COOKIE-1. Normalmente se gana poco de otros esquemas, no se ha hecho ningún esfuerzo en implementarlos hasta ahora. Dea especialmente cuidadoso acerca de usar XDMCP porque las cookies de autenticación van sobre el cable como texto en claro.Obviamente si el espionaje es posible, entonces el atacante podría tan sólo espiar su contraseña de autenticación mientras usted inicia una sesion, con independencia del esquema de autenticación que se esté usando. Si el espionaje es posible y poco deseable, entonces tendrá que crear un túnel a través de ssh para la conexión X en vez de usar XDMCP. Podría pensar en XDMCP como una clase de telnet gráfico que tiene los mismos problemas de seguridad.
+En el lado superior, la generación de números aleatorios de GDM es muy conservadora y GDM toma medidas extraordinarias para obtener un verdadero número aleatorio de 128 bits, usando generadores de números aleatorios por hardware si es posible, además de la hora actual (con precisión de microsegundos), un array de 20 bytes de números pseudoaleatorios, pids de procesos, además de otra información aleatoria (posiblemente usando
+Seguridad con cortafuegos
+Incluso aunque GDM intenta diferenciar inteligentemente a los atacantes potenciales, se recomienda que bloquee el puerto XDMCP (normalmente el puerto UDP 177) en su cortafuegos a no ser que realmente lo necesite. GDM se protege contra ataques DoS, (Denial of Service) pero el protocolo X aún es inherentemente inseguro y sólo debería usarse en entornos controlados. Además cada conexión remota toma muchos recursos, así que es más fácil hacer un DoS a un servidor XDMCP que a un servidor web.
+También es sabio bloquear todos los puertos del servidor X (puertos TCP 6000 + número de pantall) en el cortafuegos. Note que GDM usará los números de pantalla 20 y superiores para los servidores flexibles bajo demanda.
+X no es un protocolo muy seguro para dejarlo en la red, y XDMCP es incluso menos seguro.
+Seguridad de GDM con NFS
+Note que el tráfico NFS realmente va "sobre el cable" y puede verse. Cuando se acceda al archivo de autorización X del usuario (
+Seguridad XDMCP
+Incluso aunque su pantalla esté protegida por cookies, XEvents y las pulsaciones de teclas que se introducen al escribir las contraseñas aún irán sobre el cable en texto claro. Es trivial capturarlas.
+XDMCP es útil principalmente para ejecutar clientes ligeros como en terminales de laboratorio. Dichos clientes ligeros sólo necesitarán la red alguna vez para acceder al servidor, y así parece que la mejor poítica para la seguridad es tener a esos clientes ligeros en una red separada que no pueda accederse desde el mundo exterior, y sólo pueda conectarse al servidor. El único punto desde el que necesita acceder desde fuera es el servidor.
+Las secciones de arriba «Esquema de autenticación del servidor X» y «Seguridad con cortafuegos» también contienen información importante acerca de usario XDMCP de forma segura. La siguiente sección también discute cómo configurar el control de acceso de XDMCP.
+Para solucionar la seguridad inherente de XDMCP, gdm propone una sesión predeterminada integrada que usa ssh para encriptar la conexión remota. Vea la sección «Securizar una conexión remota con ssh» arriba.
+Control de acceso XDMCP
+El control de acceso XDMCP se realiza usando TCP wrappers. Es posible compilar GDM sin TCP wrappers sin embargo, así que debería comprobar su configuración y verificar que funciona.
+Debería usar el nombre del demonio
+gdm: .dominio.maligno
+a
+gdm: .su.dominio
+a su
+Configuración
+Esta sección cubrirá la configuración de GDM y el formato de los archivos de configuración de GDM. Puede usar el comando
+Puede ejecutar o el comando
+Si está preparando una distribución y quiere establecer configuraciones predeterminadas para la máquina, debería editar el archivo
+Si quiere cambiar la configuración a mano, edite el archivo
+[daemon]
+Greeter=/usr/lib/gdmgreeter
+Los archivos de configuración (especialmente
+Algunas claves en el archivo de configuración se entregan comentadas mientras que otras están activadas. Esto se hace para que los predeterminados para algunas claves puedan cambiarse fácilmente en el futuro. GDM considera que las líneas que comienzan con el carácter «#» un comentario, y estas líneas se ignorarán.
+EL archivo
+La ubicación de los archivos de configuración puede controlarse por medio de las opciones de configuración
+
+Los demás archivos de configuración de GDM se encuentran, por omisión, en la carpeta
+Esta es una lista de los contenidos del directorio de configuración:
+locale.alias
+Xsession
+XKeepsCrashing
+modules/
+Init/
+PostLogin/
+PreSession/
+PostSession/
+
+
+
+Los módulos de accesibilidad se configuran en el subdirectorio
+Los archivos que describen las sesiones GDM disponibles siguen la especificación de archivos
+Puede desactivarse una sesión (si fue instalada en
+Los directorio de scripts
+En esta sección explicaremos los directorios
+Cuando el servidor X se haya iniciado con éxito, GDM intentará ejecutar el script llamado
+Es responsabilidad del administrador de sistemas decidir si los clientes iniciados por el script Init deben matarse antes de iniciar la sesión del usuario. Esto se controla con la opción de configuración
+Cuando el usuario ha sido autenticado con éxito GDM intenta los scripts en el directorio
+Después de que la sesión del usuario haya sido configurada desde el lado de las cosas de GDM, GDM ejecutará los scripts en el directorio de
+Después de esto se ejecuta el script
+Este script debería cargar realmente el perfil de los usuarios y generalmente hacer todo el vudú que se necesita para lanzar una sesión. Debido a que muchos sistemas restablecen las selecciones de idioma realizadas por GDM, GDM también establece la variable
+Cuando el usuario termina su sesión, se ejecuta el script
+Note que el script de
+Excepto para el script
+Ninguno de scripts
+Los archivos de configuración -
+GDM usa dos archivos de configuración:
+Ejecutar el comando
+Anterior a GDM 2.13.0.4 sólo existía el archivo
+La ubicación de los archivos de configuración puede controlarse por medio de las opciones de configuración
+Ambos archivos de configuración están divididos en secciones cada una conteniendo variables que definen el comportamiento para una parte específica de la suite GDM. Refiérase a los comentarios en el archivo
+Los archivos
+Configuración del demonio
+-nodaemon
+AddGtkModules
+AddGtkModules
+Si es true, entonces activa
+Usualmente esto se usa para los módulos de accesibilidad. Los módulos que se cargan se especifican con la clave
+AlwaysRestartServer
+AlwaysRestartServer
+Si es true, entonces gdm nunca trata de reutilizar servidores X existentes reinicializándolos. Tan sólo mata el servidor X existente y empieza de nuevo. Normalmente , tan sólo reinicializar es una manera mejor pero si el uso de memoria del servidor X continua creciendo esto puede ser una opción más segura. En Solaris, este valor siempre es true, y este ajuste de configuración se ignora.
+AutomaticLoginEnable
+AutomaticLoginEnable
+Si el usuario dado en AutomaticLogin debería entrar al primer arranque. No se pedirá ninguna contraseña. Esto es útil para estaciones de trabajo de un sólo usuario donde la seguridad de la consola local no es un problema. Además podría ser útil para terminales públicos, aunque allí vea
+AutomaticLogin
+AutomaticLogin
+Este usuario debería iniciar sesión automáticamente al primer arranque. AutomaticLoginEnable debe ser true y esto debe ser un usuario válido para que esto ocurra. Sin embargo "root" nunca puede iniciar una sesión automáticamente y gdm se negará a hacerlo incluso si lo configura.
+Se reconocen los siguientes caracteres de control dentro del nombre especificado:
+nombre del visor d
+h el nombre del equipo del visor
+Alternativamente, el nombre podría terminar con una barra vertical |, el símbolo de cauce. El nombre se usa entonces como una aplicación a ejecutar que revuelve el nombre de usuario deseado en la salida estándar. Si se devuelve un nombre de usuario vacío o inválido, no se realiza el inicio de sesión automático. Esta característica se usa típicamente cuando se usan varios visores remotos como kioskos de Internet, con un usuario específico para iniciar sesión automáticamente en cada visualizador.
+BaseXsession
+Selector
+Ruta completa y nombre del ejecutable del selector seguido de argumentos opcionales.
+Configurator
+ConsoleCannotHandle
+ConsoleNotify
+ConsoleNotify
+DefaultPath
+DefaultSession
+DefaultSession
+DisplayInitDir
+DisplayLastLogin
+DisplayLastLogin
+DoubleLoginWarning
+DoubleLoginWarning
+DynamicXServers
+DynamicXServers
+FailsafeXServer
+FailsafeXServer
+FirstVT
+FirstVT
+FlexibleXServers
+FlexibleXServers
+FlexiReapDelayMinutes
+FlexiReapDelayMinutes
+Greeter
+Group
+Group
+GtkModulesList
+HaltCommand
+KillInitClients
+KillInitClients
+Directorio de registro
+PidFile
+PostLoginScriptDir
+PostSessionScriptDir
+PreSessionScriptDir
+RebootCommand
+RemoteGreeter
+RootPath
+ServAuthDir
+SessionDesktopDir
+SoundProgram
+StandardXServer
+SuspendCommand
+SuspendCommand
+TimedLoginEnable
+TimedLoginEnable
+TimedLogin
+TimedLogin
+TimedLoginDelay
+TimedLoginDelay
+User
+User
+UserAuthDir
+UserAuthDir
+UserAuthFBDir
+UserAuthFBDir
+UserAuthFile
+UserAuthFile
+VTAllocation
+VTAllocation
+XKeepsCrashing
+Xnest
+Opciones de seguridad
+Seguridad
+AllowRoot
+AllowRoot
+AllowRemoteRoot
+AllowRemoteRoot
+AllowRemoteAutoLogin
+AllowRemoteAutoLogin
+CheckDirOwner
+CheckDirOwner
+DisallowTCP
+DisallowTCP
+NeverPlaceCookiesOnNFS
+NeverPlaceCookiesOnNFS
+PasswordRequired
+PasswordRequired
+RelaxPermissions
+RelaxPermissions
+UserMaxFile
+UserMaxFile
+Soporte XDMCP
+DisplaysPerHost
+DisplaysPerHost
+Enable
+Enable
+Debería añadir
+Note que XDMCP no es un protocolo particularmente seguro y que es una buena idea bloquear el puerto UDP 177 en su cortafuegos a no ser que realmente lo necesite.
+EnableProxy
+EnableProxy
+MaxWaitIndirect
+MaxSessions
+MaxSessions
+MaxWait
+MaxWait
+MaxWaitIndirect
+MaxWaitIndirect
+Opciones comunes de configuración a través del IGU
+AllowGtkThemeChange
+AllowGtkThemeChange
+GtkRC
+GtkRC
+GtkTheme
+GtkTheme
+GtkThemesToAllow
+GtkThemesToAllow
+MaxIconWidth
+MaxIconWidth
+MaxIconHeight
+MaxIconHeight
+Configuración del interfaz
+Greeter
+BackgroundColor
+BackgroundColor
+BackgroundProgramInitialDelay
+BackgroundProgramInitialDelay
+RestartBackgroundProgram
+RestartBackgroundProgram
+BackgroundProgramRestartDelay
+BackgroundProgramRestartDelay
+BackgroundImage
+BackgroundImage
+BackgroundProgram
+BackgroundProgramInitialDelay
+BackgroundRemoteOnlyColor
+BackgroundRemoteOnlyColor
+BackgroundScaleToFit
+BackgroundScaleToFit
+BackgroundType
+BackgroundType
+Browser
+Browser
+ChooserButton
+ChooserButton
+ConfigAvailable
+ConfigAvailable
+DefaultFace
+Si un usuario no tiene una imagen de rostro definida, GDM usará el icono "stock_person" definido en el tema GTK+ actual. Si dicha imagen no está definida, entonces usará la imagen especificada en la opción de configuración
+Include
+Include
+Lista separada por comas de usuarios que serán incluidos en el visor de rostros y en la lista de selección de
+Exclude
+Lista separada por comas de usuarios que serán excluidos en el visor de rostros y en la lista de selección de
+IncludeAll
+IncludeAll
+Por omisión, una lista de inclusión vacía significa no mostrar ningún usuario. Estableciendo IncludeAll al valor «true», se inspeccionará el archivo de contraseñas y todos los usuarios se mostrarán excepto los usuarios excluidos por medio del ajuste de exclusión y los IDs de usuario menores que MinimalUID. Examinar el archivo de contraseñas puede ser lento en sistemas con gran número de usuarios y esta característica no se usará en dichos entornos. Vea además
+GlobalFaceDir
+Directorio para todo el sistema para los archivos de rostros. El administrador del sistema puede colocar iconos para los usuarios aquí sin tocar los directorios personales. Los rostros se llaman como los nombres de sus usuarios.
+Las imágenes de los rostros deben almacenarse en un formato soportado por gdk-pixbuf y deben tener permiso de lectura para el usuario GDM.
+GraphicalTheme
+GraphicalThemeDir
+Los temas gráficos que el Interfaz de entrada debería usar si el modo está puesto a Temas aleatorios. Esto es una lista delimitada por "/:" . Debería referirse a un directorio en el directorio del tema designado por
+Temas gráficos
+GraphicalThemeDir
+Los temas gráficos que el Interfaz de entrada debería usar si el modo está puesto a Temas aleatorios. Esto es una lista delimitada por "/:" . Debería referirse a un directorio en el directorio del tema designado por
+GraphicalThemeRand
+GraphicalThemeRand
+GraphicalThemeDir
+GraphicalThemedColor
+GraphicalThemedColor
+InfoMsgFile
+InfoMsgFont
+InfoMsgFont
+LocaleFile
+LockPosition
+LockPosition
+Si es true, la posición de la ventana de entrada del interfaz de entrada GTK+ no se puede cambiar incluso si la barra de título está activada.
+Logo
+ChooserButtonLogo
+MinimalUID
+MinimalUID
+PositionX
+PositionX
+La posición horizontal de la ventana de entrada del interfaz GTK+.
+PositionY
+PositionY
+La posición vertical de la ventana de entrada del interfaz GTK+.
+Quiver
+Quiver
+DefaultRemoteWelcome
+DefaultRemoteWelcome
+Si está establecido a «true» el valor "Welcome to %n" se usa para
+RemoteWelcome
+Controla qué texto mostrar al lado de la imagen del logo en el interfaz para las sesiones XDMCP remotas. Se realiza la misma expansión aquí como en la cadena
+RunBackgroundProgramAlways
+RunBackgroundProgramAlways
+SetPosition
+SetPosition
+ShowGnomeFailsafeSession
+ShowGnomeFailsafeSession
+ShowLastSession
+ShowLastSession
+ShowXtermFailsafeSession
+ShowXtermFailsafeSession
+SoundOnLogin
+SoundOnLogin
+SoundOnLoginSuccess
+SoundOnLoginSuccess
+SoundOnLoginFailure
+SoundOnLoginFailure
+SoundOnLoginFile
+SoundOnLoginFile
+SoundOnLoginSuccessFile
+SoundOnLoginSuccessFile
+SoundOnLoginFailureFile
+SoundOnLoginFailureFile
+TitleBar
+TitleBar
+Use24Clock
+Use24Clock
+UseCirclesInEntry
+UseCirclesInEntry
+UseInvisibleInEntry
+UseInvisibleInEntry
+DefaultWelcome
+DefaultWelcome
+Si está establecido a «true» el valor "Welcome" se usa para la
+Welcome
+RemoteWelcome
+Controla qué texto se muestra junto a la imagen del logotipo en el interfaz estándar. Están soportados los siguientes caracteres de control:
+h el nombre del equipo del visor
+h Nombre completamente cualificado de la máquina
+m máquina (tipo de procesador)
+n Nombre de nodo (ej. nombre del host sin .dominio)
+r lanzamiento (versión del SO)
+s sysname (i.e. OS)
+Estas cadenas se usan sólo para inicios de sesión locales. Para inicios de sesión remotos XDMCP se usa
+XineramaScreen
+XineramaScreen
+Opciones del selector XDCMP
+chooser
+AllowAdd
+AllowAdd
+Broadcast
+Broadcast
+Multicast
+Multicast
+MulticastAddr
+MulticastAddr
+DefaultHostImage
+El nombre del archivo para el icono de host predeterminado. Esta imagen debe mostrarse si no hay ningún icono especificado en un host dado. El archivo debe estar en un formato soportado por gdk-pixbuf y deben tener permiso de lectura para el usuario de GDM.
+HostImageDir
+El nombre del archvivo debe coincidir con el nombre completamente cualificado (FQDN) para el host. Los iconos deben almacenarse en un formato soportado por gdk-pixbuf y deben tener permiso de lectura para el usuario de GDM.
+Hosts
+ScanTime
+ScanTime
+Depurar configuración
+Establecer a verdadero envía la salida de depuración al syslog. Esto puede ser útil para trazar problemas con GDM. Esta salida tiene a ser prolia así que no se debería activar para uso general.
+Gestures
+Gestures
+Establecer a verdadero envía la salida de depuración de los listeners de gestos al syslog. Esto puede ser útil para trazar problemas con ellos cuando no funcionan correctamente. Esta salida tiende a ser prolija así que no se debería activar para uso general.
+Definiciones del servidor X
+nombre
+StandardXServer
+El nombre que se mostrará al usuario.
+command
+El comando a ejecutar, con ruta completa al binario del servidor X, y cualesquier argumentos adicionales necesitados.
+flexible
+flexible
+handled
+handled
+chooser
+chooser
+Configuración de la pantalla X local estática
+&lt;display numbergt;
+StandardXServer
+Configuración por usuario
+Hay algunos ajustes de configuración por usuario que controlan cómo se comporta GDM. GDM es bastante estricto con el propietario y los permisos de los archivos de usuario a los que accede, e ignorará los archivos si no pertenecen al usuario o tienen permiso de escritura para el grupo o para todos. Ignorará el usuario si la carpeta personal del usuario ($HOME) no pertenece al usuario o si la carpeta $HOME tiene permiso de escritura para el grupo o para todos. Los archivos deben ser además más pequeños que el valor
+Primero está el archivo
+La clave
+[Desktop]
+Session=gnome
+Language=es_ES.UTF-8
+Normalmente GDM escribirá este archivo cuando el usuario entre por primera vez, y lo reescribirá si el usuario escoge cambiar su valor predeterminado en una entrada subsiguiente.
+Si está activada la visualización de rostros, entonces se accede al archivo
+Las imágenes de rostros pueden colocarse en el directorio global de rostros, que se especifica por la opción de configuración
+Controlando GDM
+Puede controlar el comportamiento de GDM durante la ejecución de varias formas diferentes. Puede o ejecutar ciertos comandos, o puede hablar con GDM usando un protocolo de sockets UNIX, o un protocolo FIFO.
+Comandos
+Para parar GDM, puede o bien enviar la señal TERM al demonio principal o ejecutar el comando
+El protocolo FIFO
+El protocolo socket
+ADD_DYNAMIC_DISPLAY
+ALL_SERVERS
+ATTACHED_SERVERS
+AUTH_LOCAL
+CLOSE
+FLEXI_XNEST
+FLEXI_XSERVER
+GET_CONFIG
+GET_CONFIG_FILE
+GET_SERVER_LIST
+GET_SERVER_DETAILS
+GREETERPIDS
+QUERY_LOGOUT_ACTION
+QUERY_VT
+RELEASE_DYNAMIC_DISPLAYS
+REMOVE_DYNAMIC_DISPLAY
+SERVER_BUSY
+SET_LOGOUT_ACTION
+SET_SAFE_LOGOUT_ACTION
+SET_VT
+UPDATE_CONFIG
+VERSION
+ADD_DYNAMIC_DISPLAY
+ALL_SERVERS
+ATTACHED_SERVERS
+AUTH_LOCAL
+CLOSE
+FLEXI_XNEST
+FLEXI_XSERVER
+GET_CONFIG
+GET_CONFIG_FILE
+GET_SERVER_DETAILS
+GET_SERVER_LIST
+GREETERPIDS
+QUERY_LOGOUT_ACTION
+QUERY_VT
+RELEASE_DYNAMIC_DISPLAYS
+REMOVE_DYNAMIC_DISPLAY
+SERVER_BUSY
+SET_LOGOUT_ACTION
+SET_SAFE_LOGOUT_ACTION
+SET_VT
+UPDATE_CONFIG
+VERSION
+Comandos de GDM
+Comandos de usuario de GDM
+Opciones de línea de comandos de
+Opciones de línea de comandos de
+-x, --xnest=STRING
+Línea de comandos de Xnest, lo predeterminado es «Xnest»
+-o, --xnest-extra-options=OPCIONES
+Opciones extra para Xnest, lo predeterminado es sin opciones.
+-n, --no-query
+Tan sólo ejecute Xnest, sin consulta (sin selector)
+-d, --direct
+Hace una consulta directa en lugar de indirecta (selector)
+-B, --broadcast
+Ejecutar en difusión en vez de indirecto (selector)
+-b, --background
+Ejecutar en segundo plano
+--no-gdm-check
+No comprueba si hay un GDM funcionando
+Opciones de línea de comandos de
+Enviar el comando de protocolo especificado a GDM
+-n, --xnest
+-l, --no-lock
+No bloquear la pantalla actual
+-d, --debug
+Activar salida de depuración para enviarla a syslog. Lo mismo que cuadno se activa la depuración en el archivo de configuración.
+-a, --authenticate
+Autenticar antes de ejecutar --command
+-s, --startnew
+Inicia un servidor flexible nuevo sin mostrar un diálogo preguntando al usuario si quiere continuar cualquier sesión existente.
+Opciones de línea de comandos de
+-a display=server
+-d display
+Opciones de línea de comandos de
+Opciones de línea de comandos de
+Comandos del administrador de GDM
+Opciones de línea de comandos de
+--help
+Da un breve resumen de las opciones de línea de comandos.
+-nodaemon
+Si se especifica esta opción, entonces GDM no se bifurca a un segundo plano cuando se ejecuta. Puede usar tan sólo un simple guión con esta opción para preservar compatibilidad con XDM.
+--no-console
+--config=CONFIGFILE
+Especificar un archivo de configuración alternativo
+--preserve-ld-vars
+--version
+Imprime la versión del demonio GDM.
+--wait-for-go
+Opciones de línea de comandos de
+Opciones de línea de comandos de
+
+Opciones de línea de comandos de
+
+Opciones de línea de comandos de
+
+Comandos internos de GDM
+Opciones de línea de comandos de
+Opciones de línea de comandos de
+-xdmaddress=SOCKET
+Socket para comunicación XDM.
+--clientaddress=DIRECCIÓN
+-connectionType=TIPO
+Interfaz con temas
+Esta sección describe la creación de temas para el Interfaz con temas. Para los ejemplos incluidos en las capturas, vea los temas estándar instalados y los temas del
+Descripción de los temas
+Los campos del nombre, descripción, autor y copyright pueden traducirse como otros archivos
+Nodos contenedores.
+Si la caja es homogénea entonces los hijos se les reserver la misma cantidad de espacio.
+Nodos fijos
+Nodos de elemento
+Un tema GDM se crea especificando una gerarquía de nodos de elementos y cajas. Los nodos de elementos pueden tener el siguiente valor para el tipo:
+entry
+Campo de entrada de texto.
+list
+Un widget de lista
+label
+Una etiqueta de texto. Debe tener un nodo "text" para especificar el texto.
+pixmap
+Una imagen pixmap en un formato que gdk-pixbuf soporte como PNG, JPEG, Tiff, etc...)
+rect
+Rectángulo.
+svg
+Imagen Scaled Vector Graphic.
+Los elementos de entradas pueden tener valores id como siguen:
+user-pw-entry
+Los elementos de listas pueden tener valores id como siguen:
+userlist
+Los elementos de etiquetas pueden tener valores id como siguen:
+clock
+Etiqueta que muesta la fecha y la hora.
+pam-prompt
+pam-error
+pam-message
+timed-label
+Etiqueta que muestra la información de la entrada temporizada.
+Los rectángulos pueden tener valores id como los siguientes:
+caps-lock-warning
+Los valores posibles para los ids de los botones son los siguientes:
+chooser_button
+Ejecuta el selector XDMCP.
+config_button
+Ejecuta la aplicación de configuración de GDM.
+disconnect_button
+Desconecta de una sesión remota.
+language_button
+Muestra el diálogo de selección del idioma.
+halt_button
+Detiene (apaga) el sistema.
+reboot_button
+Reinicia el sistema.
+session_button
+Lista y selecciona las sesiones disponibles.
+suspend_button
+Suspender el sistema.
+system_button
+Realiza las opciones detener/reiniciar/suspender/etc (si están permitidas por la configuración de GSM). Además permite al usuario ejecutar el configurador si el usuario introduce la contraseña de root (otra vez si lo permite la configuración de GDM). Esto está normalmente ahora etiquetado como Acciones, y referido como el menú de Acciones.
+Nodo de posición
+Cada elemento puede especificar su posición y tamaño por medio del nodo "pos". Por ejemplo
+Tanto la posición como el tamaño pueden darse en porcentaje y se tomará como el porcentaje del tamaño del contenedor actual. Para los elementos de nivel superior su porcentaje es respecto de la pantalla completa.
+Mostrar nodo
+
+
+
+
+
+
+Por ejemplo:
+
+
+
+
+
+
+
+Por ejemplo:
+
+
+
+Nodo de texto
+%% - Un carácter literal %
+\
+ - Retorno de carro
+Stock
+Ciertas etiquetas comunes localizadas pueden especificarse por medio de las etiquetas de fábrica. La etiqueta "text" se ignora si se usa la etiqueta "stock". Debería usar las etiquetas de fábrica en vez de poner todas las traducciones en los temas. Esto da tiempos de carga más rápidos y mejores traducciones. Los valores siguientes son válidos:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Por ejemplo:
+Widgets personalizados
+Actualmente hay un elemento que puede ser personalizable y este es el elemento de la lista. Si necesita preguntar al usuario cosas adicionales, como para escoger de una lista o lugares desde donde entrar, o establecer un conjunto de sesiones de entrada personalizadas puede configurar el elemento de la lista y añadir hijos del elemento de la lista que describan las selecciones. Cada elemento de la lista debe tener un id y un texto hijo. La elección será grabada en el archivo
+Por ejemplo suponga que estamos en la pantalla 0,
+&lt;item type="list" id="custom-config"gt;
+&lt;pos anchor="nw" x="1" y="1" height="200" width="100"gt;
+&lt;listitem id="foo"gt;
+&lt;textgt;Foolt;/textgt;
+&lt;/listitemgt;
+&lt;listitem id="bar"gt;
+&lt;textgt;Barlt;/textgt;
+&lt;/listitemgt;
+&lt;/itemgt;
+Entonces si el usuario elije «Foo» entonces
+Accesibilidad
+GDM soporta «Entrada accesible» para permitir que los usuarios entren en su sesión de escritorio incluso si no pueden usar fácilmente la pantalla, ratón o teclado en una manera usual. Esta característica permite al usuario lanzar tecnologías de asistencia al entrar por medio de «gestos» especiales desde el teclado estándar y desde un teclado, dispositivo apuntador, o conmutador enchufado al puerto USB o del ratón. También permite al usuario cambiar la apariencia visual del IU de entrada antes de entrar, por ejemplo para usar un esquema de color de alto contraste para mejor visibilidad. GDM sólo soporta accesibilidad con el interfaz GTK+, así que el parámetro «Greeter» en la configuración de GDM debe establecerse a «gdmlogin»
+Configuración de accesibilidad
+Para activar la entrada accesible, el administrador del sistema debe hacer algunos cambios a la configuración predeterminada de entrada modificando manualmente tres archivos de configuración almacenados en la configuración de GDM, AccessKeyMouseEvents y AccessDwellMouseEvents.
+Para permitir a los usuarios cambiar el color y el contrarte del diálogo de entrada, asegúrese de que el parámetro
+Para restringir los cambios del usuario a la apariencia visual a un subconjunto de los temas disponibles, el parámetro
+GtkThemesToAllow=HighContrast,HighContrastInverse
+Para activar el uso de tecnologías de asistencia como el teclado en pantalla, el lector de pantalla o la Lupa, el parámetro
+GtkModulesList=gail:atk-bridge:dwellmouselistener:keymouselistener
+Los administradores de sistema quizá deseen cargar sólo un subconjunto mínimo de estos módulos que se requieren para soportar su base de usuarios. Dependiendo de las necesidades de los usuarios finales, no todos los GtkModules necesitan ser cargados. Si sus usuarios finales necesitan el lector de pantalla integrado y la lupa, debe incuir «gail» y «atk-bridge». Si sus usuarios finales estarán usando un dispositivo apuntador sin botones o interruptores, incluya «dwellmouselistener». si algunos de sus usuarios usarán dispositivos apuntadores con interruptores, alternativos a teclados físicos o despositivos de botones, incluya «keymouselistener». Incluir los cuatro es apropiado para la mayoría de las configuraciones del sistema. El teclado en pantalla puede funcionar singail o atk-bridge, pero con un conjunto de características reducido; paa accesibilidad optima recomendamos incluir tanto gail como atk-bridge.
+Configuración de sonido de accesibilidad en la entrada
+Características específicas de Solaris
+Configuración de Solaris
+Inicio de sesión automático en Solaris
+Otras características de Solaris
+GDM soporta unas pocas características específicas a Solaris, como las siguientes:
+GDM soporta Solaris Auditing si se ejecuta sobre Solaris 10 o superior. GDM no debería usarse si se necesita auditoría y se está ejecutando Solaris 9 o anterior.
+Configuraciones de ejemplo
+Esta sección tiene algunas configuraciones de ejemplo que son útiles para varias configuraciones.
+Laboratorio con terminales con un servidor
+Laboratorio con terminales con dos o más servidores
+Suponga que quiere hacer un laboratorio lleno de terminales X que todas se conectan a una selección de servidores. Por ahora llamémoslos
+Resolución de problemas
+Esta sección hace acerca de consejos útiles para hacer funcionar GDM. En general, si tiene un problema al usar GDM, puede enviar un bug a la categoría «gdm» en
+GDM no se inicia
+Licencia
+Francisco Javier F. Serrador <serrador\@cvs\.gnome\.org>, 2003, 2005.
+defaults.conf
+custom.conf
+El carácter `'
+h nombre de host de la pantalla
+gdmXnestchooser
+gdmXnest
+gdmflexichooser
+gdmchooser

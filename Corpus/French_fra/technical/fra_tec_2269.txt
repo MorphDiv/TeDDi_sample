@@ -1,0 +1,72 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	KDEdoc
+# source:	https://object.pouta.csc.fi/OPUS-KDEdoc/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/KDEdoc.php
+# copyright_long:	http://opus.nlpl.eu/KDEdoc.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Configurer kppp pour le rappel automatique
+Les serveurs de rappel automatique sous UNIX ou Linux
+Cette section est une présentation du rappel automatique sous UNIX (Linux).
+Elle explique aussi comment kppp peut être configuré si l'on veut ce connecter à un serveur UNIX de rappel automatique.
+Spécialement pour un serveur de rappel sous Linux se basant des scripts.
+Une introduction au rappel automatique
+Pour augmenter la sécurité de votre réseau local
+Pour réduire les dépenses des collaborateurs travaillant depuis l'extérieur.
+Pour contrôler les dépenses téléphoniques lorsque elles sont déclarées comme étant professionnelle
+Les programmes de rappel automatique généralement vous demande votre nom, en suite il raccroche la ligne.
+Ensuite il vous rappelle, habituellement à un numéro qui est stoqué sur le serveur dans une base de donnée.
+Le client décroche ensuite la ligne et continu comme si rien ne s'était passé.
+Le serveur vous demande maintenant votre nom d'utilisateur et votre mot de passe. tout en sachant qu'il vous a déjà identifié lors du premier appel.
+La connexion est établie normalement et le programme pppd est lancé.
+Configuration de kppp
+La procédure est assez simple.
+Premièrement, dites au modem d'accepter les connexions, et de ne pas arrêter les négotiation lorsque le serveur de rappel déccroche pour la première fois.
+Vous pouvez ajouter ces options dans l'onglet Modem u menu de configuration de kppp en ajoutant les paramètres AT&C0S0=1DT au champ Chaîne de numérotation.
+Ils n'y a pas d'autre modification des réglages de kppp à faire.
+Si vous rencontrez des problèmes avec l'initialisation et la réinitialisation du modem, consulté la section Problèmes.
+Pensez à votre serveur quelques instant.
+Souvenez -vous que les systèmes d'exploitations UNIX, Windows et Macintosh ont différentes façon pour signaler la fin d'une ligne dans un fichier texte, et de la même façon dans la procédure d'authentification.
+Si vous êtes connecté à un serveur Windows utilisé CR/LF, si vous êtes connectez à un serveur UNIX, utilisé CR et enfin si vous êtes connecté a un serveur Macintosh, utilisé LF
+Pour ces instructions, nous partons du principe que vous appellez un paquetage de rappel sous Linux qui utilise une procédure d'authentification ordinaire. (pas de PAP ou équivalent).
+Configure le mode Authentification de l'onglet Numérotation dans le configurateur de compte sur Basé sur un script
+Maintenant vous devez concevoir le script d'authentification.
+L'édition des scripts est l'une des options très agréables de kppp.
+Vous pouvez la trouver sur l'onglet Script de connexion de la boîte de dialogue Modifier le compte.
+Pour chaque ligne, choisissez les critères dans le menu déroulant en haut à gauche de la boîte de dialogue, ensuite saisissez l'action dans la boîte texte à ça droite.
+Choisissez le bouton Ajouter pour chaque ligne du script.
+Vous pouvez utilisez Insérer pour introduire une ligne au milieu du script, et Supprimer pour retirer une ligne si vous faites une erreur.
+Toutes les autres configurations, comme le réglage de pppd ou de IP sont les même que d'habitude, aucun programme supplémentaire n'est utile.
+Le rappel de kppp et d'autre programme comme mgetty ou autre faxgetty peuvent être lancé sur le même port série.
+Il n'y a pas de problème avec les appels entrant, puisque kppp réalise un fichier de verrouillage qui prévient le programme getty qu'une autre application (dans ce cas kppp biensur,) utilise la ligne à ce moment.
+Problème
+Vue que vous initialisez le modem dans le mode réponse automatique vous devrez redémarrer le modem après que la ligne est été coupé.
+Sinon, votre modem prendra la ligne pour vous, ce qui n'est pas une bonne idée si la ligne en question est celle de votre téléphone.
+kppp a des petits problèmes lorsque il partage une ligne avec une autre application comme mgetty.
+Si mgetty est lancé sur la même ligne que le modem, kppp n'est pas capable d'initialiser le modem correctement.
+kppp n'est pas capable de demander le nom utilisateur durant la procédure de connexion.
+Malheureusement, lorsque il utilise le script décrit précédament, kppp redemande le nom d'utilisateur une seconde fois durant le rappel.
+Vous pouvez régler ce problème en inscrivant votre nom d'utilisateur directement dans le script (pas vraiment propre, mais ça marche).
+Information sur Internet pour le serveur
+Des serveur de rappel pour Linux sontdisponibles dans beaucoup d'endroits.
+L'application bien connu mgetty est un programme extrêmement puissant, il permet aussi de répondre au rappel de connexion.
+Des informations permettant de configurer mgetty dans ce but maintenu par Colin McKinnon, colin@wew.co.uk.et disponible sur sur http://www.scottish.lug.org.uk/tipscrip.html
+Il y a aussi un paquetage prêt à l'usage pour Linux à l'adresse http ://www.icce.rug.nl/docs/programs/callback/callback.html.
+Ce paquetage est maintenu par Frank B.
+Brokken, frank@icce.rug.nl.
+Comme la configuration, bien que naturelle, n'est pas très facile, j'ai écrit une courte intrioduction à ce sujet à l'adresse http ://ap-dec717c.physik.uni-karlsruhe.de/~mh/callback/, qui contient également une introduction plus générale au rappel automatique.
+rappel sous Windows NT RAS
+Windows NT utilise une approche complètement différente de celle décrite précédament.
+NT demande une extension particulière au protocole PPP lui même.
+L'application pppd supporte ce protocole mais il doit doit être recompilé pour cela.
+Si vous avez des connaissances si les serveurs de rappel sur NT, faites vous connaître.

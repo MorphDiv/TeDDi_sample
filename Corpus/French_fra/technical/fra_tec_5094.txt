@@ -1,0 +1,64 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+Avertissement
+Ce module est EXPERIMENTAL.
+Cela signifie que le comportement de ces fonctions, leurs noms et concrètement, TOUT ce qui est documenté ici peut changer dans un futur proche, SANS PREAVIS!
+Soyez-en conscient, et utiliser ce module à vos risques et périls.
+L 'extension socket implémente une interface bas niveau avec les fonctions de communication par socket, basées sur les sockets BSD si populaires, et fournit la possibilité de fonctionner aussi bien sous forme de client que de serveur.
+Les fonctions de socket décrites ici font partie d'une extension PHP qui doit être activée lors de la compilation en utilisant l 'option --enable-sockets, avec la commande configure.
+Pour une interface socket cliente plus générique, voyez fsockopen() et pfsockopen().
+Lorsque vous utilisez ces fonctions, il est important de vous rappeler que si de nombreuses fonctions ont le même nom que leur alter ego en langage C, elles ont souvent des déclarations différentes.
+Lisez attentivement les descriptions pour éviter des confusions.
+L 'extension socket a été écrite pour fournir une interface utilisable avec les puissantes sockets fournies par BSD.
+Un soin particulier a été apporté pour que les fonctions soient aussi efficaces sous Unix que sous Windows32.
+Presque toutes les fonctions de sockets peuvent échouer dans certaines circonstances, et émettent ainsi un message d'alerte E_WARNING décrivant l 'erreur.
+Parfois, cela ne se fait pas selon les souhaits du développeur.
+Par exemple, la fonction socket_read() peut tout à coup émettre un message E_WARNING car la connexion a été inopinément interrompu.
+Il est commun de supprimer les erreurs avec l'opérateur @ et de traiter les erreurs avec la fonction socket_last_error(), au niveau application.
+Vous pouvez appeler socket_strerror() avec le code d'erreur pour connaître le message d 'erreur, humainement lisible.
+Reportez vous à leur description pour plus de détails.
+
+Les messages E_WARNING généré par l'extension socket sont en anglais, mais le message d'erreur s'affichera en fonction de la configuration locale (LC_MESSAGES):
+
+
+Cela dit, ceux qui ne sont pas familiers avec la programmation par socket peuvent toujours trouver beaucoup de documentation dans les pages de manuel Unix appropriées, et il y a une grande quantité d 'introductions en langage C sur le web, qui peuvent être facilement réutilisés, avec des adaptations mineures.
+UNIX Socket FAQ est un bon début.
+Exemple 1.
+Exemple de socket: serveur TCP / IP simple
+Cet exemple montre comment créer un serveur simple.
+Changez les variables address et port pour vous adapter à votre configuration, et exécutez le.
+Vous pourrez alors vous connecter au serveur avec une commande comme ceci: telnet 192.168.1.53 10000 (en supposant que l'adresse et le port correspondent à votre configuration).
+Tout ce que vous saisissez après cela sera envoyé au serveur, et affiché en retour.
+Pour vous déconnecter, tapez 'quit'.
+#! / usr / local / bin / php -q ?php error_reporting (E_ALL); / * Permet au script de s'ex eacute;cuter ind eacute;finiment, pour attendre une connexion. * / set_time_limit (0); / * Active explicitement l'envoi automatique aux visiteurs * au fur et agrave; mesure que nous recevons les donn eacute;es * / ob_implicit_flush (); $address = '192.168.1.53'; $port = 10000; if (($sock = socket_create (AF_INET, SOCK_STREAM, 0)) 0) {echo "socket_create() failed: reason: ". socket_strerror ($sock). "\n";} if (($ret = socket_bind ($sock, $address, $port)) 0) {echo "socket_bind() a eacute;chou eacute;: raison:". socket_strerror ($ret). "\n";} if (($ret = socket_listen ($sock, 5)) 0) {echo "socket_listen() a eacute;chou eacute;: raison: ". socket_strerror ($ret). "\n";} do {if (($msgsock = socket_accept($sock)) 0) {echo "socket_accept() a eacute;chou eacute;: raison:". socket_strerror ($msgsock). "\n"; break;} / * Envoie des instructions. * / $msg = "\nBienvenue au serveur de test PHP. \n ". "Pour quitter, tapez 'quit '.
+Pour eacute; teindre le serveur, tapes 'shutdown'.\n"; socket_write($msgsock, $msg, strlen($msg)); do {if (FALSE === ($buf = socket_read ($msgsock, 2048))) {echo "socket_read() a eacute;chou eacute;: raison: ". socket_strerror ($ret). "\n"; break 2;} if (!$buf = trim ($buf)) {continue;} if ($buf == 'quit') {break;} if ($buf == 'shutdown') {socket_close ($msgsock); break 2;} $talkback = "PHP:
+Vous avez dit '$buf'.\n"; socket_write ($msgsock, $talkback, strlen ($talkback)); echo "$buf\n";} while (true); socket_close ($msgsock);} while (true); socket_close ($sock);?
+Exemple 2.
+Exemple avec les sockets:
+Client TCP / IP simple
+Ce exemple illustre un client HTTP simple.
+Il se connecte simplement à une page, envoie une requête HEAD, affiche le résultat, et se termine.
+?php error_reporting (E_ALL); echo "h2 Connexion TCP / IP / h2 \n"; / * Lit le port du service WWW. * / $service_port = getservbyname ('www', 'tcp'); / * Lit l'adresse IP du serveur de destination * / $address = gethostbyname ('www.exemple.com'); / * Cree une socket TCP / IP. * / $socket = socket_create (AF_INET, SOCK_STREAM, 0); if ($socket 0) {echo "socket_create() a eacute;chou eacute;: raison:". socket_strerror ($socket). "\n";} else {echo "OK.\n";} echo "Essai de connexion agrave; '$address 'sur le port '$service_port'.. ."; $result = socket_connect ($socket, $address, $service_port); if ($result 0) {echo "socket_connect() a eacute;chou eacute;: raison: ($result) ". socket_strerror($result). "\n";} else {echo "OK.\n";} $in = "HEAD / HTTP / 1.0\r\n\r\n"; $out = ''; echo "Envoi de la requ ecirc;te HTTP HEAD.. ."; socket_write ($socket, $in, strlen ($in)); echo "OK.\n"; echo "Lire la r eacute;ponse: \n\n"; while ($out = socket_read ($socket, 2048)) {echo $out;} echo "Fermeture de la socket.. ."; socket_close ($socket); echo "OK.\n\n";?
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

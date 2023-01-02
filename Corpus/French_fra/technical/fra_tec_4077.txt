@@ -1,0 +1,36 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+openssl_seal() retourne la longueur des données scellées en cas de succès, et FALSE sinon.
+En cas de succès, les données scellées sont placées dans le paramètre sealed_data, et les clés d 'enveloppe dans env_keys.
+openssl_seal() scelle (chiffre) les données data en utilisant l 'algorithme RC4 avec une clé secrètre générée aléatoirement.
+La clé est chiffrée avec chaque clé publique associée à pub_key_ids et chaque clé ainsi encryptée est retournée dans env_keys.
+Cela signifique que vous pouvez envoyez des données scellées à plusieurs destinataires (en supposant que chacun ait recu la clé publique).
+Chaque destinataire doit recevoir les données encryptées et la clé d 'enveloppe, qui a été encryptée avec la clé publique du destinataire.
+Exemple 1.
+Exemple avec openssl_seal()
+?php / / On suppose que $data contient les données à sceller / / lecture de la clé publique pour chaque destinataire $fp = fopen( "/ src / openssl-0.9.6 / demos / maurice / cert.pem", "r"); $cert = fread($fp, 8192); fclose($fp); $pk1 = openssl_get_publickey($cert); / / pour le deuxième destinataire $fp = fopen(" / src / openssl-0.9.6 / demos / sign / cert.pem", "r"); $cert = fread($fp, 8192); fclose($fp); $pk2 = openssl_get_publickey($cert); / / scelle le message: seuls, les possessuers de $pk1 et $pk2 peuvent déchiffrer / / le message $sealed avec les clés $ekeys[0] et $ekeys[1] (respectivement). openssl_seal($data, $sealed, $ekeys, array($pk1,$pk2)); / / libère les clés de la mémoire openssl_free_key($pk1); openssl_free_key($pk2);?
+Voir aussi openssl_open().
+Précédent
+Sommaire
+Suivant
+
+Niveau supérieur

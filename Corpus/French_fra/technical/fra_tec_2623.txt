@@ -1,0 +1,61 @@
+# language_name_wals:	French
+# language_name_glotto:	French
+# iso639_3:	fra
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/fr.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+Manuel PHP
+Précédent
+Suivant
+
+Les informations suivantes ne sont valables qu 'à partir de la version 3.0.7.
+Le statut des connexions est conservé en interne par PHP.
+Il y a trois états possibles:
+0 - NORMAL (normal)
+1 - ABORTED (annulé)
+2 - TIMEOUT (périmé)
+Lorsqu'un script PHP est en cours d 'exécution, son état est NORMAL.
+Si le client distant se déconnecte, le statut devient ABORTED.
+En général, une telle déconnexion provient d 'un arrêt temporaire.
+Si la durée maximale d'exécution de PHP est dépassée, (voir set_time_limit()), le script prend le statut TIMEOUT.
+Vous pouvez en outre décider si vous voulez que la déconnexion d'un client provoque l 'arrêt de votre script.
+Il est parfois pratique de terminer le script, même si le client n 'est plus là pour recevoir les informations.
+Cependant, par défaut, le script sera interrompu, et terminé dès que le client se déconnecte.
+Ce comportement peut être modifié avec la directive ignore_user_abort dans le fichier php.ini ou bien avec la directive Apache ignore_user_abort du fichier Apache httpd.conf ou avec la fonction ignore_user_abort().
+Si vous ne demandez pas à PHP d'ignorer la déconnexion, et que l 'utilisateur se déconnecte, le script sera terminé.
+La seule exception est si vous avez enregistré une fonction de fermeture, avec register_shutdown_function().
+Avec une telle fonction, lorsque l'utilisateur interrompt sa requête, à la prochaine exécution du script, PHP va s'apercevoir que le dernier script n 'a pas été terminé, et il va déclencher la fonction de fermeture.
+Cette fonction sera aussi appelée à la fin du script, si celui-ci se termine normalement.
+Pour pouvoir avoir un comportement différent suivant l'état du script lors de sa finalisation, vous pouvez exécutez des commandes spécifiques à la déconnexion grâce à la commande connection_aborted().
+Cette fonction retournera TRUE si la connexion a été annulée.
+Votre script peut aussi expirer après un laps de temps.
+Par défaut, le délai est de 30 secondes.
+Cette valeur peut être changée en utilisant la directive PHP max_execution_time dans le fichier php.ini ou avec la directive php3_max_execution_time, dans le fichier Apache .conf ou encore avec la fonction set_time_limit().
+Lorsque le délai expire, le script est terminé, et comme pour la déconnexion du client, une fonction de finalisation sera appelée.
+Dans cette fonction, vous pouvez savoir si c'est le délai d'expiration qui a causé la fin du script, en appelant la fonction connection_timeout().
+Cette fonction retournera vrai si le délai d 'expiration a été dépassé.
+Une chose à noter est que les deux cas ABORTED et TIMEOUT peuvent être appelés en même temps.
+Ceci est possible si vous demandez à PHP d 'ignorer les déconnexions des utilisateurs.
+PHP va quand même noter le fait que l'utilisateur s 'est déconnecté, mais le script va continuer.
+Puis, lorsqu 'il atteint la limite de temps, le script va expirer.
+A ce moment-là, les deux fonctions connection_timeout() et connection_aborted() vont retourner TRUE.
+Vous pouvez aussi vérifier les deux états en un seul appel avec la fonction connection_status().
+Cette fonction va retourner un champs de bits, avec les états.
+Si les deux états sont actifs, l 'état retourné prendra la valeur 3.
+Précédent
+Sommaire
+Suivant
+Utilisation des fichiers à distance
+Niveau supérieur
+Connexions persistantes aux bases de données

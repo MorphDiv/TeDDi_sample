@@ -1,0 +1,1592 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	ada83
+# source:	https://object.pouta.csc.fi/OPUS-ada83/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/ada83.php
+# copyright_long:	http://opus.nlpl.eu/ada83.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	part
+# comments:	NA
+
+At the start and at the end of its activation, a task is synchronized with the task that causes this activation.
+A task that has completed its execution is synchronized with any other task.
+For the actions performed by a program that uses shared variables, the following assumptions can always be made:
+If between two synchronization points of a task, this task reads a shared variable whose type is a scalar or access type, then the variable is not updated by any other task at any time between these two points.
+If between two synchronization points of a task, this task updates a shared variable whose type is a scalar or access type, then the variable is neither read nor updated by any other task at any time between these two points.
+The execution of the program is erroneous if any of these assumptions is violated.
+If a given task reads the value of a shared variable, the above assumptions allow an implementation to maintain local copies of the value
+(for example, in registers or in some other form of temporary storage);
+and for as long as the given task neither reaches a synchronization point nor updates the value of the shared variable, the above assumptions imply that, for the given task, reading a local copy is equivalent to reading the shared variable itself.
+Similarly, if a given task updates the value of a shared variable, the above assumptions allow an implementation to maintain a local copy of the value, and to defer the effective store of the local copy into the shared variable until a synchronization point, provided that every further read or update of the variable by the given task is treated as a read or update of the local copy.
+On the other hand, an implementation is not allowed to introduce a store, unless this store would also be executed in the canonical order (see 11.6).
+The pragma SHARED can be used to specify that every read or update of a variable is a synchronization point for that variable; that is, the above assumptions always hold for the given variable (but not necessarily for other variables).
+The form of this pragma is as follows:
+This pragma is allowed only for a variable declared by an object declaration and whose type is a scalar or access type;
+the variable declaration and the pragma must both occur (in this order) immediately within the same declarative part or package specification;
+the pragma must appear before any occurrence of the name of the variable, other than in an address clause.
+An implementation must restrict the objects for which the pragma SHARED is allowed to objects for which each of direct reading and direct updating is implemented as an indivisible operation.
+The following example defines a buffering task to smooth variations between the speed of output of a producing task and the speed of input of some consuming task.
+For instance, the producing task may contain the statements
+and the consuming task may contain the statements
+The buffering task contains an internal pool of characters processed in a round-robin fashion.
+The pool has two indices, an IN_INDEX denoting the space for the next input character and an OUT_INDEX denoting the space for the next output character.
+The overall structure of programs and the facilities for separate compilation are described in this chapter.
+A program is a collection of one or more compilation units submitted to a compiler in one or more compilations.
+Each compilation unit specifies the separate compilation of a construct which can be a subprogram declaration or body, a package declaration or body, a generic declaration or body, or a generic instantiation.
+Alternatively this construct can be a subunit, in which case it includes the body of a subprogram, package, task unit, or generic unit declared within another compilation unit.
+The text of a program can be submitted to the compiler in one or more compilations.
+Each compilation is a succession of compilation units.
+The compilation units of a program are said to belong to a program library.
+A compilation unit defines either a library unit or a secondary unit.
+A secondary unit is either the separately compiled proper body of a library unit, or a subunit of another compilation unit.
+The designator of a separately compiled subprogram (whether a library unit or a subunit) must be an identifier.
+Within a program library the simple names of all library units must be distinct identifiers.
+The effect of compiling a library unit is to define (or redefine) this unit as one that belongs to the program library.
+For the visibility rules, each library unit acts as a declaration that occurs immediately within the package STANDARD.
+The effect of compiling a secondary unit is to define the body of a library unit, or in the case of a subunit, to define the proper body of a program unit that is declared within another compilation unit.
+A subprogram body given in a compilation unit is interpreted as a secondary unit if the program library already contains a library unit that is a subprogram with the same name;
+it is otherwise interpreted both as a library unit and as the corresponding library unit body (that is, as a secondary unit).
+The compilation units of a compilation are compiled in the given order.
+A pragma that applies to the whole of a compilation must appear before the first compilation unit of that compilation.
+A subprogram that is a library unit can be used as a main program in the usual sense.
+Each main program acts as if called by some environment task; the means by which this execution is initiated are not prescribed by the language definition.
+An implementation may impose certain requirements on the parameters and on the result, if any, of a main program
+(these requirements must be stated in Appendix F).
+In any case, every implementation is required to allow, at least, main programs that are parameterless procedures, and every main program must be a subprogram that is a library unit.
+A simple program may consist of a single compilation unit.
+A compilation need not have any compilation units; for example, its text can consist of pragmas.
+The designator of a library function cannot be an operator symbol, but a renaming declaration is allowed to rename a library function as an operator.
+Two library subprograms must have distinct simple names and hence cannot overload each other.
+However, renaming declarations are allowed to define overloaded names for such subprograms, and a locally declared subprogram is allowed to overload a library subprogram.
+The expanded name STANDARD.L can be used for a library unit L (unless the name STANDARD is hidden) since library units act as declarations that occur immediately within the package STANDARD.
+A context clause is used to specify the library units whose names are needed within a compilation unit.
+The names that appear in a context clause must be the simple names of library units.
+The simple name of any library unit is allowed within a with clause.
+The only names allowed in a use clause of a context clause are the simple names of library packages mentioned by previous with clauses of the context clause.
+A simple name declared by a renaming declaration is not allowed in a context clause.
+The with clauses and use clauses of the context clause of a library unit apply to this library unit and also to the secondary unit that defines the corresponding body
+(whether such a clause is repeated or not for this unit).
+Similarly, the with clauses and use clauses of the context clause of a compilation unit apply to this unit and also to its subunits, if any.
+If a library unit is named by a with clause that applies to a compilation unit, then this library unit is directly visible within the compilation unit, except where hidden;
+the library unit is visible as if declared immediately within the package STANDARD (see 8.6).
+Dependences among compilation units are defined by with clauses; that is, a compilation unit that mentions other library units in its with clauses depends on those library units.
+These dependences between units are taken into account for the determination of the allowed order of compilation (and recompilation) of compilation units, as explained in section 10.3, and for the determination of the allowed order of elaboration of compilation units, as explained in section 10.5.
+A library unit named by a with clause of a compilation unit is visible (except where hidden) within the compilation unit and hence can be used as a corresponding program unit.
+Thus within the compilation unit, the name of a library package can be given in use clauses and can be used to form expanded names;
+a library subprogram can be called;
+and instances of a library generic unit can be declared.
+The rules given for with clauses are such that the same effect is obtained whether the name of a library unit is mentioned once or more than once by the applicable with clauses, or even within a given with clause.
+Example 1 : A main program:
+The following is an example of a main program consisting of a single compilation unit: a procedure for printing the real roots of a quadratic equation.
+The predefined package TEXT_IO and a user-defined package REAL_OPERATIONS (containing the definition of the type REAL and of the packages REAL_IO and REAL_FUNCTIONS) are assumed to be already present in the program library.
+Such packages may be used by other main programs.
+Notes on the example:
+The with clauses of a compilation unit need only mention the names of those library subprograms and packages whose visibility is actually necessary within the unit.
+They need not (and should not) mention other library units that are used in turn by some of the units named in the with clauses, unless these other library units are also used directly by the current compilation unit.
+For example, the body of the package REAL_OPERATIONS may need elementary operations provided by other packages.
+The latter packages should not be named by the with clause of QUADRATIC_EQUATION since these elementary operations are not directly called within its body.
+A compilation unit can be split into a number of compilation units.
+For example, consider the following program.
+The following three compilation units define a program with an effect equivalent to the above example
+(the broken lines between compilation units serve to remind the reader that these units need not be contiguous texts).
+Example 2 : Several compilation units:
+Note that in the latter version, the package STOCK has no visibility of outer identifiers other than the predefined identifiers (of the package STANDARD).
+In particular, STOCK does not use any identifier declared in PROCESSOR such as SMALL or TOTAL;
+otherwise STOCK could not have been extracted from PROCESSOR in the above manner.
+The procedure PROCESSOR, on the other hand, depends on STOCK and mentions this package in a with clause.
+This permits the inner occurrences of STOCK in the expanded name STOCK.RESTART and in the use clause.
+These three compilation units can be submitted in one or more compilations.
+For example, it is possible to submit the package specification and the package body together and in this order in a single compilation.
+A subunit is used for the separate compilation of the proper body of a program unit declared within another compilation unit.
+This method of splitting a program permits hierarchical program development.
+A body stub is only allowed as the body of a program unit (a subprogram, a package, a task unit, or a generic unit) if the body stub occurs immediately within either the specification of a library package or the declarative part of another compilation unit.
+If the body of a program unit is a body stub, a separately compiled subunit containing the corresponding proper body is required.
+In the case of a subprogram, the subprogram specifications given in the proper body and in the body stub must conform (see 6.3.1).
+Each subunit mentions the name of its parent unit, that is, the compilation unit where the corresponding body stub is given.
+If the parent unit is a library unit, it is called the ancestor library unit.
+If the parent unit is itself a subunit, the parent unit name must be given in full as an expanded name, starting with the simple name of the ancestor library unit.
+The simple names of all subunits that have the same ancestor library unit must be distinct identifiers.
+Visibility within the proper body of a subunit is the visibility that would be obtained at the place of the corresponding body stub (within the parent unit) if the with clauses and use clauses of the subunit were appended to the context clause of the parent unit.
+If the parent unit is itself a subunit, then the same rule is used to define the visibility within the proper body of the parent unit.
+The effect of the elaboration of a body stub is to elaborate the proper body of the subunit.
+Two subunits of different library units in the same program library need not have distinct identifiers.
+In any case, their full expanded names are distinct, since the simple names of library units are distinct and since the simple names of all subunits that have a given library unit as ancestor unit are also distinct.
+By means of renaming declarations, overloaded subprogram names that rename (distinct) subunits can be introduced.
+A library unit that is named by the with clause of a subunit can be hidden by a declaration (with the same identifier) given in the proper body of the subunit.
+Moreover, such a library unit can even be hidden by a declaration given within a parent unit since a library unit acts as if declared in STANDARD;
+this however does not affect the interpretation of the with clauses themselves, since only names of library units can appear in with clauses.
+The procedure TOP is first written as a compilation unit without subunits.
+The body of the package FACILITY and that of the procedure TRANSFORM can be made into separate subunits of TOP.
+Similarly, the body of the procedure G can be made into a subunit of FACILITY as follows.
+Example 3:
+In the above example TRANSFORM and FACILITY are subunits of TOP, and G is a subunit of FACILITY.
+The visibility in the split version is the same as in the initial version except for one change: since TEXT_IO is only used within G, the corresponding with clause is written for G instead of for TOP.
+Apart from this change, the same identifiers are visible at corresponding program points in the two versions.
+For example, all of the following are (directly) visible within the proper body of the subunit G: the procedure TOP, the type REAL, the variables R and S, the package FACILITY and the contained named number PI and subprograms F and G.
+The rules defining the order in which units can be compiled are direct consequences of the visibility rules and, in particular, of the fact that any library unit that is mentioned by the context clause of a compilation unit is visible in the compilation unit.
+A compilation unit must be compiled after all library units named by its context clause.
+A secondary unit that is a subprogram or package body must be compiled after the corresponding library unit.
+Any subunit of a parent compilation unit must be compiled after the parent compilation unit.
+If any error is detected while attempting to compile a compilation unit, then the attempted compilation is rejected and it has no effect whatsoever on the program library;
+the same holds for recompilations
+(no compilation unit can become obsolete because of such a recompilation).
+The order in which the compilation units of a program are compiled must be consistent with the partial ordering defined by the above rules.
+Similar rules apply for recompilations.
+A compilation unit is potentially affected by a change in any library unit named by its context clause.
+A secondary unit is potentially affected by a change in the corresponding library unit.
+The subunits of a parent compilation unit are potentially affected by a change of the parent compilation unit.
+If a compilation unit is successfully recompiled, the compilation units potentially affected by this change are obsolete and must be recompiled unless they are no longer needed.
+An implementation may be able to reduce the compilation costs if it can deduce that some of the potentially affected units are not actually affected by the change.
+The subunits of a unit can be recompiled without affecting the unit itself.
+Similarly, changes in a subprogram or package body do not affect other compilation units (apart from the subunits of the body) since these compilation units only have access to the subprogram or package specification.
+An implementation is only allowed to deviate from this rule for inline inclusions, for certain compiler optimizations, and for certain implementations of generic program units, as described below.
+If a pragma INLINE is applied to a subprogram declaration given in a package specification, inline inclusion will only be achieved if the package body is compiled before units calling the subprogram.
+In such a case, inline inclusion creates a dependence of the calling unit on the package body, and the compiler must recognize this dependence when deciding on the need for recompilation.
+If a calling unit is compiled before the package body, the pragma may be ignored by the compiler for such calls
+(a warning that inline inclusion was not achieved may be issued).
+Similar considerations apply to a separately compiled subprogram for which an INLINE pragma is specified.
+For optimization purposes, an implementation may compile several units of a given compilation in a way that creates further dependences among these compilation units.
+The compiler must then take these dependences into account when deciding on the need for recompilations.
+An implementation may require that a generic declaration and the corresponding proper body be part of the same compilation, whether the generic unit is itself separately compiled or is local to another compilation unit.
+An implementation may also require that subunits of a generic unit be part of the same compilation.
+Examples of Compilation Order:
+In example 1 (see 10.1.1): The procedure QUADRATIC_EQUATION must be compiled after the library packages TEXT_IO and REAL_OPERATIONS since they appear in its with clause.
+In example 2 (see 10.1.2): The package body STOCK must be compiled after the corresponding package specification.
+In example 2 (see 10.1.2): The specification of the package STOCK must be compiled before the procedure PROCESSOR.
+On the other hand, the procedure PROCESSOR can be compiled either before or after the package body STOCK.
+In example 3 (see 10.2.1): The procedure G must be compiled after the package TEXT_IO since this package is named by the with clause of G.
+On the other hand, TEXT_IO can be compiled either before or after TOP.
+In example 3 (see 10.2.1): The subunits TRANSFORM and FACILITY must be compiled after the main program TOP.
+Similarly, the subunit G must be compiled after its parent unit FACILITY.
+For library packages, it follows from the recompilation rules that a package body is made obsolete by the recompilation of the corresponding specification.
+If the new package specification is such that a package body is not required
+(that is, if the package specification does not contain the declaration of a program unit),
+then the recompilation of a body for this package is not required.
+In any case, the obsolete package body must not be used and can therefore be deleted from the program library.
+Compilers are required to enforce the language rules in the same manner for a program consisting of several compilation units (and subunits) as for a program submitted as a single compilation.
+Consequently, a library file containing information on the compilation units of the program library must be maintained by the compiler or compiling environment.
+This information may include symbol tables and other information pertaining to the order of previous compilations.
+A normal submission to the compiler consists of the compilation unit(s) and the library file.
+The latter is used for checks and is updated for each compilation unit successfully compiled.
+A single program library is implied for the compilation units of a compilation.
+The possible existence of different program libraries and the means by which they are named are not concerns of the language definition;
+they are concerns of the programming environment.
+There should be commands for creating the program library of a given program or of a given family of programs.
+These commands may permit the reuse of units of other program libraries.
+Finally, there should be commands for interrogating the status of the units of a program library.
+The form of these commands is not specified by the language definition.
+Before the execution of a main program, all library units needed by the main program are elaborated, as well as the corresponding library unit bodies, if any.
+The library units needed by the main program are: those named by with clauses applicable to the main program, to its body, and to its subunits; those named by with clauses applicable to these library units themselves, to the corresponding library unit bodies, and to their subunits; and so on, in a transitive manner.
+The elaboration of these library units and of the corresponding library unit bodies is performed in an order consistent with the partial ordering defined by the with clauses (see 10.3).
+In addition, a library unit mentioned by the context clause of a subunit must be elaborated before the body of the ancestor library unit of the subunit.
+An order of elaboration that is consistent with this partial ordering does not always ensure that each library unit body is elaborated before any other compilation unit whose elaboration necessitates that the library unit body be already elaborated.
+If the prior elaboration of library unit bodies is needed, this can be requested by a pragma ELABORATE.
+The form of this pragma is as follows:
+These pragmas are only allowed immediately after the context clause of a compilation unit
+(before the subsequent library unit or secondary unit).
+Each argument of such a pragma must be the simple name of a library unit mentioned by the context clause, and this library unit must have a library unit body.
+Such a pragma specifies that the library unit body must be elaborated before the given compilation unit.
+If the given compilation unit is a subunit, the library unit body must be elaborated before the body of the ancestor library unit of the subunit.
+The program is illegal if no consistent order can be found
+(that is, if a circularity exists).
+The elaboration of the compilation units of the program is performed in some order that is otherwise not defined by the language.
+Optimization of the elaboration of declarations and the execution of statements may be performed by compilers.
+In particular, a compiler may be able to optimize a program by evaluating certain expressions, in addition to those that are static expressions.
+Should one of these expressions, whether static or not, be such that an exception would be raised by its evaluation, then the code in that path of the program can be replaced by code to raise the exception;
+the same holds for exceptions raised by the evaluation of names and simple expressions.
+(See also section 11.6.)
+A compiler may find that some statements or subprograms will never be executed, for example, if their execution depends on a condition known to be FALSE.
+The corresponding object machine code can then be omitted.
+This rule permits the effect of conditional compilation within the language.
+An expression whose evaluation is known to raise an exception need not represent an error if it occurs in a statement or subprogram that is never executed.
+The compiler may warn the programmer of a potential error.
+This chapter defines the facilities for dealing with errors or other exceptional situations that arise during program execution.
+Such a situation is called an exception.
+To raise an exception is to abandon normal program execution so as to draw attention to the fact that the corresponding situation has arisen.
+Executing some actions, in response to the arising of an exception, is called handling the exception.
+An exception declaration declares a name for an exception.
+An exception can be raised by a raise statement, or it can be raised by another statement or operation that propagates the exception.
+When an exception arises, control can be transferred to a user-provided exception handler at the end of a block statement or at the end of the body of a subprogram, package, or task unit.
+An exception declaration declares a name for an exception.
+The name of an exception can only be used in raise statements, exception handlers, and renaming declarations.
+An exception declaration with several identifiers is equivalent to a sequence of single exception declarations, as explained in section 3.2.
+Each single exception declaration declares a name for a different exception.
+In particular, if a generic unit includes an exception declaration, the exception declarations implicitly generated by different instantiations of the generic unit refer to distinct exceptions
+(but all have the same identifier).
+The particular exception denoted by an exception name is determined at compilation time and is the same regardless of how many times the exception declaration is elaborated.
+Hence, if an exception declaration occurs in a recursive subprogram, the exception name denotes the same exception for all invocations of the recursive subprogram.
+The following exceptions are predefined in the language;
+they are raised when the situations described are detected.
+This exception is raised in any of the following situations: upon an attempt to violate a range constraint, an index constraint, or a discriminant constraint;
+upon an attempt to use a record component that does not exist for the current discriminant values;
+and upon an attempt to use a selected component, an indexed component, a slice, or an attribute, of an object designated by an access value, if the object does not exist because the access value is null.
+This exception is raised by the execution of a predefined numeric operation that cannot deliver a correct result
+(within the declared accuracy for real types);
+this includes the case where an implementation uses a predefined numeric operation for the execution, evaluation, or elaboration of some construct.
+The rules given in section 4.5.7 define the cases in which an implementation is not required to raise this exception when such an error situation arises; see also section 11.6.
+This exception is raised upon an attempt to call a subprogram, to activate a task, or to elaborate a generic instantiation, if the body of the corresponding unit has not yet been elaborated.
+This exception is also raised if the end of a function is reached (see 6.5); or during the execution of a selective wait that has no else part, if this execution determines that all alternatives are closed (see 9.7.1).
+Finally, depending on the implementation, this exception may be raised upon an attempt to execute an action that is erroneous, and for incorrect order dependences (see 1.6).
+This exception is raised in any of the following situations: when the dynamic storage allocated to a task is exceeded; during the evaluation of an allocator, if the space available for the collection of allocated objects is exhausted; or during the elaboration of a declarative item, or during the execution of a subprogram call, if storage is not sufficient.
+This exception is raised when exceptions arise during intertask communication (see 9 and 11.5).
+The situations described above can arise without raising the corresponding exceptions, if the pragma SUPPRESS has been used to give permission to omit the corresponding checks (see 11.7).
+Examples of user-defined exception declarations:
+Constraint error exception contexts: aggregate 4.3.1 4.3.2, allocator 4.8, assignment statement 5.2 5.2.1, constraint 3.3.2, discrete type attribute 3.5.5, discriminant constraint 3.7.2, elaboration of a generic formal parameter 12.3.1 12.3.2 12.3.4 12.3.5, entry index 9.5, exponentiating operator 4.5.6, index constraint 3.6.1, indexed component 4.1.1, logical operator 4.5.1, null access value 3.8, object declaration 3.2.1, parameter association 6.4.1, qualified expression 4.7, range constraint 3.5, selected component 4.1.3, slice 4.1.2, subtype indication 3.3.2, type conversion 4.6
+Numeric error exception contexts: discrete type attribute 3.5.5, implicit conversion 3.5.4 3.5.6 4.6, numeric operation 3.5.5 3.5.8 3.5.10, operator of a numeric type 4.5 4.5.7
+Program error exception contexts: collection 3.8, elaboration 3.9, elaboration check 3.9 7.3 9.3 12.2, erroneous 1.6, incorrect order dependence 1.6, leaving a function 6.5, selective wait 9.7.1
+Storage error exception contexts: allocator 4.8
+Tasking error exception contexts: abort statement 9.10, entry call 9.5 9.7.2 9.7.3, exceptions during task communication 11.5, task activation 9.3
+The response to one or more exceptions is specified by an exception handler.
+An exception handler occurs in a construct that is either a block statement or the body of a subprogram, package, task unit, or generic unit.
+Such a construct will be called a frame in this chapter.
+In each case the syntax of a frame that has exception handlers includes the following part:
+The exceptions denoted by the exception names given as exception choices of a frame must all be distinct.
+The exception choice others is only allowed for the last exception handler of a frame and as its only exception choice;
+it stands for all exceptions not listed in previous handlers of the frame, including exceptions whose names are not visible at the place of the exception handler.
+The exception handlers of a frame handle exceptions that are raised by the execution of the sequence of statements of the frame.
+The exceptions handled by a given exception handler are those named by the corresponding exception choices.
+The same kinds of statement are allowed in the sequence of statements of each exception handler as are allowed in the sequence of statements of the frame.
+For example, a return statement is allowed in a handler within a function body.
+A raise statement raises an exception.
+For the execution of a raise statement with an exception name, the named exception is raised.
+A raise statement without an exception name is only allowed within an exception handler
+(but not within the sequence of statements of a subprogram, package, task unit, or generic unit, enclosed by the handler);
+it raises again the exception that caused transfer to the innermost enclosing handler.
+When an exception is raised, normal program execution is abandoned and control is transferred to an exception handler.
+The selection of this handler depends on whether the exception is raised during the execution of statements or during the elaboration of declarations.
+The handling of an exception raised by the execution of a sequence of statements depends on whether the innermost frame or accept statement that encloses the sequence of statements is a frame or an accept statement.
+The case where an accept statement is innermost is described in section 11.5.
+The case where a frame is innermost is presented here.
+Different actions take place, depending on whether or not this frame has a handler for the exception, and on whether the exception is raised in the sequence of statements of the frame or in that of an exception handler.
+If an exception is raised in the sequence of statements of a frame that has a handler for the exception, execution of the sequence of statements of the frame is abandoned and control is transferred to the exception handler.
+The execution of the sequence of statements of the handler completes the execution of the frame
+(or its elaboration if the frame is a package body).
+If an exception is raised in the sequence of statements of a frame that does not have a handler for the exception, execution of this sequence of statements is abandoned.
+The next action depends on the nature of the frame:
+For a subprogram body, the same exception is raised again at the point of call of the subprogram, unless the subprogram is the main program itself,
+in which case execution of the main program is abandoned.
+For a block statement, the same exception is raised again immediately after the block statement
+(that is, within the innermost enclosing frame or accept statement).
+For a package body that is a declarative item, the same exception is raised again immediately after this declarative item (within the enclosing declarative part).
+If the package body is that of a subunit, the exception is raised again at the place of the corresponding body stub.
+If the package is a library unit, execution of the main program is abandoned.
+For a task body, the task becomes completed.
+An exception that is raised again (as in the above cases (a), (b), and (c)) is said to be propagated, either by the execution of the subprogram, the execution of the block statement, or the elaboration of the package body.
+No propagation takes place in the case of a task body.
+If the frame is a subprogram or a block statement and if it has dependent tasks, the propagation of an exception takes place only after termination of the dependent tasks.
+Finally, if an exception is raised in the sequence of statements of an exception handler, execution of this sequence of statements is abandoned.
+Subsequent actions (including propagation, if any) are as in the cases (a) to (d) above, depending on the nature of the frame.
+If the multiplication raises NUMERIC_ERROR, then FLOAT'SAFE_LARGE is returned by the handler.
+This value will cause further NUMERIC_ERROR exceptions to be raised by the evaluation of the expression in each of the remaining invocations of the function,
+so that for large values of N the function will ultimately return the value FLOAT'SAFE_LARGE.
+The following situations can arise:
+If the exception ERROR is raised in the sequence of statements of the outer procedure P, the handler E1 provided within P is used to complete the execution of P.
+If the exception ERROR is raised in the sequence of statements of Q, the handler E2 provided within Q is used to complete the execution of Q.
+Control will be returned to the point of call of Q upon completion of the handler.
+If the exception ERROR is raised in the body of R, called by Q, the execution of R is abandoned and the same exception is raised in the body of Q.
+The handler E2 is then used to complete the execution of Q, as in situation (2).
+Note that in the third situation, the exception raised in R results in (indirectly) transferring control to a handler that is part of Q and hence not enclosed by R.
+Note also that if a handler were provided within R for the exception choice others, situation (3) would cause execution of this handler, rather than direct termination of R.
+Lastly, if ERROR had been declared in R, rather than in P, the handlers E1 and E2 could not provide an explicit handler for ERROR since this identifier would not be visible within the bodies of P and Q.
+In situation (3), the exception could however be handled in Q by providing a handler for the exception choice others.
+The language does not define what happens when the execution of the main program is abandoned after an unhandled exception.
+The predefined exceptions are those that can be propagated by the basic operations and the predefined operators.
+The case of a frame that is a generic unit is already covered by the rules for subprogram and package bodies, since the sequence of statements of such a frame is not executed but is the template for the corresponding sequences of statements of the subprograms or packages obtained by generic instantiation.
+If an exception is raised during the elaboration of the declarative part of a given frame, this elaboration is abandoned.
+The next action depends on the nature of the frame:
+For a subprogram body, the same exception is raised again at the point of call of the subprogram, unless the subprogram is the main program itself, in which case execution of the main program is abandoned.
+For a block statement, the same exception is raised again immediately after the block statement.
+For a package body that is a declarative item, the same exception is raised again immediately after this declarative item, in the enclosing declarative part.
+If the package body is that of a subunit, the exception is raised again at the place of the corresponding body stub.
+If the package is a library unit, execution of the main program is abandoned.
+For a task body, the task becomes completed, and the exception TASKING_ERROR is raised at the point of activation of the task, as explained in section 9.3.
+Similarly, if an exception is raised during the elaboration of either a package declaration or a task declaration, this elaboration is abandoned;
+the next action depends on the nature of the declaration.
+For a package declaration or a task declaration, that is a declarative item, the exception is raised again immediately after the declarative item in the enclosing declarative part or package specification.
+For the declaration of a library package, the execution of the main program is abandoned.
+An exception that is raised again (as in the above cases (a), (b), (c) and (e)) is said to be propagated, either by the execution of the subprogram or block statement, or by the elaboration of the package declaration, task declaration or package body.
+Example of an exception in the declarative part of a block statement (case (b)):
+An exception can be propagated to a task communicating, or attempting to communicate, with another task.
+An exception can also be propagated to a calling task if the exception is raised during a rendezvous.
+When a task calls an entry of another task, the exception TASKING_ERROR is raised in the calling task, at the place of the call, if the called task is completed before accepting the entry call or is already completed at the time of the call.
+A rendezvous can be completed abnormally in two cases:
+When an exception is raised within an accept statement, but not handled within an inner frame.
+In this case, the execution of the accept statement is abandoned and the same exception is raised again immediately after the accept statement within the called task;
+the exception is also propagated to the calling task at the point of the entry call.
+When the task containing the accept statement is completed abnormally as the result of an abort statement.
+In this case, the exception TASKING_ERROR is raised in the calling task at the point of the entry call.
+On the other hand, if a task issuing an entry call becomes abnormal (as the result of an abort statement) no exception is raised in the called task.
+If the rendezvous has not yet started, the entry call is cancelled.
+If the rendezvous is in progress, it completes normally, and the called task is unaffected.
+The purpose of this section is to specify the conditions under which an implementation is allowed to perform certain actions either earlier or later than specified by other rules of the language.
+In general, when the language rules specify an order for certain actions (the canonical order), an implementation may only use an alternative order if it can guarantee that the effect of the program is not changed by the reordering.
+In particular, no exception should arise for the execution of the reordered program if none arises for the execution of the program in the canonical order.
+When, on the other hand, the order of certain actions is not defined by the language, any order can be used by the implementation.
+(For example, the arguments of a predefined operator can be evaluated in any order since the rules given in section 4.5 do not require a specific order of evaluation.)
+Additional freedom is left to an implementation for reordering actions involving predefined operations that are either predefined operators or basic operations other than assignments.
+This freedom is left, as defined below, even in the case where the execution of these predefined operations may propagate a (predefined) exception:
+For the purpose of establishing whether the same effect is obtained by the execution of certain actions in the canonical and in an alternative order, it can be assumed that none of the predefined operations invoked by these actions propagates a (predefined) exception, provided that the two following requirements are met by the alternative order: first, an operation must not be invoked in the alternative order if it is not invoked in the canonical order;
+second, for each operation, the innermost enclosing frame or accept statement must be the same in the alternative order as in the canonical order, and the same exception handlers must apply.
+Within an expression, the association of operators with operands is specified by the syntax.
+However, for a sequence of predefined operators of the same precedence level (and in the absence of parentheses imposing a specific association), any association of operators with operands is allowed if it satisfies the following requirement: an integer result must be equal to that given by the canonical left-to-right order;
+a real result must belong to the result model interval defined for the canonical left-to-right order (see 4.5.7).
+Such a reordering is allowed even if it may remove an exception, or introduce a further predefined exception.
+Similarly, additional freedom is left to an implementation for the evaluation of numeric simple expressions.
+For the evaluation of a predefined operation, an implementation is allowed to use the operation of a type that has a range wider than that of the base type of the operands, provided that this delivers the exact result (or a result within the declared accuracy, in the case of a real type), even if some intermediate results lie outside the range of the base type.
+The exception NUMERIC_ERROR need not be raised in such a case.
+In particular, if the numeric expression is an operand of a predefined relational operator, the exception NUMERIC_ERROR need not be raised by the evaluation of the relation, provided that the correct BOOLEAN result is obtained.
+A preedefined operation need not be invoked at all, if its only possible effect is to propagate a predefined exception.
+Similarly, a predefined operation need not be invoked if the removal of subsequent operations by the above rule renders this invocation ineffective.
+Rule (b) applies to predefined operators but not to the short-circuit control forms.
+The expression SPEED < 300_000.0 can be replaced by TRUE if the value 300_000.0 lies outside the base type of SPEED, even though the implicit conversion of the numeric literal would raise the exception NUMERIC_ERROR.
+The evaluation of A(K) may be performed before the loop, and possibly immediately before the assignment statement (1) even if this evaluation can raise an exception.
+Consequently, within the exception handler, the value of N is either the undefined initial value or a value later assigned.
+On the other hand, the evaluation of A(K) cannot be moved before begin since an exception would then be handled by a different handler.
+For this reason, the initialization of N in the declaration itself would exclude the possibility of having an undefined initial value of N in the handler.
+The presence of a SUPPRESS pragma gives permission to an implementation to omit certain run-time checks.
+The form of this pragma is as follows:
+The identifier is that of the check that can be omitted.
+The name (if present) must be either a simple name or an expanded name and it must denote either an object, a type or subtype, a task unit, or a generic unit;
+alternatively the name can be a subprogram name, in which case it can stand for several visible overloaded subprograms.
+A pragma SUPPRESS is only allowed immediately within a declarative part or immediately within a package specification.
+In the latter case, the only allowed form is with a name that denotes an entity (or several overloaded subprograms) declared immediately within the package specification.
+The permission to omit the given check extends from the place of the pragma to the end of the declarative region associated with the innermost enclosing block statement or program unit.
+For a pragma given in a package specification, the permission extends to the end of the scope of the named entity.
+If the pragma includes a name, the permission to omit the given check is further restricted: it is given only for operations on the named object or on all objects of the base type of a named type or subtype; for calls of a named subprogram; for activations of tasks of the named task type; or for instantiations of the given generic unit.
+The following checks correspond to situations in which the exception CONSTRAINT_ERROR may be raised;
+for these checks, the name (if present) must denote either an object or a type.
+When accessing a selected component, an indexed component, a slice, or an attribute, of an object designated by an access value, check that the access value is not null.
+Check that a discriminant of a composite value has the value imposed by a discriminant constraint.
+Also, when accessing a record component, check that it exists for the current discriminant values.
+Check that the bounds of an array value are equal to the corresponding bounds of an index constraint.
+Also, when accessing a component of an array object, check for each dimension that the given index value belongs to the range defined by the bounds of the array object.
+Also, when accessing a slice of an array object, check that the given discrete range is compatible with the range defined by the bounds of the array object.
+Check that there is a matching component for each component of an array, in the case of array assignments, type conversions, and logical operators for arrays of boolean components.
+Check that a value satisfies a range constraint.
+Also, for the elaboration of a subtype indication, check that the constraint (if present) is compatible with the type mark.
+Also, for an aggregate, check that an index or discriminant value belongs to the corresponding subtype.
+Finally, check for any constraint checks performed by a generic instantiation.
+The following checks correspond to situations in which the exception NUMERIC_ERROR is raised.
+The only allowed names in the corresponding pragmas are names of numeric types.
+Check that the second operand is not zero for the operations /, rem and mod.
+Check that the result of a numeric operation does not overflow.
+The following check corresponds to situations in which the exception PROGRAM_ERROR is raised.
+The only allowed names in the corresponding pragmas are names denoting task units, generic units, or subprograms.
+When either a subprogram is called, a task activation is accomplished, or a generic instantiation is elaborated, check that the body of the corresponding unit has already been elaborated.
+The following check corresponds to situations in which the exception STORAGE_ERROR is raised.
+The only allowed names in the corresponding pragmas are names denoting access types, task units, or subprograms.
+Check that execution of an allocator does not require more space than is available for a collection.
+Check that the space available for a task or subprogram has not been exceeded.
+If an error situation arises in the absence of the corresponding run-time checks, the execution of the program is erroneous
+(the results are not defined by the language).
+For certain implementations, it may be impossible or too costly to suppress certain checks.
+The corresponding SUPPRESS pragma can be ignored.
+Hence, the occurrence of such a pragma within a given unit does not guarantee that the corresponding exception will not arise;
+the exceptions may also be propagated by called units.
+A generic unit is a program unit that is either a generic subprogram or a generic package.
+A generic unit is a template, which is parameterized or not, and from which corresponding (nongeneric) subprograms or packages can be obtained.
+The resulting program units are said to be instances of the original generic unit.
+A generic unit is declared by a generic declaration.
+This form of declaration has a generic formal part declaring any generic formal parameters.
+An instance of a generic unit is obtained as the result of a generic instantiation with appropriate generic actual parameters for the generic formal parameters.
+An instance of a generic subprogram is a subprogram.
+An instance of a generic package is a package.
+Generic units are templates.
+As templates they do not have the properties that are specific to their nongeneric counterparts.
+For example, a generic subprogram can be instantiated but it cannot be called.
+In contrast, the instance of a generic subprogram is a nongeneric subprogram; hence, this instance can be called but it cannot be used to produce further instances.
+A generic declaration declares a generic unit, which is either a generic subprogram or a generic package.
+A generic declaration includes a generic formal part declaring any generic formal parameters.
+A generic formal parameter can be an object;
+alternatively (unlike a parameter of a subprogram), it can be a type or a subprogram.
+The terms generic formal object (or simply, formal object), generic formal type (or simply, formal type), and generic formal subprogram (or simply, formal subprogram) are used to refer to corresponding generic formal parameters.
+The only form of subtype indication allowed within a generic formal part is a type mark
+(that is, the subtype indication must not include an explicit constraint).
+The designator of a generic subprogram must be an identifier.
+Outside the specification and body of a generic unit, the name of this program unit denotes the generic unit.
+In contrast, within the declarative region associated with a generic subprogram, the name of this program unit denotes the subprogram obtained by the current instantiation of the generic unit.
+Similarly, within the declarative region associated with a generic package, the name of this program unit denotes the package obtained by the current instantiation.
+The elaboration of a generic declaration has no other effect.
+Examples of generic formal parts:
+Examples of generic declarations declaring generic subprograms:
+Example of a generic declaration declaring a generic package:
+Within a generic subprogram, the name of this program unit acts as the name of a subprogram.
+Hence this name can be overloaded, and it can appear in a recursive call of the current instantiation.
+For the same reason, this name cannot appear after the reserved word new in a (recursive) generic instantiation.
+An expression that occurs in a generic formal part is either the default expression for a generic formal object of mode in, or a constituent of an entry name given as default name for a formal subprogram, or the default expression for a parameter of a formal subprogram.
+Default expressions for generic formal objects and default names for formal subprograms are only evaluated for generic instantiations that use such defaults.
+Default expressions for parameters of formal subprograms are only evaluated for calls of the formal subprograms that use such defaults.
+(The usual visibility rules apply to any name used in a default expression: the denoted entity must therefore be visible at the place of the expression.)
+Neither generic formal parameters nor their attributes are allowed constituents of static expressions (see 4.9).
+The first form of generic parameter declaration declares generic formal objects.
+The type of a generic formal object is the base type of the type denoted by the type mark given in the generic parameter declaration.
+A generic parameter declaration with several identifiers is equivalent to a sequence of single generic parameter declarations, as explained in section 3.2.
+A generic formal object has a mode that is either in or in out.
+In the absence of an explicit mode indication in a generic parameter declaration, the mode in is assumed; otherwise the mode is the one indicated.
+If a generic parameter declaration ends with an expression, the expression is the default expression of the generic formal parameter.
+A default expression is only allowed if the mode is in
+(whether this mode is indicated explicitly or implicitly).
+The type of a default expression must be that of the corresponding generic formal parameter.
+A generic formal object of mode in is a constant whose value is a copy of the value supplied as the matching generic actual parameter in a generic instantiation, as described in section 12.3.
+The type of a generic formal object of mode in must not be a limited type;
+the subtype of such a generic formal object is the subtype denoted by the type mark given in the generic parameter declaration.
+A generic formal object of mode in out is a variable and denotes the object supplied as the matching generic actual parameter in a generic instantiation, as described in section 12.3.
+The constraints that apply to the generic formal object are those of the corresponding generic actual parameter.
+The constraints that apply to a generic formal object of mode in out are those of the corresponding generic actual parameter
+(not those implied by the type mark that appears in the generic parameter declaration).
+Whenever possible (to avoid confusion) it is recommended that the name of a base type be used for the declaration of such a formal object.
+If, however, the base type is anonymous, it is recommended that the subtype name defined by the type declaration for the base type be used.
+A generic parameter declaration that includes a generic type definition or a private type declaration declares a generic formal type.
+A generic formal type denotes the subtype supplied as the corresponding actual parameter in a generic instantiation, as described in 12.3(d).
+However, within a generic unit, a generic formal type is considered as being distinct from all other (formal or nonformal) types.
+The form of constraint applicable to a formal type in a subtype indication depends on the class of the type as for a nonformal type.
+The only form of discrete range that is allowed within the declaration of a generic formal (constrained) array type is a type mark.
+The discriminant part of a generic formal private type must not include a default expression for a discriminant.
+(Consequently, a variable that is declared by an object declaration must be constrained if its type is a generic formal type with discriminants.)
+Within the declaration and body of a generic unit, the operations available for values of a generic formal type (apart from any additional operation specified by a generic formal subprogram) are determined by the generic parameter declaration for the formal type:
+For a private type declaration, the available operations are those defined in section 7.4.2
+(in particular, assignment, equality, and inequality are available for a private type unless it is limited).
+For an array type definition, the available operations are those defined in section 3.6.2
+(for example, they include the formation of indexed components and slices).
+For an access type definition, the available operations are those defined in section 3.8.2
+(for example, allocators can be used).
+The four forms of generic type definition in which a box appears (that is, the compound delimiter <>) correspond to the following major forms of scalar type:
+Discrete types: (<>)
+The available operations are the operations common to enumeration and integer types;
+these are defined in section 3.5.5.
+Integer types: range <>
+The available operations are the operations of integer types defined in section 3.5.5.
+Floating point types: digits <>
+The available operations are those defined in section 3.5.8.
+Fixed point types: delta <>
+The available operations are those defined in section 3.5.10.
+In all of the above cases (a) through (f), each operation implicitly associated with a formal type (that is, other than an operation specified by a formal subprogram) is implicitly declared at the place of the declaration of the formal type.
+The same holds for a formal fixed point type, except for the multiplying operators that deliver a result of the type universal fixed (see 4.5.5), since these special operators are declared in the package STANDARD.
+For an instantiation of the generic unit, each of these operations is the corresponding basic operation or predefined operator of the matching actual type.
+For an operator, this rule applies even if the operator has been redefined for the actual type or for some parent type of the actual type.
+Examples of generic formal types:
+Example of a generic formal part declaring a formal integer type:
+A generic parameter declaration that includes a subprogram specification declares a generic formal subprogram.
+Two alternative forms of defaults can be specified in the declaration of a generic formal subprogram.
+In these forms, the subprogram specification is followed by the reserved word is and either a box or the name of a subprogram or entry.
+The matching rules for these defaults are explained in section 12.3.6.
+A generic formal subprogram denotes the subprogram, enumeration literal, or entry supplied as the corresponding generic actual parameter in a generic instantiation, as described in section 12.3(f).
+Examples of generic formal subprograms:
+The constraints that apply to a parameter of a formal subprogram are those of the corresponding parameter in the specification of the matching actual subprogram
+(not those implied by the corresponding type mark in the specification of the formal subprogram).
+A similar remark applies to the result of a function.
+Whenever possible (to avoid confusion), it is recommended that the name of a base type be used rather than the name of a subtype in any declaration of a formal subprogram.
+If, however, the base type is anonymous, it is recommended that the subtype name defined by the type declaration be used.
+The type specified for a formal parameter of a generic formal subprogram can be any visible type, including a generic formal type of the same generic formal part.
+The body of a generic subprogram or generic package is a template for the bodies of the corresponding subprograms or packages obtained by generic instantiations.
+The syntax of a generic body is identical to that of a nongeneric body.
+For each declaration of a generic subprogram, there must be a corresponding body.
+The elaboration of a generic body has no other effect than to establish that the body can from then on be used as the template for obtaining the corresponding instances.
+Example of a generic procedure body:
+Example of a generic function body:
+Example of a generic package body:
+An instance of a generic unit is declared by a generic instantiation.
+An explicit generic actual parameter must be supplied for each generic formal parameter, unless the corresponding generic parameter declaration specifies that a default can be used.
+Generic associations can be either positional or named in the same manner as parameter associations of subprogram calls (see 6.4).
+If two or more formal subprograms have the same designator, then named associations are not allowed for the corresponding generic parameters.
+Each generic actual parameter must match the corresponding generic formal parameter.
+An expression can match a formal object of mode in;
+a variable name can match a formal object of mode in out;
+a subprogram name or an entry name can match a formal subprogram;
+a type mark can match a formal type.
+The detailed rules defining the allowed matches are given in sections 12.3.1 to 12.3.6; these are the only allowed matches.
+The instance is a copy of the generic unit, apart from the generic formal part;
+thus the instance of a generic package is a package, that of a generic procedure is a procedure, and that of a generic function is a function.
+For each occurrence, within the generic unit, of a name that denotes a given entity, the following list defines which entity is denoted by the corresponding occurrence within the instance.
+For a name that denotes the generic unit: The corresponding occurrence denotes the instance.
+For a name that denotes a generic formal object of mode in: The corresponding name denotes a constant whose value is a copy of the value of the associated generic actual parameter.
+For a name that denotes a generic formal object of mode in out: The corresponding name denotes the variable named by the associated generic actual parameter.
+For a name that denotes a generic formal type: The corresponding name denotes the subtype named by the associated generic actual parameter (the actual subtype).
+For a name that denotes a discriminant of a generic formal type: The corresponding name denotes the corresponding discriminant (there must be one) of the actual type associated with the generic formal type.
+For a name that denotes a generic formal subprogram: The corresponding name denotes the subprogram, enumeration literal, or entry named by the associated generic actual parameter (the actual subprogram).
+For a name that denotes a formal parameter of a generic formal subprogram: The corresponding name denotes the corresponding formal parameter of the actual subprogram associated with the formal subprogram.
+For a name that denotes a local entity declared within the generic unit: The corresponding name denotes the entity declared by the corresponding local declaration within the instance.
+For a name that denotes a global entity declared outside of the generic unit: The corresponding name denotes the same global entity.
+Similar rules apply to operators and basic operations: in particular, formal operators follow a rule similar to rule (f), local operations follow a rule similar to rule (h), and operations for global types follow a rule similar to rule (i).
+In addition, if within the generic unit a predefined operator or basic operation of a formal type is used, then within the instance the corresponding occurrence refers to the corresponding predefined operation of the actual type associated with the formal type.
+The above rules apply also to any type mark or (default) expression given within the generic formal part of the generic unit.
+For the elaboration of a generic instantiation, each expression supplied as an explicit generic actual parameter is first evaluated, as well as each expression that appears as a constituent of a variable name or entry name supplied as an explicit generic actual parameter;
+these evaluations proceed in some order that is not defined by the language.
+Then, for each omitted generic association (if any), the corresponding default expression or default name is evaluated;
+such evaluations are performed in the order of the generic parameter declarations.
+Finally, the implicitly generated instance is elaborated.
+The elaboration of a generic instantiation may also involve certain constraint checks as described in later subsections.
+Recursive generic instantiation is not allowed in the following sense: if a given generic unit includes an instantiation of a second generic unit, then the instance generated by this instantiation must not include an instance of the first generic unit
+(whether this instance is generated directly, or indirectly by intermediate instantiations).
+Examples of generic instantiations (see 12.1):
+Examples of uses of instantiated units:
+Omission of a generic actual parameter is only allowed if a corresponding default exists.
+If default expressions or default names (other than simple names) are used, they are evaluated in the order in which the corresponding generic formal parameters are declared.
+If two overloaded subprograms declared in a generic package specification differ only by the (formal) type of their parameters and results, then there exist legal instantiations for which all calls of these subprograms from outside the instance are ambiguous.
+For example:
+A generic formal parameter of mode in of a given type is matched by an expression of the same type.
+If a generic unit has a generic formal object of mode in, a check is made that the value of the expression belongs to the subtype denoted by the type mark, as for an explicit constant declaration (see 3.2.1).
+The exception CONSTRAINT_ERROR is raised if this check fails.
+A generic formal parameter of mode in out of a given type is matched by the name of a variable of the same type.
+The variable must not be a formal parameter of mode out or a subcomponent thereof.
+The name must denote a variable for which renaming is allowed (see 8.5).
+The type of a generic actual parameter of mode in must not be a limited type.
+The constraints that apply to a generic formal parameter of mode in out are those of the corresponding generic actual parameter (see 12.1.1).
+A generic formal private type is matched by any type or subtype (the actual subtype) that satisfies the following conditions:
+If the formal type is not limited, the actual type must not be a limited type.
+(If, on the other hand, the formal type is limited, no such condition is imposed on the corresponding actual type, which can be limited or not limited.)
+If the formal type has a discriminant part, the actual type must be a type with the same number of discriminants;
+the type of a discriminant that appears at a given position in the discriminant part of the actual type must be the same as the type of the discriminant that appears at the same position in the discriminant part of the formal type;
+and the actual subtype must be unconstrained.
+(If, on the other hand, the formal type has no discriminants, the actual type is allowed to have discriminants.)
+Furthermore, consider any occurrence of the name of the formal type at a place where this name is used as an unconstrained subtype indication.
+The actual subtype must not be an unconstrained array type or an unconstrained type with discriminants, if any of these occurrences is at a place where either a constraint or default discriminants would be required for an array type or for a type with discriminants (see 3.6.1 and 3.7.2).
+The same restriction applies to occurrences of the name of a subtype of the formal type, and to occurrences of the name of any type or subtype derived, directly or indirectly, from the formal type.
+If a generic unit has a formal private type with discriminants, the elaboration of a corresponding generic instantiation checks that the subtype of each discriminant of the actual type is the same as the subtype of the corresponding discriminant of the formal type.
+The exception CONSTRAINT_ERROR is raised if this check fails.
+A generic formal type defined by (<>) is matched by any discrete subtype (that is, any enumeration or integer subtype).
+A generic formal type defined by range <> is matched by any integer subtype.
+A generic formal type defined by digits <> is matched by any floating point subtype.
+A generic formal type defined by delta <> is matched by any fixed point subtype.
+No other matches are possible for these generic formal types.
+A formal array type is matched by an actual array subtype that satisfies the following conditions:
+The formal array type and the actual array type must have the same dimensionality;
+the formal type and the actual subtype must be either both constrained or both unconstrained.
+For each index position, the index type must be the same for the actual array type as for the formal array type.
+The component type must be the same for the actual array type as for the formal array type.
+If the component type is other than a scalar type, then the component subtypes must be either both constrained or both unconstrained.
+If a generic unit has a formal array type, the elaboration of a corresponding instantiation checks that the constraints (if any) on the component type are the same for the actual array type as for the formal array type, and likewise that for any given index position the index subtypes or the discrete ranges have the same bounds.
+The exception CONSTRAINT_ERROR is raised if this check fails.
+For the above rules, if any of the index or component types of the formal array type is itself a formal type, then within the instance its name denotes the corresponding actual subtype (see 12.3(d)).
+A formal access type is matched by an actual access subtype if the type of the designated objects is the same for the actual type as for the formal type.
+If the designated type is other than a scalar type, then the designated subtypes must be either both constrained or both unconstrained.
+If a generic unit has a formal access type, the elaboration of a corresponding instantiation checks that any constraints on the designated objects are the same for the actual access subtype as for the formal access type.
+The exception CONSTRAINT_ERROR is raised if this check fails.
+For the above rules, if the designated type is itself a formal type, then within the instance its name denotes the corresponding actual subtype (see 12.3(d)).
+A formal subprogram is matched by an actual subprogram, enumeration literal, or entry if both have the same parameter and result type profile (see 6.6); in addition, parameter modes must be identical for formal parameters that are at the same parameter position.
+If a generic unit has a default subprogram specified by a name, this name must denote a subprogram, an enumeration literal, or an entry, that matches the formal subprogram (in the above sense).
+The evaluation of the default name takes place during the elaboration of each instantiation that uses the default, as defined in section 12.3.
+If a generic unit has a default subprogram specified by a box, the corresponding actual parameter can be omitted if a subprogram, enumeration literal, or entry matching the formal subprogram, and with the same designator as the formal subprogram, is directly visible at the place of the generic instantiation; this subprogram, enumeration literal, or entry is then used by default (there must be exactly one subprogram, enumeration literal, or entry satisfying the previous conditions).
+The matching rules for formal subprograms state requirements that are similar to those applying to subprogram renaming declarations (see 8.5).
+In particular, the name of a parameter of the formal subprogram need not be the same as that of the corresponding parameter of the actual subprogram;
+similarly, for these parameters, default expressions need not correspond.
+A formal subprogram is matched by an attribute of a type if the attribute is a function with a matching specification.
+An enumeration literal of a given type matches a parameterless formal function whose result type is the given type.
+The following example provides a possible formulation of stacks by means of a generic package.
+The size of each stack and the type of the stack elements are provided as generic parameters.
+Instances of this generic package can be obtained as follows:
+Thereafter, the procedures of the instantiated packages can be called as follows:
+Alternatively, a generic formulation of the type STACK can be given as follows (package body omitted):
+In order to use such a package, an instantiation must be created and thereafter stacks of the corresponding type can be declared:
+This chapter describes representation clauses, certain implementation- dependent features, and other features that are used in system programming.
+Representation clauses specify how the types of the language are to be mapped onto the underlying machine.
+They can be provided to give more efficient representation or to interface with features that are outside the domain of the language (for example, peripheral hardware).
+A type representation clause applies either to a type or to a first named subtype
+(that is, to a subtype declared by a type declaration, the base type being therefore anonymous).
+Such a representation clause applies to all objects that have this type or this first named subtype.
+At most one enumeration or record representation clause is allowed for a given type: an enumeration representation clause is only allowed for an enumeration type; a record representation clause, only for a record type.
+(On the other hand, more than one length clause can be provided for a given type;
+moreover, both a length clause and an enumeration or record representation clause can be provided.)
+A length clause is the only form of representation clause allowed for a type derived from a parent type that has (user-defined) derivable subprograms.
+An address clause applies either to an object; to a subprogram, package, or task unit; or to an entry.
+At most one address clause is allowed for any of these entities.
+A representation clause and declaration of the entity to which the clause applies must both occur immediately within the same declarative part, package specification, or task specification;
+the declaration must occur before the clause.
+In the absence of a representation clause for a given declaration, a default representation of this declaration is determined by the implementation.
+Such a default determination occurs no later than the end of the immediately enclosing declarative part, package specification, or task specification.
+For a declaration given in a declarative part, this default determination occurs before any enclosed body.
+In the case of a type, certain occurrences of its name imply that the representation of the type must already have been determined.
+Consequently these occurrences force the default determination of any aspect of the representation not already determined by a prior type representation clause.
+This default determination is also forced by similar occurrences of the name of a subtype of the type, or of the name of any type or subtype that has subcomponents of the type.
+A forcing occurence is any occurrence other than in a type or subtype declaration, a subprogram specification, an entry declaration, a deferred constant declaration, a pragma, or a representation clause for the type itself.
+In any case, an occurrence within an expression is always forcing.
+A representation clause for a given entity must not appear after an occurrence of the name of the entity if this occurrence forces a default determination of representation for the entity.
+Similar restrictions exist for address clauses.
+For an object, any occurrence of its name (after the object declaration) is a forcing occurrence.
+For a subprogram, package, task unit, or entry, any occurrence of a representation attribute of such an entity is a forcing occurrence.
+The effect of the elaboration of a representation clause is to define the corresponding aspects of the representation.
+The interpretation of some of the expressions that appear in representation clauses is implementation dependent, for example, expressions specifying addresses.
+An implementation may limit its acceptance of representation clauses to those that can be handled simply by the underlying hardware.
+If a representation clause is accepted by an implementation, the compiler must guarantee that the net effect of the program is not changed by the presence of the clause, except for address clauses and for parts of the program that interrogate representation attributes.
+If a program contains a representation clause that is not accepted, the program is illegal.
+For each implementation, the allowed representation clauses, and the conventions used for implementation- dependent expressions, must be documented in Appendix F of the reference manual.
+Whereas a representation clause is used to impose certain characteristics of the mapping of an entity onto the underlying machine, pragmas can be used to provide an implementation, with criteria for its selection of such a mapping.
+The pragma PACK specifies that storage minimization should be the main criterion when selecting the representation of a record or array type.
+Its form is as follows:
+Packing means that gaps between the storage areas allocated to consecutive components should be minimized.
+It need not, however, affect the mapping of each component onto storage.
+This mapping can itself be influenced by a pragma (or controlled by a representation clause) for the component or component type.
+The position of a PACK pragma, and the restrictions on the named type, are governed by the same rules as for a representation clause;
+in particular, the pragma must appear before any use of a representation attribute of the packed entity.
+The pragma PACK is the only language-defied representation pragma.
+Additional representation pragmas may be provided by an implementation;
+these must be documented in Appendix F.
+(in contrast to representation clauses, a pragma that is not accepted by the implementation is ignored).
+No representation clause is allowed for a generic formal type.
+A length clause specifies an amount of storage associated with a type.
+The expression must be of some numeric type and is evaluated during the elaboration of the length clause
+(unless it is a static expression).
+The prefix of the attribute must denote either a type or a first named subtype.
+The prefix is called T in what follows.
+The only allowed attribute designators in a length clause are SIZE, STORAGE_SIZE, and SMALL.
+The effect of the length clause depends on the attribute designator:
+Size specification: T'SIZE
+The expression must be a static expression of some integer type.
+The value of the expression specifies an upper bound for the number of bits to be allocated to objects of the type or first named subtype T.
+The size specification must allow for enough storage space to accommodate every allowable value of these objects.
+A size specification for a composite type may affect the size of the gaps between the storage areas allocated to consecutive components.
+On the other hand, it need not affect the size of the storage area allocated to each component.
+The size specification is only allowed if the constraints on T and on its subcomponents (if any) are static.
+In the case of an unconstrained array type, the index subtypes must also be static.
+Specification of collection size: T'STORAGE_SIZE
+The prefix T must denote an access type.
+The expression must be of some integer type (but need not be static);
+its value specifies the number of storage units to be reserved for the collection, that is, the storage space needed to contain all objects designated by values of the access type and by values of other types derived form the access type, directly or indirectly.
+This form of length clause is not allowed for a type derived from an access type.
+Specification of storage for a task activation: T'STORAGE _SIZE
+The prefix T must denote a task type.
+The expression must be of some integer type (but need not be static);
+its value specifies the number of storage units to be reserved for an activation (not the code) of a task of the type.
+Specification of small for a fixed point type: T'SMALL
+The prefix T must denote the first named subtype of a fixed point type.
+The expression must be a static expression of some real type;
+its value must be greater than the delta of the first named subtype.
+The effect of the length clause is to use this value of small for the representation of values of the fixed point base type.
+(The length clause thereby also affects the amount of storage for objects that have this type).
+A size specification is allowed for an access, task, or fixed point type, whether or not another form of length clause is also given for the type.
+What is considered to be part of the storage reserved for a collection or for an activation of a task is implementation-dependent.
+The control afforded by length clauses is therefore relative to the implementation conventions.
+For example, the language does not define whether the storage reserved for an activation of a task includes any storage needed for the collection associated with an access type declared within the task body.
+Neither does it define the method of allocation for objects denoted by values of an access type.
+For example, the space allocated could be on a stack;
+alternatively, a general dynamic aliocation scheme or fixed storage could be used.
+The objects allocated in a collection need not have the same size if the designated type is an unconstrained array type or an unconstrained type with discriminants.
+Note also that the allocator itself may require some space for internal tables and links.
+Hence a length clause for the collection of an access type does not always give precise control over the maximum number of allocated objects.
+Notes on the examples:
+In the length clause for SHORT, fifteen bits is the minimum necessary, since the type definition requires SHORT'SMALL=2**(-7) and SHORT'MANTISSA = 14.
+The length clause for DEGREE forces the model numbers to exactly span the range of the type.
+An enumeration representation clause specifies the internal codes for the literals of the enumeration type that is named in the clause.
+The aggregate used to specify this mapping is written as a one-dimensional aggregate, for which the index subtype is the enumeration type and the component type is universal integer.
+All literals of the enumeration type must be provided with distinct integer codes, and all choices and component values given in the aggregate must be static.
+The integer codes specified for the enumeration type must satisfy the predefined ordering relation of the type.
+The attributes SUCC, PRED, and POS are defined even for enumeration types with a noncontiguous representation;
+their definition corresponds to the (logical) type declaration and is not affected by the enumeration representation clause.
+In the example, because of the need to avoid the omitted values, these functions are likely to be less efficiently implemented than they could be in the absence of a representation clause.
+Similar considerations apply when such types are used for indexing.
+A record representation clause specifies the storage representation of records, that is, the order, position, and size of record components (including discriminants, if any).
+The simple expression given after the reserved words at mod in an alignment clause, or after the reserved word at in a component clause, must be a static expression of some integer type.
+If the bounds of the range of a component clause are defined by simple expressions, then each bound of the range must be defined by a static expression of some integer type, but the two bounds need not have the same integer type.
+An alignment clause forces each record of the given type to be allocated at a starting address that is a multiple of the value of the given expression
+(that is, the address modulo the expression must be zero).
+An implementation may place restrictions on the allowable alignments.
+A component clause specifies the storage place of a component, relative to the start of the record.
+The integer defined by the static expression of a component clause is a relative address expressed in storage units.
+The range defines the bit positions of the storage place, relative to the storage unit.
+The first storage unit of a record is numbered zero.
+The first bit of a storage unit is numbered zero.
+The ordering of bits in a storage unit is machine dependent and may extend to adjacent storage units.
+(For a specific machine, the size in bits of a storage unit is given by the configuration-dependent named number SYSTEM.STORAGE_UNIT.)
+Whether a component is allowed to overlap a storage boundary, and if so, how, is implementation-defined.
+At most one component clause is allowed for each component of the record type, including for each discriminant
+(component clauses may be given for some, all, or none of the components).
+If no component clause is given for a component, then the choice of the storage place for the component is left to the compiler.
+If component clauses are given for all components, the record representation clause completely specifies the representation of the record type and must be obeyed exactly by the compiler.
+Storage places within a record variant must not overlap, but overlap of the storage for distinct variants is allowed.
+Each component clause must allow for enough storage space to accommodate every allowable value of the component.
+A component clause is only allowed for a component if any constraint on this component or on any of its subcomponents is static.
+An implementation may generate names that denote implementation-dependent components (for example, one containing the offset of another component).
+Such implementation-dependent names can be used in record representation clauses
+(these names need not be simple names; for example, they could be implementation-dependent attributes).
+Note on the example:
+The record representation clause defines the record layout.
+The length clause guarantees that exactly eight storage units are used.
+An address clause specifies a required address in storage for an entity.
+The expression given after the reserved word at must be of the type ADDRESS defined in the package SYSTEM (see 13.7);
+this package must be named by a with clause that applies to the compilation unit in which the address clause occurs.
+The conventions that define the interpretation of a value of the type ADDRESS as an address, as an interrupt level, or whatever it may be, are implementation-dependent.
+The allowed nature of the simple name and the meaning of the corresponding address are as follows:
+Name of an object: the address is that required for the object (variable or constant).
+Name of a subprogram, package, or task unit: the address is that required for the machine code associated with the body of the program unit.
+Name of a single entry: the address specifies a hardware interrupt to which the single entry is to be linked.
+If the simple name is that of a single task, the address clause is understood to refer to the task unit and not to the task object.
+In all cases, the address clause is only legal if exactly one declaration with this identifier occurs earlier, immediately within the same declarative part, package specification, or task specification.
+A name declared by a renaming declaration is not allowed as the simple name.
+Address clauses should not be used to achieve overlays of objects or overlays of program units.
+Nor should a given interrupt be linked to more than one entry.
+Any program using address clauses to achieve such effects is erroneous.
+The above rules imply that if two subprograms overload each other and are visible at a given point, an address clause for any of them is not legal at this point.
+Similarly if a task specification declares entries that overload each other, they cannot be interrupt entries.
+The syntax does not allow an address clause for a library unit.
+An implementation may provide pragmas for the specification of program overlays.
+An address clause given for an entry associates the entry with some device that may cause an interrupt;
+such an entry is referred to in this section as an interrupt entry.
+If control information is supplied upon an interrupt, it is passed to an associated interrupt entry as one or more parameters of mode in;
+only parameters of this mode are allowed.
+An interrupt acts as an entry call issued by a hardware task whose priority is higher than the priority of the main program, and also higher than the priority of any user-defined task
+(that is, any task whose type is declared by a task unit in the program).
+The entry call may be an ordinary entry call, a timed entry call, or a conditional entry call, depending on the kind of interrupt and on the implementation.
+If a select statement contains both a terminate alternative and an accept alternative for an interrupt entry, then an implementation may impose further requirements for the selection of the terminate alternative in addition to those given in section 9.4.
+Interrupt entry calls need only have the semantics described above;
+they may be implemented by having the hardware directly execute the appropriate accept statements.
+Queued interrupts correspond to ordinary entry calls.
+Interrupts that are lost if not immediately processed correspond to conditional entry calls.
+It is a consequence of the priority rules that an accept statement executed in response to an interrupt takes precedence over ordinary, user-defined tasks, and can be executed without first invoking a scheduling action.
+One of the possible effects of an address clause for an interrupt entry is to specify the priority of the interrupt (directly or indirectly).
+Direct calls to an interrupt entry are allowed.
+At most one representation clause is allowed for a given type and a given aspect of its representation.
+Hence, if an alternative representation is needed, it is necessary to declare a second type, derived from the first, and to specify a different representation for the second type.
+Change of representation can now be accomplished by assignment with explicit type conversions:
+For each implementation there is a predefined library package called SYSTEM which includes the definitions of certain configuration-dependent characteristics.
+The specification of the package SYSTEM is implementation-dependent and must be given in Appendix F.
+The visible part of this package must contain at least the following declarations.
+The type ADDRESS is the type of the addresses provided in address clauses;
+it is also the type of the result delivered by the attribute ADDRESS.
+Values of the enumeration type NAME are the names of alternative machine configurations handled by the implementation;
+one of these is the constant SYSTEM_NAME.
+The named number STORAGE_UNIT is the number of bits per storage unit; the named number MEMORY_SIZE is the number of available storage units in the configuration; these named numbers are of the type universal integer.
+An alternative form of the package SYSTEM, with given values for any of SYSTEM_NAME, STORAGE_UNIT, and MEMORY_SIZE, can be obtained by means of the corresponding pragmas.
+These pragmas are only allowed at the start of a compilation, before the first compilation unit (if any) of the compilation.
+The effect of the above pragma is to use the enumeration literal with the specified identifier for the definition of the constant SYSTEM_NAME.
+This pragma is only allowed if the specified identifier corresponds to one of the literals of the type NAME.
+The effect of the above pragma is to use the value of the specified numeric literal for the definition of the named number STORAGE_UNIT.
+The effect of the above pragma is to use the value of the specified numeric literal for the definition of the named number MEMORY_SIZE.
+The compilation of any of these pragmas causes an implicit recompilation of the package SYSTEM.
+Consequently any compilation unit that names SYSTEM in its context clause becomes obsolete after this implicit recompilation.
+An implementation may impose further limitations on the use of these pragmas.
+For example, an implementation may allow them only at the start of the first compilation, when creating a new program library.
+It is a consequence of the visibility rules that a declaration given in the package SYSTEM is not visible in a compilation unit unless this package is mentioned by a with clause that applies (directly or indirectly) to the compilation unit.
+Within the package SYSTEM, the following named numbers are declared.
+The numbers FINE_DELTA and TICK are of the type universal real; the others are of the type universal integer.
+The smallest (most negative) value of all predefined integer types.
+The largest (most positive) value of all predefined integer types.
+The largest value allowed for the number of significant decimal digits in a floating point constraint.
+The largest possible number of binary digits in the mantissa of model numbers of a fixed point subtype.
+The smallest delta allowed in a fixed point constraint that has the range constraint -1.0 ..
+1.0.
+The basic clock period, in seconds.
+The values of certain implementation-dependent characteristics can be obtatined by interrogating appropriate representation attributes.
+These attributes are described below.
+For any object, program unit, label, or entry X:
+Yields the address of the first of the storage units allocated to X.
+For a subprogram, package, task unit or label, this value refers to the machine code associated with the corresponding body or statement.
+For an entry for which an address clause has been given, the value refers to the corresponding hardware interrupt.
+The value of this attribute is of the type ADDRESS defined in the package SYSTEM.
+For any type or subtype X or for any object X:
+Applied to an object, yields the number of bits allocated to hold the object.
+Applied to a type or subtype, yields the minimum number of bits that is needed by the implementation to hold any possible object of this type or subtype.
+The value of this attribute is of the type universal integer.
+For the above two representation attributes, if the prefix is the name of a function, the attribute is understood to be an attribute of the function (not of the result of calling the function).
+Similarly, if the type of the prefix is an access type, the attribute is understood to be an attribute of the prefix
+(not of the designated object: attributes of the latter can be written with a prefix ending with the reserved word all).
+For any component C of a record object R:
+Yields the offset, from the start of the first storage unit occupied by the record, of the first of the storage units occupied by C.
+This offset is measured in storage units.
+The value of this attribute is of the type universal integer.
+Yields the offset, from the start of the first of the storage units occupied by C, of the last bit occupied by C.
+This offset is measured in bits.
+The value of this attribute is of the type universal integer.
+Yields the offset, from the start of the first of the storage units occupied by C, of the last bit occupied by C.
+This offset is measured in bits.
+The value of this attribute is of the type universal integer.
+For any access type or subtype T:
+Yields the total number of storage units reserved for the collection associated with the base type of T.
+The value of this attribute is of the type universal integer.
+For any task type or task object T:
+Yields the number of storage units reserved for each activation of a task of the type T or for the activation of the task object T.
+The value of this attribute is of the type universal integer.
+For a task object X, the attribute X'SIZE gives the number of bits used to hold the object X, whereas X'STORAGE_SIZE gives the number of storage units allocated for the activation of the task designated by X.
+For a formal parameter X, if parameter passing is achieved by copy, then the attribute X'ADDRESS yields the address of the local copy;
+if parameter passing is by reference, then the address is that of the actual parameter.
+For every real type or subtype T, the following machine-dependent attributes are defined, which are not related to the model numbers.
+Programs using these attributes may thereby exploit properties that go beyond the minimal properties associated with the numeric type
+(see section 4.5.7 for the rules defining the accuracy of operations with real operands).
+Precautions must therefore be taken when using these machine- dependent attributes if portability is to be ensured.
+For both floating point and fixed point types:
+Yields the value TRUE if every predefined arithmetic operation on values of the base type of T either returns an exact result or performs rounding;
+yields the value FALSE otherwise.
+The value of this attribute is of the predefined type BOOLEAN.
+Yields the value TRUE if every predefined operation on values of the base type of T either provides a correct result, or raises the exception NUMERIC_ERROR in overflow situations (see 4.5.7);
+yields the value FALSE otherwise.
+The value of this attribute is of the predefined type BOOLEAN.
+For floating point types, the following attributes provide characteristics of the underlying machine representation, in terms of the canonical form defined in section 3.5.7:
+Yields the value of the radix used by the machine representation of the base type of T (the digits are extended digits in the range 0 to T'MACHINE_RADIX -1).
+The value of this attribute is of the type universal integer.
+Yields the largest value of exponent for the machine representation of the base type of T.
+The value of this attribute is of the type universal integer.
+Yields the smallest (most negative) value of exponent for the machine representation of the base type of T.
+The value of this attribute is of the type universal integer.
+For many machines the largest machine representable number of type F is almost X and the smallest positive representable number is Y.
+A machine code insertion can be achieved by a call to a procedure whose sequence of statements contains code statements.
+A code statement is only allowed in the sequence of statements of a procedure body.
+If a procedure body contains code statements, then within this procedure body the only allowed form of statement is a code statement (labeled or not), the only allowed declarative items are use clauses, and no exception handler is allowed
+(comments and pragmas are allowed as usual).
+Each machine instruction appears as a record aggregate of a record type that defines the corresponding instruction.
+The base type of the type mark of a code statement must be declared within the predefined library package called MACHINE_CODE;
+this package must be named by a with clause that applies to the compilation unit in which the code statement occurs.
+An implementation is not required to provide such a package.
+An implementation is allowed to impose further restrictions on the record aggregates allowed in code statements.
+For example, it may require that expressions contained in such aggregates be static expressions.
+An implementation may provide machine-dependent pragmas specifying register conventions and calling conventions.
+Such pragmas must be documented in Appendix F
+A subprogram written in another language can be called from an Ada program provided that all communication is achieved via parameters and function results.
+A pragma of the next form must be given for each such subprogram;
+a subprogram name is allowed to stand for several overloaded subprograms.
+This pragma is allowed at the place of a declarative item, and must apply in this case to a subprogram declared by an earlier declarative item of the same declarative part or package specification.
+The pragma is also allowed for a library unit;
+in this case the pragma must appear after the subprogram declaration, and before any subsequent compilation unit.
+The pragma specifies the other language (and therby the calling conventions ) and informs the compiler that an object module will be supplied for the corresponding subprogram.
+A body is not allowed for such a subprogram (not even in the form of a body stub) since the instructions of the subprogram are written in another language.
+This capability need not be provided by all implementations.
+An implementation may place restrictions on the allowable forms and places of parameters and calls.
+The conventions used by other language processors that call Ada programs are not part of the Ada language definition.
+Such conventions must be defined by these other language processors.
+The pragma INTERFACE is not defined for generic subprograms.
+The predefined generic library subprograms UNCHECKED_DEALLOCATION and UNCHECKED_CONVERSION are used for unchecked storage deallocation and for unchecked type conversions.
+Unchecked storage deallocation of an object designated by a value of an access type is achieved by a call of a procedure that is obtained by instantiation of the generic procedure UNCHECKED_DEALLOCATION.
+For example:
+Such a FREE procedure has the following effect:
+after executing FREE(X), the value of X is null
+FREE(X), when X is already equal to null, has no effect
+FREE(X), when X is not equal to null, is an indication that the object designated by X is no longer required, and that the storage it occupies is to be reclaimed.
+If X and Y designate the same object, then accessing this object through Y is erroneous if this access is performed (or attempted) after the call FREE(X);
+the efeect of each such access is not defined by the language.
+It is a consequence of the visibility rules that the generic procedure UNCHECKED_DEALLOCATION is not visible in a compilation unit unless this generic procedure is mentioned by a with clause that applies to the compilation unit.
+If X designates a task object, the call FREE(X); has no effect on the task designated by the value of this task object.
+The same holds for any subcomponent of the object designated by X, if this subcomponent is a task object.
+An unchecked type conversion can be achieved by a call of a function that is obtained by instantiation of the generic function UNCHECKED_CONVERSION.
+The effect of an unchecked conversion is to return the (uninterpreted) parameter value as a value of the target type, that is, the bit pattern defining the source value is returned unchanged as the bit pattern defining a value of the target type.
+An implementation may place restrictions on unchecked conversions, for example, restrictions dependeing on the respective sizes of objects of the source and target type.
+Such restrictions must be documented in appendix F.
+Whenever unchecked conversions are used, it is the programmer's responsibility to ensure that these conversions maintain the properties that are guaranteed by the language for objects of the target type.
+Programs that violate these properties by means of unchecked conversions are erroneous.
+It is a consequence of the visibility rules that the generic function UNCHECKED_CONVERSION is not visible in a compilation unit unless this generic function is mentioned by a with clause that applies to the compilation unit.
+Input-output is provided in the language by means of predefined packages.
+The generic packages SEQUENTIAL_IO and DIRECT_IO define input-output operations applicable to files containing elements of a given type.
+Additional operations for text input-output are supplied in the package TEXT_IO.
+The package IO_EXCEPTIONS defines the exceptions needed by the above three packages.
+Finally, a package LOW_LEVEL_IO is provided for direct control of peripheral devices.
+Values input from the external environment of the program, or output to the environment, are considered to occupy external files.
+An external file can be anything external to the program that can produce a value to be read or receive a value to be written.
+An external file is identified by a string (the name).
+A second string (the form) gives further system-dependent characteristics that may be associated with the file, such as the physical organization or access rights.
+The conventions governing the interpretation of such strings must be documented in Appendix F.
+Input and output operations are expressed as operations on objects of some file type, rather than directly in terms of the external files.
+In the remainder of this chapter, the term file is always used to refer to a file object;
+the term external file is used otherwise.
+The values transferred for a given file must all be of one type.
+Input-output for sequential files of values of a single element type is defined by means of the generic package SEQUENTIAL_IO.
+The skeleton of this package is given below.
+In order to define sequential input-output for a given element type, an instantiation of this generic unit, with the given type as actual parameter, must be declared.
+The resulting package contains the declaration of a file type (called FILE_TYPE) for files of such elements, as well as the operations applicable to these files, such as the OPEN, READ, and WRITE procedures.
+Input-output for direct access files is likewise defined by a generic package called DIRECT_IO.
+Input-output in human-readable form is defined by the (nongeneric) package TEXT_IO.
+Before input or output operations can be performed on a file, the file must first be associated with an external file.
+While such an association is in effect, the file is said to be open, and otherwise the file is said to be closed.
+The language does not define what happens to external files after the completion of the main program
+(in particular, if corresponding files have not been closed).
+The effect of input-output for access types is implementation-dependent.
+An open file has a current mode, which is a value of one of the enumeration types
+These values correspond respectively to the cases where only reading, both reading and writing, or only writing are to be performed.
+The mode of a file can be changed.
+Several file management operations are common to the three input-output packages.
+These operations are described in section 14.2.1 for sequential and direct files.
+Any additional effects concerning text input-output are described in section 14.3.1.
+The exceptions that can be raised by a call of an input-output subprogram are all defined in the package IO_EXCEPTIONS;
+the situations in which they can be raised are described, either following the description of the subprogram (and in section 14.4), or in Appendix F in the case of error situations that are implementation-dependent.
+Each instantiation of the generic packages SEQUENTIAL_IO and DIRECT_IO declares a different type FILE_TYPE;
+in the case of TEXT_IO, the type FILE_TYPE is unique.
+A bidirectional device can often be modeled as two sequential files associated with the device, one of mode IN_FILE, and one of mode OUT_FILE.
+An implementation may restrict the number of files that may be associated with a given external file.
+The effect of sharing an external file in this way by several file objects is implementation-dependent.
+Two kinds of access to external files are defined: sequential access and direct access.
+The corresponding file types and the associated operations are provided by the generic packages SEQUENTIAL_IO and DIRECT_IO.
+A file object to be used for sequential access is called a sequential file, and one to be used for direct access is called a direct file.
+For sequential access, the file is viewed as a sequence of values that are transferred in the order of their appearance (as produced by the program or by the environment).
+When the file is opened, transfer starts from the beginning of the file.
+For direct access, the file is viewed as a set of elements occupying consecutive positions in linear order;
+a value can be transferred to or from an element of the file at any selected position.
+The position of an element is specified by its index, which is a number, greater than zero, of the implementation-defined integer type COUNT.
+The first element, if any, has index one;
+the index of the last element, if any, is called the current size;
+the current size is zero if there are no elements.
+The current size is a property of the external file.
+An open direct file has a current index, which is the index that will be used by the next read or write operation.
+When a direct file is opened, the current index is set to one.
+The current index of a direct file is a property of a file object, not of an external file.
+All three file modes are allowed for direct files.
+The only allowed modes for sequential files are the modes IN_FILE and OUT_FILE.
+The procedures and functions described in this section provide for the control of external files;
+their declarations are repeated in each of the three packages for sequential, direct, and text input-output.
+For text input-output, the procedures CREATE, OPEN, and RESET have additional effects described in section 14.3.1.
+Establishes a new external file, with the given name and form, and associates this external file with the given file.
+The given file is left open.
+The current mode of the given file is set to the given access mode.
+The default access mode is the mode OUT_FILE for sequential and text input-output; it is the mode INOUT_FILE for direct input-output.
+For direct access, the size of the created file is implementation-dependent.
+A null string for NAME specifies an external file that is not accessible after the completion of the main program (a temporary file).
+A null string for FORM specifies the use of the default options of the implementation for the external file.
+The exception STATUS_ERROR is raised if the given file is already open.
+The exception NAME_ERROR is raised if the string given as NAME does not allow the identification of an external file.
+The exception USE_ERROR is raised if, for the specified mode, the environment does not support creation of an external file with the given name (in the absence of NAME_ERROR) and form.
+Associates the given file with an existing external file having the given name and form, and sets the current mode of the given file to the given mode.
+The given file is left open.
+The exception STATUS_ERROR is raised if the given file is already open.
+The exception NAME_ERROR is raised if the string given as NAME does not allow the identification of an external file;
+in particular, this exception is raised if no external file with the given name exists.
+The exception USE_ERROR is raised if, for the specified mode, the environment does not support opening for an external file with the given name (in the absence of NAME_ERROR) and form.
+Severs the association between the given file and its associated external file.
+The given file is left closed.
+The exception STATUS_ERROR is raised if the given file is not open.
+Deletes the external file associated with the given file.
+The given file is closed, and the external file ceases to exist.
+The exception STATUS_ERROR is raised if the given file is not open.
+The exception USE_ERROR is raised if (as fully defined in Appendix F) deletion of the external file is not supported by the environment.
+Resets the given file so that reading from or writing to its elements can be restarted from the beginning of the file;
+in particular, for direct access this means that the current index is set to one.
+If a MODE parameter is supplied, the current mode of the given file is set to the given mode.
+The exception STATUS_ERROR is raised if the file is not open.
+The exception USE_ERROR is raised if the environment does not support resetting for the external file and, also, if the environment does not support resetting to the specified mode for the external file.
+Returns the current mode of the given file.
+The exception STATUS_ERROR is raised if the file is not open.
+Returns a string which uniquely identifies the external file currently associated with the given file (and may thus be used in an OPEN operation).
+If an environment allows alternative specifications of the name (for example, abbreviations), the string returned by the function should correspond to a full specification of the name.
+The exception STATUS_ERROR is raised if the given file is not open.
+Returns the form string for the external file currently associated with the given file.
+If an environment allows alternative specifications of the form (for example, abbreviations using default options), the string returned by the function should correspond to a full specification
+(that is, it should indicate explicitly all options selected, including default options).
+The exception STATUS_ERROR is raised if the given file is not open.
+Returns TRUE if the file is open (that is, if it is associated with an external file), otherwise returns FALSE.
+The operations available for sequential input and output are described in this section.
+The exception STATUS_ERROR is raised if any of these operations is attempted for a file that is not open.
+Operates on a file of mode IN_FILE.
+Reads an element from the given file, and returns the value of this element in the ITEM parameter.
+The exception MODE_ERROR is raised if the mode is not IN_FILE.
+The exception END_ERROR is raised if no more elements can be read from the given file.
+The exception DATA_ERROR is raised if the element read cannot be interpreted as a value of the type ELEMENT_TYPE;
+however, an implementation is allowed to omit this check if performing the check is too complex.
+Operates on a file of mode OUT_FILE.
+Writes the value of ITEM to the given file.
+The exception MODE_ERROR is raised if the mode is not OUT_FILE.
+The exception USE_ERROR is raised if the capacity of the external file is exceeded.
+Operates on a file of mode IN_FILE.
+Returns TRUE if no more elements can be read from the given file; otherwise returns FALSE.
+The exception MODE_ERROR is raised if the mode is not IN_FILE.
+The operations available for direct input and output are described in this section.
+The exception STATUS_ERROR is raised if any of these operations is attempted for a file that is not open.
+Operates on a file of mode IN_FILE or INOUT_FILE.
+In the case of the first form, sets the current index of the given file to the index value given by the parameter FROM.
+Then (for both forms) returns, in the parameter ITEM, the value of the element whose position in the given file is specified by the current index of the file;
+finally, increases the current index by one.
+The exception MODE_ERROR is raised if the mode of the given file is OUT_FILE.
+The exception END_ERROR is raised if the index to be used exceeds the size of the external file.
+The exception DATA_ERROR is raised if the element read cannot be interpreted as a value of the type ELEMENT_TYPE;
+however, an implementation is allowed to omit this check if performing the check is too complex.
+Operates on a file of mode INOUT_FILE or OUT_FILE.
+In the case of the first form, sets the index of the given file to the index value given by the parameter TO.
+Then (for both forms) gives the value of the parameter ITEM to the element whose position in the given file is specified by the current index of the file;
+finally, increases the current index by one.
+The exception MODE_ERROR is raised if the mode of the given file is IN_FILE.
+The exception USE_ERROR is raised if the capacity of the external file is exceeded.
+Operates on a file of any mode.
+Sets the current index of the given file to the given index value
+(which may exceed the current size of the file).
+Operates on a file of any mode.
+Returns the current index of the given file.
+Operates on a file of any mode.
+Returns the current size of the external file that is associated with the given file.
+Operates on a file of mode IN_FILE or INOUT_FILE.
+Returns TRUE if the current index exceeds the size of the external file; otherwise returns FALSE.
+The exception MODE_ERROR is raised if the mode of the given file is OUT_FILE.
+This section describes the package TEXT_IO, which provides facilities for input and output in human-readable form.
+Each file is read or written sequentially, as a sequence of characters grouped into lines, and as a sequence of lines grouped into pages.
+The specification of the package is given below in section 14.3.10.
+The facilities for file management given above, in sections 14.2.1 and 14.2.2, are available for text input-output.
+In place of READ and WRITE, however, there are procedures GET and PUT that input values of suitable types from text files, and output values to them.
+These values are provided to the PUT procedures, and returned by the GET procedures, in a parameter ITEM.
+Several overloaded procedures of these names exist, for different types of ITEM.
+These GET procedures analyze the input sequences of characters as lexical elements (see Chapter 2) and return the corresponding values;
+the PUT procedures output the given values as appropriate lexical elements.
+Procedures GET and PUT are also available that input and output individual characters treated as character values rather than as lexical elements.
+In addition to the procedures GET and PUT for numeric and enumeration types of ITEM that operate on text files, analogous procedures are provided that read from and write to a parameter of type STRING.
+These procedures perform the same analysis and composition of character sequences as their counterparts which have a file parameter.
+For all GET and PUT procedures that operate on text files, and for many other subprograms, there are forms with and without a file parameter.
+Each such GET procedure operates on an input file, and each such PUT procedure operates on an output file.
+If no file is specified, a default input file or a default output file is used.
+At the beginning of program execution the default input and output files are the so-called standard input file and standard output file.
+These files are open, have respectively the current modes IN_FILE and OUT_FILE, and are associated with two implementation-defined external files.
+Procedures are provided to change the current default input file and the current default output file.
+From a logical point of view, a text file is a sequence of pages, a page is a sequence of lines, and a line is a sequence of characters;
+the end of a line is marked by a line terminator;
+the end of a page is marked by the combination of a line terminator immediately followed by a page terminator;
+and the end of a file is marked by the combination of a line terminator immediately followed by a page terminator and then a file terminator.
+Terminators are generated during output; either by calls of procedures provided expressly for that purpose; or implicitly as part of other operations, for example, when a bounded line length, a bounded page length, or both, have been specified for a file.
+The actual nature of terminators is not defined by the language and hence depends on the implementation.
+Although terminators are recognized or generated by certain of the procedures that follow, they are not necessarily implemented as characters or as sequences of characters.
+Whether they are characters (and if so which ones) in any particular implementation need not concern a user who neither explicitly outputs nor explicitly inputs control characters.
+The effect of input or output of control characters (other than horizontal tabulation) is not defined by the language.
+The characters of a line are numbered, starting from one;
+the number of a character is called its column number.
+For a line terminator, a column number is also defined: it is one more than the number of characters in the line.
+The lines of a page, and the pages of a file, are similarly numbered.
+The current column number is the column number of the next character or line terminator to be transferred.
+The current line number is the number of the current line.
+The current page number is the number of the current page.
+These numbers are values of the subtype POSITIVE_COUNT of the type COUNT
+(by convention, the value zero of the type COUNT is used to indicate special conditions).
+For an output file, a maximum line length can be specified and a maximum page length can be specified.
+If a value to be output cannot fit on the current line, for a specified maximum line length, then a new line is automatically started before the value is output;
+if, further, this new line cannot fit on the current page, for a specified maximum page length, then a new page is automatically started before the value is output.
+Functions are provided to determine the maximum line length and the maximum page length.
+When a file is opened with mode OUT_FILE, both values are zero: by convention, this means that the line lengths and page lengths are unbounded.
+(Consequently, output consists of a single line if the subprograms for explicit control of line and page structure are not used.)
+The constant UNBOUNDED is provided for this purpose.
+The only allowed file modes for text files are the modes IN_FILE and OUT_FILE.
+The subprograms given in section 14.2.1 for the control of external files, and the function END_OF_FILE given in section 14.2.2 for sequential input-output, are also available for text files.
+There is also a version of END_OF_FILE that refers to the current default input file.
+For text files, the procedures have the following additional effects:
+For the procedures CREATE and OPEN: After opening a file with mode OUT_FILE, the page length and line length are unbounded (both have the conventional value zero).
+After opening a file with mode IN_FILE or OUT_FILE, the current column, current line, and current page numbers are set to one.
+For the procedure CLOSE: If the file has the current mode OUT_FILE, has the effect of calling NEW_PAGE, unless the current page is already terminated;
+then outputs a file terminator.
+For the procedure RESET: If the file has the current mode OUT_FILE, has the effect of calling NEW_PAGE, unless the current page is already terminated;
+then outputs a file terminator.
+If the new file mode is OUT_FILE, the page and line lengths are unbounded.
+For all modes, the current column, line, and page numbers are set to one.
+The exception MODE_ERROR is raised by the procedure RESET upon an attempt to change the mode of a file that is either the current default input file, or the current default output file.
+The following subprograms provide for the control of the particular default files that are used when a file parameter is omitted from a GET, PUT or other operation of text input-output described below.
+Operates on a file of mode IN_FILE.
+Sets the current default input file to FILE.
+The exception STATUS_ERROR is raised if the given file is not open.
+The exception MODE_ERROR is raised if the mode of the given file is not IN_FILE.
+Operates on a file of mode OUT_FILE.
+Sets the current default output file to FILE.
+The exception STATUS_ERROR is raised if the given file is not open.
+The exception MODE_ERROR is raised if the mode of the given file is not OUT_FILE.
+Returns the standard input file (see 14.3).
+Returns the standard output file (see 14.3).
+Returns the current default input file.
+Returns the current default output file.
+The standard input and the standard output files cannot be opened, closed, reset, or deleted, because the parameter FILE of the corresponding procedures has the mode in out.
+The subprograms described in this section are concerned with the line and page structure of a file of mode OUT_FILE.
+They operate either on the file given as the first parameter, or, in the absence of such a file parameter, on the current default output file.
+They provide for output of text with a specified maximum line length or page length.
+In these cases, line and page terminators are output implicitly and automatically when needed.
+When line and page lengths are unbounded (that is, when they have the conventional value zero), as in the case of a newly opened file, new lines and new pages are only started when explicitly called for.
+In all cases, the exception STATUS_ERROR is raised if the file to be used is not open;
+the exception MODE_ERROR is raised if the mode of the file is not OUT_FILE.
+Sets the maximum line length of the specified output file to the number of characters specified by TO.
+The value zero for TO specifies an unbounded line length.
+The exception USE_ERROR is raised if the specified line length is inappropriate for the associated external file.
+Sets the maximum page length of the specified output file to the number of lines specified by TO.
+The value zero for TO specifies an unbounded page length.
+The exception USE_ERROR is raised if the specified page length is inappropriate for the associated external file.
+Returns the maximum line length currently set for the specified output file, or zero if the line length is unbounded.
+Returns the maximum page length currently set for the specified output file, or zero if the page length is unbounded.
+The subprograms described in this section provide for explicit control of line and page structure;
+they operate either on the file given as the first parameter, or, in the absence of such a file parameter, on the appropriate (input or output) current default file.
+The exception STATUS_ERROR is raised by any of these subprograms if the file to be used is not open.
+Operates on a file of mode OUT_FILE.
+For a SPACING of one: Outputs a line terminator and sets the current column number to one.
+Then increments the current line number by one, except in the case that the current line number is already greater than or equal to the maximum page length, for a bounded page length;
+in that case a page terminator is output, the current page number is incremented by one, and the current line number is set to one.
+For a SPACING greater than one, the above actions are performed SPACING times.
+The exception MODE_ERROR is raised if the mode is not OUT_FILE.
+Operates on a file of mode IN_FILE.
+For a SPACING of one: Reads and discards all characters until a line terminator has been read, and then sets the current column number to one.
+If the line terminator is not immediately followed by a page terminator, the current line number is incremented by one.
+Otherwise, if the line terminator is immediately followed by a page terminator, then the page terminator is skipped, the current page number is incremented by one, and the current line number is set to one.
+For a SPACING greater than one, the above actions are performed SPACING times.
+The exception MODE_ERROR is raised if the mode is not IN_FILE.
+The exception END_ERROR is raised if an attempt is made to read a file terminator.
+Operates on a file of mode IN_FILE.
+Returns TRUE if a line terminator or a file terminator is next;
+otherwise returns FALSE.
+The exception MODE_ERROR is raised if the mode is not IN_FILE.
+Operates on a file of mode OUT_FILE.
+Outputs a line terminator if the current line is not terminated, or if the current page is empty
+(that is, if the current column and line numbers are both equal to one).
+Then outputs a page terminator, which terminates the current page.
+Adds one to the current page number and sets the current column and line numbers to one.
+The exception MODE_ERROR is raised if the mode is not OUT_FILE.
+Operates on a file of mode IN_FILE.
+Reads and discards all characters and line terminators until a page terminator has been read.
+Then adds one to the current page number, and sets the current column and line numbers to one.
+The exception MODE_ERROR is raised if the mode is not IN_FILE.
+The exception END_ERROR is raised if an attempt is made to read a file terminator.
+Operates on a file of mode IN_FILE.
+Returns TRUE if the combination of a line terminator and a page terminator is next, or if a file terminator is next;
+otherwise returns FALSE.
+The exception MODE_ERROR is raised if the mode is not IN_FILE.
+Operates on a file of mode IN_FILE.
+Returns TRUE if a file terminator is next, or if the combination of a line, a page, and a file terminator is next;
+otherwise returns FALSE.
+The exception MODE_ERROR is raised if the mode is not IN_FILE.
+The following subprograms provide for the control of the current position of reading or writing in a file.
+In all cases, the default file is the current output file.
+If the file mode is OUT_FILE:
+If the value specified by TO is greater than the current column number, outputs spaces, adding one to the current column number after each space, until the current column number equals the specified value.
+If the value specified by TO is equal to the current column number, there is no effect.
+If the value specified by TO is less than the current column number, has the effect of calling NEW_LINE (with a spacing of one), then outputs (TO - 1) spaces, and sets the current column number to the specified value.
+The exception LAYOUT_ERROR is raised if the value specified by TO exceeds LINE_LENGTH when the line length is bounded (that is, when it does not have the conventional value zero).
+If the file mode is IN_FILE:
+Reads (and discards) individual characters, line terminators, and page terminators, until the next character to be read has a column number that equals the value specified by TO;
+there is no effect if the current column number already equals this value.
+Each transfer of a character or terminator maintains the current column, line, and page numbers in the same way as a GET procedure (see 14.3.5).
+(Short lines will be skipped until a line is reached that has a character at the specified column position.)
+The exception END_ERROR is raised if an attempt is made to read a file terminator.
+If the file mode is OUT_FILE:
+If the value specified by TO is greater than the current line number, has the effect of repeatedly calling NEW_LINE (with a spacing of one), until the current line number equals the specified value.
+If the value specified by TO is equal to the current line number, there is no effect.
+If the value specified by TO is less than the current line number, has the effect of calling NEW_PAGE followed by a call of NEW_LINE with a spacing equal to (TO - 1).
+The exception LAYOUT_ERROR is raised if the value specified by TO exceeds PAGE_LENGTH when the page length is bounded (that is, when it does not have the conventional value zero).
+If the mode is IN_FILE:
+Has the effect of repeatedly calling SKIP_LINE (with a spacing of one), until the current line number equals the value specified by TO;
+there is no effect if the current line number already equals this value.
+(Short pages will be skipped until a page is reached that has a line at the specified line position.)
+The exception END_ERROR is raised if an attempt is made to read a file terminator.
+Returns the current column number.
+The exception LAYOUT_ERROR is raised if this number exceeds COUNT'LAST.
+Returns the current line number.
+The exception LAYOUT_ERROR is raised if this number exceeds COUNT'LAST.
+Returns the current page number.
+The exception LAYOUT_ERROR is raised if this number exceeds COUNT'LAST.
+The column number, line number, or page number are allowed to exceed COUNT'LAST
+(as a consequence of the input or output of sufficiently many characters, lines, or pages).
+These events do not cause any exception to be raised.
+However, a call of COL, LINE, or PAGE raises the exception LAYOUT_ERROR if the corresponding number exceeds COUNT'LAST.
+A page terminator is always skipped whenever the preceding line terminator is skipped.
+An implementation may represent the combination of these terminators by a single character, provided that it is properly recognized at input.
+The procedures GET and PUT for items of the types CHARACTER, STRING, numeric types, and enumeration types are described in subsequent sections.
+Features of these procedures that are common to most of these types are described in this section.
+The GET and PUT procedures for items of type CHARACTER and STRING deal with individual character values; the GET and PUT procedures for numeric and enumeration types treat the items as lexical elements.
+All procedures GET and PUT have forms with a file parameter, written first.
+Where this parameter is omitted, the appropriate (input or output) current default file is understood to be specified.
+Each procedure GET operates on a file of mode IN_FILE.
+Each procedure PUT operates on a file of mode OUT_FILE.
+All procedures GET and PUT maintain the current column, line, and page numbers of the specified file: the effect of each of these procedures upon these numbers is the resultant of the effects of individual transfers of characters and of individual output or skipping of terminators.
+Each transfer of a character adds one to the current column number.
+Each output of a line terminator sets the current column number to one and adds one to the current line number.
+Each output of a page terminator sets the current column and line numbers to one and adds one to the current page number.
+For input, each skipping of a line terminator sets the current column number to one and adds one to the current line number;
+each skipping of a page terminator sets the current column and line numbers to one and adds one to the current page number.
+Similar considerations apply to the procedures GET_LINE, PUT_LINE, and SET_COL.
+Several GET and PUT procedures, for numeric and enumeration types, have format parameters which specify field lengths; these parameters are of the nonnegative subtype FIELD of the type INTEGER.
+Input-output of enumeration values uses the syntax of the corresponding lexical elements.
+Any GET procedure for an enumeration type begins by skipping any leading blanks, or line or page terminators;
+a blank being defined as a space or a horizontal tabulation character.
+Next, characters are input only so long as the sequence input is an initial sequence of an identifier or of a character literal
+(in particular, input ceases when a line terminator is encountered).
+The character or line terminator that causes input to cease remains available for subsequent input.
+For a numeric type, the GET procedures have a format parameter called WIDTH.
+If the value given for this parameter is zero, the GET procedure proceeds in the same manner as for enumeration types, but using the syntax of numeric literals instead of that of enumeration literals.
+If a nonzero value is given, then exactly WIDTH characters are input, or the characters up to a line terminator, whichever comes first;
+any skipped leading blanks are included in the count.
+The syntax used for numeric literals is an extended syntax that allows a leading sign
+(but no intervening blanks, or line or page terminators).
+Any PUT procedure, for an item of a numeric or an enumeration type, outputs the value of the item as a numeric literal, identifier, or character literal, as appropriate.
+This is preceded by leading spaces if required by the format parameters WIDTH or FORE (as described in later sections), and then a minus sign for a negative value;
+for an enumeration type, the spaces follow instead of leading.
+The format given for a PUT procedure is overridden if it is insufficiently wide.
+Two further cases arise for PUT procedures for numeric and enumeration types, if the line length of the specified output file is bounded
+(that is, if it does not have the conventional value zero).
+If the number of characters to be output does not exceed the maximum line length, but is such that they cannot fit on the current line, starting from the current column, then (in effect) NEW_LINE is called (with a spacing of one) before output of the item.
+Otherwise, if the number of characters exceeds the maximum line length, then the exception LAYOUT_ERROR is raised and no characters are output.
+The exception STATUS_ERROR is raised by any of the procedures GET, GET_LINE, PUT, and PUT_LINE if the file to be used is not open.
+The exception MODE_ERROR is raised by the procedures GET and GET_LINE if the mode of the file to be used is not IN_FILE; and by the procedures PUT and PUT_LINE, if the mode is not OUT_FILE.
+The exception END_ERROR is raised by a GET procedure if an attempt is made to skip a file terminator.
+The exception DATA_ERROR is raised by a GET procedure if the sequence finally input is not a lexical element corresponding to the type, in particular if no characters were input;
+for this test, leading blanks are ignored;
+for an item of a numeric type, when a sign is input, this rule applies to the succeeding numeric literal.
+The exception LAYOUT_ERROR is raised by a PUT procedure that outputs to a parameter of type STRING, if the length of the actual string is insufficient for the output of the item.
+In the examples, here and in sections 14.3.7 and 14.3.8, the string quotes and the lower case letter b are not transferred: they are shown only to reveal the layout and spaces.
+Example of overridden width parameter:
+For an item of type CHARACTER the following procedures are provided:
+After skipping any line terminators and any page terminators, reads the next character from the specified input file and returns the value of this character in the out parameter ITEM.
+The exception END_ERROR is raised if an attempt is made to skip a file terminator.
+If the line length of the specified output file is bounded (that is, does not have the conventional value zero), and the current column number exceeds it, has the effect of calling NEW_LINE with a spacing of one.
+Then, or otherwise, outputs the given character to the file.
+For an item of type STRING the following procedures are provided:
+Determines the length of the given string and attempts that number of GET operations for successive characters of the string
+(in particular, no operation is performed if the string is null).
+Determines the length of the given string and attempts that number of PUT operations for successive characters of the string
+(in particular, no operation is performed if the string is null).
+Replaces successive characters of the specified string by successive characters read from the specified input file.
+Reading stops if the end of the line is met, in which case the procedure SKIP_LINE is then called (in effect) with a spacing of one;
+reading also stops if the end of the string is met.
+Characters not replaced are left undefined.
+If characters are read, returns in LAST the index value such that ITEM(LAST) is the last character replaced
+(the index of the first character replaced is ITEM'FIRST).
+If no characters are read, returns in LAST an index value that is one less than ITEM'FIRST.
+The exception END_ERROR is raised if an attempt is made to skip a file terminator.
+Calls the procedure PUT for the given string, and then the procedure NEW_LINE with a spacing of one.
+In a literal string parameter of PUT, the enclosing string bracket characters are not output.
+Each doubled string bracket character in the enclosed string is output as a single string bracket character, as a consequence of the rule for string literals (see 2.6).
+A string read by GET or written by PUT can extend over several lines.
+The following procedures are defined in the generic package INTEGER_IO.
+This must be instantiated for the appropriate integer type (indicated by NUM in the specification).
+Values are output as decimal or based literals, without underline characters or exponent, and preceded by a minus sign if negative.
+The format (which includes any leading spaces and minus sign) can be specified by an optional field width parameter.
+Values of widths of fields in output formats are of the nonnegative integer subtype FIELD.
+Values of bases are of the integer subtype NUMBER_BASE.
+The default field width and base to be used by output procedures are defined by the following variables that are declared in the generic package INTEGER_IO:
+The following procedures are provided:
+If the value of the parameter WIDTH is zero, skips any leading blanks, line terminators, or page terminators, then reads a plus or a minus sign if present, then reads according to the syntax of an integer literal
+(which may be a based literal).
+If a nonzero value of WIDTH is supplied, then exactly WIDTH characters are input, or the characters (possibly none) up to a line terminator, whichever comes first;
+any skipped leading blanks are included in the count.
+Returns, in the parameter ITEM, the value of type NUM that corresponds to the sequence input.
+The exception DATA_ERROR is raised if the sequence input does not have the required syntax or if the value obtained is not of the subtype NUM.
+Outputs the value of the parameter ITEM as an integer literal, with no underlines, no exponent, and no leading zeros (but a single zero for the value zero), and a preceding minus sign for a negative value.
+If the resulting sequence of characters to be output has fewer than WIDTH characters, then leading spaces are first output to make up the difference.
+Uses the syntax for decimal literal if the parameter BASE has the value ten (either explicitly or through DEFAULT_BASE); otherwise, uses the syntax for based literal, with any letters in upper case.
+Reads an integer value from the beginning of the given string, following the same rules as the GET procedure that reads an integer value from a file, but treating the end of the string as a file terminator.
+Returns, in the parameter ITEM, the value of type NUM that corresponds to the sequence input.
+Returns in LAST the index value such that FROM(LAST) is the last character read.
+The exception DATA_ERROR is raised if the sequence input does not have the required syntax or if the value obtained is not of the subtype NUM.
+Outputs the value of the parameter ITEM to the given string, following the same rule as for output to a file, using the length of the given string as the value for WIDTH.
+The following procedures are defined in the generic packages FLOAT_IO and FIXED_IO, which must be instantiated for the appropriate floating point or fixed point type respectively (indicated by NUM in the specifications).
+Values are output as decimal literals without underline characters.
+The format of each value output consists of a FORE field, a decimal point, an AFT field, and (if a nonzero EXP parameter is supplied) the letter E and an EXP field.
+The two possible formats thus correspond to:
+and to:
+without any spaces between these fields.
+The FORE field may include leading spaces, and a minus sign for negative values.
+The AFT field includes only decimal digits (possibly with trailing zeros).
+The EXP field includes the sign (plus or minus) and the exponent (possibly with leading zeros).
+For floating point types, the default lengths of these fields are defined by the following variables that are declared in the generic package FLOAT_IO:
+For fixed point types, the default lengths of these fields are defined by the following variables that are declared in the generic package FIXED_IO:
+The following procedures are provided:
+If the value of the parameter WIDTH is zero, skips any leading blanks, line terminators, or page terminators, then reads a plus or a minus sign if present, then reads according to the syntax of a real literal
+(which may be a based literal).
+If a nonzero value of WIDTH is supplied, then exactly WIDTH characters are input, or the characters (possibly none) up to a line terminator, whichever comes first;
+any skipped leading blanks are included in the count.
+Returns, in the parameter ITEM, the value of type NUM that corresponds to the sequence input.
+The exception DATA_ERROR is raised if the sequence input does not have the required syntax or if the value obtained is not of the subtype NUM.
+Outputs the value of the parameter ITEM as a decimal literal with the format defined by FORE, AFT and EXP.
+If the value is negative, a minus sign is included in the integer part.
+If EXP has the value zero, then the integer part to be output has as many digits as are needed to represent the integer part of the value of ITEM, overriding FORE if necessary,
+or consists of the digit zero if the value of ITEM has no integer part.
+If EXP has a value greater than zero, then the integer part to be output has a single digit, which is nonzero except for the value 0.0 of ITEM.
+In both cases, however, if the integer part to be output has fewer than FORE characters, including any minus sign, then leading spaces are first output to make up the difference.
+The number of digits of the fractional part is given by AFT, or is one if AFT equals zero.
+The value is rounded;
+a value of exactly one half in the last place may be rounded either up or down.
+If EXP has the value zero, there is no exponent part.
+If EXP has a value greater than zero, then the exponent part to be output has as many digits as are needed to represent the exponent part of the value of ITEM (for which a single digit integer part is used), and includes an initial sign (plus or minus).
+If the exponent part to be output has fewer than EXP characters, including the sign, then leading zeros precede the digits, to make up the difference.
+For the value 0.0 of ITEM, the exponent has the value zero.
+Reads a real value from the beginning of the given string, following the same rule as the GET procedure that reads a real value from a file, but treating the end of the string as a file terminator.
+Returns, in the parameter ITEM, the value of type NUM that corresponds to the sequence input.
+Returns in LAST the index value such that FROM(LAST) is the last character read.
+The exception DATA_ERROR is raised if the sequence input does not have the required syntax, or if the value obtained is not of the subtype NUM.
+Outputs the value of the parameter ITEM to the given string, following the same rule as for output to a file, using a value for FORE such that the sequence of characters output exactly fills the string, including any leading spaces.
+For an item with a positive value, if output to a string exactly fills the string without leading spaces, then output of the corresponding negative value will raise LAYOUT_ERROR.
+The following procedures are defined in the generic package ENUMERATION_IO, which must be instantiated for the appropriate enumeration type (indicated by ENUM in the specification).
+Values are output using either upper or lower case letters for identifiers.
+This is specified by the parameter SET, which is of the enumeration type TYPE_SET.
+The format (which includes any trailing spaces) can be specified by an optional field width parameter.
+The default field width and letter case are defined by the following variables that are declared in the generic package ENUMERATION_IO:
+The following procedures are provided:
+After skipping any leading blanks, line terminators, or page terminators, reads an identifier according to the syntax of this lexical element (lower and upper case being considered equivalent), or a character literal according to the syntax of this lexical element (including the apostrophes).
+Returns, in the parameter ITEM, the value of type ENUM that corresponds to the sequence input.
+The exception DATA_ERROR is raised if the sequence input does not have the required syntax, or if the identifier or character literal does not correspond to a value of the subtype ENUM.
+Outputs the value of the parameter ITEM as an enumeration literal (either an identifier or a character literal).
+The optional parameter SET indicates whether lower case or upper case is used for identifiers; it has no effect for character literals.
+If the sequence of characters produced has fewer than WIDTH characters, then trailing spaces are finally output to make up the difference.
+Reads an enumeration value from the beginning of the given string, following the same rule as the GET procedure that reads an enumeration value from a file, but treating the end of the string as a file terminator.
+Returns, in the parameter ITEM, the value of type ENUM that corresponds to the sequence input.
+Returns in LAST the index value such that FROM(LAST) is the last character read.
+The exception DATA_ERROR is raised if the sequence input does not have the required syntax, or if the identifier or character literal does not correspond to a value of the subtype ENUM.
+Outputs the value of the parameter ITEM to the given string, following the same rule as for output to a file, using the length of the given string as the value for WIDTH.
+Although the specification of the package ENUMERATION_IO would allow instantiation for an integer type, this is not the intended purpose of this generic package, and the effect of such instantiations is not defined by the language.
+There is a difference between PUT defined for characters, and for enumeration values.
+The type BOOLEAN is an enumeration type, hence ENUMERATION_IO can be instantiated for this type.
+The following exceptions can be raised by input-output operations.
+They are declared in the package IO_EXCEPTIONS, defined in section 14.5;
+this package is named in the context clause for each of the three input-output packages.
+Only outline descriptions are given of the conditions under which NAME_ERROR, USE_ERROR, and DEVICE_ERROR are raised;
+for full details see Appendix F.
+If more than one error condition exists, the corresponding exception that appears earliest in the following list is the one that is raised.
+The exception STATUS_ERROR is raised by an attempt to operate upon a file that is not open, and by an attempt to open a file that is already open.
+The exception MODE_ERROR is raised by an attempt to read from, or test for the end of, a file whose current mode is OUT_FILE, and also by an attempt to write to a file whose current mode is IN_FILE.
+In the case of TEXT_IO, the exception MODE_ERROR is also raised by specifying a file whose current mode is OUT_FILE in a call of SET_INPUT, SKIP_LINE, END_OF_LINE, SKIP_PAGE, or END_OF_PAGE; and by specifying a file whose current mode is IN_FILE in a call of SET_OUTPUT, SET_LINE_LENGTH, SET_PAGE_LENGTH, LINE_LENGTH, PAGE_LENGTH, NEW_LINE, or NEW_PAGE.
+The exception NAME_ERROR is raised by a call of CREATE or OPEN if the string given for the parameter NAME does not allow the identification of an external file.
+For example, this exception is raised if the string is improper, or, alternatively, if either none or more than one external file corresponds to the string.
+The exception USE_ERROR is raised if an operation is attempted that is not possible for reasons that depend on characteristics of the external file.
+For example, this exception is raised by the procedure CREATE, among other circumstances, if the given mode is OUT_FILE but the form specifies an input only device, if the parameter FORM specifies invalid access rights, or if an external file with the given name already exists and overwriting is not allowed.
+The exception DEVICE_ERROR is raised if an input-output operation cannot be completed because of a malfunction of the underlying system.
+The exception END_ERROR is raised by an attempt to skip (read past) the end of a file.
+The exception DATA_ERROR may be raised by the procedure READ if the element read cannot be interpreted as a value of the required type.
+This exception is also raised by a procedure GET (defined in the package TEXT_IO) if the input character sequence fails to satisfy the required syntax, or if the value input does not belong to the range of the required type or subtype.
+The exception LAYOUT_ERROR is raised (in text input-output) by COL, LINE, or PAGE if the value returned exceeds COUNT'LAST.
+The exception LAYOUT_ERROR is also raised on output by an attempt to set column or line numbers in excess of specified maximum line or page lengths, respectively (excluding the unbounded cases).
+It is also raised by an attempt to PUT too many characters to a string.
+This package defines the exceptions needed by the packages SEQUENTIAL_IO, DIRECT_IO, and TEXT_IO.
+A low level input-output operation is an operation acting on a physical device.
+Such an operation is handled by using one of the (overloaded) predefined procedures SEND_CONTROL and RECEIVE_CONTROL.
+A procedure SEND_CONTROL may be used to send control information to a physical device.
+A procedure RECEIVE_CONTROL may be used to monitor the execution of an input-output operation by requesting information from the physical device.
+Such procedures are declared in the standard package LOW_LEVEL_IO and have two parameters identifying the device and the data.
+However, the kinds and formats of the control information will depend on the physical characteristics of the machine and the device.
+Hence, the types of the parameters are implementation-defined.
+Overloaded definitions of these procedures should be provided for the supported devices.
+The visible part of the package defining these procedures is outlined as follows:
+The bodies of the procedures SEND_CONTROL and RECEIVE_CONTROL for various devices can be supplied in the body of the package LOW_LEVEL_IO.
+These procedure bodies may be written with code statements.
+The following example shows the use of some of the text input-output facilities in a dialogue with a user at a terminal.
+The user is prompted to type a color, and the program responds by giving the number of items of that color available in stock, according to an inventory.
+The default input and output files are used.
+For simplicity, all the requisite instantiations are given within one subprogram;
+in practice, a package, separate from the procedure, would be used.
+Example of an interaction (characters typed by the user are italicized):
+For a prefix P that denotes an object, a program unit, a label, or an entry:
+Yields the address of the first of the storage units allocated to P.
+For a subprogram, package, task unit, or label, this value refers to the machine code associated with the corresponding body or statement.
+For an entry for which an address clause has been given, the value refers to the corresponding hardware interrupt.
+The value of this attribute is of the type ADDRESS defined in the package SYSTEM.
+(See 13.7.2.)
+For a prefix P that denotes a fixed point subtype:
+Yields the number of decimal digits needed after the point to accommodate the precision of the subtype P, unless the delta of the subtype P is greater than 0.1, in which case the attribute yields the value one.
+(P'AFT is the smallest positive integer N for which (10**N)*P'DELTA is greater than or equal to one.)
+The value of this attribute is of the type universal integer.
+(See 3.5.10.)
+For a prefix P that denotes a type or subtype:
+This attribute denotes the base type of P.
+It is only allowed as the prefix of the name of another attribute: for example, P'BASE'FIRST.
+(See 3.3.3.)
+For a prefix P that is appropriate for a task type:
+Yields the value FALSE when the execution of the task P is either completed or terminated, or when the task is abnormal;
+yields the value TRUE otherwise.
+The value of this attribute is of the predefined type BOOLEAN.
+(See 9.9.)
+For a prefix P that denotes an object of a type with discriminants:
+Yields the value TRUE if a discriminant constraint applies to the object P, or if the object is a constant
+(including a formal parameter or generic formal parameter of mode in);
+yields the value FALSE otherwise.
+If P is a generic formal parameter of mode in out, or if P is a formal parameter of mode in out or out and the type mark given in the corresponding parameter specification denotes an unconstrained type with discriminants, then the value of this attribute is obtained from that of the corresponding actual parameter.
+The value of this attribute is of the predefined type BOOLEAN.
+(See 3.7.4.)
+For a prefix P that denotes a private type or subtype:
+Yields the value FALSE if P denotes an unconstrained nonformal private type with discriminants; also yields the value FALSE if P denotes a generic formal private type and the associated actual subtype is either an unconstrained type with discriminants or an unconstrained array type;
+yields the value TRUE otherwise.
+The value of this attribute is of the predefined type BOOLEAN.
+(See 7.4.2.)
+For a prefix P that denotes an entry of a task unit:
+Yields the number of entry calls presently queued on the entry (if the attribute is evaluated within an accept statement for the entry P, the count does not include the calling task).
+The value of this attribute is of the type universal integer.
+(See 9.9.)
+For a prefix P that denotes a fixed point subtype:
+Yields the value of the delta specified in the fixed accuracy definition for the subtype P.
+The value of this attribute is of the type universal real.
+(See 3.5.10.)
+For a prefix P that denotes a floating point subtype:
+Yields the number of decimal digits in the decimal mantissa of model numbers of the subtype P.
+(This attribute yields the number D of section 3.5.7.)
+The value of this attribute is of the type universal integer.
+(See 3.5.8.)
+For a prefix P that denotes a floating point subtype:
+Yields the largest exponent value in the binary canonical form of model numbers of the subtype P.
+(This attribute yields the product 4*B of section 3.5.7.)
+The value of this attribute is of the type universal integer.
+(See 3.5.8.)
+For a prefix P that denotes a floating point subtype:
+Yields the absolute value of the difference between the model number 1.0 and the next model number above, for the subtype P.
+The value of this attribute is of the type universal real.
+(See 3.5.8.)
+For a prefix P that denotes a scalar type, or a subtype of a scalar type:
+Yields the lower bound of P.
+The value of this attribute has the same type as P.
+(See 3.5.)
+For a prefix P that is appropriate for an array type, or that denotes a constrained array subtype:
+Yields the lower bound of the first index range.
+The value of this attribute has the same type as this lower bound.
+(See 3.6.2 and 3.8.2.)
+For a prefix P that is appropriate for an array type, or that denotes a constrained array subtype:
+Yields the lower bound of the N-th index range.
+The value of this attribute has the same type as this lower bound.
+The argument N must be a static expression of type universal integer.
+The value of N must be positive (nonzero) and no greater than the dimensionality of the array.
+(See 3.6.2 and 3.8.2.)
+For a prefix P that denotes a component of a record object:
+Yields the offset, from the start of the first of the storage units occupied by the component, of the first bit occupied by the component.
+This offset is measured in bits.
+The value of this attribute is of the type universal integer.
+(See 13.7.2.)
+For a prefix P that denotes a fixed point subtype:
+Yields the minimum number of characters needed for the integer part of the decimal representation of any value of the subtype P, assuming that the representation does not include an exponent, but includes a one-character prefix that is either a minus sign or a space.
+(This minimum number does not include superfluous zeros or underlines, and is at least two.)
+The value of this attribute is of the type universal integer.
+(See 3.5.10.)
+For a prefix P that denotes a discrete type or subtype:
+This attribute is a function with a single parameter.
+The actual parameter X must be a value of the base type of P.
+The result type is the predefined type STRING.
+The result is the image of the value of X, that is, a sequence of characters representing the value in display form.
+The image of an integer value is the corresponding decimal literal; without underlines, leading zeros, exponent, or trailing spaces; but with a one character prefix that is either a minus sign or a space.
+The image of an enumeration value is either the corresponding identifier in upper case or the corresponding character literal (including the two apostrophes); neither leading nor trailing spaces are included.
+The image of a character other than a graphic character is implementation-defined.
+(See 3.5.5.)
+For a prefix P that denotes a real subtype:
+The attribute yields the largest positive model number of the subtype P.
+The value of this attribute is of the type universal real.
+(See 3.5.8 and 3.5.10.)
+For a prefix P that denotes a scalar type, or a subtype of a scalar type:
+Yields the upper bound of P.
+The value of this attribute has the same type as P.
+(See 3.5.)
+For a prefix P that is appropriate for an array type, or that denotes a constrained array subtype:
+Yields the upper bound of the first index range.
+The value of this attribute has the same type as this upper bound.
+(See 3.6.2 and 3.8.2.)
+For a prefix P that is appropriate for an array type, or that denotes a constrained array subtype:
+Yields the upper bound of the N-th index range.
+The value of this attribute has the same type as this upper bound.
+The argument N must be a static expression of type universal integer.
+The value of N must be positive (nonzero) and no greater than the dimensionality of the array.
+(See 3.6.2 and 3.8.2.)
+For a prefix P that denotes a component of a record object:
+Yields the offset, from the start of the first of the storage units occupied by the component, of the last bit occupied by the component.
+This offset is measured in bits.
+The value of this attribute is of the type universal integer.
+(See 13.7.2.)
+For a prefix P that is appropriate for an array type, or that denotes a constrained array subtype:
+Yields the number of values of the first index range (zero for a null range).
+The value of this attribute is of the type universal integer.
+(See 3.6.2.)
+For a prefix P that is appropriate for an array type, or that denotes a constrained array subtype:
+Yields the number of values of the N-th index range (zero for a null range).
+The value of this attribute is of the type universal integer.
+The argument N must be a static expression of type universal integer.
+The value of N must be positive (nonzero) and no greater than the dimensionality of the array.
+(See 3.6.2 and 3.8.2.)
+For a prefix P that denotes a floating point type or subtype:
+Yields the largest value of exponent for the machine representation of the base type of P.
+The value of this attribute is of the type universal integer.
+(See 13.7.3.)
+For a prefix P that denotes a floating point type or subtype:
+Yields the smallest (most negative) value of exponent for the machine representation of the base type of P.
+The value of this attribute is of the type universal integer.
+(See 13.7.3.)
+For a prefix P that denotes a floating point type or subtype:
+Yields the number of digits in the mantissa for the machine representation of the base type of P
+(the digits are extended digits in the range 0 to P'MACHINE_RADIX - 1).
+The value of this attribute is of the type universal integer.
+(See 13.7.3.)
+For a prefix P that denotes a real type or subtype:
+Yields the value TRUE if every predefined operation on values of the base type of P either provides a correct result, or raises the exception NUMERIC_ERROR in overflow situations;
+yields the value FALSE otherwise.
+The value of this attribute is of the predefined type BOOLEAN.
+(See 13.7.3.)
+For a prefix P that denotes a floating point type or subtype:
+Yields the value of the radix used by the machine representation of the base type of P.
+The value of this attribute is of the type universal integer.
+(See 13.7.3.)
+For a prefix P that denotes a real type or subtype:
+Yields the value TRUE if every predefined arithmetic operation on values of the base type of P either returns an exact result or performs rounding;
+yields the value FALSE otherwise.
+The value of this attribute is of the predefined type BOOLEAN.
+(See 13.7.3.)
+For a prefix P that denotes a real subtype:
+Yields the number of binary digits in the binary mantissa of model numbers of the subtype P.
+(This attribute yields the number B of section 3.5.7 for a floating point type, or of section 3.5.9 for a fixed point type.)
+The value of this attribute is of the type universal integer.
+(See 3.5.8 and 3.5.10.)
+For a prefix P that denotes a discrete type or subtype:
+This attribute is a function with a single parameter.
+The actual parameter X must be a value of the base type of P.
+The result type is the type universal integer.
+The result is the position number of the value of the actual parameter.
+(See 3.5.5.)
+For a prefix P that denotes a component of a record object:
+Yields the offset, from the start of the first storage unit occupied by the record, of the first of the storage units occupied by the component.
+This offset is measured in storage units.
+The value of this attribute is of the type universal integer.
+(See 13.7.2.)
+For a prefix P that denotes a discrete type or subtype:
+This attribute is a function with a single parameter.
+The actual parameter X must be a value of the base type of P.
+The result type is the base type of P.
+The result is the value whose position number is one less than that of X.
+The exception CONSTRAINT_ERROR is raised if X equals P'BASE'FIRST.
+(See 3.5.5.)
+For a prefix P that is appropriate for an array type, or that denotes a constrained array subtype:
+Yields the first index range of P, that is, the range P'FIRST ..
+P'LAST.
+(See 3.6.2.)
+For a prefix P that is appropriate for an array type, or that denotes a constrained array subtype:
+Yields the N-th index range of P, that is, the range P'FIRST(N) ..
+P'LAST(N).
+(See 3.6.2.)
+For a prefix P that denotes a floating point type or subtype:
+Yields the largest exponent value in the binary canonical form of safe numbers of the base type of P.
+(This attribute yields the number E of section 3.5.7.)
+The value of this attribute is of the type universal integer.
+(See 3.5.8.)
+For a prefix P that denotes a real type or subtype:
+Yields the largest positive safe number of the base type of P.
+The value of this attribute is of the type universal real.
+(See 3.5.8 and 3.5.10.)
+For a prefix P that denotes a real type or subtype:
+Yields the smallest positive (nonzero) safe number of the base type of P.
+The value of this attribute is of the type universal real.
+(See 3.5.8 and 3.5.10.)
+For a prefix P that denotes an object:
+Yields the number of bits allocated to hold the object.
+The value of this attribute is of the type universal integer.
+(See 13.7.2.)
+For a prefix P that denotes any type or subtype:
+Yields the minimum number of bits that is needed by the implementation to hold any possible object of the type or subtype P.
+The value of this attribute is of the type universal integer.
+(See 13.7.2.)
+For a prefix P that denotes a real subtype:
+Yields the smallest positive (nonzero) model number of the subtype P.
+The value of this attribute is of the type universal real.
+(See 3.5.8 and 3.5.10.)
+For a prefix P that denotes an access type or subtype:
+Yields the total number of storage units reserved for the collection associated with the base type of P.
+The value of this attribute is of the type universal integer.
+(See 13.7.2.)
+For a prefix P that denotes a task type or a task object:
+Yields the number of storage units reserved for each activation of a task of the type P or for the activation of the task object P.
+The value of this attribute is of the type universal integer.
+(See 13.7.2.)
+For a prefix P that denotes a discrete type or subtype:
+This attribute is a function with a single parameter.
+The actual parameter X must be a value of the base type of P.
+The result type is the base type of P.
+The result is the value whose position number is one greater than that of X.
+The exception CONSTRAINT_ERROR is raised if X equals P'BASE'LAST.
+(See 3.5.5.)
+For a prefix P that is appropriate for a task type:
+Yields the value TRUE if the task P is terminated; yields the value FALSE otherwise.
+The value of this attribute is of the predefined type BOOLEAN.
+(See 9.9.)
+For a prefix P that denotes a discrete type or subtype:
+This attribute is a special function with a single parameter X which can be of any integer type.
+The result type is the base type of P.
+The result is the value whose position number is the universal integer value corresponding to X.
+The exception CONSTRAINT_ERROR is raised if the universal integer value corresponding to X is not in the range P'POS(P'BASE'FIRST) ..
+P'POS(P'BASE'LAST).
+(See 3.5.5.)
+For a prefix P that denotes a discrete type or subtype:
+This attribute is a function with a single parameter.
+The actual parameter X must be a value of the predefined type STRING.
+The result type is the base type of P.
+Any leading and any trailing spaces of the sequence of characters that corresponds to X are ignored.
+For an enumeration type, if the sequence of characters has the syntax of an enumeration literal and if this literal exists for the base type of P, the result is the corresponding enumeration value.
+For an integer type, if the sequence of characters has the syntax of an integer literal, with an optional single leading character that is a plus or minus sign, and if there is a corresponding value in the base type of P, the result is this value.
+In any other case, the exception CONSTRAINT_ERROR is raised.
+(See 3.5.5.)
+For a prefix P that denotes a discrete subtype:
+Yields the maximum image length over all values of the subtype P
+(the image is the sequence of characters returned by the attribute IMAGE).
+The value of this attribute is of the type universal integer.
+(See 3.5.5.)

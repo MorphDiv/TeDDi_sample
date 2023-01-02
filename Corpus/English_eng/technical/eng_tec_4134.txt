@@ -1,0 +1,50 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/en.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Manual
+Prev
+Next
+(PHP 4)
+This function will turn output buffering on.
+While output buffering is active no output is sent from the script (other than headers), instead the output is stored in an internal buffer.
+The contents of this internal buffer may be copied into a string variable using ob_get_contents().
+To output what is stored in the internal buffer, use ob_end_flush().
+Alternatively, ob_end_clean() will silently discard the buffer contents.
+An optional output_callback function may be specified.
+This function takes a string as a parameter and should return a string.
+The function will be called when ob_end_flush() is called, or when the output buffer is flushed to the browser at the end of the request.
+When output_callback is called, it will receive the contents of the output buffer as its parameter and is expected to return a new output buffer as a result, which will be sent to the browser.
+Note:
+In PHP 4.0.4, ob_gzhandler() was introduced to facilitate sending gz-encoded data to web browsers that support compressed web pages. ob_gzhandler() determines what type of content encoding the browser will accept and will return it's output accordingly.
+Output buffers are stackable, that is, you may call ob_start() while another ob_start() is active.
+Just make sure that you call ob_end_flush() the appropriate number of times.
+If multiple output callback functions are active, output is being filtered sequentially through each of them in nesting order.
+ob_end_clean(), ob_end_flush(), ob_clean(), ob_flush() and ob_start() may not be called from a callback function.
+If you call them from callback function, the behavior is undefined.
+If you would like to delete the contents of a buffer, return "" (a null string) from callback function.
+Example 1.
+User defined callback function example
+?php function callback( $buffer) {/ / replace all the apples with oranges return (ereg_replace("apples", "oranges", $buffer));} ob_start("callback");? html body p It's like comparing apples to oranges. / body / html ?php ob_end_flush();?
+Would produce:
+html body p It 's like comparing oranges to oranges. / body / html
+See also ob_get_contents(), ob_end_flush(), ob_end_clean(), ob_implicit_flush() and ob_gzhandler().
+Prev
+Home
+Next
+ob_implicit_flush
+Up
+Object property and method call overloading

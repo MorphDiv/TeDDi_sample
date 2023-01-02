@@ -1,0 +1,47 @@
+# language_name_wals:	German
+# language_name_glotto:	German
+# iso639_3:	deu
+# year_composed:	NA
+# year_published:	NA
+# mode:	written
+# genre_broad:	technical
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	PHP
+# source:	https://object.pouta.csc.fi/OPUS-PHP/v1/raw/de.zip
+# copyright_short:	http://opus.nlpl.eu/PHP.php
+# copyright_long:	http://opus.nlpl.eu/PHP.php J. Tiedemann, 2012, Parallel Data, Tools and Interfaces in OPUS. In Proceedings of the 8th International Conference on Language Resources and Evaluation (LREC 2012)
+# sample_type:	whole
+# comments:	NA
+
+PHP Handbuch
+Zurück
+Nach vorne
+
+Diese Funktion liefert ein Verbindungs-Handle bzw.
+FALSE bei evtl. auftretenden Fehlern.
+Verbindungen können nicht nur zu IMAP-, sondern auch zu POP - oder NNTP-Servern aufgebaut werden, wobei dann allerdings nicht der gesamte Funktionsumfang zur Verfügung steht.
+Liefert ein IMAP-Streamhandle oder FALSE bei Fehlern.
+Der Name eines Postfachs setzt sich zusammen aus der Bezeichnung des Servers und dem Pfad des Postfachs auf diesem Server.
+Der spezielle Name INBOX steht dabei als Synonym für das persönliche Postfach des jeweiligen Benutzers.
+Die Bezeichnung des Servers setzt sich zusammen aus dem eigentlichen Servernamen oder der entsprechenden IP-Adresse sowie das gewünschte Protokoll (getrennt durch '/') und optional der zu benutzende Port (getrennt durch ':').
+Die gesamte Serverbezeichnung wird in '{' und '} 'eingeschlossen und muss immer mit angegeben werden.
+Enthält der Name eines Postfachs Zeichen außerhalb des druckbaren ASCII-Bereiches wie z.B.
+Umlaute oder das 'ß', so muss er mit Hilfe der Funktion imap_utf7_encode() codiert werden.
+Der optionale Parameter flags kann sich aus den folgenden Bitmasken zusammensetzen:
+OP_READONLY - Über diese Verbindung darf nur lesend zugegriffen werden
+OP_ANONYMOUS - Bei NNTP-Verbindungen wird die Datei .newsrc nicht aktualisiert
+OP_HALFOPEN - es wird eine IMAP - oder NNTP-Verbindung aufgebaut, aber noch kein Postfach ausgewählt
+CL_EXPUNGE - beim Schließen der Verbindung werden alle zum Löschen vorgemerkte Nachrichten endgültig gelöscht (siehe auch imap_delete() und imap_expunge())
+Das folgende Beispiel stellt eine Verbindung zu einem lokalen IMAP-Server (IMAP = Port 143) her:
+
+$mbox = imap_open ("{localhost / pop3:110}INBOX", "user_id", "password");
+$nntp = imap_open ("{localhost / nntp:119}comp.test", "", "");
+Beispiel 1. imap_open() Beispiel
+$mbox = imap_open ("{your.imap.host:143}", "username", "password"); echo "p h1 Mailboxes / h1 \n"; $folders = imap_listmailbox ($mbox, "{your.imap.host:143}", "*"); if ($folders == false) echo "Call failed br \n"; else while (list ($key, $val) = each ($folders)) echo $val." br \n"; echo "p h1 Headers in INBOX / h1 \n"; $headers = imap_headers ($mbox); if ($headers == false) echo "Call failed br \n"; else while (list ($key, $val) = each ($headers)) echo $val." br n"; imap_close ($mbox);
+Zurück
+Zum Anfang
+Nach vorne
+
+Nach oben
