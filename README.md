@@ -10,7 +10,7 @@ If you use TeDDi, please cite as:
 
 To contribute code or data to the repository, please first refer to our guidelines on [contributing](CONTRIBUTING.md).
 
-Different data formats available for direct [download](https://drive.switch.ch/index.php/s/MJv7xFkzqlzFn0y)
+Different data formats available for direct [download](https://drive.switch.ch/index.php/s/MJv7xFkzqlzFn0y).
 
 Main Contributors (alphabetical order):
 
