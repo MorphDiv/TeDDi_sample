@@ -1,7 +1,8 @@
 Generate world maps from the TeDDi language sample
 ================
 Steven Moran and Chris Bentz
-22 April, 2022
+
+02 April, 2024
 
 ``` r
 library(tidyverse)
@@ -14,7 +15,7 @@ library(testthat)
 
 Let’s generate some world maps from the TeDDi language sample for visual
 inspection and for publications. If you want to save them as PDF,
-uncomment the last line in each map plot, i.e. `ggsave`.
+uncomment the last line in each map plot, i.e. `ggsave`.
 
 Load the lang info file with information on TeDDi language sample.
 
@@ -57,6 +58,15 @@ lang_teddi_map <- ggplot() +
         title=element_text(size = 12),
         legend.title = element_text(size = 10),
         legend.position = "bottom")
+```
+
+    ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+    ## ℹ Please use `linewidth` instead.
+    ## This warning is displayed once every 8 hours.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    ## generated.
+
+``` r
 lang_teddi_map
 ```
 
@@ -354,14 +364,14 @@ information on which corpora are represented by which writing systems.
 langs_ws <- read_csv('../writing_systems/TeDDi_writing_systems.csv')
 ```
 
-And let’s merge in the geo-coordinates from the lang\_teddi index file,
+And let’s merge in the geo-coordinates from the lang_teddi index file,
 so that we can plot the data on a world map.
 
 ``` r
 langs_ws <- left_join(langs_ws, lang_teddi)
 ```
 
-    ## Joining, by = "iso639_3"
+    ## Joining with `by = join_by(iso639_3)`
 
 A world map with points colored by writing system.
 
@@ -393,27 +403,23 @@ ws_map
 ```
 
 To create a map of corpus size, we can first load in the output from the
-[get word TTR
-    report](../ttr/get_word_ttr.md).
+[get word TTR report](../ttr/get_word_ttr.md).
 
 ``` r
 word_ttr <- read_csv('../ttr/word_ttr.csv')
 ```
 
     ## Rows: 135 Columns: 7
-
-    ## ── Column specification ─────────────────────────────────────────────────────────────────────────────────────────
+    ## ── Column specification ────────────────────────────────────────────────────────
     ## Delimiter: ","
     ## chr (3): name, genre_broad, writing_system
     ## dbl (4): types, tokens, mean_word_length, ttr
-
     ## 
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 This CSV file splits each language by broad genre, so first we can
-collapse those into single word counts per
-corpus.
+collapse those into single word counts per corpus.
 
 ``` r
 word_counts <- word_ttr %>% group_by(name) %>% summarize(word_count = sum(tokens))
@@ -425,7 +431,7 @@ Again we need the geo-coordinates to be able to plot on a world map.
 word_counts <- left_join(word_counts, lang_teddi)
 ```
 
-    ## Joining, by = "name"
+    ## Joining with `by = join_by(name)`
 
 A world map with points sized word tokens per corpus.
 
@@ -472,8 +478,7 @@ word_tokens
 # ggsave("word_tokens.pdf", macroarea_map, dpi = 300, scale = 1, device = cairo_pdf)
 ```
 
-We can also plot size by word
-types.
+We can also plot size by word types.
 
 ``` r
 word_type_counts <- word_ttr %>% group_by(name) %>% summarize(word_type_count = sum(types))
@@ -486,7 +491,7 @@ this we can just merge into the existing dataframe.
 word_counts <- left_join(word_counts, word_type_counts)
 ```
 
-    ## Joining, by = "name"
+    ## Joining with `by = join_by(name)`
 
 A world map with points sized word types per corpus.
 

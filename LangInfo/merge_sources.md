@@ -1,7 +1,7 @@
 Merge language information for 100LC sources
 ================
 Chris Bentz & Steven Moran
-22 April, 2022
+02 April, 2024
 
 ``` r
 library(dplyr)
@@ -74,14 +74,14 @@ folders <- cbind(fils, folders)
 kable(head(folders))
 ```
 
-| name                  | folder\_language\_name | iso639\_3 |
-| :-------------------- | :--------------------- | :-------- |
-| Abkhaz\_abk           | Abkhaz                 | abk       |
-| Acoma\_kjq            | Acoma                  | kjq       |
-| Alamblak\_amp         | Alamblak               | amp       |
-| Amele\_aey            | Amele                  | aey       |
-| Apurina\_apu          | Apurina                | apu       |
-| Arabic\_Egyptian\_arz | Arabic\_Egyptian       | arz       |
+| name                | folder_language_name | iso639_3 |
+|:--------------------|:---------------------|:---------|
+| Abkhaz_abk          | Abkhaz               | abk      |
+| Acoma_kjq           | Acoma                | kjq      |
+| Alamblak_amp        | Alamblak             | amp      |
+| Amele_aey           | Amele                | aey      |
+| Apurina_apu         | Apurina              | apu      |
+| Arabic_Egyptian_arz | Arabic_Egyptian      | arz      |
 
 # Combine the various information sources
 
@@ -96,7 +96,7 @@ langInfo.100 <- langInfo.100[ , c(11, 1, 2, 10, 3, 12, 16, 9, 17, 7, 8, 13, 6, 1
 langInfo.100 <- left_join(langInfo.100, folders)
 ```
 
-    ## Joining, by = "iso639_3"
+    ## Joining with `by = join_by(iso639_3)`
 
 # Data integrity checks
 
@@ -118,6 +118,10 @@ isocode <- "[a-z]{3}"
 expect_equal(length(which(!(str_detect(langInfo.100$iso639_3, isocode)))), 0)
 # If this test fails, the next line will tell us where it fails
 # which(!(str_detect(langInfo.100$iso639_3, isocode)))
+
+# Russian is wrong in Glottolog 3.3 -- update to "safe"
+langInfo.100 <- langInfo.100 %>% 
+    mutate(status = ifelse(iso639_3 == "rus", "safe",status))
 ```
 
 # Write results to CSV
@@ -140,19 +144,19 @@ nrow(langInfo.100 %>% filter(is.na(name)))
 kable(langInfo.100 %>% filter(is.na(name)) %>% select(iso639_3, glottocode, name_glotto, name_wals))
 ```
 
-| iso639\_3 | glottocode | name\_glotto            | name\_wals      |
-| :-------- | :--------- | :---------------------- | :-------------- |
-| kyh       | karo1304   | Karok                   | Karok           |
-| cku       | koas1236   | Koasati                 | Koasati         |
-| ses       | koyr1242   | Koyraboro Senni Songhai | Koyraboro Senni |
-| lkt       | lako1247   | Lakota                  | Lakhota         |
-| lez       | lezg1247   | Lezgian                 | Lezgian         |
-| mpc       | mang1381   | Mangarrayi              | Mangarrayi      |
-| mni       | mani1292   | Manipuri                | Meithei         |
-| mrc       | mari1440   | Maricopa                | Maricopa        |
-| scs       | nort2942   | North Slavey            | Slave           |
-| one       | onei1249   | Oneida                  | Oneida          |
-| bhq       | tuka1249   | Tukang Besi South       | Tukang Besi     |
+| iso639_3 | glottocode | name_glotto             | name_wals       |
+|:---------|:-----------|:------------------------|:----------------|
+| kyh      | karo1304   | Karok                   | Karok           |
+| cku      | koas1236   | Koasati                 | Koasati         |
+| ses      | koyr1242   | Koyraboro Senni Songhai | Koyraboro Senni |
+| lkt      | lako1247   | Lakota                  | Lakhota         |
+| lez      | lezg1247   | Lezgian                 | Lezgian         |
+| mpc      | mang1381   | Mangarrayi              | Mangarrayi      |
+| mni      | mani1292   | Manipuri                | Meithei         |
+| mrc      | mari1440   | Maricopa                | Maricopa        |
+| scs      | nort2942   | North Slavey            | Slave           |
+| one      | onei1249   | Oneida                  | Oneida          |
+| bhq      | tuka1249   | Tukang Besi South       | Tukang Besi     |
 
 ``` r
 # Clean up

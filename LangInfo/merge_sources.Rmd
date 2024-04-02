@@ -112,6 +112,10 @@ isocode <- "[a-z]{3}"
 expect_equal(length(which(!(str_detect(langInfo.100$iso639_3, isocode)))), 0)
 # If this test fails, the next line will tell us where it fails
 # which(!(str_detect(langInfo.100$iso639_3, isocode)))
+
+# Russian is wrong in Glottolog 3.3 -- update to "safe"
+langInfo.100 <- langInfo.100 %>% 
+    mutate(status = ifelse(iso639_3 == "rus", "safe",status))
 ```
 
 # Write results to CSV

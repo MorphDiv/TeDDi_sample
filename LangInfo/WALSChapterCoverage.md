@@ -1,7 +1,7 @@
 WALS Chapter Coverage
 ================
 Chris Bentz
-4/25/2022
+05/20/2022
 
 ## Load Packages
 
@@ -52,8 +52,7 @@ wals.chapters.short <- select(wals.chapters, wals_code, X1A.Consonant.Inventorie
 
 ## Merge
 
-Merge the two data frames together by wals
-code.
+Merge the two data frames together by wals code.
 
 ``` r
 wals.100.chapters <- merge(wals.100.short, wals.chapters.short, by = "wals_code")
@@ -100,8 +99,7 @@ Save to file.
 ## Heatmap
 
 Plot heatmap with all wals features and languages, in which empty cells
-are indicated by
-colour.
+are indicated by colour.
 
 ``` r
 wals.100.chapters.long <- melt(wals.100.chapters, id.vars = c("wals_code", "name_wals"))
