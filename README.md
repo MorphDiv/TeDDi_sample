@@ -1,6 +1,6 @@
 # TeDDi
 
-This is the repository for the Text Data Diversity Sample (TeDDi Sample), a part of the Swiss National Science Foundation funded project: [Non-randomness in Morphological Diversity: A Computational Approach Based on Multilingual Corpora](https://www.spur.uzh.ch/en/departments/research/textgroup/MorphDiv.html).
+This is the repository for the Text Data Diversity Sample (TeDDi Sample), a part of the Swiss National Science Foundation funded project: [Non-randomness in Morphological Diversity: A Computational Approach Based on Multilingual Corpora](https://www.spur.uzh.ch/en/departments/research/textgroup/MorphDiv.html) realised at the University of Zurich URPP **'Language and Space'**.
 
 This repository contains the corpus data and code that processes and analyzes it. This is currently a work in progress.
 
