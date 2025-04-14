@@ -1,0 +1,357 @@
+# language_name_wals:	English
+# language_name_glotto:	English
+# iso639_3:	eng
+# year_composed:	NA
+# year_published:	2000
+# mode:	written
+# genre_broad:	conversation
+# genre_narrow:	NA
+# writing_system:	Latn
+# special_characters:	NA
+# short_description:	ca
+# source:	https://ca.talkbank.org/data-orig/MICASE/les/les235su099.cha
+# copyright_short:	https://sla.talkbank.org/TBB/ca
+# copyright_long:	CABank: MacWhinney, B., & Wagner, J. (2010). Transcribing, searching and data sharing: The CLAN software and the TalkBank data repository. Gesprachsforschung, 11, 154-173.
+# sample_type:	whole
+# comments:	NA
+okay why don't we get started alright as you see we've got a slightly unusual event today we're being taped and &-uh basically we'll just pretend they're not here which is +//.
+was their request &-uh before we get going with the selection sort again are there any questions about anything +..?
+okay .
+well what I'd like to do first +...
+is review the algorithm we did go through it yesterday but I think this is &-uh tough enough to understand that we probably oughta go through it &-uh quicker this time but go through it again and then when we look at the code I think it'll be easier to understand if we've just looked at these &-uh graphics again to see how the sort works .
+so first of all the idea was to take this array those five elements and of_course put it in ascending numeric order and that would give us this array over here .
+&-uh one thing that I didn't mention yesterday is that this sort is called a an in place sort because it sorts the array &-uh changes the contents of the actual array .
+it's also possible to do a sort where you make a second copy keep the original and then put a sorted array in a second data structure .
+so that's not what we're doing we're actually doing the sort inside the array .
+and let's actually go through this algorithm again .
+we said there were N minus one passes .
+here N is five so <we'll do> we'll do four passes .
+and we said each one &-uh essentially takes us through the array elements one time .
+we look at them all .
+we take the item that's in the starting position for the current pass .
+and we exchange that or swap it with the smallest item that's in the unsorted part for the current pass .
+so essentially the idea is on one pass to sort one item and we know from yesterday's fairly quick discussion that after four passes five elements would be sorted .
+and that's always the case always N minus one .
+&-uh it's worth noting at this point actually that this sort is not the most efficient sort in the world we'll talk about that a little bit more later but if you think about it this sort does exactly the same process even if the whole array is in_order_to begin with .
+it always does N minus one passes it's not very intelligent it doesn't look to see &-uh if perhaps something could be done quicker than that .
+(o)kay .
+so we keep doing this and let's take a look again at these diagrams +...
+so this is our starting point initially the whole array's not sorted that's the assumption and the starting point would be the thirty two that's the index of zero and we know that on the first pass we took that element and we exchanged it with the smallest item that's in the entire array .
+so the thirty two and the minus sixteen get swapped so in the array they have to trade places and then what we have after that is this contents in the array where the minus sixteen is in the right spot and the other items are still considered unsorted .
+so we've got one item that got sorted on the first pass .
+now this is our starting point for the second pass so let's take a look at that (0.6) (o)kay the other thing I've done here the gray elements are intended to show you what is already sorted and those are items we're not considering anymore .
+so just like in the binary search where we eliminated parts of the array from further consideration we're doing that with this sort also .
+so the minus sixteen at a@l sub zero is no longer being looked at that means the starting point has an index of one that's the one fifteen and then we take the smallest item in that part of the array so the currently unsorted part that would be the thirty two of_course and then we swap those .
+so again those trade places in the array and we can see that after the second pass two items are sorted .
+so on the first pass we sorted one item and on the second pass we sorted the second item .
+now that means that the unsorted part again is shrinking and now I've got three items that I have to sort at that point .
+(o)kay so let's look at the third pass course that's this one this is where we were after the second pass with the top two items sorted and then we do the same process again .
+it's really exactly the same process every time it's just that the part of the array that we're looking at is shrinking .
+so the starting point now has an index of two and that's the fifty six here and then we can see that the smallest item in that part of your array is the forty three and of_course we swap those and then we end up with this array contents over here .
+so on the third pass the third item lands in the correct spot +...
+now the fourth pass is the last one (0.5) we've only got two items left and you know from common sense if you've got two things and you sort them &-uh both of them will be in the correct order .
+so we don't do five passes here we do four because that will take care of it and the starting point now is at index three and that's the one fifteen the fifty six obviously is smaller than that so again we do a swap and then we end up with the correctly sorted array .
+so at this point we're done .
+N minus one passes and that's it .
+now the next thing we're going to look at is the actual c@l plus plus code for it and hopefully everybody can keep in mind &-uh the process behind this &-uh it might be worth while you're studying for the final &-uh to work through this by hand and just go through the algorithm yourself with a piece of paper .
+and then compare that with the actual c@l plus plus code and make sure you can &-uh make the connection between the two .
+now a couple things before we actually look at it &-uh I kept mentioning the starting point and we'll have one index called start and that'll be the index to the first item that's in the unsorted part of the array .
+so start hasta range from zero up through three .
+and of_course that's zero up through &-uh N minus two .
+if we use N as a reference point .
+now we also need a_couple_of other indexes &-uh one of them will be called current and current will range from the index that's right after the starting index so start plus one and that will sequentially go through the array looking for the smallest item .
+and if you think way back when we talked about &-uh finding maximum and minimum &-uh we used a while@q loop for that &-uh early part of the semester .
+essentially what we did was we held the smallest value , the one we currently thought was the smallest , in a special place in a variable .
+and then as we looked at each_other element in the data set sequentially we compared it to see if it was smaller than the currently smallest item .
+and if it was smaller we replaced what we thought was the smallest value .
+now the same algorithm is actually being used here the difference is that we use array indexes and what we do is store the index of the smallest item and if we find a new smallest item we replace the index that we're saving .
+so instead of &~sto saving the actual smallest value we save the index to it +...
+now actually before we leave this &-uh that actually points out the fact that we need a third index for the smallest item .
+so three indexes and actually let's jump into the code here +...
+(o)kay so here's the function &-uh just like the search routines if you do write a sort and program six does require a sort .
+it is best to put it off in its own function .
+&-uh again a sort is really a task unto itself just like a search and to make your program modular this really belongs in a function all by itself .
+so what we do up here is &-uh pass in the size of the array and N is the assumption here N was five in our example that we just did and then we're just calling this array A it's a generic name &-uh just an array of ints .
+now once we get into the local declarations that's where we start seeing the items from the algorithm we just talked about we've got start small and current .
+and as I mentioned start is the index to the first element in the unsorted part small is going to be the index to the smallest value in the unsorted part and what we do on a pass is exchange a@l sub start with a@l sub small .
+so that's how we trade these we know the indexes where they're located .
+this other one current &-uh you can think of that as being kind_of like a search index &-uh in a way this looking for the smallest is kind_of like a linear search .
+we're sequentially going through the array we're looking at each item in turn to see if it's a new small value .
+and current is the index that takes care of that .
+now these three are all ints and the important point here is that they are ints because that's the index type of the array .
+so the type of the subscripts is int .
+this fourth one here is an int but when you write another sort like you write the one for program six this fourth variable probably won't be an int .
+what this needs to be is the type of the elements that are in the array .
+so if you've got an array of of say title strings the type here would be a title string .
+or if you've got an array of floats this would hafta be a float .
+the indexes would still be ints because we know that array indexes actually hafta be ints in c@l plus plus .
+(o)kay so this last one is an int because that's actually the base type of the array and what we'll see is that we'll use this when we make the exchange (be)cause we need &-uh actually an extra variable to make a swap .
+okay are there any questions so far about any any of this ?
+(0.4) yeah Meredith ?
+<you have> you have at most N minus one &-um passes right ?
+mhm +/.
++, that's so that's just the maximum number you can have less than that ?
+actually that's a really good point the the selection sort always does N minus one passes .
+even if doesn't need to .
+even if they're already in order ?
+yeah even if they're already in order .
+it just doesn't &~sw switch (th)em ?
+yeah it doesn't &-uh there's no way to exit this algorithm because the list is sorted .
+have you seen the bubble sort before ?
+perhaps (be)cause I'm wondering if maybe you're thinking that one &-um that's a sort where once the list is sorted actually you can exit the algorithm .
+&-uh oddly enough it's less efficient than this one which is why we cover this one in class .
+did anyone see that in high school or somewhere else bubble sort ?
+okay .
+oh Jim saw it very good .
+&=laughs &-uh I saw it .
+okay .
+well let's look at this algorithm and +...
+related to your question Meredith you can see that there's a for loop controlling this .
+and what we know about for loops is that &-uh stylewise then should be used to just do straightforward counting &-uh this one counts from zero up through N minus two and in our example case that would be zero through three and then it stops .
+so the sort is totally controlled by a counter .
+&-uh there are other sorts where &-uh you might have a flag that tells you at some point that the list is actually sorted and now you can exit .
+but not with this one .
+(o)kay so this is a very predictable methodical approach to sorting values .
+alright now I should say rather than to totally denigrate this thing I +//.
+for small lists this is perfectly fine and when you run this say for program six it's a a very reasonable sort .
+it's not &-uh such a terrible inefficient routine that we'd never use it .
+for small N just like the linear search it's really pretty decent .
+(o)kay well with that in mind let's take a look at the code &-uh the for loop that controls one pass basically one execution of the for loop is one pass .
+and we know we've got four passes for that little array we just looked at we start off with start equals zero that's the first array element and then what we do with small is just like what we did before with maximum and and minimum we set small to the first value .
+Jim did you have some .
+should that be N minus two in the header ?
+no because it's less than .
+good question Jim you're totally &~wr &=laughs you're totally wrong but that's a good question .
+&=laughs:multiple &-uh Jim asked should this be N minus two and the answer in no because &-uh if we had less than or equal to we could use N minus two but I tried to make this consistent with our other array accessing and put less than .
+and that means that we'd use N minus one and then the loop will range from zero to N minus two .
+so good point actually that's a good review of &-uh array indexing for us .
+so +//.
+and again the reason I did that was to make it consistent with all of our other loops where we went from zero up to something and we always said less than and then say the size of the array .
+okay .
+well we initialize small to the starting value and again we're storing the index of the starting value we're not really storing the value itself .
+the value's in the array so we have that but we're using the index to keep track of where the smallest item is .
+now this next loop very short for loop &-uh that's where the search for the smallest item takes place .
+and we don't need much code to do this okay in this one current is the index and remember current goes from start plus one so the element after the starting element for this particular pass and then it ranges up through N minus one and we know N minus one is the very last array element .
+so for this one we're gonna start at the element right after the the starting point element and go all the way to the end of the array and we'll look at each one at each point we'd say okay is a@l sub current the one I'm currently looking at is that less than a@l sub small ?
+where small is where we save the index of the currently smallest item the one we think is the the smallest .
+now if it is we replace small with current .
+so going back to when we found a minimum in a data set &-uh we'd basically say something if this is a new low then replace low with whatever the current value is .
+and the same thing's happening here except this is an array index and so is this one .
+but they represent the values that we're looking at in the array .
+now when we exit this loop small would have the index to the smallest item that is in the unsorted part .
+and that means we're all set to do the last phase here +...
+(o)kay so the last part of the pass and that is to actually make the &-uh exchange itself .
+now two words are used for this one is exchange and the other is swap and you hear both of those &-uh quite frequently the idea with this one is that first of all we check to see if the starting point element is the smallest .
+because if that is the smallest we don't need to make an exchange and we really oughta skip this three line sequence here that does the actual swap .
+so first of all we'll check if small@q is not equal to start@q .
+and again the reason for that is that &-uh the item that I'm trying to sort might actually already be in the right spot .
+mkay let's say it isn't though and small is different from start &-uh that would've occurred with every single instance of small in our example that we did with the five array elements that means we do need to do an exchange and a swap or an exchange always takes three lines .
+this is a very &-uh predictable process &-uh three lines always the same that you can plug into any program whenever you need to do a swap like this .
+so first of all we'll take the starting point element and store that in temp .
+and remember temp we need to essentially hold one of the values so that we can do the exchange .
+that's all it's functioning as here .
+and once we've got a@l sub start stored away in temp then we can replace it with the small value .
+so that moves the smallest value to the right spot in the array .
+and then the other thing we do here is &-uh reset a@l sub small .
+this is getting a@l sub start for this last line .
+(o)kay so in effect this is like saying a@l sub small equals a@l sub start .
+now once we've done that we've done the swap and actually let's use the board here for a minute .
+&=writing:board (o)kay it's pretty clear we're doing something like this to trade the two elements and I've got one question for you which is why can't I do this ?
+&=writing:board (o)kay why can't I just do that in two statements it looks shorter I don't hafta declare an extra variable +...
+yeah David ?
+&~yo you'd lose the value in start .
+yeah exactly .
+&-uh you can't do a swap in two statements because you lose one of the values .
+alright you can try if you're not convinced &-um tracing through it and you'll see that one of the values gets lost they're both equal to the same thing .
+&-uh let's say that this is three and five .
+what would happen is that a@l sub start would get set to five and then a@l sub small is already five but you're copying a five into it .
+(o)kay it's pretty much a useless sequence of code and you just wiped out one of the values .
+so that's why we need a third variable to actually do this process &-uh any time we wanna do an exchange like that .
+(o)kay well that's the end of the loop that does a pass and you can see there are basically two processes going on here the first small for loop +...
+(o)kay this one where we look for the smallest item and then the second part here is this part where we do the exchange .
+so we do that four times and then &-uh as we saw with that small array at the end of that we're all sorted .
+now one thing to notice is that &-uh if you trace through this code with &-uh as Meredith said an array that's already all in order basically you go through the whole thing anyway .
+so efficiency is not our crowning glory here with this sort &-uh but as I mentioned it is pretty decent for small N .
+alright did you have a question ?
+yes <if you> if you have an error in your &-um code and you compile it &-um if +//.
+say you have something like this is +//.
+do you like ruin your file for good or do you have to start over with a +/.
++, <⌊ xxx ⌋> <version of the file> file I was just wondering does it make permanent changes every time you compile it ?
+I'm not sure what you mean are you you talking about destroying the original data ?
+yeah +/.
+⌈ that you ⌉ have +/.
++, ⌊ if you were ⌋ like reading from an in file or something like that .
+if &-uh if you read a bunch of data in from a file and then did this in the program you'd be altering the array in memory only but then if you were really using a file what you'd probably do is write out the array to the file at the end and then yeah you would ruin the file basically .
+(o)kay so it's definitely possible to &-uh lose a_lot_of information with just a tiny little bug like this .
+(o)kay any other questions about the sort here ?
+(o)kay well I think it's kind_of amazing the first time I saw it which was I think nineteen seventy four &-uh I thought my goodness &=laughs this works ?
+&=laughs and I wanna also mention if we wanted to sort the array into descending order all we have to do is change this to a greater than .
+now that's also kind of amazing .
+&-uh everything would work if we just flip the sign from less than to greater than .
+now the other thing we would probably do if we did want to sort in descending order is change the name of small because if we are sorting descending order the meaning of that index is that it indexes the largest item in the unsorted part of the array .
+so on program six actually you have to do a descending order sort_of numbers .
+and keep in mind that is definitely &-uh stylewise better to rename that one variable .
+so change it to something like &-uh large or largest or max or or whatever .
+now we need to talk about efficiency in a little more detail and there are two things that go into this discussion one is how many comparisons this is a comparison of array elements we said that with searches that was really the main thing how many comparisons do we do .
+and with linear search we saw that we did quite a few with the binary search we did a smaller number typically with a sort we've also got another thing going on and that's how many exchanges are there .
+so when you talk about efficiency with sorts it's comparisons and exchanges typically +...
+now again we won't go into the mathematics behind this now some of the math majors I don't know if they wish we would or or hope that we never do but basically that's the topic of other classes especially EECS thirty eighty .
+if anybody gets to that point they spend a_lot_of time on efficiency and &-uh the mathematics behind all of this stuff I'm basically giving you up here &-uh as just facts .
+it's all been proven and that's why I can do that but later on if you go on in computer science you'll see how to prove it .
+now the maximum number of comparisons is given by this formula N times N minus one over two +...
+one thing that's actually intuitive is the maximum number of exchanges .
+now with that we can look at this number N minus one and say well that's the number of passes I can only do one exchange on a pass so definitely that is the maximum number of exchanges we could possibly do .
+so we could do anywhere from zero up to N minus one exchanges .
+the other number is a bit less &-uh intuitive but one way to think about that is that you've got two loops two for loops and they're both ranging to about N .
+and one thing we saw with nested for loops is that if you have &-uh a statement inside the inner loop it'll execute &-uh the number of times that the outer loop executes multiplied by the number of times that the inner loop executes .
+so actually what we've got here is is basically that situation .
+alright for one thing we did the multiplication example a while ago &-uh where we were multiplying &-uh all the numbers from one through nine and we made a nice table and each loop went from one through nine .
+we said that the statements inside the inner loop executed eighty one times .
+so nine times nine .
+and we've got a pretty similar situation right here +...
+now with that in mind &-uh actually when we talk about the the time required to execute the algorithm we look at the the most overriding factor and that is actually the number of comparisons .
+and that's proportional to n@l squared .
+we can see that with this formula here we've got N times N minus one and that's where the n@l squared comes in .
+now this could get pretty bad if you're say at a an airline and you wanna sort &-uh all of your five thousand flights we've got five thousand squared on our hands .
+mkay and that's gonna be a pretty big number .
+so this is not an efficient sort for large N +...
+it's called a quadratic sort because &-uh I'm sure everybody's seen the quadratic equation and you know that the &-uh idea there is that you've got a square as one of the elements in the equation .
+and that's what we've got here we've got n@l squared .
+now the problem that we've got in a one hundred level class is that we can't cover a quick sort .
+and actually the quick sort is the name of one of the the very efficient sorts and it uses recursion very heavily &-uh in_order_to perform the process and it works much better than this particular sort .
+the problem is that we can't cover that in this course .
+okay we don't cover recursion &-uh we're not going to if you do go on and say take two eighty you'd see that &-uh pretty early in the course and then you'd be able to look at the faster sorts at that point .
+now last time we looked at some graphs &-uh the linear search versus the binary search &-uh the linear search was &-uh O of N and the binary search was O of log two of N and we just settle this one as ON squared and the graph for that is approximately like this .
+&-uh now I drew this by hand because I was having trouble getting my &-uh graphing calculator to allow me to take the image it produced for the graph and then put it in the power point show .
+but hopefully this is a good enough approximation that you can see how the processing time increases .
+and it increases drastically I mean this is just really a you know a huge increase as N goes up .
+okay .
+well are there are any questions at all about the selection sort or about sorting in general for that matter ?
+(0.7) (o)kay well there are lots_of other sorts and if this intrigues you you can ask Jim or me in office hours about &-uh you_know what else is out there and we'd be able to talk about it +...
+one last note about this sort and that is that &-uh in program six you need to sort parallel arrays if you use that data structure .
+&-uh you've also got a choice in that program of using an array of structs .
+and that's something we'll be talking about later &-uh probably not today probably tomorrow .
+now let's say we had our area codes and our locations array that we talked about yesterday and what we'd like to do is sort both of them into ascending numeric order by area code .
+now what we know is we can't sort one array and then leave the other one unchanged because we'll lose that parallel relationship that we worked so hard to set up .
+so what we need to do with this (0.5) is do the comparisons using the area codes array and the area code here would be called the sort key .
+that means what are you sorting on ?
+&-uh one thing to notice if you use Excel is that you can sort the data that you're looking at and you'll actually see the word key in one of their &-uh windows with the options that you're picking for the sort .
+so you can choose what to sort on and that's what you're actually looking at .
+so for a comparison I'd have this if area code sub current is less than area code sub small .
+and that would take care of that part of the selection sort as far converting it over to this other array .
+&-uh obviously I'd need to pass in the area codes array itself and I'd need to pass in the size of the area codes array .
+other than that I could basically take the selection sort &-uh copy and paste it into this new program that I'd be working on and just substitute the word area codes every place you see &-uh array A that we were just looking at .
+now there's another issue and that is well what about the exchanges and this is where parallel arrays get to be a little bit awkward .
+(o)kay if you've got two arrays it's not really too bad but if you had three or four or five parallel arrays this could get to be very inconvenient because you can compare in one array but you have to exchange in all the parallel arrays .
+so you have to do the same exchange with the same indexes in both arrays at the same time .
+and what we just saw was that an exchange takes three lines so this would take six lines to exchange area codes sub start with the smallest item and then location sub start with the same index item in the locations array .
+so &-uh again for program six you've gotta do a sort and if you choose to use parallel arrays this is basically what you have to go through in_order_to do it .
+&-uh it doesn't change the selection sort a whole lot you just need to plug in the extra code to do the exchange in the other array .
+(o)kay well are there any questions about this ?
+(0.5) (o)kay well let's start looking at structs (0.6) (o)kay so we're taking a drastic turn of topics here away from arrays and we'll start talking about this new data structure &-uh the struct is extremely important in programming so is the array but with the struct actually we open up a whole new &-uh group of possibilities in programming .
+most dynamic data structures are set up with structs &-uh if you look at object oriented programming &-uh the basic unit there is called the class .
+and the class is essentially &-uh something that derived from structs .
+so once you understand structs you're you're getting a long way toward learning some more advanced programming techniques .
+now an array we said was a list .
+we talked about &-uh the idea of abstract data types and we said that people frequently use the word list of something .
+and an array very naturally fits that description .
+a struct really fits a record .
+&-uh now people don't use that term quite as much but you do hear things like a patient record or a student record &-uh if you go into the registrar you might wanna find out something about your student record for example and the struct is a very natural data structure for representing that sort of information .
+now with a student record you'd expect quite a_lot_of information it wouldn't all be the same data type we'd have names addresses &-uh phone numbers we'd have grades &-uh GPAs for every semester cumulative GPAs &-uh basically you know <what you> what you see when you look at Wolverine Access .
+now on the other hand an array we said has a list of things they're all the same type .
+and now all of a sudden we're talking about storing lots_of information that's all different types so we need something a little more &-uh complicated than the array to actually set this up and do it in &~a in appropriate fashion .
+so first of all let's look at the similarities and differences here .
+okay they're both data structures they're both &-uh what the book calls composite data types or structured is another word for that &-uh meaning that I've got a group of elements .
+now with the array we said we have to fix the size and that's true with a struct also we've got a maximum number of elements when we declare the struct type we establish that and it is set for the rest of the program .
+with the array now we get into the differences here &-uh all the elements hafta be the same type .
+so I could have a list of ints or a list of strings but I can't have a list of ints and strings .
+(o)kay for that I could actually set up an array of structs and then &-uh I could have a list of mixed types but I'd hafta use both of these data structures to set that up .
+arrays by themselves wouldn't do it .
+now clearly this is a big advantage elements can be different types in structs .
+so that's where we can do the combination of all these different types of data .
+(o)kay another item that we talked about with arrays is that we can access any element at any time using the index we've got direct access to the elements that way and they're all numbered and they're in order the order never changes .
+(o)kay at least the order of the basic array structure .
+so index is ranging from zero up to and then N minus one .
+once we define the array we can't alter that .
+now with structs we don't have this same structure we don't have indexes we don't have numbers and we'll access these things in a very different way .
+we'll access the elements in a struct and they're called members with this new operator basically you type a period on the keyboard and you get the member operator and then we'll use the name .
+so with arrays we use a subscript and an index a numeric value and with structs we use the dot and then the name of the element in the struct that we set up +...
+(o)kay so let's look at some examples here (0.5) and we'll go back to MIRLYN and we'll imagine that we're writing a small version of MIRLYN .
+(o)kay so we're gonna set up a book struct a book record and we'll put a few of the major items in it so that we can look at how we could set that up in a real program .
+so first of all all of this would be global &-uh we said that type definitions typically are put in a global position in the program and of_course that's so the rest of the program can access the type .
+and we also know that we can't cause bugs in a program by declaring constants and types globally .
+so we would put this at the beginning of the program in front of main and first of all I'll set up a constant for the string size and we're gonna have actually authors and titles in the book struct .
+so I'm allowing forty one characters for each one of those and of_course the the one is for the null character .
+so forty characters in a title or forty in the author's name .
+that sounds like enough to avoid any kind of problems with input and range errors .
+now the type for the string here is actually course this typedef@q &-uh name string is the generic name that I'll use for both the authors and the titles and then we used a constant there of_course to set up the size .
+so we've established the information that we need to declare the book record and actually the the definition of the book record starts here at the word struct and then you can see it has braces and closing the body of the structure and what I'm defining inside is the members .
+so this struct has four members in it they are the title the author the number of copies of the book and then all taken out .
+so the title and the author are pretty obvious what they are &-uh the number of copies is how many does the library own and then all taken out would represent &-uh the obvious also are they all taken out or is there something available that you can get a copy of .
+now if you just look at this if you take off these braces here this looks just like variable declarations that we've done earlier in the course .
+the difference being that they're inside a struct .
+so I have two strings an int and a bool and they're being put together here as a unit in a data structure that contains all four of them .
+so as far as the syntax for writing the interior here you just use what you're accustomed to for declaring variables and then keep in mind that these are all components in this overall data type .
+now one thing to notice here is these are not variable declarations .
+(o)kay I actually haven't declared any variables yet .
+this is a type definition .
+so they look like variable declarations but they aren't .
+(o)kay what we'll do on the next slide here is actually set up the variables and we're gonna start off here with just declaring a_couple_of book records book one and book two and you can see that I used the type book rec just like other types that we've used in the past and then book one and book two are the two variables that we're declaring .
+now that's when space gets allocated to store a variable .
+&-uh remember the data type definition doesn't cause memory allocation .
+(o)kay all it does is set up a pattern for variables that when you declare them you can use the data type .
+but the variable declaration that's when we actually get some storage space and we can store some data in (th)em .
+so now we've got two books .
+and what I've done here is just written assignment statements to put data in all four members of book one .
+now the title and the author are strings so what we saw very recently is that we need to use string copy and what we're doing here is putting the title Walden into the title field &-uh by the way field is another term that's used for member .
+and I may use both of those in class .
+and what we're doing here is putting Henry Thoreau +//.
+&-uh David didn't fit on the slide so I didn't put that in there .
+but we're putting his name in the author field here .
+and then the library has two copies so we can assign that into the known copies field .
+and then what we're saying here is that they aren't all taken out at the moment so we'll set this to false .
+now as far as the notation here &-uh let's look at this last one the thing to notice is that the very first item is the name of a struct variable .
+so book one is the name of the variable that I declared up here as book rec and then the dot here in this spot that's the member operator and then if you look at the word all taken out that is from the type definition .
+so we've got something a little new here as far as the syntax &-uh where this is a variable name and this is something from a type .
+(o)kay we're not really used to doing things like that .
+now one difficulty that &-uh we see in this class with programs where we've got structs there's a little confusion over the the notation and that's why I'm emphasizing it .
+(o)kay are there any questions about this so far ?
+(0.4) yeah .
+so <you're gonna> have to declare a a record variable for every record you wanna enter ?
+well that's a really good question .
+&-uh you're thinking ahead here &-uh if you really were writing MIRLYN you wouldn't declare book one book two book three book four I mean we'd be sitting there typing all day long .
+&-uh what we'll talk about after our initial discussion of of just single structs here is how to set up an array of structs .
+because of_course the library's not gonna have one book or three or or whatever it's gonna have <lots and> lots and lots .
+so one possible data structure is &-uh to declare this book record and then declare an array of book records .
+&-uh that's the other possible data structure you can use on program six if you would like to .
+&-uh actually you've got a choice either parallel arrays or an array of structs .
+so that's a good point we're gonna get to that &-uh not today obviously but we'll we'll probably be talking about that tomorrow .
+(0.5) (o)kay well let's try to think about how in memory we might picture this as being stored &-uh when we talked about arrays we drew them like this where they had sequential elements they were all the same size because they're all exactly the same data type .
+now with a struct it it appears that we could use something similar to imagine how it's stored but they're not all the same size .
+so I've tried to represent that here &-uh the strings we know are forty one characters so in reality we'd have forty one bytes of storage for each one of those &-uh we actually know that these are arrays .
+in fact &-uh we could draw this a little differently &=writing:board (o)kay the title here is a string and so is the author and we could've drawn it up there very similarly but said okay that's an array it's got forty one elements in it each one's got its own little box .
+so actually it's a little more complicated than we've &~go we've got up here what we're doing with this is basically taking a a fairly high level look at it at the whole thing and not looking at the individual characters in the strings just yet .
+now the two and the false would be stored in a_lot less storage space .
+&-uh what we saw with ints is that they get &-uh thirty two bits and booleans we actually haven't talked about but they can be stored &-uh typically in one byte .
+so we'd have a large group of sequential storage locations which is like an array .
+these are stored consecutively in memory .
+the difference being that they're not &-uh uniform storage locations we've got items of different sizes because they're different data types .
+so we could picture a book going like this and I think it's helpful &-uh to think about it this way so that when you work with structs in a program you've got something you're kinda pinning it on as far as what it looks like .
+(0.6) (o)kay well let's take a look at a_couple_of issues before we have to stop we just set up book one and we initialized it all four members have values and if I wanted to copy all of book one into book two one very convenient thing about structs is that I can do that with an assignment statement .
+so if I write book two equals book one that does the whole thing it copies the two strings and the int and the Bool .
+now that may be a little surprising based on what we talked about with arrays and just to compare the two for the moment &-uh is it possible to write something like this ?
+(o)kay I've got two arrays of ints with ten ints each and I've initialized B just like I initialized book one B would have all zeros in it because of that and then can I write A equals B +..?
+okay I just wrote book two equals book one but can I actually do that ?
+no Polly why not ?
+you you can just &-um you can do that in initialization like &-um A equals ten but not here &-um the ⌈ xxx ⌉ +/.
+⌊ mhm ⌋ .
++, assignments .
+yeah you just you can't use assignment with arrays except when you declare them and you initialize (th)em that's what Polly was saying so no I can't do that .
+even though it looks like an analogous operation it's not possible .
+&-uh what could I do instead ?
+let's say I did wanna copy all of B into A .
+what would I be able to do in c@l plus plus that would work ?
+(0.10) (o)kay no volunteers ?
+well it is ten o'clock so I'll just quickly say here that &-uh to do this we could write a little for loop that went from zero up through nine and then brute force method copy every single element of B into the corresponding element of A .
+so I'd hafta write a for loop to do it whereas with structs I can actually just do the assignment .
+(o)kay well it's after ten so we'll stop here and we'll pick up with structs tomorrow 
